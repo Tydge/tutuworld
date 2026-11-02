@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+2026-11-02 11:26:03.818 Godot[853:96424933] not in fullscreen state
+2026-11-02 11:26:04.180 Godot[853:96424933] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+RENDER_BUDGET output=(1440, 960) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=9765 components=3
+MULTIPLAYER_CLIENT_FLOW_RESULT PASS checks=24 failures=[]

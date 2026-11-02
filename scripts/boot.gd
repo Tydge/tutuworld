@@ -18,7 +18,7 @@ func _ready() -> void:
 	text.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	await get_tree().process_frame
 	# Keep bootstrap independent of release.gd so patched gameplay is first loaded after mounting.
-	var build:=3
+	var build:=4
 	if not OS.get_cmdline_user_args().has("--test"):
 		for file in ["pending.json","active.json"]:
 			var path: String="user://updates/"+file

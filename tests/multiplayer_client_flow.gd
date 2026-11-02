@@ -25,7 +25,7 @@ func run() -> void:
 	var offline= session.authority
 	var suffix:=Crypto.new().generate_random_bytes(4).hex_encode()
 	var login=preload("res://scripts/ui/online_login.gd").new();login.session=session;login.endpoint=endpoint;root.add_child(login)
-	login.open();login.toggle_mode();login.username.text="ui_"+suffix;login.password.text="island-ui-test-123";login.confirmation.text="mismatch"
+	login.open();login.toggle_mode();await capture("账号注册-空白提示");login.username.text="ui_"+suffix;login.password.text="island-ui-test-123";login.confirmation.text="mismatch"
 	await login.submit();check(login.feedback.text.contains("不一样"),"Registration form checks password confirmation")
 	await capture("账号注册")
 	login.confirmation.text=login.password.text;await login.submit()

@@ -22,6 +22,7 @@ func _ready() -> void:
 	http.use_threads=true
 	http.timeout=18
 	http.max_redirects=3
+	http.set_tls_options(preload("res://scripts/services/network_trust.gd").options())
 	http.request_completed.connect(on_response)
 	add_child(http)
 func set_status(s: String,text: String) -> void:

@@ -49,10 +49,10 @@ func apply() -> void:
 	var native: bool=is_instance_valid(session) and session.settings.get("render_quality","balanced")=="native"
 	var modern:=RenderingServer.get_current_rendering_method()=="forward_plus"
 	var pixels: float=maxf(1.0,float(window.size.x)*window.size.y)
-	var scale_: float=1.0 if native or not modern else minf(1.0,sqrt(MAX_3D_PIXELS/pixels))
+	var scale_: float=1.0 if native else minf(1.0,sqrt(MAX_3D_PIXELS/pixels))
 	if scale_>.99: scale_=1.0
 	var mode:=Viewport.SCALING_3D_MODE_BILINEAR
-	if scale_<1.0:
+	if scale_<1.0 and modern:
 		mode=Viewport.SCALING_3D_MODE_METALFX_SPATIAL if RenderingServer.get_current_rendering_driver_name()=="metal" else Viewport.SCALING_3D_MODE_FSR
 	window.scaling_3d_mode=mode
 	window.scaling_3d_scale=scale_

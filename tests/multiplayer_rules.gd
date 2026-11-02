@@ -1,4 +1,5 @@
 extends SceneTree
+const Release=preload("res://scripts/services/release.gd")
 const Server=preload("res://server/world_server.gd")
 const Transport=preload("res://scripts/services/remote_transport.gd")
 const DB=preload("res://scripts/services/game_data.gd")
@@ -44,7 +45,7 @@ func run() -> void:
 	check(server.ready_for_players,"Server starts with both physics maps")
 	if not server.ready_for_players:quit(1);return
 	var invalid=Transport.new();invalid.set_meta("build",2);root.add_child(invalid)
-	check(not await invalid.ensure_connected("ws://127.0.0.1:18893") and invalid.required_version=="0.3.0","Old build rejected before account login")
+	check(not await invalid.ensure_connected("ws://127.0.0.1:18893") and invalid.required_version==Release.VERSION,"Old build rejected before account login")
 	invalid.close();invalid.queue_free()
 	var suffix:=Crypto.new().generate_random_bytes(5).hex_encode()
 	for i in range(5):

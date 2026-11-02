@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import re
 import secrets
 import subprocess
 import tarfile
@@ -21,7 +22,7 @@ except KeyError:
  account=pwd.getpwnam('tutuworld')
 for name in ['/var/lib/tutuworld','/var/lib/tutuworld-staging']:
  p=Path(name);p.mkdir(parents=True,exist_ok=True);p.chmod(0o700);os.chown(p,account.pw_uid,account.pw_gid)
-release=Path('/srv/tutuworld/releases/0.3.0');release.mkdir(parents=True,exist_ok=True)
+release=Path('/srv/tutuworld/releases')/VERSION;release.mkdir(parents=True,exist_ok=True)
 if (release/'released.json').exists():raise SystemExit('Refusing to overwrite a released service')
 for unit in ['tutuworld-stage-world','tutuworld-stage-auth']:subprocess.run(['systemctl','stop',unit],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 engine=Path('/srv/tutuworld/engine/4.6.3/godot');engine.parent.mkdir(parents=True,exist_ok=True)
@@ -32,24 +33,28 @@ with tarfile.open(archive) as t:
   (release/name).chmod(0o644)
  with t.extractfile('engine.zip') as source:
   temporary=engine.parent/'engine.zip';temporary.write_bytes(source.read())
- with zipfile.ZipFile(temporary) as z:engine.write_bytes(z.read('Godot_v4.6.3-stable_linux.x86_64'))
+ with zipfile.ZipFile(temporary) as z:binary=z.read('Godot_v4.6.3-stable_linux.x86_64')
+ if not engine.exists() or hashlib.sha256(engine.read_bytes()).digest()!=hashlib.sha256(binary).digest():
+  next_engine=engine.with_suffix('.next');next_engine.write_bytes(binary);next_engine.chmod(0o755);os.replace(next_engine,engine)
  temporary.unlink();engine.chmod(0o755)
 archive.unlink()
 subprocess.run([str(engine),'--headless','--version'],check=True)
-common=['systemd-run','--collect','--property=User=tutuworld','--property=Group=tutuworld','--setenv=TUTU_STATE_DIR=/var/lib/tutuworld-staging','--setenv=TUTU_AUTH_PORT=18896','--setenv=TUTU_GAME_PORT=18895']
+common=['systemd-run','--collect','--property=User=tutuworld','--property=Group=tutuworld','--setenv=TUTU_STATE_DIR=/var/lib/tutuworld-staging','--setenv=TUTU_AUTH_PORT=18896','--setenv=TUTU_GAME_PORT=18895','--setenv=TUTU_VERSION='+VERSION,'--setenv=TUTU_BUILD='+str(BUILD)]
 subprocess.run(common+['--unit=tutuworld-stage-auth','/usr/bin/python3',str(release/'auth_service.py')],check=True)
 subprocess.run(common+['--unit=tutuworld-stage-world',str(engine),'--headless','--main-pack',str(release/'server.pck'),'--script','res://server/main.gd'],check=True)
-print(json.dumps({'prepared':True,'version':'0.3.0','staging_game_port':18895,'staging_auth_port':18896}))
+print(json.dumps({'prepared':True,'version':VERSION,'staging_game_port':18895,'staging_auth_port':18896}))
 '''
 ACTIVATE = r'''
 import datetime,json,os,shutil,subprocess
 from pathlib import Path
-release=Path('/srv/tutuworld/releases/0.3.0')
+release=Path('/srv/tutuworld/releases')/VERSION
 if not (release/'server.pck').exists():raise SystemExit('Prepare the service first')
+subprocess.run(['systemctl','start','tutuworld-backup.service'],check=False,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+subprocess.run(['systemctl','stop','tutuworld-world.service','tutuworld-auth.service'],check=False)
 root=Path('/srv/tutuworld');link=root/'current.next'
 if link.is_symlink():link.unlink()
 link.symlink_to(release);os.replace(link,root/'current')
-environment='Environment=TUTU_STATE_DIR=/var/lib/tutuworld\nEnvironment=TUTU_AUTH_PORT=18892\nEnvironment=TUTU_GAME_PORT=18891\nEnvironment=TUTU_VERSION=0.3.0\nEnvironment=TUTU_BUILD=3\nEnvironment=TUTU_RELEASE_MANIFEST=/srv/illuminati/www/tutuworld/manifest.json\n'
+environment=f'Environment=TUTU_STATE_DIR=/var/lib/tutuworld\nEnvironment=TUTU_AUTH_PORT=18892\nEnvironment=TUTU_GAME_PORT=18891\nEnvironment=TUTU_VERSION={VERSION}\nEnvironment=TUTU_BUILD={BUILD}\nEnvironment=TUTU_RELEASE_MANIFEST=/srv/illuminati/www/tutuworld/manifest.json\n'
 base='[Service]\nType=simple\nUser=tutuworld\nGroup=tutuworld\nWorkingDirectory=/srv/tutuworld/current\nUMask=0077\n'+environment+'Restart=on-failure\nRestartSec=3\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=strict\nProtectHome=true\nReadWritePaths=/var/lib/tutuworld\n'
 units={
  'tutuworld-auth.service':'[Unit]\nDescription=TutuWorld account service\nAfter=network.target\n'+base+'ExecStart=/usr/bin/python3 /srv/tutuworld/current/auth_service.py\nMemoryMax=640M\n[Install]\nWantedBy=multi-user.target\n',
@@ -93,7 +98,7 @@ subprocess.run(['systemctl','daemon-reload'],check=True)
 subprocess.run(['systemctl','enable','--now','tutuworld-auth.service','tutuworld-world.service','tutuworld-backup.timer'],check=True)
 subprocess.run(['systemctl','reload','nginx'],check=True)
 for name in ['tutuworld-stage-world','tutuworld-stage-auth']:subprocess.run(['systemctl','stop',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-(release/'released.json').write_text(json.dumps({'version':'0.3.0','activated_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}))
+(release/'released.json').write_text(json.dumps({'version':VERSION,'activated_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}))
 print(json.dumps({'activated':True,'public_port':443,'internal_ports':[18891,18892],'existing_vhost_preserved':True}))
 '''
 STATUS = r'''
@@ -135,7 +140,12 @@ def main():
     args = parser.parse_args()
     ssh = ['ssh', '-i', str(args.ssh_key), '-o', 'IdentitiesOnly=yes', '-o', 'BatchMode=yes', '-o', 'StrictHostKeyChecking=yes', HOST]
 
+    release_source=(ROOT/'scripts/services/release.gd').read_text()
+    version=re.search(r'const VERSION := "([^"]+)"',release_source).group(1)
+    build=int(re.search(r'const BUILD := (\d+)',release_source).group(1))
+
     def remote(code):
+        code='VERSION='+repr(version)+'\nBUILD='+str(build)+'\n'+code
         subprocess.run(ssh + ['python3', '-'], input=code, text=True, check=True)
 
     if args.action == 'prepare':

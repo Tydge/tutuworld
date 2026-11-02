@@ -1,0 +1,70 @@
+{
+  "version": "0.3.1",
+  "build": 4,
+  "protocol": 3,
+  "tests": {
+    "rules_groups": 14,
+    "multiplayer_rules": 88,
+    "linux_clients": 42,
+    "movement_latency_checks_per_run": 16,
+    "motion_buffer": 117,
+    "graphical_client": 24,
+    "update": 8,
+    "project_integrity": 261,
+    "public_tls": 4,
+    "python_auth": 3
+  },
+  "latency_conditions": {
+    "round_trip_ms": 300,
+    "jitter_each_direction_ms": 50,
+    "temporary_stall_ms": 800,
+    "backward_pulls": 0,
+    "normal_hard_corrections": 0,
+    "stopped_error": 0,
+    "injected_error_recovered": true
+  },
+  "windows": {
+    "native_runtime_test": false,
+    "vm_testing_stopped_per_user": true,
+    "preferred_driver": "d3d12",
+    "agility_sdk": "1.618.5",
+    "sdk_version": 618,
+    "sdk_directory": "x86_64",
+    "gpu_exports": {
+      "AmdPowerXpressRequestHighPerformance": 1,
+      "NvOptimusEnablement": 1
+    }
+  },
+  "deployment": {
+    "existing_character_count": 1,
+    "character_assets_unchanged": true,
+    "epoch_unchanged": 1793584800.0,
+    "clock_not_realigned": true,
+    "asset_comparison": "semantic equality with numeric normalization"
+  },
+  "artifacts": {
+    "city.pck": {
+      "bytes": 54801936,
+      "sha256": "92f050b697c5e23e1844f7846181286f6453e8e2835cd04fce781ade10fe55f1"
+    },
+    "server.pck": {
+      "bytes": 54925472,
+      "sha256": "9d9eccacd5ad55a4c024438b5b01252aca0fb391342bcfafa2ff47802357edc3"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 107320101,
+      "sha256": "96563958ab3628bed920c4c0fa0b5e99aa433aaa25f6f1c18c59fa4938f98e4c"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 82248878,
+      "sha256": "b69cefda16e46279fa558508347ab08d89f57bfd0f76808b63247aeb1fdc3364"
+    }
+  },
+  "native_update": {
+    "old_active_build": 3,
+    "new_active_build": 4,
+    "automatic_restart": true,
+    "runtime_version_visually_verified": "0.3.1",
+    "isolated_user_directory": "TutuWorldUpdaterQA030"
+  }
+}

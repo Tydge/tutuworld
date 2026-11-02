@@ -14,6 +14,8 @@ var pending: Dictionary={}
 var endpoint:=Release.WORLD_URL
 var sequence:=0
 var heartbeat:=0.0
+var round_trip_ms:=0.0
+var ping_at:=0
 var handshake_sent:=false
 var required_version:=""
 func connect_world(url: String=Release.WORLD_URL,_token: String="") -> Error:
@@ -21,7 +23,7 @@ func connect_world(url: String=Release.WORLD_URL,_token: String="") -> Error:
 	if not url.begins_with("wss://") and not (OS.get_cmdline_user_args().has("--test") and url.begins_with("ws://127.0.0.1:")):return ERR_UNAUTHORIZED
 	endpoint=url;socket=WebSocketPeer.new();socket.inbound_buffer_size=Codec.MAX_BYTES;socket.outbound_buffer_size=Codec.MAX_BYTES
 	socket.heartbeat_interval=10;handshake_sent=false;required_version=""
-	var error:=socket.connect_to_url(url)
+	var error:=socket.connect_to_url(url,preload("res://scripts/services/network_trust.gd").options() if url.begins_with("wss://") else null)
 	connecting=error==OK
 	return error
 func ensure_connected(url: String=Release.WORLD_URL) -> bool:
@@ -59,6 +61,8 @@ func _process(delta: float) -> void:
 		while socket.get_available_packet_count()>0:
 			var data:=Codec.decode(socket.get_packet())
 			match str(data.get("type","")):
+				"pong":
+					if ping_at>0:round_trip_ms=float(Time.get_ticks_msec()-ping_at);ping_at=0
 				"welcome":connected=true;connecting=false
 				"update_required":required_version=str(data.get("version",""));connecting=false;connected=false;socket.close();update_required.emit(required_version)
 				"result":
@@ -69,7 +73,7 @@ func _process(delta: float) -> void:
 				"snapshot":snapshot_received.emit(data)
 			message_received.emit(data)
 		heartbeat+=delta
-		if heartbeat>10:heartbeat=0;send({"type":"ping"})
+		if heartbeat>10:heartbeat=0;ping_at=Time.get_ticks_msec();send({"type":"ping"})
 	elif state==WebSocketPeer.STATE_CLOSED:
 		var notify:=connected
 		connected=false;connecting=false

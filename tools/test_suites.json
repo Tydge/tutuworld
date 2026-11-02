@@ -122,6 +122,12 @@
     },
     "multiplayer_public": {
       "headless": true
+    },
+    "movement_latency": {
+      "headless": true
+    },
+    "motion_buffer_rules": {
+      "headless": true
     }
   }
 }

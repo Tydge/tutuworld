@@ -33,6 +33,10 @@ func _ready() -> void:
 func field(placeholder: String,secret: bool) -> LineEdit:
 	var input:=LineEdit.new();input.placeholder_text=placeholder;input.secret=secret;input.max_length=72;input.custom_minimum_size=Vector2(420,48)
 	input.add_theme_stylebox_override("normal",UI.box(Color("e9eddf"),14,12));input.add_theme_color_override("font_color",UI.INK)
+	input.add_theme_color_override("font_placeholder_color",Color("526c59"))
+	input.add_theme_color_override("caret_color",UI.INK)
+	var focus:=UI.box(Color.TRANSPARENT,14,12);focus.set_border_width_all(2);focus.border_color=UI.GREEN;focus.shadow_size=0
+	input.add_theme_stylebox_override("focus",focus)
 	return input
 func _process(_delta: float) -> void:card.position=(get_viewport_rect().size-card.size)*.5
 func open() -> void:

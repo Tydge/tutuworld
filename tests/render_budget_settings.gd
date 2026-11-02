@@ -22,7 +22,7 @@ func run() -> void:
 	root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/画面设置-均衡与原生.png")
 	root.size=Vector2i(2400,1440);await create_timer(.6).timeout
 	var modern:=RenderingServer.get_current_rendering_method()=="forward_plus"
-	check(root.scaling_3d_scale<.85 if modern else is_equal_approx(root.scaling_3d_scale,1.0),"Dense window budgets the 3D buffer; compatibility remains supported")
+	check(root.scaling_3d_scale<.85,"Dense window budgets the 3D buffer; compatibility remains supported")
 	var before: Vector2=root.get_texture().get_size()
 	choice.select(1);choice.item_selected.emit(1);await create_timer(.4).timeout
 	check(session.settings.render_quality=="native" and is_equal_approx(root.scaling_3d_scale,1.0),"Native-quality selection restores the full 3D buffer")

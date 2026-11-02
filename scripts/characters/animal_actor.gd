@@ -2,6 +2,7 @@ extends CharacterBody3D
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
 ## Shared semantic rig: four limb pivots, head, eyes, mouth and wearable slots.
 @export var rig_profile: Resource = preload("res://config/animals/bunny.tres")
+signal movement_predicted(direction: Vector3,jump: bool,running: bool)
 signal landed
 var visual: Node3D
 var head: Node3D
@@ -51,6 +52,28 @@ var network_direction:=Vector3.ZERO
 var network_jump:=false
 var network_replica:=false
 var network_grounded:=true
+var network_client_prediction:=false
+var network_sequenced:=false
+var network_generation:=1
+var network_ack:=0
+var network_received:=0
+var network_queue: Array=[]
+var network_budget:=0.0
+var network_idle:=0.0
+var network_restore_grounded: Variant=null
+var presentation_offset:=Vector3.ZERO
+var presentation_applied:=Vector3.ZERO
+const INPUT_STEP:=1.0/60.0
+func reset_network_motion() -> void:
+	network_generation+=1;network_ack=0;network_received=0;network_queue.clear();network_budget=0
+	network_direction=Vector3.ZERO;network_jump=false
+func movement_state() -> Dictionary:
+	return {"position":[position.x,position.y,position.z],"velocity":[velocity.x,velocity.y,velocity.z],"grounded":is_on_floor()}
+func restore_movement_state(value: Dictionary) -> void:
+	var p: Array=value.position;var v: Array=value.velocity
+	position=Vector3(p[0],p[1],p[2]);velocity=Vector3(v[0],v[1],v[2])
+	network_restore_grounded=bool(value.get("grounded",false));was_on_floor=network_restore_grounded
+
 
 func _ready() -> void:
 	visual = $Visual
@@ -116,27 +139,43 @@ func lie_in_bed(bed: Node3D) -> void:
 	head.position=pose.head;head.rotation=Vector3(SleepPose.HEAD_ANGLE,0,0)
 
 func _physics_process(delta: float) -> void:
+	visual.position-=presentation_applied;presentation_applied=Vector3.ZERO
+	presentation_offset*=exp(-delta*14)
 	animate_pose(delta)
-	if network_replica: return
-	if world == null: return
-	if stamina_fraction<=.0001: run_enabled=false
-	if not network_controlled and Input.is_action_just_pressed("sprint") and can_move and action=="" and not world.paused: toggle_run()
-	is_running=false
-	# Gravity and floor collision must not fight the seated anchor.
-	if seated:
-		velocity = Vector3.ZERO
-		walking = false
+	presentation_applied=presentation_offset;visual.position+=presentation_applied
+	if network_replica or world==null:return
+	if network_sequenced:
+		network_idle+=delta
+		network_budget=minf(120,network_budget+delta*60)
+		var count_: int=mini(8,mini(network_queue.size(),int(network_budget)))
+		for i in range(count_):
+			network_idle=0
+			var input: Dictionary=network_queue.pop_front();network_budget-=1
+			run_enabled=bool(input.running)
+			simulate_movement(INPUT_STEP,Vector3(input.direction[0],0,input.direction[2]),bool(input.jump),false)
+			network_ack=int(input.seq)
+		if count_==0 and network_idle>.3:simulate_movement(delta,Vector3.ZERO,false,false)
 		return
-	var direction := Vector3.ZERO
-	if can_move and action == "" and not world.paused:
-		var axis := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-		var camera_yaw: float = world.yaw
-		var right := Vector3(cos(camera_yaw), 0, -sin(camera_yaw))
-		var forward := Vector3(sin(camera_yaw), 0, cos(camera_yaw))
-		right.y = 0
-		forward.y = 0
-		direction = (right.normalized()*axis.x+forward.normalized()*axis.y).normalized()
-		if network_controlled: direction=network_direction.limit_length(1.0)
+	if stamina_fraction<=.0001:run_enabled=false
+	if not network_controlled and Input.is_action_just_pressed("sprint") and can_move and action=="" and not world.paused:toggle_run()
+	var axis:=Input.get_vector("move_left","move_right","move_up","move_down")
+	var yaw: float=world.yaw
+	var direction:=Vector3(cos(yaw),0,-sin(yaw))*axis.x+Vector3(sin(yaw),0,cos(yaw))*axis.y
+	if network_controlled:direction=network_direction
+	var jump: bool=network_jump if network_controlled else Input.is_action_just_pressed("jump")
+	if network_client_prediction and not world.session.test_mode and not DisplayServer.window_is_focused():direction=Vector3.ZERO;jump=false
+	if not can_move or action!="" or world.paused:direction=Vector3.ZERO;jump=false
+	simulate_movement(delta,direction,jump,true)
+	network_jump=false
+	if network_client_prediction:movement_predicted.emit(direction,jump,run_enabled)
+func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool=true) -> void:
+	is_running=false
+	if seated:velocity=Vector3.ZERO;walking=false;return
+	if stamina_fraction<=.0001:run_enabled=false
+	if not can_move or action!="" or world.paused:direction=Vector3.ZERO;jump=false
+	direction=direction.limit_length(1)
+	var grounded: bool=is_on_floor() if network_restore_grounded==null else bool(network_restore_grounded)
+	network_restore_grounded=null
 	if work_align_active:
 		var offset:=work_position-global_position;offset.y=0
 		if offset.length()<.035 or action=="": work_align_active=false
@@ -149,16 +188,15 @@ func _physics_process(delta: float) -> void:
 	if direction.length()>.1:
 		facing = atan2(direction.x,direction.z)
 		visual.rotation.y = lerp_angle(visual.rotation.y,facing,1.0-exp(-delta*12.0))
-	if not is_on_floor(): velocity.y -= 18.0*delta
-	if (network_jump if network_controlled else Input.is_action_just_pressed("jump")) and is_on_floor() and action=="" and not world.paused:
+	if not grounded: velocity.y -= 18.0*delta
+	if jump and grounded and action=="" and not world.paused:
 		velocity.y = 7.0
-		world.play_tone(510.0,.08,.15)
-	network_jump=false
+		if feedback:world.play_tone(510.0,.08,.15)
 	if not world.can_walk(global_position+Vector3(velocity.x,0,velocity.z)*delta):
 		velocity.x = 0
 		velocity.z = 0
-	move_on_ground(delta)
-	if not was_on_floor and is_on_floor():
+	move_on_ground(delta,grounded)
+	if feedback and not was_on_floor and is_on_floor():
 		landed.emit()
 		if action=="": mood_label.text = ""
 	was_on_floor = is_on_floor()
@@ -169,14 +207,14 @@ func _physics_process(delta: float) -> void:
 		var pace := clampf((speed-move_speed*speed_multiplier)/(move_speed*speed_multiplier*(SPRINT_MULTIPLIER*run_speed_multiplier-1)),0,1)
 		var rate := 8.6*minf(speed/(move_speed*speed_multiplier),1.0)+1.6*pace
 		var next_phase := step_phase+delta*rate
-		if int(step_phase/PI)!=int(next_phase/PI): world.footstep(global_position)
+		if feedback and int(step_phase/PI)!=int(next_phase/PI): world.footstep(global_position)
 		step_phase = fmod(next_phase,TAU*100)
 	if global_position.y < -8.0:
 		global_position=world.respawn_position();velocity=Vector3.ZERO;reset_physics_interpolation()
 
-func move_on_ground(delta: float) -> void:
+func move_on_ground(delta: float,grounded: bool=false) -> void:
 	var horizontal:=Vector3(velocity.x,0,velocity.z)
-	if is_on_floor() and get_floor_normal().y>.995 and velocity.y<=0 and horizontal.length_squared()>.01:
+	if grounded and get_floor_normal().y>.995 and velocity.y<=0 and horizontal.length_squared()>.01:
 		var ahead: Vector3=global_position+horizontal.normalized()*rig_profile.step_probe_distance
 		floor_query.from=ahead+Vector3(0,.38,0)
 		floor_query.to=ahead-Vector3(0,.12,0)

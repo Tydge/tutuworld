@@ -1,4 +1,5 @@
 extends SceneTree
+const Release=preload("res://scripts/services/release.gd")
 const Transport=preload("res://scripts/services/remote_transport.gd")
 var clients: Array=[]
 var tokens: Array=[]
@@ -16,7 +17,7 @@ func run() -> void:
 	var endpoint:=OS.get_environment("TUTU_TEST_ENDPOINT")
 	if endpoint=="":endpoint="ws://127.0.0.1:18895"
 	var old=Transport.new();old.set_meta("build",2);root.add_child(old)
-	check(not await old.ensure_connected(endpoint) and old.required_version=="0.3.0","Live server rejects outdated build")
+	check(not await old.ensure_connected(endpoint) and old.required_version==Release.VERSION,"Live server rejects outdated build")
 	old.close();old.queue_free()
 	var suffix:=Crypto.new().generate_random_bytes(5).hex_encode()
 	for i in range(5):

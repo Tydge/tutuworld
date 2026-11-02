@@ -9,16 +9,22 @@ var replicas: Dictionary={}
 var motion: Dictionary={}
 var bubbles: Dictionary={}
 var input_timer:=0.0
-var jump_pending:=false
+var prediction=preload("res://scripts/services/movement_prediction.gd").new()
+var buffers: Dictionary={}
+const Buffer=preload("res://scripts/services/motion_buffer.gd")
 var chat_input: LineEdit
 var chat_card: PanelContainer
 var connection_card: PanelContainer
 var changing_scene:=false
 var remote_meal:=""
+var metrics_timer:=0.0
 func _ready() -> void:
+	process_physics_priority=-10
 	session=city.session
+	city.bunny.network_client_prediction=true
+	city.bunny.movement_predicted.connect(record_input)
 	for npc in city.npcs:
-		npc.network_replica=true
+		npc.network_replica=true;npc.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
 		for child in npc.get_children():
 			if child.get_script() in [load("res://scripts/city/npc_driver.gd"),load("res://scripts/valley/panda_routine.gd"),load("res://scripts/valley/visitor_routine.gd")]:child.set_physics_process(false)
 		npc.set_physics_process(true)
@@ -40,7 +46,6 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if changing_scene:return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.is_action_pressed("jump") and not chat_card.visible:jump_pending=true
 		if event.keycode==KEY_ESCAPE and chat_card.visible:
 			close_chat();get_viewport().set_input_as_handled();return
 		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.overlay.visible and not city.preparing:
@@ -55,6 +60,7 @@ func connection_changed(connected: bool) -> void:
 	connection_card.visible=not connected
 	city.bunny.can_move=connected;city.paused=not connected or city.hud.overlay.visible or chat_card.visible
 	if connected:
+		prediction=preload("res://scripts/services/movement_prediction.gd").new()
 		var p: Array=session.state().player_position
 		city.bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])));city.sleep_active=false;city.nap_active=false;city.dining_active=false
 func version_changed(_version: String) -> void:
@@ -64,38 +70,48 @@ func version_changed(_version: String) -> void:
 	get_tree().change_scene_to_file("res://scenes/title.tscn")
 func receive(data: Dictionary) -> void:
 	if data.get("type","")=="snapshot":
-		var id:=str(data.state.player_id)
-		if motion.has(id):motion[id].pose=data.state.get("net_pose",{});motion[id].position=data.state.player_position;motion[id].job=data.get("job",{})
+		if data.get("movement") is Dictionary:
+			var row: Dictionary=data.movement;motion[str(row.id)]=row;prediction.receive(row)
 	elif data.get("type","")=="motion":
 		var seen: Dictionary={}
 		for row in data.get("actors",[]):
 			var id: String=row.id;motion[id]=row;seen[id]=true
+			if id==session.active_character_id:prediction.receive(row)
+			else:
+				if not buffers.has(id):buffers[id]=Buffer.new()
+				buffers[id].push(row,int(data.get("tick",0)),float(Time.get_ticks_msec())/1000)
 			if row.get("npc",false):continue
 			if id==session.active_character_id:continue
 			if not replicas.has(id):make_replica(row)
 		for id in replicas.keys():
-			if not seen.has(id):replicas[id].actor.queue_free();replicas[id].props.queue_free();replicas.erase(id);motion.erase(id)
+			if not seen.has(id):replicas[id].actor.queue_free();replicas[id].props.queue_free();replicas.erase(id);motion.erase(id);buffers.erase(id)
 	elif data.get("type","")=="chat":show_chat(data)
 func make_replica(row: Dictionary) -> void:
-	var actor=Animals.create(row.species);actor.network_replica=true;actor.world=city;actor.name="Online_"+str(row.id);city.add_child(actor)
+	var actor=Animals.create(row.species);actor.network_replica=true;actor.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;actor.world=city;actor.name="Online_"+str(row.id);city.add_child(actor)
 	actor.position=from_array(row.position);Outfit.apply(actor,row.equipment)
 	var props:=Props.new();props.bunny=actor;city.add_child(props)
 	var label:=preload("res://scripts/geometry.gd").text3d(actor,row.name,Vector3(0,actor.rig_profile.name_height,0),22,UI.CREAM)
 	label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.outline_size=6;label.outline_modulate=UI.INK
 	replicas[row.id]={"actor":actor,"props":props,"equipment":row.equipment.duplicate(),"action":""}
+func record_input(direction: Vector3,jump: bool,running: bool) -> void:
+	if session.online_joined and not city.preparing:prediction.record(city.bunny,direction,jump,running)
+func _physics_process(_delta: float) -> void:
+	if not city.preparing and is_instance_valid(city.bunny):prediction.reconcile(city.bunny)
 func _process(delta: float) -> void:
 	if not is_instance_valid(city.bunny):return
+	metrics_timer+=delta
+	if metrics_timer>=30:
+		metrics_timer=0
+		print("NET_CLIENT fps=",Engine.get_frames_per_second()," rtt_ms=",snappedf(session.remote.round_trip_ms,1)," unacked=",prediction.history.size()," corrections=",prediction.corrections," hard=",prediction.hard_corrections," max_error=",snappedf(prediction.max_error,.001))
 	input_timer+=delta
 	if input_timer>=.05 and session.online_joined:
 		input_timer=0
-		var axis:=Input.get_vector("move_left","move_right","move_up","move_down")
-		var direction: Vector3=Vector3(cos(city.yaw),0,-sin(city.yaw))*axis.x+Vector3(sin(city.yaw),0,cos(city.yaw))*axis.y
-		if city.paused or city.preparing or not city.bunny.can_move or city.bunny.action!="" or (not session.test_mode and not DisplayServer.window_is_focused()):direction=Vector3.ZERO;jump_pending=false
-		session.remote.send({"type":"motion","direction":[direction.x,0,direction.z],"running":city.bunny.run_enabled,"jump":jump_pending})
-		jump_pending=false
+		var packet: Dictionary=prediction.take_packet()
+		if not packet.is_empty():session.remote.send(packet)
 	if not city.preparing:
 		for id in motion:
 			var row: Dictionary=motion[id]
+			if buffers.has(id):row=buffers[id].sample(float(Time.get_ticks_msec())/1000)
 			if id==session.active_character_id:apply_local(row,delta)
 			elif row.get("npc",false):
 				if city.targets.has(id):apply_actor(city.targets[id].node,row,delta)
@@ -136,14 +152,10 @@ func apply_local(row: Dictionary,delta: float) -> void:
 		actor.stand_up(from_array(row.position));city.sleep_active=false;city.nap_active=false
 	if kind=="eat":return
 	if kind=="waiting_exit":city.nap_active=true;actor.seated=true;actor.play_action("nap",INF);return
-	var expected:=from_array(row.position)
-	var distance: float=actor.position.distance_to(expected)
-	if distance>3:
-		actor.position=expected;actor.velocity=from_array(row.velocity);actor.reset_physics_interpolation()
-	elif distance>.45:actor.position=actor.position.lerp(expected,minf(1,delta*8))
+
 func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	var target:=from_array(row.position)
-	actor.position=target if actor.position.distance_to(target)>4 else actor.position.lerp(target,1-exp(-delta*16))
+	actor.position=target
 	actor.velocity=from_array(row.get("velocity",[0,0,0]));actor.walking=row.get("walking",false);actor.network_grounded=row.get("grounded",true)
 	if str(row.get("id",""))!=city.talking_npc or city.targets.get(city.talking_npc,{}).get("kind","")!="shop":actor.visual.rotation.y=lerp_angle(actor.visual.rotation.y,float(row.get("yaw",0)),1-exp(-delta*18))
 	actor.step_phase+=delta*minf(13,Vector2(actor.velocity.x,actor.velocity.z).length()*3)

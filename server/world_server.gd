@@ -26,6 +26,10 @@ var save_path: String
 var auth_url: String
 var clock_alignment: Dictionary={}
 var admin_timer:=0.0
+var metrics_timer:=0.0
+var metrics_frames:=0
+var metrics_max_frame:=0.0
+var metrics_elapsed:=0.0
 func state() -> Dictionary:return world.state
 func _ready() -> void:
 	var directory:=OS.get_environment("TUTU_STATE_DIR")
@@ -89,6 +93,13 @@ func save_world() -> bool:
 	return DirAccess.rename_absolute(save_path+".tmp",save_path)==OK
 func _process(delta: float) -> void:
 	if not ready_for_players:return
+	metrics_timer+=delta;metrics_elapsed+=delta;metrics_frames+=1;metrics_max_frame=maxf(metrics_max_frame,delta*1000)
+	if metrics_timer>=30:
+		if not actors.is_empty():
+			var queued:=0
+			for pawn in pawns.values():queued+=pawn.network_queue.size()
+			print("NET_SERVER players=",actors.size()," queued_inputs=",queued," frame_ms_avg=",snappedf(metrics_elapsed*1000/maxi(1,metrics_frames),.1)," frame_ms_max=",snappedf(metrics_max_frame,.1))
+		metrics_timer=0;metrics_elapsed=0;metrics_frames=0;metrics_max_frame=0
 	while listener.is_connection_available():
 		var tcp:=listener.take_connection()
 		if peers.size()>=32:tcp.disconnect_from_host();continue
@@ -179,15 +190,23 @@ func receive(peer_id: int,data: Dictionary) -> void:
 	if kind=="ping":send(peer_id,{"type":"pong"});return
 	if kind=="motion":
 		if peer.character=="" or not pawns.has(peer.character):return
-		var direction=data.get("direction",[])
-		if not direction is Array or direction.size()!=3:return
-		for n in direction:
-			if not (n is float or n is int) or not is_finite(float(n)):return
 		var pawn=pawns[peer.character]
-		pawn.network_direction=Vector3(float(direction[0]),0,float(direction[2])).limit_length(1)
+		var inputs=data.get("inputs",[])
+		if int(data.get("generation",0))!=pawn.network_generation or not inputs is Array or inputs.size()>12:return
+		for input in inputs:
+			if not input is Dictionary:return
+			var direction=input.get("direction",[])
+			if not direction is Array or direction.size()!=3:return
+			for n in direction:
+				if not (n is float or n is int) or not is_finite(float(n)):return
+			var seq:=int(input.get("seq",0))
+			if seq<=pawn.network_received:continue
+			if seq!=pawn.network_received+1 or pawn.network_queue.size()>=120:
+				pawn.reset_network_motion();send_snapshot(peer_id);return
+			var limited:=Vector3(float(direction[0]),0,float(direction[2])).limit_length(1)
+			pawn.network_queue.append({"seq":seq,"direction":[limited.x,0,limited.z],"running":bool(input.get("running",false)),"jump":bool(input.get("jump",false))})
+			pawn.network_received=seq
 		peer.motion_at=Time.get_ticks_msec()
-		pawn.run_enabled=bool(data.get("running",false))
-		pawn.network_jump=pawn.network_jump or bool(data.get("jump",false))
 		return
 	if kind!="request" or str(data.get("id","")).length()>128:return
 	var verb: String=str(data.get("verb",""));var args=data.get("args",{})
@@ -267,7 +286,7 @@ func join_world(peer_id: int,id: String) -> Dictionary:
 	a.tick_stamina(maxf(0,Time.get_unix_time_from_system()-float(record.get("saved_at",Time.get_unix_time_from_system()))))
 	var map_id: String=str(a.state.get("map_id","city"))
 	if not maps.has(map_id):map_id="city";a.state.map_id=map_id
-	var pawn=Animals.create(a.state.species);pawn.name=id;pawn.network_controlled=true;pawn.world=maps[map_id]
+	var pawn=Animals.create(a.state.species);pawn.name=id;pawn.network_controlled=true;pawn.network_sequenced=true;pawn.world=maps[map_id]
 	maps[map_id].add_child(pawn)
 	var old: Array=a.state.player_position
 	var desired:=Vector3(float(old[0]),float(old[1]),float(old[2]))
@@ -319,7 +338,7 @@ func restore_runtime(id: String,backup: Dictionary) -> void:
 	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(host.targets[pose.target].node.get_node("SeatAnchor").global_transform);pawn.play_action("nap",INF)
 	elif pose.get("kind","") in ["eat","waiting_exit"]:pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
 	elif not a.job.is_empty():begin_job_pose(id)
-	pawn.position=backup.position
+	pawn.position=backup.position;pawn.reset_network_motion()
 func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
 	var id: String=peers[peer_id].character;var a=actors[id];var pawn=pawns[id]
 	var command_id:=str(request.get("id",""))
@@ -353,7 +372,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 			if not body_clear(map_id,seat.get_node("SeatAnchor").global_position,id):return fail("座位旁有人，稍等一下吧。")
 			pawn.sit_on_surface(seat.get_node("SeatAnchor").global_transform);pawn.play_action("nap",INF)
 			a.state.net_pose={"kind":"sit","target":target,"exit":vector_array(seat.get_node("ExitAnchor").global_position)}
-			occupy(map_id,target,id,"sit")
+			occupy(map_id,target,id,"sit");pawn.reset_network_motion()
 		return {"ok":true,"message":""}
 	if verb=="cancel":
 		var result: Dictionary=a.execute(command_for(id,request,verb,args))
@@ -368,7 +387,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		var result: Dictionary=a.execute(command_for(id,request,verb,args))
 		if result.ok:
 			release_all(id);pawn.reparent(maps[destination],false);pawn.world=maps[destination];pawn.position=point.position;pawn.velocity=Vector3.ZERO
-			a.state.player_position=vector_array(pawn.position)
+			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 		return result
 	if verb not in ["buy","sell","equip","plant","water","weed","harvest","gather","craft","eat","snack","rest"]:return fail("这项操作暂时不能使用。")
 	var needs_lock:=verb in ["plant","water","weed","harvest","gather","craft","eat","rest"]
@@ -387,7 +406,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if verb=="rest":
 			var bed: Node3D=host.home.get_node("Furnishing/bed")
 			pawn.lie_in_bed(bed);host.home.bed_occupant=pawn
-			a.state.net_pose={"kind":"sleep","target":target,"exit":vector_array(bed.get_node("SleepExit").global_position)}
+			a.state.net_pose={"kind":"sleep","target":target,"exit":vector_array(bed.get_node("SleepExit").global_position)};pawn.reset_network_motion()
 		elif not a.job.is_empty():begin_job_pose(id)
 	return result
 func command_for(id: String,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
@@ -408,7 +427,7 @@ func begin_job_pose(id: String) -> void:
 		var point: Vector3=host.targets[j.target].position
 		if j.verb not in ["craft","eat"]:pawn.visual.rotation.y=atan2(point.x-pawn.position.x,point.z-pawn.position.z)
 		if j.verb in ["water","weed","gather"] and animation!="harvest_tree":pawn.align_work(point,1.30 if j.verb=="gather" else 1.45)
-	pawn.play_action(animation,INF);a.state.player_position=vector_array(pawn.position)
+	pawn.play_action(animation,INF);a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 func finish_pose(id: String) -> void:
 	var a=actors[id];var pawn=pawns[id]
 	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
@@ -420,7 +439,7 @@ func finish_pose(id: String) -> void:
 		pawn.play_action("nap",INF)
 		return
 	pawn.stand_up(point.position if not point.is_empty() else pawn.position)
-	pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO;a.state.net_pose={};a.state.rest_mode="";a.sleeping=false
+	pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO;a.state.net_pose={};a.state.rest_mode="";a.sleeping=false;pawn.reset_network_motion()
 	a.state.player_position=vector_array(pawn.position)
 func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
@@ -430,7 +449,7 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	a.execute({"verb":"cancel"});release_all(id)
 	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
 	pawn.stand_up(point.position);pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO
-	a.state.net_pose={};a.state.rest_mode="";a.state.rest_bed="";a.sleeping=false;a.state.player_position=vector_array(pawn.position)
+	a.state.net_pose={};a.state.rest_mode="";a.state.rest_bed="";a.sleeping=false;a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 	return {"ok":true,"message":"找到可以落脚的地方啦。" if unstuck else ""}
 func tick_actor(id: String,delta: float) -> void:
 	var a=actors[id];var pawn=pawns[id]
@@ -514,7 +533,7 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 	return {}
 func actor_packet(id: String) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
-	return {"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"action":pawn.action,"walking":pawn.walking,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job}
+	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"action":pawn.action,"walking":pawn.walking,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job}
 func broadcast_motion() -> void:
 	var batches: Dictionary={"city":[],"valley":[]}
 	for id in actors:batches[actors[id].state.map_id].append(actor_packet(id))
@@ -523,14 +542,14 @@ func broadcast_motion() -> void:
 			batches[map_id].append({"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})})
 	for peer_id in peers:
 		var id: String=peers[peer_id].character
-		if actors.has(id):send(peer_id,{"type":"motion","actors":batches[actors[id].state.map_id]})
+		if actors.has(id):send(peer_id,{"type":"motion","tick":Engine.get_physics_frames(),"actors":batches[actors[id].state.map_id]})
 func send_snapshot(peer_id: int) -> void:
 	if not peers.has(peer_id):return
 	var id: String=peers[peer_id].character
 	if not actors.has(id):return
 	var a=actors[id];var snapshot: Dictionary=a.state.duplicate(true)
 	snapshot.erase("account_id");snapshot.erase("seen");snapshot.time=world.state.time
-	send(peer_id,{"type":"snapshot","state":snapshot,"job":a.job,"locks":locks,"care_history":care_history,"doors":doors,"epoch":epoch})
+	send(peer_id,{"type":"snapshot","state":snapshot,"job":a.job,"locks":locks,"care_history":care_history,"doors":doors,"epoch":epoch,"movement":actor_packet(id)})
 func chat(peer_id: int,request: Dictionary,text: String) -> void:
 	var peer: Dictionary=peers[peer_id]
 	text=text.strip_edges()

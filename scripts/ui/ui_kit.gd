@@ -12,6 +12,11 @@ static func theme() -> Theme:
 	t.set_font_size("font_size","TooltipLabel",15)
 	t.set_color("font_color","Label",INK)
 	t.set_color("font_color","Button",INK)
+	t.set_color("font_color","LineEdit",INK)
+	t.set_color("font_placeholder_color","LineEdit",Color("526c59"))
+	t.set_color("caret_color","LineEdit",INK)
+	t.set_color("selection_color","LineEdit",Color("b8d4bd"))
+	t.set_color("font_selected_color","LineEdit",INK)
 	for state in ["font_color","font_hover_color","font_pressed_color","font_hover_pressed_color","font_focus_color"]: t.set_color(state,"CheckButton",INK)
 	return t
 static func label(text: String,size_: int=18,color: Color=INK) -> Label:

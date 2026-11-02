@@ -116,6 +116,9 @@ func _ready() -> void:
 			for mesh_ in node.find_children("*","GeometryInstance3D",true,false): cloud_meshes.append(mesh_)
 	atmosphere=scenery.get_node("Atmosphere").environment.duplicate(true)
 	scenery.get_node("Atmosphere").environment=atmosphere
+	if RenderingServer.get_current_rendering_method()=="gl_compatibility":
+		atmosphere.tonemap_mode=Environment.TONE_MAPPER_FILMIC
+		atmosphere.tonemap_exposure=.9
 	if RenderingServer.get_current_rendering_method()=="forward_plus":
 		atmosphere.ssao_enabled=true
 		atmosphere.ssao_radius=.65

@@ -17,3 +17,4 @@ server/state/
 *.key
 *.pem
 !config/release_public.pem
+!config/network_ca.pem
