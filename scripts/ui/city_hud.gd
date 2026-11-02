@@ -265,6 +265,7 @@ func close_panel() -> void:
 	city.paused=false
 	city.talking_npc=""
 func open_panel(kind: String) -> void:
+	if is_instance_valid(city.online_view) and city.online_view.chat_card.visible:city.online_view.close_chat()
 	if not session.job().is_empty():
 		notify("先完成动作，或按 Esc 取消。")
 		return

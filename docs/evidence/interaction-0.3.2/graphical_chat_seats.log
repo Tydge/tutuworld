@@ -1,0 +1,10 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+TUTU_SERVER_READY version=0.3.2 build=5
+WANDER_GRID_READY cells=9765 components=3
+WANDER_GRID_READY cells=11554 components=26
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=9765 components=3
+2026-11-02 12:50:22.705 Godot[3373:96493444] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+CHAT_SEAT_RESULT PASS checks=27 failures=[]

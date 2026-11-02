@@ -1,0 +1,60 @@
+{
+  "version": "0.3.2",
+  "build": 5,
+  "protocol": 3,
+  "checks": {
+    "chat_seats": 27,
+    "shop_steps_npc_return": 47,
+    "valley_traversal": 85,
+    "graphical_chat_seats": 27,
+    "project_integrity": 265,
+    "multiplayer": 88,
+    "remote_interpolation": 117,
+    "linux_five_clients": 42,
+    "latency_each_run": 16,
+    "update": 8,
+    "public_tls": 4
+  },
+  "scope": {
+    "shop_entries": "3 species × 3 shops × 3 approach lanes, walking without jump",
+    "panda_return": "3 outdoor origins, evening return to own bed and morning wake",
+    "seats": "4 park benches and 1 beach bench, matching client/server IDs and E sit/stand",
+    "chat": "all gameplay hotkeys, Tab focus containment, synthetic lost key-up with Chinese text/modifier keys, Escape and window focus, fresh input recovery"
+  },
+  "limits": [
+    "未进行Windows实体机或虚拟机验收",
+    "输入法丢失松键通过合成按键事件及中文文本专项模拟，未穷举所有原生输入法",
+    "Mac包尚未公证"
+  ],
+  "deployment": {
+    "characters_preserved": 2,
+    "assets_preserved": true,
+    "care_history_preserved": true,
+    "epoch_preserved": 1793584800.0,
+    "clock_not_realigned": true
+  },
+  "artifacts": {
+    "city.pck": {
+      "bytes": 54805692,
+      "sha256": "a46cb3197190a0cfdef4939fa9dff3872d7eeb72d5140a5178dd20e30785c2cd"
+    },
+    "server.pck": {
+      "bytes": 54929164,
+      "sha256": "e08420e0ccdc09fdd1211ecf5d665b53d238fd48617be59fa49f7df5c6f3ebf5"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 107317853,
+      "sha256": "933414e9ce3e24dc5f5a033e67533352467b0b610a63681d525084419cb4b3e8"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 82246628,
+      "sha256": "c75302dd2ec8bd488b62167c9fc861329b790451da0efda54c4a41c437d55203"
+    }
+  },
+  "native_update": {
+    "old_active_build": 4,
+    "new_active_build": 5,
+    "automatic_restart": true,
+    "verified_mounted_signed_pack": true
+  }
+}

@@ -45,12 +45,16 @@ subprocess.run(common+['--unit=tutuworld-stage-world',str(engine),'--headless','
 print(json.dumps({'prepared':True,'version':VERSION,'staging_game_port':18895,'staging_auth_port':18896}))
 '''
 ACTIVATE = r'''
-import datetime,json,os,shutil,subprocess
+import datetime,json,os,shutil,subprocess,time,urllib.request
 from pathlib import Path
 release=Path('/srv/tutuworld/releases')/VERSION
 if not (release/'server.pck').exists():raise SystemExit('Prepare the service first')
 subprocess.run(['systemctl','start','tutuworld-backup.service'],check=False,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 subprocess.run(['systemctl','stop','tutuworld-world.service','tutuworld-auth.service'],check=False)
+state=Path('/var/lib/tutuworld/world.json')
+if state.exists():
+ snapshot=Path('/root/tutuworld-deploy-backups');snapshot.mkdir(mode=0o700,exist_ok=True)
+ shutil.copy2(state,snapshot/('world-before-'+VERSION+'.json'))
 root=Path('/srv/tutuworld');link=root/'current.next'
 if link.is_symlink():link.unlink()
 link.symlink_to(release);os.replace(link,root/'current')
@@ -96,6 +100,14 @@ if validation.returncode:
  raise SystemExit(validation.stderr)
 subprocess.run(['systemctl','daemon-reload'],check=True)
 subprocess.run(['systemctl','enable','--now','tutuworld-auth.service','tutuworld-world.service','tutuworld-backup.timer'],check=True)
+ready=False
+for attempt in range(60):
+ try:
+  health=json.load(urllib.request.urlopen('http://127.0.0.1:18892/health',timeout=2))
+  if health.get('ok') and health.get('version')==VERSION and int(health.get('build',0))==BUILD:ready=True;break
+ except Exception:pass
+ time.sleep(.5)
+if not ready:raise SystemExit('World did not become ready; do not promote the public manifest')
 subprocess.run(['systemctl','reload','nginx'],check=True)
 for name in ['tutuworld-stage-world','tutuworld-stage-auth']:subprocess.run(['systemctl','stop',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 (release/'released.json').write_text(json.dumps({'version':VERSION,'activated_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}))

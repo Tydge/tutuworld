@@ -214,9 +214,7 @@ func setup_targets() -> void:
 		add_child(visual)
 		crops[p.id]=visual
 	setup_resources()
-	for node in scenery.get_node("CentralPark").get_children():
-		if str(node.name).begins_with("Bench"):
-			targets[str(node.name)]={"kind":"bench","position":node.global_position,"radius":2.4,"node":node}
+	preload("res://scripts/city/interaction_targets.gd").add_benches(self)
 func setup_resources() -> void:
 	for r in DB.resources(map_id):
 		targets[r.id]={"kind":"resource","position":Vector3(r.x,r.get("y",0.0),r.z),"radius":1.95,"item":r.item}
@@ -422,8 +420,13 @@ func quick_interact() -> Dictionary:
 	if quick_action.is_empty(): return {"ok":false,"message":"选中的这块地暂时没有可快捷完成的照料。"}
 	return begin_action(quick_action.verb,quick_action.target)
 func target_position(id: String) -> Vector3: return targets.get(id,{}).get("position",bunny.position)
+func is_text_entry_active() -> bool:
+	if is_instance_valid(online_view) and is_instance_valid(online_view.chat_card) and online_view.chat_card.visible:return true
+	var focus:=get_viewport().gui_get_focus_owner()
+	return focus is LineEdit or focus is TextEdit
 func _unhandled_input(event: InputEvent) -> void:
-	if preparing: return
+	if preparing:return
+	if is_instance_valid(online_view) and is_instance_valid(online_view.chat_card) and online_view.chat_card.visible:return
 	if event.is_action_pressed("pause"):
 		if sleep_active and not hud.overlay.visible: wake_from_bed()
 		elif talking_npc!="": end_dialogue()
@@ -432,6 +435,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else: hud.open_panel("settings")
 		get_viewport().set_input_as_handled()
 		return
+	if is_text_entry_active():return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode==KEY_C: toggle_panel("profile"); return
 		if event.keycode in [KEY_I,KEY_B]: toggle_panel("bag"); return

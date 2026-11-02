@@ -7,6 +7,7 @@ func navigation_bounds() -> Rect2i: return Rect2i(-54,-46,109,106)
 func respawn_position() -> Vector3: return Vector3(-11,.3,43)
 func setup_targets() -> void:
 	setup_resources()
+	preload("res://scripts/city/interaction_targets.gd").add_benches(self)
 	for id in ["home_sofa","home_desk"]:
 		var seat: Node3D=home.seat_node(id)
 		targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"radius":1.65,"node":seat,"label":"坐下来，听听溪水"}

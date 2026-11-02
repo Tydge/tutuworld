@@ -128,6 +128,12 @@
     },
     "motion_buffer_rules": {
       "headless": true
+    },
+    "interaction_revision_rules": {
+      "headless": true
+    },
+    "chat_seat_rules": {
+      "headless": true
     }
   }
 }

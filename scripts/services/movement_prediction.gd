@@ -54,7 +54,7 @@ func reconcile(actor: CharacterBody3D) -> void:
 	for frame in history:
 		var input: Dictionary=frame.input
 		actor.run_enabled=bool(input.running)
-		actor.simulate_movement(actor.INPUT_STEP,Vector3(input.direction[0],0,input.direction[2]),bool(input.jump),false)
+		actor.simulate_movement(actor.INPUT_STEP,Vector3(input.direction[0],0,input.direction[2]),bool(input.jump),false,true)
 		frame.state=actor.movement_state()
 	actor.visual.rotation.y=yaw;actor.step_phase=step
 	corrections+=1

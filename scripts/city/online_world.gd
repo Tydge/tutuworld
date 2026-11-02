@@ -46,16 +46,27 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if changing_scene:return
 	if event is InputEventKey and event.pressed and not event.echo:
+		if chat_card.visible and event.keycode==KEY_TAB and not chat_input.has_ime_text():
+			chat_input.grab_focus();get_viewport().set_input_as_handled();return
+		if chat_card.visible and event.keycode==KEY_ENTER and not chat_input.has_ime_text():chat_input.grab_focus()
 		if event.keycode==KEY_ESCAPE and chat_card.visible:
+			if chat_input.has_ime_text():return
 			close_chat();get_viewport().set_input_as_handled();return
 		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.overlay.visible and not city.preparing:
-			chat_card.show();chat_input.grab_focus();city.paused=true;get_viewport().set_input_as_handled()
+			open_chat();get_viewport().set_input_as_handled()
+func open_chat() -> void:
+	preload("res://scripts/services/gameplay_input.gd").release_controls()
+	chat_card.show();chat_input.grab_focus();city.paused=true
 func send_chat(value: String) -> void:
+	if chat_input.has_ime_text():return
 	var text:=value.strip_edges()
 	close_chat()
 	if text!="":session.dispatch("chat",{"text":text})
 func close_chat() -> void:
 	chat_input.text="";chat_input.release_focus();chat_card.hide();city.paused=city.hud.overlay.visible
+	preload("res://scripts/services/gameplay_input.gd").release_controls()
+func _notification(what: int) -> void:
+	if what==NOTIFICATION_APPLICATION_FOCUS_OUT:preload("res://scripts/services/gameplay_input.gd").release_controls()
 func connection_changed(connected: bool) -> void:
 	connection_card.visible=not connected
 	city.bunny.can_move=connected;city.paused=not connected or city.hud.overlay.visible or chat_card.visible

@@ -100,7 +100,7 @@ class Handler(BaseHTTPRequestHandler):
                 ready = True
         except OSError:
             pass
-        self.reply(200 if ready else 503, {'ok': ready, 'version': os.environ.get('TUTU_VERSION', '0.3.1'), 'build': int(os.environ.get('TUTU_BUILD', '4'))})
+        self.reply(200 if ready else 503, {'ok': ready, 'version': os.environ.get('TUTU_VERSION', '0.3.2'), 'build': int(os.environ.get('TUTU_BUILD', '5'))})
 
     def do_POST(self):
         if not LIMIT.acquire(blocking=False):

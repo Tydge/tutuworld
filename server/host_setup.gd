@@ -23,8 +23,7 @@ static func setup(host: Node3D) -> void:
 	for id in ["home_sofa","home_desk"]:
 		var seat: Node3D=host.home.seat_node(id)
 		host.targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"node":seat}
-	for node in host.scenery.find_children("Bench*","Node3D",true,false):
-		if node.has_node("SeatAnchor"):host.targets[str(node.name)]={"kind":"bench","position":node.global_position,"node":node}
+	preload("res://scripts/city/interaction_targets.gd").add_benches(host)
 	for source in DB.resources(host.map_id):host.targets[source.id]={"kind":"resource","position":Vector3(source.x,source.get("y",0),source.z),"item":source.item}
 static func update(host: Node3D) -> void:
 	var closest:=INF
