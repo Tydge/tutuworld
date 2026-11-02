@@ -1,0 +1,40 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+BOW_FIT bunny bow_rose minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_rose minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_rose minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_FIT bunny bow_sage minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_sage minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_sage minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_FIT bunny bow_honey minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_honey minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_honey minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_FIT bunny bow_plaid_rose minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_plaid_rose minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_plaid_rose minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_FIT bunny bow_plaid_sage minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_plaid_sage minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_plaid_sage minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_FIT bunny bow_plaid_honey minimum_gap=-0.00593564612791 size=(0.833595, 0.401625, 0.15351)
+BOW_KNOT_GAP bunny -0.00165363983251
+BOW_FIT cat_teacher bow_plaid_honey minimum_gap=-0.00120514375158 size=(0.708556, 0.341381, 0.130484)
+BOW_KNOT_GAP cat_teacher 0.03119768761098
+BOW_FIT panda bow_plaid_honey minimum_gap=0.00033204775536 size=(0.750235, 0.361463, 0.138159)
+BOW_KNOT_GAP panda 0.0529658831656
+BOW_REVISION_RESULT PASS checks=95 failures=[]

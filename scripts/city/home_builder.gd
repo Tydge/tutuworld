@@ -66,11 +66,13 @@ func floor_collision(parent: Node3D,p: Vector3,size_: Vector3) -> void:
 	var body:=G.solid_box(parent,p,size_,"WalkFloor");body.collision_layer=8;body.collision_mask=0
 func construct(world: Node3D,definition: Dictionary) -> Node3D:
 	blueprint=definition;floor_y=definition.floor_height;height=definition.wall_height;thickness=definition.wall_thickness
-	root=Node3D.new();root.name="SeabreezeHome"
+	root=Node3D.new();root.name=definition.get("node_name","SeabreezeHome")
 	root.set_script(load("res://scripts/city/seabreeze_home.gd"));root.assembling=true
 	root.floor_size=Vector2(definition.size[0],definition.size[1]);root.floor_level=floor_y;root.wall_height=height;root.roof_rise=definition.roof_rise
 	root.position=Vector3(definition.origin[0],definition.origin[1],definition.origin[2])
 	root.set_meta("buildable_reference",true);root.set_meta("blueprint_id",definition.id);root.set_meta("building_definition",definition.duplicate(true))
+	root.set_meta("building_name",definition.name)
+	if definition.has("door_id"): root.set_meta("door_id",definition.door_id)
 	world.add_child(root)
 	var structure:=group(root,"Structure")
 	build_floor(group(structure,"Floor"))
@@ -89,7 +91,9 @@ func construct(world: Node3D,definition: Dictionary) -> Node3D:
 			"desk": build_desk(n)
 			"hearth": build_hearth(n)
 			"bookshelf": build_bookshelf(n)
+			"workbench": preload("res://scripts/city/production_builder.gd").build_workbench(self,n)
 			_: preload("res://scripts/city/forest_furniture.gd").build(self,n,item.kind)
+		if item.has("facility"): preload("res://scripts/city/production_facilities.gd").configure(n,item.facility)
 		bake_section(n)
 	build_room_details(group(root,"RoomDetails"))
 	build_garden(group(root,"Garden"))
@@ -339,6 +343,8 @@ func build_bookshelf(n: Node3D) -> void:
 			rounded(n,Vector3(-.52+i*.20,.20+row*.70+h*.5,.02),Vector3(.15,h,.40),.016,material(color),"Book")
 	P.box(n,"BookshelfCollision",Vector3(0,1.17,0),Vector3(1.6,2.34,.7))
 func build_room_details(n: Node3D) -> void:
+	if blueprint.get("theme","")=="workshop":
+		preload("res://scripts/city/production_builder.gd").decorate_workshop(self,n);return
 	if blueprint.get("theme","")=="forest":
 		var art:=group(n,"PressedLeafArt",Vector3(1.3,floor_y+2.65,-4.83))
 		for i in range(3):

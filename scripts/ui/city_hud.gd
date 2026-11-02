@@ -16,6 +16,7 @@ var shop := ""
 var selected_seed := "seed_carrot"
 var clock_label: Label
 var coin_label: Label
+var water_label: Label
 var buff_icon: Control
 var stamina_meter: Control
 var player_status: Control
@@ -72,6 +73,7 @@ func _ready() -> void:
 	coin_label=UI.label("",16,Color("a77b39"))
 	top_col.add_child(clock_label)
 	top_col.add_child(coin_label)
+	water_label=UI.label("",15,Color("537f88"));top_col.add_child(water_label)
 	buff_icon=BuffIcon.new()
 	buff_icon.position=Vector2(28,26)
 	root_ui.add_child(buff_icon)
@@ -188,9 +190,11 @@ func refresh_stats() -> void:
 	clock_label.text="第 %d 天   %02d : %02d"%[int(s.time/3600)+1,int(hour),int(fmod(hour,1)*60)]
 	if session.is_online():clock_label.text=preload("res://scripts/services/island_calendar.gd").text(float(s.time))
 	coin_label.text="贝壳币   %d"%s.coins
+	water_label.visible=session.authority.watering_can_id()!=""
+	water_label.text="%s  %d / %d"%[DB.item(session.authority.watering_can_id()).get("name","水壶"),session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())]
 	buff_icon.set_effect(s.get("food_effect",{}),float(s.time))
-	if overlay.visible and mode in ["bag","wardrobe","shop","kitchen","dining"]:
-		var signature:=JSON.stringify([s.inventory,s.equipment,s.coins,s.skill_experience])
+	if overlay.visible and mode in ["bag","wardrobe","shop","kitchen","workshop","dining"]:
+		var signature:=JSON.stringify([s.inventory,s.equipment,s.coins,s.skill_experience,s.get("watering_water",{})])
 		if signature!=panel_signature:
 			panel_signature=signature
 			if mode=="shop": refresh_shop_items()
@@ -225,7 +229,7 @@ func _process(delta: float) -> void:
 		elif job.verb=="gather" and job.item=="orange": focus=city.target_position(job.target)+Vector3(0,3.6,0)
 		ring.position=city.camera.unproject_position(focus)-Vector2(36,36)
 		ring.queue_redraw()
-		var verb_name: String={"craft":"烹饪","eat":"用餐","snack":"吃橘子","water":"浇水","weed":"除草","plant":"播种","harvest":"收获","gather":"采集"}.get(job.verb,"动作")
+		var verb_name: String={"craft":"制造" if job.get("station","")=="workshop" else "烹饪","refill":"打水","eat":"用餐","snack":"吃橘子","water":"浇水","weed":"除草","plant":"播种","harvest":"收获","gather":"采集"}.get(job.verb,"动作")
 		var dish: String=" · "+DB.item(job.item).name if job.verb in ["craft","eat"] else ""
 		prompt.text="%s%s · %.1f 秒\nEsc 取消"%[verb_name,dish,maxf(0,float(job.duration)-float(job.elapsed))]
 		prompt_card.visible=not photo_mode and not overlay.visible
@@ -272,7 +276,7 @@ func open_panel(kind: String) -> void:
 	if city.talking_npc!="": city.end_dialogue()
 	shop_preview_overrides.clear()
 	mode=kind
-	panel_signature=JSON.stringify([session.state().inventory,session.state().equipment,session.state().coins,session.state().skill_experience])
+	panel_signature=JSON.stringify([session.state().inventory,session.state().equipment,session.state().coins,session.state().skill_experience,session.state().get("watering_water",{})])
 	overlay.show()
 	city.paused=true
 	rebuild()
@@ -294,7 +298,7 @@ func rebuild() -> void:
 	modal.position=Vector2(-width_*.5,-height*.5)
 	var head:=UI.row()
 	content.add_child(head)
-	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","dining":"坐下来，好好吃一餐","profile":"我的小岛生活"}
+	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活"}
 	var title:=UI.label(titles.get(mode,""),28)
 	title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	head.add_child(title)
@@ -307,6 +311,7 @@ func rebuild() -> void:
 		"settings": build_settings()
 		"plot": build_plot()
 		"kitchen": build_kitchen()
+		"workshop": build_workshop()
 		"dining": build_dining()
 		"map": build_map()
 		"dialogue":
@@ -452,7 +457,8 @@ func build_inventory(clothes_only: bool) -> void:
 		elif item.kind=="ingredient": c.add_child(UI.label("厨房调料 · 烹饪成功后消耗",13,UI.MUTED))
 		elif item.kind=="seed": c.add_child(UI.button("已选择播种" if selected_seed==id else "设为播种种子",func(): selected_seed=id; rebuild()))
 		elif item.kind=="tool":
-			var skill: String={"pickaxe":"mining","stone_hammer":"quarrying","copper_axe":"woodcutting","watering_can":"planting"}.get(id,"")
+			if DB.water_capacity(id)>0: c.add_child(UI.label("剩余水量 %d / %d · 到菜园水井装满"%[session.authority.water_left(id),DB.water_capacity(id)],13,Color("537f88")))
+			var skill: String={"pickaxe":"mining","stone_hammer":"quarrying","copper_axe":"woodcutting","watering_can":"planting","copper_watering_can":"planting"}.get(id,"")
 			var required:=int(item.get("required_level",1))
 			c.add_child(UI.label("%s Lv.%d"%[preload("res://scripts/services/character_stats.gd").skill_name(skill).replace("技能",""),required],13,UI.MUTED if session.authority.skill_level(skill)>=required else Color("b87955")))
 		else:
@@ -586,9 +592,11 @@ func build_plot() -> void:
 		quality.tooltip_text="细心照料有机会提升品质，收获更丰盛。"
 		content.add_child(quality)
 		var locked: String=session.authority.crop_lock_reason(p.crop)
+		content.add_child(UI.label("水壶余量 %d / %d 次 · 菜园东侧水井可打水"%[session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())],15,Color("537f88")))
 		for row in [["浇水","water",need.water],["除草 · 除草剂 × 1","weed",need.weed],["收获","harvest",need.ready]]:
 			var b:=UI.button(locked if locked!="" else "%s · %.1f 秒"%[row[0],session.authority.action_duration(row[1])],func(): close_panel(); city.begin_action(row[1],id),true)
-			b.disabled=not row[2] or locked!="" or online_target_busy(id)
+			b.disabled=not row[2] or locked!="" or online_target_busy(id) or (row[1]=="water" and session.authority.water_left()<1)
+			if row[1]=="water" and session.authority.water_left()<1: b.text="先到水井打水，再来浇水"
 			content.add_child(b)
 	if session.is_online():content.add_child(UI.button("照料记录",func():show_plot_history(id)))
 func show_plot_history(id: String) -> void:
@@ -618,6 +626,7 @@ func build_kitchen() -> void:
 	var grid:=scroll_grid(2)
 	for id in DB.catalog().recipes:
 		var recipe:=DB.recipe(id)
+		if recipe.station!="kitchen": continue
 		if category!="all" and DB.food_category(recipe.output)!=category: continue
 		var c:=item_card(recipe.output,grid)
 		c.add_child(UI.label("%.1f 秒 · 烹饪 Lv.%d"%[float(recipe.seconds)/session.authority.multiplier("cook"),int(recipe.get("required_level",1))],14,Color("a57c43")))
@@ -634,6 +643,26 @@ func build_kitchen() -> void:
 		b.disabled=not enough or locked!=""
 		b.set_meta("recipe",id)
 		c.add_child(b)
+func build_workshop() -> void:
+	content.add_child(UI.label("把采集的材料做成工具。完成时扣材料，取消不消耗。",15,UI.MUTED))
+	content.add_child(UI.label("制造 Lv.%d · 速度加成 +%d%%"%[session.authority.skill_level("manufacturing"),roundi(session.authority.bonus("manufacture")*100)],17,UI.GREEN))
+	var grid:=scroll_grid(2)
+	for id in DB.catalog().recipes:
+		var recipe:=DB.recipe(id)
+		if recipe.station!="workshop": continue
+		var c:=item_card(recipe.output,grid)
+		if DB.water_capacity(recipe.output)>0: c.add_child(UI.label("装满可浇水 %d 次"%DB.water_capacity(recipe.output),15,UI.GREEN))
+		c.add_child(UI.label("%.1f 秒 · 制造 Lv.%d · 经验 +%d"%[float(recipe.seconds)/session.authority.multiplier("manufacture"),int(recipe.get("required_level",1)),int(recipe.get("skill_experience",1))],14,Color("a57c43")))
+		var enough:=true
+		for ingredient in recipe.ingredients:
+			var owned: int=session.authority.count(ingredient);var needed: int=recipe.ingredients[ingredient]
+			enough=enough and owned>=needed
+			c.add_child(UI.label("%s    %d / %d"%[DB.item(ingredient).name,owned,needed],15,UI.MUTED if owned>=needed else Color("b96c59")))
+		var locked: String=session.authority.recipe_lock_reason(id)
+		var owned: bool=session.authority.count(recipe.output)>0
+		var b:=UI.button("已拥有" if owned else (locked if locked!="" else ("开始制造" if enough else "材料还不够")),func(): close_panel();city.begin_manufacturing(id),true)
+		b.disabled=owned or not enough or locked!="" or online_target_busy(city.current_target)
+		b.set_meta("recipe",id);c.add_child(b)
 func build_dining() -> void:
 	content.add_child(UI.label("坐下，慢慢享用。",15,UI.MUTED))
 	var category:=build_filters("dining",[["all","全部"],["soup","暖汤"],["salad","沙拉"],["stew","炖菜"],["baked","烘焙"],["meal","简餐"]])

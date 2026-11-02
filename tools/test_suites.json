@@ -134,6 +134,12 @@
     },
     "chat_seat_rules": {
       "headless": true
+    },
+    "production_rules": {
+      "headless": true
+    },
+    "production_multiplayer_rules": {
+      "headless": true
     }
   }
 }

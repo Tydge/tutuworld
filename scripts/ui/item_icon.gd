@@ -12,7 +12,7 @@ func _draw() -> void:
 	var color:=Color(definition.get("color","a9b98a"))
 	draw_circle(Vector2.ZERO,25,Color("eff0dc"))
 	var kind: String=definition.get("kind","")
-	var shape: String=definition.get("style",item_id)
+	var shape: String=definition.get("style",definition.get("icon",item_id))
 	if kind=="food" and shape in ["honey_wheat_cake","rustic_wheat_bread","vegetable_omelette"]:
 		draw_set_transform(c,0,Vector2(scale_,scale_*.72))
 		draw_circle(Vector2(0,5),22,Color("f7ebce"))

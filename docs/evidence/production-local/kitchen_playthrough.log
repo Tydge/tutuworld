@@ -1,0 +1,125 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=9765 components=5
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Active controlled species: bunny
+PASS Kitchen replaces bakery: bunny
+PASS Player and NPC collision layer enabled: bunny
+PASS Feet meet plaza paving instead of underlying ground: bunny
+PASS Walks up curb onto road without sinking: bunny
+PASS Empty selected bed does not redirect F to neighboring crop: bunny
+PASS Marked crop is the sole quick target: bunny
+PASS F dispatches same target: bunny
+PASS E opens recipe cards: bunny carrot_soup
+PASS Ingredient counts enable recipe: carrot_soup
+PASS Recipe button starts shared cook action: bunny carrot_soup
+PASS Spoon, steam and timed ring active: bunny
+PASS Stirring animates through completion: bunny carrot_soup
+PASS Real cooking duration yields exactly one meal: carrot_soup
+PASS Table opens food selection: bunny
+PASS Begin seated meal: bunny carrot_soup
+PASS Food served and actor sits on the chair: bunny
+PASS Shared sitting legs and eating spoon: bunny
+PASS Eating arm moves for this species: bunny
+PASS Meal completion clears plate and stands safely: bunny
+PASS Meal consumed once and matching buff applied: bunny carrot_soup
+PASS Food effect HUD visible: bunny
+PASS E opens recipe cards: bunny pumpkin_soup
+PASS Ingredient counts enable recipe: pumpkin_soup
+PASS Recipe button starts shared cook action: bunny pumpkin_soup
+PASS Spoon, steam and timed ring active: bunny
+PASS Stirring animates through completion: bunny pumpkin_soup
+PASS Real cooking duration yields exactly one meal: pumpkin_soup
+PASS Table opens food selection: bunny
+PASS Begin seated meal: bunny pumpkin_soup
+PASS Food served and actor sits on the chair: bunny
+PASS Shared sitting legs and eating spoon: bunny
+PASS Eating arm moves for this species: bunny
+PASS Meal completion clears plate and stands safely: bunny
+PASS Meal consumed once and matching buff applied: bunny pumpkin_soup
+PASS Food effect HUD visible: bunny
+PASS Cancel meal returns safely without charging food: bunny
+PASS Start shared garden action: bunny plant
+PASS Garden pose and progress active: bunny plant
+PASS Start shared garden action: bunny water
+PASS Garden pose and progress active: bunny water
+PASS Start shared garden action: bunny weed
+PASS Garden pose and progress active: bunny weed
+PASS Start shared garden action: bunny harvest
+PASS Garden pose and progress active: bunny harvest
+PASS Garden cycle finishes and retains can: bunny
+PASS Start shared gathering: bunny limestone
+PASS Gather pose and ring active: bunny limestone
+PASS Gather material gained, tool retained: bunny limestone
+PASS Start shared gathering: bunny copper
+PASS Gather pose and ring active: bunny copper
+PASS Gather material gained, tool retained: bunny copper
+PASS Start shared gathering: bunny branch
+PASS Gather pose and ring active: bunny branch
+PASS Gather material gained, tool retained: bunny branch
+PASS Movement food increases measured travel distance: bunny
+PASS Save food effect: bunny
+PASS Reload food effect: bunny
+WANDER_GRID_READY cells=9765 components=5
+PASS Active controlled species: cat_teacher
+PASS Kitchen replaces bakery: cat_teacher
+PASS Player and NPC collision layer enabled: cat_teacher
+PASS Cat has a spherical white tail
+PASS Feet meet plaza paving instead of underlying ground: cat_teacher
+PASS Walks up curb onto road without sinking: cat_teacher
+PASS Empty selected bed does not redirect F to neighboring crop: cat_teacher
+PASS Marked crop is the sole quick target: cat_teacher
+PASS F dispatches same target: cat_teacher
+PASS E opens recipe cards: cat_teacher garden_salad
+PASS Ingredient counts enable recipe: garden_salad
+PASS Recipe button starts shared cook action: cat_teacher garden_salad
+PASS Spoon, steam and timed ring active: cat_teacher
+PASS Stirring animates through completion: cat_teacher garden_salad
+PASS Real cooking duration yields exactly one meal: garden_salad
+PASS Table opens food selection: cat_teacher
+PASS Begin seated meal: cat_teacher garden_salad
+PASS Food served and actor sits on the chair: cat_teacher
+PASS Shared sitting legs and eating spoon: cat_teacher
+PASS Eating arm moves for this species: cat_teacher
+PASS Meal completion clears plate and stands safely: cat_teacher
+PASS Meal consumed once and matching buff applied: cat_teacher garden_salad
+PASS Food effect HUD visible: cat_teacher
+PASS E opens recipe cards: cat_teacher tomato_stew
+PASS Ingredient counts enable recipe: tomato_stew
+PASS Recipe button starts shared cook action: cat_teacher tomato_stew
+PASS Spoon, steam and timed ring active: cat_teacher
+PASS Stirring animates through completion: cat_teacher tomato_stew
+PASS Real cooking duration yields exactly one meal: tomato_stew
+PASS Table opens food selection: cat_teacher
+PASS Begin seated meal: cat_teacher tomato_stew
+PASS Food served and actor sits on the chair: cat_teacher
+PASS Shared sitting legs and eating spoon: cat_teacher
+PASS Eating arm moves for this species: cat_teacher
+PASS Meal completion clears plate and stands safely: cat_teacher
+PASS Meal consumed once and matching buff applied: cat_teacher tomato_stew
+PASS Food effect HUD visible: cat_teacher
+PASS Cancel meal returns safely without charging food: cat_teacher
+PASS Start shared garden action: cat_teacher plant
+PASS Garden pose and progress active: cat_teacher plant
+PASS Start shared garden action: cat_teacher water
+PASS Garden pose and progress active: cat_teacher water
+PASS Start shared garden action: cat_teacher weed
+PASS Garden pose and progress active: cat_teacher weed
+PASS Start shared garden action: cat_teacher harvest
+PASS Garden pose and progress active: cat_teacher harvest
+PASS Garden cycle finishes and retains can: cat_teacher
+PASS Start shared gathering: cat_teacher limestone
+PASS Gather pose and ring active: cat_teacher limestone
+PASS Gather material gained, tool retained: cat_teacher limestone
+PASS Start shared gathering: cat_teacher copper
+PASS Gather pose and ring active: cat_teacher copper
+PASS Gather material gained, tool retained: cat_teacher copper
+PASS Start shared gathering: cat_teacher branch
+PASS Gather pose and ring active: cat_teacher branch
+PASS Gather material gained, tool retained: cat_teacher branch
+PASS Movement food increases measured travel distance: cat_teacher
+PASS Save food effect: cat_teacher
+PASS Reload food effect: cat_teacher
+KITCHEN_PLAYTHROUGH_RESULT PASS checks=117 failures=[]

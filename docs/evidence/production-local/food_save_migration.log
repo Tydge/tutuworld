@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Legacy city save without food effect loads empty bonus
+PASS Legacy money, seeds and neckwear preserved
+PASS Saved species preserved
+PASS Unexpired food effect survives offline minute
+PASS Food expires after offline game day
+PASS Unknown food effect is ignored safely
+FOOD_SAVE_RESULT PASS checks=6 failures=[]

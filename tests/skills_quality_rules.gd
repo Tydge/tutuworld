@@ -91,7 +91,7 @@ func run() -> void:
 	for verb in ["water","weed","harvest"]: check(not command(a,verb,"plot_00").ok,"Pumpkin care and harvest locked "+verb)
 	a=ControlledAuthority.new();a.state.player_position=[22,.1,-6];a.add("seed_wheat",1)
 	check(not command(a,"plant","plot_00","seed_wheat").ok,"Wheat requires level five")
-	set_level(a,"planting",5);a.add("watering_can",1);a.add("herbicide",2);a.forced_critical=true
+	set_level(a,"planting",5);a.add("watering_can",1);a.state.watering_water.watering_can=6;a.add("herbicide",2);a.forced_critical=true
 	check(command(a,"plant","plot_00","seed_wheat").ok,"Plant wheat at five")
 	finish(a)
 	for stage in range(4):
@@ -125,7 +125,7 @@ func run() -> void:
 		check(a.count("orange")==1 and a.state.stamina==93 and a.state.experience==0,"Orange restores three with no XP "+map_id)
 		a.state.stamina=99;command(a,"snack","","orange");finish(a)
 		check(a.state.stamina==100 and not command(a,"snack","","orange").ok,"Snack clamps to capacity "+map_id)
-	for recipe_id in DB.catalog().recipes:
+	for recipe_id in DB.recipes_for_station("kitchen"):
 		a=ControlledAuthority.new();a.state.player_position=[21,.1,-20]
 		var recipe:=DB.recipe(recipe_id)
 		for item in recipe.ingredients: a.add(item,int(recipe.ingredients[item]))
@@ -163,6 +163,6 @@ func run() -> void:
 	check(reloaded.skill_level("planting")==5 and reloaded.state.skill_rules_version==Stats.PROGRESSION_VERSION,"New save marker prevents repeated reset")
 	session.free()
 	check(DB.starter_clothes().size()==9 and not DB.starter_clothes().has("bow_plaid_rose"),"New shop bows do not silently enlarge starter gifts")
-	check(DB.catalog().recipes.size()==7 and DB.catalog().crops.size()==5,"Five crops and seven dishes available")
+	check(DB.recipes_for_station("kitchen").size()==7 and DB.catalog().crops.size()==5,"Five crops and seven dishes available")
 	print("SKILLS_QUALITY_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

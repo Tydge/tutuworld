@@ -1,9 +1,10 @@
 extends RefCounted
 const G=preload("res://scripts/geometry.gd")
-static func make(kind: String) -> Node3D:
+static func make(kind: String,water_id: String="") -> Node3D:
 	var root:=Node3D.new();root.name="Tool"
 	var wood:=G.mat("bd8952");var dark:=G.mat("806442");var brass:=G.mat("cfad69",.40)
 	var metal:=G.mat("a5bec0",.35)
+	if kind=="water" and water_id=="copper_watering_can": wood=G.mat("bd875d",.45);dark=G.mat("78563d");brass=G.mat("ddbd7c",.35)
 	match kind:
 		"water":
 			G.cylinder(root,Vector3.ZERO,.22,.36,wood,.24)

@@ -1,0 +1,88 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+TextServer: Added interface "Dummy"
+TextServer: Added interface "ICU / HarfBuzz / Graphite (Built-in)"
+Unrecognized output string "misc2" in mapping:
+030000007e0500006920000001010000,Nintendo Switch 2 Pro Controller,a:b0,b:b1,back:b14,dpdown:b8,dpleft:b10,dpright:b9,dpup:b11,guide:b16,leftshoulder:b12,leftstick:b15,lefttrigger:b13,leftx:a0,lefty:a1~,misc1:b17,misc2:b20,paddle1:b18,paddle2:b19,rightshoulder:b4,rightstick:b7,righttrigger:b5,rightx:a2,righty:a3~,start:b6,x:b2,y:b3,platform:Mac OS X,
+SDL: Init OK!
+Accessibility: window 0 adapter created.
+Using "default" pen tablet driver...
+OpenGL debugging not supported!
+Shader 'CanvasSdfShaderGLES3' SHA256: 7a9c7da7197380a8b4b9bed74a66c3db22dfec38289fca65dfc773d0e14bc34d
+Shader 'SkeletonShaderGLES3' SHA256: cd8cf5c99c809e1c52e631def68e698ebb87433ca458fe53b18973acb9e8488e
+Shader 'ParticlesShaderGLES3' SHA256: 34bcffb83e05189ef250988c859eeaadd4976b48c1c0055f451c4658e391d130
+Shader 'ParticlesCopyShaderGLES3' SHA256: d68d28f0af91c907d5b40ab4dfa8651ec15dd6bdfe5f290391fb29e04f590389
+Shader 'CopyShaderGLES3' SHA256: df820ac1061e15c3fe5c98662fb02723af19b58c98b2f4fda266834f25cae8f3
+Shader 'CubemapFilterShaderGLES3' SHA256: a74520ac95598294a527277eefa5018104f3f5894a988693c2dcb7758128f079
+Shader 'GlowShaderGLES3' SHA256: 276bbe3ad647cec79442bc2f6bec5ce085b226e3e70a45256cdeb17cb238483c
+Shader 'PostShaderGLES3' SHA256: acb48277530c66e561d7d77d21800c322d358c23e07abaa3a0571ac52d7497d8
+Shader 'FeedShaderGLES3' SHA256: 134467731551f4ad6520592774d5b822a72c7a17216e4300dc80ee19dd53378f
+Shader 'CanvasShaderGLES3' SHA256: cf978cea5d531b1d10bd3ebd5c6426463b3a3a92abbd179d40ce528d990eac6a
+Shader 'CanvasOcclusionShaderGLES3' SHA256: 4cda27b56fce0d35c991af777b783275a0d86cf71934f1056d5fce5e3839ae35
+Shader 'SceneShaderGLES3' SHA256: 9802b8f57faaad3367f7e1c06686174d80624d4ad64dbd9361e893c48c6b7cde
+Shader 'SkyShaderGLES3' SHA256: f5e090a4ba3095c3dbf5aefaa9177c44e05ee325b8a31ed0ff9b70d0187d1181
+OpenGL API 4.1 Metal - 89.4 - Compatibility - Using Device: Apple - Apple M1 Pro
+CoreAudio: detected 2 channels
+CoreAudio: output sampling rate: 44100 Hz
+CoreAudio: output audio buffer frames: 512 calculated latency: 11ms
+
+TextServer: Primary interface set to: "ICU / HarfBuzz / Graphite (Built-in)".
+CORE API HASH: 0
+EDITOR API HASH: 0
+SceneTreeFTI: traversal method DEFAULT
+Loaded system CA certificates
+Loading resource: res://.godot/exported/133200997/export-c3c40bb4d42d26c7c74cc88080d6723d-boot.scn
+Loading resource: res://scripts/boot.gdc
+Loading resource: res://scripts/services/session.gdc
+TUTU_CLIENT_READY version=0.3.3 build=6
+Loading resource: res://.godot/exported/133200997/export-1f317455290310368203a73618de45af-title.scn
+Loading resource: res://scripts/ui/title.gdc
+Loading resource: res://.godot/exported/133200997/export-b09acef00129144ee4e17689a8d85f06-city_map.scn
+Loading resource: res://assets/shaders/island_sky.gdshader
+Loading resource: res://assets/shaders/island_ocean.gdshader
+Loading resource: res://assets/shaders/lamp_glow.gdshader
+Loading resource: res://assets/fonts/NotoSansSC.ttf
+Loading resource: res://.godot/imported/NotoSansSC.ttf-53e7d2951cb723449d16fcecb813db38.fontdata
+Loading resource: res://scenes/shop_farm.scn
+Loading resource: res://scripts/city/seabreeze_home.gdc
+Loading resource: res://assets/shaders/home_surface.gdshader
+Loading resource: res://assets/shaders/home_floor.gdshader
+Loading resource: res://assets/fabrics/sprig.svg
+Loading resource: res://.godot/imported/sprig.svg-75aee8576a426cd7e5397998f66ba4eb.ctex
+Loading resource: res://scenes/shop_tools.scn
+Loading resource: res://scenes/shop_clothes.scn
+Loading resource: res://assets/fabrics/tartan.svg
+Loading resource: res://.godot/imported/tartan.svg-150dc23dfe0c6cf434fede9111da9c39.ctex
+Loading resource: res://scenes/seabreeze_home.scn
+Loading resource: res://assets/shaders/contact_shadow.gdshader
+Loading resource: res://assets/shaders/sleep_quilt.gdshader
+Loading resource: res://assets/shaders/hearth_fire.gdshader
+Loading resource: res://assets/shaders/hearth_embers.gdshader
+Loading resource: res://scenes/workshop.scn
+Loading resource: res://assets/shaders/meadow_blades.gdshader
+Loading resource: res://assets/shaders/occlusion_fade.gdshader
+Loading resource: res://assets/shaders/meadow.gdshader
+Loading resource: res://assets/shaders/lawn_surface.gdshaderinc
+Loading resource: res://assets/terrain/spring_lawn_v1.png
+Loading resource: res://.godot/imported/spring_lawn_v1.png-9df0b12aa869a1c6ac6e83d83ad29df0.ctex
+Loading resource: res://assets/shaders/paving.gdshader
+Loading resource: res://assets/shaders/fountain_water.gdshader
+Loading resource: res://assets/shaders/town_roof.gdshader
+Loading resource: res://assets/shaders/farm_soil.gdshader
+Loading resource: res://assets/shaders/beach_sand.gdshader
+Loading resource: res://assets/shaders/shore_foam.gdshader
+Loading resource: res://assets/shaders/forest_blossoms.gdshader
+Loading resource: res://.godot/exported/133200997/export-34c4bffaa4cbafa881ce027c0a4d76a1-bunny.scn
+Loading resource: res://scripts/bunny.gdc
+Loading resource: res://.godot/exported/133200997/export-bb5b11e97485ca1df60f96fbce8a116a-bunny.res
+Loading resource: res://scripts/characters/rig_profile.gdc
+Loading resource: res://assets/fonts/NotoSansSC-Bold.ttf
+Loading resource: res://.godot/imported/NotoSansSC-Bold.ttf-332d68d8388b995f9d12d7d8b464f364.fontdata
+Loading resource: res://.godot/exported/133200997/export-34c4bffaa4cbafa881ce027c0a4d76a1-bunny.scn
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=0 quality=balanced
+Loading resource: res://.godot/exported/133200997/export-bb994c8683207532f085921dc466c8b2-cat_teacher.scn
+Loading resource: res://.godot/exported/133200997/export-f17f61337312e77ef1b67287bf88e8c3-cat_teacher.res
+Loading resource: res://scripts/characters/cat_coat.gdshader
+Loading resource: res://.godot/exported/133200997/export-28400a9aa0492771ee3938677a7797a6-panda.scn
+Loading resource: res://.godot/exported/133200997/export-127922bb88d82388ae21f357688a1a55-panda.res
+Loading resource: res://scripts/characters/panda_coat.gdshader
+Loading resource: res://scripts/characters/animal_outline.gdshader

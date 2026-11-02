@@ -87,7 +87,7 @@ func run() -> void:
 	park()
 	var plot: Dictionary=DB.plots()[0];var point:=Vector3(plot.x,.2,plot.z)
 	for i in range(2):
-		var actor=server.actors[ids[i]];actor.add("seed_carrot",1);actor.add("watering_can",1);actor.add("herbicide",1)
+		var actor=server.actors[ids[i]];actor.add("seed_carrot",1);actor.add("watering_can",1);actor.state.watering_water.watering_can=6;actor.add("herbicide",1)
 		place(i,point+Vector3(-1.1 if i==0 else 1.1,0,0))
 	await wait()
 	await race("plant",{"target":plot.id,"item":"seed_carrot"})

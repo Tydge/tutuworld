@@ -5,7 +5,7 @@ static func setup(host: Node3D) -> void:
 	host.scenery=load("res://scenes/valley_map.scn" if host.map_id=="valley" else "res://scenes/city_map.tscn").instantiate()
 	host.add_child(host.scenery)
 	for node in host.scenery.find_children("*","Node3D",true,false):
-		if node.get_script()==load("res://scripts/city/seabreeze_home.gd"):node.set_process(false);node.city=host
+		if node.get_script()==load("res://scripts/city/seabreeze_home.gd"):node.set_process(false);node.city=host;host.interiors.append(node)
 	host.home=host.scenery.get_node_or_null("ValleyHome" if host.map_id=="valley" else "SeabreezeHome")
 	host.bunny=Animals.create()
 	host.add_child(host.bunny)
@@ -16,16 +16,18 @@ static func setup(host: Node3D) -> void:
 	host.spawn_npcs()
 	if host.map_id=="city":
 		host.targets.home_bed={"kind":"bed","position":host.home.get_node("Furnishing/bed/ActionAnchor").global_position,"node":host.home.get_node("Furnishing/bed")}
-		host.targets.home_door={"kind":"door","position":host.home.door_action_position()}
+		host.targets.home_door={"kind":"door","position":host.home.door_action_position(),"node":host.home}
 		host.targets.kitchen={"kind":"kitchen","position":host.scenery.get_node("Kitchen/PotSteam").global_position}
 		host.targets.dining={"kind":"dining","position":host.scenery.get_node("DiningTable/MealAnchor").global_position}
 		for plot in DB.plots():host.targets[plot.id]={"kind":"plot","position":Vector3(plot.x,0,plot.z)}
 	for id in ["home_sofa","home_desk"]:
 		var seat: Node3D=host.home.seat_node(id)
 		host.targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"node":seat}
+	preload("res://scripts/city/production_facilities.gd").register(host)
 	preload("res://scripts/city/interaction_targets.gd").add_benches(host)
 	for source in DB.resources(host.map_id):host.targets[source.id]={"kind":"resource","position":Vector3(source.x,source.get("y",0),source.z),"item":source.item}
 static func update(host: Node3D) -> void:
+	preload("res://scripts/city/production_facilities.gd").refresh(host)
 	var closest:=INF
 	var chosen: CharacterBody3D
 	for pawn in host.manager.pawns.values():

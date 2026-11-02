@@ -39,7 +39,7 @@ func clear_meal() -> void:
 func _process(delta: float) -> void:
 	clock+=delta
 	var job: Dictionary=city.session.job()
-	var cooking: bool=job.get("verb","")=="craft"
+	var cooking: bool=job.get("verb","")=="craft" and job.get("station","kitchen")=="kitchen"
 	if city.session.is_online():
 		var owner: String=city.session.online_locks.get(city.map_id+":kitchen",{}).get("owner","")
 		cooking=cooking or owner!=""

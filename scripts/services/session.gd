@@ -14,7 +14,7 @@ const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
 const WORLD_KEYS=["world_id","time","plots","resources"]
-const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position"]
+const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water"]
 var authority=Authority.new()
 var active:=false
 var test_mode:=false
@@ -138,10 +138,17 @@ func _process(delta: float) -> void:
 		return
 	var previous_stamina: float=state().stamina
 	if active:
-		for event in authority.tick(delta):
-			event_received.emit(event)
-			changed.emit()
-			if event.type=="completed": save_game()
+		var backup: Dictionary={}
+		if not job().is_empty() and float(job().elapsed)+delta>=float(job().duration):
+			backup={"state":snapshot(),"job":job().duplicate(true),"revision":authority.revision,"random":authority.reward_random.state,"world":world.duplicate(true),"characters":characters.duplicate(true)}
+		var events: Array=authority.tick(delta)
+		if events.any(func(event): return event.type=="completed") and not save_game():
+			authority.state=backup.state;authority.job=backup.job;authority.revision=backup.revision;authority.reward_random.state=backup.random
+			world=backup.world;characters=backup.characters
+			authority.refund_work_stamina(authority.job);authority.job.clear()
+			events=[{"type":"rejected","message":"进度未能保存，本次动作已取消，材料、水量和经验没有改变。"}]
+		for event in events:
+			event_received.emit(event);changed.emit()
 	elif player_started:
 		authority.running=false;authority.sleeping=state().get("rest_mode","")=="sleep"
 		authority.tick_stamina(delta)
@@ -334,6 +341,7 @@ func restore_state(raw: Dictionary):
 		s.equipment[slot]=""
 		var id: String=raw.get("equipment",{}).get(slot,"")
 		if s.inventory.has(id) and DB.item(id).get("slot","")==slot: s.equipment[slot]=id
+	s.watering_water=raw.get("watering_water",{}).duplicate() if raw.get("watering_water",{}) is Dictionary else {}
 	s.experience=clampi(int(raw.get("experience",0)),0,2147483647)
 	s.attributes=Stats.defaults()
 	for key in s.attributes: s.attributes[key]=clampf(float(raw.get("attributes",{}).get(key,0)),-.8,10.0)
@@ -366,6 +374,7 @@ func restore_state(raw: Dictionary):
 		if not r.is_empty(): s.resources[id]={"available":bool(r.get("available",true)),"respawn_at":maxf(0,float(r.get("respawn_at",0))),"generation":maxi(0,int(r.get("generation",0)))}
 	var pos: Variant=raw.get("player_position",s.player_position)
 	if pos is Array and pos.size()==3 and preload("res://scripts/valley/valley_layout.gd").valid_saved_position(s.map_id,Vector3(float(pos[0]),float(pos[1]),float(pos[2]))): s.player_position=pos.duplicate()
+	restored.normalize_production_state()
 	return restored
 func set_setting(key: String,value: Variant) -> void:
 	if not settings.has(key): return

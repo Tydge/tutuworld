@@ -7,7 +7,9 @@ extends Resource
 @export var step_probe_distance:=.39
 @export var body_center := Vector3(0,.78,0)
 @export var body_radii := Vector3(.30,.435,.265)
-@export var bow_offset := Vector3(-.46,.53,.43)
+## Head-local position and outward normal of the complete ear-root accessory.
+@export var bow_offset := Vector3(-.40,.615,.39)
+@export var bow_normal := Vector3(-.42,.78,.46)
 @export var bow_tilt := -.24
 @export var neck_center := Vector3(0,1.025,0)
 @export var neck_radii := Vector2(.275,.27)

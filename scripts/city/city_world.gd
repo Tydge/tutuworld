@@ -81,8 +81,8 @@ func _ready() -> void:
 	scenery.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
 	home=scenery.get_node_or_null("ValleyHome" if map_id=="valley" else "SeabreezeHome")
 	if is_instance_valid(home): interiors.append(home)
-	for id in ["farm","tools","clothes"]:
-		var interior:=scenery.get_node_or_null("Shop_"+id)
+	for id in ["farm","tools","clothes","workshop"]:
+		var interior:=scenery.get_node_or_null("Workshop" if id=="workshop" else "Shop_"+id)
 		if is_instance_valid(interior) and interior.get_script()==load("res://scripts/city/seabreeze_home.gd"): interiors.append(interior)
 	prepare_scenery()
 	sun=scenery.get_node("Sun")
@@ -201,7 +201,7 @@ func setup_targets() -> void:
 	if is_instance_valid(home):
 		if home.has_node("Furnishing/bed/ActionAnchor"):
 			targets["home_bed"]={"kind":"bed","position":home.get_node("Furnishing/bed/ActionAnchor").global_position,"radius":2.3}
-		targets["home_door"]={"kind":"home_door","position":home.door_action_position(),"radius":4.6}
+		targets["home_door"]={"kind":"home_door","position":home.door_action_position(),"radius":4.6,"node":home}
 		for id in ["home_sofa","home_desk"]:
 			var seat: Node3D=home.seat_node(id)
 			targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"radius":1.65,"node":seat,"label":"坐在沙发上歇一会儿" if id=="home_sofa" else "坐到窗边，发会儿呆"}
@@ -213,6 +213,8 @@ func setup_targets() -> void:
 		visual.position=Vector3(p.x,.17,p.z)
 		add_child(visual)
 		crops[p.id]=visual
+	preload("res://scripts/city/production_facilities.gd").register(self)
+	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	setup_resources()
 	preload("res://scripts/city/interaction_targets.gd").add_benches(self)
 func setup_resources() -> void:
@@ -352,8 +354,12 @@ func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
 	return safe
 func respawn_position() -> Vector3: return Vector3(0,1,7)
 func can_navigate(p: Vector3) -> bool: return can_walk(p)
-func can_walk(p: Vector3) -> bool: return Vector2(p.x,p.z/.88).length()<52
+func can_walk(p: Vector3) -> bool:
+	for building_ in interiors:
+		if building_.contains_position(p): return true
+	return Vector2(p.x,p.z/.88).length()<52
 func update_target() -> void:
+	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active:
 		current_target="home_bed";quick_action.clear();hud.set_prompt("E   起床，伸个懒腰     ·     睡眠中 · 耐力恢复 +100%")
 		return
@@ -380,7 +386,9 @@ func update_target() -> void:
 			"plot":
 				var p: Dictionary=session.state().plots[current_target]
 				text="E   选择种子，播种" if p.crop=="" else "E   照料 %s · %d%%"%[DB.crop(p.crop).name,int(float(p.growth)/(float(DB.crop(p.crop).days)*3600)*100)]
-			"home_door": text="E   "+("轻轻关上门" if home.door_open else "推开门，走进海风小屋")
+			"home_door": text="E   "+("轻轻关上门" if t.get("node",home).door_open else "推开门，走进"+t.get("name","海风小屋"))
+			"well": text="E   打水 · 2 秒 · 水量 %d/%d"%[session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())]
+			"workshop": text="E   制造工作台 · 制造道具"
 			"kitchen": text="E   海风小厨房 · 烹饪料理"
 			"dining": text="E   入座用餐 · 选择料理"
 			"boat": text="E   坐船回海岛城 · 免费" if map_id=="valley" else "E   坐船去眠风山谷 · 10 贝壳币"
@@ -408,7 +416,7 @@ func find_quick_action() -> Dictionary:
 	var need: Dictionary=session.authority.needs(p)
 	var verb: String=""
 	if need.ready: verb="harvest"
-	elif need.water and session.authority.count("watering_can")>0: verb="water"
+	elif need.water and session.authority.watering_can_id()!="": verb="water"
 	elif need.weed and session.authority.count("herbicide")>0: verb="weed"
 	elif need.water: verb="water"
 	elif need.weed: verb="weed"
@@ -475,11 +483,13 @@ func interact() -> void:
 		online_interact(current_target);return
 	match t.kind:
 		"home_door":
-			var result: Dictionary=home.toggle_door(bunny)
+			var result: Dictionary=t.get("node",home).toggle_door(bunny)
 			if result.message!="": hud.notify(result.message)
 			update_target()
 		"plot": hud.open_panel("plot")
 		"kitchen": hud.open_panel("kitchen")
+		"workshop": hud.open_panel("workshop")
+		"well": begin_action("refill",current_target)
 		"dining": hud.open_panel("dining")
 		"bed": enter_sleep()
 		"boat": preload("res://scripts/valley/boat_travel.gd").go(self)
@@ -523,6 +533,7 @@ func wake_from_bed() -> void:
 	sleep_active=false;bunny.stand_up(sleep_exit)
 	update_target()
 func begin_cooking(recipe: String) -> Dictionary: return begin_action("craft","kitchen",recipe)
+func begin_manufacturing(recipe: String) -> Dictionary: return begin_action("craft",current_target,recipe)
 func begin_dining(item: String) -> Dictionary: return begin_action("eat","dining",item)
 func begin_snack(item: String) -> Dictionary: return begin_action("snack","",item)
 func begin_action(verb: String,target: String,item: String="") -> Dictionary:
@@ -530,9 +541,11 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		if network_action_pending:return {"ok":false,"message":""}
 		online_begin_action(verb,target,item)
 		return {"ok":true,"pending":true,"message":""}
+	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active: return {"ok":false,"message":"先起床，伸个懒腰吧。"}
 	if verb!="snack" and bunny.position.distance_to(target_position(target))>3.3: return {"ok":false,"message":"再靠近一点吧。"}
 	if verb=="gather" and targets[target].item!="orange" and bunny.position.distance_to(target_position(target))>2.0: return {"ok":false,"message":"再靠近一点，让工具够得着吧。"}
+	if targets.get(target,{}).get("kind","")=="workshop" and not targets[target].building.contains_position(bunny.global_position): return {"ok":false,"message":"先走进工坊，再使用工作台吧。"}
 	var result: Dictionary={"ok":true} if network_action_approved else session.dispatch(verb,{"target":target,"item":item,"recipe":item})
 	if result.ok:
 		if verb=="eat":
@@ -540,23 +553,27 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 			bunny.sit_on_surface(seat)
 			dining_active=true
 			culinary.serve(item)
+		elif verb=="refill":
+			bunny.position=targets[target].work_anchor.global_position;bunny.velocity=Vector3.ZERO;bunny.reset_physics_interpolation()
 		elif verb=="craft":
-			bunny.position=scenery.get_node("Kitchen/CookAnchor").global_position
+			bunny.position=targets[target].work_anchor.global_position if targets[target].has("work_anchor") else scenery.get_node("Kitchen/CookAnchor").global_position
 			bunny.velocity=Vector3.ZERO
 			bunny.reset_physics_interpolation()
 		session.set_player_position(bunny.position)
 		job_start=bunny.position
 		bunny.can_move=false
-		var animation: String="cook" if verb=="craft" else verb
+		var animation: String=("gather_stone" if DB.recipe(item).get("station","")=="workshop" else "cook") if verb=="craft" else verb
 		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
-		if verb in ["craft","eat"]: bunny.visual.rotation.y=PI
+		if verb=="craft" and targets[target].has("work_anchor"): bunny.visual.rotation.y=targets[target].work_anchor.global_rotation.y+PI
+		elif verb in ["craft","eat"]: bunny.visual.rotation.y=PI
 		elif verb!="snack": bunny.visual.rotation.y=atan2(target_position(target).x-bunny.position.x,target_position(target).z-bunny.position.z)
 		bunny.play_action(animation,float(session.job().duration)+.25,"")
 		if verb in ["water","weed","gather"] and animation!="harvest_tree":
 			bunny.align_work(target_position(target),1.30 if verb=="gather" else 1.45)
 		session.authority.running=false
 		tools.target_point=target_position(target)+Vector3(0,(.38 if targets.get(target,{}).get("item","")=="birch" else .65) if verb=="gather" else .18,0)
-		tools.show_tool(animation)
+		if targets.get(target,{}).has("effect_anchor"): tools.target_point=targets[target].effect_anchor.global_position
+		tools.show_tool(animation,session.authority.watering_can_id())
 	return result
 func cancel_action() -> void:
 	if session.is_online():
@@ -759,6 +776,16 @@ func setup_occluders() -> void:
 				materials.append(material)
 			mesh_.material_override=copies[id]
 		occluders.append({"point":tree_.get_node("Crown").global_position,"materials":materials,"alpha":1.0,"target":1.0})
+	# Small placeable roofs use their own material copies and moving local center.
+	for fixture in scenery.get_children():
+		if not fixture.has_meta("occlusion_section"): continue
+		var section: Node3D=fixture.get_node(fixture.get_meta("occlusion_section"))
+		var materials: Array[ShaderMaterial]=[]
+		for mesh_ in section.find_children("*","MeshInstance3D",true,false):
+			if not mesh_.material_override is ShaderMaterial: continue
+			var material: ShaderMaterial=mesh_.material_override.duplicate()
+			mesh_.material_override=material;materials.append(material)
+		occluders.append({"anchor":fixture,"local_point":fixture.get_meta("occlusion_center"),"point":Vector3.ZERO,"radius_squared":2.89,"materials":materials,"alpha":1.0,"target":1.0})
 func update_occluders(delta: float) -> void:
 	occlusion_timer+=delta
 	var check_overlap:=occlusion_timer>=.06
@@ -768,8 +795,9 @@ func update_occluders(delta: float) -> void:
 	var ray_length:=maxf(.01,ray.length_squared())
 	for tree_ in occluders:
 		if check_overlap:
+			if tree_.has("anchor"): tree_.point=tree_.anchor.to_global(tree_.local_point)
 			var u:=clampf((tree_.point-start).dot(ray)/ray_length,0,1)
-			var obscures: bool=u>.05 and tree_.point.distance_squared_to(start+ray*u)<7.29
+			var obscures: bool=u>.05 and tree_.point.distance_squared_to(start+ray*u)<float(tree_.get("radius_squared",7.29))
 			tree_.target=0.0 if obscures else 1.0
 		var alpha: float=move_toward(tree_.alpha,tree_.target,delta*3.2)
 		if is_equal_approx(alpha,tree_.alpha): continue

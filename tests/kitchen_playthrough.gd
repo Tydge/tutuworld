@@ -66,7 +66,7 @@ func run() -> void:
 		# Both E and F must use the currently floating marked plot.
 		session.active=false
 		session.authority.state.plots.plot_00={"crop":"carrot","growth":0.0,"water_stage":-1,"weed_stage":0}
-		session.authority.add("watering_can",1)
+		session.authority.add("watering_can",1);session.state().watering_water.watering_can=6
 		game.refresh_world()
 		await travel(Vector3(23.5,.15,-5.4))
 		game.update_target()
@@ -82,6 +82,10 @@ func run() -> void:
 		var dishes: Array=["carrot_soup","pumpkin_soup"] if species=="bunny" else ["garden_salad","tomato_stew"]
 		for id in dishes:
 			var recipe:=DB.recipe(id)
+			var stats=preload("res://scripts/services/character_stats.gd")
+			session.state().skill_experience.cooking=maxi(int(session.state().skill_experience.cooking),stats.skill_start(int(recipe.required_level)))
+			session.state().skills.cooking=session.authority.skill_level("cooking")
+			var expected_seconds: float=float(recipe.seconds)/session.authority.multiplier("cook")
 			await travel(Vector3(21,.2,-19.6))
 			game.current_target="kitchen"
 			game.interact()
@@ -102,7 +106,7 @@ func run() -> void:
 			await capture("厨房更新-"+species+"-烹饪-"+id)
 			var motion:=await watch_job()
 			check(motion.finished and motion.range>.15,"Stirring animates through completion: "+species+" "+id)
-			check(Time.get_ticks_msec()-started>=int(recipe.seconds*1000)-120 and session.authority.count(recipe.output)==1,"Real cooking duration yields exactly one meal: "+id)
+			check(Time.get_ticks_msec()-started>=int(expected_seconds*1000)-120 and session.authority.count(recipe.output)==1,"Real cooking duration yields exactly one meal: "+id)
 			await travel(Vector3(28.2,.2,-17.5))
 			game.yaw=PI-.65
 			game.pitch=.43

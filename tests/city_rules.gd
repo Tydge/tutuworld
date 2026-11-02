@@ -32,7 +32,7 @@ func _initialize() -> void:
 	a.tick(3600)
 	check(a.state.plots.plot_00.growth==0,"Dry crop does not grow")
 	check(not act(a,"water","plot_00").ok,"Watering requires permanent watering can")
-	a.add("watering_can",1)
+	a.add("watering_can",1);a.state.watering_water.watering_can=6
 	check(act(a,"water","plot_00").ok,"Owned watering can enables action")
 	a.tick(2.01)
 	check(a.count("watering_can")==1,"Watering does not consume the tool")

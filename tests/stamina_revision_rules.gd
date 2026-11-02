@@ -22,7 +22,7 @@ func run() -> void:
 	check(a.state.stamina==80,"Sleep does not award a point early")
 	a.tick_stamina(.01);check(a.state.stamina==81,"Sleeping recovers one point per fifteen real seconds")
 	a.tick_stamina(9000);check(a.state.stamina==100 and a.state.stamina_recovery_elapsed==0,"Recovery caps and cannot bank time while full")
-	a.sleeping=false;a.state.player_position=[22,.1,-6];a.state.inventory.watering_can=1
+	a.sleeping=false;a.state.player_position=[22,.1,-6];a.state.inventory.watering_can=1;a.state.watering_water.watering_can=6
 	check(a.execute({"verb":"plant","target":"plot_00","item":"seed_carrot"}).ok and a.state.stamina==99,"Production reserves exactly one point")
 	a.execute({"verb":"cancel"});check(a.state.stamina==100 and a.count("seed_carrot")==3,"Cancelling returns the reserved point and keeps materials")
 	a.execute({"verb":"plant","target":"plot_00","item":"seed_carrot"});a.tick(2.01)

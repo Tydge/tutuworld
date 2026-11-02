@@ -286,6 +286,8 @@ func animate_pose(delta: float) -> void:
 				arm_l.x=-.85
 				lean=.04
 				roll=sin(t*2.5)*.012
+			"refill":
+				arm_r.x=-.65+sin(t*3)*.08;arm_l.x=-.25;lean=.08
 			"eat":
 				var bite:=.5+.5*sin(t*3.8)
 				arm_r.x=lerpf(-.75,-1.95,smoothstep(.1,.9,bite))

@@ -4,8 +4,8 @@ const PROGRESSION_VERSION := 2
 const ROWS: Array = [
 	["stamina_capacity","耐力值"],["stamina_regen","耐力回复速度"],["move","移动速度"],["run_speed","奔跑速度"],
 	["water","浇水速度"],["plant","播种速度"],["weed","除草速度"],["harvest","收获速度"],
-	["cook","烹饪速度"],["stone","采石速度"],["mining","采矿速度"],["wood","采木速度"]]
-const SKILLS: Array = [["planting","种植技能","seed_carrot"],["cooking","烹饪技能","food_pumpkin_soup"],["mining","采矿技能","pickaxe"],["quarrying","采石技能","stone_hammer"],["woodcutting","伐木技能","branch"]]
+	["cook","烹饪速度"],["manufacture","制造速度"],["stone","采石速度"],["mining","采矿速度"],["wood","采木速度"]]
+const SKILLS: Array = [["planting","种植技能","seed_carrot"],["cooking","烹饪技能","food_pumpkin_soup"],["mining","采矿技能","pickaxe"],["quarrying","采石技能","stone_hammer"],["woodcutting","伐木技能","branch"],["manufacturing","制造技能","copper_watering_can"]]
 static func defaults() -> Dictionary:
 	var out: Dictionary={}
 	for row in ROWS: out[row[0]]=0.0
@@ -38,7 +38,7 @@ static func skill_progress(total: int) -> Dictionary:
 		remaining-=skill_required(level);level+=1
 	return {"level":level,"current":0 if level==MAX_LEVEL else remaining,"required":0 if level==MAX_LEVEL else skill_required(level)}
 static func attribute_skill(kind: String) -> String:
-	return {"plant":"planting","water":"planting","weed":"planting","harvest":"planting","cook":"cooking","mining":"mining","stone":"quarrying","wood":"woodcutting"}.get(kind,"")
+	return {"plant":"planting","water":"planting","weed":"planting","harvest":"planting","cook":"cooking","manufacture":"manufacturing","mining":"mining","stone":"quarrying","wood":"woodcutting"}.get(kind,"")
 static func skill_name(id: String) -> String:
 	for row in SKILLS:
 		if row[0]==id: return row[1]
@@ -47,13 +47,14 @@ static func skill_description(id: String) -> String:
 	return {
 		"planting":"每级提升1%播种、浇水、除草和收获速度。等级越高，越容易把作物照料得更丰盛。",
 		"cooking":"每级提升1%烹饪速度。提升等级，尝试更丰富的料理。",
+		"manufacturing":"每级提升1%制造速度。提升等级，解锁工坊中的道具配方。",
 		"mining":"每级提升1%采矿速度。满足工具和矿石等级后可采集，熟练时有机会收获双份。",
 		"quarrying":"每级提升1%采石速度。满足工具和石材等级后可采集，熟练时有机会收获双份。",
 		"woodcutting":"每级提升1%采木速度。满足工具和木材等级后可采集，熟练时有机会收获双份。"
 	}.get(id,"")
-static func work_skill(verb: String,item: String) -> String:
+static func work_skill(verb: String,item: String,station: String="") -> String:
 	if verb in ["plant","water","weed","harvest"]: return "planting"
-	if verb=="craft": return "cooking"
+	if verb=="craft": return "manufacturing" if station=="workshop" else "cooking"
 	if verb!="gather": return ""
 	return {"orange":"planting","branch":"woodcutting","birch":"woodcutting","copper":"mining","iron":"mining","limestone":"quarrying","sandstone":"quarrying"}.get(item,"")
 static func work_tier(item: String) -> int:

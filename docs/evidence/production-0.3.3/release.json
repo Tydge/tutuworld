@@ -1,0 +1,96 @@
+{
+  "version": "0.3.3",
+  "build": 6,
+  "launcher": 2,
+  "protocol": 3,
+  "date": "2026-11-02",
+  "features": [
+    "耳根立体蝴蝶结",
+    "菜园东侧水井与6/12次水壶水量",
+    "可进入的铜叶工坊",
+    "制造技能与速度",
+    "铜水壶及铜斧制造配方",
+    "为后续建造保留独立模块和实际挂点"
+  ],
+  "prior_related_checks": {
+    "production": 1448,
+    "bow": 95
+  },
+  "release_checks": {
+    "project_integrity": 276,
+    "production_rules": 71,
+    "exported_client": 9,
+    "exported_server": 35,
+    "linux_staging_five_clients": 42,
+    "update_rules": 8,
+    "public_tls": 4
+  },
+  "logs": {
+    "project_integrity": "project_integrity.log",
+    "production_rules": "production_rules.log",
+    "bow_revision_preview": "bow_revision_preview.log",
+    "exported_client": "exported_client.log",
+    "exported_server": "exported_server.log",
+    "linux_staging_five_clients": "linux_staging_five_clients.log",
+    "update_rules": "update_rules.log",
+    "public_tls": "public_tls.log",
+    "update_download": "update_download.log",
+    "native_new": "native_new.log",
+    "native_update_old": "native_update_old.log",
+    "native_update_new": "native_update_new.log"
+  },
+  "artifacts": {
+    "city.pck": {
+      "bytes": 57399064,
+      "sha256": "1ab33e08d325826819c7e7b6688ae533dc551e85d145903c4c6a3cb56d4ada9b"
+    },
+    "server.pck": {
+      "bytes": 57524408,
+      "sha256": "4f0dd3c7349d49092d4ca922425438993a094b298ea8936d634b06ff0d89daaf"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 109189508,
+      "sha256": "89f37f168ad9e176f81581c34905cee48fd2b7b43d275df513828421484aab66"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 84118286,
+      "sha256": "c9dfdd0a39562b17e6bc77d6f61aa12672e01bbbe682cb2cef3b76330d9c4ce2"
+    }
+  },
+  "deployment": {
+    "all_existing_characters_preserved": true,
+    "character_count": 2,
+    "care_history_preserved": true,
+    "doors_preserved": true,
+    "epoch_preserved": true,
+    "clock_alignment_preserved": true,
+    "current_release": "/srv/tutuworld/releases/0.3.3",
+    "health": {
+      "ok": true,
+      "version": "0.3.3",
+      "build": 6
+    },
+    "failures": [],
+    "history_time_roundtrip_tolerance_seconds": 1e-08,
+    "tutuworld-world": "active",
+    "tutuworld-auth": "active",
+    "tutuworld-backup.timer": "active",
+    "passed": true
+  },
+  "native_update": {
+    "old_build": 5,
+    "active_build": 6,
+    "automatic_restart": true,
+    "mounted_verified_signed_pack": true,
+    "isolated_user_dir": true
+  },
+  "installers": {
+    "macos_codesign": "PASS before adding local QA override",
+    "windows_agility_sdk": "official Microsoft.Direct3D.D3D12 1.618.5 included; archive structure checked"
+  },
+  "limits": [
+    "未跑全局回归或性能压测",
+    "Windows实体机/双显卡未验收",
+    "Mac为临时签名、未公证"
+  ]
+}

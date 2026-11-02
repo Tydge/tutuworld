@@ -29,10 +29,11 @@ func _ready() -> void:
 	var ripple:=ShaderMaterial.new();ripple.shader=load("res://assets/shaders/water_splash.gdshader")
 	splash=G.mesh(effects,plane,Vector3.ZERO,ripple,"WaterLanding");splash.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	effects.hide()
-func show_tool(kind: String) -> void:
+func show_tool(kind: String,water_id: String="") -> void:
 	verb=kind;clock=0
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
-	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind)
+	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id)
+	elif kind=="refill": prop=Models.make("water",water_id)
 	else:
 		prop=Node3D.new()
 		var wood:=G.mat("bb905c")
@@ -92,6 +93,9 @@ func _physics_process(delta: float) -> void:
 		var forward: Vector3=(target-hand).normalized();var right:=Vector3.UP.cross(forward).normalized();var up:=forward.cross(right)
 		prop.global_transform=Transform3D(Basis(right,up,forward),hand)
 		prop.scale=Vector3(1,1,clampf(hand.distance_to(target)/spoon_length,.85,1.05))
+	elif verb=="refill":
+		var basis: Basis=bunny.visual.global_basis
+		prop.global_transform=Transform3D(basis,hand-basis*prop.get_node("GripR").position)
 	elif verb in ["water","weed"]:
 		hand+=bunny.visual.global_basis*Vector3(.27,.12,.10) if verb=="water" else bunny.visual.global_basis*Vector3(.18,.06,.08)
 		bunny.aim_hand(bunny.right_arm,hand)

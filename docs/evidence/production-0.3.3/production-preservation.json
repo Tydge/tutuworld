@@ -1,0 +1,20 @@
+{
+  "all_existing_characters_preserved": true,
+  "character_count": 2,
+  "care_history_preserved": true,
+  "doors_preserved": true,
+  "epoch_preserved": true,
+  "clock_alignment_preserved": true,
+  "current_release": "/srv/tutuworld/releases/0.3.3",
+  "health": {
+    "ok": true,
+    "version": "0.3.3",
+    "build": 6
+  },
+  "failures": [],
+  "history_time_roundtrip_tolerance_seconds": 1e-08,
+  "tutuworld-world": "active",
+  "tutuworld-auth": "active",
+  "tutuworld-backup.timer": "active",
+  "passed": true
+}

@@ -1,0 +1,33 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS New character starts with 100 points
+PASS Pauses do not charge early
+PASS Three accumulated running seconds cost exactly one point
+PASS Recovery waits for thirty real seconds
+PASS Thirty real seconds recover one point
+PASS Sleep does not award a point early
+PASS Sleeping recovers one point per fifteen real seconds
+PASS Recovery caps and cannot bank time while full
+PASS Production reserves exactly one point
+PASS Cancelling returns the reserved point and keeps materials
+PASS Success consumes one point once and grants XP
+PASS No production starts at zero stamina
+PASS Water uses the same cost
+PASS Permanent watering can is retained
+PASS Inactive / offline recovery uses wall-clock age
+PASS Accumulated running debt survives switching / restoration
+PASS Changing the game clock cannot grant real-time stamina
+PASS New counters save normally
+PASS Offline recovery is applied once and keeps running remainder
+PASS Offline bed recovery doubles exactly once: bunny
+PASS Saved sleeper can wake: bunny
+PASS Offline bed recovery doubles exactly once: cat_teacher
+PASS Saved sleeper can wake: cat_teacher
+PASS Production feedback uses the character name
+PASS Unnamed cat fallback uses its species
+PASS Unnamed rabbit fallback uses its species
+PASS Saving unfinished work preserves its cancellation refund
+PASS Bed sleep is an authority state
+PASS Persistent bed state doubles recovery
+PASS Wake clears the persistent resting state
+STAMINA_REVISION_RULES_RESULT PASS checks=30 failures=[]

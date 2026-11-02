@@ -131,9 +131,9 @@ func _process(delta: float) -> void:
 				if replica.equipment!=row.equipment:replica.equipment=row.equipment.duplicate();Outfit.apply(replica.actor,row.equipment)
 				if replica.action!=str(row.get("action","")):
 					replica.action=str(row.get("action",""));replica.props.hide_tool()
-					if replica.action!="":replica.props.show_tool(replica.action)
+					if replica.action!="":replica.props.show_tool(replica.action,str(row.get("watering_can","")))
 				var target: String=row.get("job",{}).get("target","")
-				if city.targets.has(target):replica.props.target_point=city.target_position(target)+Vector3(0,.6,0)
+				if city.targets.has(target):replica.props.target_point=city.targets[target].effect_anchor.global_position if city.targets[target].has("effect_anchor") else city.target_position(target)+Vector3(0,.6,0)
 	if city.map_id=="city" and is_instance_valid(city.culinary):
 		var meal:=""
 		for id in replicas:
@@ -205,7 +205,10 @@ func show_chat(data: Dictionary) -> void:
 	col.add_child(label);city.hud.root_ui.add_child(panel)
 	bubbles[data.id]={"panel":panel,"remaining":clampf(3+str(data.text).length()*.08,4,10)}
 func apply_shared_state() -> void:
-	var value=session.online_doors.get(city.map_id)
-	if value is Dictionary and is_instance_valid(city.home):
-		city.home.door_open=value.get("open",false);city.home.door_target=float(value.get("target",0));city.home.door_tweening=absf(city.home.door_angle-city.home.door_target)>.001
+	for id in city.targets:
+		var row: Dictionary=city.targets[id]
+		if row.kind!="home_door" or not row.has("node"): continue
+		var value=session.online_doors.get(city.map_id if id=="home_door" else city.map_id+":"+id)
+		if value is Dictionary:
+			row.node.door_open=value.get("open",false);row.node.door_target=float(value.get("target",0));row.node.door_tweening=absf(row.node.door_angle-row.node.door_target)>.001
 func from_array(p: Array) -> Vector3:return Vector3(float(p[0]),float(p[1]),float(p[2]))

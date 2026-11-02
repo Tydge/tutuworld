@@ -116,8 +116,9 @@
    "sell": 0,
    "shop": "tools",
    "color": "bd925f",
-   "description": "永久工具。持有即可浇水，使用后保留。",
-   "required_level": 1
+   "description": "木制水壶，装满可浇水6次。先到菜园水井打水，2秒装满。",
+   "required_level": 1,
+   "water_capacity": 6
   },
   "stone_hammer": {
    "name": "初级采石锤",
@@ -192,7 +193,7 @@
    "kind": "material",
    "sell": 3,
    "color": "aa8059",
-   "description": "一级木材。可直接捡拾，留待以后制作。",
+   "description": "一级木材。可直接捡拾，也可用于工坊制造。",
    "gather_yield": 1,
    "required_level": 1
   },
@@ -293,7 +294,7 @@
    "sell": 0,
    "shop": "tools",
    "color": "c58b58",
-   "description": "永久工具。双手挥斧，从倒下的桦木树干采集二级木材。",
+   "description": "永久工具。可在工坊制造或工具店购买，伐木Lv.3可采集二级木材。",
    "required_level": 3
   },
   "birch": {
@@ -404,6 +405,16 @@
    },
    "effect_text": "采石速度 +25%",
    "description": "采石速度 +25%。持续1游戏天，新的一餐替换上一餐。"
+  },
+  "copper_watering_can": {
+   "name": "铜水壶",
+   "kind": "tool",
+   "water_capacity": 12,
+   "required_level": 1,
+   "sell": 0,
+   "color": "bd875d",
+   "icon": "watering_can",
+   "description": "工坊制造的铜水壶，装满可浇水12次。拥有后自动优先使用，制成时为空壶。"
   }
  },
  "recipes": {
@@ -524,6 +535,29 @@
    "effect_text": "采石速度 +25%",
    "required_level": 5,
    "skill_experience": 10
+  },
+  "copper_watering_can": {
+   "name": "铜水壶",
+   "station": "workshop",
+   "required_level": 1,
+   "seconds": 10,
+   "skill_experience": 5,
+   "output": "copper_watering_can",
+   "ingredients": {
+    "copper": 10
+   }
+  },
+  "copper_axe": {
+   "name": "铜斧",
+   "station": "workshop",
+   "required_level": 1,
+   "seconds": 10,
+   "skill_experience": 5,
+   "output": "copper_axe",
+   "ingredients": {
+    "copper": 8,
+    "branch": 8
+   }
   }
  },
  "crop_care_stages": [

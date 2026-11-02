@@ -29,7 +29,16 @@ static func catalog() -> Dictionary:
 static func item(id: String) -> Dictionary: return catalog().items.get(id,{})
 static func recipe(id: String) -> Dictionary: return catalog().recipes.get(id,{})
 static func facilities() -> Dictionary:
-	return {"kitchen":Vector2(21,-20.0),"dining":Vector2(27.8,-18.5),"home_bed":Vector2(-30.7,-4.75)}
+	var result:={"kitchen":Vector2(21,-20.0),"dining":Vector2(27.8,-18.5),"home_bed":Vector2(-30.7,-4.75)}
+	for id in preload("res://scripts/city/production_facilities.gd").defaults():
+		var point: Vector3=preload("res://scripts/city/production_facilities.gd").defaults()[id].position
+		result[id]=Vector2(point.x,point.z)
+	return result
+static func recipes_for_station(station: String) -> Array:
+	return catalog().recipes.keys().filter(func(id): return recipe(id).get("station","")==station)
+static func recipe_skill(id: String) -> String: return "manufacturing" if recipe(id).get("station","")=="workshop" else "cooking"
+static func recipe_speed(id: String) -> String: return "manufacture" if recipe_skill(id)=="manufacturing" else "cook"
+static func water_capacity(id: String) -> int: return int(item(id).get("water_capacity",0))
 static func crop(id: String) -> Dictionary: return catalog().crops.get(id,{})
 static func care_stages(id: String) -> Array:
 	return crop(id).get("care_stages",catalog().get("crop_care_stages",[{"water":true,"weed":false},{"water":true,"weed":true},{"water":true,"weed":true}]))
@@ -58,6 +67,7 @@ static func resources(map_id: String="city") -> Array:
 	for i in range(15):
 		var type_: String=["limestone","copper","branch"][i%3]
 		var point: Vector2=spots[type_][i/3]+Vector2(random.randf_range(-.35,.35),random.randf_range(-.35,.35))
+		if i==4: point=Vector2(43,-24) # Stable copper node moved clear of the new workshop.
 		_resources.append({"id":"resource_%02d"%i,"item":type_,"x":point.x,"z":point.y,"map":"city"})
 	for i in range(4):
 		var point: Vector2=[Vector2(-12,-7),Vector2(12,-7),Vector2(-12,6),Vector2(12,6)][i]

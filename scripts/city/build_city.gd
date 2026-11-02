@@ -55,6 +55,7 @@ func build() -> void:
 	build_plaza()
 	build_districts()
 	build_large_farm()
+	build_production_facilities()
 	build_beach()
 	build_city_nature()
 	preload("res://scripts/city/scenery_polish.gd").apply(world)
@@ -68,6 +69,11 @@ func build() -> void:
 	save_scene(world,"res://scenes/city_map.tscn")
 	print("CITY_MAP_BUILT area_ratio=4.84 plots=48")
 	quit()
+func build_production_facilities() -> void:
+	var catalog=preload("res://scripts/city/production_facilities.gd")
+	for row in catalog.object_definitions(): preload("res://scripts/city/production_builder.gd").build_well(world,row)
+	var builder=load("res://scripts/city/home_builder.gd").new()
+	preload("res://scripts/city/home_builder.gd").pack_module(world,builder.construct(world,catalog.workshop_definition()),"res://scenes/workshop.scn")
 func build_city_island() -> void:
 	var terrain := group(world,"Island")
 	var sea_mat:=ShaderMaterial.new()
@@ -115,7 +121,7 @@ func build_streets() -> void:
 	road(Vector3(0,0,-40),Vector3(0,0,33),6)
 	road(Vector3(-43,0,13),Vector3(43,0,13),5)
 	road(Vector3(-43,0,-13),Vector3(43,0,-13),5)
-	road(Vector3(-30,0,-19),Vector3(29,0,-19),4)
+	road(Vector3(-30,0,-19),Vector3(39,0,-19),4)
 	road(Vector3(-25,0,-26),Vector3(-25,0,27),4)
 	road(Vector3(17,0,-26),Vector3(17,0,24),4)
 	lamps=group(world,"Streetlights")
@@ -373,12 +379,13 @@ func build_large_farm() -> void:
 			for y in [.43,.82]: G.box(farm,Vector3(x+.95,y,z),Vector3(1.9,.12,.12),pale_wood)
 	for x in [20.0,40.0]:
 		for z in range(-9,9,2):
+			if x==40.0 and z in [1,3]: continue # East gate to the reusable well module.
 			G.cylinder(farm,Vector3(x,.58,z),.075,1.18,pale_wood,.06)
 			for y in [.43,.82]: G.box(farm,Vector3(x,y,z+.94),Vector3(.12,.12,1.88),pale_wood)
 	# Loose flat stepping stones lead in from the front gate.
 	for z in [8.4,9.25,10.10]:
 		G.ball(farm,Vector3(29,.075,z),Vector3(.57,.055,.36),G.mat("b8aa86"),"GardenStep")
-	building("FarmBarn","东边的大菜园",Vector3(35,0,-17),"d6ac71","986449",8,4.5,5)
+	building("FarmBarn","东边的大菜园",Vector3(42,0,21),"d6ac71","986449",8,4.5,5)
 	var sign:=group(farm,"GardenSign",Vector3(26.3,0,9.95))
 	G.cylinder(sign,Vector3(0,.55,0),.07,1.1,wood)
 	G.box(sign,Vector3(0,1.15,0),Vector3(2.3,.72,.15),pale_wood)
@@ -582,7 +589,9 @@ func city_clear(p: Vector3) -> bool:
 	if absf(p.x)<12 and absf(p.z)<12: return false
 	if p.x>19 and p.x<43 and p.z>-21 and p.z<15: return false
 	if p.x<-28 and p.z>-10 and p.z<29: return false
-	if p.z<-20 and absf(p.x)<36: return false
+	if p.z<-20 and absf(p.x)<41: return false
+	if absf(p.x-43)<3 and absf(p.z-3)<3: return false
+	if absf(p.x-42)<6 and absf(p.z-21)<5: return false
 	if p.x>-20 and p.x<-10 and p.z>19 and p.z<29: return false
 	return true
 func build_city_nature() -> void:

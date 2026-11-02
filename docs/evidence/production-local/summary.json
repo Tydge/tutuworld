@@ -1,0 +1,129 @@
+{
+  "date": "2026-11-02",
+  "status": "local-only-unreleased",
+  "baseline": "v0.3.2 / build 5 / launcher 2 / protocol 3",
+  "scope": "菜园水井、有限水量、可进入的制造工坊、制造技能及速度；相关旧功能回归",
+  "environment": {
+    "os": "macOS",
+    "godot": "4.6.3",
+    "graphical_renderer": "OpenGL",
+    "rule_tests": "headless",
+    "multiplayer": "隔离回环双客户端；账号18912，世界18903"
+  },
+  "checks": 1448,
+  "groups": 13,
+  "full_regression": false,
+  "command": "python3 tools/dev.py test <tests中的用例名>",
+  "map_build": {
+    "command": "python3 tools/dev.py build city",
+    "log": ".qa-artifacts/20261102-155337-723847/build_city/run.log",
+    "passed": true
+  },
+  "doctor": "PASS",
+  "diff_check": "PASS",
+  "tests": {
+    "production_rules": {
+      "passed": true,
+      "checks": 71,
+      "log": "production_rules.log",
+      "source": ".qa-artifacts/20261102-155555-942079/production_rules/run.log"
+    },
+    "production_flow": {
+      "passed": true,
+      "checks": 26,
+      "log": "production_flow.log",
+      "source": ".qa-artifacts/20261102-155555-942079/production_flow/run.log"
+    },
+    "production_multiplayer_rules": {
+      "passed": true,
+      "checks": 35,
+      "log": "production_multiplayer_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/production_multiplayer_rules/run.log"
+    },
+    "city_rules": {
+      "passed": true,
+      "checks": 56,
+      "log": "city_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/city_rules/run.log"
+    },
+    "stamina_revision_rules": {
+      "passed": true,
+      "checks": 30,
+      "log": "stamina_revision_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/stamina_revision_rules/run.log"
+    },
+    "kitchen_rules": {
+      "passed": true,
+      "checks": 128,
+      "log": "kitchen_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/kitchen_rules/run.log"
+    },
+    "skills_quality_rules": {
+      "passed": true,
+      "checks": 568,
+      "log": "skills_quality_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/skills_quality_rules/run.log"
+    },
+    "skill_experience_rules": {
+      "passed": true,
+      "checks": 8,
+      "log": "skill_experience_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/skill_experience_rules/run.log"
+    },
+    "character_roster_rules": {
+      "passed": true,
+      "checks": 39,
+      "log": "character_roster_rules.log",
+      "source": ".qa-artifacts/20261102-154711-907562/character_roster_rules/run.log"
+    },
+    "food_save_migration": {
+      "passed": true,
+      "checks": 6,
+      "log": "food_save_migration.log",
+      "source": ".qa-artifacts/20261102-154711-907562/food_save_migration/run.log"
+    },
+    "multiplayer_rules": {
+      "passed": true,
+      "checks": 88,
+      "log": "multiplayer_rules.log",
+      "source": ".qa-artifacts/20261102-154813-643945/multiplayer_rules/run.log"
+    },
+    "kitchen_playthrough": {
+      "passed": true,
+      "checks": 117,
+      "log": "kitchen_playthrough.log",
+      "source": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/run.log"
+    },
+    "project_integrity": {
+      "passed": true,
+      "checks": 276,
+      "log": "project_integrity.log",
+      "source": ".qa-artifacts/20261102-155555-942079/project_integrity/run.log"
+    }
+  },
+  "visual_evidence": {
+    "directory": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots",
+    "screenshots": 8,
+    "reviewed": [
+      "菜园水井及通道",
+      "厨房东侧工坊及室内",
+      "制造配方与动作",
+      "六项技能角色面板",
+      "取水与浇水动作",
+      "井顶遮挡淡出"
+    ]
+  },
+  "preserved": [
+    "原有蝴蝶结本地修改",
+    "动物成品及山谷地图",
+    "旧角色资产与五项技能进度",
+    "世界epoch及校准标记",
+    "正式版本与发布配置"
+  ],
+  "limitations": [
+    "未跑全局回归或性能压测",
+    "未做Windows实机验收",
+    "未打包、发布或部署",
+    "未实现建造编辑器、布局持久化或移动后的导航重建"
+  ]
+}

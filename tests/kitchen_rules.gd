@@ -9,13 +9,13 @@ func check(ok: bool,label_: String) -> void:
 	if not ok: failures.append(label_)
 func _initialize() -> void:
 	var a=A.new()
-	check(DB.catalog().recipes.size()==7,"Seven crop recipes")
+	check(DB.recipes_for_station("kitchen").size()==7,"Seven crop recipes")
 	check(not a.execute({"verb":"craft","target":"kitchen","recipe":"carrot_soup"}).ok,"Cannot cook remotely")
 	a.state.player_position=[21,.1,-20]
 	check(not a.execute({"verb":"craft","target":"kitchen","recipe":"carrot_soup"}).ok,"Missing ingredients rejected")
 	check(not a.execute({"verb":"craft","target":"kitchen","recipe":"fake"}).ok,"Unknown recipes rejected")
 	a.state.skills.cooking=5;a.state.skill_experience.cooking=preload("res://scripts/services/character_stats.gd").skill_start(5)
-	for id in DB.catalog().recipes:
+	for id in DB.recipes_for_station("kitchen"):
 		var r:=DB.recipe(id)
 		for ingredient in r.ingredients: a.add(ingredient,20)
 		var before: Dictionary=a.state.inventory.duplicate(true)

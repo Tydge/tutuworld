@@ -9,6 +9,8 @@ const DAY_SECONDS := 3600.0
 const ACTION_SECONDS := 2.0
 var state: Dictionary
 var job: Dictionary = {}
+var facility_positions: Dictionary={}
+var facility_kinds: Dictionary={}
 var seen_commands: Dictionary = {}
 var revision := 0
 var running:=false
@@ -27,6 +29,29 @@ func _init() -> void:
 	state.rest_mode=""
 	state.rest_bed=""
 	state.skill_rules_version=Stats.PROGRESSION_VERSION
+	state.watering_water={}
+	for id in preload("res://scripts/city/production_facilities.gd").defaults():
+		facility_kinds[id]=preload("res://scripts/city/production_facilities.gd").defaults()[id].kind
+func facility_position(id: String) -> Vector2: return facility_positions.get(id,DB.facilities().get(id,Vector2(INF,INF)))
+func facility_kind(id: String) -> String: return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
+func watering_can_id() -> String:
+	for id in ["copper_watering_can","watering_can"]:
+		if count(id)>0: return id
+	return ""
+func water_left(id: String="") -> int:
+	if id=="": id=watering_can_id()
+	return clampi(int(state.get("watering_water",{}).get(id,0)),0,DB.water_capacity(id)) if count(id)>0 else 0
+func normalize_production_state() -> void:
+	if not state.get("watering_water",{}) is Dictionary: state.watering_water={}
+	var clean: Dictionary={}
+	for id in ["watering_can","copper_watering_can"]:
+		if count(id)>0: clean[id]=water_left(id)
+	state.watering_water=clean
+	for row in Stats.SKILLS:
+		if not state.skill_experience.has(row[0]): state.skill_experience[row[0]]=0
+		state.skills[row[0]]=skill_level(row[0])
+	for row in Stats.ROWS:
+		if not state.attributes.has(row[0]): state.attributes[row[0]]=0.0
 
 func empty_plot() -> Dictionary:
 	return {"crop":"","growth":0.0,"water_stage":-1,"weed_stage":-1,"quality":0}
@@ -77,7 +102,8 @@ func resource_lock_reason(id: String) -> String:
 	return "需要%s Lv.%d"%[Stats.skill_name(skill).replace("技能",""),required] if skill_level(skill)<required else ""
 func recipe_lock_reason(id: String) -> String:
 	var required := int(DB.recipe(id).get("required_level",1))
-	return "需要烹饪 Lv.%d"%required if skill_level("cooking")<required else ""
+	var skill:=DB.recipe_skill(id)
+	return "需要%s Lv.%d"%[Stats.skill_name(skill).replace("技能",""),required] if skill_level(skill)<required else ""
 func critical_chance(skill: String,required: int,minimum: float,maximum: float) -> float:
 	return lerpf(minimum,maximum,clampf((skill_level(skill)-required)/10.0,0,1))
 func roll_critical(chance: float) -> bool:
@@ -142,7 +168,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		if state.coins<fare: return fail("船票需要 10 贝壳币。")
 		state.coins-=fare;state.map_id=destination;state.player_position=Valley.arrival(destination)
 		return {"ok":true,"message":"出发，去听山谷的风。" if destination=="valley" else "海岛城，我们回来啦。"}
-	if map_id!="city" and verb in ["buy","sell","plant","water","weed","harvest","craft","eat","rest"]: return fail("这件事要回海岛城才能做哦。")
+	if map_id!="city" and verb in ["buy","sell","plant","water","weed","harvest","craft","refill","eat","rest"]: return fail("这件事要回海岛城才能做哦。")
 	var definition := DB.item(item)
 	var quantity := int(c.get("quantity",1))
 	if verb in ["buy","sell"]:
@@ -185,15 +211,23 @@ func _apply(c: Dictionary) -> Dictionary:
 	if verb=="craft":
 		var recipe_id: String=c.get("recipe","")
 		var recipe:=DB.recipe(recipe_id)
-		if target!="kitchen" or recipe.is_empty() or recipe.station!="kitchen" or not near_position(DB.facilities().kitchen,3.8): return fail("请来到海风小厨房的料理台。")
+		if recipe.is_empty() or facility_kind(target)!=recipe.station or not near_position(facility_position(target),3.8): return fail("请来到对应的料理台或工坊工作台。")
+		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return fail("这件工具已经拥有啦。")
 		var locked := recipe_lock_reason(recipe_id)
 		if locked!="": return fail(locked)
 		for ingredient in recipe.ingredients:
 			if count(ingredient)<int(recipe.ingredients[ingredient]): return fail("还缺少%s。"%DB.item(ingredient).name)
 		if not reserve_work_stamina(): return fail("%s耐力不够啦，歇一会儿再做吧。"%actor_name())
-		job={"verb":verb,"target":target,"recipe":recipe_id,"item":recipe.output,"elapsed":0.0,"duration":float(recipe.seconds)/multiplier("cook")}
+		job={"verb":verb,"target":target,"recipe":recipe_id,"item":recipe.output,"elapsed":0.0,"duration":float(recipe.seconds)/multiplier(DB.recipe_speed(recipe_id)),"station":recipe.station}
 		job.stamina_reserved=true
-		return {"ok":true,"message":"正在烹饪%s，完成后才会使用材料。"%recipe.name}
+		return {"ok":true,"message":"正在%s%s，完成后才会使用材料。"%["制造" if recipe.station=="workshop" else "烹饪",recipe.name]}
+	if verb=="refill":
+		var can:=watering_can_id()
+		if facility_kind(target)!="well" or not near_position(facility_position(target),3.0): return fail("请来到菜园水井旁打水。")
+		if can=="": return fail("需要先拥有一把水壶，木水壶可以在工具店购买。")
+		if water_left(can)>=DB.water_capacity(can): return fail("水壶已经装满啦。")
+		job={"verb":verb,"target":target,"item":can,"elapsed":0.0,"duration":2.0}
+		return {"ok":true,"message":"正在打水，2秒后装满水壶。"}
 	if verb=="snack":
 		if definition.get("edible",{}).is_empty() or count(item)<1: return fail("口袋里没有可以吃的橘子。")
 		if state.stamina>=stamina_max(): return fail("耐力已满，留着一会儿吃吧。")
@@ -236,7 +270,8 @@ func _apply(c: Dictionary) -> Dictionary:
 			if p.crop!="" or definition.get("kind","")!="seed" or count(item)<1: return fail("需要空地和背包里的种子。")
 		"water":
 			if p.crop=="" or not need.water: return fail("这株作物现在不缺水。")
-			if count("watering_can")<1: return fail("需要木水壶，工具店可以买到。")
+			if watering_can_id()=="": return fail("需要水壶，木水壶可以在工具店购买。")
+			if water_left()<1: return fail("水壶没水啦，先到菜园水井打水。")
 		"weed":
 			if p.crop=="" or not need.weed: return fail("这里现在没有杂草。")
 			if count("herbicide")<1: return fail("需要除草剂，种子商店可以买到。")
@@ -245,6 +280,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		_: return fail("暂时不支持这个动作。")
 	if not reserve_work_stamina(): return fail("%s耐力不够啦，歇一会儿再照料吧。"%actor_name())
 	job={"verb":verb,"target":target,"item":item,"elapsed":0.0,"duration":action_duration(verb,item),"stamina_reserved":true}
+	if verb=="water": job.can=watering_can_id()
 	return {"ok":true,"message":"%s开始认真干活了。"%actor_name()}
 
 func tick(delta: float) -> Array:
@@ -294,13 +330,19 @@ func complete(j: Dictionary) -> Dictionary:
 	var quality := 0
 	if j.verb=="craft":
 		var recipe:=DB.recipe(j.recipe)
-		if not near_position(DB.facilities().kitchen,3.8): return rejected_work(j,"离开了料理台，材料没有消耗。")
+		if recipe.is_empty() or facility_kind(target)!=recipe.get("station","") or not near_position(facility_position(target),3.8): return rejected_work(j,"离开了工作台，材料没有消耗。")
+		if recipe_lock_reason(j.recipe)!="": return rejected_work(j,"配方等级条件发生变化。")
+		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return rejected_work(j,"已经拥有这件工具，材料没有消耗。")
 		for ingredient in recipe.ingredients:
-			if count(ingredient)<int(recipe.ingredients[ingredient]): return rejected_work(j,"材料不足，烹饪已取消。")
+			if count(ingredient)<int(recipe.ingredients[ingredient]): return rejected_work(j,"材料不足，制作已取消。")
 		for ingredient in recipe.ingredients: add(ingredient,-int(recipe.ingredients[ingredient]))
 		add(recipe.output,1)
 		amount=1
 		message="做好了 %s × 1"%recipe.name
+	elif j.verb=="refill":
+		if facility_kind(target)!="well" or not near_position(facility_position(target),3.0) or count(j.item)<1: return rejected_work(j,"离开了水井，打水已取消。")
+		state.watering_water[j.item]=DB.water_capacity(j.item)
+		message="%s装满啦，可以浇水%d次。"%[DB.item(j.item).name,water_left(j.item)]
 	elif j.verb=="snack":
 		var edible: Dictionary=DB.item(j.item).get("edible",{})
 		if edible.is_empty() or count(j.item)<1: return rejected_work(j,"橘子已经不在口袋里了。")
@@ -335,7 +377,11 @@ func complete(j: Dictionary) -> Dictionary:
 				p.crop=DB.item(j.item).crop
 				p.quality=0
 				message="种下了%s，记得先浇水。"%DB.crop(p.crop).name
-			"water": p.water_stage=mini(DB.care_stages(p.crop).size()-1,int(floor(float(p.growth)/(float(DB.crop(p.crop).days)*DAY_SECONDS)*DB.care_stages(p.crop).size()+.00001))); message="浇好水啦。"
+			"water":
+				var can: String=j.get("can",watering_can_id())
+				if water_left(can)<1 or p.crop=="" or not needs(p).water: return rejected_work(j,"水量或作物需求发生变化，浇水已取消。")
+				state.watering_water[can]=water_left(can)-1
+				p.water_stage=mini(DB.care_stages(p.crop).size()-1,int(floor(float(p.growth)/(float(DB.crop(p.crop).days)*DAY_SECONDS)*DB.care_stages(p.crop).size()+.00001))); message="浇好水啦。"
 			"weed":
 				if count("herbicide")<1: return rejected_work(j,"除草剂不足。")
 				add("herbicide",-1)
@@ -352,7 +398,7 @@ func complete(j: Dictionary) -> Dictionary:
 			if quality_gain: p.quality=mini(DB.crop_quality_max(p.crop),int(p.get("quality",0))+1)
 			quality=int(p.get("quality",0))
 			if quality_gain: message="照料得真好！品质 +1"
-	var skill: String=Stats.work_skill(j.verb,j.item)
+	var skill: String=Stats.work_skill(j.verb,j.item,DB.recipe(j.get("recipe","")).get("station",""))
 	var skill_gain:=0
 	var previous_level:=skill_level(skill) if skill!="" else 1
 	if skill!="":
