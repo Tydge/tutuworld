@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Fresh experience and full stamina
+PASS Running consumes nine points in the first 29.9 seconds
+PASS Thirty real seconds consume ten points and naturally recover one
+PASS Fifteen real seconds preserve a partial recovery interval
+PASS Thirty real seconds recover one point
+PASS Capacity bonus applies independently
+PASS Recovery +100% restores one point in fifteen seconds
+PASS Percent stats affect speed without UI formulas
+PASS Food and attributes aggregate consistently
+PASS Twenty-four clothes include six new variants
+PASS Pattern references are independent of color: rose
+PASS Pattern references are independent of color: sage
+PASS Pattern references are independent of color: honey
+PASS No XP before completion
+PASS Cancelled work grants no XP
+PASS Planting grants one XP
+PASS Repeated command cannot award twice
+PASS Watering grants one XP
+PASS Weeding grants one XP
+PASS Harvest grants one XP
+PASS Stone, ore and branch each grant one XP
+PASS Cooking grants one XP
+PASS Eating does not masquerade as work
+PASS Successful work accumulates corresponding skill XP
+PROGRESSION_RULES_RESULT PASS checks=24 failures=[]

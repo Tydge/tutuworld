@@ -1,0 +1,30 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Offline local authority allows the debug clock
+PASS Creates both species sharing this clock
+PASS Can select an exact hour and minute
+PASS Sets 22:15 on the same day, without skipping a date
+PASS Shared world and active snapshot agree on the clock
+PASS Changing the clock does not advance crops or real-time work
+PASS Clock changes grant no items or work experience
+PASS Active food keeps its remaining duration
+PASS Depleted gathering nodes keep their remaining respawn duration
+PASS Inactive character food keeps its remaining duration
+PASS Inactive rest already earned is settled before moving the clock
+PASS Rewind stays on the same date
+PASS Rewinding neither deletes nor extends a buff
+PASS 23:59 does not roll into tomorrow
+PASS Reject invalid time [24, 0]
+PASS Reject invalid time [-1, 0]
+PASS Reject invalid time [12, 60]
+PASS Reject invalid time [12, -1]
+PASS Invalid input leaves state unchanged
+PASS Multiplayer transport rejects local time changes
+PASS A configured online session also rejects time changes
+PASS A save failure rolls the clock and character records back
+PASS Adjusted time saves through the normal atomic save path
+PASS Adjusted clock survives reload
+PASS Switching to the other species preserves its food and the shared adjusted clock
+PASS Can rewind the first day all the way to midnight
+PASS First-day rewind keeps nonnegative timestamps and already-earned rest
+TESTING_CLOCK_RULES_RESULT PASS checks=27 failures=[]

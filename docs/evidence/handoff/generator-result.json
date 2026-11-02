@@ -1,0 +1,12 @@
+{
+  "isolated_import": "PASS",
+  "isolated_city_builder": "PASS",
+  "isolated_cat_builder": "PASS",
+  "original_runtime_assets_unchanged": {
+    "scenes/bunny.tscn": "bb813047b57b0aeba47a9a7cefadf0f71fb977e7b89f8964c993e73a2fabbef4",
+    "scenes/cat_teacher.tscn": "058f64428bd35fee007dffe87708e68df8813de30a99ddda3263b56893307fb5",
+    "scenes/panda.tscn": "5baa86b9c9116fe7406526e757b168197cc27ad18df82cab017a22f6c2778656",
+    "scenes/city_map.tscn": "01b2674fabbac7173f94c1e225a927bc80956de237c6a1336a617111032f7994",
+    "scenes/valley_map.scn": "1047e395c5cb22cf9e75faf04d15901c389b438701289b2be14c826b7cf9bc59"
+  }
+}

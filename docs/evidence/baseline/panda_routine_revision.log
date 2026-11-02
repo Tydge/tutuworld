@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=11554 components=26
+PASS Random clothing on shared panda rig
+PASS Daytime outdoor wander
+PASS Walk home and lie in bed at night; seconds=16.2000000000001
+PASS Sleeping inside own cottage
+PASS Quilt follows resident sleeping pose
+PASS Interaction does not wake resident
+PASS Morning restores normal pose and collision
+PASS Morning stroll leaves bedside
+PASS Night map arrival finds resident asleep
+PANDA_VALLEY_ROUTINE_RESULT PASS checks=9 failures=[]

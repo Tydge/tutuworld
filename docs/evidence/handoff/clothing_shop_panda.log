@@ -1,0 +1,40 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Shop opens with current character and actual outfit: panda
+PASS Shop layout fits the screen
+PASS Restore button starts disabled
+PASS Shop character rotates by dragging
+PASS Available UI action: try_on_item beret_plaid_rose
+PASS Available UI action: try_on_item apron_honey
+PASS Available UI action: try_on_item bell_blue
+PASS Can combine unowned clothes across all three slots
+PASS Trying clothes never equips, buys or charges them
+PASS All trial garments are actually attached to the displayed model
+PASS Available UI action: category_filter head
+PASS Available UI action: try_on_item beret_plaid_sage
+PASS Same-slot trial replaces only that slot
+PASS Trying preserves the scroll position, model instance and rotation
+PASS Available UI action: try_on_item beret_plaid_sage
+PASS Clicking a trial again restores the worn item in that slot
+PASS Available UI action: try_on_item beret_plaid_rose
+PASS Available UI action: category_filter body
+PASS Categories filter the shop while retaining the whole trial outfit
+PASS Clothes purchase starts genuinely scrolled down
+PASS Available UI action: buy_item apron_honey
+PASS Buying keeps the exact scroll position and scroll container
+PASS Buying updates the original button instead of rebuilding its card
+PASS Buying the previewed garment charges the exact price and adds it once
+PASS Buying retains the trial without changing the worn outfit
+PASS Owned clothing shows the owned purchase state
+PASS Purchase refresh reuses the rotated preview
+PASS Available UI action: reset_shop_preview true
+PASS Restore returns all three slots to current clothing
+PASS Available UI action: category_filter head
+PASS Insufficient money disables buying while allowing trials
+PASS Available UI action: try_on_item beret_plaid_sage
+PASS Trying remains free with no money
+PASS Closing discards trials and suspends the preview
+PASS Shop trials do not leak into the actual wardrobe preview
+PASS Reopening starts from the actual worn outfit
+CLOTHING_SHOP_PREVIEW_RESULT PASS checks=36 failures=[]

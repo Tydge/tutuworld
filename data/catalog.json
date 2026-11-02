@@ -1,0 +1,543 @@
+{
+ "crops": {
+  "carrot": {
+   "name": "胡萝卜",
+   "seed": "seed_carrot",
+   "days": 1.0,
+   "yield": 4,
+   "color": "ef9c4d",
+   "required_level": 1
+  },
+  "lettuce": {
+   "name": "生菜",
+   "seed": "seed_lettuce",
+   "days": 1.5,
+   "yield": 3,
+   "color": "91bb5c",
+   "required_level": 1
+  },
+  "tomato": {
+   "name": "番茄",
+   "seed": "seed_tomato",
+   "days": 2.0,
+   "yield": 4,
+   "color": "d96855",
+   "required_level": 1
+  },
+  "pumpkin": {
+   "name": "南瓜",
+   "seed": "seed_pumpkin",
+   "days": 3.0,
+   "yield": 3,
+   "color": "e8a44f",
+   "required_level": 3
+  },
+  "wheat": {
+   "name": "小麦",
+   "seed": "seed_wheat",
+   "days": 3.0,
+   "yield": 6,
+   "color": "d9b65d",
+   "required_level": 5,
+   "care_stages": [
+    {
+     "water": true,
+     "weed": false
+    },
+    {
+     "water": true,
+     "weed": true
+    },
+    {
+     "water": true,
+     "weed": true
+    },
+    {
+     "water": true,
+     "weed": false
+    }
+   ]
+  }
+ },
+ "items": {
+  "seed_carrot": {
+   "name": "胡萝卜种子",
+   "kind": "seed",
+   "crop": "carrot",
+   "price": 10,
+   "sell": 2,
+   "shop": "farm",
+   "color": "ef9c4d",
+   "description": "1 天成熟，每株基础收获 4 份胡萝卜。"
+  },
+  "seed_lettuce": {
+   "name": "生菜种子",
+   "kind": "seed",
+   "crop": "lettuce",
+   "price": 14,
+   "sell": 3,
+   "shop": "farm",
+   "color": "91bb5c",
+   "description": "1.5 天成熟，每株基础收获 3 份生菜。"
+  },
+  "seed_tomato": {
+   "name": "番茄种子",
+   "kind": "seed",
+   "crop": "tomato",
+   "price": 20,
+   "sell": 4,
+   "shop": "farm",
+   "color": "d96855",
+   "description": "2 天成熟，每株基础收获 4 份番茄。"
+  },
+  "seed_pumpkin": {
+   "name": "南瓜种子",
+   "kind": "seed",
+   "crop": "pumpkin",
+   "price": 24,
+   "sell": 5,
+   "shop": "farm",
+   "color": "e8a44f",
+   "description": "3 天成熟，每株基础收获 3 份南瓜。"
+  },
+  "herbicide": {
+   "name": "除草剂",
+   "kind": "consumable",
+   "price": 12,
+   "sell": 3,
+   "shop": "farm",
+   "color": "8ca798",
+   "description": "每次成功除草消耗 1 瓶，中途取消不消耗。"
+  },
+  "watering_can": {
+   "name": "木水壶",
+   "kind": "tool",
+   "price": 80,
+   "sell": 0,
+   "shop": "tools",
+   "color": "bd925f",
+   "description": "永久工具。持有即可浇水，使用后保留。",
+   "required_level": 1
+  },
+  "stone_hammer": {
+   "name": "初级采石锤",
+   "kind": "tool",
+   "price": 100,
+   "sell": 0,
+   "shop": "tools",
+   "color": "a5aaa3",
+   "description": "永久工具。采集一级石材：石灰石。",
+   "required_level": 1
+  },
+  "pickaxe": {
+   "name": "初级矿镐",
+   "kind": "tool",
+   "price": 140,
+   "sell": 0,
+   "shop": "tools",
+   "color": "ad8668",
+   "description": "永久工具。采集一级矿石：铜矿。",
+   "required_level": 1
+  },
+  "carrot": {
+   "name": "胡萝卜",
+   "kind": "crop",
+   "sell": 18,
+   "color": "ef9c4d",
+   "description": "脆嫩清甜的胡萝卜，煮汤时会散发温暖的香气。"
+  },
+  "lettuce": {
+   "name": "生菜",
+   "kind": "crop",
+   "sell": 25,
+   "color": "91bb5c",
+   "description": "鲜嫩爽口的生菜，适合拌一份清新的沙拉。"
+  },
+  "tomato": {
+   "name": "番茄",
+   "kind": "crop",
+   "sell": 32,
+   "color": "d96855",
+   "description": "饱满多汁的番茄，给炖菜添一抹酸甜。"
+  },
+  "pumpkin": {
+   "name": "南瓜",
+   "kind": "crop",
+   "sell": 60,
+   "color": "e8a44f",
+   "description": "金黄绵密的南瓜，煮成浓汤格外香甜。"
+  },
+  "limestone": {
+   "name": "石灰石",
+   "kind": "material",
+   "sell": 8,
+   "tool": "stone_hammer",
+   "color": "c6c7af",
+   "description": "一级石材。使用采石锤采集。",
+   "gather_yield": 1,
+   "required_level": 1
+  },
+  "copper": {
+   "name": "铜矿",
+   "kind": "material",
+   "sell": 10,
+   "tool": "pickaxe",
+   "color": "ba8862",
+   "description": "一级矿石。使用矿镐采集。",
+   "gather_yield": 1,
+   "required_level": 1
+  },
+  "branch": {
+   "name": "树枝",
+   "kind": "material",
+   "sell": 3,
+   "color": "aa8059",
+   "description": "一级木材。可直接捡拾，留待以后制作。",
+   "gather_yield": 1,
+   "required_level": 1
+  },
+  "sea_salt": {
+   "name": "海盐",
+   "kind": "ingredient",
+   "price": 4,
+   "sell": 1,
+   "shop": "farm",
+   "color": "e4dfd0",
+   "description": "厨房烹饪用的调料，春芽商店有售。"
+  },
+  "olive_oil": {
+   "name": "橄榄油",
+   "kind": "ingredient",
+   "price": 7,
+   "sell": 1,
+   "shop": "farm",
+   "color": "abc16c",
+   "description": "厨房烹饪用的调料，春芽商店有售。"
+  },
+  "cream": {
+   "name": "鲜奶油",
+   "kind": "ingredient",
+   "price": 9,
+   "sell": 1,
+   "shop": "farm",
+   "color": "f1e1b9",
+   "description": "厨房烹饪用的调料，春芽商店有售。"
+  },
+  "food_carrot_soup": {
+   "name": "胡萝卜暖汤",
+   "kind": "food",
+   "recipe": "carrot_soup",
+   "style": "carrot_soup",
+   "color": "e99c48",
+   "sell": 25,
+   "effect": {
+    "move": 0.15
+   },
+   "effect_text": "移动速度 +15%",
+   "description": "移动速度 +15%，持续1游戏天。在餐桌享用，新的一餐替换上一餐。"
+  },
+  "food_garden_salad": {
+   "name": "田园鲜蔬沙拉",
+   "kind": "food",
+   "recipe": "garden_salad",
+   "style": "garden_salad",
+   "color": "81b85d",
+   "sell": 25,
+   "effect": {
+    "water": 0.3
+   },
+   "effect_text": "浇水速度 +30%",
+   "description": "浇水速度 +30%，持续1游戏天。在餐桌享用，新的一餐替换上一餐。"
+  },
+  "food_tomato_stew": {
+   "name": "番茄炖蔬菜",
+   "kind": "food",
+   "recipe": "tomato_stew",
+   "style": "tomato_stew",
+   "color": "cf6751",
+   "sell": 25,
+   "effect": {
+    "wood": 0.2
+   },
+   "effect_text": "采木速度 +20%",
+   "description": "采木速度 +20%，持续1游戏天。在餐桌享用，新的一餐替换上一餐。"
+  },
+  "food_pumpkin_soup": {
+   "name": "奶香南瓜浓汤",
+   "kind": "food",
+   "recipe": "pumpkin_soup",
+   "style": "pumpkin_soup",
+   "color": "e8b25b",
+   "sell": 25,
+   "effect": {
+    "stamina_capacity": 0.2
+   },
+   "effect_text": "耐力上限 +20%",
+   "description": "耐力上限 +20%，持续1游戏天。在餐桌享用，新的一餐替换上一餐。"
+  },
+  "orange": {
+   "name": "橘子",
+   "kind": "crop",
+   "sell": 3,
+   "color": "ee9c37",
+   "description": "清甜多汁的小橘子。随时吃一颗，恢复3点耐力。",
+   "edible": {
+    "seconds": 3,
+    "stamina": 3
+   }
+  },
+  "copper_axe": {
+   "name": "铜斧",
+   "kind": "tool",
+   "price": 160,
+   "sell": 0,
+   "shop": "tools",
+   "color": "c58b58",
+   "description": "永久工具。双手挥斧，从倒下的桦木树干采集二级木材。",
+   "required_level": 3
+  },
+  "birch": {
+   "name": "桦木",
+   "kind": "material",
+   "tier": 2,
+   "tool": "copper_axe",
+   "sell": 22,
+   "color": "d9d6c4",
+   "description": "二级木材。持有铜斧可采集，基础耗时 5 秒。",
+   "gather_yield": 1,
+   "required_level": 3
+  },
+  "iron": {
+   "name": "铁矿",
+   "kind": "material",
+   "tier": 2,
+   "tool": "pickaxe",
+   "sell": 26,
+   "color": "70888c",
+   "description": "二级矿石。持有矿镐可采集，基础耗时 5 秒。",
+   "gather_yield": 1,
+   "required_level": 3
+  },
+  "sandstone": {
+   "name": "砂石",
+   "kind": "material",
+   "tier": 2,
+   "tool": "stone_hammer",
+   "sell": 20,
+   "color": "c5a477",
+   "description": "二级石材。持有采石锤可采集，基础耗时 5 秒。",
+   "gather_yield": 1,
+   "required_level": 3
+  },
+  "seed_wheat": {
+   "name": "小麦种子",
+   "kind": "seed",
+   "crop": "wheat",
+   "price": 30,
+   "sell": 6,
+   "shop": "farm",
+   "color": "d9b65d",
+   "description": "3天成熟，每株基础收获6份小麦。种植需要Lv.5。"
+  },
+  "wheat": {
+   "name": "小麦",
+   "kind": "crop",
+   "sell": 32,
+   "color": "d9b65d",
+   "description": "金灿灿的麦穗，在微风里晃出细碎的阳光。"
+  },
+  "honey": {
+   "name": "蜂蜜",
+   "kind": "ingredient",
+   "price": 12,
+   "sell": 3,
+   "shop": "farm",
+   "color": "dcb45f",
+   "description": "一小罐金色蜂蜜，给烘焙添些温柔的甜。"
+  },
+  "egg": {
+   "name": "鸡蛋",
+   "kind": "ingredient",
+   "price": 8,
+   "sell": 2,
+   "shop": "farm",
+   "color": "f1dec1",
+   "description": "圆滚滚的新鲜鸡蛋，可以烘焙，也可以做蛋饼。"
+  },
+  "food_honey_wheat_cake": {
+   "name": "蜂蜜麦饼",
+   "kind": "food",
+   "recipe": "honey_wheat_cake",
+   "style": "honey_wheat_cake",
+   "food_category": "baked",
+   "color": "e0b65f",
+   "sell": 110,
+   "effect": {},
+   "effect_text": "恢复30点耐力",
+   "description": "恢复30点耐力。保留已有食物增益。",
+   "stamina_restore": 30
+  },
+  "food_rustic_wheat_bread": {
+   "name": "香烤麦面包",
+   "kind": "food",
+   "recipe": "rustic_wheat_bread",
+   "style": "rustic_wheat_bread",
+   "food_category": "baked",
+   "color": "c8904b",
+   "sell": 140,
+   "effect": {
+    "run_speed": 0.2
+   },
+   "effect_text": "奔跑速度 +20%",
+   "description": "奔跑速度 +20%。持续1游戏天，新的一餐替换上一餐。"
+  },
+  "food_vegetable_omelette": {
+   "name": "田园蔬菜蛋饼",
+   "kind": "food",
+   "recipe": "vegetable_omelette",
+   "style": "vegetable_omelette",
+   "food_category": "meal",
+   "color": "e8c779",
+   "sell": 110,
+   "effect": {
+    "stone": 0.25
+   },
+   "effect_text": "采石速度 +25%",
+   "description": "采石速度 +25%。持续1游戏天，新的一餐替换上一餐。"
+  }
+ },
+ "recipes": {
+  "carrot_soup": {
+   "name": "胡萝卜暖汤",
+   "station": "kitchen",
+   "output": "food_carrot_soup",
+   "seconds": 5,
+   "ingredients": {
+    "carrot": 2,
+    "sea_salt": 1
+   },
+   "effect": {
+    "move": 0.15
+   },
+   "effect_text": "移动速度 +15%",
+   "required_level": 1,
+   "skill_experience": 3
+  },
+  "garden_salad": {
+   "name": "田园鲜蔬沙拉",
+   "station": "kitchen",
+   "output": "food_garden_salad",
+   "seconds": 6,
+   "ingredients": {
+    "lettuce": 2,
+    "tomato": 1,
+    "olive_oil": 1
+   },
+   "effect": {
+    "water": 0.3
+   },
+   "effect_text": "浇水速度 +30%",
+   "required_level": 1,
+   "skill_experience": 3
+  },
+  "tomato_stew": {
+   "name": "番茄炖蔬菜",
+   "station": "kitchen",
+   "output": "food_tomato_stew",
+   "seconds": 8,
+   "ingredients": {
+    "tomato": 2,
+    "carrot": 1,
+    "sea_salt": 1,
+    "olive_oil": 1
+   },
+   "effect": {
+    "wood": 0.2
+   },
+   "effect_text": "采木速度 +20%",
+   "required_level": 1,
+   "skill_experience": 4
+  },
+  "pumpkin_soup": {
+   "name": "奶香南瓜浓汤",
+   "station": "kitchen",
+   "output": "food_pumpkin_soup",
+   "seconds": 10,
+   "ingredients": {
+    "pumpkin": 2,
+    "cream": 1,
+    "sea_salt": 1
+   },
+   "effect": {
+    "stamina_capacity": 0.2
+   },
+   "effect_text": "耐力上限 +20%",
+   "required_level": 3,
+   "skill_experience": 8
+  },
+  "honey_wheat_cake": {
+   "name": "蜂蜜麦饼",
+   "station": "kitchen",
+   "output": "food_honey_wheat_cake",
+   "seconds": 12,
+   "ingredients": {
+    "wheat": 2,
+    "honey": 1,
+    "egg": 1
+   },
+   "effect": {},
+   "effect_text": "恢复30点耐力",
+   "required_level": 5,
+   "skill_experience": 10
+  },
+  "rustic_wheat_bread": {
+   "name": "香烤麦面包",
+   "station": "kitchen",
+   "output": "food_rustic_wheat_bread",
+   "seconds": 14,
+   "ingredients": {
+    "wheat": 3,
+    "egg": 1,
+    "cream": 1
+   },
+   "effect": {
+    "run_speed": 0.2
+   },
+   "effect_text": "奔跑速度 +20%",
+   "required_level": 5,
+   "skill_experience": 12
+  },
+  "vegetable_omelette": {
+   "name": "田园蔬菜蛋饼",
+   "station": "kitchen",
+   "output": "food_vegetable_omelette",
+   "seconds": 12,
+   "ingredients": {
+    "carrot": 2,
+    "tomato": 1,
+    "egg": 2,
+    "sea_salt": 1
+   },
+   "effect": {
+    "stone": 0.25
+   },
+   "effect_text": "采石速度 +25%",
+   "required_level": 5,
+   "skill_experience": 10
+  }
+ },
+ "crop_care_stages": [
+  {
+   "water": true,
+   "weed": false
+  },
+  {
+   "water": true,
+   "weed": true
+  },
+  {
+   "water": true,
+   "weed": true
+  }
+ ]
+}

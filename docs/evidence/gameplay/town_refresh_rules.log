@@ -1,0 +1,127 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Spawn inside island resource_00
+PASS Missing tool rejected resource_00
+PASS Gather starts resource_00
+PASS Base two seconds plus level-one speed resource_00
+PASS Single reward and work stamina resource_00
+PASS Game-time 1–2 day deadline resource_00
+PASS Permanent tool resource_00
+PASS Spawn inside island resource_01
+PASS Missing tool rejected resource_01
+PASS Gather starts resource_01
+PASS Base two seconds plus level-one speed resource_01
+PASS Single reward and work stamina resource_01
+PASS Game-time 1–2 day deadline resource_01
+PASS Permanent tool resource_01
+PASS Spawn inside island resource_02
+PASS Gather starts resource_02
+PASS Base two seconds plus level-one speed resource_02
+PASS Single reward and work stamina resource_02
+PASS Game-time 1–2 day deadline resource_02
+PASS Spawn inside island resource_03
+PASS Missing tool rejected resource_03
+PASS Gather starts resource_03
+PASS Base two seconds plus level-one speed resource_03
+PASS Single reward and work stamina resource_03
+PASS Game-time 1–2 day deadline resource_03
+PASS Permanent tool resource_03
+PASS Spawn inside island resource_04
+PASS Missing tool rejected resource_04
+PASS Gather starts resource_04
+PASS Base two seconds plus level-one speed resource_04
+PASS Single reward and work stamina resource_04
+PASS Game-time 1–2 day deadline resource_04
+PASS Permanent tool resource_04
+PASS Spawn inside island resource_05
+PASS Gather starts resource_05
+PASS Base two seconds plus level-one speed resource_05
+PASS Single reward and work stamina resource_05
+PASS Game-time 1–2 day deadline resource_05
+PASS Spawn inside island resource_06
+PASS Missing tool rejected resource_06
+PASS Gather starts resource_06
+PASS Base two seconds plus level-one speed resource_06
+PASS Single reward and work stamina resource_06
+PASS Game-time 1–2 day deadline resource_06
+PASS Permanent tool resource_06
+PASS Spawn inside island resource_07
+PASS Missing tool rejected resource_07
+PASS Gather starts resource_07
+PASS Base two seconds plus level-one speed resource_07
+PASS Single reward and work stamina resource_07
+PASS Game-time 1–2 day deadline resource_07
+PASS Permanent tool resource_07
+PASS Spawn inside island resource_08
+PASS Gather starts resource_08
+PASS Base two seconds plus level-one speed resource_08
+PASS Single reward and work stamina resource_08
+PASS Game-time 1–2 day deadline resource_08
+PASS Spawn inside island resource_09
+PASS Missing tool rejected resource_09
+PASS Gather starts resource_09
+PASS Base two seconds plus level-one speed resource_09
+PASS Single reward and work stamina resource_09
+PASS Game-time 1–2 day deadline resource_09
+PASS Permanent tool resource_09
+PASS Spawn inside island resource_10
+PASS Missing tool rejected resource_10
+PASS Gather starts resource_10
+PASS Base two seconds plus level-one speed resource_10
+PASS Single reward and work stamina resource_10
+PASS Game-time 1–2 day deadline resource_10
+PASS Permanent tool resource_10
+PASS Spawn inside island resource_11
+PASS Gather starts resource_11
+PASS Base two seconds plus level-one speed resource_11
+PASS Single reward and work stamina resource_11
+PASS Game-time 1–2 day deadline resource_11
+PASS Spawn inside island resource_12
+PASS Missing tool rejected resource_12
+PASS Gather starts resource_12
+PASS Base two seconds plus level-one speed resource_12
+PASS Single reward and work stamina resource_12
+PASS Game-time 1–2 day deadline resource_12
+PASS Permanent tool resource_12
+PASS Spawn inside island resource_13
+PASS Missing tool rejected resource_13
+PASS Gather starts resource_13
+PASS Base two seconds plus level-one speed resource_13
+PASS Single reward and work stamina resource_13
+PASS Game-time 1–2 day deadline resource_13
+PASS Permanent tool resource_13
+PASS Spawn inside island resource_14
+PASS Gather starts resource_14
+PASS Base two seconds plus level-one speed resource_14
+PASS Single reward and work stamina resource_14
+PASS Game-time 1–2 day deadline resource_14
+PASS Spawn inside island city_orange_0
+PASS Gather starts city_orange_0
+PASS Base two seconds plus level-one speed city_orange_0
+PASS Single reward and work stamina city_orange_0
+PASS Game-time 1–2 day deadline city_orange_0
+PASS Spawn inside island city_orange_1
+PASS Gather starts city_orange_1
+PASS Base two seconds plus level-one speed city_orange_1
+PASS Single reward and work stamina city_orange_1
+PASS Game-time 1–2 day deadline city_orange_1
+PASS Spawn inside island city_orange_2
+PASS Gather starts city_orange_2
+PASS Base two seconds plus level-one speed city_orange_2
+PASS Single reward and work stamina city_orange_2
+PASS Game-time 1–2 day deadline city_orange_2
+PASS Spawn inside island city_orange_3
+PASS Gather starts city_orange_3
+PASS Base two seconds plus level-one speed city_orange_3
+PASS Single reward and work stamina city_orange_3
+PASS Game-time 1–2 day deadline city_orange_3
+PASS Exactly five of each ground resource and four fruit trees
+PASS Staggered refresh times
+PASS Oranges consume harvest attribute and planting speed
+PASS Cancelled picking keeps fruit
+PASS No early respawn
+PASS Respawn at saved deadline
+PASS Resource deadlines and generations survive save restore
+PASS Write independent test save
+PASS Power choices persist through save/load
+TOWN_REFRESH_RULES_RESULT PASS checks=124 failures=[]

@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+REACH_CLEARANCE bunny minimum=1.00878286361694
+SNACK_CLEARANCE bunny minimum=1.05039346218109 frame=101
+REACH_CLEARANCE cat_teacher minimum=1.33501493930817
+SNACK_CLEARANCE cat_teacher minimum=1.08505940437317 frame=101
+REACH_CLEARANCE panda minimum=1.2660276889801
+SNACK_CLEARANCE panda minimum=1.16922950744629 frame=101
+FRUIT_REACH_RULES_RESULT PASS checks=14583 failures=[]

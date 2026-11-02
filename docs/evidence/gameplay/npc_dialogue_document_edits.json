@@ -1,0 +1,543 @@
+{
+  "result": "PASS",
+  "changed_entries": 40,
+  "changed_texts": 39,
+  "changed_windows": [
+    {
+      "id": "Passerby3_04",
+      "start": 10,
+      "end": 14
+    }
+  ],
+  "total_profiles": 12,
+  "total_lines": 96,
+  "document_rows_match": 96,
+  "br_converted_to_newlines": true,
+  "dialogue_functions_unchanged": true,
+  "other_implementation_sources_unchanged": true,
+  "targeted_test": "npc_dialogue_rules",
+  "checks": 15071,
+  "full_regression_run": false,
+  "changes": [
+    {
+      "id": "Merchant_farm_01",
+      "before": {
+        "text": "早呀，种子们也刚刚醒来。\n今天想带哪一种去认识你的菜园？",
+        "start": 6,
+        "end": 11
+      },
+      "after": {
+        "text": "早呀\n今天想带哪一种种子？",
+        "start": 6,
+        "end": 11
+      }
+    },
+    {
+      "id": "Merchant_farm_03",
+      "before": {
+        "text": "小小一粒种子，口袋就能装下。\n等它长成南瓜，得换个大一点的拥抱啦。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "小小一粒种子，口袋就能装下。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_farm_05",
+      "before": {
+        "text": "除草剂就在旁边。\n可别让杂草比你的小苗还先长高呀。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "别让杂草比你的小苗还先长高呀。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_tools_01",
+      "before": {
+        "text": "早，工具都擦好了。\n水壶、锤子和矿镐，一个也没睡懒觉。",
+        "start": 6,
+        "end": 11
+      },
+      "after": {
+        "text": "早，工具都擦好了。",
+        "start": 6,
+        "end": 11
+      }
+    },
+    {
+      "id": "Merchant_tools_05",
+      "before": {
+        "text": "锤子找石头，矿镐找矿石。\n我替它们摆在两边，省得出门时认错伙伴。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "锤子找石头，矿镐找矿石。\n我替它们摆在两边，出门时别认错啦。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_tools_06",
+      "before": {
+        "text": "铜斧有一点分量，采木练到三级再用。\n先让胳膊和它熟悉起来，别急着和桦木较劲。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "铜斧有一点分量，采木练到三级再用。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_clothes_02",
+      "before": {
+        "text": "夜里试衣服也好，灯光软软的。\n你慢慢看，我把这条围巾再叠一遍。",
+        "start": 20,
+        "end": 6
+      },
+      "after": {
+        "text": "夜里试衣服也好，灯光软软的。",
+        "start": 20,
+        "end": 6
+      }
+    },
+    {
+      "id": "Merchant_clothes_05",
+      "before": {
+        "text": "喜欢哪件，就先试一试吧。\n有些颜色，要穿到身上才肯告诉你答案。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "喜欢哪件，就先试一试吧。\n有些颜色，要穿到身上才知道。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_clothes_06",
+      "before": {
+        "text": "围巾和铃铛都想住在脖子上。\n地方只有一个，今天先带谁出门呢？",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "围巾和铃铛都在脖子上。\n地方只有一个，今天先带谁出门呢？",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_clothes_07",
+      "before": {
+        "text": "帽子稍微歪一点，也不一定是戴错了。\n说不定，它只是想换个角度看海。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "帽子稍微歪一点，也不一定是戴错了。\n说不定它只是想换个角度。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Merchant_clothes_08",
+      "before": {
+        "text": "我把小小的线头收进了盒子。\n攒得多了，看起来像一场彩色的雨。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "等我把线头收进了盒子。\n看看你想买点什么？",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby0_04",
+      "before": {
+        "text": "海边的贝壳，我总会留一半在原地。\n也许下一只兔兔看见了，会很开心。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "海边的贝壳，我总会留一半在原地。\n也许下一只小动物看见了会很开心。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby0_07",
+      "before": {
+        "text": "我把好看的小石子排在了窗边。\n它们挨在一起，好像也有了邻居。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "我把好看的小石子排在了窗边。\n它们挨在一起好像也有了邻居。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby0_08",
+      "before": {
+        "text": "夜里连小路也轻轻的。\n我把脚步放慢了，怕吵醒路边的花。",
+        "start": 19,
+        "end": 6
+      },
+      "after": {
+        "text": "夜里连小路也轻轻的。\n我们轻点走，别吵醒路边的花。",
+        "start": 19,
+        "end": 6
+      }
+    },
+    {
+      "id": "Passerby1_03",
+      "before": {
+        "text": "快看我的新帽子！\n戴上以后，感觉连散步都有新路线了！",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "快看我的新帽子！\n怎么样呢？",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby1_04",
+      "before": {
+        "text": "你说，云会不会也有自己的背包？\n不然它们把雨藏在哪里呀？",
+        "start": 6,
+        "end": 18
+      },
+      "after": {
+        "text": "你说云会不会也有自己的背包？\n不然它们把雨藏在哪里呀？",
+        "start": 6,
+        "end": 18
+      }
+    },
+    {
+      "id": "Passerby1_06",
+      "before": {
+        "text": "小麦顶上的小胡须，是不是用来挠风的？\n难怪风一来，它们就笑得东倒西歪！",
+        "start": 8,
+        "end": 18
+      },
+      "after": {
+        "text": "小麦顶上的小胡须是什么东西啊？是男小麦才有的吗？",
+        "start": 8,
+        "end": 18
+      }
+    },
+    {
+      "id": "Passerby1_07",
+      "before": {
+        "text": "我给蝴蝶结起了个名字，叫“出发”！\n这样一戴上，就有理由到处跑啦！",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "我记得有些料理难度比较大，好像要一定的烹饪等级才能做哦。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby2_06",
+      "before": {
+        "text": "我想量一量自己的影子有多长。\n可每次转过身，它就又跑到另一边了。",
+        "start": 10,
+        "end": 17
+      },
+      "after": {
+        "text": "我想量一量自己的影子有多长。\n可每次转过身，它就又跑到另一边了……",
+        "start": 10,
+        "end": 17
+      }
+    },
+    {
+      "id": "Passerby3_04",
+      "before": {
+        "text": "我刚才在长椅上认真想了一件事。\n午睡之前吃点心，还是醒来再吃？",
+        "start": 11,
+        "end": 16
+      },
+      "after": {
+        "text": "我刚才在长椅上认真想了一件事。\n午睡之前吃点心，还是醒来再吃？",
+        "start": 10,
+        "end": 14
+      }
+    },
+    {
+      "id": "Passerby3_05",
+      "before": {
+        "text": "有人说，走路能让肚子饿得快一点。\n所以你看，我一直都很努力。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "有人说，走路能让肚子饿得快一点。\n所以我一直都很努力走路。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby3_06",
+      "before": {
+        "text": "蜂蜜麦饼闻起来像一个甜甜的拥抱。\n我决定先吃一块，再想想这个比喻准不准。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "蜂蜜麦饼闻起来好香耶，你喜欢吃吗？",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Passerby3_08",
+      "before": {
+        "text": "月亮像一块烤得刚刚好的小饼。\n就是挂得太高，够不着。",
+        "start": 20,
+        "end": 6
+      },
+      "after": {
+        "text": "月亮像一块烤得刚刚好的小饼，感觉是胡萝卜馅的，嗯一定是。",
+        "start": 20,
+        "end": 6
+      }
+    },
+    {
+      "id": "CatTeacher_02",
+      "before": {
+        "text": "那边的阳光不错。\n等我睡醒，再告诉你散步的诀窍。",
+        "start": 9,
+        "end": 17
+      },
+      "after": {
+        "text": "那边的阳光不错。\n等我睡醒，再告诉你变强的诀窍。",
+        "start": 9,
+        "end": 17
+      }
+    },
+    {
+      "id": "CatTeacher_07",
+      "before": {
+        "text": "你的口袋里是不是藏了麦饼？\n吾辈的鼻子，可比你的表情诚实多了。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "你的口袋里是不是藏了梅酒？\n吾辈的鼻子，可比你的表情诚实多了。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Youmu_01",
+      "before": {
+        "text": "刚才路过菜园，看见一片新叶子。\n它长得不着急，我也就慢慢走。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "刚才路过菜园，看见一片新叶子。\n它长得不着急，比我悠闲。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Youmu_03",
+      "before": {
+        "text": "想去海边坐一小会儿。\n如果捡到漂亮的贝壳，分你一颗。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "想去海边坐一小会儿。\n捡漂亮的贝壳。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Youmu_04",
+      "before": {
+        "text": "围巾暖暖的，路也还很长。\n今天换条没走过的小路吧。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "围巾暖暖的，真舒服。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Youmu_05",
+      "before": {
+        "text": "我叫又木。又见面的又，树木的木。\n下次见面，希望刚好有阳光。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "我叫又木。又见面的又，树木的木。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Youmu_06",
+      "before": {
+        "text": "树影挪到脚边的时候，我也跟着挪一点。\n这样一下午，好像和树一起散了步。",
+        "start": 12,
+        "end": 18
+      },
+      "after": {
+        "text": "树影挪到脚边的时候，我也跟着挪一点。\n这样一下午好像和树一起散了步。",
+        "start": 12,
+        "end": 18
+      }
+    },
+    {
+      "id": "Youmu_07",
+      "before": {
+        "text": "刚捡到一颗圆圆的小石头。\n握在手里，像揣着一小块安静。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "刚捡到一颗圆圆的小石头。\n这个该不会是帝王绿翡翠吧？",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Panda_01",
+      "before": {
+        "text": "欢迎来到眠风山谷。\n桥那边的风，会带一点橘子的香气。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "欢迎来到眠风山谷。\n桥那边会闻到橘子的香气。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Panda_04",
+      "before": {
+        "text": "睡前听溪水流过，我就不数羊啦。\n数到第三块石头，眼睛就睁不开了。",
+        "start": 18,
+        "end": 20
+      },
+      "after": {
+        "text": "睡前听溪水流过，我就不数羊啦。\n数到第三块石头眼睛就睁不开了。",
+        "start": 18,
+        "end": 20
+      }
+    },
+    {
+      "id": "Panda_05",
+      "before": {
+        "text": "今天摘的橘子，有一颗特别甜。\n也许明天轮到你找到它。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "今天摘的橘子有一颗特别甜。\n也许明天轮到你找到它。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "Panda_06",
+      "before": {
+        "text": "清早的草叶上，露水还没收好。\n我走得轻一点，省得把它们碰掉了。",
+        "start": 6,
+        "end": 11
+      },
+      "after": {
+        "text": "清早草叶上的露水还没收好。\n我们走得轻一点，小心把它们碰掉了。",
+        "start": 6,
+        "end": 11
+      }
+    },
+    {
+      "id": "ValleyVisitor0_04",
+      "before": {
+        "text": "这顶帽子装不下整片森林。\n不过能装下一片小叶子。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "帽子装不下整片森林。\n不过能装下一片小叶子。",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "ValleyVisitor1_03",
+      "before": {
+        "text": "我发现了五根树枝。\n数完以后，忘了第一根在哪里。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "我发现了五根树枝。\n数完以后似乎忘了第一根在哪里……",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "ValleyVisitor1_04",
+      "before": {
+        "text": "如果石阶变成饼干，\n上山这件事可能会慢一点。",
+        "start": 0,
+        "end": 24
+      },
+      "after": {
+        "text": "如果石阶变成饼干，\n上山这件事可能会慢一点……",
+        "start": 0,
+        "end": 24
+      }
+    },
+    {
+      "id": "ValleyVisitor1_05",
+      "before": {
+        "text": "到晚上十点，我就要回去啦。\n溪水还在，我们明天再见。",
+        "start": 18,
+        "end": 22
+      },
+      "after": {
+        "text": "到晚上十点，我就要回去啦。\n明天再见。",
+        "start": 18,
+        "end": 22
+      }
+    },
+    {
+      "id": "ValleyVisitor1_06",
+      "before": {
+        "text": "我想跟自己的影子比赛爬石阶。\n结果不管谁先到，它都紧紧挨着我。",
+        "start": 8,
+        "end": 18
+      },
+      "after": {
+        "text": "跟自己的影子比赛爬石阶，\n结果不管谁先到，它都紧紧挨着我。",
+        "start": 8,
+        "end": 18
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+[PASS] build_city (3.3s) 
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 4.1 Metal - 89.4 - Compatibility - Using Device: Apple - Apple M1 Pro
+
+TOWN_GARDENS flowers=104 shrubs=6
+CITY_BATCHES 484 DETAILS 102
+CITY_MAP_BUILT area_ratio=4.84 plots=48
+Log: /private/var/folders/ft/q0nrd0qn1nd51kvqp4xzk_0m0000gn/T/tutuworld-handoff-g5n37uff/project/.qa-artifacts/20261101-180453-058132/build_city/run.log

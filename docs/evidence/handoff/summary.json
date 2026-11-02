@@ -1,0 +1,114 @@
+{
+  "date": "2026-11-01",
+  "total_checks": 1205,
+  "suites": [
+    {
+      "name": "character_roster_rules",
+      "checks": 39,
+      "result": "PASS",
+      "log": "character_roster_rules.log"
+    },
+    {
+      "name": "city_rules",
+      "checks": 55,
+      "result": "PASS",
+      "log": "city_rules.log"
+    },
+    {
+      "name": "food_save_migration",
+      "checks": 6,
+      "result": "PASS",
+      "log": "food_save_migration.log"
+    },
+    {
+      "name": "kitchen_rules",
+      "checks": 77,
+      "result": "PASS",
+      "log": "kitchen_rules.log"
+    },
+    {
+      "name": "progression_rules",
+      "checks": 24,
+      "result": "PASS",
+      "log": "progression_rules.log"
+    },
+    {
+      "name": "skill_experience_rules",
+      "checks": 203,
+      "result": "PASS",
+      "log": "skill_experience_rules.log"
+    },
+    {
+      "name": "stamina_revision_rules",
+      "checks": 30,
+      "result": "PASS",
+      "log": "stamina_revision_rules.log"
+    },
+    {
+      "name": "testing_clock_rules",
+      "checks": 27,
+      "result": "PASS",
+      "log": "testing_clock_rules.log"
+    },
+    {
+      "name": "town_refresh_rules",
+      "checks": 124,
+      "result": "PASS",
+      "log": "town_refresh_rules.log"
+    },
+    {
+      "name": "valley_rules",
+      "checks": 215,
+      "result": "PASS",
+      "log": "valley_rules.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 237,
+      "result": "PASS",
+      "log": "project_integrity.log"
+    },
+    {
+      "name": "valley_journey",
+      "checks": 15,
+      "result": "PASS",
+      "log": "valley_journey.log"
+    },
+    {
+      "name": "forest_art_structure",
+      "checks": 19,
+      "result": "PASS",
+      "log": "forest_art_structure.log"
+    },
+    {
+      "name": "shop_transaction_scroll",
+      "checks": 26,
+      "result": "PASS",
+      "log": "shop_transaction_scroll.log"
+    },
+    {
+      "name": "clothing_shop_preview",
+      "checks": 72,
+      "result": "PASS",
+      "log": "clothing_shop_preview.log"
+    },
+    {
+      "name": "clothing_shop_panda",
+      "checks": 36,
+      "result": "PASS",
+      "log": "clothing_shop_panda.log"
+    }
+  ],
+  "isolated_generators": {
+    "isolated_import": "PASS",
+    "isolated_city_builder": "PASS",
+    "isolated_cat_builder": "PASS",
+    "original_runtime_assets_unchanged": {
+      "scenes/bunny.tscn": "bb813047b57b0aeba47a9a7cefadf0f71fb977e7b89f8964c993e73a2fabbef4",
+      "scenes/cat_teacher.tscn": "058f64428bd35fee007dffe87708e68df8813de30a99ddda3263b56893307fb5",
+      "scenes/panda.tscn": "5baa86b9c9116fe7406526e757b168197cc27ad18df82cab017a22f6c2778656",
+      "scenes/city_map.tscn": "01b2674fabbac7173f94c1e225a927bc80956de237c6a1336a617111032f7994",
+      "scenes/valley_map.scn": "1047e395c5cb22cf9e75faf04d15901c389b438701289b2be14c826b7cf9bc59"
+    }
+  }
+}

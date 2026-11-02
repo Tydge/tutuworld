@@ -1,0 +1,53 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Panda is a registered third species
+PASS Panda uses the existing controller and animation implementation
+PASS Base panda contains no baked clothing
+PASS Shared semantic rig: Visual/Head/Eyes
+PASS Shared semantic rig: Visual/Head/Mouth
+PASS Shared semantic rig: Visual/Head/LeftEar
+PASS Shared semantic rig: Visual/Head/RightEar
+PASS Shared semantic rig: Visual/LeftArm
+PASS Shared semantic rig: Visual/RightArm/Cup
+PASS Shared semantic rig: Visual/LeftLeg
+PASS Shared semantic rig: Visual/RightLeg
+PASS Shared semantic rig: Mood
+PASS Head keeps a rounded side profile with a shallow muzzle
+PASS Existing garment attaches without a species-specific copy: bow_rose
+PASS Existing garment attaches without a species-specific copy: bow_sage
+PASS Existing garment attaches without a species-specific copy: bow_honey
+PASS Existing garment attaches without a species-specific copy: beret_rose
+PASS Existing garment attaches without a species-specific copy: beret_sage
+PASS Existing garment attaches without a species-specific copy: beret_honey
+PASS Existing garment attaches without a species-specific copy: overalls_rose
+PASS Existing garment attaches without a species-specific copy: overalls_sage
+PASS Existing garment attaches without a species-specific copy: overalls_honey
+PASS Existing garment attaches without a species-specific copy: vest_rose
+PASS Existing garment attaches without a species-specific copy: vest_sage
+PASS Existing garment attaches without a species-specific copy: vest_honey
+PASS Existing garment attaches without a species-specific copy: scarf_red
+PASS Existing garment attaches without a species-specific copy: bell_red
+PASS Existing garment attaches without a species-specific copy: scarf_blue
+PASS Existing garment attaches without a species-specific copy: bell_blue
+PASS Existing garment attaches without a species-specific copy: scarf_green
+PASS Existing garment attaches without a species-specific copy: bell_green
+PASS Existing garment attaches without a species-specific copy: bow_plaid_rose
+PASS Existing garment attaches without a species-specific copy: beret_plaid_rose
+PASS Existing garment attaches without a species-specific copy: apron_rose
+PASS Existing garment attaches without a species-specific copy: bow_plaid_sage
+PASS Existing garment attaches without a species-specific copy: beret_plaid_sage
+PASS Existing garment attaches without a species-specific copy: apron_sage
+PASS Existing garment attaches without a species-specific copy: bow_plaid_honey
+PASS Existing garment attaches without a species-specific copy: beret_plaid_honey
+PASS Existing garment attaches without a species-specific copy: apron_honey
+PASS All twenty-seven current clothes are supported
+PASS Panda can be created and selected
+PASS Panda receives the normal single starter
+PASS Panda has independent progress on the existing shared island
+PASS Panda roster saves normally
+PASS Panda identity and clothing survive reload
+PASS Existing rabbit progress remains intact
+PASS Unnamed panda messages use the right species label
+PASS Youmu has eight lines with time-filtered non-repeating choices
+PANDA_RULES_RESULT PASS checks=49 failures=[]

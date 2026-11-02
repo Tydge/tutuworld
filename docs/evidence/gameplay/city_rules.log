@@ -1,0 +1,59 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Five crop types
+PASS Twenty-seven clothing items across three slots
+PASS 48 independent plots
+PASS Plant starts
+PASS Plant takes full two seconds before charging seed
+PASS Concurrent actions are blocked
+PASS Cancelled planting consumes nothing
+PASS Successful planting consumes exactly one seed
+PASS New crop needs water
+PASS Dry crop does not grow
+PASS Watering requires permanent watering can
+PASS Owned watering can enables action
+PASS Watering does not consume the tool
+PASS Care gates stop growth at one third
+PASS Neglected crop remains paused
+PASS Weeding requires herbicide
+PASS Cancelled weeding does not consume herbicide
+PASS Successful weeding consumes one bottle
+PASS Second care gate is reached
+PASS Crop matures after cumulative one game day of growth
+PASS Harvest requires two seconds
+PASS Harvest yields inventory and clears soil
+PASS Stone gathering requires stone hammer
+PASS Ore gathering requires mining pickaxe
+PASS Gather starts limestone
+PASS Gather waits two seconds limestone
+PASS Gather grants item and depletes resource limestone
+PASS Gather tool remains in inventory stone_hammer
+PASS Gather starts copper
+PASS Gather waits two seconds copper
+PASS Gather grants item and depletes resource copper
+PASS Gather tool remains in inventory pickaxe
+PASS Gather starts branch
+PASS Gather waits two seconds branch
+PASS Gather grants item and depletes resource branch
+PASS Depleted resource cannot be gathered twice
+PASS Resources respawn after cooldown
+PASS Seed purchase
+PASS Repeated command ID cannot double-charge
+PASS Permanent tool cannot be bought twice
+PASS Permanent tool cannot be sold accidentally
+PASS Negative purchase quantity is rejected
+PASS Harvest can be sold for coins
+PASS Head accessory can be equipped
+PASS Same-slot clothing replaces prior item without losing it
+PASS Clothing rejects wrong slot
+PASS Head and body slots are independent
+PASS Crop duration range carrot
+PASS Crop duration range lettuce
+PASS Crop duration range tomato
+PASS Crop duration range pumpkin
+PASS Crop duration range wheat
+PASS One real hour advances exactly one game day
+PASS Cannot trade remotely outside a shop
+PASS Cannot plant across the island
+PASS Incompatible command protocol is rejected
+CITY_RULES_RESULT PASS checks=56 failures=[]

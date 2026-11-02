@@ -1,0 +1,218 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Travel only at dock
+PASS No money: no debit or teleport
+PASS Outward fare exactly ten
+PASS Town commerce gated by map
+PASS Reject gathering resource on another map
+PASS Start valley_branch_0
+PASS Correct real action duration valley_branch_0
+PASS No early reward valley_branch_0
+PASS Yield valley_branch_0
+PASS XP and hidden source valley_branch_0
+PASS One-to-two game day refresh valley_branch_0
+PASS Start valley_branch_1
+PASS Correct real action duration valley_branch_1
+PASS No early reward valley_branch_1
+PASS Yield valley_branch_1
+PASS XP and hidden source valley_branch_1
+PASS One-to-two game day refresh valley_branch_1
+PASS Start valley_branch_2
+PASS Correct real action duration valley_branch_2
+PASS No early reward valley_branch_2
+PASS Yield valley_branch_2
+PASS XP and hidden source valley_branch_2
+PASS One-to-two game day refresh valley_branch_2
+PASS Start valley_branch_3
+PASS Correct real action duration valley_branch_3
+PASS No early reward valley_branch_3
+PASS Yield valley_branch_3
+PASS XP and hidden source valley_branch_3
+PASS One-to-two game day refresh valley_branch_3
+PASS Start valley_branch_4
+PASS Correct real action duration valley_branch_4
+PASS No early reward valley_branch_4
+PASS Yield valley_branch_4
+PASS XP and hidden source valley_branch_4
+PASS One-to-two game day refresh valley_branch_4
+PASS Tool gate valley_birch_0
+PASS Start valley_birch_0
+PASS Correct real action duration valley_birch_0
+PASS No early reward valley_birch_0
+PASS Yield valley_birch_0
+PASS XP and hidden source valley_birch_0
+PASS One-to-two game day refresh valley_birch_0
+PASS Tool retained valley_birch_0
+PASS Tool gate valley_birch_1
+PASS Start valley_birch_1
+PASS Correct real action duration valley_birch_1
+PASS No early reward valley_birch_1
+PASS Yield valley_birch_1
+PASS XP and hidden source valley_birch_1
+PASS One-to-two game day refresh valley_birch_1
+PASS Tool retained valley_birch_1
+PASS Tool gate valley_birch_2
+PASS Start valley_birch_2
+PASS Correct real action duration valley_birch_2
+PASS No early reward valley_birch_2
+PASS Yield valley_birch_2
+PASS XP and hidden source valley_birch_2
+PASS One-to-two game day refresh valley_birch_2
+PASS Tool retained valley_birch_2
+PASS Tool gate valley_birch_3
+PASS Start valley_birch_3
+PASS Correct real action duration valley_birch_3
+PASS No early reward valley_birch_3
+PASS Yield valley_birch_3
+PASS XP and hidden source valley_birch_3
+PASS One-to-two game day refresh valley_birch_3
+PASS Tool retained valley_birch_3
+PASS Tool gate valley_birch_4
+PASS Start valley_birch_4
+PASS Correct real action duration valley_birch_4
+PASS No early reward valley_birch_4
+PASS Yield valley_birch_4
+PASS XP and hidden source valley_birch_4
+PASS One-to-two game day refresh valley_birch_4
+PASS Tool retained valley_birch_4
+PASS Start valley_orange_0
+PASS Correct real action duration valley_orange_0
+PASS No early reward valley_orange_0
+PASS Yield valley_orange_0
+PASS XP and hidden source valley_orange_0
+PASS One-to-two game day refresh valley_orange_0
+PASS Start valley_orange_1
+PASS Correct real action duration valley_orange_1
+PASS No early reward valley_orange_1
+PASS Yield valley_orange_1
+PASS XP and hidden source valley_orange_1
+PASS One-to-two game day refresh valley_orange_1
+PASS Start valley_orange_2
+PASS Correct real action duration valley_orange_2
+PASS No early reward valley_orange_2
+PASS Yield valley_orange_2
+PASS XP and hidden source valley_orange_2
+PASS One-to-two game day refresh valley_orange_2
+PASS Start valley_orange_3
+PASS Correct real action duration valley_orange_3
+PASS No early reward valley_orange_3
+PASS Yield valley_orange_3
+PASS XP and hidden source valley_orange_3
+PASS One-to-two game day refresh valley_orange_3
+PASS Start valley_orange_4
+PASS Correct real action duration valley_orange_4
+PASS No early reward valley_orange_4
+PASS Yield valley_orange_4
+PASS XP and hidden source valley_orange_4
+PASS One-to-two game day refresh valley_orange_4
+PASS Tool gate valley_copper_0
+PASS Start valley_copper_0
+PASS Correct real action duration valley_copper_0
+PASS No early reward valley_copper_0
+PASS Yield valley_copper_0
+PASS XP and hidden source valley_copper_0
+PASS One-to-two game day refresh valley_copper_0
+PASS Tool retained valley_copper_0
+PASS Tool gate valley_copper_1
+PASS Start valley_copper_1
+PASS Correct real action duration valley_copper_1
+PASS No early reward valley_copper_1
+PASS Yield valley_copper_1
+PASS XP and hidden source valley_copper_1
+PASS One-to-two game day refresh valley_copper_1
+PASS Tool retained valley_copper_1
+PASS Tool gate valley_copper_2
+PASS Start valley_copper_2
+PASS Correct real action duration valley_copper_2
+PASS No early reward valley_copper_2
+PASS Yield valley_copper_2
+PASS XP and hidden source valley_copper_2
+PASS One-to-two game day refresh valley_copper_2
+PASS Tool retained valley_copper_2
+PASS Tool gate valley_copper_3
+PASS Start valley_copper_3
+PASS Correct real action duration valley_copper_3
+PASS No early reward valley_copper_3
+PASS Yield valley_copper_3
+PASS XP and hidden source valley_copper_3
+PASS One-to-two game day refresh valley_copper_3
+PASS Tool retained valley_copper_3
+PASS Tool gate valley_iron_0
+PASS Start valley_iron_0
+PASS Correct real action duration valley_iron_0
+PASS No early reward valley_iron_0
+PASS Yield valley_iron_0
+PASS XP and hidden source valley_iron_0
+PASS One-to-two game day refresh valley_iron_0
+PASS Tool retained valley_iron_0
+PASS Tool gate valley_iron_1
+PASS Start valley_iron_1
+PASS Correct real action duration valley_iron_1
+PASS No early reward valley_iron_1
+PASS Yield valley_iron_1
+PASS XP and hidden source valley_iron_1
+PASS One-to-two game day refresh valley_iron_1
+PASS Tool retained valley_iron_1
+PASS Tool gate valley_limestone_0
+PASS Start valley_limestone_0
+PASS Correct real action duration valley_limestone_0
+PASS No early reward valley_limestone_0
+PASS Yield valley_limestone_0
+PASS XP and hidden source valley_limestone_0
+PASS One-to-two game day refresh valley_limestone_0
+PASS Tool retained valley_limestone_0
+PASS Tool gate valley_limestone_1
+PASS Start valley_limestone_1
+PASS Correct real action duration valley_limestone_1
+PASS No early reward valley_limestone_1
+PASS Yield valley_limestone_1
+PASS XP and hidden source valley_limestone_1
+PASS One-to-two game day refresh valley_limestone_1
+PASS Tool retained valley_limestone_1
+PASS Tool gate valley_limestone_2
+PASS Start valley_limestone_2
+PASS Correct real action duration valley_limestone_2
+PASS No early reward valley_limestone_2
+PASS Yield valley_limestone_2
+PASS XP and hidden source valley_limestone_2
+PASS One-to-two game day refresh valley_limestone_2
+PASS Tool retained valley_limestone_2
+PASS Tool gate valley_limestone_3
+PASS Start valley_limestone_3
+PASS Correct real action duration valley_limestone_3
+PASS No early reward valley_limestone_3
+PASS Yield valley_limestone_3
+PASS XP and hidden source valley_limestone_3
+PASS One-to-two game day refresh valley_limestone_3
+PASS Tool retained valley_limestone_3
+PASS Tool gate valley_sandstone_0
+PASS Start valley_sandstone_0
+PASS Correct real action duration valley_sandstone_0
+PASS No early reward valley_sandstone_0
+PASS Yield valley_sandstone_0
+PASS XP and hidden source valley_sandstone_0
+PASS One-to-two game day refresh valley_sandstone_0
+PASS Tool retained valley_sandstone_0
+PASS Tool gate valley_sandstone_1
+PASS Start valley_sandstone_1
+PASS Correct real action duration valley_sandstone_1
+PASS No early reward valley_sandstone_1
+PASS Yield valley_sandstone_1
+PASS XP and hidden source valley_sandstone_1
+PASS One-to-two game day refresh valley_sandstone_1
+PASS Tool retained valley_sandstone_1
+PASS Exact valley resource allocation
+PASS Staggered valley regrowth
+PASS Free return
+PASS Return arrives on city pier
+PASS Create named panda
+PASS New character begins in city
+PASS Per-character map and position retained
+PASS Resume chooses saved map
+PASS Legacy save defaults to city
+PASS Both map resources share one saved world
+PASS Write isolated valley save
+PASS Disk save restores valley and shared world
+PASS Extended harbor position survives disk restore
+PASS Failed travel save rolls back fare and map
+VALLEY_RULES_RESULT PASS checks=215 failures=[]

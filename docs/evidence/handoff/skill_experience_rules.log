@@ -1,0 +1,206 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Geometric 100 / 150 / 225 skill curve
+PASS Exact level boundary 0
+PASS Exact level boundary 99
+PASS Exact level boundary 100
+PASS Exact level boundary 249
+PASS Exact level boundary 250
+PASS Exact level boundary 475
+PASS Start work resource_00
+PASS No early skill reward resource_00
+PASS Correct skill/tier, character XP unchanged resource_00
+PASS Replay grants no duplicate skill XP resource_00
+PASS Start work resource_01
+PASS No early skill reward resource_01
+PASS Correct skill/tier, character XP unchanged resource_01
+PASS Replay grants no duplicate skill XP resource_01
+PASS Start work resource_02
+PASS No early skill reward resource_02
+PASS Correct skill/tier, character XP unchanged resource_02
+PASS Replay grants no duplicate skill XP resource_02
+PASS Start work resource_03
+PASS No early skill reward resource_03
+PASS Correct skill/tier, character XP unchanged resource_03
+PASS Replay grants no duplicate skill XP resource_03
+PASS Start work resource_04
+PASS No early skill reward resource_04
+PASS Correct skill/tier, character XP unchanged resource_04
+PASS Replay grants no duplicate skill XP resource_04
+PASS Start work resource_05
+PASS No early skill reward resource_05
+PASS Correct skill/tier, character XP unchanged resource_05
+PASS Replay grants no duplicate skill XP resource_05
+PASS Start work resource_06
+PASS No early skill reward resource_06
+PASS Correct skill/tier, character XP unchanged resource_06
+PASS Replay grants no duplicate skill XP resource_06
+PASS Start work resource_07
+PASS No early skill reward resource_07
+PASS Correct skill/tier, character XP unchanged resource_07
+PASS Replay grants no duplicate skill XP resource_07
+PASS Start work resource_08
+PASS No early skill reward resource_08
+PASS Correct skill/tier, character XP unchanged resource_08
+PASS Replay grants no duplicate skill XP resource_08
+PASS Start work resource_09
+PASS No early skill reward resource_09
+PASS Correct skill/tier, character XP unchanged resource_09
+PASS Replay grants no duplicate skill XP resource_09
+PASS Start work resource_10
+PASS No early skill reward resource_10
+PASS Correct skill/tier, character XP unchanged resource_10
+PASS Replay grants no duplicate skill XP resource_10
+PASS Start work resource_11
+PASS No early skill reward resource_11
+PASS Correct skill/tier, character XP unchanged resource_11
+PASS Replay grants no duplicate skill XP resource_11
+PASS Start work resource_12
+PASS No early skill reward resource_12
+PASS Correct skill/tier, character XP unchanged resource_12
+PASS Replay grants no duplicate skill XP resource_12
+PASS Start work resource_13
+PASS No early skill reward resource_13
+PASS Correct skill/tier, character XP unchanged resource_13
+PASS Replay grants no duplicate skill XP resource_13
+PASS Start work resource_14
+PASS No early skill reward resource_14
+PASS Correct skill/tier, character XP unchanged resource_14
+PASS Replay grants no duplicate skill XP resource_14
+PASS Start work city_orange_0
+PASS No early skill reward city_orange_0
+PASS Correct skill/tier, character XP unchanged city_orange_0
+PASS Replay grants no duplicate skill XP city_orange_0
+PASS Start work city_orange_1
+PASS No early skill reward city_orange_1
+PASS Correct skill/tier, character XP unchanged city_orange_1
+PASS Replay grants no duplicate skill XP city_orange_1
+PASS Start work city_orange_2
+PASS No early skill reward city_orange_2
+PASS Correct skill/tier, character XP unchanged city_orange_2
+PASS Replay grants no duplicate skill XP city_orange_2
+PASS Start work city_orange_3
+PASS No early skill reward city_orange_3
+PASS Correct skill/tier, character XP unchanged city_orange_3
+PASS Replay grants no duplicate skill XP city_orange_3
+PASS Start work valley_branch_0
+PASS No early skill reward valley_branch_0
+PASS Correct skill/tier, character XP unchanged valley_branch_0
+PASS Replay grants no duplicate skill XP valley_branch_0
+PASS Start work valley_branch_1
+PASS No early skill reward valley_branch_1
+PASS Correct skill/tier, character XP unchanged valley_branch_1
+PASS Replay grants no duplicate skill XP valley_branch_1
+PASS Start work valley_branch_2
+PASS No early skill reward valley_branch_2
+PASS Correct skill/tier, character XP unchanged valley_branch_2
+PASS Replay grants no duplicate skill XP valley_branch_2
+PASS Start work valley_branch_3
+PASS No early skill reward valley_branch_3
+PASS Correct skill/tier, character XP unchanged valley_branch_3
+PASS Replay grants no duplicate skill XP valley_branch_3
+PASS Start work valley_branch_4
+PASS No early skill reward valley_branch_4
+PASS Correct skill/tier, character XP unchanged valley_branch_4
+PASS Replay grants no duplicate skill XP valley_branch_4
+PASS Start work valley_birch_0
+PASS No early skill reward valley_birch_0
+PASS Correct skill/tier, character XP unchanged valley_birch_0
+PASS Replay grants no duplicate skill XP valley_birch_0
+PASS Start work valley_birch_1
+PASS No early skill reward valley_birch_1
+PASS Correct skill/tier, character XP unchanged valley_birch_1
+PASS Replay grants no duplicate skill XP valley_birch_1
+PASS Start work valley_birch_2
+PASS No early skill reward valley_birch_2
+PASS Correct skill/tier, character XP unchanged valley_birch_2
+PASS Replay grants no duplicate skill XP valley_birch_2
+PASS Start work valley_birch_3
+PASS No early skill reward valley_birch_3
+PASS Correct skill/tier, character XP unchanged valley_birch_3
+PASS Replay grants no duplicate skill XP valley_birch_3
+PASS Start work valley_birch_4
+PASS No early skill reward valley_birch_4
+PASS Correct skill/tier, character XP unchanged valley_birch_4
+PASS Replay grants no duplicate skill XP valley_birch_4
+PASS Start work valley_orange_0
+PASS No early skill reward valley_orange_0
+PASS Correct skill/tier, character XP unchanged valley_orange_0
+PASS Replay grants no duplicate skill XP valley_orange_0
+PASS Start work valley_orange_1
+PASS No early skill reward valley_orange_1
+PASS Correct skill/tier, character XP unchanged valley_orange_1
+PASS Replay grants no duplicate skill XP valley_orange_1
+PASS Start work valley_orange_2
+PASS No early skill reward valley_orange_2
+PASS Correct skill/tier, character XP unchanged valley_orange_2
+PASS Replay grants no duplicate skill XP valley_orange_2
+PASS Start work valley_orange_3
+PASS No early skill reward valley_orange_3
+PASS Correct skill/tier, character XP unchanged valley_orange_3
+PASS Replay grants no duplicate skill XP valley_orange_3
+PASS Start work valley_orange_4
+PASS No early skill reward valley_orange_4
+PASS Correct skill/tier, character XP unchanged valley_orange_4
+PASS Replay grants no duplicate skill XP valley_orange_4
+PASS Start work valley_copper_0
+PASS No early skill reward valley_copper_0
+PASS Correct skill/tier, character XP unchanged valley_copper_0
+PASS Replay grants no duplicate skill XP valley_copper_0
+PASS Start work valley_copper_1
+PASS No early skill reward valley_copper_1
+PASS Correct skill/tier, character XP unchanged valley_copper_1
+PASS Replay grants no duplicate skill XP valley_copper_1
+PASS Start work valley_copper_2
+PASS No early skill reward valley_copper_2
+PASS Correct skill/tier, character XP unchanged valley_copper_2
+PASS Replay grants no duplicate skill XP valley_copper_2
+PASS Start work valley_copper_3
+PASS No early skill reward valley_copper_3
+PASS Correct skill/tier, character XP unchanged valley_copper_3
+PASS Replay grants no duplicate skill XP valley_copper_3
+PASS Start work valley_iron_0
+PASS No early skill reward valley_iron_0
+PASS Correct skill/tier, character XP unchanged valley_iron_0
+PASS Replay grants no duplicate skill XP valley_iron_0
+PASS Start work valley_iron_1
+PASS No early skill reward valley_iron_1
+PASS Correct skill/tier, character XP unchanged valley_iron_1
+PASS Replay grants no duplicate skill XP valley_iron_1
+PASS Start work valley_limestone_0
+PASS No early skill reward valley_limestone_0
+PASS Correct skill/tier, character XP unchanged valley_limestone_0
+PASS Replay grants no duplicate skill XP valley_limestone_0
+PASS Start work valley_limestone_1
+PASS No early skill reward valley_limestone_1
+PASS Correct skill/tier, character XP unchanged valley_limestone_1
+PASS Replay grants no duplicate skill XP valley_limestone_1
+PASS Start work valley_limestone_2
+PASS No early skill reward valley_limestone_2
+PASS Correct skill/tier, character XP unchanged valley_limestone_2
+PASS Replay grants no duplicate skill XP valley_limestone_2
+PASS Start work valley_limestone_3
+PASS No early skill reward valley_limestone_3
+PASS Correct skill/tier, character XP unchanged valley_limestone_3
+PASS Replay grants no duplicate skill XP valley_limestone_3
+PASS Start work valley_sandstone_0
+PASS No early skill reward valley_sandstone_0
+PASS Correct skill/tier, character XP unchanged valley_sandstone_0
+PASS Replay grants no duplicate skill XP valley_sandstone_0
+PASS Start work valley_sandstone_1
+PASS No early skill reward valley_sandstone_1
+PASS Correct skill/tier, character XP unchanged valley_sandstone_1
+PASS Replay grants no duplicate skill XP valley_sandstone_1
+PASS Cancelled work grants no skill XP
+PASS Plant, water, weed, harvest each grant planting XP
+PASS Cooking waits its real completion time
+PASS Successful cooking grants cooking XP
+PASS Eating grants no production skill XP
+PASS Failed cooking grants no skill XP
+PASS Skill levels have no unrequested speed effects
+PASS New character has independent skill XP
+PASS Switching restores character skill progress
+PASS Disk save preserves exact skill progress
+PASS Legacy levels migrate without losing earned level
+PASS Old placeholder save starts five skills at level one
+SKILL_EXPERIENCE_RULES_RESULT PASS checks=203 failures=[]

@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "original_profiles": 9,
+  "original_lines_preserved_exactly": 45,
+  "new_lines_for_original_profiles": 27,
+  "merchants": 3,
+  "merchant_lines": 24,
+  "total_profiles": 12,
+  "total_lines": 96,
+  "document_rows_match": 96,
+  "dialogue_functions_unchanged": true,
+  "other_implementation_sources_unchanged": true,
+  "targeted_test": "npc_dialogue_rules",
+  "checks": 15071,
+  "full_regression_run": false
+}

@@ -1,0 +1,127 @@
+{
+  "suites": {
+    "smoke": [
+      "project_integrity",
+      "city_rules",
+      "character_roster_rules",
+      "valley_rules",
+      "valley_journey",
+      "forest_art_structure"
+    ],
+    "rules": [
+      "project_integrity",
+      "city_rules",
+      "character_roster_rules",
+      "stamina_revision_rules",
+      "progression_rules",
+      "kitchen_rules",
+      "food_save_migration",
+      "testing_clock_rules",
+      "town_refresh_rules",
+      "valley_rules",
+      "skill_experience_rules",
+      "skills_quality_rules",
+      "npc_dialogue_rules",
+      "fruit_reach_rules"
+    ],
+    "graphics": [
+      "town_polish_flow",
+      "shop_transaction_scroll",
+      "valley_traversal_regression",
+      "valley_camera_regression",
+      "valley_movement",
+      "valley_journey",
+      "panda_valley_routine",
+      "valley_visitors_night",
+      "home_lighting_stability",
+      "forest_art_structure",
+      "bow_revision_preview",
+      "gameplay_revision_flow"
+    ],
+    "visual": [
+      "valley_revision_preview",
+      "panda_model_preview",
+      "clothing_shop_preview"
+    ],
+    "performance": [
+      "valley_performance",
+      "town_performance"
+    ]
+  },
+  "tests": {
+    "project_integrity": {
+      "headless": true
+    },
+    "city_rules": {
+      "headless": true
+    },
+    "character_roster_rules": {
+      "headless": true
+    },
+    "stamina_revision_rules": {
+      "headless": true
+    },
+    "progression_rules": {
+      "headless": true
+    },
+    "kitchen_rules": {
+      "headless": true
+    },
+    "food_save_migration": {
+      "headless": true
+    },
+    "testing_clock_rules": {
+      "headless": true
+    },
+    "town_refresh_rules": {
+      "headless": true
+    },
+    "valley_rules": {
+      "headless": true
+    },
+    "skill_experience_rules": {
+      "headless": true
+    },
+    "valley_revision_preview": {
+      "args": [
+        "--warmup-test"
+      ]
+    },
+    "valley_performance": {
+      "args": [
+        "--benchmark",
+        "--warmup-test"
+      ]
+    },
+    "town_performance": {
+      "script": "valley_performance",
+      "args": [
+        "--benchmark",
+        "--warmup-test",
+        "--city"
+      ]
+    },
+    "skills_quality_rules": {
+      "headless": true
+    },
+    "npc_dialogue_rules": {
+      "headless": true
+    },
+    "fruit_reach_rules": {
+      "headless": true
+    },
+    "multiplayer_rules": {
+      "headless": true
+    },
+    "multiplayer_client_flow": {},
+    "multiplayer_live": {
+      "headless": true
+    },
+    "update_rules": {
+      "headless": true
+    },
+    "multiplayer_public": {
+      "headless": true
+    }
+  }
+}

@@ -1,0 +1,599 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/bunny.gd" id="1_0sl5a"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qn21b"]
+radius = 0.34
+height = 1.95
+
+[sub_resource type="Shader" id="Shader_ovlj1"]
+code = "shader_type spatial; render_mode unshaded; void fragment(){ float light = smoothstep(-0.65,0.85,dot(normalize(NORMAL),normalize(vec3(-0.4,0.8,1.0)))); ALBEDO = mix(vec3(0.57,0.61,0.62),vec3(0.98,0.98,0.97),light); }"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kdyof"]
+render_priority = 0
+shader = SubResource("Shader_ovlj1")
+
+[sub_resource type="SphereMesh" id="SphereMesh_ggkmg"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="Shader" id="Shader_l787c"]
+code = "shader_type spatial; render_mode unshaded, cull_front; uniform float outline_width = 0.035; void vertex(){ mat3 inverse_modelview = inverse(mat3(MODELVIEW_MATRIX)); vec3 normal_view = normalize(transpose(inverse_modelview) * NORMAL); VERTEX += inverse_modelview * normal_view * outline_width; } void fragment(){ ALBEDO = vec3(0.004, 0.003, 0.006); }"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qchqy"]
+render_priority = 0
+shader = SubResource("Shader_l787c")
+shader_parameter/outline_width = 0.035
+
+[sub_resource type="SphereMesh" id="SphereMesh_mfjs7"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1ypmr"]
+radius = 0.075
+height = 0.6952064
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wqkoa"]
+radius = 0.1
+height = 0.58
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5g1bf"]
+radius = 0.075
+height = 0.6952064
+radial_segments = 24
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_84m58"]
+albedo_color = Color(0.93333334, 0.89411765, 0.81960785, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_su7q7"]
+top_radius = 0.15
+bottom_radius = 0.13
+height = 0.19
+radial_segments = 20
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_njtq1"]
+albedo_color = Color(0.50980395, 0.32156864, 0.21176471, 1)
+roughness = 0.85
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_na01y"]
+top_radius = 0.13
+bottom_radius = 0.13
+height = 0.008
+radial_segments = 20
+
+[sub_resource type="SphereMesh" id="SphereMesh_2ctrq"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_sx2u5"]
+radius = 0.1
+height = 0.58
+radial_segments = 24
+rings = 5
+
+[sub_resource type="SphereMesh" id="SphereMesh_pxuix"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="SphereMesh" id="SphereMesh_nnq5m"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="SphereMesh" id="SphereMesh_0s22f"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pgj5p"]
+shading_mode = 0
+albedo_color = Color(0.08235294, 0.07058824, 0.105882354, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_r6vrw"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="SphereMesh" id="SphereMesh_xiaoa"]
+radius = 1.0
+height = 2.0
+radial_segments = 48
+rings = 24
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4mi0e"]
+radius = 0.028
+height = 0.08577346
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_q4boq"]
+radius = 0.028
+height = 0.08512048
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_me8qe"]
+radius = 0.028
+height = 0.08454599
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fqvij"]
+radius = 0.028
+height = 0.08403879
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_47lqk"]
+radius = 0.028
+height = 0.08358999
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_qlhj6"]
+radius = 0.028
+height = 0.0831924
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_k00go"]
+radius = 0.028
+height = 0.08284013
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_d6xfm"]
+radius = 0.028
+height = 0.08252848
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_juseh"]
+radius = 0.028
+height = 0.08225336
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_237fy"]
+radius = 0.028
+height = 0.08201155
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_v08eb"]
+radius = 0.028
+height = 0.081800304
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_e0iw5"]
+radius = 0.028
+height = 0.06983661
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f41ob"]
+radius = 0.028
+height = 0.0698473
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_w77xs"]
+radius = 0.028
+height = 0.06953447
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dud1n"]
+radius = 0.028
+height = 0.069521695
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_bdmuj"]
+radius = 0.028
+height = 0.08415376
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_f8fd0"]
+radius = 0.028
+height = 0.08440369
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1888s"]
+radius = 0.028
+height = 0.08469338
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_eot2m"]
+radius = 0.028
+height = 0.085026726
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_123f5"]
+radius = 0.028
+height = 0.08540857
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ohvs2"]
+radius = 0.028
+height = 0.085844785
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rm5ww"]
+radius = 0.028
+height = 0.08634264
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lb268"]
+radius = 0.028
+height = 0.08691119
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mh0t2"]
+radius = 0.028
+height = 0.08756172
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_jqkwj"]
+radius = 0.028
+height = 0.088308774
+radial_segments = 24
+rings = 5
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_e6414"]
+radius = 0.029
+height = 0.378
+radial_segments = 24
+rings = 5
+
+[sub_resource type="SystemFont" id="SystemFont_uker7"]
+font_names = PackedStringArray("PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC")
+
+[node name="Bunny" type="CharacterBody3D" unique_id=39828364]
+floor_snap_length = 0.35
+script = ExtResource("1_0sl5a")
+
+[node name="@CollisionShape3D@2" type="CollisionShape3D" parent="." unique_id=749198685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.99, 0)
+shape = SubResource("CapsuleShape3D_qn21b")
+
+[node name="Visual" type="Node3D" parent="." unique_id=814103435]
+
+[node name="Torso" type="MeshInstance3D" parent="Visual" unique_id=2080754103]
+transform = Transform3D(0.3, 0, 0, 0, 0.435, 0, 0, 0, 0.265, 0, 0.78, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("SphereMesh_ggkmg")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/Torso" unique_id=218839495]
+material_override = SubResource("ShaderMaterial_qchqy")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_ggkmg")
+
+[node name="Tail" type="MeshInstance3D" parent="Visual" unique_id=734275724]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0.6, -0.285)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("SphereMesh_mfjs7")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/Tail" unique_id=320248652]
+material_override = SubResource("ShaderMaterial_qchqy")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_mfjs7")
+
+[node name="LeftArm" type="Node3D" parent="Visual" unique_id=1547749671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33, 1.065, 0)
+
+[node name="StraightArm" type="MeshInstance3D" parent="Visual/LeftArm" unique_id=268152406]
+transform = Transform3D(-0.9816433, -0.13756257, 0.13210955, 0.13756257, -0.9904506, -0.009170838, 0.13210955, 0.009170838, 0.9911927, -0.0375, -0.27, 0.0025)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("CapsuleMesh_1ypmr")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/LeftArm/StraightArm" unique_id=1318423709]
+material_override = SubResource("ShaderMaterial_qchqy")
+mesh = SubResource("CapsuleMesh_1ypmr")
+
+[node name="LeftLeg" type="Node3D" parent="Visual" unique_id=644241826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.17, 0.48, 0)
+
+[node name="StraightLeg" type="MeshInstance3D" parent="Visual/LeftLeg" unique_id=1947190180]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -0.19, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("CapsuleMesh_wqkoa")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/LeftLeg/StraightLeg" unique_id=1455829714]
+material_override = SubResource("ShaderMaterial_qchqy")
+mesh = SubResource("CapsuleMesh_wqkoa")
+
+[node name="RightArm" type="Node3D" parent="Visual" unique_id=100128309]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.33, 1.065, 0)
+
+[node name="StraightArm" type="MeshInstance3D" parent="Visual/RightArm" unique_id=1693097324]
+transform = Transform3D(-0.9816433, 0.13756257, -0.13210955, -0.13756257, -0.9904506, -0.009170838, -0.13210955, 0.009170838, 0.9911927, 0.0375, -0.27, 0.0025)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("CapsuleMesh_5g1bf")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/RightArm/StraightArm" unique_id=1666689732]
+material_override = SubResource("ShaderMaterial_qchqy")
+mesh = SubResource("CapsuleMesh_5g1bf")
+
+[node name="Cup" type="Node3D" parent="Visual/RightArm" unique_id=1976001360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0.35)
+visible = false
+
+[node name="Cylinder" type="MeshInstance3D" parent="Visual/RightArm/Cup" unique_id=1486111349]
+material_override = SubResource("StandardMaterial3D_84m58")
+mesh = SubResource("CylinderMesh_su7q7")
+
+[node name="@MeshInstance3D@29" type="MeshInstance3D" parent="Visual/RightArm/Cup" unique_id=1402265592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.101, 0)
+material_override = SubResource("StandardMaterial3D_njtq1")
+mesh = SubResource("CylinderMesh_na01y")
+
+[node name="Pebble" type="MeshInstance3D" parent="Visual/RightArm/Cup" unique_id=454887366]
+transform = Transform3D(0.07, 0, 0, 0, 0.075, 0, 0, 0, 0.035, 0.15, 0, 0)
+material_override = SubResource("StandardMaterial3D_84m58")
+mesh = SubResource("SphereMesh_2ctrq")
+
+[node name="RightLeg" type="Node3D" parent="Visual" unique_id=1226822560]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17, 0.48, 0)
+
+[node name="StraightLeg" type="MeshInstance3D" parent="Visual/RightLeg" unique_id=1595581273]
+transform = Transform3D(-1, 0, 0, 0, -1, 0, 0, 0, 1, 0, -0.19, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("CapsuleMesh_sx2u5")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/RightLeg/StraightLeg" unique_id=1220412945]
+material_override = SubResource("ShaderMaterial_qchqy")
+mesh = SubResource("CapsuleMesh_sx2u5")
+
+[node name="Head" type="Node3D" parent="Visual" unique_id=85507954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.78, 0)
+
+[node name="RoundHead" type="MeshInstance3D" parent="Visual/Head" unique_id=1438909419]
+transform = Transform3D(0.84, 0, 0, 0, 0.76, 0, 0, 0, 0.79, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("SphereMesh_pxuix")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/Head/RoundHead" unique_id=1777819172]
+material_override = SubResource("ShaderMaterial_qchqy")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_pxuix")
+
+[node name="LeftEar" type="Node3D" parent="Visual/Head" unique_id=120918686]
+transform = Transform3D(0.990216, -0.13954312, 0, 0.13954312, 0.990216, 0, 0, 0, 1, -0.34, 0.61, -0.035)
+
+[node name="WhiteEar" type="MeshInstance3D" parent="Visual/Head/LeftEar" unique_id=984176795]
+transform = Transform3D(0.123, 0, 0, 0, 0.405, 0, 0, 0, 0.13, 0, 0.26, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("SphereMesh_nnq5m")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/Head/LeftEar/WhiteEar" unique_id=1993106766]
+material_override = SubResource("ShaderMaterial_qchqy")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_nnq5m")
+
+[node name="RightEar" type="Node3D" parent="Visual/Head" unique_id=1636176829]
+transform = Transform3D(0.99680173, 0.07991469, 0, -0.07991469, 0.99680173, 0, 0, 0, 1, 0.34, 0.61, -0.035)
+
+[node name="WhiteEar" type="MeshInstance3D" parent="Visual/Head/RightEar" unique_id=1146272578]
+transform = Transform3D(0.123, 0, 0, 0, 0.405, 0, 0, 0, 0.13, 0, 0.26, 0)
+material_override = SubResource("ShaderMaterial_kdyof")
+mesh = SubResource("SphereMesh_0s22f")
+
+[node name="InkOutline" type="MeshInstance3D" parent="Visual/Head/RightEar/WhiteEar" unique_id=1291216225]
+material_override = SubResource("ShaderMaterial_qchqy")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_0s22f")
+
+[node name="Eyes" type="Node3D" parent="Visual/Head" unique_id=1502900521]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+
+[node name="DotEye" type="MeshInstance3D" parent="Visual/Head/Eyes" unique_id=1483539617]
+transform = Transform3D(0.043850206, 0.00047346894, -0.0053800484, 0.000458975, 0.048940457, 0.0006765606, 0.018253736, -0.0023679622, 0.01290726, -0.34, 0, 0.72847676)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_r6vrw")
+
+[node name="@MeshInstance3D@3" type="MeshInstance3D" parent="Visual/Head/Eyes" unique_id=740063503]
+transform = Transform3D(0.043850206, -0.00047346894, 0.0053800484, -0.000458975, 0.048940457, 0.0006765606, -0.018253736, -0.0023679622, 0.01290726, 0.34, 0, 0.72847676)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_xiaoa")
+
+[node name="FixedEyebrows" type="Node3D" parent="Visual/Head" unique_id=512980406]
+
+[node name="InkStroke" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1380151645]
+transform = Transform3D(0.30554914, 0.83967423, -0.44898432, -0.83967423, 0.015266657, -0.5428758, -0.44898432, 0.5428758, 0.7097175, -0.46749997, 0.16022727, 0.63970065)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_4mi0e")
+
+[node name="@MeshInstance3D@4" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1590501019]
+transform = Transform3D(0.27430242, 0.8585017, -0.43328175, -0.8585017, 0.015609145, -0.5125732, -0.43328175, 0.5125732, 0.7413067, -0.4425, 0.16068181, 0.6552454)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_q4boq")
+
+[node name="@MeshInstance3D@5" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=738224428]
+transform = Transform3D(0.245031, 0.8757799, -0.4158958, -0.8757799, 0.015923202, -0.48244786, -0.4158958, 0.48244786, 0.7708922, -0.41750002, 0.16113636, 0.66959465)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_me8qe")
+
+[node name="@MeshInstance3D@6" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=2045238055]
+transform = Transform3D(0.21769196, 0.89162225, -0.39701387, -0.89162225, 0.016211212, -0.4524898, -0.39701387, 0.4524898, 0.79851925, -0.39249998, 0.1615909, 0.68282425)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_fqvij")
+
+[node name="@MeshInstance3D@7" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=2012042153]
+transform = Transform3D(0.19224387, 0.9061258, -0.37680027, -0.9061258, 0.016474962, -0.42268753, -0.37680027, 0.42268753, 0.824231, -0.3675, 0.16204545, 0.69499886)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_47lqk")
+
+[node name="@MeshInstance3D@8" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=2144590900]
+transform = Transform3D(0.16864699, 0.91937494, -0.35539842, -0.91937494, 0.016716301, -0.39302725, -0.35539842, 0.39302725, 0.8480693, -0.34249997, 0.1625, 0.7061735)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_qlhj6")
+
+[node name="@MeshInstance3D@9" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1146740046]
+transform = Transform3D(0.14686692, 0.93144023, -0.33294013, -0.93144023, 0.01693511, -0.36349997, -0.33294013, 0.36349997, 0.8700682, -0.3175, 0.16295455, 0.7163954)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_k00go")
+
+[node name="@MeshInstance3D@10" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1166132975]
+transform = Transform3D(0.12687331, 0.94238365, -0.30954194, -0.94238365, 0.01713413, -0.334095, -0.30954194, 0.334095, 0.8902608, -0.29250002, 0.1634091, 0.725705)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_d6xfm")
+
+[node name="@MeshInstance3D@11" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=358676399]
+transform = Transform3D(0.10863489, 0.9522595, -0.2853075, -0.9522595, 0.017313898, -0.3047985, -0.2853075, 0.3047985, 0.908679, -0.26749998, 0.16386364, 0.73413754)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_juseh")
+
+[node name="@MeshInstance3D@12" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=425211528]
+transform = Transform3D(0.092130244, 0.96111107, -0.26034114, -0.96111107, 0.017474711, -0.27560863, -0.26034114, 0.27560863, 0.92534447, -0.2425, 0.16431819, 0.74172306)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_237fy")
+
+[node name="@MeshInstance3D@13" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=480344264]
+transform = Transform3D(0.077331185, 0.9689811, -0.23472449, -0.9689811, 0.017617881, -0.2465062, -0.23472449, 0.2465062, 0.9402867, -0.2175, 0.16477273, 0.74848753)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_v08eb")
+
+[node name="@MeshInstance3D@14" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=990756502]
+transform = Transform3D(0.7594562, 0.6504475, 0.0120132705, -0.6504475, 0.75885624, 0.032484736, 0.0120132705, -0.032484736, 0.9994, -0.20050001, 0.17025, 0.7514428)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_e0iw5")
+
+[node name="@MeshInstance3D@15" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1542204142]
+transform = Transform3D(0.7597467, 0.64994645, 0.018832669, -0.64994645, 0.7582704, 0.05094716, 0.018832669, -0.05094716, 0.9985238, -0.19150001, 0.18075001, 0.7508653)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_f41ob")
+
+[node name="@MeshInstance3D@16" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1233239076]
+transform = Transform3D(-0.75919616, 0.6280266, -0.17089085, -0.6280266, -0.7757968, -0.06100741, -0.17089085, 0.06100741, 0.9833994, 0.18925, 0.17975, 0.7516352)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_w77xs")
+
+[node name="@MeshInstance3D@17" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1492627742]
+transform = Transform3D(-0.7682961, 0.62861884, -0.12066295, -0.62861884, -0.7765298, -0.042894967, -0.12066295, 0.042894967, 0.99176633, 0.19775, 0.16925001, 0.75233805)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_dud1n")
+
+[node name="@MeshInstance3D@18" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1663004848]
+transform = Transform3D(0.039254904, 0.96967536, 0.24122356, -0.96967536, -0.021311402, 0.24346577, 0.24122356, -0.24346577, 0.9394337, 0.21565, 0.16370001, 0.7492008)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_bdmuj")
+
+[node name="@MeshInstance3D@19" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1840566598]
+transform = Transform3D(0.056268096, 0.96114314, 0.2702551, -0.96114314, -0.021124482, 0.2752411, 0.2702551, -0.2752411, 0.9226075, 0.24295002, 0.1631, 0.7418647)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_f8fd0")
+
+[node name="@MeshInstance3D@20" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=567853904]
+transform = Transform3D(0.07543051, 0.951439, 0.29845262, -0.951439, -0.020910501, 0.30712616, 0.29845262, -0.30712616, 0.903659, 0.27025002, 0.1625, 0.7335495)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_1888s")
+
+[node name="@MeshInstance3D@21" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1934630864]
+transform = Transform3D(0.096765876, 0.94051254, 0.32568792, -0.94051254, -0.020670533, 0.33912975, 0.32568792, -0.33912975, 0.88256353, 0.29755002, 0.16190001, 0.72422135)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_eot2m")
+
+[node name="@MeshInstance3D@22" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=459611272]
+transform = Transform3D(0.12030959, 0.9283011, 0.35182774, -0.9283011, -0.020402193, 0.37126932, 0.35182774, -0.37126932, 0.8592883, 0.32485002, 0.1613, 0.7138402)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_123f5")
+
+[node name="@MeshInstance3D@23" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1438116612]
+transform = Transform3D(0.14609683, 0.91473275, 0.37672246, -0.91473275, -0.020104408, 0.40355906, 0.37672246, -0.40355906, 0.8337987, 0.35215002, 0.16070001, 0.70235884)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_ohvs2")
+
+[node name="@MeshInstance3D@24" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=712982729]
+transform = Transform3D(0.17416662, 0.899724, 0.4002033, -0.899724, -0.01977408, 0.43601108, 0.4002033, -0.43601108, 0.80605936, 0.37945002, 0.16010001, 0.68972194)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_rm5ww")
+
+[node name="@MeshInstance3D@25" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1014189129]
+transform = Transform3D(0.20456147, 0.88317543, 0.4220851, -0.88317543, -0.019410372, 0.4686411, 0.4220851, -0.4686411, 0.77602816, 0.40675002, 0.1595, 0.675864)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_lb268")
+
+[node name="@MeshInstance3D@26" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1707383257]
+transform = Transform3D(0.23732448, 0.86497194, 0.44215462, -0.86497194, -0.019010901, 0.5014601, 0.44215462, -0.5014601, 0.7436646, 0.43405002, 0.15890001, 0.66070735)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_mh0t2")
+
+[node name="@MeshInstance3D@27" type="MeshInstance3D" parent="Visual/Head/FixedEyebrows" unique_id=1749294382]
+transform = Transform3D(0.27251446, 0.84497076, 0.4601742, -0.84497076, -0.01857078, 0.53449, 0.4601742, -0.53449, 0.70891476, 0.46135002, 0.15830001, 0.64415956)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_jqkwj")
+
+[node name="Mouth" type="Node3D" parent="Visual/Head" unique_id=1663821526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.012, -0.355, 0.7054282)
+
+[node name="FlatMouth" type="MeshInstance3D" parent="Visual/Head/Mouth" unique_id=116495343]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_pgj5p")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_e6414")
+
+[node name="Mood" type="Label3D" parent="." unique_id=743313610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.55, 0)
+pixel_size = 0.009
+billboard = 1
+no_depth_test = true
+modulate = Color(0.9764706, 0.78039217, 0.36078432, 1)
+outline_modulate = Color(1, 0.9843137, 0.92941177, 1)
+font = SubResource("SystemFont_uker7")
+font_size = 105
+outline_size = 6

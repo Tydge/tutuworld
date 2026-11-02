@@ -1,0 +1,19 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+.qa-artifacts/
+__pycache__/
+*.pyc
+
+.DS_Store
+exports/
+releases/
+build/
+server/state/
+.env
+*.sqlite3
+*.sqlite3-*
+*.key
+*.pem
+!config/release_public.pem

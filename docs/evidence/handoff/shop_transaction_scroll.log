@@ -1,0 +1,30 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Seed shop purchase is scrolled below the first row
+PASS Available UI action: buy_item cream
+PASS Single purchase retains the scroll container, position and original card
+PASS Single purchase updates real inventory, balance and visible quantity
+PASS Available UI action: buy_item cream
+PASS Available UI action: bulk_buy_item cream
+PASS Repeated and bulk purchases use current quantities and prices
+PASS Repeated and bulk purchases do not jump to the top
+PASS Balance updates the affordability of original single and bulk buttons
+PASS Available UI action: buy_item cream
+PASS Purchase immediately updates balance and disables unaffordable buttons without scrolling
+PASS Available UI action: shop_tab sell
+PASS Sale list is genuinely scrolled near its lower end
+PASS Available UI action: sell_item sandstone
+PASS Partial sale charges the current quantity once
+PASS Partial sale keeps its original card and exact scroll offset
+PASS Remaining quantity and total-sale price update in place
+PASS Available UI action: sell_all_item sandstone
+PASS Selling the remainder removes only the exhausted item
+PASS Selling out retains all surviving cards and the scroll container
+PASS Shorter sale list clamps the previous scroll position to its new end
+PASS Available UI action: sell_all_item branch
+PASS Large-stack sale honors the per-transaction cap
+PASS Available UI action: sell_all_item branch
+PASS Next sale reads the remaining live quantity
+PASS Final sale shows the empty list without stale cards or blank scrolling space
+SHOP_TRANSACTION_SCROLL_RESULT PASS checks=26 failures=[]

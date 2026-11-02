@@ -1,0 +1,319 @@
+{
+  "date": "2026-11-01",
+  "items": 61,
+  "crops": 5,
+  "recipes": 7,
+  "npcs": 12,
+  "dialogues": 96,
+  "sources": [
+    {
+      "path": "scripts/boot.gd",
+      "sha256": "0d635960524612e23e5cc0a7f029a1bbd51e6e06fc1e56c1388b32287f3d935d"
+    },
+    {
+      "path": "scripts/builders/scene_builder_base.gd",
+      "sha256": "708a1b8b433f9c161378f36732faf930b6c604945e82b196ad6518fe50581bcb"
+    },
+    {
+      "path": "scripts/bunny.gd",
+      "sha256": "b4c304c4a1f641e7be9184480b21ee950b711dc508209f1c4d7eae1be413096f"
+    },
+    {
+      "path": "scripts/characters/animal_actor.gd",
+      "sha256": "afddf319978e1c2f5bb5eb98d77b66156d40fb92f742b99628da8420c867961c"
+    },
+    {
+      "path": "scripts/characters/animal_catalog.gd",
+      "sha256": "aa204a2ac289c3dccbac3f2087ea4fd1fcf21f2ac94009679a8a9673bde4ca49"
+    },
+    {
+      "path": "scripts/characters/animal_factory.gd",
+      "sha256": "d41f4dfa2b293009ec5a0bc774b95572573c2e169abc1196dfb6176a00dc589b"
+    },
+    {
+      "path": "scripts/characters/build_cat.gd",
+      "sha256": "ff480b212854705d6069352ff84877b9447e6dac3e51235c8321095d40ee8704"
+    },
+    {
+      "path": "scripts/characters/build_panda.gd",
+      "sha256": "a38be6a6cc83c362f6dca526ace41cf1d8e0d8354e93b27c83f59e7ec9b96bb0"
+    },
+    {
+      "path": "scripts/characters/cat_surface.gd",
+      "sha256": "d7f70b69da2a3f0047bb92aab08654ed866feaf721d0648c2284aabc3131ba45"
+    },
+    {
+      "path": "scripts/characters/rig_profile.gd",
+      "sha256": "2faad961f066baecbbbefdc4ffa7da546363ca7caf364c45e795d8b54668ebad"
+    },
+    {
+      "path": "scripts/characters/sleep_pose.gd",
+      "sha256": "66533e3791057150ae52a1e6024b740fd76b853f5b3b8a6c258764bcb650c2c6"
+    },
+    {
+      "path": "scripts/city/ambient_life.gd",
+      "sha256": "ad6c0ec4ee9a3fd7786074a03c0e421fca0e60a9dbd8f6a436ba46a45a79c530"
+    },
+    {
+      "path": "scripts/city/bow_accessory.gd",
+      "sha256": "8a747a0876d787a0f24c5fe7b23460ecc2e56c28dfdc61dd092f75edc19e7410"
+    },
+    {
+      "path": "scripts/city/build_city.gd",
+      "sha256": "d0f8e7e24c639e79f59deaa999a26222a3b15707378208368ea1b2fca70c6e27"
+    },
+    {
+      "path": "scripts/city/city_world.gd",
+      "sha256": "565bf6eb68f160c622820ab1f02927ca93bfb0de903d2149a8abc48f1f3c07e5"
+    },
+    {
+      "path": "scripts/city/crop_visual.gd",
+      "sha256": "050176469bebd080e58068dfca35cf7477da08405c976fdf0c68fb929aaf70f4"
+    },
+    {
+      "path": "scripts/city/culinary.gd",
+      "sha256": "8dd3c3ed1f9e8fc13f773735e96e6aefe7834102f1941a8851e4cacdaeb87cbf"
+    },
+    {
+      "path": "scripts/city/fabric_library.gd",
+      "sha256": "e42a209a8760f1bc4a03a01dc3a070f20461aa015532a7f6f763a012d97cae84"
+    },
+    {
+      "path": "scripts/city/food_visual.gd",
+      "sha256": "3d7d9434c6fa30d0176ed7db7668a1bd3fcfac583d084902c002a374ef023560"
+    },
+    {
+      "path": "scripts/city/forest_builder.gd",
+      "sha256": "4311f3596510b8e161842de169540272ace8a45afe5a7b7dcbd95245229895dc"
+    },
+    {
+      "path": "scripts/city/forest_furniture.gd",
+      "sha256": "31da2b6af0064b0ead5b043988acf1e85849f94769561e4a3ce6fc027e84032f"
+    },
+    {
+      "path": "scripts/city/frame_pacer.gd",
+      "sha256": "7c9d662f2513c58ea38bb52ebfe64563e5e4a8427a43238f2ade550edd30cefc"
+    },
+    {
+      "path": "scripts/city/home_builder.gd",
+      "sha256": "8c9d9a8fa32302dd41dc7bf7c96125d25c43b59c29c18df3254d79914e40f991"
+    },
+    {
+      "path": "scripts/city/kitchen_scenery.gd",
+      "sha256": "e4d0b0e64e53fb79535bb4ff591efcd1ffe50f1d80e2acb34aaae02755a3733b"
+    },
+    {
+      "path": "scripts/city/lamp_builder.gd",
+      "sha256": "a68dba8497eec82e8913f0a6d9a2c9313a9de711ebac7a3e19b3cd68c60b3a94"
+    },
+    {
+      "path": "scripts/city/meadow_blossoms.gd",
+      "sha256": "cca5856aac54b8205ff5e51db59253d14986833ebc631a90e55cb48341372bd0"
+    },
+    {
+      "path": "scripts/city/npc_driver.gd",
+      "sha256": "1b15be0c5eecc60f11f61aba10c89dd66c872b52d513d503d277db0e9a0e6fd9"
+    },
+    {
+      "path": "scripts/city/npc_profiles.gd",
+      "sha256": "8565f1401cea80886085a645f84a9f092c752469c09d1d660e86b826b7e5d6b7"
+    },
+    {
+      "path": "scripts/city/outfit.gd",
+      "sha256": "082cc87f754e6c751ea9b3a11170d20304412da8dbadb6875e89b87bb0f367bf"
+    },
+    {
+      "path": "scripts/city/prop_collisions.gd",
+      "sha256": "e2f1d5445c443ff9a4e6f84781f9a6f9068fb07cb4fefe13489abb12675a100d"
+    },
+    {
+      "path": "scripts/city/render_budget.gd",
+      "sha256": "55cf5199560267d014c558f45a7920d1f6c780c78463e62d64096e9326a87037"
+    },
+    {
+      "path": "scripts/city/resource_visual.gd",
+      "sha256": "d9fafda93f18106d0d4300253dd226f4ae58d0860f1a63fb9b0c2847c345d17a"
+    },
+    {
+      "path": "scripts/city/reward_sparkle.gd",
+      "sha256": "98ec687ba72e1fe76b1adaa39ac1045ffa68b7b83792f0f2122a7bb7f997e854"
+    },
+    {
+      "path": "scripts/city/scene_preparation.gd",
+      "sha256": "873a705ad44dfceed20ab1db7e3665c53a1fa8fce567965b4ca46eb7e32e62d4"
+    },
+    {
+      "path": "scripts/city/scenery_polish.gd",
+      "sha256": "8532915b645bb1b26c44672ab48ecb5b60091443dc7796fa8ad2130fc35a69c6"
+    },
+    {
+      "path": "scripts/city/seabreeze_home.gd",
+      "sha256": "fa2c87db983ee589b27d16a7f5dcd0341fcc182b37616b1af7bc61154cefec15"
+    },
+    {
+      "path": "scripts/city/shop_builder.gd",
+      "sha256": "bef0527dec1d3846933403f93fc70a0eb0316beae41137d891ed2dc2285836a1"
+    },
+    {
+      "path": "scripts/city/sky_palette.gd",
+      "sha256": "5211e3054ec76097af57bfdd196b78d420ddbd32724458544689214563835674"
+    },
+    {
+      "path": "scripts/city/static_batches.gd",
+      "sha256": "314dc695808e08b896ccee25611d172f3ca42474d25656117b7bcd31c647210d"
+    },
+    {
+      "path": "scripts/city/tool_models.gd",
+      "sha256": "8f56163b301c4ca73403caf0aeb1d9f9fc56ead5f05066bfccd5c010df502bb3"
+    },
+    {
+      "path": "scripts/city/town_gardens.gd",
+      "sha256": "48b1660352b6b5f520966ad4512e3b36affa99993fdece75675c2bca6d293c7b"
+    },
+    {
+      "path": "scripts/city/wander_navigation.gd",
+      "sha256": "42ae8a21eb50632e4244481513960b73f03b817b7c4dce58fcfea3eaf41e8948"
+    },
+    {
+      "path": "scripts/city/work_props.gd",
+      "sha256": "7183f47ad229588cec7a0e5507d669ea0e28d9709f5d65b519572873ce095bec"
+    },
+    {
+      "path": "scripts/geometry.gd",
+      "sha256": "2cf86de300483d7a9362aedfaead7eee2bc8da78fe0df056f6fc4eab8ef53f72"
+    },
+    {
+      "path": "scripts/services/character_stats.gd",
+      "sha256": "5ac6ae1b54013601929c674b88cbe06d23f2ad1fc1df5e92fed21cd0bd21dfca"
+    },
+    {
+      "path": "scripts/services/game_data.gd",
+      "sha256": "c450f614b5a6ba7e565e9d60c6718a98835f3be0f925098117e6ad49e0d2fce4"
+    },
+    {
+      "path": "scripts/services/local_authority.gd",
+      "sha256": "580cfdfe9537e4ee289ecc0728949bb8839f9bf150cda4003cf12813cb2898d1"
+    },
+    {
+      "path": "scripts/services/remote_transport.gd",
+      "sha256": "fa1c001424037751fb7af6e16c8691da70a773d3959f3d1c07fb7e7acb43213f"
+    },
+    {
+      "path": "scripts/services/session.gd",
+      "sha256": "621640cdd35f392dca1a314316f1a60c0101e5ba788b923c02b05d8677efbe30"
+    },
+    {
+      "path": "scripts/services/update_client.gd",
+      "sha256": "0e0d02cd8a605228aa6f02918f3e038e8c87d72705038a6b53c786de1cf93f22"
+    },
+    {
+      "path": "scripts/ui/buff_icon.gd",
+      "sha256": "bde841e46b73556b30b682e4e9a7f40ffd188aece6b5aa200bff06e1e51c81f2"
+    },
+    {
+      "path": "scripts/ui/character_menu.gd",
+      "sha256": "1e1b240a86ecedc6c884588727e45a242ed6ebf9081fe8669e4c0cdec1265db1"
+    },
+    {
+      "path": "scripts/ui/character_preview.gd",
+      "sha256": "a0a42579ab9924d1d012a48d9b6f13203e0e08371b9be5b073ee635cc66904ff"
+    },
+    {
+      "path": "scripts/ui/character_sheet.gd",
+      "sha256": "59c095e10ca53684889bc28514e00126ff4a281a71c5cb51d6ae5a2d271caf0e"
+    },
+    {
+      "path": "scripts/ui/city_hud.gd",
+      "sha256": "80300b9b4d1a5a73f88349f7a8159cbe09370f1aa4fe9c7e0255d9d870f638a7"
+    },
+    {
+      "path": "scripts/ui/item_icon.gd",
+      "sha256": "aaf92f2ea8d39d2014c2874f91870fd158bb2c818496041dca771120e7b94bad"
+    },
+    {
+      "path": "scripts/ui/player_status.gd",
+      "sha256": "1082d95fc27086c9fc9506ee2d318bf3ec8b1da40fff2f1d1ca73a236ea7a4f5"
+    },
+    {
+      "path": "scripts/ui/progress_ring.gd",
+      "sha256": "a507f13f1489376eac77f38e4157aea3338f49a076aeb3d1a0d2dd03ff5d3a92"
+    },
+    {
+      "path": "scripts/ui/stamina_meter.gd",
+      "sha256": "a5c16f9da8718018cfc85f7e275202bb1dcbef99ffa555defa1932e3b686731e"
+    },
+    {
+      "path": "scripts/ui/time_controls.gd",
+      "sha256": "d5eb237aece88c4afca4654a72ad8f1e14f8c948c1ff9f122bd5c637703eb350"
+    },
+    {
+      "path": "scripts/ui/title.gd",
+      "sha256": "872cd2313036b51c04e78a3af17881731a90db43cd762c9ec6e322e4213b7105"
+    },
+    {
+      "path": "scripts/ui/ui_kit.gd",
+      "sha256": "71ae337132e95aec80a7fd84f52d9e98606ed59a476795feac6b8b8a8102d60e"
+    },
+    {
+      "path": "scripts/valley/boat_travel.gd",
+      "sha256": "d11b2b7a38fd71b4e984d91ee892a2425e35adb85077719ae5361789af579227"
+    },
+    {
+      "path": "scripts/valley/build_valley.gd",
+      "sha256": "3bb935cc2393faa8c8741bc5931de4e8bd44e43caa8cec85e53e0ae0c4212429"
+    },
+    {
+      "path": "scripts/valley/panda_routine.gd",
+      "sha256": "2b58f406130c601502ff45691bccd439f81e56e3e4806e0c4cabd7c7344c2ae0"
+    },
+    {
+      "path": "scripts/valley/valley_layout.gd",
+      "sha256": "e418566c7f602c2d6569533b190603d2065c4f9fe8238bb8fd19e96720249581"
+    },
+    {
+      "path": "scripts/valley/valley_world.gd",
+      "sha256": "9e753ecd54f978c7732d0f3aed437d1bbf393f96c5bcf758f11d7d473c4a421b"
+    },
+    {
+      "path": "scripts/valley/visitor_routine.gd",
+      "sha256": "72defa611a132297d6c69927668eabb996178374ed24f1f0b5bb7a1b51b8f548"
+    },
+    {
+      "path": "data/catalog.json",
+      "sha256": "fa6ecddb724cec43fb2f7e7d4957e00bd0023efebe309e8eb0fbed04e86434c4"
+    },
+    {
+      "path": "data/houses/mianfeng_cottage.json",
+      "sha256": "202c574d00190a7ac3e0e25f4e8560040550863ca7c4b54238889e8a5a903347"
+    },
+    {
+      "path": "data/houses/seabreeze_cottage.json",
+      "sha256": "ba114357c692c2eeb3c3810b0c07f9ddc8f15b61f0b8f84eb98e4a3aae5440a1"
+    },
+    {
+      "path": "config/animals/bunny.tres",
+      "sha256": "2618115c0c6231b5a26a30cb5bf8c075aca2d43b393d4a2c1980e8e8f4d6a9b3"
+    },
+    {
+      "path": "config/animals/cat_teacher.tres",
+      "sha256": "aefb9ef2e7d02ba6bba235c14f9fc09dde7a88744ec152a8cbf51aeb08b69ed4"
+    },
+    {
+      "path": "config/animals/panda.tres",
+      "sha256": "df2c92b0e5ed7edb726ec90bdd6019293a7b29ea6a46e73b44bf971aeac02785"
+    }
+  ],
+  "stamina": {
+    "normal_work": 1,
+    "tier_two_gather": 2,
+    "cancel_refunds_reserved_amount": true
+  },
+  "dialogue_revision": {
+    "source": "06_NPC作息与对话.md 本轮手工修订",
+    "changed_texts": 39,
+    "changed_windows": 1,
+    "total_profiles": 12,
+    "total_lines": 96,
+    "scope": "dialogue content and time windows only"
+  }
+}

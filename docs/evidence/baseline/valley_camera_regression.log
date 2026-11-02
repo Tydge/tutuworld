@@ -1,0 +1,6 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=11554 components=26
+VALLEY_CAMERA_REGRESSION_RESULT PASS checks=217 failures=[]

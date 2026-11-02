@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-01",
+  "rules_groups": 14,
+  "tests": [
+    {
+      "test": "project_integrity",
+      "checks": 245,
+      "source": ".qa-artifacts/20261101-214600-773790/project_integrity/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "city_rules",
+      "checks": 56,
+      "source": ".qa-artifacts/20261101-214339-330195/city_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "character_roster_rules",
+      "checks": 39,
+      "source": ".qa-artifacts/20261101-214339-330195/character_roster_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "stamina_revision_rules",
+      "checks": 30,
+      "source": ".qa-artifacts/20261101-214339-330195/stamina_revision_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "progression_rules",
+      "checks": 24,
+      "source": ".qa-artifacts/20261101-214339-330195/progression_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "kitchen_rules",
+      "checks": 128,
+      "source": ".qa-artifacts/20261101-214339-330195/kitchen_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "food_save_migration",
+      "checks": 6,
+      "source": ".qa-artifacts/20261101-214339-330195/food_save_migration/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "testing_clock_rules",
+      "checks": 27,
+      "source": ".qa-artifacts/20261101-214339-330195/testing_clock_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "town_refresh_rules",
+      "checks": 124,
+      "source": ".qa-artifacts/20261101-214339-330195/town_refresh_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "valley_rules",
+      "checks": 215,
+      "source": ".qa-artifacts/20261101-214339-330195/valley_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "skill_experience_rules",
+      "checks": 8,
+      "source": ".qa-artifacts/20261101-214339-330195/skill_experience_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "skills_quality_rules",
+      "checks": 568,
+      "source": ".qa-artifacts/20261101-214339-330195/skills_quality_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "npc_dialogue_rules",
+      "checks": 15071,
+      "source": ".qa-artifacts/20261101-224203-086093/npc_dialogue_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "fruit_reach_rules",
+      "checks": 14583,
+      "source": ".qa-artifacts/20261101-214339-330195/fruit_reach_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "bow_revision_preview",
+      "checks": 10666,
+      "source": ".qa-artifacts/20261101-214302-980835/bow_revision_preview/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "shop_transaction_scroll",
+      "checks": 26,
+      "source": ".qa-artifacts/20261101-214302-980835/shop_transaction_scroll/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "clothing_shop_preview",
+      "checks": 72,
+      "source": ".qa-artifacts/20261101-214302-980835/clothing_shop_preview/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "valley_journey",
+      "checks": 15,
+      "source": ".qa-artifacts/20261101-214302-980835/valley_journey/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "panda_rules",
+      "checks": 49,
+      "source": ".qa-artifacts/20261101-211855-461848/panda_rules/run.log",
+      "result": "PASS"
+    },
+    {
+      "test": "gameplay_revision_flow",
+      "checks": 45,
+      "source": ".qa-artifacts/20261101-214704-473271/gameplay_revision_flow/run.log",
+      "result": "PASS"
+    }
+  ],
+  "wheat_mesh": {
+    "phases": [
+      0.1,
+      0.5,
+      0.9
+    ],
+    "instances_per_plot": 2,
+    "vertices": 76440,
+    "result": "PASS"
+  },
+  "latest_change": {
+    "description": "NPC对白文档手工修订同步",
+    "changed_texts": 39,
+    "changed_windows": 1,
+    "targeted_tests": [
+      "npc_dialogue_rules"
+    ],
+    "verification": "npc_dialogue_document_edits.json",
+    "full_regression_run": false,
+    "note": "其余验证沿用先前记录，本次仅对白内容及时间窗口变化。"
+  }
+}

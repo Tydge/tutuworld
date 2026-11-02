@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "id": "seabreeze_cottage",
+  "name": "海风小屋",
+  "origin": [
+    -34,
+    0,
+    -2.1
+  ],
+  "grid": 0.5,
+  "size": [
+    12,
+    10
+  ],
+  "floor_height": 0.18,
+  "wall_height": 4.4,
+  "wall_thickness": 0.24,
+  "roof_rise": 1.8,
+  "materials": {
+    "plaster": "eedfc4",
+    "trim": "f5e9d0",
+    "roof": "548b87",
+    "oak": "b28a5f",
+    "panel": "94ae9d"
+  },
+  "walls": [
+    {
+      "id": "south",
+      "a": [
+        -6,
+        5
+      ],
+      "b": [
+        6,
+        5
+      ],
+      "openings": [
+        {
+          "id": "living_window",
+          "type": "window",
+          "offset": 2,
+          "width": 2.2,
+          "bottom": 1.1,
+          "height": 2.25
+        },
+        {
+          "id": "front_door",
+          "type": "door",
+          "offset": 6,
+          "width": 3,
+          "bottom": 0,
+          "height": 3.55
+        },
+        {
+          "id": "desk_window",
+          "type": "window",
+          "offset": 10,
+          "width": 2.2,
+          "bottom": 1.1,
+          "height": 2.25
+        }
+      ]
+    },
+    {
+      "id": "east",
+      "a": [
+        6,
+        5
+      ],
+      "b": [
+        6,
+        -5
+      ],
+      "openings": [
+        {
+          "id": "east_window",
+          "type": "window",
+          "offset": 5.3,
+          "width": 2.8,
+          "bottom": 1.1,
+          "height": 2.25
+        }
+      ]
+    },
+    {
+      "id": "north",
+      "a": [
+        6,
+        -5
+      ],
+      "b": [
+        -6,
+        -5
+      ],
+      "openings": [
+        {
+          "id": "bed_window",
+          "type": "window",
+          "offset": 2.7,
+          "width": 2.5,
+          "bottom": 1.25,
+          "height": 2.1
+        }
+      ]
+    },
+    {
+      "id": "west",
+      "a": [
+        -6,
+        -5
+      ],
+      "b": [
+        -6,
+        5
+      ],
+      "openings": [
+        {
+          "id": "west_window",
+          "type": "window",
+          "offset": 4.8,
+          "width": 3,
+          "bottom": 1.15,
+          "height": 2.2
+        }
+      ]
+    }
+  ],
+  "furniture": [
+    {
+      "id": "sofa",
+      "kind": "sofa",
+      "position": [
+        -3.1,
+        0,
+        -0.4
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "tea_table",
+      "kind": "tea_table",
+      "position": [
+        -3.3,
+        0,
+        2.5
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "bed",
+      "kind": "bed",
+      "position": [
+        3.3,
+        0,
+        -2.65
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "desk",
+      "kind": "desk",
+      "position": [
+        3.65,
+        0,
+        3.55
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "hearth",
+      "kind": "hearth",
+      "position": [
+        -2.8,
+        0,
+        -4.55
+      ],
+      "yaw": 0
+    },
+    {
+      "id": "bookshelf",
+      "kind": "bookshelf",
+      "position": [
+        0.1,
+        0,
+        -4.3
+      ],
+      "yaw": 0
+    }
+  ]
+}

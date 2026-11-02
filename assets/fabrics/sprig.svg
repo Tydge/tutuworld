@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+<rect width="160" height="160" fill="#000"/>
+<defs><g id="flower">
+<path d="M0 14Q-2 31 8 39" fill="none" stroke="#707070" stroke-width="3" stroke-linecap="round"/>
+<path d="M1 25Q-18 11-18 27Q-8 34 1 25M3 31Q20 12 21 27Q14 37 3 31" fill="#999"/>
+<ellipse cy="-9" rx="7" ry="10" fill="#e6e6e6"/>
+<ellipse cy="-9" rx="7" ry="10" transform="rotate(72)" fill="#e6e6e6"/>
+<ellipse cy="-9" rx="7" ry="10" transform="rotate(144)" fill="#e6e6e6"/>
+<ellipse cy="-9" rx="7" ry="10" transform="rotate(216)" fill="#e6e6e6"/>
+<ellipse cy="-9" rx="7" ry="10" transform="rotate(288)" fill="#e6e6e6"/>
+<circle r="4.5" fill="#777"/></g></defs>
+<use href="#flower" transform="translate(38 36) rotate(-15)"/>
+<use href="#flower" transform="translate(117 113) rotate(30) scale(.8)"/>
+<g fill="#555"><circle cx="119" cy="31" r="3"/><circle cx="30" cy="123" r="3"/><circle cx="80" cy="80" r="2"/></g>
+</svg>

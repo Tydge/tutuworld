@@ -1,0 +1,80 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Four crop recipes
+PASS Cannot cook remotely
+PASS Missing ingredients rejected
+PASS Unknown recipes rejected
+PASS Start carrot_soup
+PASS Cooking uses 5–10 real seconds: carrot_soup
+PASS No material charged before full duration: carrot_soup
+PASS Busy job excludes second action: carrot_soup
+PASS Cancelled cooking preserves ingredients: carrot_soup
+PASS One completed dish consumes exact recipe: carrot_soup
+PASS Repeated command cannot create a second dish: carrot_soup
+PASS Eating requires dining table: carrot_soup
+PASS Begin meal: carrot_soup
+PASS Meal requires full duration: carrot_soup
+PASS Cancelled meal preserves food: carrot_soup
+PASS Finished meal grants the corresponding effect: carrot_soup
+PASS Food effect lasts one game day: carrot_soup
+PASS Correct nonstacking modifier: move
+PASS Effect remains until a full day: carrot_soup
+PASS Effect expires automatically: carrot_soup
+PASS Start garden_salad
+PASS Cooking uses 5–10 real seconds: garden_salad
+PASS No material charged before full duration: garden_salad
+PASS Busy job excludes second action: garden_salad
+PASS Cancelled cooking preserves ingredients: garden_salad
+PASS One completed dish consumes exact recipe: garden_salad
+PASS Repeated command cannot create a second dish: garden_salad
+PASS Eating requires dining table: garden_salad
+PASS Begin meal: garden_salad
+PASS Meal requires full duration: garden_salad
+PASS Cancelled meal preserves food: garden_salad
+PASS Finished meal grants the corresponding effect: garden_salad
+PASS Food effect lasts one game day: garden_salad
+PASS Correct nonstacking modifier: water
+PASS Watering is faster
+PASS Effect remains until a full day: garden_salad
+PASS Effect expires automatically: garden_salad
+PASS Start tomato_stew
+PASS Cooking uses 5–10 real seconds: tomato_stew
+PASS No material charged before full duration: tomato_stew
+PASS Busy job excludes second action: tomato_stew
+PASS Cancelled cooking preserves ingredients: tomato_stew
+PASS One completed dish consumes exact recipe: tomato_stew
+PASS Repeated command cannot create a second dish: tomato_stew
+PASS Eating requires dining table: tomato_stew
+PASS Begin meal: tomato_stew
+PASS Meal requires full duration: tomato_stew
+PASS Cancelled meal preserves food: tomato_stew
+PASS Finished meal grants the corresponding effect: tomato_stew
+PASS Food effect lasts one game day: tomato_stew
+PASS Correct nonstacking modifier: mining
+PASS Mining affects both ore and stone, not branches
+PASS Effect remains until a full day: tomato_stew
+PASS Effect expires automatically: tomato_stew
+PASS Start pumpkin_soup
+PASS Cooking uses 5–10 real seconds: pumpkin_soup
+PASS No material charged before full duration: pumpkin_soup
+PASS Busy job excludes second action: pumpkin_soup
+PASS Cancelled cooking preserves ingredients: pumpkin_soup
+PASS One completed dish consumes exact recipe: pumpkin_soup
+PASS Repeated command cannot create a second dish: pumpkin_soup
+PASS Eating requires dining table: pumpkin_soup
+PASS Begin meal: pumpkin_soup
+PASS Meal requires full duration: pumpkin_soup
+PASS Cancelled meal preserves food: pumpkin_soup
+PASS Finished meal grants the corresponding effect: pumpkin_soup
+PASS Food effect lasts one game day: pumpkin_soup
+PASS Correct nonstacking modifier: farm
+PASS Farm food speeds all three garden jobs
+PASS Effect remains until a full day: pumpkin_soup
+PASS Effect expires automatically: pumpkin_soup
+PASS Cancelling a new meal preserves the prior effect
+PASS New meal replaces prior bonus instead of stacking
+PASS Raw crop cannot impersonate a cooked meal
+PASS Seasoning shop sale: sea_salt
+PASS Seasoning shop sale: olive_oil
+PASS Seasoning shop sale: cream
+KITCHEN_RULES_RESULT PASS checks=77 failures=[]
