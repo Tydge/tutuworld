@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-02",
+  "source_baseline": "v0.3.2",
+  "removed_tracked": [
+    {
+      "path": "docs/策划数值与机制/.核对基线/代码数据快照.json",
+      "bytes": 51279,
+      "sha256": "0281e1701583ff4d923803a3a721c7a19ccfe2604de3e95d5027b1341c9732ec"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/01_全局规则与角色成长.md",
+      "bytes": 6770,
+      "sha256": "607b433678298d5d425c53bc118537cefee1cb1519282792ec1d01cec289c480"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/02_种植与采集机制.md",
+      "bytes": 8905,
+      "sha256": "57fa01beff16fa153e1561227f44fafeb2d3b056a2feeee34544738c29639c28"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/03_烹饪与食物效果.md",
+      "bytes": 4185,
+      "sha256": "8f40f4621543d2e046148c5eb07d081cfafbcc9d288ebb165a9535bef697d451"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/04_物品商店与服装.md",
+      "bytes": 12148,
+      "sha256": "a6031ac8b5f01691b1523f64778842b5a513def2dcab2dae64dc63be5ff8deab"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/05_地图交互与旅行.md",
+      "bytes": 11235,
+      "sha256": "06ef172b8713f0edbfc6da3d2d5fa908b2fa85f5e733dca964cee3d05138cb82"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/06_NPC作息与对话.md",
+      "bytes": 18656,
+      "sha256": "7c97331675a418d5a16e536a7eb3fe4b751f17af87659a949e2f800d98d04b1a"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/07_机制总览与经济成长对比.md",
+      "bytes": 3158,
+      "sha256": "268ab24480e2e735afeeb5903c7f07c06e49a516e9ccaf3ae50d5fb2eaa748df"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/NPC对白.json",
+      "bytes": 16355,
+      "sha256": "2ec7249848590787bd14cf796e28e8ab8cfc2bfe2b6c0f8dce881323e767c444"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/README.md",
+      "bytes": 3952,
+      "sha256": "2fa7f37f5b1ba3d320d55071efb011f732117380bcb64067a45015e54d567fe0"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/代码数据快照.json",
+      "bytes": 70422,
+      "sha256": "3e7d8d17aa6fdbfb0bb1b863838a3273033c723bdeffd2b40d4b21c6feafe206"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/当前已实现/来源文件清单.json",
+      "bytes": 11032,
+      "sha256": "09be6347ef4c463440e63ce6125413942558bfae6f7f68bba517936969e1da75"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/01_全局规则与角色成长.md",
+      "bytes": 12909,
+      "sha256": "c957786dd7c39a141ae3936cc94edbf23f126c97b8122d5f2313aeeb780191d2"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/02_种植与采集机制.md",
+      "bytes": 13692,
+      "sha256": "33035c6d9719daae6f82531ef83e83e41b6c81a056df21d0dfef54321621f5b0"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/03_烹饪与食物效果.md",
+      "bytes": 6665,
+      "sha256": "3f05cf552584250d123cb13019bd2800229a13616fdb056e48200143606e86a3"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/04_物品商店与服装.md",
+      "bytes": 16699,
+      "sha256": "3c855d97b5dc45d0be46c182e24103613ec9d4bbdf23a6f9dcbdb4e8e9d3b11d"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/05_地图交互与旅行.md",
+      "bytes": 13243,
+      "sha256": "5ec7b6adbb0b016a0d9e37c9d40406e5abc509d713338f4977a10d06616d85eb"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/06_NPC作息与对话.md",
+      "bytes": 14252,
+      "sha256": "c4eb1da5c295e80021cd15d30913e1d4f11e62be5d602d6caa62e917504bb7e0"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/07_机制总览与经济成长对比.md",
+      "bytes": 6944,
+      "sha256": "457380efc228cf09ed90aa297de9e76b1991d2f11518e86cc38b91937945acd7"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/文档初稿/README.md",
+      "bytes": 7339,
+      "sha256": "73240ed01e0bdef09de62a9369e18d1d584faa9897da1338ce964da826c1d078"
+    },
+    {
+      "path": "docs/策划数值与机制/.核对基线/来源文件清单.json",
+      "bytes": 4209,
+      "sha256": "41bacca8e2f20d6f6ec4f4e0a443af67afa102f29232d6ef1f9fc2d0a138349a"
+    },
+    {
+      "path": "docs/策划数值与机制/.制作记录/build_docs.py",
+      "bytes": 59222,
+      "sha256": "4003b1dad0728220f7ff9e201f3427a6320b3e9932e844bdb8c9e85e17635b8e"
+    },
+    {
+      "path": "docs/策划数值与机制/.制作记录/collect_baseline.gd",
+      "bytes": 2662,
+      "sha256": "0ba9dfb9bb37b309977eb25d17cb85128daf13641ec84073253246f5ab2aef5b"
+    }
+  ],
+  "preserved_local": [
+    "releases/0.3.2/TutuWorld-Windows.zip",
+    "releases/0.3.2/content-export.log",
+    "releases/0.3.2/windows-export.log",
+    "releases/0.3.2/manifest.json",
+    "releases/0.3.2/city.pck",
+    "releases/0.3.2/macos-export.log",
+    "releases/0.3.2/server.pck",
+    "releases/0.3.2/server-export.log",
+    "releases/0.3.2/TutuWorld-macOS.zip",
+    "build/dependencies/d3d12-sdk-1.618.5.nupkg",
+    "build/dependencies/godot-4.6.3-linux-x86_64.zip",
+    "交付工作区/archives/2026-11-01-多人开发前源码.tar.gz",
+    "交付工作区/archives/2026-11-01-配置表拆分建议.md"
+  ],
+  "removed_qa": {
+    "files": 1134,
+    "bytes": 2489143415,
+    "categories": [
+      "旧版本完整/解包产物",
+      "一次性探针与源代码下载",
+      "旧测试日志/截图",
+      "隔离测试账号与世界",
+      "更新试验项目/缓存"
+    ]
+  },
+  "removed_python_cache_dirs": [
+    "tools/__pycache__",
+    "server/__pycache__",
+    "tests/__pycache__"
+  ]
+}

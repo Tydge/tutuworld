@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-02",
+  "baseline": "v0.3.2",
+  "scope": "文档、旧制作脚本及再生文件整理；运行时、模型、地图、已发布包、生产数据未修改",
+  "doctor": "Godot 4.6.3 literal resource paths passed",
+  "tests": {
+    "project_integrity": {
+      "passed": true,
+      "checks": 265,
+      "log": "project_integrity.log"
+    },
+    "skill_experience_rules": {
+      "passed": true,
+      "checks": 8,
+      "log": "skill_experience_rules.log"
+    },
+    "skills_quality_rules": {
+      "passed": true,
+      "checks": 568,
+      "log": "skills_quality_rules.log"
+    },
+    "npc_dialogue_rules": {
+      "passed": true,
+      "checks": 15071,
+      "log": "npc_dialogue_rules.log"
+    }
+  },
+  "document_audit": {
+    "status": "PASS",
+    "method": "一次性Godot提取当前GameData/NPC/场景挂点，逐字段对比Markdown；另手工核对全局/移动/存档/运维说明",
+    "counts": {
+      "assertions": 937,
+      "active_markdown_files": 19,
+      "items": 61,
+      "clothing": 27,
+      "crops": 5,
+      "resources": 46,
+      "recipes": 7,
+      "npc_lines": 96,
+      "plots": 48
+    },
+    "failures": []
+  },
+  "release_artifacts_preserved": {
+    "city.pck": {
+      "bytes": 54805692,
+      "sha256": "a46cb3197190a0cfdef4939fa9dff3872d7eeb72d5140a5178dd20e30785c2cd"
+    },
+    "server.pck": {
+      "bytes": 54929164,
+      "sha256": "e08420e0ccdc09fdd1211ecf5d665b53d238fd48617be59fa49f7df5c6f3ebf5"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 107317853,
+      "sha256": "933414e9ce3e24dc5f5a033e67533352467b0b610a63681d525084419cb4b3e8"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 82246628,
+      "sha256": "c75302dd2ec8bd488b62167c9fc861329b790451da0efda54c4a41c437d55203"
+    }
+  },
+  "terrain_asset_sha256_verified": true,
+  "server_read_only_check": {
+    "version": "0.3.2",
+    "build": 5,
+    "world_service": "active",
+    "auth_service": "active",
+    "backup_timer": "active",
+    "staging_services": "inactive",
+    "epoch": 1793584800.0,
+    "clock_alignment_version": 1,
+    "game_and_auth_loopback_only": true
+  },
+  "limitations": [
+    "没有重跑整套图形、联机和性能测试",
+    "未做Windows实机验证",
+    "未打包或部署"
+  ]
+}

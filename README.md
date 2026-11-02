@@ -1,14 +1,20 @@
 # 兔兔的世界
 
-Godot 4.6.3 的 3D 生活模拟游戏。当前可玩内容包括海岛城、眠风山谷、三种可创建角色、种植/采集/烹饪、三槽换装、技能经验、昼夜 NPC 与可进入建筑。版本0.3.2已开放长期运行的多人公共世界；账号注册登录，个人进度独立，菜地、资源和NPC全服共享。单人进度继续保留。
+Godot 4.6.3 的3D生活模拟游戏：海岛城与眠风山谷，三种角色，种植、采集、烹饪、换装和昼夜NPC。当前正式版 **0.3.2** 支持单人及长期运行的多人公共世界。
 
-**开发者先读：[开发接手指南](docs/开发接手指南.md)。** 当前规则、架构、存档、角色扩展、生成方式、测试、发布边界与已知问题以该文档为准。
+[Windows x64下载](https://47.119.37.251/tutuworld/releases/0.3.2/TutuWorld-Windows.zip) · [Mac通用版下载](https://47.119.37.251/tutuworld/releases/0.3.2/TutuWorld-macOS.zip)。解压后运行，新安装默认全屏、60 FPS上限、均衡画质；Mac包为临时签名，尚未公证。
 
-0.3.2下载：[Windows x64](https://47.119.37.251/tutuworld/releases/0.3.2/TutuWorld-Windows.zip) · [Mac通用版](https://47.119.37.251/tutuworld/releases/0.3.2/TutuWorld-macOS.zip)。解压后运行；Mac包尚未公证。新安装默认全屏、60 FPS上限、均衡画质。
+## 开发入口
 
-## 运行
+| 资料 | 用途 |
+| --- | --- |
+| [开发接手指南](docs/开发接手指南.md) | 架构、存档、改动边界、验证方法与已知限制 |
+| [策划数值与机制](docs/策划数值与机制/README.md) | 7份可直接编辑的MD；修改后交开发核对实现 |
+| [服务器运维](docs/服务器运维.md) | 服务、数据、备份与分阶段发布 |
+| [验证基线](docs/验证基线.md) | 当前覆盖、历史证据与未验证范围 |
+| [整理清单](docs/整理清单.md) | 文件清理与恢复方式 |
 
-用 Godot 打开本目录 `project.godot`，F5，从标题选择或创建角色。无需安装额外建模插件或下载在线美术资源。桌面 Forward+，macOS 使用 Metal；Python 3.9+ 仅用于开发工具。
+用Godot打开`project.godot`，完成首次导入后F5；无需额外建模插件。Python 3.9+仅用于开发工具，在项目根目录运行：
 
 ```sh
 python3 tools/dev.py doctor
@@ -16,27 +22,12 @@ python3 tools/dev.py test --suite smoke
 python3 tools/dev.py run
 ```
 
-找不到引擎时用 `GODOT_BIN` 环境变量，或 `python3 tools/dev.py --godot /path/to/Godot doctor`。
+引擎可通过`GODOT_BIN`环境变量或`python3 tools/dev.py --godot /path/to/Godot doctor`指定。测试产物写`.qa-artifacts/`，玩家存档、密钥和构建产物不提交Git。
 
 ## 操作
 
-- WASD / 方向键移动；Shift 切换走跑；空格跳跃。
-- 右键拖动视角，滚轮缩放。
-- E 互动；F 快捷照料当前圆球标记选中的作物；多人按回车发送文字/emoji气泡。
-- C 角色，I/B 背包，Tab 换装，M 地图，Esc 返回/取消/设置。
-- R 发呆；F2 取景；F12 保存照片。
+- WASD／方向键移动，Shift切换走跑，空格跳跃；右键拖动视角，滚轮缩放。
+- E互动，F快捷照料选中的作物；多人回车打开聊天，再回车发送文字/emoji气泡，Esc取消。
+- C角色，I／B背包，Tab换装，M地图，Esc返回/取消/设置；R发呆，F2取景，F12拍照。
 
-城镇南岸坐船花 10 贝壳币前往山谷，返程免费。单人设置可调整当天时间以测试日夜。基本工作为 2 现实秒，二级采集 5 秒，烹饪基础 5～14 秒；世界一天为现实一小时。五项技能上限Lv.100，每级+1%对应工作速度；有等级门槛、作物品质和采集暴击。可种植5种作物（含小麦）、烹饪7道料理，背包可直接吃橘子恢复耐力。
-
-## 开发和资料
-
-- [开发接手指南](docs/开发接手指南.md)：项目事实与开发入口。
-- [策划数值与机制文档](docs/策划数值与机制/README.md)：6份可编辑MD正文、26项机制资料与4类参考总览；文档修改后由开发核对实现。
-- [多人模式设计](docs/多人模式设计草案.md)：已实现的公共世界、日历、占用、聊天与照料记录规则。
-- [验证基线](docs/验证基线.md)：已验证范围、环境与限制。
-- [整理清单](docs/整理清单.md)：本次清理、保留理由与恢复方式。
-- [草坪素材记录](assets/terrain/ASSET_NOTES.md)：AI 纹理来源与接入。
-
-测试证据默认写 `.qa-artifacts/`，无需原开发机的绝对路径。图形测试顺序运行；通常限 45 FPS，性能测试单独使用预热和基准参数。地图生成使用有图形窗口的 GL 模式，不使用 headless 保存 MultiMesh。已确认的动物基础模型不随地图生成重建。
-
-玩家存档位于 Godot 的 `user://island_city_v2.json`，外壳已为 schema 3。不要清理真实存档、私钥或更新文件来进行普通回归。发布脚本会真实上传，只有明确安排发布时才运行。
+源码与备份仓库：[Tydge/tutuworld](https://github.com/Tydge/tutuworld)。美术素材来源见[草坪记录](assets/terrain/ASSET_NOTES.md)。
