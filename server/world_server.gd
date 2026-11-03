@@ -91,12 +91,10 @@ func character_record(id: String) -> Dictionary:
 func save_world() -> bool:
 	for id in actors:records[id]=character_record(id)
 	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources},"characters":records,"care_history":care_history,"doors":doors}
-	var file:=FileAccess.open(save_path+".tmp",FileAccess.WRITE)
-	if file==null:return false
-	file.store_string(JSON.stringify(data,"",false,true));file.flush();file.close()
-	if FileAccess.file_exists(save_path):
-		if DirAccess.copy_absolute(save_path,save_path+".bak")!=OK:return false
-	return DirAccess.rename_absolute(save_path+".tmp",save_path)==OK
+	var old: Variant=JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
+	var backup_valid: bool=old is Dictionary and old.get("schema",0)==1 and old.get("world") is Dictionary
+	return preload("res://scripts/services/atomic_file.gd").write(save_path,JSON.stringify(data,"",false,true),backup_valid)
+
 func _process(delta: float) -> void:
 	if not ready_for_players:return
 	metrics_timer+=delta;metrics_elapsed+=delta;metrics_frames+=1;metrics_max_frame=maxf(metrics_max_frame,delta*1000)
@@ -342,7 +340,7 @@ func restore_runtime(id: String,backup: Dictionary) -> void:
 	pawn.stand_up(backup.position);pawn.work_align_active=false
 	var pose: Dictionary=a.state.get("net_pose",{})
 	if pose.get("kind","")=="sleep":pawn.lie_in_bed(host.home.get_node("Furnishing/bed"));host.home.bed_occupant=pawn
-	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(host.targets[pose.target].node.get_node("SeatAnchor").global_transform);pawn.play_action("nap",INF)
+	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(host.targets[pose.target].node,int(pose.get("slot",0))));pawn.play_action("nap",INF)
 	elif pose.get("kind","") in ["eat","waiting_exit"]:pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
 	elif not a.job.is_empty():begin_job_pose(id)
 	pawn.position=backup.position;pawn.reset_network_motion()
@@ -371,7 +369,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		var object_: Dictionary=host.targets[target]
 		if pawn.position.distance_to(object_.position)>4:return fail("再靠近一点吧。")
 		var reason:=lock_reason(map_id,target,id)
-		if reason!="":return fail(reason)
+		if reason!="" and verb=="talk":return fail(reason)
 		if verb=="talk":
 			if object_.kind!="npc" or not object_.node.get_meta("interaction_available",true) or object_.node.sleeping:return fail("现在先别打扰它吧。")
 			occupy(map_id,target,id,"talk");host.talking_npc=target;host.bunny=pawn
@@ -379,10 +377,14 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		else:
 			if object_.kind!="bench":return fail("这里不是座位。")
 			var seat: Node3D=object_.node
-			if not body_clear(map_id,seat.get_node("SeatAnchor").global_position,id):return fail("座位旁有人，稍等一下吧。")
-			pawn.sit_on_surface(seat.get_node("SeatAnchor").global_transform);pawn.play_action("nap",INF)
-			a.state.net_pose={"kind":"sit","target":target,"exit":vector_array(seat.get_node("ExitAnchor").global_position)}
-			occupy(map_id,target,id,"sit");pawn.reset_network_motion()
+			var seating=preload("res://scripts/city/seating.gd");var slot:=-1
+			for index in range(seating.capacity(seat)):
+				if lock_reason(map_id,seating.lock_target(target,index),id)!="":continue
+				if seat_clear(map_id,seating.seat(seat,index).origin,id,target):slot=index;break
+			if slot<0:return fail("座位已坐满，或旁边有人，稍等一下吧。")
+			pawn.sit_on_surface(seating.seat(seat,slot));pawn.play_action("nap",INF)
+			a.state.net_pose={"kind":"sit","target":target,"slot":slot,"exit":vector_array(seating.exit_position(seat,slot))}
+			occupy(map_id,seating.lock_target(target,slot),id,"sit");pawn.reset_network_motion()
 		return {"ok":true,"message":""}
 	if verb=="cancel":
 		var result: Dictionary=a.execute(command_for(id,request,verb,args))
@@ -509,6 +511,15 @@ func refresh_occupancy() -> void:
 			var target: Dictionary=maps[row.map].targets.get(row.target,{})
 			if target.is_empty() or pawns[id].position.distance_to(target.position)>4 or not target.node.get_meta("interaction_available",true):
 				release_all(id);actors[id].state.net_pose={}
+func seat_clear(map_id: String,point: Vector3,ignore: String,target: String) -> bool:
+	for id in pawns:
+		if id==ignore or actors[id].state.map_id!=map_id:continue
+		var other: Vector3=pawns[id].position;var pose: Dictionary=actors[id].state.get("net_pose",{})
+		var radius: float=pawns[ignore].rig_profile.head_radii.x+pawns[id].rig_profile.head_radii.x+.06 if pose.get("kind","")=="sit" and pose.get("target","")==target else 1.85
+		if absf(other.y-point.y)<2.6 and Vector2(other.x-point.x,other.z-point.z).length()<radius:return false
+	for npc in maps[map_id].npcs:
+		if npc.visible and not npc.sleeping and absf(npc.position.y-point.y)<2.6 and Vector2(npc.position.x-point.x,npc.position.z-point.z).length()<1.85:return false
+	return true
 func body_clear(map_id: String,point: Vector3,ignore: String) -> bool:
 	for id in pawns:
 		if id==ignore or actors[id].state.map_id!=map_id:continue

@@ -22,6 +22,7 @@ static func setup(host: Node3D) -> void:
 		for plot in DB.plots():host.targets[plot.id]={"kind":"plot","position":Vector3(plot.x,0,plot.z)}
 	for id in ["home_sofa","home_desk"]:
 		var seat: Node3D=host.home.seat_node(id)
+		preload("res://scripts/city/seating.gd").ensure(seat,2 if id=="home_sofa" else 1)
 		host.targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"node":seat}
 	preload("res://scripts/city/production_facilities.gd").register(host)
 	preload("res://scripts/city/interaction_targets.gd").add_benches(host)

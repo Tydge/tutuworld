@@ -18,7 +18,14 @@
       "building_exit_flow",
       "pattern_colors_rules",
       "pattern_colors_flow",
-      "npc_edge_flow"
+      "npc_edge_flow",
+      "save_transactions",
+      "building_expansion_rules",
+      "building_expansion_flow",
+      "double_seat_rules",
+      "firelight_rules",
+      "building_surface_flow",
+      "thumbnail_lifecycle"
     ],
     "smoke": [
       "project_integrity",
@@ -202,6 +209,24 @@
       "headless": true
     },
     "pattern_colors_rules": {
+      "headless": true
+    },
+    "save_transactions": {
+      "headless": true
+    },
+    "building_expansion_rules": {
+      "headless": true
+    },
+    "double_seat_rules": {
+      "headless": true
+    },
+    "firelight_rules": {
+      "headless": true
+    },
+    "double_seat_network": {
+      "headless": true
+    },
+    "thumbnail_lifecycle": {
       "headless": true
     }
   }

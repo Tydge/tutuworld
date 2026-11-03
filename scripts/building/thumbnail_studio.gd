@@ -1,6 +1,8 @@
 extends Node
 ## One offscreen studio renders real catalog models into cached static thumbnails.
 signal thumbnail_ready(id: String,texture: Texture2D)
+signal draw_ready
+var exiting:=false
 const Catalog=preload("res://scripts/building/catalog.gd")
 const Factory=preload("res://scripts/building/module_factory.gd")
 var cache: Dictionary={}
@@ -13,6 +15,7 @@ var viewport: SubViewport
 var stage: Node3D
 var camera: Camera3D
 func _ready() -> void:
+	RenderingServer.frame_post_draw.connect(on_draw_completed)
 	viewport=SubViewport.new();viewport.name="ThumbnailViewport";viewport.size=Vector2i(144,112);viewport.own_world_3d=true;viewport.transparent_bg=true;viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED;viewport.msaa_3d=Viewport.MSAA_2X;add_child(viewport)
 	stage=Node3D.new();stage.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;viewport.add_child(stage)
 	var environment:=WorldEnvironment.new();var env:=Environment.new();env.background_mode=Environment.BG_COLOR;env.background_color=Color(0,0,0,0);env.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR;env.ambient_light_color=Color("fff1da");env.ambient_light_energy=.8;env.tonemap_mode=Environment.TONE_MAPPER_FILMIC;environment.environment=env;viewport.add_child(environment)
@@ -38,6 +41,9 @@ func render_next() -> void:
 	busy=true
 	var key: String=pending.pop_front();active_key=key;var variant: Dictionary=variants.get(key,{});var id: String=variant.get("kind",key);var model:=Node3D.new();stage.add_child(model)
 	var builder:=Factory.builder(model)
+	var form:="classic"
+	if id.contains(":"):
+		var parts:=id.split(":");id=parts[0];form=parts[1]
 	if id=="template":
 		var source:=preload("res://scripts/building/templates.gd").cottage();builder.blueprint.size=[12.,10.];builder.build_floor(model);builder.build_roof(model);var walls: Array=[]
 		for row in source.elements:
@@ -51,10 +57,10 @@ func render_next() -> void:
 		match id:
 			"wall","door","window":
 				var openings: Array=[]
-				if id!="wall":openings=[{"id":"preview","type":id,"offset":2.5,"width":2.86 if id=="door" else 2.2,"height":3.5 if id=="door" else 2.,"bottom":0. if id=="door" else 1.1}]
+				if id!="wall":openings=[{"id":"preview","type":id,"offset":2.5,"width":2.86 if id=="door" else 2.2,"height":3.5 if id=="door" else 2.,"bottom":0. if id=="door" else 1.1,"form":form}]
 				var data:={"id":"wall","a":[-2.5,0],"b":[2.5,0],"openings":openings};builder.blueprint.walls=[data];builder.build_wall(model,data)
 				if id=="door":model.set_script(preload("res://scripts/building/room_door.gd"));builder.build_door(model)
-			"roof":builder.blueprint.size=[4.,3.];builder.build_roof(model)
+			"roof":builder.roof_form=form;builder.blueprint.size=[4.,3.];builder.build_roof(model)
 			_:builder.blueprint.size=[4.,3.];builder.build_floor(model)
 	if not variant.is_empty():Factory.paint(model,variant)
 	var bounds:=AABB();var found:=false
@@ -68,9 +74,8 @@ func render_next() -> void:
 	viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
 	var img: Image
 	for attempt in range(4):
-		await get_tree().process_frame
-		await RenderingServer.frame_post_draw
-		if not is_inside_tree():return
+		await draw_ready
+		if exiting or not is_inside_tree():return
 		if attempt==0:continue
 		img=viewport.get_texture().get_image()
 		if valid_image(img):break
@@ -90,3 +95,11 @@ func valid_image(img: Image) -> bool:
 	if img==null or img.is_empty():return false
 	var used:=img.get_used_rect()
 	return used.size.x>2 and used.size.y>2 and used.get_area()>=64
+
+func on_draw_completed() -> void:draw_ready.emit()
+func _exit_tree() -> void:
+	exiting=true;pending.clear()
+	if RenderingServer.frame_post_draw.is_connected(on_draw_completed):RenderingServer.frame_post_draw.disconnect(on_draw_completed)
+	# Resolve the owned wait while the studio/model still exist. Waiting directly
+	# on RenderingServer kept coroutine resources alive after a map was removed.
+	draw_ready.emit()

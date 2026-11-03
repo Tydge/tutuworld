@@ -28,6 +28,11 @@ func run() -> void:
 	Store.write(s.save_path,"stale-generation",str(disk.world.get("world_id","local")),L.empty());Store.replay(s.save_path,disk,str(disk.building_generation));check(disk.world.build_layout==saved_layout,"A journal from a different full-save generation cannot overwrite the layout")
 	Store.write(s.save_path,str(disk.building_generation),"foreign-world",L.empty());Store.replay(s.save_path,disk,str(disk.building_generation));check(disk.world.build_layout==saved_layout,"A foreign world's checkpoint cannot overwrite the player's layout")
 	Store.consolidate(s.save_path)
+	var legacy: Dictionary=s.state().build_layout.duplicate(true);legacy.erase("lighting_version");legacy.erase("legacy_fireplaces");legacy.erase("legacy_light_limit")
+	var old_record:={"schema":1,"base":str(disk.building_generation),"world_id":str(disk.world.get("world_id","local")),"layout":legacy,"sha256":JSON.stringify(legacy).sha256_text()}
+	var legacy_file:=FileAccess.open(s.save_path+".building",FileAccess.WRITE);legacy_file.store_string(JSON.stringify(old_record));legacy_file.close();disk.world.build_layout=L.empty();Store.replay(s.save_path,disk,str(disk.building_generation))
+	check(disk.world.build_layout==s.state().build_layout,"A pre-lighting schema1 checkpoint still verifies and recovers its complete layout")
+	Store.consolidate(s.save_path)
 
 	var previous: Dictionary=s.state().build_layout.duplicate(true);var revision: int=s.authority.revision;s.save_path=folder+"/missing/save.json"
 	check(not s.set_build_layout(L.empty()).ok and s.state().build_layout==previous and s.authority.revision==revision,"A journal write failure rolls back layout and revision")

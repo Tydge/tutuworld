@@ -1,0 +1,11 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Mining level three applies three percent speed
+PASS New character has independent skill XP
+PASS Switching preserves new skill progress
+PASS Disk save preserves exact new XP
+PASS Per-character migration version persisted
+PASS Old curve resets five skills to one and zero XP
+PASS Reset preserves other character progress
+PASS Missing old skill fields also starts at one
+SKILL_EXPERIENCE_RULES_RESULT PASS checks=8 failures=[]

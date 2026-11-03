@@ -113,17 +113,17 @@ func dispatch(verb: String,args: Dictionary={}) -> Dictionary:
 	sequence+=1
 	var command:=args.duplicate(true)
 	command.merge({"id":"%s:%d:%d"%[state().player_id,Time.get_ticks_usec(),sequence],"player_id":state().player_id,"protocol":protocol_version,"verb":verb},true)
-	var travel_backup: Dictionary={}
-	if verb=="travel": travel_backup={"state":snapshot(),"world":world.duplicate(true),"characters":characters.duplicate(true),"revision":authority.revision}
+	var persist: bool=verb not in ["cancel","plant","water","weed","harvest","gather"]
+	var backup: Dictionary={}
+	if persist:backup={"state":snapshot(),"world":world.duplicate(true),"characters":characters.duplicate(true),"revision":authority.revision,"job":job().duplicate(true),"seen":authority.seen_commands.duplicate(true),"random":authority.reward_random.state,"sleeping":authority.sleeping,"running":authority.running}
 	var result: Dictionary=authority.execute(command) if transport_mode=="local_authority" else {"ok":false,"message":"多人世界暂未开放。"}
-	if result.ok and verb=="travel" and not save_game():
-		authority.state=travel_backup.state;authority.revision=travel_backup.revision
-		authority.seen_commands.erase(command.id);world=travel_backup.world;characters=travel_backup.characters
-		result=authority.fail("旅程还没有保存成功，请稍后再试。")
+	if result.ok and persist and not save_game():
+		authority.state=backup.state;authority.revision=backup.revision;authority.job=backup.job;authority.seen_commands=backup.seen;authority.reward_random.state=backup.random;authority.sleeping=backup.sleeping;authority.running=backup.running
+		world=backup.world;characters=backup.characters
+		result=authority.fail("旅程还没有保存成功，请稍后再试。" if verb=="travel" else "进度未能保存，本次操作没有生效，请稍后重试。")
 	if result.ok:
 		changed.emit()
 		if verb=="equip": equipment_changed.emit()
-		if verb not in ["cancel","plant","water","weed","harvest","gather","travel"]: save_game()
 	event_received.emit({"type":"notice","message":result.message,"ok":result.ok})
 	return result
 func set_player_position(position: Vector3) -> void:
@@ -263,16 +263,12 @@ func save_game() -> bool:
 	if test_mode: return true
 	var next_generation:=Crypto.new().generate_random_bytes(8).hex_encode()
 	var data:={"schema":3,"building_generation":next_generation,"saved_at":Time.get_unix_time_from_system(),"world":world,"characters":characters,"active_character":active_character_id,"settings":settings}
-	var temp:=save_path+".tmp"
-	var file:=FileAccess.open(temp,FileAccess.WRITE)
-	if file==null: return false
-	file.store_string(JSON.stringify(data))
-	file.close()
+	var writer=preload("res://scripts/services/atomic_file.gd")
 	if legacy_source!="" and FileAccess.file_exists(legacy_source) and not FileAccess.file_exists(save_path+".v2.bak"):
-		if DirAccess.copy_absolute(legacy_source,save_path+".v2.bak")!=OK: return false
-	if FileAccess.file_exists(save_path):
-		if DirAccess.copy_absolute(save_path,save_path+".bak")!=OK: return false
-	var saved:=DirAccess.rename_absolute(temp,save_path)==OK
+		if not writer.copy_verified(legacy_source,save_path+".v2.bak"):return false
+	# A corrupt primary recovered from .bak must never replace that healthy backup.
+	var backup_valid:=FileAccess.file_exists(save_path) and valid_save(JSON.parse_string(FileAccess.get_file_as_string(save_path)))
+	var saved: bool=writer.write(save_path,JSON.stringify(data),backup_valid)
 	if saved:
 		legacy_source="";building_generation=next_generation;preload("res://scripts/building/layout_store.gd").consolidate(save_path)
 	return saved
@@ -282,11 +278,11 @@ func set_build_layout(candidate: Dictionary) -> Dictionary:
 	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate)
 	if not checked.ok:return checked
 	if state().build_layout==checked.layout:return checked
-	var previous: Dictionary=state().build_layout;var revision_before: int=authority.revision
+	var previous: Dictionary=state().build_layout;var revision_before: int=authority.revision;var state_revision_before: int=int(state().revision)
 	state()["build_layout"]=checked.layout
-	authority.revision+=1
+	authority.revision+=1;state().revision=authority.revision
 	if not test_mode and not preload("res://scripts/building/layout_store.gd").write(save_path,building_generation,str(state().get("world_id","local")),checked.layout):
-		state().build_layout=previous;authority.revision=revision_before
+		state().build_layout=previous;authority.revision=revision_before;state().revision=state_revision_before
 		return {"ok":false,"message":"布局保存失败，已保留修改前的房间。"}
 	changed.emit()
 	return checked
@@ -377,8 +373,12 @@ func restore_state(raw: Dictionary):
 			s.skills[key]=Stats.skill_progress(s.skill_experience[key]).level
 	s.stamina_run_elapsed=clampf(float(raw.get("stamina_run_elapsed",0)),0,2.999999)
 	s.stamina_recovery_elapsed=clampf(float(raw.get("stamina_recovery_elapsed",0)),0,29.999999)
-	s.rest_mode="sleep" if raw.get("rest_mode","")=="sleep" and raw.get("rest_bed","")=="home_bed" else ""
-	s.rest_bed="home_bed" if s.rest_mode=="sleep" else ""
+	var bed_id:=str(raw.get("rest_bed",""));var bed_valid:=bed_id=="home_bed"
+	if bed_id.begins_with("build:") and s.map_id=="city":
+		var bed:=preload("res://scripts/building/layout.gd").find(s.build_layout,bed_id.trim_prefix("build:"))
+		bed_valid=bed.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[bed.kind].get("bed",false)
+	s.rest_mode="sleep" if raw.get("rest_mode","")=="sleep" and bed_valid else ""
+	s.rest_bed=bed_id if s.rest_mode=="sleep" else ""
 	restored.sleeping=s.rest_mode=="sleep"
 	s.food_effect={}
 	var food_effect: Dictionary=raw.get("food_effect",{})

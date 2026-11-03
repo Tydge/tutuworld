@@ -722,6 +722,7 @@ func build_settings() -> void:
 	volume.value=session.settings.volume
 	volume.value_changed.connect(func(v): session.set_setting("volume",v))
 	options.add_child(volume)
+	preload("res://scripts/ui/audio_credits.gd").add_to(options)
 	var full:=CheckButton.new()
 	full.text="全屏显示"
 	full.button_pressed=session.settings.fullscreen

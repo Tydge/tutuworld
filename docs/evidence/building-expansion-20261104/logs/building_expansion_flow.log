@@ -1,0 +1,71 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 01:51:20.051 Godot[71853:98872219] not in fullscreen state
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Room-wide matching paint is enabled by default
+PASS The complete building visibility switch names both walls and roof
+PASS A structural parent opens exactly three form cards: door
+PASS Visible form card chooses the real placement model: door/classic
+PASS Visible form card chooses the real placement model: door/arch
+PASS Visible form card chooses the real placement model: door/glass
+PASS A structural parent opens exactly three form cards: window
+PASS Visible form card chooses the real placement model: window/classic
+PASS Visible form card chooses the real placement model: window/arch
+PASS Visible form card chooses the real placement model: window/round
+PASS A structural parent opens exactly three form cards: roof
+PASS Visible form card chooses the real placement model: roof/classic
+PASS Visible form card chooses the real placement model: roof/hip
+PASS Visible form card chooses the real placement model: roof/shed
+PASS All new models and all nine structural forms coexist in one valid layout
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Complete view keeps every wall face visible
+PASS Every bed registers its own sleeping target: bed
+PASS Normal interaction lies in the chosen actual bed: bed
+PASS Waking finds real floor outside bed collision: bed
+PASS Every bed registers its own sleeping target: canopy_bed
+PASS Normal interaction lies in the chosen actual bed: canopy_bed
+PASS Waking finds real floor outside bed collision: canopy_bed
+PASS Every bed registers its own sleeping target: cloud_bed
+PASS Normal interaction lies in the chosen actual bed: cloud_bed
+PASS Waking finds real floor outside bed collision: cloud_bed
+PASS Every buildable chair exposes its declared physical seating: sofa
+PASS Every buildable chair exposes its declared physical seating: forest_settee
+PASS Every buildable chair exposes its declared physical seating: chair
+PASS Every buildable chair exposes its declared physical seating: petal_armchair
+PASS A real nonempty thumbnail is available: tea_service
+PASS A real nonempty thumbnail is available: field_journal
+PASS A real nonempty thumbnail is available: pressed_leaves
+PASS A real nonempty thumbnail is available: ceramic_vases
+PASS A real nonempty thumbnail is available: woven_basket
+PASS A real nonempty thumbnail is available: moon_mobile
+PASS A real nonempty thumbnail is available: petal_armchair
+PASS A real nonempty thumbnail is available: floor_lamp
+PASS A real nonempty thumbnail is available: lotus_pendant
+PASS A real nonempty thumbnail is available: canopy_bed
+PASS A real nonempty thumbnail is available: cloud_bed
+PASS A real nonempty thumbnail is available: rose_arch
+PASS A real nonempty thumbnail is available: lily_pond
+PASS A real nonempty thumbnail is available: door:classic
+PASS A real nonempty thumbnail is available: door:arch
+PASS A real nonempty thumbnail is available: door:glass
+PASS A real nonempty thumbnail is available: window:classic
+PASS A real nonempty thumbnail is available: window:arch
+PASS A real nonempty thumbnail is available: window:round
+PASS A real nonempty thumbnail is available: roof:classic
+PASS A real nonempty thumbnail is available: roof:hip
+PASS A real nonempty thumbnail is available: roof:shed
+BUILDING_EXPANSION_FLOW_RESULT PASS checks=62 failures=[]

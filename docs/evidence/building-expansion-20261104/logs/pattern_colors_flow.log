@@ -1,0 +1,33 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 01:40:45.831 Godot[71351:98861048] not in fullscreen state
+RENDER_BUDGET output=(1600, 1000) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS The original wooden frame shows only its meaningful color channel
+PASS The original bed quilt exposes its actual existing accent color
+PASS Every existing and new SVG/AI fabric exposes both colors: tartan
+PASS Dual-color live preview neither saves nor applies a selection overlay: tartan
+PASS Apply stores both colors and updates the actual model: tartan
+PASS Every existing and new SVG/AI fabric exposes both colors: sprig
+PASS Dual-color live preview neither saves nor applies a selection overlay: sprig
+PASS Apply stores both colors and updates the actual model: sprig
+PASS Every existing and new SVG/AI fabric exposes both colors: stripes
+PASS Dual-color live preview neither saves nor applies a selection overlay: stripes
+PASS Apply stores both colors and updates the actual model: stripes
+PASS Every existing and new SVG/AI fabric exposes both colors: dots
+PASS Dual-color live preview neither saves nor applies a selection overlay: dots
+PASS Apply stores both colors and updates the actual model: dots
+PASS Every existing and new SVG/AI fabric exposes both colors: daisies
+PASS Dual-color live preview neither saves nor applies a selection overlay: daisies
+PASS Apply stores both colors and updates the actual model: daisies
+PASS Closing cancels an unsaved secondary color preview
+PASS Resetting a part removes its secondary color override
+PASS Undo restores both pattern color channels
+PASS Switching to solid hides the unused pattern color
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+PASS The two-color panel fits a 720px-high window
+PASS A real isolated save reloads the full independent color appearance
+PATTERN_COLORS_FLOW_RESULT PASS checks=23 failures=[]

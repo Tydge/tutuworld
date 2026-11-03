@@ -15,7 +15,7 @@ func click(pos: Vector2) -> void:
 	await physics_frame
 func button(id: String) -> void:
 	var control: Control=editor.ui.root_ui.find_child(id,true,false)
-	check(control!=null,"Visible editor control exists: "+id)
+	check(control!=null and control.is_visible_in_tree(),"Visible editor control exists: "+id)
 	if control!=null:await click(root.get_final_transform()*(control.get_global_transform_with_canvas()*(control.size*.5)))
 func world(point_: Vector3) -> void:await click(root.get_final_transform()*city.camera.unproject_position(point_))
 func run() -> void:
@@ -34,11 +34,11 @@ func run() -> void:
 	for segment in [[Vector3(73,.18,15),Vector3(85,.18,15)],[Vector3(85,.18,5),Vector3(73,.18,5)],[Vector3(73,.18,5),Vector3(73,.18,15)],[Vector3(85,.18,15),Vector3(85,.18,5)]]:
 		await world(segment[0]);await world(segment[1])
 	check(editor.layout.elements.size()==5,"Mouse tool creates all four walls from scratch")
-	await button("Tool_door");await world(Vector3(79,1.6,15))
+	await button("Tool_door");await button("Tool_door_classic");await world(Vector3(79,1.6,15))
 	check(editor.layout.elements.any(func(row):return row.type=="door"),"Mouse attaches a door to a real wall")
-	await button("Tool_window");await world(Vector3(81,2,5))
+	await button("BackToStructures");await button("Tool_window");await button("Tool_window_classic");await world(Vector3(81,2,5))
 	check(editor.layout.elements.any(func(row):return row.type=="window"),"Mouse attaches a window with a real wall opening")
-	await button("Tool_roof");await world(Vector3(73,.18,5));await world(Vector3(85,.18,15))
+	await button("BackToStructures");await button("Tool_roof");await button("Tool_roof_classic");await world(Vector3(73,.18,5));await world(Vector3(85,.18,15))
 	check(editor.layout.elements.any(func(row):return row.type=="roof"),"Mouse tool creates a supported gabled roof")
 	await button("Category_床");await button("Tool_object_bed");await world(Vector3(82,.18,8))
 	check(editor.layout.elements.any(func(row):return row.get("kind","")=="bed"),"Furniture can be placed through the visible palette and world click")

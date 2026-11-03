@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+PASS Mainland grass is registered as real walkable ground, including the cat teacher spawn
+PASS The logical connector excludes the unsupported strip beyond its real collision surface
+PASS Bridge/land corner nodes with unsupported feet are excluded from navigation
+PASS Real-time steering cannot walk a supported actor outward over the corner
+PASS An actor displaced to the edge can retreat toward safe land naturally
+PASS The connector retains a continuous path with real floor support at every node
+EDGE_STEERING bunny minimum_y=-0.02986084669828 position=(52.16432, 0.048, 15.0) stayed_on_land=true
+PASS Unsafe corner steering is corrected without falling or teleporting: bunny
+PASS The real NPC driver walks from the town across the connector onto land: bunny
+PASS The real NPC driver walks back around the same corner without dropping: bunny
+EDGE_WALK bunny outward={ "arrived": true, "min_y": -0.02906481362879, "position": (64.3592, -0.029, 20.09728) } return={ "arrived": true, "min_y": -0.0290000513196, "position": (54.63027, 0.048, 12.98933) }
+EDGE_STEERING cat_teacher minimum_y=-0.02986084669828 position=(53.15348, 0.048, 15.00002) stayed_on_land=true
+PASS Unsafe corner steering is corrected without falling or teleporting: cat_teacher
+PASS The real NPC driver walks from the town across the connector onto land: cat_teacher
+PASS The real NPC driver walks back around the same corner without dropping: cat_teacher
+EDGE_WALK cat_teacher outward={ "arrived": true, "min_y": -0.02979129552841, "position": (64.38761, -0.029, 20.06122) } return={ "arrived": true, "min_y": -0.02900008298457, "position": (54.63638, 0.048, 12.99) }
+EDGE_STEERING panda minimum_y=-0.02986084669828 position=(52.623, 0.048, 15.00001) stayed_on_land=true
+PASS Unsafe corner steering is corrected without falling or teleporting: panda
+PASS The real NPC driver walks from the town across the connector onto land: panda
+PASS The real NPC driver walks back around the same corner without dropping: panda
+EDGE_WALK panda outward={ "arrived": true, "min_y": -0.02931742370129, "position": (64.39025, -0.029, 20.06388) } return={ "arrived": true, "min_y": -0.02899988926947, "position": (54.63683, 0.048, 12.99005) }
+NPC_EDGE_FLOW_RESULT PASS checks=15 failures=[]

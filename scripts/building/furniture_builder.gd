@@ -3,6 +3,11 @@ extends "res://scripts/city/home_builder.gd"
 func discard(node: Node) -> void:
 	node.get_parent().remove_child(node);node.free()
 func build_item(n: Node3D,kind: String) -> void:
+	if kind in ["tea_service", "field_journal", "pressed_leaves", "ceramic_vases", "woven_basket", "moon_mobile", "petal_armchair", "floor_lamp", "lotus_pendant", "canopy_bed", "cloud_bed", "rose_arch", "lily_pond"]:
+		preload("res://scripts/building/new_furniture.gd").build(self,n,kind)
+		preload("res://scripts/building/appearance.gd").prepare(n,kind,self)
+		preload("res://scripts/city/seating.gd").ensure(n,int(preload("res://scripts/building/catalog.gd").OBJECTS[kind].get("seats",1)))
+		return
 	match kind:
 		"bed":
 			build_bed(n);discard(n.get_node("Bedside"))
@@ -16,6 +21,7 @@ func build_item(n: Node3D,kind: String) -> void:
 				if child is MeshInstance3D and child.position.y>.735:discard(child)
 		"hearth":
 			build_hearth(n)
+			var fire:=SpotLight3D.new();fire.name="FixtureFireLight";fire.position=Vector3(0,.92,.48);fire.rotation=Vector3(-.20,PI,0);fire.light_color=Color("ffb866");fire.light_energy=2.5;fire.spot_range=5.;fire.spot_angle=72.;fire.spot_attenuation=1.0;fire.shadow_enabled=false;fire.distance_fade_enabled=true;fire.distance_fade_begin=22.;fire.distance_fade_length=16.;n.add_child(fire);preload("res://scripts/city/fire_flicker.gd").attach(fire)
 			for child in n.get_children():
 				if str(child.name)=="CeramicPlant" or (child is MeshInstance3D and child.position.y>1.83):discard(child)
 		"forest_cabinet":
@@ -59,6 +65,7 @@ func build_item(n: Node3D,kind: String) -> void:
 		"fountain":preload("res://scripts/city/plaza_fountain.gd").build(n,Vector3(0,-.18,0),false)
 		_:preload("res://scripts/city/forest_furniture.gd").build(self,n,kind)
 	preload("res://scripts/building/appearance.gd").prepare(n,kind,self)
+	preload("res://scripts/city/seating.gd").ensure(n,int(preload("res://scripts/building/catalog.gd").OBJECTS[kind].get("seats",1)))
 func bulb(n: Node3D,p: Vector3,radius: float) -> void:
 	var material_:=StandardMaterial3D.new();material_.albedo_color=Color("ffe8ba");material_.emission_enabled=true;material_.emission=Color("ffd69a");material_.emission_energy_multiplier=1.5
 	var mesh:=G.ball(n,p,Vector3.ONE*radius,material_,"Bulb");mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

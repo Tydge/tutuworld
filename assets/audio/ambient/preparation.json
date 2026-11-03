@@ -1,0 +1,75 @@
+{
+  "prepared": "2026-11-04",
+  "processing": "mono 32 kHz; DC removal, conservative peak leveling, edge crossfade; gull calls spaced across a 48-second loop",
+  "files": [
+    {
+      "file": "ocean_waves.ogg",
+      "rate": 32000,
+      "channels": 1,
+      "seconds": 28.5,
+      "bytes": 218364,
+      "sha256": "9259b979a19725ae227dfe9312d4439c11c1266ffd78ba94abbbb718d8e096e8"
+    },
+    {
+      "file": "seagulls.ogg",
+      "rate": 32000,
+      "channels": 1,
+      "seconds": 48.0,
+      "bytes": 57408,
+      "sha256": "446a23d205b6a6293d16017834d0af01bbaa20dfa43f3fcd5a636e57a696879b"
+    },
+    {
+      "file": "creek.ogg",
+      "rate": 32000,
+      "channels": 1,
+      "seconds": 30.896,
+      "bytes": 241422,
+      "sha256": "b2df5fadebaf117f8e9cc13151c4fa083414bd6be56d1f94a991f117e6dd29a0"
+    }
+  ],
+  "downloads": [
+    {
+      "file": "wave1.flac",
+      "url": "https://opengameart.org/sites/default/files/wave_01_cc0-18363__jasinski__alkaibeach.flac",
+      "bytes": 626248,
+      "sha256": "fcfca178eca2eac536e8c2a4ed5cf8096e44c921acd587047b3d9f1d7845435c"
+    },
+    {
+      "file": "wave2.flac",
+      "url": "https://opengameart.org/sites/default/files/wave_02_cc0-18363__jasinski__alkaibeach.flac",
+      "bytes": 404529,
+      "sha256": "53b5c28c0edc36f049e77e65f2cf8a86135103328c44c1507c416e6469d18096"
+    },
+    {
+      "file": "wave3.flac",
+      "url": "https://opengameart.org/sites/default/files/wave_03_cc0-18363__jasinski__alkaibeach.flac",
+      "bytes": 367584,
+      "sha256": "fc795f95f352b354867d69a587daecb8815334e28e3b56a7798c5f3005349054"
+    },
+    {
+      "file": "gull1.wav",
+      "url": "https://opengameart.org/sites/default/files/Seagull%20Ambient%201.wav",
+      "bytes": 686636,
+      "sha256": "3e891a8cf944797b2f16e0c19b1167e7eea7a20c8c7693487dcfdcfa0eb5621c"
+    },
+    {
+      "file": "gull2.wav",
+      "url": "https://opengameart.org/sites/default/files/Seagull%20Ambient%202.wav",
+      "bytes": 274476,
+      "sha256": "477246beafe31569b5937483b34b97043f4331a0639358fdcb3a55347d3d7a3a"
+    },
+    {
+      "file": "gull3.wav",
+      "url": "https://opengameart.org/sites/default/files/Seagull%20Ambient%203.wav",
+      "bytes": 198764,
+      "sha256": "f9e5e283197945d3df148082a9c2110154bc5a1c7ff2b58c951134c182c61788"
+    },
+    {
+      "file": "stream.zip",
+      "url": "https://opengameart.org/sites/default/files/stream-waterfall.zip",
+      "bytes": 4771353,
+      "sha256": "71d64573330b49de83e648ca86331d38f5b7147f75873708495e2fffb01f9ac3"
+    }
+  ],
+  "stream_original_sha256": "c0b5256f20db94654493e4c32fdb3c25cffa6a8d41f6871969d0922147d28e65"
+}

@@ -596,6 +596,377 @@
           "b89a5e"
         ]
       }
+    ],
+    "tea_service": [
+      {
+        "id": "ceramic",
+        "name": "茶壶与茶杯",
+        "family": "ceramic",
+        "colors": [
+          "5b9388",
+          "e6bd7d"
+        ]
+      },
+      {
+        "id": "trim",
+        "name": "杯碟与壶盖",
+        "family": "ceramic",
+        "colors": [
+          "ede2cb"
+        ]
+      },
+      {
+        "id": "drink",
+        "name": "茶汤",
+        "family": "solid",
+        "colors": [
+          "84623e"
+        ]
+      }
+    ],
+    "field_journal": [
+      {
+        "id": "cover",
+        "name": "书封",
+        "family": "fabric",
+        "colors": [
+          "719376"
+        ]
+      },
+      {
+        "id": "pages",
+        "name": "书页",
+        "family": "paper",
+        "colors": [
+          "ede2cb"
+        ]
+      },
+      {
+        "id": "ribbon",
+        "name": "书签与笔",
+        "family": "metal",
+        "colors": [
+          "c5a66a",
+          "b58b62"
+        ]
+      }
+    ],
+    "pressed_leaves": [
+      {
+        "id": "frame",
+        "name": "相框",
+        "family": "wood",
+        "colors": [
+          "b8925c",
+          "b58b62"
+        ]
+      },
+      {
+        "id": "paper",
+        "name": "衬纸",
+        "family": "paper",
+        "colors": [
+          "f0dfb4"
+        ]
+      },
+      {
+        "id": "leaves",
+        "name": "压叶",
+        "family": "foliage",
+        "colors": [
+          "709a75"
+        ]
+      }
+    ],
+    "ceramic_vases": [
+      {
+        "id": "body",
+        "name": "陶瓶",
+        "family": "ceramic",
+        "colors": [
+          "ede2cb",
+          "7f9d88",
+          "c99a8b"
+        ]
+      },
+      {
+        "id": "rim",
+        "name": "瓶沿",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      }
+    ],
+    "woven_basket": [
+      {
+        "id": "weave",
+        "name": "藤编",
+        "family": "wood",
+        "colors": [
+          "b58b62",
+          "ede2cb"
+        ]
+      },
+      {
+        "id": "throw",
+        "name": "薄毯",
+        "family": "fabric",
+        "colors": [
+          "8fae9c"
+        ]
+      }
+    ],
+    "moon_mobile": [
+      {
+        "id": "moon",
+        "name": "月牙",
+        "family": "ceramic",
+        "colors": [
+          "ede2cb"
+        ]
+      },
+      {
+        "id": "stars",
+        "name": "悬线与星星",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      }
+    ],
+    "petal_armchair": [
+      {
+        "id": "frame",
+        "name": "椅脚",
+        "family": "wood",
+        "colors": [
+          "b58b62"
+        ]
+      },
+      {
+        "id": "body",
+        "name": "花瓣靠背",
+        "family": "fabric",
+        "colors": [
+          "c49b9b"
+        ]
+      },
+      {
+        "id": "seat",
+        "name": "坐垫",
+        "family": "fabric",
+        "colors": [
+          "ede2cb"
+        ]
+      }
+    ],
+    "floor_lamp": [
+      {
+        "id": "frame",
+        "name": "灯杆与底座",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      },
+      {
+        "id": "shade",
+        "name": "灯罩",
+        "family": "fabric",
+        "colors": [
+          "ede2cb"
+        ]
+      }
+    ],
+    "lotus_pendant": [
+      {
+        "id": "stem",
+        "name": "吊杆与底座",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      },
+      {
+        "id": "shade",
+        "name": "瓷瓣灯罩",
+        "family": "ceramic",
+        "colors": [
+          "ede2cb"
+        ]
+      }
+    ],
+    "rose_arch": [
+      {
+        "id": "frame",
+        "name": "拱门框架",
+        "family": "wood",
+        "colors": [
+          "ede2cb",
+          "b58b62"
+        ]
+      },
+      {
+        "id": "leaves",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "7f9d88"
+        ]
+      },
+      {
+        "id": "blooms",
+        "name": "蔷薇花朵",
+        "family": "flowers",
+        "colors": [
+          "dba6a3"
+        ]
+      }
+    ],
+    "lily_pond": [
+      {
+        "id": "stone",
+        "name": "池体",
+        "family": "stone",
+        "colors": [
+          "b9b7a1",
+          "ede2cb"
+        ]
+      },
+      {
+        "id": "water",
+        "name": "水面",
+        "family": "solid",
+        "colors": [
+          "71a59f"
+        ]
+      },
+      {
+        "id": "pads",
+        "name": "睡莲叶",
+        "family": "foliage",
+        "colors": [
+          "7f9d88"
+        ]
+      },
+      {
+        "id": "blooms",
+        "name": "莲花",
+        "family": "flowers",
+        "colors": [
+          "e6b6b4"
+        ]
+      }
+    ],
+    "canopy_bed": [
+      {
+        "id": "frame",
+        "name": "床架",
+        "family": "wood",
+        "colors": [
+          "b18b61"
+        ]
+      },
+      {
+        "id": "sheet",
+        "name": "床单",
+        "family": "fabric",
+        "colors": [
+          "eee6d4"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "quilt",
+        "name": "被套",
+        "family": "fabric",
+        "colors": [
+          "bb885a"
+        ],
+        "names": [
+          "Quilt"
+        ]
+      },
+      {
+        "id": "pillow",
+        "name": "枕套",
+        "family": "fabric",
+        "colors": [
+          "f3e9d3"
+        ],
+        "names": [
+          "Pillow"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "canopy",
+        "name": "帷幔",
+        "family": "fabric",
+        "colors": [
+          "e6d8ba"
+        ]
+      },
+      {
+        "id": "finials",
+        "name": "金属顶饰",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      }
+    ],
+    "cloud_bed": [
+      {
+        "id": "frame",
+        "name": "床架",
+        "family": "wood",
+        "colors": [
+          "b18b61"
+        ]
+      },
+      {
+        "id": "sheet",
+        "name": "床单",
+        "family": "fabric",
+        "colors": [
+          "eee6d4"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "quilt",
+        "name": "被套",
+        "family": "fabric",
+        "colors": [
+          "bb885a",
+          "719e9c"
+        ],
+        "names": [
+          "Quilt"
+        ]
+      },
+      {
+        "id": "pillow",
+        "name": "枕套",
+        "family": "fabric",
+        "colors": [
+          "f3e9d3"
+        ],
+        "names": [
+          "Pillow"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "headboard",
+        "name": "软包床头",
+        "family": "fabric",
+        "colors": [
+          "c59d9c"
+        ]
+      }
     ]
   },
   "presets": {

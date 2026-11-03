@@ -50,6 +50,7 @@ func _ready() -> void:
 			door_open=true;door_angle=deg_to_rad(102);door_target=door_angle;hinge.rotation.y=door_angle
 			portal_shape.set_deferred("disabled",true)
 	key_light=get_node_or_null("Lighting/RoomKey");fill_light=get_node_or_null("Lighting/RoomFill");bedside=get_node_or_null("Lighting/BedsideLight");porch=get_node_or_null("Lighting/PorchLight");hearth=get_node_or_null("Lighting/HearthLight")
+	if is_instance_valid(hearth):preload("res://scripts/city/fire_flicker.gd").attach(hearth)
 	register_cutaway($Structure/Roof,true)
 	for wall in $Structure/Walls.get_children():
 		wall.set_meta("view_face",str(wall.name));wall.set_meta("view_floor",floor_level)
@@ -181,7 +182,7 @@ func _process(delta: float) -> void:
 		for label in section.labels:label.visible=alpha>.70
 
 	if is_instance_valid(quilt):
-		var occupied: bool=bed_occupant.sleeping if is_instance_valid(bed_occupant) else city.sleep_active
+		var occupied: bool=bed_occupant.sleeping if is_instance_valid(bed_occupant) else city.sleep_active and city.get_meta("sleeping_bed",null)==get_node("Furnishing/bed")
 		quilt_occupancy=move_toward(quilt_occupancy,1.0 if occupied else 0.0,delta*2.2)
 		quilt.material_override.set_shader_parameter("occupancy",quilt_occupancy)
 		var profile: Resource=bed_occupant.rig_profile if is_instance_valid(bed_occupant) else city.bunny.rig_profile
@@ -191,7 +192,6 @@ func _process(delta: float) -> void:
 		if is_instance_valid(pillow):
 			var height_: float=lerpf(.20,pose.pillow_height,quilt_occupancy)
 			pillow.scale.y=height_/.20;pillow.position.y=.90+height_*.5
-	if is_instance_valid(hearth): hearth.light_energy=(.55+(1-last_day)*.45)*(1+.025*sin(clock*4)+.014*sin(clock*7.7))
 func update_lighting(day: float) -> void:
 	if assembling:return
 	last_day=day

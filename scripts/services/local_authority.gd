@@ -203,8 +203,12 @@ func _apply(c: Dictionary) -> Dictionary:
 		state.rest_mode="";state.rest_bed="";sleeping=false
 		return {"ok":true,"message":""}
 	if verb=="rest":
-		if not job.is_empty() or c.get("target","")!="home_bed" or not near_position(DB.facilities().home_bed,3.4): return fail("先来到床边，再好好睡一觉吧。")
-		state.rest_mode="sleep";state.rest_bed="home_bed";sleeping=true;running=false
+		var bed_id:=str(c.get("target",""));var point: Vector2=DB.facilities().home_bed if bed_id=="home_bed" else Vector2(INF,INF)
+		if bed_id.begins_with("build:"):
+			var row:=preload("res://scripts/building/layout.gd").find(state.build_layout,bed_id.trim_prefix("build:"))
+			if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[row.kind].get("bed",false):point=Vector2(row.position[0],row.position[1])+preload("res://scripts/building/catalog.gd").rotate_xz(Vector2(-2.6,.30),float(row.yaw))
+		if not job.is_empty() or not near_position(point,3.4):return fail("先来到床边，再好好睡一觉吧。")
+		state.rest_mode="sleep";state.rest_bed=bed_id;sleeping=true;running=false
 		return {"ok":true,"message":""}
 	if state.get("rest_mode","")=="sleep": return fail("先起床，伸个懒腰吧。")
 	if not job.is_empty(): return fail("%s一次只能认真做一件事情。"%actor_name())

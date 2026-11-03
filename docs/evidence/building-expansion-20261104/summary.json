@@ -1,0 +1,544 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "5fb6bee662ebfca30672f6bff02341d88f62e016",
+  "scope": "Save reliability, structural forms/room finishes, furniture and seating/sleep, bounded fire lighting, licensed positional ambience. Source only; no deployment, export, map regeneration or real-player progress writes.",
+  "building_groups": 25,
+  "rules_groups": 14,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 376,
+      "result_line": "PROJECT_INTEGRITY_RESULT PASS checks=376 failures=[]",
+      "log": "logs/project_integrity.log",
+      "original_qa_directory": "20261104-014956-892067",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "result_line": "BUILDING_RULES_RESULT PASS checks=41 failures=[]",
+      "log": "logs/building_rules.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_revision_rules",
+      "result": "PASS",
+      "checks": 53,
+      "result_line": "BUILDING_REVISION_RULES_RESULT PASS checks=53 failures=[]",
+      "log": "logs/building_revision_rules.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "result_line": "BUILDING_CONTROLS_RESULT PASS checks=34 failures=[]",
+      "log": "logs/building_controls.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_mouse_flow",
+      "result": "PASS",
+      "checks": 36,
+      "result_line": "BUILDING_MOUSE_FLOW_RESULT PASS checks=36 failures=[]",
+      "log": "logs/building_mouse_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_flow",
+      "result": "PASS",
+      "checks": 27,
+      "result_line": "BUILDING_FLOW_RESULT PASS checks=27 failures=[]",
+      "log": "logs/building_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_revision_flow",
+      "result": "PASS",
+      "checks": 55,
+      "result_line": "BUILDING_REVISION_FLOW_RESULT PASS checks=55 failures=[]",
+      "log": "logs/building_revision_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_grid_rules",
+      "result": "PASS",
+      "checks": 29,
+      "result_line": "BUILDING_GRID_RULES_RESULT PASS checks=29 failures=[]",
+      "log": "logs/building_grid_rules.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_store_rules",
+      "result": "PASS",
+      "checks": 14,
+      "result_line": "BUILDING_STORE_RULES_RESULT PASS checks=14 failures=[]",
+      "log": "logs/building_store_rules.log",
+      "original_qa_directory": "20261104-014711-162367",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_grid_flow",
+      "result": "PASS",
+      "checks": 27,
+      "result_line": "BUILDING_GRID_FLOW_RESULT PASS checks=27 failures=[]",
+      "log": "logs/building_grid_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_editing_regression",
+      "result": "PASS",
+      "checks": 23,
+      "result_line": "BUILDING_EDITING_REGRESSION_RESULT PASS checks=23 failures=[]",
+      "log": "logs/building_editing_regression.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "appearance_rules",
+      "result": "PASS",
+      "checks": 164,
+      "result_line": "APPEARANCE_RULES_RESULT PASS checks=164 failures=[]",
+      "log": "logs/appearance_rules.log",
+      "original_qa_directory": "20261104-014956-892067",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "appearance_camera_flow",
+      "result": "PASS",
+      "checks": 33,
+      "result_line": "APPEARANCE_CAMERA_FLOW_RESULT PASS checks=33 failures=[]",
+      "log": "logs/appearance_camera_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "result": "PASS",
+      "checks": 56,
+      "result_line": "THUMBNAIL_PREVIEW_FLOW_RESULT PASS checks=56 failures=[]",
+      "log": "logs/thumbnail_preview_flow.log",
+      "original_qa_directory": "20261104-014245-850653",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_exit_flow",
+      "result": "PASS",
+      "checks": 15,
+      "result_line": "BUILDING_EXIT_FLOW_RESULT PASS checks=15 failures=[]",
+      "log": "logs/building_exit_flow.log",
+      "original_qa_directory": "20261104-015113-772731",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "pattern_colors_rules",
+      "result": "PASS",
+      "checks": 38,
+      "result_line": "PATTERN_COLORS_RULES_RESULT PASS checks=38 failures=[]",
+      "log": "logs/pattern_colors_rules.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "pattern_colors_flow",
+      "result": "PASS",
+      "checks": 23,
+      "result_line": "PATTERN_COLORS_FLOW_RESULT PASS checks=23 failures=[]",
+      "log": "logs/pattern_colors_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "npc_edge_flow",
+      "result": "PASS",
+      "checks": 15,
+      "result_line": "NPC_EDGE_FLOW_RESULT PASS checks=15 failures=[]",
+      "log": "logs/npc_edge_flow.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "save_transactions",
+      "result": "PASS",
+      "checks": 10,
+      "result_line": "SAVE_TRANSACTIONS_RESULT PASS checks=10 failures=[]",
+      "log": "logs/save_transactions.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_expansion_rules",
+      "result": "PASS",
+      "checks": 44,
+      "result_line": "BUILDING_EXPANSION_RULES_RESULT PASS checks=44 failures=[]",
+      "log": "logs/building_expansion_rules.log",
+      "original_qa_directory": "20261104-014956-892067",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_expansion_flow",
+      "result": "PASS",
+      "checks": 62,
+      "result_line": "BUILDING_EXPANSION_FLOW_RESULT PASS checks=62 failures=[]",
+      "log": "logs/building_expansion_flow.log",
+      "original_qa_directory": "20261104-015113-772731",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "double_seat_rules",
+      "result": "PASS",
+      "checks": 62,
+      "result_line": "DOUBLE_SEAT_RULES_RESULT PASS checks=62 failures=[]",
+      "log": "logs/double_seat_rules.log",
+      "original_qa_directory": "20261104-013748-990601",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "firelight_rules",
+      "result": "PASS",
+      "checks": 8,
+      "result_line": "FIRELIGHT_RULES_RESULT PASS checks=8 failures=[]",
+      "log": "logs/firelight_rules.log",
+      "original_qa_directory": "20261104-014216-861421",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "building_surface_flow",
+      "result": "PASS",
+      "checks": 9,
+      "result_line": "BUILDING_SURFACE_FLOW_RESULT PASS checks=9 failures=[]",
+      "log": "logs/building_surface_flow.log",
+      "original_qa_directory": "20261104-014245-850653",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "thumbnail_lifecycle",
+      "result": "PASS",
+      "checks": 3,
+      "result_line": "THUMBNAIL_LIFECYCLE_RESULT PASS checks=3 failures=[]",
+      "log": "logs/thumbnail_lifecycle.log",
+      "original_qa_directory": "20261104-014216-861421",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "city_rules",
+      "result": "PASS",
+      "checks": 56,
+      "result_line": "CITY_RULES_RESULT PASS checks=56 failures=[]",
+      "log": "logs/city_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "character_roster_rules",
+      "result": "PASS",
+      "checks": 39,
+      "result_line": "CHARACTER_ROSTER_RULES_RESULT PASS checks=39 failures=[]",
+      "log": "logs/character_roster_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "stamina_revision_rules",
+      "result": "PASS",
+      "checks": 30,
+      "result_line": "STAMINA_REVISION_RULES_RESULT PASS checks=30 failures=[]",
+      "log": "logs/stamina_revision_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "progression_rules",
+      "result": "PASS",
+      "checks": 24,
+      "result_line": "PROGRESSION_RULES_RESULT PASS checks=24 failures=[]",
+      "log": "logs/progression_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "kitchen_rules",
+      "result": "PASS",
+      "checks": 128,
+      "result_line": "KITCHEN_RULES_RESULT PASS checks=128 failures=[]",
+      "log": "logs/kitchen_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "food_save_migration",
+      "result": "PASS",
+      "checks": 6,
+      "result_line": "FOOD_SAVE_RESULT PASS checks=6 failures=[]",
+      "log": "logs/food_save_migration.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "testing_clock_rules",
+      "result": "PASS",
+      "checks": 27,
+      "result_line": "TESTING_CLOCK_RULES_RESULT PASS checks=27 failures=[]",
+      "log": "logs/testing_clock_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "town_refresh_rules",
+      "result": "PASS",
+      "checks": 124,
+      "result_line": "TOWN_REFRESH_RULES_RESULT PASS checks=124 failures=[]",
+      "log": "logs/town_refresh_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "valley_rules",
+      "result": "PASS",
+      "checks": 215,
+      "result_line": "VALLEY_RULES_RESULT PASS checks=215 failures=[]",
+      "log": "logs/valley_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "skill_experience_rules",
+      "result": "PASS",
+      "checks": 8,
+      "result_line": "SKILL_EXPERIENCE_RULES_RESULT PASS checks=8 failures=[]",
+      "log": "logs/skill_experience_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "skills_quality_rules",
+      "result": "PASS",
+      "checks": 568,
+      "result_line": "SKILLS_QUALITY_RULES_RESULT PASS checks=568 failures=[]",
+      "log": "logs/skills_quality_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "npc_dialogue_rules",
+      "result": "PASS",
+      "checks": 15071,
+      "result_line": "NPC_DIALOGUE_RULES_RESULT PASS checks=15071 failures=[]",
+      "log": "logs/npc_dialogue_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "fruit_reach_rules",
+      "result": "PASS",
+      "checks": 14583,
+      "result_line": "FRUIT_REACH_RULES_RESULT PASS checks=14583 failures=[]",
+      "log": "logs/fruit_reach_rules.log",
+      "original_qa_directory": "20261104-014027-110101",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "production_rules",
+      "result": "PASS",
+      "checks": 71,
+      "result_line": "PRODUCTION_RULES_RESULT PASS checks=71 failures=[]",
+      "log": "logs/production_rules.log",
+      "original_qa_directory": "20261104-014041-241399",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "double_seat_network",
+      "result": "PASS",
+      "checks": 15,
+      "result_line": "DOUBLE_SEAT_NETWORK_RESULT PASS checks=15 failures=[]",
+      "log": "logs/double_seat_network.log",
+      "original_qa_directory": "20261104-012913-425565",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "chat_seat_rules",
+      "result": "PASS",
+      "checks": 27,
+      "result_line": "CHAT_SEAT_RESULT PASS checks=27 failures=[]",
+      "log": "logs/chat_seat_rules.log",
+      "original_qa_directory": "20261104-012913-425565",
+      "native_exit_diagnostics": []
+    },
+    {
+      "name": "ambient_fire_flow",
+      "result": "PASS",
+      "checks": 9,
+      "result_line": "AMBIENT_FIRE_FLOW_RESULT PASS checks=9 failures=[]",
+      "log": "logs/ambient_fire_flow.log",
+      "original_qa_directory": "20261104-014448-594809",
+      "native_exit_diagnostics": [
+        "ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketSmallE"
+      ]
+    },
+    {
+      "name": "building_capacity",
+      "result": "PASS",
+      "checks": null,
+      "result_line": "BUILDING_CAPACITY_RESULT PASS cases=8 forced_frames=0 record=/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261104-012835-712230/building_capacity/capacity.json",
+      "log": "logs/building_capacity.log",
+      "original_qa_directory": "20261104-012835-712230",
+      "native_exit_diagnostics": []
+    }
+  ],
+  "python_tests": {
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "result": "PASS",
+    "tests": 4,
+    "short_write_fault": "One child constrained by RLIMIT_FSIZE=1024 with SIGXFSZ ignored; failed save/copy preserve primary, previous backup and building checkpoint byte-for-byte."
+  },
+  "catalog": {
+    "furniture": 35,
+    "appearance_parts": 105,
+    "added_objects": 13,
+    "structure_forms_each": 3,
+    "new_structure_textures": [
+      "herringbone",
+      "terrazzo",
+      "botanical"
+    ]
+  },
+  "audio": {
+    "sources": "../../../assets/audio/ambient/CREDITS.txt",
+    "runtime_bytes": 517194,
+    "files": [
+      {
+        "file": "ocean_waves.ogg",
+        "rate": 32000,
+        "channels": 1,
+        "seconds": 28.5,
+        "bytes": 218364,
+        "sha256": "9259b979a19725ae227dfe9312d4439c11c1266ffd78ba94abbbb718d8e096e8"
+      },
+      {
+        "file": "seagulls.ogg",
+        "rate": 32000,
+        "channels": 1,
+        "seconds": 48.0,
+        "bytes": 57408,
+        "sha256": "446a23d205b6a6293d16017834d0af01bbaa20dfa43f3fcd5a636e57a696879b"
+      },
+      {
+        "file": "creek.ogg",
+        "rate": 32000,
+        "channels": 1,
+        "seconds": 30.896,
+        "bytes": 241422,
+        "sha256": "b2df5fadebaf117f8e9cc13151c4fa083414bd6be56d1f94a991f117e6dd29a0"
+      }
+    ],
+    "voices_city": 2,
+    "voices_valley": 3,
+    "source_update_hz": 10,
+    "listener": "avatar at head height, independent of camera zoom",
+    "observed_ocean_rms_near": 0.006779187877,
+    "observed_ocean_rms_far": 0.00018229942763
+  },
+  "firelight": {
+    "real_light": "SpotLight3D",
+    "range_m": 5,
+    "shadows": false,
+    "energy_update_hz": 20,
+    "energy_envelope_fraction": 0.07,
+    "pixel_check": "Nearby pixels differ with animated flame meshes hidden."
+  },
+  "performance": {
+    "capacity": "capacity.json",
+    "cases": 8,
+    "checkerboard_single_cell_edit_ms": 287.985,
+    "full_furniture_move_ms": [
+      26.033,
+      31.382
+    ],
+    "metric": "Synchronous edit wall time / force_draw CPU submission; no whole-game FPS or GPU timing claim. Short sequential samples, not a controlled same-session A/B."
+  },
+  "limitations": [
+    "Windows physical hardware and native input methods not validated.",
+    "All capacity maxima together and prolonged editing remain unvalidated; extreme checkerboard edits still cause a short synchronous pause.",
+    "The capture/map-switch flow returns success but emits one native Variant pool diagnostic at shutdown. No script/shader errors or abnormal exit. Standalone thumbnail lifecycle checks release generated materials and its isolated city-exit probe is clean."
+  ],
+  "source_sha256": {
+    "assets/audio/ambient/CREDITS.txt": "0cde0145a184c88c5efce79bb51d79e7ff0e601f1281540a09621fb9d1b9f4df",
+    "assets/audio/ambient/LICENSE-CC-BY-3.0.txt": "e6bc9e9c474700b708f568bac9e5a8a9bcb2b1dad53442f5ba449fcb848b8e76",
+    "assets/audio/ambient/LICENSE-CC0-1.0.txt": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+    "assets/audio/ambient/README.md": "8ca9d5da5a03d6fb660a7d6bf3b0ef2dda4f794af718b992071614dd857f41d5",
+    "assets/audio/ambient/creek.ogg": "b2df5fadebaf117f8e9cc13151c4fa083414bd6be56d1f94a991f117e6dd29a0",
+    "assets/audio/ambient/creek.ogg.import": "9eda4ee9c7452bff9256711acd3c75626f09784982891d69cd8d530a612c7fc9",
+    "assets/audio/ambient/ocean_waves.ogg": "9259b979a19725ae227dfe9312d4439c11c1266ffd78ba94abbbb718d8e096e8",
+    "assets/audio/ambient/ocean_waves.ogg.import": "b22271c7deafc2dee78cab2c14d1cd0a25b8fc47efdb1e66fa5432ba74aa0df2",
+    "assets/audio/ambient/preparation.json": "afc8c1a80c226b86566ea82bcebee94f87f111d5cd68408781c333157258caba",
+    "assets/audio/ambient/seagulls.ogg": "446a23d205b6a6293d16017834d0af01bbaa20dfa43f3fcd5a636e57a696879b",
+    "assets/audio/ambient/seagulls.ogg.import": "c8b7d083741a05b81de840c6938406e4f19af895134d073dd8d20ad163667609",
+    "scripts/building/bed_comfort.gd": "475f9da198b151f8c080eba3bdd0cc7c769ab02a76375fa56004f71d29e88cbb",
+    "scripts/building/new_furniture.gd": "b39a86c97d435ee176711a6c929c8d7ae780008dbd33f5ca1dcbdcddc8e2b96d",
+    "scripts/building/structure_catalog.gd": "321145041406c375c53fd03994244a911fad7f49c73d788c3adb81dfcaf54262",
+    "scripts/building/structure_shapes.gd": "17eb06aa20efef285eeaf6a678d72221212ed7d9be70dda6b1473a4d84c15a1d",
+    "scripts/building/surface_edit.gd": "549b8a03d296f711611e73dbd68389b98c4eeb12c9bd53a6e0207113ac2e4691",
+    "scripts/city/fire_flicker.gd": "31307d1fb04654eb403000875c1efb15d666583a012ac603d3d9741d910bea93",
+    "scripts/city/local_landing.gd": "11dc32cf64c3951f63280466107a121305e113567f7bb98bffd16cf0cc6cfe4f",
+    "scripts/city/seating.gd": "afa69f618dde98a3cfd202d5e8f71eb39ff73613d50e396f8e92f0cf64fbdf59",
+    "scripts/city/spatial_ambience.gd": "668a4f768ee3ccedd561a8d70a6865ca23a18e3c4c4324ed79f68c69ba3f571e",
+    "scripts/services/atomic_file.gd": "55a0213a267be4b1c1ce3f7524779e401ad50ca4454431748c71f861c51034a5",
+    "scripts/ui/audio_credits.gd": "f8d92da33dc93f02514e3f0272d508afc478d113057bcc0230eda6895b721cac",
+    "tests/ambient_fire_flow.gd": "11081ae3f98502d27459ac53f5eeba5347ce5cbf343125380fbce1efc6eb7559",
+    "tests/building_expansion_flow.gd": "f5988fc976a3716f4620c6c6ffbda91405819b9b9b0cf6a810041904c4980b5d",
+    "tests/building_expansion_rules.gd": "d3df70a57f173f5f78b9217a868116d98311a0bfeae1aa1ae2e7eb07471e2b6f",
+    "tests/building_surface_flow.gd": "dadbd940ee526ddc8a71f492e0c798dadb234a7816ecc87f4ff43ff45aa930a3",
+    "tests/double_seat_network.gd": "ddeb4c053418d6722b0c2a428d53dac7e4619d019b6edc66eee7c6783bee19c5",
+    "tests/double_seat_rules.gd": "d2f14b9e08769252df1cb84662cbdb0085e5f834bbd38d41145b3398362c74fe",
+    "tests/firelight_rules.gd": "ffcc1061c74944fc289e183c3cb2d3d407793df763a727e0b152e22600e6027f",
+    "tests/save_transactions.gd": "0dc6ce1217fb01dcf7392f1f21ea6aa21da36992aaebc7a8df9cce61375c6b98",
+    "tests/save_write_fault_probe.gd": "4ef7b68b3ad27cf6e201776cbe15d590ad75ec507f5e27666efe796bb7b038e0",
+    "tests/test_save_write_faults.py": "27a2a6ac20afa850f5e96644ab915fd12934f76d36999dcc4f99ee7ecc506ee4",
+    "tests/thumbnail_lifecycle.gd": "ddb7db3387a42cffe3951c8c1a1b2cc2ef31bd9fff2fd68c14bfae61d59b358a",
+    "tools/build_ambient_audio.py": "6ab39a03328d77fcfee87e28cca1b046224c3556913d40bc04f7ab5d8a8773fd",
+    "README.md": "edaf2052f9c550f8ce4e31585fec65ccd1886c7ec75f251160a4fc9ffb127867",
+    "assets/shaders/home_surface.gdshader": "e87cb26b80c431353b44cf79e861a94c4b2944e9273fcbbee1af5d5891f2124a",
+    "data/furniture_appearance.json": "c206a55b18b78d57d4c58cec51301c94f42055364a295a57cd204fd19d1a9535",
+    "docs/外观与纹理开发.md": "664f9b87586864fb6c378b43056639e332f4376900b981d5cf86267a50a5cf9b",
+    "docs/建造模式.md": "be8ac92b03be009d53ae339e73b3739e288cc5af27b109b640378ca1b8b6c1ec",
+    "docs/开发接手指南.md": "e1bdd94dd45db544ea0ead5dcb6fd99dd1b49eb5c8bbb9ac3579244668a56f65",
+    "docs/策划数值与机制/05_地图交互与旅行.md": "ad9fe2445ba82a0615954bc1eb425cc3fa8360a01996d785875aadf244562a90",
+    "docs/策划数值与机制/07_多人公共世界.md": "0005f302d9ea875bac5c0735a72c2ada1b5c56cce5ca3e2dd1eb7a87b9b2bffb",
+    "docs/策划数值与机制/README.md": "d90c445d3134d7f37673a0ff2e15bb3bde3f99cabe4343758ef593fcd9b1ffca",
+    "docs/验证基线.md": "6d91faaae51fae56f53cb9bdfd6333dd61d1433bf23f5d875b354b9f1d7daa07",
+    "export_presets.cfg": "751968a242ace435138f0b020308fd70d63b72261c5b727ee99b4908d030ad94",
+    "scripts/building/catalog.gd": "e082f5f157e83a670c7ca43af24bac552fbee1ccfcb403c086bb5a9e02743ff3",
+    "scripts/building/editable_builder.gd": "f4eeca02a881589fa0eda1c10b8cc7c70e5e3f07ae46cda1385b10a701e15f92",
+    "scripts/building/editor.gd": "7318c4b84961a0e3b8da4cf653203009e6724b7160a3befa36b3e1a5f0b4f9d0",
+    "scripts/building/editor_ui.gd": "622389dffca8de403be787afeb6af346436f7275f59bb0f789edc81a3192f35c",
+    "scripts/building/furniture_builder.gd": "eea7312986f33a71528733b6b5a929cc88d43e67450d36a9d1cb24907b4a294e",
+    "scripts/building/grid_layout.gd": "3fde29cf7a49fc75121874cd740910bca30db54c5d56638588043fc45f2055ff",
+    "scripts/building/layout.gd": "e168e0a5711d0b116fb2e407379b11c7e8c119bb15f9327022db879cb93a9ab2",
+    "scripts/building/layout_store.gd": "bedc21e9350e292d0be91ce1c46183c8ab1b7eb2d17d4b9026fde8acb0b5d46b",
+    "scripts/building/module_factory.gd": "b8fed32f35961422c748e152d4e006a70b63a324610dd2754f30652d60575221",
+    "scripts/building/thumbnail_studio.gd": "7ec9102184c07e4d2889b476f9421a2a4cea5472aa9c7dd470fb129bd6d8c5c9",
+    "scripts/city/city_world.gd": "a780139c56b38e70a0ca2d42e6f78715edcc7fc71cad10d958520a5646ad04e3",
+    "scripts/city/interaction_targets.gd": "5aa7a550ba87df79ff641878d96e28b5cc67cc8454e85eb9c2214a6a54a75186",
+    "scripts/city/online_world.gd": "3ac39fe37b1d1769503c093bca50383e4e75612d92b3eb541031b67a18dec9af",
+    "scripts/city/seabreeze_home.gd": "4818c6ec0f0b5cbe9090fbf54f96435eb4287a862850cac1df8a08f716baf7ab",
+    "scripts/services/local_authority.gd": "0abb28ac2239636202fbaad0fad4afb89fb3cc51eda0b2cacfcaadb60ce26344",
+    "scripts/services/session.gd": "5ab9183f91a46cf2e0f1835a231db4d9f273d613a05697b88d31c146d97d8f56",
+    "scripts/ui/city_hud.gd": "384c619736eda2d7bf072c74ec58e2491ab3a690d1b909b1303e6f64cf14bbae",
+    "scripts/valley/valley_world.gd": "67f23d0ddbfab1a0d1a1556e6362c559b8db6f4035bd9be65c24d83fd18b36c9",
+    "server/host_setup.gd": "e834a6da78dde040d253125e2a44960c538eccb583954b58f792ea6b38d0e2cf",
+    "server/world_server.gd": "9d5da39b006b0cb7ff52b6e5ede62befb94fad07b78514ab1fee27efffd2607e",
+    "tests/building_mouse_flow.gd": "cbfc770111e39bdf3f55a7f611bd986622e844832f10c8efce5007bc7bd51562",
+    "tests/building_store_rules.gd": "69d81d4304a5c4dda7e00c4cdc3b4993e5288983b7f57ad581d275817e8b976d",
+    "tools/test_suites.json": "1929d0cc32b493c6f77026b41f8d818d3572164ec1735d0d6a8b5830d1ce0042"
+  }
+}

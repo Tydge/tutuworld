@@ -187,10 +187,11 @@ func _ready() -> void:
 	session.event_received.connect(on_event)
 	ambience=AudioStreamPlayer.new()
 	ambience.stream=load("res://assets/garden_ambience.wav")
-	ambience.volume_db=-15
+	ambience.volume_db=-24
 	add_child(ambience)
 	ambience.finished.connect(ambience.play)
 	ambience.play()
+	var spatial:=preload("res://scripts/city/spatial_ambience.gd").new();spatial.name="SpatialAmbience";spatial.city=self;add_child(spatial)
 	AudioServer.set_bus_volume_db(0,linear_to_db(maxf(.001,float(session.settings.volume))))
 	AudioServer.set_bus_mute(0,not session.settings.sound)
 	session.active=true
@@ -208,6 +209,7 @@ func setup_targets() -> void:
 		targets["home_door"]={"kind":"home_door","position":home.door_action_position(),"radius":4.6,"node":home}
 		for id in ["home_sofa","home_desk"]:
 			var seat: Node3D=home.seat_node(id)
+			preload("res://scripts/city/seating.gd").ensure(seat,2 if id=="home_sofa" else 1)
 			targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"radius":1.65,"node":seat,"label":"坐在沙发上歇一会儿" if id=="home_sofa" else "坐到窗边，发会儿呆"}
 	targets["kitchen"]={"kind":"kitchen","position":scenery.get_node("Kitchen/PotSteam").global_position,"radius":2.6}
 	targets["dining"]={"kind":"dining","position":scenery.get_node("DiningTable/MealAnchor").global_position,"radius":2.8}
@@ -307,8 +309,9 @@ func _process(delta: float) -> void:
 		var face: Vector3=bunny.position-actor.position
 		actor.visual.rotation.y=lerp_angle(actor.visual.rotation.y,atan2(face.x,face.z),1-exp(-delta*9))
 	if nap_active and bunny.action=="":
-		bunny.stand_up(nap_exit)
-		nap_active=false
+		var landing:=preload("res://scripts/city/local_landing.gd").find(self,nap_exit,bunny)
+		if landing.is_empty():bunny.play_action("nap",1)
+		else:bunny.stand_up(landing.position);nap_active=false
 	update_camera(delta)
 	update_ambient_lighting()
 	update_occluders(delta)
@@ -370,7 +373,7 @@ func can_walk(p: Vector3) -> bool:
 func update_target() -> void:
 	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active:
-		current_target="home_bed";quick_action.clear();hud.set_prompt("E   起床，伸个懒腰     ·     睡眠中 · 耐力恢复 +100%")
+		current_target=str(session.state().get("rest_bed","home_bed"));quick_action.clear();hud.set_prompt("E   起床，伸个懒腰     ·     睡眠中 · 耐力恢复 +100%")
 		return
 	if talking_npc!="":
 		quick_action.clear()
@@ -413,7 +416,14 @@ func update_target() -> void:
 		text+=("\n" if text!="" else "")+"F   "+quick_action.label+" · %.1f 秒"%session.authority.action_duration(quick_action.verb)
 	if session.is_online() and current_target!="":
 		var occupied: Dictionary=session.online_locks.get(map_id+":"+current_target,{})
-		if not occupied.is_empty() and occupied.owner!=session.active_character_id:text=str(occupied.name)+"正在使用"
+		var selected_target: Dictionary=targets[current_target]
+		if selected_target.kind=="bench" and selected_target.has("node"):
+			var seats=preload("res://scripts/city/seating.gd");var free:=0
+			for slot in range(seats.capacity(selected_target.node)):
+				if not session.online_locks.has(map_id+":"+seats.lock_target(current_target,slot)):free+=1
+			if seats.capacity(selected_target.node)>1:text+=" · 空位 %d/%d"%[free,seats.capacity(selected_target.node)]
+			if free==0:text="座位已坐满"
+		elif not occupied.is_empty() and occupied.owner!=session.active_character_id:text=str(occupied.name)+"正在使用"
 	hud.set_prompt(text)
 func find_quick_action() -> Dictionary:
 	# E, F and the floating selection marker always share this one target.
@@ -523,31 +533,38 @@ func interact() -> void:
 			previous_dialogues[current_target]=dialogue_text
 			hud.show_dialogue(t.node,t.name,dialogue_text)
 		"bench":
-			bunny.sit_on_surface(t.node.get_node("SeatAnchor").global_transform)
-			nap_exit=t.node.get_node("ExitAnchor").global_position
-			nap_active=true
-			bunny.play_action("nap",6,"z z Z")
+			var seats=preload("res://scripts/city/seating.gd");var slot: int=seats.local_slot(self,t.node,bunny)
+			if slot<0:hud.notify("座位已坐满，稍等一下吧。");return
+			bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action("nap",6,"z z Z")
 func end_dialogue() -> void:
 	if session.is_online() and talking_npc!="" and targets.get(talking_npc,{}).get("kind","")=="npc":session.dispatch("end_talk")
 	talking_npc=""
 	hud.hide_dialogue()
 func enter_sleep(restoring: bool=false) -> void:
-	if not is_instance_valid(home) or not home.has_node("Furnishing/bed/SleepExit"): return
+	var id: String=str(session.state().get("rest_bed","home_bed")) if restoring else current_target
+	var bed: Node3D=targets.get(id,{}).get("node")
+	if id=="home_bed" and is_instance_valid(home):bed=home.get_node_or_null("Furnishing/bed")
+	if not is_instance_valid(bed) or not bed.has_node("SleepExit"):return
+	var exit_: Vector3=bed.get_node("SleepExit").global_position
 	if not restoring:
-		var result: Dictionary=session.dispatch("rest",{"target":"home_bed"})
-		if not result.ok: return
-	var bed: Node3D=home.get_node("Furnishing/bed")
-	sleep_exit=bed.get_node("SleepExit").global_position
-	nap_active=false;sleep_active=true
-	bunny.lie_in_bed(bed)
-	session.authority.sleeping=true
-	session.set_player_position(sleep_exit)
-	update_target()
+		var landing:=preload("res://scripts/city/local_landing.gd").find(self,exit_,bunny)
+		if landing.is_empty():hud.notify("床边暂时没有起身的位置，请先留出通道。");return
+		exit_=landing.position
+		var result: Dictionary=session.dispatch("rest",{"target":id})
+		if not result.ok:return
+	sleep_exit=exit_;set_meta("sleeping_bed",bed)
+	nap_active=false;sleep_active=true;bunny.lie_in_bed(bed)
+	session.authority.sleeping=true;session.set_player_position(sleep_exit);update_target()
 func wake_from_bed() -> void:
 	if session.is_online():online_stand();return
-	session.dispatch("wake")
-	sleep_active=false;bunny.stand_up(sleep_exit)
-	update_target()
+	var landing:=preload("res://scripts/city/local_landing.gd").find(self,sleep_exit,bunny)
+	if landing.is_empty():hud.notify("床边暂时有人或有家具，请稍后起身。");return
+	var previous: Array=session.state().player_position.duplicate()
+	session.set_player_position(landing.position)
+	var result: Dictionary=session.dispatch("wake")
+	if not result.ok:session.state().player_position=previous;return
+	sleep_active=false;set_meta("sleeping_bed",null);bunny.stand_up(landing.position);session.set_player_position(landing.position);update_target()
+
 func begin_cooking(recipe: String) -> Dictionary: return begin_action("craft","kitchen",recipe)
 func begin_manufacturing(recipe: String) -> Dictionary: return begin_action("craft",current_target,recipe)
 func begin_dining(item: String) -> Dictionary: return begin_action("eat","dining",item)
@@ -746,7 +763,7 @@ func online_interact(id: String) -> void:
 	if not result.get("ok",false):hud.notify(str(result.get("message","稍等一下吧。")));return
 	if t.kind=="bed":enter_sleep(true)
 	elif t.kind=="bench":
-		bunny.sit_on_surface(t.node.get_node("SeatAnchor").global_transform);nap_exit=t.node.get_node("ExitAnchor").global_position;nap_active=true;bunny.play_action("nap",INF)
+		var seats=preload("res://scripts/city/seating.gd");var slot:=int(session.state().get("net_pose",{}).get("slot",0));bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action("nap",INF)
 	elif t.kind=="npc":
 		talking_npc=id
 		dialogue_text=People.line_for(int(t.profile),previous_dialogues.get(id,""),fposmod(float(session.state().time)/3600*24,24))

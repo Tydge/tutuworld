@@ -1,0 +1,22 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 01:44:54.717 Godot[71562:98866573] not in fullscreen state
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+PASS City uses one avatar listener and only two spatial looping voices
+PASS Imported ambience loops continuously and is culled beyond its audible radius
+PASS Imported ambience loops continuously and is culled beyond its audible radius
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Camera zoom does not change the avatar's hearing position
+SPATIAL_AUDIO_RMS near=0.006779187877 far=0.00018229942763
+PASS Real audio mix becomes substantially quieter away from the coast
+PASS The fireplace occupies a real independently editable room
+PASS Actual fireplace light changes nearby walls and floor pixels with animated flames hidden
+WANDER_GRID_READY cells=11554 components=25
+PASS Valley adds one continuous creek voice, without duplicating decoders along the river
+PASS The stream emitter follows the actual river shape and water height
+AMBIENT_FIRE_FLOW_RESULT PASS checks=9 failures=[]
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketSmallE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)

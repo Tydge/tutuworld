@@ -10,6 +10,7 @@ func setup_targets() -> void:
 	preload("res://scripts/city/interaction_targets.gd").add_benches(self)
 	for id in ["home_sofa","home_desk"]:
 		var seat: Node3D=home.seat_node(id)
+		preload("res://scripts/city/seating.gd").ensure(seat,2 if id=="home_sofa" else 1)
 		targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"radius":1.65,"node":seat,"label":"坐下来，听听溪水"}
 func spawn_npcs() -> void:
 	var rng:=RandomNumberGenerator.new();rng.randomize()

@@ -9,8 +9,9 @@ const MAX_WALL_RUNS:=256
 const MAX_ROOFS:=128
 static var grid_cache: Dictionary={}
 static var last_validation_usec:=0
-const STYLES:=["original","plaster","wood","brick","stone"]
-static func empty() -> Dictionary:return {"schema":3,"next_id":1,"elements":[],"grandfathered":{}}
+const STYLES=preload("res://scripts/building/structure_catalog.gd").STYLES
+const Structures=preload("res://scripts/building/structure_catalog.gd")
+static func empty() -> Dictionary:return {"schema":3,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
 static func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
 static func point(value: Variant,grid: bool=true) -> bool:
 	if not value is Array or value.size()!=2:return false
@@ -32,8 +33,9 @@ static func supported(footprint: Rect2,floors: Array) -> bool:
 	return Grid.covered(footprint,Grid.index(floors).floors)
 static func compiled(layout: Dictionary) -> Dictionary:
 	var structures: Array=layout.elements.filter(func(row):return row.type in ["floor","wall"])
+	var cache_key:=hash(structures)
+	if grid_cache.has(cache_key) and grid_cache[cache_key].source==structures:return grid_cache[cache_key].compiled
 	var key:=JSON.stringify(structures).sha256_text()
-	if grid_cache.has(key):return grid_cache[key]
 	var result:=Grid.index(structures);result["signature"]=key;result["wall_buckets"]={}
 	for row in structures:
 		if row.type!="wall":continue
@@ -44,13 +46,13 @@ static func compiled(layout: Dictionary) -> Dictionary:
 				if not result.wall_buckets.has(bucket):result.wall_buckets[bucket]=[]
 				result.wall_buckets[bucket].append(row)
 	if grid_cache.size()>=4:grid_cache.erase(grid_cache.keys()[0])
-	grid_cache[key]=result;return result
+	grid_cache[cache_key]={"source":structures.duplicate(true),"compiled":result};return result
 static func usage(layout: Dictionary) -> Dictionary:
 	var grid:=compiled(layout);var objects:=0;var lights:=0;var roofs:=0
 	for row in layout.elements:
 		if row.type=="object":
 			objects+=1
-			if row.kind in ["table_lamp","pendant"]:lights+=1
+			if Catalog.OBJECTS[row.kind].get("light",false):lights+=1
 		elif row.type=="roof":roofs+=1
 	return {"floor_cells":grid.floors.size(),"floor_area":grid.floors.size()*.25,"wall_edges":grid.walls.size(),"wall_length":grid.walls.size()*.5,"objects":objects,"lights":lights,"roofs":roofs}
 static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
@@ -84,6 +86,22 @@ static func validate(raw: Variant) -> Dictionary:
 		if id.is_empty() or id.length()>64 or ids.has(id):return fail("物件编号无效或重复。")
 		var row:={"id":id,"type":type,"color":str(value.get("color","eadcc5")),"style":str(value.get("style","original")),"painted":bool(value.get("painted",false))}
 		if row.color.length()!=6 or not Color.html_is_valid(row.color) or not row.style in STYLES:return fail("请选择有效的颜色和材质。")
+		if type in ["door","window","roof"]:
+			var form:=str(value.get("form","classic"))
+			if not Structures.FORMS[type].has(form):return fail("请选择已有的门窗或屋顶造型。")
+			if form!="classic":row.form=form
+		if type=="wall" and value.has("faces"):
+			if not value.faces is Dictionary:return fail("墙面装修格式不正确。")
+			var faces: Dictionary={}
+			for side in ["positive","negative"]:
+				if not value.faces.has(side):continue
+				var face: Variant=value.faces[side]
+				if not face is Dictionary:return fail("墙面装修格式不正确。")
+				var tint:=str(face.get("color",row.color));var style:=str(face.get("style",row.style))
+				if tint.length()!=6 or not Color.html_is_valid(tint) or not style in STYLES:return fail("请选择有效的墙面颜色和纹理。")
+				faces[side]={"color":tint,"style":style,"painted":bool(face.get("painted",true))}
+			if faces.size()!=value.faces.size():return fail("未知的墙面方向。")
+			if not faces.is_empty():row.faces=faces
 		match type:
 			"floor","roof","wall":
 				if not point(value.get("a")) or not point(value.get("b")):return fail("结构要对齐半米网格，并留在建造园地块内。")
@@ -115,9 +133,24 @@ static func validate(raw: Variant) -> Dictionary:
 		ids[id]=row;clean.elements.append(row)
 	var grid:=compiled(clean)
 	if grid.error!="":return fail(grid.error)
+	# Older layouts did not count their fireplaces as lights. Preserve those exact
+	# existing IDs without allowing newly placed fireplaces to evade the budget.
+	var old_fires: Array=raw.get("legacy_fireplaces",[]) if raw.get("legacy_fireplaces",[]) is Array else []
+	if int(raw.get("lighting_version",0))==0:
+		for row in objects:
+			if row.kind=="hearth":old_fires.append(row.id)
+	var retained_fires: Array=[]
+	for row in objects:
+		if row.kind=="hearth" and row.id in old_fires:retained_fires.append(row.id)
+	if not retained_fires.is_empty():clean.legacy_fireplaces=retained_fires
 	var counts:=usage(clean)
+	var light_limit:=MAX_LIGHTS
+	if not retained_fires.is_empty():
+		var previous_limit:=int(raw.get("legacy_light_limit",counts.lights if int(raw.get("lighting_version",0))==0 else MAX_LIGHTS))
+		light_limit=maxi(MAX_LIGHTS,mini(previous_limit,MAX_LIGHTS+retained_fires.size()))
+		if mini(light_limit,int(counts.lights))>MAX_LIGHTS:clean.legacy_light_limit=mini(light_limit,int(counts.lights))
 	if counts.objects>MAX_ELEMENTS:return fail("家具和摆件最多%d件；地板、墙体另计。"%MAX_ELEMENTS)
-	if counts.lights>MAX_LIGHTS:return fail("实际照明灯具最多%d盏。"%MAX_LIGHTS)
+	if counts.lights>light_limit:return fail("实际照明灯具最多%d盏。"%MAX_LIGHTS)
 	if not grid.has("compressed_wall"):grid["compressed_wall"]=Grid.runs(grid.walls);grid["compressed_floor"]=Grid.rectangles(grid.floors)
 	if counts.wall_edges>MAX_WALL_EDGES or grid.compressed_wall.size()>MAX_WALL_RUNS:return fail("墙体超过当前容量，请减少密集或碎片墙段。")
 	if counts.roofs>MAX_ROOFS:return fail("屋顶模块超过当前容量。")

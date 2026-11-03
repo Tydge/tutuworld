@@ -157,7 +157,7 @@ func apply_local(row: Dictionary,delta: float) -> void:
 		return
 	if kind=="sit":
 		if not city.nap_active and city.targets.has(pose.target):
-			actor.sit_on_surface(city.targets[pose.target].node.get_node("SeatAnchor").global_transform);actor.play_action("nap",INF);city.nap_active=true
+			actor.sit_on_surface(preload("res://scripts/city/seating.gd").seat(city.targets[pose.target].node,int(pose.get("slot",0))));actor.play_action("nap",INF);city.nap_active=true
 		return
 	if kind not in ["sleep","sit","waiting_exit"] and (city.sleep_active or city.nap_active):
 		actor.stand_up(from_array(row.position));city.sleep_active=false;city.nap_active=false

@@ -1,0 +1,42 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Fresh island has no phantom default character
+PASS Nine basic starter clothes
+PASS Starter is a cheapest basic option: bow_honey
+PASS Starter is a cheapest basic option: bow_rose
+PASS Starter is a cheapest basic option: bow_sage
+PASS Three options for head
+PASS Starter is a cheapest basic option: scarf_blue
+PASS Starter is a cheapest basic option: scarf_green
+PASS Starter is a cheapest basic option: scarf_red
+PASS Three options for neck
+PASS Starter is a cheapest basic option: vest_honey
+PASS Starter is a cheapest basic option: vest_rose
+PASS Starter is a cheapest basic option: vest_sage
+PASS Three options for body
+PASS Blank name rejected
+PASS Control characters rejected
+PASS Overlong name rejected
+PASS Unknown species rejected
+PASS Nonstarter cannot be gifted
+PASS Creates a named rabbit with trimmed name
+PASS Exactly one free garment, equipped, alongside normal seeds
+PASS Duplicate name rejected without overwriting
+PASS Cat has a separate persistent identity
+PASS New character enters the same world and crops
+PASS Backpack, coins and experience are independent
+PASS Starter selection does not grant clothes from other slots
+PASS Can choose an existing rabbit
+PASS Restores rabbit progress without cat inventory
+PASS World growth, resource depletion and clock stay shared
+PASS Advancing only the game clock grants no inactive real-time stamina
+PASS Name and clothing are preserved per character
+PASS Invalid selection does not replace active character
+PASS Roster and shared world save atomically
+PASS Save separates a single world from character inventories
+PASS Multiple characters and active selection survive restart
+PASS Cat identity and progress survive restart
+PASS Failed write rolls back character creation
+PASS Legacy single character and island migrate intact
+PASS First migration keeps a permanent untouched legacy backup
+CHARACTER_ROSTER_RULES_RESULT PASS checks=39 failures=[]

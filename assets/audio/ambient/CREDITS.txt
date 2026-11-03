@@ -1,0 +1,20 @@
+Ambient sound credits — TutuWorld, 2026-11-04
+
+Ocean waves: “Beach Ocean Waves”, jasinski (submitted by qubodup).
+https://opengameart.org/content/beach-ocean-waves
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Original Freesound recording: https://freesound.org/people/jasinski/sounds/18363/
+Files wave_01, wave_02 and wave_03 were rearranged, crossfaded, level-adjusted, converted to mono 32 kHz and encoded as a looping Ogg Vorbis stream.
+
+Seagulls: “Solo Seagull Sound Effects”, compiled by Rango Mango.
+https://opengameart.org/content/solo-seagull-sound-effects
+CC0 1.0 as published on the source page.
+Ambient calls 1–3 were level-adjusted, edge-faded and spaced across a 48-second mono Vorbis loop. No attack or death calls are used.
+
+Creek: “Stream Sounds”, kurt.
+https://opengameart.org/content/stream-sounds
+CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Original file: stream-waterfall/stream1.ogg from stream-waterfall.zip.
+Modified: trimmed/crossfaded for continuous looping, DC removed, level-adjusted, converted to mono 32 kHz and re-encoded as Ogg Vorbis.
+
+These creators do not endorse this game. Attribution and links are also available in the in-game settings under 音效来源与许可. Original download URLs, SHA256 checksums and final asset checksums are recorded in preparation.json. Full license texts accompany these files.

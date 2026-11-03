@@ -11,6 +11,7 @@ var layout: Dictionary
 var room: Node3D
 var ui: CanvasLayer
 var tool:="select"
+var structure_form:="classic"
 var selected_id:=""
 var moving_id:=""
 var selected_unit: Dictionary={}
@@ -103,6 +104,10 @@ func rebuild() -> void:
 			city.targets["build:"+str(door.name)]={"kind":"home_door","name":"我的小屋","node":door,"anchor":door.get_node("ActionAnchor"),"position":door.door_action_position(),"radius":3.8}
 		for module in room.get_node("Furnishing").get_children():
 			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.get_node("ExitAnchor").global_position,"radius":1.65,"label":"坐下来休息一会"}
+			if module.has_node("SleepExit"):
+				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.get_node("ActionAnchor").global_position,"radius":2.3}
+				if not module.has_node("BedComfort"):
+					var comfort:=preload("res://scripts/building/bed_comfort.gd").new();comfort.name="BedComfort";comfort.bed=module;comfort.city=city;module.add_child(comfort)
 		if active:set_roof_visible(show_roof)
 	refresh_ui()
 func selected_row() -> Dictionary:
@@ -111,11 +116,14 @@ func refresh_ui() -> void:ui.refresh(selected_row())
 func choose_tool(id: String) -> void:
 	ui.appearance_panel.close()
 	restore_moving()
+	var parts:=id.split(":")
+	structure_form=parts[1] if parts.size()==2 and parts[0] in ["door","window","roof"] else "classic"
+	if parts[0] in ["door","window","roof"]:id=parts[0]
 	tool=id;start_point=null;moving_id="";moving_unit.clear();demolition_start=null;demolition_target_type="";demolition_dragging=false;demolition_candidate.clear();demolition_key="";rotation=0.;ghost_key="";ghost.hide();clear_preview()
 	if id.begins_with("object:"):ui.show_category(Catalog.OBJECTS[id.trim_prefix("object:")].category)
 	if id!="select":
 		selected_id="";selected_unit.clear();brush_painted=false;ui.updating=true;ui.style.selected=0
-		ui.color.color=Color({"floor":"cda56e","roof":"688d81","wall":"eadcc5","door":"739b8d","window":"eee2c6"}.get(id,"ffffff"))
+		ui.color.color=Color(preload("res://scripts/building/structure_catalog.gd").default_color(id,structure_form))
 		ui.updating=false
 	refresh_ui();ui.message("点击选中物件查看操作" if id=="select" else "选择位置放置 · Esc 取消")
 func set_night_preview(value: bool) -> void:
@@ -123,6 +131,7 @@ func set_night_preview(value: bool) -> void:
 	ui.root_ui.find_child("NightPreview",true,false).set_pressed_no_signal(value)
 func set_roof_visible(value: bool) -> void:
 	show_roof=value
+	ui.root_ui.find_child("ShowRoof",true,false).set_pressed_no_signal(value)
 	if not is_instance_valid(room) or not active:return
 	room.set_process(false);room.get_node("Structure/Roof").visible=value
 	apply_editor_cutaway()
@@ -133,7 +142,10 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	if not result.ok:ui.message(result.message,true);return false
 	if result.layout==layout:return true
 	if history:undo_stack.append(layout.duplicate(true));redo_stack.clear();if_history_limit()
-	layout=result.layout;rebuild();ui.message("已保存 · "+str(Layout.usage(layout).objects)+" 件家具与摆件")
+	layout=result.layout
+	if not selected_unit.is_empty():reselect_unit(selected_unit)
+	elif selected_id!="" and Layout.find(layout,selected_id).is_empty():selected_id=""
+	rebuild();ui.message("已保存 · "+str(Layout.usage(layout).objects)+" 件家具与摆件")
 	return true
 func if_history_limit() -> void:
 	if undo_stack.size()>50:undo_stack.pop_front()
@@ -157,12 +169,18 @@ func paint_selected(color: Color,style: String) -> void:
 	if selected_row().get("type","")=="object":
 		var A=preload("res://scripts/building/appearance.gd");var definition: Dictionary=A.parts(selected_row().kind)[0]
 		paint_appearance(definition.id,color,style if style in A.allowed(definition) else "original");return
-	var row:=selected_row().duplicate(true);row.color=color.to_html(false);row.style=style;row.painted=true
-	var next:=Layout.replace_unit(layout,selected_unit,row) if not selected_unit.is_empty() else Layout.replace(layout,row)
+	var row:=selected_row().duplicate(true);var next: Dictionary
+	if row.get("type","") in ["floor","wall"]:
+		if selected_unit.is_empty():row=Layout.unit_at(layout,selected_id,Layout.rect(row).get_center())
+		var camera:=Vector2(city.camera.global_position.x,city.camera.global_position.z)
+		next=preload("res://scripts/building/surface_edit.gd").paint(layout,row,color,style,ui.batch_paint.button_pressed,ui.wall_face.selected,camera)
+	else:
+		row.color=color.to_html(false);row.style=style;row.painted=true;next=Layout.replace(layout,row)
 	if commit(next):
-		if not selected_unit.is_empty():reselect_unit(row)
+		if row.type in ["floor","wall"]:reselect_unit(row)
 		else:selected_id=row.id
 		refresh_ui()
+
 func paint_appearance(slot: String,color: Color,material: String,accent: Variant=null) -> void:
 	var row:=selected_row().duplicate(true)
 	if row.get("type","")!="object":return
@@ -267,6 +285,7 @@ func closest_wall(point_: Vector2) -> Dictionary:
 	return best
 func row_at(point_: Vector2) -> Dictionary:
 	var row:={"type":tool,"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
+	if tool in ["door","window","roof"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y]}
 	if tool.begins_with("object:"):row.type="object";row.kind=tool.trim_prefix("object:");row.position=[point_.x,point_.y];row.yaw=rotation;row.painted=brush_painted
 	elif tool in ["floor","roof","wall"]:
@@ -387,7 +406,7 @@ func update_ghost(point_: Vector2) -> void:
 func update_camera() -> void:
 	city.camera.position=focus+Vector3(sin(yaw)*cos(pitch),sin(pitch),cos(yaw)*cos(pitch))*distance_;city.camera.look_at(focus)
 	# Center the working plot in the visible area above the bottom catalog.
-	var shift:=distance_*tan(deg_to_rad(city.camera.fov)*.5)*minf(.34,280./get_viewport().get_visible_rect().size.y)
+	var shift:=distance_*tan(deg_to_rad(city.camera.fov)*.5)*minf(.38,326./get_viewport().get_visible_rect().size.y)
 	city.camera.look_at(focus-city.camera.global_basis.y*shift)
 	if active:apply_editor_cutaway()
 func pan_camera(local_offset: Vector2) -> void:
@@ -434,27 +453,22 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 		match row.type:
 			"floor":
 				if minf(area.size.x,area.size.y)<.01:return
-				var m:=ShaderMaterial.new()
-				if row.style=="stone":m.shader=preload("res://assets/shaders/paving.gdshader");m.set_shader_parameter("paving_texture",preload("res://assets/terrain/village_stone_paving_v1.png"));m.set_shader_parameter("stone_color",Color(row.color))
-				elif row.style in ["brick","plaster"]:m.shader=preload("res://assets/shaders/home_surface.gdshader");m.set_shader_parameter("tint",Color(row.color));m.set_shader_parameter("pattern",2 if row.style=="brick" else 0)
-				else:m.shader=preload("res://assets/shaders/home_floor.gdshader");m.set_shader_parameter("wood_color",Color(row.color));m.set_shader_parameter("room_half_size",area.size*.5)
+				var m:=Factory.floor_material(row)
 				var slab:=BoxMesh.new();slab.size=Vector3(area.size.x,.30,area.size.y);var visual:=MeshInstance3D.new();visual.mesh=slab;visual.material_override=m;visual.position.y=.03;preview.add_child(visual)
 			"wall":
 				if area.size.length()<.01:return
-				b.blueprint.materials.plaster=row.color;b.build_wall(preview,{"id":"WallPreview","a":[row.a[0]-mid.x,row.a[1]-mid.y],"b":[row.b[0]-mid.x,row.b[1]-mid.y],"openings":[]})
-				if row.style in ["wood","brick","stone"]:
-					for part in preview.find_children("*","MeshInstance3D",true,false):
-						if part.material_override is ShaderMaterial and part.material_override.get_shader_parameter("tint")==Color(row.color):part.material_override.set_shader_parameter("pattern",1 if row.style=="wood" else 3)
+				b.blueprint.materials.plaster=row.color;b.build_wall(preview,{"id":"WallPreview","a":[row.a[0]-mid.x,row.a[1]-mid.y],"b":[row.b[0]-mid.x,row.b[1]-mid.y],"openings":[],"color":row.color,"style":row.style,"faces":row.get("faces",{})})
 			"roof":
 				if minf(area.size.x,area.size.y)<.01:return
-				b.blueprint.size=[area.size.x,area.size.y];b.blueprint.materials.roof=row.color;b.build_roof(preview)
+				b.roof_form=row.get("form","classic");b.blueprint.size=[area.size.x,area.size.y];b.blueprint.materials.roof=row.color;b.build_roof(preview)
 			"door","window":
 				var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var end:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(end-a).normalized();var p:=a+dir*float(row.offset)
 				preview.position=Vector3(p.x,0,p.y);var holder:=Node3D.new();preview.add_child(holder);holder.rotation.y=-atan2(dir.y,dir.x)
-				var opening:={"id":"opening","type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style}
+				var opening:={"id":"opening","type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style,"form":row.get("form","classic")}
 				b.build_opening(holder,0,opening)
 				if row.type=="door":
-					var leaf:=Node3D.new();leaf.set_script(preload("res://scripts/building/room_door.gd"));holder.add_child(leaf);b.root=leaf;b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(leaf);Factory.paint(leaf,row,true)
+					var leaf:=Node3D.new();leaf.set_script(preload("res://scripts/building/room_door.gd"));holder.add_child(leaf);b.root=leaf;b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(leaf)
+					if row.get("form","classic")=="classic" or row.get("painted",false):Factory.paint(leaf,row,true)
 		for body in preview.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
 		for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	preview.show();ghost.hide()

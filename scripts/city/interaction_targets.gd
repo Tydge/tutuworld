@@ -7,5 +7,6 @@ static func add_benches(host: Node3D) -> void:
 		var index:=0
 		for node in container.get_children():
 			if not node is Node3D or not node.has_node("SeatAnchor") or not node.has_node("ExitAnchor"):continue
+			preload("res://scripts/city/seating.gd").ensure(node,2)
 			var id:="bench:%s:%d"%[container_name,index];index+=1
 			host.targets[id]={"kind":"bench","position":node.global_position,"radius":2.4,"node":node}

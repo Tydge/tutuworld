@@ -104,7 +104,9 @@ static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
 	return root.last_sync
 static func floor_material(row: Dictionary) -> Material:
 	var material:=ShaderMaterial.new()
-	if row.style=="stone":material.shader=preload("res://assets/shaders/paving.gdshader");material.set_shader_parameter("paving_texture",preload("res://assets/terrain/village_stone_paving_v1.png"));material.set_shader_parameter("stone_color",Color(row.color))
+	if row.style in ["herringbone","terrazzo","botanical"]:
+		material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",preload("res://scripts/building/structure_catalog.gd").pattern(row.style,true));material.set_shader_parameter("building_world_pattern",true)
+	elif row.style=="stone":material.shader=preload("res://assets/shaders/paving.gdshader");material.set_shader_parameter("paving_texture",preload("res://assets/terrain/village_stone_paving_v1.png"));material.set_shader_parameter("stone_color",Color(row.color))
 	elif row.style in ["brick","plaster"]:material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",2 if row.style=="brick" else 0);material.set_shader_parameter("building_world_pattern",true)
 	else:material.shader=preload("res://assets/shaders/home_floor.gdshader");material.set_shader_parameter("wood_color",Color(row.color));material.set_shader_parameter("world_aligned",true)
 	return material
@@ -126,13 +128,10 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 				var r:=Layout.rect(part);var mid: Vector2=r.get_center()-row.origin;b.floor_collision(module,Vector3(mid.x,.03,mid.y),Vector3(r.size.x,.30,r.size.y))
 		"wall":
 			b.blueprint.materials.plaster=row.color;b.build_wall(parent,wall_data(layout,row,Vector2(Site.CENTER.x,Site.CENTER.z)));module=parent.get_node(NodePath(row.id))
-			if row.style in ["wood","brick","stone"]:
-				for part in module.find_children("*","MeshInstance3D",true,false):
-					if part.material_override is ShaderMaterial and part.material_override.get_shader_parameter("tint")==Color(row.color):part.material_override.set_shader_parameter("pattern",1 if row.style=="wood" else 3)
 			b.bake_section(module)
 		"roof":
 			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,0,mid.y)
-			b.blueprint.size=[r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
+			b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
 		"object":
 			module=group(parent,row.id)
 			b.build_item(module,row.kind)
@@ -154,9 +153,11 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 			if row.type=="door":
 				module=preload("res://scripts/building/room_door.gd").new();module.name=row.id;parent.add_child(module);b.root=module
 			else:module=group(parent,row.id)
-			var opening:={"id":row.id,"type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style}
+			var opening:={"id":row.id,"type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style,"form":row.get("form","classic")}
 			if row.type=="door":
-				b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(module);b.bake_section(module.get_node("Hinge"));paint(module,row,true);module.configure(city)
+				b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(module);b.bake_section(module.get_node("Hinge"))
+				if row.get("form","classic")=="classic" or row.painted:paint(module,row,true)
+				module.configure(city)
 			var frame:=group(module,"Frame");frame.position.y=-.18 if row.type=="door" else 0.;b.build_opening(frame,0,opening);b.bake_section(frame)
 			if row.type=="window":
 				var picker:=StaticBody3D.new();picker.collision_layer=16;picker.collision_mask=0;var shape:=BoxShape3D.new();shape.size=Vector3(2.2,2.,.10);var collision:=CollisionShape3D.new();collision.shape=shape;collision.position.y=2.28;picker.add_child(collision);module.add_child(picker)
@@ -168,6 +169,15 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
 	module.set_meta("module_type",row.type);module.set_meta("module_id",row.id)
 	if row.type not in ["floor_chunk","joint"]:module.set_meta("build_element_id",row.id)
+	if row.type=="object" and Catalog.OBJECTS[row.kind].get("bed",false):
+		for mesh in module.find_children("*","MeshInstance3D",true,false):
+			if not mesh.material_override is ShaderMaterial or mesh.material_override.shader!=preload("res://assets/shaders/sleep_quilt.gdshader"):continue
+			var previous: Material=mesh.material_override;var own: Material=previous.duplicate();mesh.material_override=own
+			var original: Material=mesh.get_meta("appearance_original",previous)
+			mesh.set_meta("appearance_original",own if original==previous else original.duplicate())
+	if row.type=="wall":
+		for mesh in module.find_children("*","MeshInstance3D",true,false):
+			if mesh.material_override is ShaderMaterial:mesh.material_override.set_shader_parameter("building_world_pattern",true)
 	if row.type in ["wall","roof","joint","door","window"]:root.register_cutaway(module,row.type=="roof")
 	preload("res://scripts/city/environment_materials.gd").apply(module)
 static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
@@ -178,7 +188,7 @@ static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 		"wall":
 			var data:=wall_data(layout,row,Vector2.ZERO)
 			for opening in data.openings:opening.erase("id")
-			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.color,row.style,data.openings])
+			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.color,row.style,row.get("faces",{}),row.a[0]<row.b[0] if is_equal_approx(row.a[1],row.b[1]) else row.a[1]>row.b[1],data.openings])
 		"joint":return "joint:"+JSON.stringify([row.corner,row.color,row.axis])
 	return ""
 static func pose_wall(module: Node3D,row: Dictionary) -> void:
@@ -214,8 +224,8 @@ static func wall_data(layout: Dictionary,row: Dictionary,center: Vector2) -> Dic
 		var width:=2.86 if item.type=="door" else 2.2;var left:=maxf(first,p[axis]-width*.5);var right:=minf(last,p[axis]+width*.5)
 		if right-left<.001:continue
 		var mid:=(left+right)*.5;var offset:=absf(mid-float(row.a[axis]))
-		openings.append({"id":item.id,"type":item.type,"offset":offset,"color":item.color,"style":item.style,"width":right-left,"height":3.5 if item.type=="door" else 2.,"bottom":0. if item.type=="door" else 1.1,"geometry_only":true})
-	return {"id":row.id,"a":[row.a[0]-center.x,row.a[1]-center.y],"b":[row.b[0]-center.x,row.b[1]-center.y],"openings":openings}
+		openings.append({"id":item.id,"type":item.type,"offset":offset,"color":item.color,"style":item.style,"width":right-left,"height":3.5 if item.type=="door" else 2.,"bottom":0. if item.type=="door" else 1.1,"geometry_only":true,"form":item.get("form","classic"),"full_width":width,"center_shift":absf(p[axis]-float(row.a[axis]))-offset})
+	return {"id":row.id,"a":[row.a[0]-center.x,row.a[1]-center.y],"b":[row.b[0]-center.x,row.b[1]-center.y],"openings":openings,"color":row.color,"style":row.style,"faces":row.get("faces",{})}
 
 static func mark_navigation(root: Node3D,row: Dictionary) -> void:
 	if row.is_empty():return

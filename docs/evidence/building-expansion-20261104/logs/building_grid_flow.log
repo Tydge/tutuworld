@@ -1,0 +1,36 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 01:39:31.197 Godot[71294:98858800] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Build adjacent wall drags on a continuous floor
+PASS Only real wall endpoints receive trim; straight join has no post
+PASS Hammer click deletes one half-metre wall edge
+PASS One undo restores the wall edge
+PASS Dragging previews demolition without changing committed geometry
+PASS Visible drag preview and committed range identify the same two metres
+PASS Mouse drag removes precisely the selected wall range
+PASS Structural edits keep the building root instance
+PASS Wall demolition reuses all untouched floor geometry
+PASS Range demolition removes sixteen individual floor cells
+PASS The demolished floor hole is detected by exact support validation
+PASS Floor edit rebuilds only touched render chunks
+PASS One undo restores all floor cells in the drag
+PASS Escape cancels a live demolition drag without changing layout
+PASS Releasing a demolition drag above the dock completes the owned gesture
+PASS One undo restores a range demolition completed over the dock
+PASS Picking a merged floor addresses an individual editable cell
+PASS Painting one floor cell changes exactly one floor chunk
+PASS Furniture can move through the incremental update path
+PASS Furniture movement preserves meshes and unrelated fixture instances
+PASS A door may span wall edges with different appearances
+PASS Wall repaint preserves the door instance, anchor and angle
+PASS No wall collision is rebuilt inside a door spanning several material runs
+PASS Shared roof is cut only over the occupied room, not its neighboring room
+PASS Interior classification follows enclosed rooms and actual floor support
+PASS Entering one house leaves the separate house's roof visible
+PASS Removing exterior wall enclosure makes that room outdoors
+BUILDING_GRID_FLOW_RESULT PASS checks=27 failures=[]

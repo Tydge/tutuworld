@@ -58,6 +58,36 @@ void fragment(){
   float row=floor(uv.y);uv.x+=mod(row,2.0)*.5;vec2 f=fract(uv);
   float edge=min(min(f.x,1.0-f.x),min(f.y,1.0-f.y));
   color*=mix(.74,.97+hash(floor(uv))*.08,smoothstep(.025,.06,edge));
+ }else if(pattern==4){
+  vec2 uv=(abs(local_normal.y)>.6?local_pos.xz:(abs(local_normal.z)>.6?local_pos.xy:local_pos.zy))*2.4;
+  uv=mat2(vec2(.7071,.7071),vec2(-.7071,.7071))*uv;
+  vec2 cell=floor(uv);vec2 f=fract(uv);float d=mod(cell.x-cell.y,8.);bool horizontal=d<4.;
+  vec2 board=horizontal?vec2(d+f.x,f.y):vec2(f.x,7.-d+f.y);
+  vec2 size=horizontal?vec2(4.,1.):vec2(1.,4.);
+  vec2 start=horizontal?vec2(cell.x-d,cell.y):vec2(cell.x,cell.y-(7.-d));
+  float edge=min(min(board.x,size.x-board.x),min(board.y,size.y-board.y));
+  float seam=smoothstep(.008,.023+fwidth(edge),edge);float along=horizontal?uv.x:uv.y;float across=horizontal?uv.y:uv.x;
+  float streak=sin(along*35.+sin(along*2.7+across)*2.+across*180.)*.022;
+  color=mix(base*.64,base*(.91+hash(start)*.14+streak),seam);
+ }else if(pattern==5){
+  vec2 uv=(abs(local_normal.y)>.6?local_pos.xz:(abs(local_normal.z)>.6?local_pos.xy:local_pos.zy))*13.;
+  vec2 cell=floor(uv);vec2 f=fract(uv)-.5;float h=hash(cell);
+  vec2 center=vec2(hash(cell+2.),hash(cell+8.))*.5-.25;
+  float shape=length((f-center)*vec2(1.,1.4));float chip=1.-smoothstep(.10,.15+fwidth(shape),shape);
+  vec3 fleck=mix(base*.61,mix(base,vec3(.93,.83,.67),.45),step(.5,h));
+  color=mix(base*(.99+grain),fleck,chip*step(.30,h));
+ }else if(pattern==6){
+  vec2 uv=(abs(local_normal.y)>.6?local_pos.xz:(abs(local_normal.z)>.6?local_pos.xy:local_pos.zy))*1.5;
+  uv.x+=mod(floor(uv.y),2.)*.5;vec2 f=fract(uv)-.5;
+  float stem=1.-smoothstep(.010,.022+fwidth(f.x),abs(f.x-.08*sin(f.y*5.)));
+  float leaf=0.;
+  for(int i=0;i<3;i++){
+   vec2 q=f-vec2(i==1?-.12:.12,-.23+float(i)*.21);q.x+=(i==1?-1.:1.)*q.y*.7;
+   leaf=max(leaf,1.-smoothstep(.75,1.+fwidth(q.x)*12.,length(q/vec2(.12,.065))));
+  }
+  vec2 bell=f-vec2(.01,.34);float bloom=1.-smoothstep(.8,1.,length(bell/vec2(.07,.075)));
+  vec3 ink=mix(base*.62,vec3(.39,.54,.40),.40);
+  color=mix(base*(1.+grain),ink,max(leaf*.7,stem*step(-.37,f.y)*step(f.y,.34))*.43);color=mix(color,mix(base,vec3(1.),.70),bloom);
  }else{color*=1.0+grain*.65;}
  if(plaster_strength>.001 && pattern==0){
   vec2 wall_uv=(abs(local_normal.z)>.6?p.xy:p.zy)*.65;

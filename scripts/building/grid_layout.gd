@@ -6,7 +6,7 @@ static func cell(p: Vector2) -> Vector2i:return Vector2i(floori(p.x/STEP),floori
 static func point(p: Vector2i) -> Vector2:return Vector2(p)*STEP
 static func area(row: Dictionary) -> Rect2:
 	var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);return Rect2(a.min(b),(b-a).abs())
-static func style_key(row: Dictionary) -> String:return str(row.get("color","eadcc5"))+":"+str(row.get("style","original"))+":"+str(row.get("painted",false))
+static func style_key(row: Dictionary) -> String:return str(row.get("color","eadcc5"))+":"+str(row.get("style","original"))+":"+str(row.get("painted",false))+(JSON.stringify(row.faces) if not row.get("faces",{}).is_empty() else "")
 static func coordinates(row: Dictionary) -> Array[Vector2i]:
 	var r:=area(row);var out: Array[Vector2i]=[]
 	for z in range(roundi(r.position.y/STEP),roundi(r.end.y/STEP)):

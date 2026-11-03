@@ -2,12 +2,7 @@ extends RefCounted
 ## Durable building-only checkpoint. Periodic/full saves consolidate it atomically.
 static func write(path: String,generation: String,world_id: String,layout: Dictionary) -> bool:
 	var payload:=JSON.stringify(layout);var record:={"schema":2,"base":generation,"world_id":world_id,"sha256":payload.sha256_text(),"payload":payload}
-	var target:=path+".building";var file:=FileAccess.open(target+".tmp",FileAccess.WRITE)
-	if file==null:return false
-	file.store_string(JSON.stringify(record));file.flush();var error:=file.get_error();file.close()
-	if error!=OK:return false
-	if FileAccess.file_exists(target) and DirAccess.copy_absolute(target,target+".bak")!=OK:return false
-	return DirAccess.rename_absolute(target+".tmp",target)==OK
+	return preload("res://scripts/services/atomic_file.gd").write(path+".building",JSON.stringify(record))
 static func replay(path: String,data: Dictionary,generation: String) -> void:
 	var world: Dictionary=data.get("world",data.get("state",{}));var world_id:=str(world.get("world_id","local"))
 	for file in [path+".building",path+".building.bak"]:
@@ -23,7 +18,11 @@ static func replay(path: String,data: Dictionary,generation: String) -> void:
 			raw=parser.data
 		else:raw=record.get("layout")
 		var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(raw)
-		if record.get("schema",0)==1 and (not checked.ok or JSON.stringify(checked.layout).sha256_text()!=record.get("sha256","")):continue
+		if record.get("schema",0)==1:
+			if not checked.ok:continue
+			var legacy: Dictionary=checked.layout.duplicate(true)
+			if not raw.has("lighting_version"):legacy.erase("lighting_version");legacy.erase("legacy_fireplaces");legacy.erase("legacy_light_limit")
+			if JSON.stringify(legacy).sha256_text()!=record.get("sha256","") and JSON.stringify(raw).sha256_text()!=record.get("sha256",""):continue
 		if checked.ok:world.build_layout=checked.layout;return
 static func consolidate(path: String) -> void:
 	for name_ in [path+".building",path+".building.bak"]:
