@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+ROAM Passerby0 distance=76.2 recoveries=0 repaths=1 max_stall_seconds=1
+ROAM Passerby1 distance=77.89 recoveries=1 repaths=3 max_stall_seconds=1
+ROAM Passerby2 distance=75.95 recoveries=2 repaths=4 max_stall_seconds=1
+ROAM Passerby3 distance=70.43 recoveries=0 repaths=1 max_stall_seconds=1
+ROAM CatTeacher distance=77.9 recoveries=0 repaths=1 max_stall_seconds=1
+ROAM Youmu distance=78.46 recoveries=0 repaths=2 max_stall_seconds=1
+NAVIGATION_ROAM_RESULT PASS failures=[]

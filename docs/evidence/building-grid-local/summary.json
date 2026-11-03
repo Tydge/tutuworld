@@ -1,0 +1,222 @@
+{
+  "date": "2026-11-03",
+  "scope": "Unpublished local single-player grid-building upgrade; no export, deployment, release bump, commit or push",
+  "official": "0.3.3/build6/launcher2/protocol3",
+  "features": [
+    "Half-metre wall edges and floor cells, compact same-style runs/rectangles",
+    "No trim at straight wall joins; trim only at true endpoints and corners",
+    "Real mouse range demolition with per-edge highlight, category filters, dependent counts, cancellation, dock release and one-step undo",
+    "Absolute door/window anchors across differently decorated wall runs; dependent removal and real door-aperture collision",
+    "Exact occupied-cell furniture/roof support instead of nine-point sampling",
+    "Cached four-metre floor chunks and stable reusable scene modules; model/collision transforms reused for moves",
+    "Batched floor arrays, bounded reusable geometry prototypes, per-chunk descriptor cache and regional navigation updates",
+    "Closed-wall room flood-fill and per-room shader cutaways across shared roofs and separate houses",
+    "Atomic building-only checkpoint with checksum, backup, world/generation verification, recovery and full-save consolidation",
+    "Separate furniture, light, wall-length, wall-fragment and roof budgets"
+  ],
+  "building_suite_checks": 646,
+  "related_regression_checks": 206,
+  "total_checks": 852,
+  "capacity_cases": 8,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 337,
+      "log": "logs/project_integrity.log",
+      "qa_run": "20261103-164419-809186"
+    },
+    {
+      "name": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "log": "logs/building_rules.log",
+      "qa_run": "20261103-162707-585257"
+    },
+    {
+      "name": "building_revision_rules",
+      "result": "PASS",
+      "checks": 53,
+      "log": "logs/building_revision_rules.log",
+      "qa_run": "20261103-162707-585257"
+    },
+    {
+      "name": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "log": "logs/building_controls.log",
+      "qa_run": "20261103-164419-809186"
+    },
+    {
+      "name": "building_mouse_flow",
+      "result": "PASS",
+      "checks": 30,
+      "log": "logs/building_mouse_flow.log",
+      "qa_run": "20261103-164419-809186"
+    },
+    {
+      "name": "building_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_flow.log",
+      "qa_run": "20261103-163436-660583"
+    },
+    {
+      "name": "building_revision_flow",
+      "result": "PASS",
+      "checks": 55,
+      "log": "logs/building_revision_flow.log",
+      "qa_run": "20261103-162707-585257"
+    },
+    {
+      "name": "building_grid_rules",
+      "result": "PASS",
+      "checks": 29,
+      "log": "logs/building_grid_rules.log",
+      "qa_run": "20261103-162707-585257"
+    },
+    {
+      "name": "building_store_rules",
+      "result": "PASS",
+      "checks": 13,
+      "log": "logs/building_store_rules.log",
+      "qa_run": "20261103-163313-906630"
+    },
+    {
+      "name": "building_grid_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_grid_flow.log",
+      "qa_run": "20261103-164419-809186"
+    },
+    {
+      "name": "seamless_home",
+      "result": "PASS",
+      "checks": 57,
+      "log": "logs/seamless_home.log",
+      "qa_run": "20261103-163001-229521"
+    },
+    {
+      "name": "home_lighting_stability",
+      "result": "PASS",
+      "checks": 22,
+      "log": "logs/home_lighting_stability.log",
+      "qa_run": "20261103-163001-229521"
+    },
+    {
+      "name": "city_rules",
+      "result": "PASS",
+      "checks": 56,
+      "log": "logs/city_rules.log",
+      "qa_run": "20261103-163001-229521"
+    },
+    {
+      "name": "production_rules",
+      "result": "PASS",
+      "checks": 71,
+      "log": "logs/production_rules.log",
+      "qa_run": "20261103-163001-229521"
+    },
+    {
+      "name": "building_capacity",
+      "result": "PASS",
+      "checks": null,
+      "log": "logs/building_capacity.log",
+      "qa_run": "20261103-163436-660583"
+    }
+  ],
+  "limits": {
+    "objects": 256,
+    "actual_lights": 16,
+    "wall_edges": 2048,
+    "wall_length_m": 1024,
+    "same_style_wall_runs": 256,
+    "floor_cells": 4896,
+    "floor_area_m2": 1224,
+    "roof_modules": 128
+  },
+  "capacity": {
+    "raw_data": "capacity.json",
+    "environment": "macOS / Apple M1 Pro / Godot 4.6.3 / Metal Forward+ / 1920x1080 output, balanced ~2M 3D pixels, 4x MSAA, VSync/fps cap disabled",
+    "frame_metric": "Synchronous force_draw CPU wall time, excludes GPU completion; not FPS or GPU-only timing. Separate from older frame_post_draw tests.",
+    "sequence": "Single process; eight warm-up submissions and thirty measured submissions per case. Geometry cache stays warm across later cases. Initial commit includes validation/synchronization, excludes prior pure fixture validation.",
+    "edit_metric": "Synchronous editor.commit and candidate construction; isolated Session test mode omits disk. Real layout checkpoint duration measured separately in a temporary file.",
+    "final_results": {
+      "full_floor_initial_ms": 151.035,
+      "checkerboard_floor_initial_ms": 346.433,
+      "checkerboard_one_cell_edit_ms": 333.933,
+      "checkerboard_changed_chunks": 1,
+      "checkerboard_reused_chunks": 89,
+      "plants_256_move_ms": 35.495,
+      "combined_256_objects_16_lights_move_ms": 31.008,
+      "movement_created_models": 0,
+      "maximum_wall_edges_one_cut_ms": 139.176,
+      "checkpoint_ms_range": [
+        0.816,
+        26.243
+      ]
+    },
+    "pre_optimization": "An exploratory run exposed repeated mesh generation: checkerboard floor ~10005 ms and 256 identical plants ~11735 ms. It timed out on native inactive-window rendering; its frame intervals are invalid for FPS and are not compared to final submission timings.",
+    "remaining_limit": "The full 4896-cell alternating-style layout still has ~0.33 s synchronous edit cost because complete validation, canonical encoding and the layout checkpoint remain whole-layout operations."
+  },
+  "local_save_migration": {
+    "audit": "migration-audit.json",
+    "from_schema": 2,
+    "to_schema": 3,
+    "records_before": 84,
+    "records_after": 83,
+    "other_progress_fields_unchanged": true,
+    "live_save_modified_only_in_build_layout": true,
+    "rendered_from_isolated_copy": true,
+    "preview": "screenshots/current-player-layout.png"
+  },
+  "manual_visual_review": [
+    "continuous-wall",
+    "wall-range-preview",
+    "floor-range-preview",
+    "floor-hole",
+    "independent-room-roof",
+    "current-player-layout"
+  ],
+  "known_limits": [
+    "Only local single-player east plot, one floor and orthogonal walls",
+    "Roofs remain whole rectangular modules; removing their floor support removes the whole roof plus pendants, with preview counts and atomic undo",
+    "Full validation and building-only layout serialization remain synchronous; actual scene/collision updates are local",
+    "No Windows physical-hardware test, all-budget simultaneous combination, long-running editing soak or full multiplayer regression in this revision",
+    "Capacity tests use specified repeated objects and style patterns, not every possible unique material/geometry arrangement",
+    "No FPS guarantee from force_draw submission timings"
+  ],
+  "source_sha256": {
+    "assets/shaders/build_area_highlight.gdshader": "90e324a0a4f334d9a0db1b92b6da3c72371002022960eb476b2cfc0f6cefb4bd",
+    "assets/shaders/home_floor.gdshader": "d1520ba00ecd19f74738dc7e20adf9402bee610f96551796b0e241a8eb0a1dc0",
+    "assets/shaders/home_surface.gdshader": "4f5fd42229e14d48db9d32cdf4fa5f1741ca0e1241cb47fdedb065c7979cc797",
+    "scripts/building/building_world.gd": "eb76a18f19097fda701311a60a711dec0288fdbea51c3dbe87c64958dd050d13",
+    "scripts/building/catalog.gd": "70e0eae7d9ee46e588bafa8a2c3d88b91fb82fef3e9705dd4fcc153a54891d20",
+    "scripts/building/editable_builder.gd": "54288dfa6c30aee0d8352ad79fcacd8da0a7d32e9883599c5e87718aabea5d9c",
+    "scripts/building/editor.gd": "e209ca4e8e7d3a6a20c7cd6f1e095d8b96b4b96cc6215e2e2669b47cdaffcffc",
+    "scripts/building/editor_ui.gd": "699b8d4c4a3e9c82bdc23d27778ebc2954177dc641463170903bb2d0586b95d8",
+    "scripts/building/furniture_builder.gd": "f4bd9b3657f7cb1cb7d460c30c2041874c988d96ab66e896ceb7637a851c6d92",
+    "scripts/building/grid_layout.gd": "97bcc764cc53de8d83a3877fef7fa57dee71227da29dbfeadc86ccfa6c9efe95",
+    "scripts/building/layout.gd": "dabcfe78c730b2ee66fed57beec15add8c4a38880c3a61038f5630d133f822fe",
+    "scripts/building/layout_store.gd": "5f4c226b0fb192c66c86c03cfe1f75998db8977896d3e80519049bebc49f4a38",
+    "scripts/building/module_factory.gd": "65a1309a9a4963ef9a4c40ffb08e05fb1121d261fb4414f516067ffb5119dfcb",
+    "scripts/building/room_door.gd": "05b06a37b08b4d683b4693ac4c5f245abde378896a9647ac55edb54910e36565",
+    "scripts/building/room_plan.gd": "5ffbd1e837d68db9cf7cc680a3ff0afd007c5df95c75593a6827775cbf3b5e74",
+    "scripts/building/site.gd": "488e0bd15f11aa9589ebf57b053293d0b84f94e4dd34dc5953792d2c88f65985",
+    "scripts/building/templates.gd": "19e8c478693bfefcfdf3dd3c1ab87a4ca3901ed2dcf4720f7623a01fada78964",
+    "scripts/building/thumbnail_studio.gd": "013cebd71e94bd6eeacf322323082ca02f5a05fc53af2f5eccc24a9fe3b83f80",
+    "scripts/building/tool_icon.gd": "ed0b45c740b5f4be55f17ed1ce7c48f2384707fccd37fc8211db1560c33c84b2",
+    "scripts/services/session.gd": "3a04dff5302eb9fe78b8fd057fb3cb1dc68def2eb7107924080a78665a091e1f",
+    "tests/building_capacity.gd": "6cdfe1ef0bc6a6bcb1be0e79618e23042017fcd12fe6870ccf994b1eec0a0b92",
+    "tests/building_controls.gd": "a01364ec3ac281abd2852364b8216d0a1b4d4fad7a380295e1125f42a7240544",
+    "tests/building_flow.gd": "754f71b55505d8db48aa6dea016c9e3407ece0ce26ffdf67cbd4a55f139bc20f",
+    "tests/building_grid_flow.gd": "3fd281cd08d85ef77d09632eb471003134c01cd6797d591aa80180f05a7052b7",
+    "tests/building_grid_rules.gd": "7067922163555a026ce4ff38b73c0d7c615bde2a2a8666bf2220011c05b43855",
+    "tests/building_mouse_flow.gd": "32ad5347eb2f1834b5833c8dca3b575e8dc42258bd985938dd2b11bec7ff6d0d",
+    "tests/building_revision_flow.gd": "5f7f5cfac48fe88f3d661a00e886772ca8e61059f924888eaef574a67498c7ee",
+    "tests/building_revision_rules.gd": "18858d346ef97320a467caa9e831cf8352a0bac56704a02bb870a8db33f6c422",
+    "tests/building_rules.gd": "a3dd154ecd57cf59ddf11163e27aee6706fd95982c6073b5d566b4d31d242bf5",
+    "tests/building_store_rules.gd": "d5868bf289caba420aab6bc1699130c524ad838ebaf1993ec906c05fb652afc3",
+    "tools/test_suites.json": "ec35b584130c4560eb880ad52b98bc9f7d7e2c2bd672d1580cdf2f5727e281ed"
+  }
+}

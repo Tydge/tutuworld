@@ -9,6 +9,8 @@ static func tree_at(world: Node3D,point: Vector3) -> Node3D:
 		if gap<distance_: nearest=tree_;distance_=gap
 	return nearest
 static func apply(world: Node3D) -> void:
+	preload("res://scripts/city/terrain_materials.gd").apply(world)
+	preload("res://scripts/city/environment_materials.gd").apply(world)
 	if world.get_meta("scenery_polished",false):
 		refresh_groundcover(world)
 		return

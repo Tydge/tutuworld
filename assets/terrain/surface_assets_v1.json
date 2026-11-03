@@ -1,0 +1,64 @@
+{
+  "generator": "built-in image_gen",
+  "date": "2026-11-02",
+  "status": "local-only-unreleased",
+  "assets": [
+    {
+      "id": "packed_earth_path_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable albedo texture for the packed-earth walking paths of a cozy hand-painted 3D life simulation game. Generate a single square 1024x1024 texture, filling the entire canvas, perfectly orthographic top-down. A continuous surface of warm ochre-tan compacted fine earth: gently rubbed dusty clay, fine sandy grains, a few very small smooth embedded pebbles, restrained irregular tonal variation. Painterly clean charming material, soft natural colors, low-to-medium contrast, harmonizing with lush spring green grass and cream houses. The material must read well when tiled across a wide forest footpath. Consistent density and scale across the image, no focal feature, no large dark patch. Perfectly seamless wrapping on all four edges. Neutral flat diffuse color only, no directional sunlight, no cast shadows, no vignette or ambient-occlusion shading. No grass, leaves, litter, footprints, tracks, cracked-drought pattern, flowers, stones larger than a few grains, perspective, horizon, scene, text, border, watermark, grid, or material sphere. Output one usable material bitmap, not a material preview or a collage.",
+      "path": "assets/terrain/packed_earth_path_v1.png",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-6a199020-82dd-4cc7-bdc9-b3cdbf3cf420.png",
+      "sha256": "9094eff249c0fa486b302e3fc087f1ad6c6ba0ebd4b401b864d6788000e88050",
+      "original_pixels": [
+        1254,
+        1254
+      ],
+      "import": {
+        "size_limit": 1024,
+        "mode": "VRAM Compressed",
+        "high_quality": false,
+        "mipmaps": true,
+        "desktop_format": "S3TC BC1 RGB",
+        "alternate_format": "ETC2 RGB"
+      }
+    },
+    {
+      "id": "cultivated_soil_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable albedo texture for cultivated vegetable-garden soil in a cozy hand-painted 3D life simulation game. Generate one square 1024x1024 texture filling every pixel, perfectly orthographic top-down. Warm medium umber earthy brown freshly cultivated fine loam, many softly rounded small crumbs and tiny irregular soil aggregates, understated fine earth grains. Soft hand-painted game material with gentle variation and clear but delicate soil structure. Keep it matte, cozy, clean and natural, low-to-medium contrast, no near-black crevices or white speckles. Uniform density, no large chunks or composition, no furrow lines because the 3D game supplies the raised beds and furrows separately. Perfectly seamless on all four borders. Flat neutral diffuse/albedo only: no baked cast shadows, no directional lighting, no vignette or directional relief highlight. No plants, roots, grass, mushrooms, stones, footprints, tracks, cracks, worms, tools, perspective, horizon, letters, borders, watermark, sample sphere or collage. Output a single usable tileable surface texture.",
+      "path": "assets/terrain/cultivated_soil_v1.png",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-fa57df29-5f1f-4ea6-81ed-004784939747.png",
+      "sha256": "f231e3c1f448ffd98f45a6f0d5e727405e6d2089a283ae5f55ef5d896b118023",
+      "original_pixels": [
+        1254,
+        1254
+      ],
+      "import": {
+        "size_limit": 1024,
+        "mode": "VRAM Compressed",
+        "high_quality": false,
+        "mipmaps": true,
+        "desktop_format": "S3TC BC1 RGB",
+        "alternate_format": "ETC2 RGB"
+      }
+    },
+    {
+      "id": "village_stone_paving_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable albedo stone-paving texture for paths and a plaza in a cozy hand-painted 3D life simulation village. Generate one square 1024x1024 image entirely filled with a repeating running-bond rectangular stone pavement. Use exactly eight stone courses from top to bottom and four rectangular slabs across each course, the next course offset by half a slab, a uniform seamless repeat on all borders. Slabs are cool muted blue-gray with subtle warm gray variation, gently rounded worn corners, narrow understated warm-gray mortar joints. Fine pale mineral texture within slabs, delicate small mottling and restrained edge wear, clean charming soft painterly game art. Medium-light stone, readable structure, subtle contrast, no harsh dark outlines, no bright white bevels. All slabs are flat and even. Orthographic straight-down, identical scale everywhere, no perspective or horizon. Surface color/albedo only with flat uniform illumination, no directional sunlight or cast shadows and no dark raised-looking bevel shading. No moss, grass, plants, cracks, broken stones, pebbles, dirt stains, objects, text, borders, watermarks, material ball, or collage. This image must tile cleanly over a large town street, with quiet surface detail rather than photographic noise.",
+      "path": "assets/terrain/village_stone_paving_v1.png",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-a5d08503-4b10-47f4-9945-68b715139c17.png",
+      "sha256": "acc1e28a1a22546ea2acd3a11a2522075e3faffc52a26f0750a799f7d7238a94",
+      "original_pixels": [
+        1254,
+        1254
+      ],
+      "import": {
+        "size_limit": 1024,
+        "mode": "VRAM Compressed",
+        "high_quality": false,
+        "mipmaps": true,
+        "desktop_format": "S3TC BC1 RGB",
+        "alternate_format": "ETC2 RGB"
+      }
+    }
+  ]
+}

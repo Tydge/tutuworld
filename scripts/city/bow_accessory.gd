@@ -1,7 +1,7 @@
 extends RefCounted
 ## A complete, softly padded bow mounted as one piece beside an ear.
 const G=preload("res://scripts/geometry.gd")
-const Fabric=preload("res://scripts/city/fabric_library.gd")
+const Fabric=preload("res://scripts/appearance/fabric_material.gd")
 const SIZE_SCALE:=.8925 # Original revision size reduced by the requested fifteen percent.
 static var ribbon_mesh: ArrayMesh
 static func build(root: Node3D,rig: Resource,item: Dictionary) -> void:

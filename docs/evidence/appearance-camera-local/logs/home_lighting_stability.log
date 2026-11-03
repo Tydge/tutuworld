@@ -1,0 +1,42 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Create bunny
+RENDER_BUDGET output=(2400, 1440) scale=0.761 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actually exercises balanced rendering
+INDOOR_STABILITY bunny balanced 0.5 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: bunny balanced 0.5
+PASS Hidden roof remains hidden: bunny balanced 0.5
+INDOOR_STABILITY bunny balanced 0.92 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: bunny balanced 0.92
+PASS Hidden roof remains hidden: bunny balanced 0.92
+RENDER_BUDGET output=(3024, 1890) scale=1.0 mode=0 quality=native
+PASS Actually exercises native rendering
+INDOOR_STABILITY bunny native 0.5 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: bunny native 0.5
+PASS Hidden roof remains hidden: bunny native 0.5
+INDOOR_STABILITY bunny native 0.92 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: bunny native 0.92
+PASS Hidden roof remains hidden: bunny native 0.92
+PASS Create cat_teacher
+WANDER_GRID_READY cells=14229 components=5
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actually exercises balanced rendering
+INDOOR_STABILITY cat_teacher balanced 0.5 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: cat_teacher balanced 0.5
+PASS Hidden roof remains hidden: cat_teacher balanced 0.5
+INDOOR_STABILITY cat_teacher balanced 0.92 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: cat_teacher balanced 0.92
+PASS Hidden roof remains hidden: cat_teacher balanced 0.92
+RENDER_BUDGET output=(3024, 1890) scale=1.0 mode=0 quality=native
+PASS Actually exercises native rendering
+INDOOR_STABILITY cat_teacher native 0.5 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: cat_teacher native 0.5
+PASS Hidden roof remains hidden: cat_teacher native 0.5
+INDOOR_STABILITY cat_teacher native 0.92 energy_range=0.0 color_jump=0.0 roof_restores=0
+PASS No periodic ambient flash: cat_teacher native 0.92
+PASS Hidden roof remains hidden: cat_teacher native 0.92
+HOME_LIGHTING_STABILITY_RESULT PASS checks=22 failures=[]

@@ -1,7 +1,7 @@
 extends SceneTree
 const DB=preload("res://scripts/services/game_data.gd")
 const A=preload("res://scripts/services/local_authority.gd")
-const Fabric=preload("res://scripts/city/fabric_library.gd")
+const Fabric=preload("res://scripts/appearance/fabric_material.gd")
 var session: Node
 var game: Node3D
 var failures: Array[String]=[]

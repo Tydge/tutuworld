@@ -1,0 +1,4765 @@
+{
+  "date": "2026-11-03",
+  "removed": [
+    {
+      "path": ".qa-artifacts/building-local-mouse-debug.gd",
+      "type": "file",
+      "bytes": 1414
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 4238
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左前.png",
+      "type": "file",
+      "bytes": 650355
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-侧后.png",
+      "type": "file",
+      "bytes": 534932
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右侧.png",
+      "type": "file",
+      "bytes": 486311
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左前.png",
+      "type": "file",
+      "bytes": 581829
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右侧.png",
+      "type": "file",
+      "bytes": 471303
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-侧后.png",
+      "type": "file",
+      "bytes": 509343
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左侧.png",
+      "type": "file",
+      "bytes": 542350
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-正面.png",
+      "type": "file",
+      "bytes": 167765
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右前.png",
+      "type": "file",
+      "bytes": 556952
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左侧.png",
+      "type": "file",
+      "bytes": 491872
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-全身试穿.png",
+      "type": "file",
+      "bytes": 689412
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-正面.png",
+      "type": "file",
+      "bytes": 639642
+    },
+    {
+      "path": ".qa-artifacts/20261102-145645-683663/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右前.png",
+      "type": "file",
+      "bytes": 535019
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 2560
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左前.png",
+      "type": "file",
+      "bytes": 654734
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-侧后.png",
+      "type": "file",
+      "bytes": 525535
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右侧.png",
+      "type": "file",
+      "bytes": 477457
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左前.png",
+      "type": "file",
+      "bytes": 586784
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右侧.png",
+      "type": "file",
+      "bytes": 467615
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-侧后.png",
+      "type": "file",
+      "bytes": 500994
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左侧.png",
+      "type": "file",
+      "bytes": 536955
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-正面.png",
+      "type": "file",
+      "bytes": 170330
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右前.png",
+      "type": "file",
+      "bytes": 555744
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左侧.png",
+      "type": "file",
+      "bytes": 491617
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-全身试穿.png",
+      "type": "file",
+      "bytes": 692865
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-正面.png",
+      "type": "file",
+      "bytes": 651498
+    },
+    {
+      "path": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右前.png",
+      "type": "file",
+      "bytes": 532114
+    },
+    {
+      "path": ".qa-artifacts/20261102-145325-755489/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 885
+    },
+    {
+      "path": ".qa-artifacts/20261102-153256-892549/build_city/run.log",
+      "type": "file",
+      "bytes": 257
+    },
+    {
+      "path": ".qa-artifacts/20261102-221830-030755/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-102115-081690/building_controls/run.log",
+      "type": "file",
+      "bytes": 2691
+    },
+    {
+      "path": ".qa-artifacts/20261103-102115-081690/building_controls/screenshots/storage-against-wall-night.png",
+      "type": "file",
+      "bytes": 2616373
+    },
+    {
+      "path": ".qa-artifacts/20261103-002613-584451/building_rules/run.log",
+      "type": "file",
+      "bytes": 1239
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_controls/run.log",
+      "type": "file",
+      "bytes": 2409
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_controls/screenshots/storage-against-wall-night.png",
+      "type": "file",
+      "bytes": 2630805
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_flow/run.log",
+      "type": "file",
+      "bytes": 2000
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3157194
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2368565
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1803
+    },
+    {
+      "path": ".qa-artifacts/20261103-102238-345305/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2502929
+    },
+    {
+      "path": ".qa-artifacts/20261102-225222-704206/production_flow/run.log",
+      "type": "file",
+      "bytes": 2363
+    },
+    {
+      "path": ".qa-artifacts/20261103-004954-861831/build_valley/run.log",
+      "type": "file",
+      "bytes": 530
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 2560
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左前.png",
+      "type": "file",
+      "bytes": 654734
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-侧后.png",
+      "type": "file",
+      "bytes": 525535
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右侧.png",
+      "type": "file",
+      "bytes": 477457
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左前.png",
+      "type": "file",
+      "bytes": 586784
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右侧.png",
+      "type": "file",
+      "bytes": 467615
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-侧后.png",
+      "type": "file",
+      "bytes": 500994
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左侧.png",
+      "type": "file",
+      "bytes": 536955
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-正面.png",
+      "type": "file",
+      "bytes": 170330
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右前.png",
+      "type": "file",
+      "bytes": 555744
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左侧.png",
+      "type": "file",
+      "bytes": 491617
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-全身试穿.png",
+      "type": "file",
+      "bytes": 692865
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-正面.png",
+      "type": "file",
+      "bytes": 651498
+    },
+    {
+      "path": ".qa-artifacts/20261102-150136-412927/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右前.png",
+      "type": "file",
+      "bytes": 532114
+    },
+    {
+      "path": ".qa-artifacts/20261102-224017-225908/terrain_surface/run.log",
+      "type": "file",
+      "bytes": 457
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/production_multiplayer_rules/run.log",
+      "type": "file",
+      "bytes": 256
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/kitchen_rules/run.log",
+      "type": "file",
+      "bytes": 6558
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/skill_experience_rules/run.log",
+      "type": "file",
+      "bytes": 502
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/character_roster_rules/run.log",
+      "type": "file",
+      "bytes": 1985
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/production_rules/run.log",
+      "type": "file",
+      "bytes": 124
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/skills_quality_rules/run.log",
+      "type": "file",
+      "bytes": 129
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/food_save_migration/run.log",
+      "type": "file",
+      "bytes": 388
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/city_rules/run.log",
+      "type": "file",
+      "bytes": 2338
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/stamina_revision_rules/run.log",
+      "type": "file",
+      "bytes": 1561
+    },
+    {
+      "path": ".qa-artifacts/20261102-154711-907562/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/production-save/progress.json.bak",
+      "type": "file",
+      "bytes": 9349
+    },
+    {
+      "path": ".qa-artifacts/production-save/progress.json",
+      "type": "file",
+      "bytes": 9349
+    },
+    {
+      "path": ".qa-artifacts/20261103-010422-294781/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 2233
+    },
+    {
+      "path": ".qa-artifacts/20261103-010422-294781/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2430383
+    },
+    {
+      "path": ".qa-artifacts/20261103-015951-411375/building_flow/run.log",
+      "type": "file",
+      "bytes": 2000
+    },
+    {
+      "path": ".qa-artifacts/20261103-015951-411375/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3155407
+    },
+    {
+      "path": ".qa-artifacts/20261103-015951-411375/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2366279
+    },
+    {
+      "path": ".qa-artifacts/20261103-015951-411375/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1803
+    },
+    {
+      "path": ".qa-artifacts/20261103-015951-411375/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2501188
+    },
+    {
+      "path": ".qa-artifacts/20261103-102323-616025/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-175340-857192/update_download/run.log",
+      "type": "file",
+      "bytes": 285
+    },
+    {
+      "path": ".qa-artifacts/20261102-175340-857192/multiplayer_public/run.log",
+      "type": "file",
+      "bytes": 125
+    },
+    {
+      "path": ".qa-artifacts/20261102-174238-999820/production_rules/run.log",
+      "type": "file",
+      "bytes": 124
+    },
+    {
+      "path": ".qa-artifacts/20261102-174238-999820/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-143847-335155/multiplayer_public/run.log",
+      "type": "file",
+      "bytes": 125
+    },
+    {
+      "path": ".qa-artifacts/20261102-175103-981696/update_rules/run.log",
+      "type": "file",
+      "bytes": 119
+    },
+    {
+      "path": ".qa-artifacts/20261103-000047-181645/build_valley/run.log",
+      "type": "file",
+      "bytes": 1215
+    },
+    {
+      "path": ".qa-artifacts/20261102-155337-723847/build_city/run.log",
+      "type": "file",
+      "bytes": 257
+    },
+    {
+      "path": ".qa-artifacts/20261102-223232-751152/build_city/run.log",
+      "type": "file",
+      "bytes": 1012
+    },
+    {
+      "path": ".qa-artifacts/production-before-map/shop_farm.scn",
+      "type": "file",
+      "bytes": 2507597
+    },
+    {
+      "path": ".qa-artifacts/production-before-map/city_map.tscn",
+      "type": "file",
+      "bytes": 13202981
+    },
+    {
+      "path": ".qa-artifacts/production-before-map/seabreeze_home.scn",
+      "type": "file",
+      "bytes": 4525286
+    },
+    {
+      "path": ".qa-artifacts/production-before-map/shop_clothes.scn",
+      "type": "file",
+      "bytes": 1911797
+    },
+    {
+      "path": ".qa-artifacts/production-before-map/shop_tools.scn",
+      "type": "file",
+      "bytes": 2464392
+    },
+    {
+      "path": ".qa-artifacts/20261103-001034-445574/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-235844-723219/build_city/run.log",
+      "type": "file",
+      "bytes": 256
+    },
+    {
+      "path": ".qa-artifacts/20261103-003727-526742/build_city/run.log",
+      "type": "file",
+      "bytes": 256
+    },
+    {
+      "path": ".qa-artifacts/20261102-154452-237573/build_city/run.log",
+      "type": "file",
+      "bytes": 257
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/exported_server_rules.gd",
+      "type": "file",
+      "bytes": 8990
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/exported-pack.log",
+      "type": "file",
+      "bytes": 901
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/verify_production.py",
+      "type": "file",
+      "bytes": 2354
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/inspect_history.py",
+      "type": "file",
+      "bytes": 764
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/exported-server.log",
+      "type": "file",
+      "bytes": 256
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/pack_probe.gd",
+      "type": "file",
+      "bytes": 2348
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-new.log",
+      "type": "file",
+      "bytes": 6209
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-update-console.log",
+      "type": "file",
+      "bytes": 5661
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-update-new.log",
+      "type": "file",
+      "bytes": 27911
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-isolation.log",
+      "type": "file",
+      "bytes": 3942
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-new-console.log",
+      "type": "file",
+      "bytes": 6401
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-update-old.log",
+      "type": "file",
+      "bytes": 3942
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/production-preservation.json",
+      "type": "file",
+      "bytes": 513
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/native-probe-sample.txt",
+      "type": "file",
+      "bytes": 99384
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/auth/accounts.sqlite3",
+      "type": "file",
+      "bytes": 32768
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/world-246064/world.json.bak",
+      "type": "file",
+      "bytes": 10142
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/world-246064/world.json",
+      "type": "file",
+      "bytes": 10142
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/Info.plist",
+      "type": "file",
+      "bytes": 1799
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/PkgInfo",
+      "type": "file",
+      "bytes": 9
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "bytes": 3187
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/MacOS/兔兔的世界",
+      "type": "file",
+      "bytes": 185671040
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/MacOS/override.cfg",
+      "type": "file",
+      "bytes": 159
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/Resources/icon.icns",
+      "type": "file",
+      "bytes": 603026
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/Resources/PrivacyInfo.xcprivacy",
+      "type": "file",
+      "bytes": 229
+    },
+    {
+      "path": ".qa-artifacts/release-0.3.3/new-native/兔兔的世界.app/Contents/Resources/兔兔的世界.pck",
+      "type": "file",
+      "bytes": 57399064
+    },
+    {
+      "path": ".qa-artifacts/20261103-010133-242321/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1101
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source.log",
+      "type": "file",
+      "bytes": 703
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/forest_windowed.gd",
+      "type": "file",
+      "bytes": 5427
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/texture_stats.json",
+      "type": "file",
+      "bytes": 1943
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/grass-compression-bc7_1024.png",
+      "type": "file",
+      "bytes": 2882406
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/protected-assets.json",
+      "type": "file",
+      "bytes": 2248
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/forest-wait-sample.txt",
+      "type": "file",
+      "bytes": 146262
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/preview-final.log",
+      "type": "file",
+      "bytes": 3690
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/grass-compression-reference.png",
+      "type": "file",
+      "bytes": 3287407
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression_error.json",
+      "type": "file",
+      "bytes": 605
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-grass_near-before.png",
+      "type": "file",
+      "bytes": 3197007
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/grass-compression-bc1_1024.png",
+      "type": "file",
+      "bytes": 3328148
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/texture-probe.log",
+      "type": "file",
+      "bytes": 1481
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/production_flow_windowed.gd",
+      "type": "file",
+      "bytes": 8986
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-error.log",
+      "type": "file",
+      "bytes": 545
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/valley-path_near-before.png",
+      "type": "file",
+      "bytes": 3034649
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/valley-path-after.png",
+      "type": "file",
+      "bytes": 2790574
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-paving_near-before.png",
+      "type": "file",
+      "bytes": 3227340
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression_error.gd",
+      "type": "file",
+      "bytes": 1223
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/valley_journey_windowed.gd",
+      "type": "file",
+      "bytes": 4200
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/comparison.json",
+      "type": "file",
+      "bytes": 4900
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/valley-path-before.png",
+      "type": "file",
+      "bytes": 2734131
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/import-s3tc.log",
+      "type": "file",
+      "bytes": 3302
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/preview_compare.gd",
+      "type": "file",
+      "bytes": 4963
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/valley-path_near-after.png",
+      "type": "file",
+      "bytes": 3115748
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-garden-before.png",
+      "type": "file",
+      "bytes": 2936018
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/import-final.log",
+      "type": "file",
+      "bytes": 2355
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/texture_probe.gd",
+      "type": "file",
+      "bytes": 1152
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/grass-compression-bc7_native.png",
+      "type": "file",
+      "bytes": 2880839
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-grass_near-after.png",
+      "type": "file",
+      "bytes": 3327822
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-garden-after.png",
+      "type": "file",
+      "bytes": 3126537
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/preview.log",
+      "type": "file",
+      "bytes": 4125
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/texture-probe-final.log",
+      "type": "file",
+      "bytes": 1478
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source-first.log",
+      "type": "file",
+      "bytes": 992
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/city-paving_near-after.png",
+      "type": "file",
+      "bytes": 3661485
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/import.log",
+      "type": "file",
+      "bytes": 4682
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/scenes",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scenes",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/config",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/config",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/.godot",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/.godot",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/scripts",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scripts",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/data",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/data",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/assets",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/icon.svg",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/icon.svg.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/editor_probe.gd",
+      "type": "file",
+      "bytes": 2017
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/editor-source/project.godot",
+      "type": "file",
+      "bytes": 6405
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc7_1024.png.import",
+      "type": "file",
+      "bytes": 1217
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_reference.png",
+      "type": "file",
+      "bytes": 2871912
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc1_1024.png",
+      "type": "file",
+      "bytes": 2871912
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc1_1024.png.import",
+      "type": "file",
+      "bytes": 1218
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc7_1024.png",
+      "type": "file",
+      "bytes": 2871912
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc7_native.png.import",
+      "type": "file",
+      "bytes": 1224
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_reference.png.import",
+      "type": "file",
+      "bytes": 975
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/compression-sources/lawn_bc7_native.png",
+      "type": "file",
+      "bytes": 2871912
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/shop_farm.scn",
+      "type": "file",
+      "bytes": 2507597
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/city_map.tscn",
+      "type": "file",
+      "bytes": 14046011
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/workshop.scn",
+      "type": "file",
+      "bytes": 1940820
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/spring_lawn_v1.png.import",
+      "type": "file",
+      "bytes": 960
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/seabreeze_home.scn",
+      "type": "file",
+      "bytes": 4525293
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/shop_clothes.scn",
+      "type": "file",
+      "bytes": 1911795
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/paving.gdshader",
+      "type": "file",
+      "bytes": 715
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/lawn_surface.gdshaderinc",
+      "type": "file",
+      "bytes": 253
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/build_city.gd",
+      "type": "file",
+      "bytes": 37348
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/shop_tools.scn",
+      "type": "file",
+      "bytes": 2464393
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/forest_floor.gdshader",
+      "type": "file",
+      "bytes": 1427
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/meadow.gdshader",
+      "type": "file",
+      "bytes": 694
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/before/farm_soil.gdshader",
+      "type": "file",
+      "bytes": 641
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/grass-compression-bc7_1024.png",
+      "type": "file",
+      "bytes": 2882406
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/grass-compression-reference.png",
+      "type": "file",
+      "bytes": 2880741
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-grass_near-before.png",
+      "type": "file",
+      "bytes": 2876019
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/grass-compression-bc1_1024.png",
+      "type": "file",
+      "bytes": 2922038
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/valley-path_near-before.png",
+      "type": "file",
+      "bytes": 3034378
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/valley-path-after.png",
+      "type": "file",
+      "bytes": 2762107
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-paving_near-before.png",
+      "type": "file",
+      "bytes": 2845671
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/comparison.json",
+      "type": "file",
+      "bytes": 5333
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/valley-path-before.png",
+      "type": "file",
+      "bytes": 2733772
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/valley-path_near-after.png",
+      "type": "file",
+      "bytes": 3070623
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-garden-before.png",
+      "type": "file",
+      "bytes": 2842771
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/grass-compression-bc7_native.png",
+      "type": "file",
+      "bytes": 2880839
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-grass_near-after.png",
+      "type": "file",
+      "bytes": 2882371
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-garden-after.png",
+      "type": "file",
+      "bytes": 2975626
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/with-curbs/city-paving_near-after.png",
+      "type": "file",
+      "bytes": 3105520
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/scenes",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scenes",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/config",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/config",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/.godot",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/.godot",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/scripts",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scripts",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/data",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/data",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/assets",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/icon.svg",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/icon.svg.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/preview.gd",
+      "type": "file",
+      "bytes": 4991
+    },
+    {
+      "path": ".qa-artifacts/terrain-materials-local/render-fixture/project.godot",
+      "type": "file",
+      "bytes": 6332
+    },
+    {
+      "path": ".qa-artifacts/20261102-225935-007375/terrain_compare/run.log",
+      "type": "file",
+      "bytes": 465
+    },
+    {
+      "path": ".qa-artifacts/20261103-101733-357838/building_rules/run.log",
+      "type": "file",
+      "bytes": 1306
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/run.log",
+      "type": "file",
+      "bytes": 3091
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 1823998
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 4767633
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 5130685
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 1899949
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 7354581
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 8481476
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 6380521
+    },
+    {
+      "path": ".qa-artifacts/20261102-154253-408480/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 5857617
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1359
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/forest_art_structure/screenshots/城镇-新草坪.png",
+      "type": "file",
+      "bytes": 7066895
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 7704611
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/forest_art_structure/screenshots/山谷-全新林间样板间.png",
+      "type": "file",
+      "bytes": 5730938
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/character_roster_rules/run.log",
+      "type": "file",
+      "bytes": 1985
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/valley_rules/run.log",
+      "type": "file",
+      "bytes": 8260
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/valley_journey/run.log",
+      "type": "file",
+      "bytes": 989
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/valley_journey/screenshots/山谷-地图.png",
+      "type": "file",
+      "bytes": 2806671
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/city_rules/run.log",
+      "type": "file",
+      "bytes": 2338
+    },
+    {
+      "path": ".qa-artifacts/20261102-143808-053734/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-002101-933652/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1359
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/forest_art_structure/screenshots/城镇-新草坪.png",
+      "type": "file",
+      "bytes": 7567557
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 8593272
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/forest_art_structure/screenshots/山谷-全新林间样板间.png",
+      "type": "file",
+      "bytes": 5917021
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/run.log",
+      "type": "file",
+      "bytes": 2932
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 1875752
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 4821222
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 5193045
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 1937056
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 7945659
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 8615356
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 6520827
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 7340727
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/valley_journey/run.log",
+      "type": "file",
+      "bytes": 989
+    },
+    {
+      "path": ".qa-artifacts/20261102-222317-893536/valley_journey/screenshots/山谷-地图.png",
+      "type": "file",
+      "bytes": 2823562
+    },
+    {
+      "path": ".qa-artifacts/20261102-145301-111704/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 885
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/multiplayer_rules/run.log",
+      "type": "file",
+      "bytes": 291
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/run.log",
+      "type": "file",
+      "bytes": 2872
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 1823675
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 4767457
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 5131368
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 1899876
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 7391159
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 8495900
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 6380703
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 5858458
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/run.log",
+      "type": "file",
+      "bytes": 7165
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-烹饪-carrot_soup.png",
+      "type": "file",
+      "bytes": 4639910
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-用餐-carrot_soup.png",
+      "type": "file",
+      "bytes": 4876908
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-脚底落地.png",
+      "type": "file",
+      "bytes": 4547208
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-美味记忆.png",
+      "type": "file",
+      "bytes": 5298920
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-采矿动作.png",
+      "type": "file",
+      "bytes": 4437738
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-烹饪-garden_salad.png",
+      "type": "file",
+      "bytes": 4681681
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-用餐-tomato_stew.png",
+      "type": "file",
+      "bytes": 5028816
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-菜谱.png",
+      "type": "file",
+      "bytes": 3100112
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-菜谱.png",
+      "type": "file",
+      "bytes": 3092300
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-用餐-pumpkin_soup.png",
+      "type": "file",
+      "bytes": 5288795
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-烹饪-tomato_stew.png",
+      "type": "file",
+      "bytes": 4646218
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-美味记忆.png",
+      "type": "file",
+      "bytes": 5304475
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-脚底落地.png",
+      "type": "file",
+      "bytes": 4511475
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-用餐-garden_salad.png",
+      "type": "file",
+      "bytes": 5030678
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-cat_teacher-采矿动作.png",
+      "type": "file",
+      "bytes": 4485434
+    },
+    {
+      "path": ".qa-artifacts/20261102-154813-643945/kitchen_playthrough/screenshots/厨房更新-bunny-烹饪-pumpkin_soup.png",
+      "type": "file",
+      "bytes": 4676404
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/run.log",
+      "type": "file",
+      "bytes": 2201
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 1823633
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 4768483
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 5131145
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 1900175
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 7355972
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 8484973
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 6381194
+    },
+    {
+      "path": ".qa-artifacts/20261102-154114-075479/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 5838653
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1340
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/forest_art_structure/screenshots/城镇-新草坪.png",
+      "type": "file",
+      "bytes": 1789325
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 1868927
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/forest_art_structure/screenshots/山谷-全新林间样板间.png",
+      "type": "file",
+      "bytes": 1318248
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/building_flow/run.log",
+      "type": "file",
+      "bytes": 1346
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3159235
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2364245
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/terrain_surface/run.log",
+      "type": "file",
+      "bytes": 2055
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/terrain_surface/screenshots/plaza-flowerbed.png",
+      "type": "file",
+      "bytes": 3467325
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/terrain_surface/screenshots/continuous-stone-roads.png",
+      "type": "file",
+      "bytes": 2706157
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/run.log",
+      "type": "file",
+      "bytes": 3007
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 525630
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 1186959
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 1267481
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 545016
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 1747957
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 1928084
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 1573188
+    },
+    {
+      "path": ".qa-artifacts/20261103-011616-796287/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 1618930
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_controls/run.log",
+      "type": "file",
+      "bytes": 2552
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_controls/screenshots/storage-against-wall-night.png",
+      "type": "file",
+      "bytes": 6715119
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_flow/run.log",
+      "type": "file",
+      "bytes": 2143
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 8195207
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 5926517
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1806
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2503552
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/building_rules/run.log",
+      "type": "file",
+      "bytes": 2742
+    },
+    {
+      "path": ".qa-artifacts/20261103-112030-451926/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/多人开发/rules-state-389750/world.json.bak",
+      "type": "file",
+      "bytes": 13958
+    },
+    {
+      "path": ".qa-artifacts/多人开发/rules-state-389750/world.json",
+      "type": "file",
+      "bytes": 13958
+    },
+    {
+      "path": ".qa-artifacts/20261102-223907-968946/build_city/run.log",
+      "type": "file",
+      "bytes": 257
+    },
+    {
+      "path": ".qa-artifacts/20261103-005447-147519/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-003726-427055/project_integrity/run.log",
+      "type": "file",
+      "bytes": 1105
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-sky_reflection.png",
+      "type": "file",
+      "bytes": 2724302
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-workshop_night-agx.png",
+      "type": "file",
+      "bytes": 1874922
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-workshop_night-volumetric_fog.png",
+      "type": "file",
+      "bytes": 1763854
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/valley-bridge-volumetric_fog.png",
+      "type": "file",
+      "bytes": 2447511
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/valley-bridge-agx.png",
+      "type": "file",
+      "bytes": 2681653
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/render_ab.gd",
+      "type": "file",
+      "bytes": 4810
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/run.log",
+      "type": "file",
+      "bytes": 10266
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/sdfgi-incomplete-results.json",
+      "type": "file",
+      "bytes": 4946
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-workshop_night-ssil.png",
+      "type": "file",
+      "bytes": 1869529
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-workshop_night-baseline.png",
+      "type": "file",
+      "bytes": 1848650
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/results.json",
+      "type": "file",
+      "bytes": 13605
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/sdfgi-sample.txt",
+      "type": "file",
+      "bytes": 149315
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/valley-bridge-baseline.png",
+      "type": "file",
+      "bytes": 2738514
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/sdfgi-incomplete.log",
+      "type": "file",
+      "bytes": 3949
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-volumetric_fog.png",
+      "type": "file",
+      "bytes": 2555941
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/valley-bridge-sky_reflection.png",
+      "type": "file",
+      "bytes": 2736255
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-workshop_night-sky_reflection.png",
+      "type": "file",
+      "bytes": 1840752
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-baseline.png",
+      "type": "file",
+      "bytes": 2734897
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-sdfgi_low.png",
+      "type": "file",
+      "bytes": 2790506
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-agx.png",
+      "type": "file",
+      "bytes": 2646668
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/valley-bridge-ssil.png",
+      "type": "file",
+      "bytes": 2750986
+    },
+    {
+      "path": ".qa-artifacts/graphics-research-20261102/city-garden-ssil.png",
+      "type": "file",
+      "bytes": 2752348
+    },
+    {
+      "path": ".qa-artifacts/20261103-004556-651049/building_flow/run.log",
+      "type": "file",
+      "bytes": 1346
+    },
+    {
+      "path": ".qa-artifacts/20261103-004556-651049/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3160585
+    },
+    {
+      "path": ".qa-artifacts/20261103-004556-651049/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2519347
+    },
+    {
+      "path": ".qa-artifacts/20261102-225014-012019/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1426
+    },
+    {
+      "path": ".qa-artifacts/20261102-225014-012019/forest_art_structure/screenshots/城镇-新草坪.png",
+      "type": "file",
+      "bytes": 1750680
+    },
+    {
+      "path": ".qa-artifacts/20261102-225014-012019/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 1780274
+    },
+    {
+      "path": ".qa-artifacts/20261102-225014-012019/forest_art_structure/screenshots/山谷-全新林间样板间.png",
+      "type": "file",
+      "bytes": 1231255
+    },
+    {
+      "path": ".qa-artifacts/20261102-225014-012019/production_flow/run.log",
+      "type": "file",
+      "bytes": 2296
+    },
+    {
+      "path": ".qa-artifacts/20261103-004335-915358/building_rules/run.log",
+      "type": "file",
+      "bytes": 1239
+    },
+    {
+      "path": ".qa-artifacts/20261103-004335-915358/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-150050-774564/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 2485478
+    },
+    {
+      "path": ".qa-artifacts/20261103-000227-510720/build_valley/run.log",
+      "type": "file",
+      "bytes": 530
+    },
+    {
+      "path": ".qa-artifacts/20261102-174757-411645/production_rules/run.log",
+      "type": "file",
+      "bytes": 124
+    },
+    {
+      "path": ".qa-artifacts/20261102-174757-411645/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/userdata_probe.gd",
+      "type": "file",
+      "bytes": 105
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/Info.plist",
+      "type": "file",
+      "bytes": 1799
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/PkgInfo",
+      "type": "file",
+      "bytes": 9
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "bytes": 3187
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/MacOS/兔兔的世界",
+      "type": "file",
+      "bytes": 185671040
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/MacOS/override.cfg",
+      "type": "file",
+      "bytes": 255
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/Resources/icon.icns",
+      "type": "file",
+      "bytes": 603026
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/Resources/PrivacyInfo.xcprivacy",
+      "type": "file",
+      "bytes": 229
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/old-native/兔兔的世界.app/Contents/Resources/兔兔的世界.pck",
+      "type": "file",
+      "bytes": 54805692
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/Info.plist",
+      "type": "file",
+      "bytes": 1799
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/PkgInfo",
+      "type": "file",
+      "bytes": 9
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "bytes": 3187
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/MacOS/兔兔的世界",
+      "type": "file",
+      "bytes": 185671040
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/Resources/icon.icns",
+      "type": "file",
+      "bytes": 603026
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/Resources/PrivacyInfo.xcprivacy",
+      "type": "file",
+      "bytes": 229
+    },
+    {
+      "path": ".qa-artifacts/release-0.4.0/new-native/兔兔的世界.app/Contents/Resources/兔兔的世界.pck",
+      "type": "file",
+      "bytes": 57399064
+    },
+    {
+      "path": ".qa-artifacts/20261103-102042-189456/building_rules/run.log",
+      "type": "file",
+      "bytes": 388
+    },
+    {
+      "path": ".qa-artifacts/20261102-230619-376811/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-002513-884291/building_rules/run.log",
+      "type": "file",
+      "bytes": 460
+    },
+    {
+      "path": ".qa-artifacts/20261102-222849-449762/build_city/run.log",
+      "type": "file",
+      "bytes": 139516
+    },
+    {
+      "path": ".qa-artifacts/20261102-225831-722012/valley_journey/run.log",
+      "type": "file",
+      "bytes": 1056
+    },
+    {
+      "path": ".qa-artifacts/20261102-225831-722012/valley_journey/screenshots/山谷-地图.png",
+      "type": "file",
+      "bytes": 603642
+    },
+    {
+      "path": ".qa-artifacts/20261102-224052-891900/terrain_surface/run.log",
+      "type": "file",
+      "bytes": 2057
+    },
+    {
+      "path": ".qa-artifacts/20261102-224052-891900/terrain_surface/screenshots/plaza-flowerbed.png",
+      "type": "file",
+      "bytes": 3424646
+    },
+    {
+      "path": ".qa-artifacts/20261102-224052-891900/terrain_surface/screenshots/continuous-stone-roads.png",
+      "type": "file",
+      "bytes": 2615068
+    },
+    {
+      "path": ".qa-artifacts/20261102-153731-382598/production_rules/run.log",
+      "type": "file",
+      "bytes": 194
+    },
+    {
+      "path": ".qa-artifacts/production-multi-247148/world.json.bak",
+      "type": "file",
+      "bytes": 10143
+    },
+    {
+      "path": ".qa-artifacts/production-multi-247148/world.json",
+      "type": "file",
+      "bytes": 10143
+    },
+    {
+      "path": ".qa-artifacts/20261102-224136-792095/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1120
+    },
+    {
+      "path": ".qa-artifacts/20261102-224136-792095/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 8745103
+    },
+    {
+      "path": ".qa-artifacts/20261102-224136-792095/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/rules-262476/world.json.bak",
+      "type": "file",
+      "bytes": 7117
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/rules-262476/world.json",
+      "type": "file",
+      "bytes": 7118
+    },
+    {
+      "path": ".qa-artifacts/20261102-140349-188245/skill_experience_rules/run.log",
+      "type": "file",
+      "bytes": 502
+    },
+    {
+      "path": ".qa-artifacts/20261102-140349-188245/skills_quality_rules/run.log",
+      "type": "file",
+      "bytes": 129
+    },
+    {
+      "path": ".qa-artifacts/20261102-140349-188245/npc_dialogue_rules/run.log",
+      "type": "file",
+      "bytes": 129
+    },
+    {
+      "path": ".qa-artifacts/20261102-140349-188245/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/run.log",
+      "type": "file",
+      "bytes": 4260
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左前.png",
+      "type": "file",
+      "bytes": 650355
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-侧后.png",
+      "type": "file",
+      "bytes": 534932
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右侧.png",
+      "type": "file",
+      "bytes": 486311
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左前.png",
+      "type": "file",
+      "bytes": 581829
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右侧.png",
+      "type": "file",
+      "bytes": 471303
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-侧后.png",
+      "type": "file",
+      "bytes": 509343
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-左侧.png",
+      "type": "file",
+      "bytes": 542350
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-正面.png",
+      "type": "file",
+      "bytes": 167765
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-右前.png",
+      "type": "file",
+      "bytes": 556952
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-左侧.png",
+      "type": "file",
+      "bytes": 491872
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-全身试穿.png",
+      "type": "file",
+      "bytes": 689412
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_plaid_sage-正面.png",
+      "type": "file",
+      "bytes": 639642
+    },
+    {
+      "path": ".qa-artifacts/20261102-145552-868336/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右前.png",
+      "type": "file",
+      "bytes": 535019
+    },
+    {
+      "path": ".qa-artifacts/20261102-153608-869613/build_city/run.log",
+      "type": "file",
+      "bytes": 257
+    },
+    {
+      "path": ".qa-artifacts/20261103-011011-469695/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1770
+    },
+    {
+      "path": ".qa-artifacts/20261103-011011-469695/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2372170
+    },
+    {
+      "path": ".qa-artifacts/production-auth-local/accounts.sqlite3",
+      "type": "file",
+      "bytes": 4096
+    },
+    {
+      "path": ".qa-artifacts/production-auth-local/accounts.sqlite3-shm",
+      "type": "file",
+      "bytes": 32768
+    },
+    {
+      "path": ".qa-artifacts/production-auth-local/accounts.sqlite3-wal",
+      "type": "file",
+      "bytes": 185432
+    },
+    {
+      "path": ".qa-artifacts/building-local/save-rules/single-player.json",
+      "type": "file",
+      "bytes": 10381
+    },
+    {
+      "path": ".qa-artifacts/building-local/save-rules/single-player.json.bak",
+      "type": "file",
+      "bytes": 10381
+    },
+    {
+      "path": ".qa-artifacts/20261103-013748-123741/building_flow/run.log",
+      "type": "file",
+      "bytes": 1852
+    },
+    {
+      "path": ".qa-artifacts/20261103-013748-123741/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3166207
+    },
+    {
+      "path": ".qa-artifacts/20261103-013748-123741/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2368020
+    },
+    {
+      "path": ".qa-artifacts/20261103-013748-123741/valley_journey/run.log",
+      "type": "file",
+      "bytes": 1110
+    },
+    {
+      "path": ".qa-artifacts/20261103-013748-123741/valley_journey/screenshots/山谷-地图.png",
+      "type": "file",
+      "bytes": 615525
+    },
+    {
+      "path": ".qa-artifacts/20261103-015830-200588/character_roster_rules/run.log",
+      "type": "file",
+      "bytes": 1985
+    },
+    {
+      "path": ".qa-artifacts/20261103-015830-200588/food_save_migration/run.log",
+      "type": "file",
+      "bytes": 388
+    },
+    {
+      "path": ".qa-artifacts/20261103-015830-200588/city_rules/run.log",
+      "type": "file",
+      "bytes": 2338
+    },
+    {
+      "path": ".qa-artifacts/20261103-015830-200588/building_rules/run.log",
+      "type": "file",
+      "bytes": 1306
+    },
+    {
+      "path": ".qa-artifacts/20261103-015830-200588/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-003558-469109/project_integrity/run.log",
+      "type": "file",
+      "bytes": 1555
+    },
+    {
+      "path": ".qa-artifacts/20261103-004142-760737/project_integrity/run.log",
+      "type": "file",
+      "bytes": 385
+    },
+    {
+      "path": ".qa-artifacts/20261103-005858-874430/building_rules/run.log",
+      "type": "file",
+      "bytes": 1306
+    },
+    {
+      "path": ".qa-artifacts/20261102-154048-938947/production_flow/run.log",
+      "type": "file",
+      "bytes": 461
+    },
+    {
+      "path": ".qa-artifacts/20261102-224634-244496/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 1120
+    },
+    {
+      "path": ".qa-artifacts/20261102-224634-244496/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 8745262
+    },
+    {
+      "path": ".qa-artifacts/20261102-223033-303714/forest_art_structure/run.log",
+      "type": "file",
+      "bytes": 2939
+    },
+    {
+      "path": ".qa-artifacts/20261102-223033-303714/forest_art_structure/screenshots/山谷-草坪与林下植物.png",
+      "type": "file",
+      "bytes": 8593600
+    },
+    {
+      "path": ".qa-artifacts/20261102-223033-303714/forest_art_structure/screenshots/山谷-全新林间样板间.png",
+      "type": "file",
+      "bytes": 5903522
+    },
+    {
+      "path": ".qa-artifacts/20261102-223033-303714/project_integrity/run.log",
+      "type": "file",
+      "bytes": 555
+    },
+    {
+      "path": ".qa-artifacts/20261103-013256-357116/building_flow/run.log",
+      "type": "file",
+      "bytes": 2012
+    },
+    {
+      "path": ".qa-artifacts/20261103-013256-357116/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3167678
+    },
+    {
+      "path": ".qa-artifacts/20261103-013256-357116/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2367769
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/interaction_revision_rules/run.log",
+      "type": "file",
+      "bytes": 254
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/run.log",
+      "type": "file",
+      "bytes": 2999
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 424156
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 974131
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 1016360
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 453398
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 1757017
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 1882844
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 1477880
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 1592896
+    },
+    {
+      "path": ".qa-artifacts/20261102-225609-439532/valley_journey/run.log",
+      "type": "file",
+      "bytes": 625
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/run.log",
+      "type": "file",
+      "bytes": 2932
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 1837813
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 4768203
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 5131461
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 1899747
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 7561643
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 8501532
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 6381705
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 5860237
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/production_rules/run.log",
+      "type": "file",
+      "bytes": 124
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/run.log",
+      "type": "file",
+      "bytes": 6603
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-烹饪-carrot_soup.png",
+      "type": "file",
+      "bytes": 4645656
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-用餐-carrot_soup.png",
+      "type": "file",
+      "bytes": 4869141
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-脚底落地.png",
+      "type": "file",
+      "bytes": 4494033
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-美味记忆.png",
+      "type": "file",
+      "bytes": 5307690
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-采矿动作.png",
+      "type": "file",
+      "bytes": 4476951
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-烹饪-garden_salad.png",
+      "type": "file",
+      "bytes": 4686001
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-用餐-tomato_stew.png",
+      "type": "file",
+      "bytes": 5027801
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-菜谱.png",
+      "type": "file",
+      "bytes": 3103857
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-菜谱.png",
+      "type": "file",
+      "bytes": 3100622
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-用餐-pumpkin_soup.png",
+      "type": "file",
+      "bytes": 4861874
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-烹饪-tomato_stew.png",
+      "type": "file",
+      "bytes": 4643327
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-美味记忆.png",
+      "type": "file",
+      "bytes": 5318818
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-脚底落地.png",
+      "type": "file",
+      "bytes": 4526365
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-用餐-garden_salad.png",
+      "type": "file",
+      "bytes": 5038332
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-cat_teacher-采矿动作.png",
+      "type": "file",
+      "bytes": 4484853
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/kitchen_playthrough/screenshots/厨房更新-bunny-烹饪-pumpkin_soup.png",
+      "type": "file",
+      "bytes": 4608171
+    },
+    {
+      "path": ".qa-artifacts/20261102-155555-942079/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-fountain.png",
+      "type": "file",
+      "bytes": 3196574
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-valley-wide.png",
+      "type": "file",
+      "bytes": 2927062
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-cascade-night.png",
+      "type": "file",
+      "bytes": 2045728
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-walls.png",
+      "type": "file",
+      "bytes": 3121766
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-fountain.png",
+      "type": "file",
+      "bytes": 3277197
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-performance.json",
+      "type": "file",
+      "bytes": 3735
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/protected-assets.json",
+      "type": "file",
+      "bytes": 1930
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-cascade-night.png",
+      "type": "file",
+      "bytes": 2160729
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/tree-inventory.log",
+      "type": "file",
+      "bytes": 464
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-woodland.png",
+      "type": "file",
+      "bytes": 3663860
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-bark.png",
+      "type": "file",
+      "bytes": 3044126
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-first-attempt-save.json",
+      "type": "file",
+      "bytes": 10405
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-bridge.png",
+      "type": "file",
+      "bytes": 2743849
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-bridge.png",
+      "type": "file",
+      "bytes": 2628421
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-preview.log",
+      "type": "file",
+      "bytes": 2735
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-cascade.png",
+      "type": "file",
+      "bytes": 2722203
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-woodland.png",
+      "type": "file",
+      "bytes": 3759495
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-cottage.png",
+      "type": "file",
+      "bytes": 2506275
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-beach.png",
+      "type": "file",
+      "bytes": 623073
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/BUILD_PLAN.md",
+      "type": "file",
+      "bytes": 6622
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-preview-v2.log",
+      "type": "file",
+      "bytes": 2745
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/building-performance.json",
+      "type": "file",
+      "bytes": 2501
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-first-attempt.log",
+      "type": "file",
+      "bytes": 1090
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-preview-v2.log",
+      "type": "file",
+      "bytes": 2763
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/preview-v2.gd",
+      "type": "file",
+      "bytes": 4057
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/building-editor-1920.png",
+      "type": "file",
+      "bytes": 2833558
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/preview.gd",
+      "type": "file",
+      "bytes": 3915
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-walls.png",
+      "type": "file",
+      "bytes": 2276753
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-performance.json",
+      "type": "file",
+      "bytes": 3716
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-beach.png",
+      "type": "file",
+      "bytes": 2447768
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/building-exterior.png",
+      "type": "file",
+      "bytes": 3212078
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/tree_inventory.gd",
+      "type": "file",
+      "bytes": 323
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/import.log",
+      "type": "file",
+      "bytes": 3829
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-preview.log",
+      "type": "file",
+      "bytes": 2768
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-cascade.png",
+      "type": "file",
+      "bytes": 2878466
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-cottage.png",
+      "type": "file",
+      "bytes": 2669331
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/mouse-debug.log",
+      "type": "file",
+      "bytes": 884
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-bark.png",
+      "type": "file",
+      "bytes": 3304460
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before-valley-wide.png",
+      "type": "file",
+      "bytes": 2873664
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/config",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/config",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/.godot",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/.godot",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/tests",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/tests",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/data",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/data",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/icon.svg",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/icon.svg.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/preview-v2.gd",
+      "type": "file",
+      "bytes": 4057
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/preview.gd",
+      "type": "file",
+      "bytes": 3915
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/project.godot",
+      "type": "file",
+      "bytes": 6332
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/city.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/shop_farm.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/city_map.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/workshop.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/boot.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/valley_map.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/valley_home.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/valley.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/seabreeze_home.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/panda.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/shop_clothes.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/shop_tools.scn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/title.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/cat_teacher.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scenes/bunny.tscn",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/boot.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/geometry.gd",
+      "type": "file",
+      "bytes": 4447
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/bunny.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/geometry.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/boot.gd",
+      "type": "file",
+      "bytes": 2508
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/bunny.gd",
+      "type": "file",
+      "bytes": 111
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/panda_routine.gd",
+      "type": "file",
+      "bytes": 1763
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/visitor_routine.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/build_valley.gd",
+      "type": "file",
+      "bytes": 24006
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/valley_world.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/boat_travel.gd",
+      "type": "file",
+      "bytes": 4040
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/panda_routine.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/visitor_routine.gd",
+      "type": "file",
+      "bytes": 1853
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/valley_world.gd",
+      "type": "file",
+      "bytes": 3538
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/build_valley.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/valley_layout.gd",
+      "type": "file",
+      "bytes": 3550
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/boat_travel.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/valley/valley_layout.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/stamina_meter.gd",
+      "type": "file",
+      "bytes": 1250
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/item_icon.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_menu.gd",
+      "type": "file",
+      "bytes": 9529
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/ui_kit.gd",
+      "type": "file",
+      "bytes": 3681
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/stamina_meter.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/player_status.gd",
+      "type": "file",
+      "bytes": 2627
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_preview.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_preview.gd",
+      "type": "file",
+      "bytes": 4063
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/progress_ring.gd",
+      "type": "file",
+      "bytes": 398
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/progress_ring.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/title.gd",
+      "type": "file",
+      "bytes": 11131
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/time_controls.gd",
+      "type": "file",
+      "bytes": 2560
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/ui_kit.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/player_status.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_sheet.gd",
+      "type": "file",
+      "bytes": 5395
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_menu.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/item_icon.gd",
+      "type": "file",
+      "bytes": 7563
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/city_hud.gd",
+      "type": "file",
+      "bytes": 41113
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/buff_icon.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/online_login.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/time_controls.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/character_sheet.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/title.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/online_login.gd",
+      "type": "file",
+      "bytes": 3937
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/city_hud.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/ui/buff_icon.gd",
+      "type": "file",
+      "bytes": 2073
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/build_city.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/static_batches.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/online_world.gd",
+      "type": "file",
+      "bytes": 13727
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/online_world.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/terrain_materials.gd",
+      "type": "file",
+      "bytes": 2229
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/prop_collisions.gd",
+      "type": "file",
+      "bytes": 3407
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/prop_collisions.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/tool_models.gd",
+      "type": "file",
+      "bytes": 3262
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/bow_accessory.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/city_world.gd",
+      "type": "file",
+      "bytes": 41428
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/reward_sparkle.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/fabric_library.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/resource_visual.gd",
+      "type": "file",
+      "bytes": 2120
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/ambient_life.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/production_facilities.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/food_visual.gd",
+      "type": "file",
+      "bytes": 4073
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/town_gardens.gd",
+      "type": "file",
+      "bytes": 2884
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/interaction_targets.gd",
+      "type": "file",
+      "bytes": 605
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/scene_preparation.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/frame_pacer.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/npc_driver.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/crop_visual.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/npc_profiles.gd",
+      "type": "file",
+      "bytes": 15763
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/kitchen_scenery.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/crop_visual.gd",
+      "type": "file",
+      "bytes": 3402
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/render_budget.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/outfit.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/plaza_flowerbed.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/production_builder.gd",
+      "type": "file",
+      "bytes": 5277
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/plaza_flowerbed.gd",
+      "type": "file",
+      "bytes": 5131
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/town_gardens.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/outfit.gd",
+      "type": "file",
+      "bytes": 8332
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/home_builder.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/scene_preparation.gd",
+      "type": "file",
+      "bytes": 4151
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/shop_builder.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/work_props.gd",
+      "type": "file",
+      "bytes": 8972
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/wander_navigation.gd",
+      "type": "file",
+      "bytes": 5680
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/seabreeze_home.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/resource_visual.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/production_facilities.gd",
+      "type": "file",
+      "bytes": 2912
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/city_world.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/ambient_life.gd",
+      "type": "file",
+      "bytes": 4045
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/interaction_targets.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/reward_sparkle.gd",
+      "type": "file",
+      "bytes": 838
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/forest_builder.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/build_city.gd",
+      "type": "file",
+      "bytes": 39070
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/shop_builder.gd",
+      "type": "file",
+      "bytes": 8292
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/forest_builder.gd",
+      "type": "file",
+      "bytes": 3668
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/sky_palette.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/forest_furniture.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/lamp_builder.gd",
+      "type": "file",
+      "bytes": 1972
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/kitchen_scenery.gd",
+      "type": "file",
+      "bytes": 4650
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/npc_profiles.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/seabreeze_home.gd",
+      "type": "file",
+      "bytes": 9615
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/scenery_polish.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/culinary.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/wander_navigation.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/render_budget.gd",
+      "type": "file",
+      "bytes": 3254
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/work_props.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/static_batches.gd",
+      "type": "file",
+      "bytes": 3555
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/sky_palette.gd",
+      "type": "file",
+      "bytes": 623
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/tool_models.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/scenery_polish.gd",
+      "type": "file",
+      "bytes": 7564
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/home_builder.gd",
+      "type": "file",
+      "bytes": 32691
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/npc_driver.gd",
+      "type": "file",
+      "bytes": 5378
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/forest_furniture.gd",
+      "type": "file",
+      "bytes": 5183
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/production_builder.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/terrain_materials.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/meadow_blossoms.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/fabric_library.gd",
+      "type": "file",
+      "bytes": 2492
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/meadow_blossoms.gd",
+      "type": "file",
+      "bytes": 1523
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/lamp_builder.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/culinary.gd",
+      "type": "file",
+      "bytes": 2362
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/frame_pacer.gd",
+      "type": "file",
+      "bytes": 3319
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/food_visual.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/city/bow_accessory.gd",
+      "type": "file",
+      "bytes": 4397
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/builders/scene_builder_base.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/builders/scene_builder_base.gd",
+      "type": "file",
+      "bytes": 2462
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/rig_profile.gd",
+      "type": "file",
+      "bytes": 1363
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/build_panda.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_outline.gdshader",
+      "type": "file",
+      "bytes": 390
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_actor.gd",
+      "type": "file",
+      "bytes": 17697
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/build_cat.gd",
+      "type": "file",
+      "bytes": 9315
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/panda_coat.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/cat_coat.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_actor.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/sleep_pose.gd",
+      "type": "file",
+      "bytes": 1435
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_catalog.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/sleep_pose.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/build_cat.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/cat_surface.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_catalog.gd",
+      "type": "file",
+      "bytes": 485
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/cat_surface.gd",
+      "type": "file",
+      "bytes": 1290
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_outline.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/panda_coat.gdshader",
+      "type": "file",
+      "bytes": 1054
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/cat_coat.gdshader",
+      "type": "file",
+      "bytes": 866
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_factory.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/animal_factory.gd",
+      "type": "file",
+      "bytes": 1673
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/build_panda.gd",
+      "type": "file",
+      "bytes": 6614
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/characters/rig_profile.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/update_trust.gd",
+      "type": "file",
+      "bytes": 1406
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/remote_transport.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/game_data.gd",
+      "type": "file",
+      "bytes": 8461
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/island_calendar.gd",
+      "type": "file",
+      "bytes": 598
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/update_client.gd",
+      "type": "file",
+      "bytes": 5349
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/movement_prediction.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/release.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/gameplay_input.gd",
+      "type": "file",
+      "bytes": 724
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/motion_buffer.gd",
+      "type": "file",
+      "bytes": 1849
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/network_trust.gd",
+      "type": "file",
+      "bytes": 398
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/packet_codec.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/session.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/movement_prediction.gd",
+      "type": "file",
+      "bytes": 3000
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/release.gd",
+      "type": "file",
+      "bytes": 208
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/game_data.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/update_trust.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/character_stats.gd",
+      "type": "file",
+      "bytes": 3586
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/update_client.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/local_authority.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/network_trust.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/character_stats.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/session.gd",
+      "type": "file",
+      "bytes": 26844
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/local_authority.gd",
+      "type": "file",
+      "bytes": 24907
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/remote_transport.gd",
+      "type": "file",
+      "bytes": 4019
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/island_calendar.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/gameplay_input.gd.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/packet_codec.gd",
+      "type": "file",
+      "bytes": 514
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/scripts/services/motion_buffer.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/fabrics",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets/fabrics",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/terrain",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets/terrain",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/fonts",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets/fonts",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/garden_ambience.wav",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/garden_ambience.wav.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/avatar_mask.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_falls.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_ridge.gdshader",
+      "type": "file",
+      "bytes": 623
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/meadow.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_ridge.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_foam.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/beach_sand.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/contact_shadow.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/hearth_fire.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/sleep_quilt.gdshader",
+      "type": "file",
+      "bytes": 864
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/water_splash.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/town_roof.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/fountain_water.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/meadow_blades.gdshader",
+      "type": "file",
+      "bytes": 662
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/island_sky.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/home_floor.gdshader",
+      "type": "file",
+      "bytes": 869
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/work_particles.gdshader",
+      "type": "file",
+      "bytes": 1314
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/hearth_fire.gdshader",
+      "type": "file",
+      "bytes": 1202
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_blossoms.gdshader",
+      "type": "file",
+      "bytes": 437
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/lamp_glow.gdshader",
+      "type": "file",
+      "bytes": 493
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/avatar_mask.gdshader",
+      "type": "file",
+      "bytes": 142
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_falls.gdshader",
+      "type": "file",
+      "bytes": 793
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/lawn_surface.gdshaderinc.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/hearth_embers.gdshader",
+      "type": "file",
+      "bytes": 420
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/meadow_blades.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_blossoms.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/lamp_glow.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/log_rings.gdshader",
+      "type": "file",
+      "bytes": 264
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/shore_foam.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/farm_soil.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/sleep_quilt.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_cliff.gdshader",
+      "type": "file",
+      "bytes": 488
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/island_ocean.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/fountain_water.gdshader",
+      "type": "file",
+      "bytes": 484
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/paving.gdshader",
+      "type": "file",
+      "bytes": 595
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/occlusion_fade.gdshader",
+      "type": "file",
+      "bytes": 1623
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/lawn_surface.gdshaderinc",
+      "type": "file",
+      "bytes": 253
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_floor.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/occlusion_fade.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/paving.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/island_sky.gdshader",
+      "type": "file",
+      "bytes": 1998
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/home_surface.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/cascade_spray.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/work_particles.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/island_ocean.gdshader",
+      "type": "file",
+      "bytes": 1047
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/watering_stream.gdshader",
+      "type": "file",
+      "bytes": 878
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/birch_bark.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/water_splash.gdshader",
+      "type": "file",
+      "bytes": 377
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_stream.gdshader",
+      "type": "file",
+      "bytes": 1733
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_foam.gdshader",
+      "type": "file",
+      "bytes": 592
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_stream.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/shore_foam.gdshader",
+      "type": "file",
+      "bytes": 401
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/cascade_spray.gdshader",
+      "type": "file",
+      "bytes": 442
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/home_floor.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/birch_bark.gdshader",
+      "type": "file",
+      "bytes": 459
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_cliff.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/forest_floor.gdshader",
+      "type": "file",
+      "bytes": 1713
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/contact_shadow.gdshader",
+      "type": "file",
+      "bytes": 225
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/beach_sand.gdshader",
+      "type": "file",
+      "bytes": 758
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/watering_stream.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/log_rings.gdshader.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/home_surface.gdshader",
+      "type": "file",
+      "bytes": 2243
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/town_roof.gdshader",
+      "type": "file",
+      "bytes": 625
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/meadow.gdshader",
+      "type": "file",
+      "bytes": 694
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/hearth_embers.gdshader.uid",
+      "type": "file",
+      "bytes": 19
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/baseline-project/assets/shaders/farm_soil.gdshader",
+      "type": "file",
+      "bytes": 759
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-fountain.png",
+      "type": "file",
+      "bytes": 2862374
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-valley-wide.png",
+      "type": "file",
+      "bytes": 2661824
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-cascade-night.png",
+      "type": "file",
+      "bytes": 1541414
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-walls.png",
+      "type": "file",
+      "bytes": 2839508
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-fountain.png",
+      "type": "file",
+      "bytes": 2938695
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-performance.json",
+      "type": "file",
+      "bytes": 3693
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-cascade-night.png",
+      "type": "file",
+      "bytes": 1599577
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-woodland.png",
+      "type": "file",
+      "bytes": 3351712
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-bark.png",
+      "type": "file",
+      "bytes": 1157580
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-bridge.png",
+      "type": "file",
+      "bytes": 2464215
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-bridge.png",
+      "type": "file",
+      "bytes": 2356274
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-cascade.png",
+      "type": "file",
+      "bytes": 2089490
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-woodland.png",
+      "type": "file",
+      "bytes": 3357579
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-cottage.png",
+      "type": "file",
+      "bytes": 2284707
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-beach.png",
+      "type": "file",
+      "bytes": 565006
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-walls.png",
+      "type": "file",
+      "bytes": 2046454
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-performance.json",
+      "type": "file",
+      "bytes": 3660
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-beach.png",
+      "type": "file",
+      "bytes": 2269124
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-cascade.png",
+      "type": "file",
+      "bytes": 2173971
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-cottage.png",
+      "type": "file",
+      "bytes": 2437597
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/after-bark.png",
+      "type": "file",
+      "bytes": 1158190
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/pass1/before-valley-wide.png",
+      "type": "file",
+      "bytes": 2610965
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/scenes",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scenes",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/config",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/config",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/.godot",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/.godot",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/tests",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/tests",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/scripts",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scripts",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/data",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/data",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/assets",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/building_perf.gd",
+      "type": "file",
+      "bytes": 3279
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/production_flow_windowed.gd",
+      "type": "file",
+      "bytes": 9125
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/valley_camera_regression_windowed.gd",
+      "type": "file",
+      "bytes": 2227
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/icon.svg",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/valley_journey_windowed.gd",
+      "type": "file",
+      "bytes": 4170
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/valley_movement_windowed.gd",
+      "type": "file",
+      "bytes": 3104
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/home_lighting_stability_windowed.gd",
+      "type": "file",
+      "bytes": 2505
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/icon.svg.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/preview-v2.gd",
+      "type": "file",
+      "bytes": 4057
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/preview.gd",
+      "type": "file",
+      "bytes": 3915
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/forest_art_structure_windowed.gd",
+      "type": "file",
+      "bytes": 5337
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/after-project/project.godot",
+      "type": "file",
+      "bytes": 6332
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/files.json",
+      "type": "file",
+      "bytes": 1761
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/shop_farm.scn",
+      "type": "file",
+      "bytes": 2507597
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/city_map.tscn",
+      "type": "file",
+      "bytes": 15187632
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/workshop.scn",
+      "type": "file",
+      "bytes": 1940820
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/valley_map.scn",
+      "type": "file",
+      "bytes": 9538249
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/valley_home.scn",
+      "type": "file",
+      "bytes": 2900966
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/seabreeze_home.scn",
+      "type": "file",
+      "bytes": 4525293
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/shop_clothes.scn",
+      "type": "file",
+      "bytes": 1911795
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scenes/shop_tools.scn",
+      "type": "file",
+      "bytes": 2464393
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/valley/build_valley.gd",
+      "type": "file",
+      "bytes": 24006
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/city/terrain_materials.gd",
+      "type": "file",
+      "bytes": 2229
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/city/build_city.gd",
+      "type": "file",
+      "bytes": 39070
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/city/forest_builder.gd",
+      "type": "file",
+      "bytes": 3668
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/city/seabreeze_home.gd",
+      "type": "file",
+      "bytes": 9615
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/scripts/city/scenery_polish.gd",
+      "type": "file",
+      "bytes": 7564
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_ridge.gdshader",
+      "type": "file",
+      "bytes": 623
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/sleep_quilt.gdshader",
+      "type": "file",
+      "bytes": 864
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/meadow_blades.gdshader",
+      "type": "file",
+      "bytes": 662
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/home_floor.gdshader",
+      "type": "file",
+      "bytes": 869
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/work_particles.gdshader",
+      "type": "file",
+      "bytes": 1314
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/hearth_fire.gdshader",
+      "type": "file",
+      "bytes": 1202
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_blossoms.gdshader",
+      "type": "file",
+      "bytes": 437
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/lamp_glow.gdshader",
+      "type": "file",
+      "bytes": 493
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/avatar_mask.gdshader",
+      "type": "file",
+      "bytes": 142
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_falls.gdshader",
+      "type": "file",
+      "bytes": 793
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/hearth_embers.gdshader",
+      "type": "file",
+      "bytes": 420
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/log_rings.gdshader",
+      "type": "file",
+      "bytes": 264
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_cliff.gdshader",
+      "type": "file",
+      "bytes": 488
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/fountain_water.gdshader",
+      "type": "file",
+      "bytes": 484
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/paving.gdshader",
+      "type": "file",
+      "bytes": 595
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/occlusion_fade.gdshader",
+      "type": "file",
+      "bytes": 1623
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/island_sky.gdshader",
+      "type": "file",
+      "bytes": 1998
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/island_ocean.gdshader",
+      "type": "file",
+      "bytes": 1047
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/watering_stream.gdshader",
+      "type": "file",
+      "bytes": 878
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/water_splash.gdshader",
+      "type": "file",
+      "bytes": 377
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_stream.gdshader",
+      "type": "file",
+      "bytes": 1733
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_foam.gdshader",
+      "type": "file",
+      "bytes": 592
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/shore_foam.gdshader",
+      "type": "file",
+      "bytes": 401
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/cascade_spray.gdshader",
+      "type": "file",
+      "bytes": 442
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/birch_bark.gdshader",
+      "type": "file",
+      "bytes": 459
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/forest_floor.gdshader",
+      "type": "file",
+      "bytes": 1713
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/contact_shadow.gdshader",
+      "type": "file",
+      "bytes": 225
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/beach_sand.gdshader",
+      "type": "file",
+      "bytes": 758
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/home_surface.gdshader",
+      "type": "file",
+      "bytes": 2243
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/town_roof.gdshader",
+      "type": "file",
+      "bytes": 625
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/meadow.gdshader",
+      "type": "file",
+      "bytes": 694
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/before/assets/shaders/farm_soil.gdshader",
+      "type": "file",
+      "bytes": 759
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/scenes",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scenes",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/config",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/config",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/.godot",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/.godot",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/tests",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/tests",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/scripts",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/scripts",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/data",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/data",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/assets",
+      "type": "symlink",
+      "target": "/Users/wangtaizhi/兔兔的世界/assets",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/icon.svg",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/icon.svg.import",
+      "type": "symlink",
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/editor_probe.gd",
+      "type": "file",
+      "bytes": 3018
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-project/project.godot",
+      "type": "file",
+      "bytes": 6407
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/final-checks/building_performance/run.log",
+      "type": "file",
+      "bytes": 1035
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/final-checks/normal_editor_source/run.log",
+      "type": "file",
+      "bytes": 1031
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-attempts/island_city_v2.json.bak",
+      "type": "file",
+      "bytes": 8411
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-attempts/attempt2.log",
+      "type": "file",
+      "bytes": 1236
+    },
+    {
+      "path": ".qa-artifacts/environment-polish-local/normal-editor-attempts/island_city_v2.json",
+      "type": "file",
+      "bytes": 10416
+    },
+    {
+      "path": ".qa-artifacts/20261103-102114-410457/building_rules/run.log",
+      "type": "file",
+      "bytes": 2742
+    },
+    {
+      "path": ".qa-artifacts/20261103-012650-419020/building_flow/run.log",
+      "type": "file",
+      "bytes": 1506
+    },
+    {
+      "path": ".qa-artifacts/20261103-012650-419020/building_flow/screenshots/constructed-interior.png",
+      "type": "file",
+      "bytes": 3157898
+    },
+    {
+      "path": ".qa-artifacts/20261103-012650-419020/building_flow/screenshots/editor-room.png",
+      "type": "file",
+      "bytes": 2367018
+    },
+    {
+      "path": ".qa-artifacts/20261103-012650-419020/building_mouse_flow/run.log",
+      "type": "file",
+      "bytes": 1803
+    },
+    {
+      "path": ".qa-artifacts/20261103-012650-419020/building_mouse_flow/screenshots/built-from-empty.png",
+      "type": "file",
+      "bytes": 2502856
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/valley_camera_regression/run.log",
+      "type": "file",
+      "bytes": 314
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/run.log",
+      "type": "file",
+      "bytes": 2934
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/铜叶工坊-制造面板.png",
+      "type": "file",
+      "bytes": 525388
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/铜叶工坊-制造动作.png",
+      "type": "file",
+      "bytes": 1198883
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/铜叶工坊-室内模块.png",
+      "type": "file",
+      "bytes": 1278926
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/制造技能-角色面板.png",
+      "type": "file",
+      "bytes": 545286
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/菜园水井-打水动作.png",
+      "type": "file",
+      "bytes": 1749372
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/菜园水井-东侧小门.png",
+      "type": "file",
+      "bytes": 1926536
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/铜叶工坊-厨房东侧.png",
+      "type": "file",
+      "bytes": 1576634
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/production_flow/screenshots/铜水壶-浇水动作.png",
+      "type": "file",
+      "bytes": 1621891
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/valley_journey/run.log",
+      "type": "file",
+      "bytes": 921
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/valley_journey/screenshots/山谷-地图.png",
+      "type": "file",
+      "bytes": 615708
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/valley_movement/run.log",
+      "type": "file",
+      "bytes": 4090
+    },
+    {
+      "path": ".qa-artifacts/20261103-012211-028531/home_lighting_stability/run.log",
+      "type": "file",
+      "bytes": 2395
+    },
+    {
+      "path": ".qa-artifacts/20261102-174824-555684/multiplayer_live/run.log",
+      "type": "file",
+      "bytes": 154
+    },
+    {
+      "path": ".qa-artifacts/20261103-002400-942210/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261103-111825-219627/direct_windowed_controls/run.log",
+      "type": "file",
+      "bytes": 2552
+    },
+    {
+      "path": ".qa-artifacts/20261103-111825-219627/direct_windowed_controls/screenshots/storage-against-wall-night.png",
+      "type": "file",
+      "bytes": 6716648
+    },
+    {
+      "path": "releases/0.3.3/windows/使用说明.txt",
+      "type": "file",
+      "bytes": 214
+    },
+    {
+      "path": "releases/0.3.3/windows/TutuWorld.pck",
+      "type": "file",
+      "bytes": 57399064
+    },
+    {
+      "path": "releases/0.3.3/windows/TutuWorld.exe",
+      "type": "file",
+      "bytes": 104569856
+    },
+    {
+      "path": "releases/0.3.3/windows/x86_64/LICENSE-CODE.txt",
+      "type": "file",
+      "bytes": 1093
+    },
+    {
+      "path": "releases/0.3.3/windows/x86_64/D3D12Core.dll",
+      "type": "file",
+      "bytes": 4821064
+    },
+    {
+      "path": "releases/0.3.3/windows/x86_64/LICENSE.txt",
+      "type": "file",
+      "bytes": 13147
+    },
+    {
+      "path": "build/dependencies/Godot_v4.6.3-stable_linux.x86_64.zip",
+      "type": "file",
+      "bytes": 71806687
+    },
+    {
+      "path": "build/dependencies/microsoft.direct3d.d3d12.1.618.5.nupkg",
+      "type": "file",
+      "bytes": 34430813
+    },
+    {
+      "path": "tools/__pycache__/dev.cpython-311.pyc",
+      "type": "file",
+      "bytes": 11591
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/plaza-flowerbed.png.import",
+      "type": "file",
+      "bytes": 987
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/continuous-stone-roads.png.import",
+      "type": "file",
+      "bytes": 1008
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/garden-earth.png.import",
+      "type": "file",
+      "bytes": 978
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/valley-path.png.import",
+      "type": "file",
+      "bytes": 975
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/render_ab.gd.uid",
+      "type": "file",
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts/catalog-doc-audit.json",
+      "type": "file",
+      "bytes": 17159
+    },
+    {
+      "path": ".qa-artifacts/catalog-doc-audit.gd",
+      "type": "file",
+      "bytes": 668
+    },
+    {
+      "path": ".qa-artifacts/placement-offset-audit.gd",
+      "type": "file",
+      "bytes": 671
+    },
+    {
+      "path": ".qa-artifacts/20261103-112825-623532/project_integrity/run.log",
+      "type": "file",
+      "bytes": 126
+    }
+  ],
+  "groups": [
+    {
+      "path": ".qa-artifacts",
+      "files": 852,
+      "symlinks": 60,
+      "bytes": 1672639699
+    },
+    {
+      "path": "releases/0.3.3/windows",
+      "files": 6,
+      "symlinks": 0,
+      "bytes": 166804438
+    },
+    {
+      "path": "build/dependencies/Godot_v4.6.3-stable_linux.x86_64.zip",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 71806687
+    },
+    {
+      "path": "build/dependencies/microsoft.direct3d.d3d12.1.618.5.nupkg",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 34430813
+    },
+    {
+      "path": "tools/__pycache__",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 11591
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/plaza-flowerbed.png.import",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 987
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/continuous-stone-roads.png.import",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 1008
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/garden-earth.png.import",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 978
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/valley-path.png.import",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 975
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/render_ab.gd.uid",
+      "files": 1,
+      "symlinks": 0,
+      "bytes": 20
+    },
+    {
+      "path": ".qa-artifacts (post-verification)",
+      "files": 4,
+      "symlinks": 0,
+      "bytes": 18624
+    }
+  ],
+  "logical_bytes": 1945715820,
+  "files": 870,
+  "symlinks": 60,
+  "preserved_previews": "preserved-previews.json",
+  "duplicate_checks": [
+    "Two duplicate dependencies matched SHA256 of retained canonical files",
+    "Every file in expanded Windows0.3.3 folder matched preserved official zip"
+  ],
+  "scope": "Only project QA caches, exact duplicate downloads/extracted installer files, Python/macOS caches, and generated documentation sidecars. Symlinks removed without following their targets; no user save, secret, production state, engine import cache or external archive removed."
+}

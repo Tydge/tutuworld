@@ -1,0 +1,642 @@
+{
+  "schema": 1,
+  "furniture": {
+    "bed": [
+      {
+        "id": "frame",
+        "name": "床架",
+        "family": "wood",
+        "colors": [
+          "b18b61"
+        ]
+      },
+      {
+        "id": "sheet",
+        "name": "床单",
+        "family": "fabric",
+        "colors": [
+          "eee6d4"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "quilt",
+        "name": "被套",
+        "family": "fabric",
+        "colors": [
+          "bb885a"
+        ],
+        "names": [
+          "Quilt"
+        ]
+      },
+      {
+        "id": "pillow",
+        "name": "枕套",
+        "family": "fabric",
+        "colors": [
+          "f3e9d3"
+        ],
+        "names": [
+          "Pillow"
+        ],
+        "neutral": true
+      }
+    ],
+    "bedside": [
+      {
+        "id": "body",
+        "name": "柜体",
+        "family": "wood",
+        "colors": [
+          "d1b58a"
+        ]
+      },
+      {
+        "id": "handle",
+        "name": "拉手",
+        "family": "metal",
+        "colors": [
+          "b79758"
+        ]
+      }
+    ],
+    "bookshelf": [
+      {
+        "id": "frame",
+        "name": "框架与层板",
+        "family": "wood",
+        "colors": [
+          "bd9c70"
+        ]
+      },
+      {
+        "id": "back",
+        "name": "背板",
+        "family": "wood",
+        "colors": [
+          "aa8f65"
+        ]
+      }
+    ],
+    "desk": [
+      {
+        "id": "top",
+        "name": "桌面",
+        "family": "wood",
+        "colors": [
+          "c6a779"
+        ],
+        "min_y": 1.0
+      },
+      {
+        "id": "frame",
+        "name": "桌腿",
+        "family": "wood",
+        "colors": [
+          "c6a779"
+        ],
+        "max_y": 0.99
+      },
+      {
+        "id": "drawer",
+        "name": "抽屉",
+        "family": "wood",
+        "colors": [
+          "b99566"
+        ]
+      },
+      {
+        "id": "handle",
+        "name": "拉手",
+        "family": "metal",
+        "colors": [
+          "c1a564"
+        ]
+      }
+    ],
+    "chair": [
+      {
+        "id": "frame",
+        "name": "椅架",
+        "family": "wood",
+        "colors": [
+          "c6a779"
+        ]
+      },
+      {
+        "id": "seat",
+        "name": "坐垫",
+        "family": "fabric",
+        "colors": [
+          "839f8a"
+        ]
+      }
+    ],
+    "sofa": [
+      {
+        "id": "frame",
+        "name": "木脚",
+        "family": "wood",
+        "colors": [
+          "a9855f"
+        ]
+      },
+      {
+        "id": "body",
+        "name": "主体布面",
+        "family": "fabric",
+        "colors": [
+          "8fae9c"
+        ]
+      },
+      {
+        "id": "seat",
+        "name": "坐垫",
+        "family": "fabric",
+        "colors": [
+          "afc1aa"
+        ]
+      },
+      {
+        "id": "pillow",
+        "name": "靠垫",
+        "family": "fabric",
+        "colors": [
+          "eadfca"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "throw",
+        "name": "搭毯",
+        "family": "fabric",
+        "colors": [
+          "ba8177"
+        ]
+      }
+    ],
+    "forest_settee": [
+      {
+        "id": "frame",
+        "name": "藤木框架",
+        "family": "wood",
+        "colors": [
+          "b58b54",
+          "e5c994"
+        ]
+      },
+      {
+        "id": "seat",
+        "name": "坐垫",
+        "family": "fabric",
+        "colors": [
+          "bf7f57"
+        ]
+      },
+      {
+        "id": "pillow",
+        "name": "靠枕",
+        "family": "fabric",
+        "colors": [
+          "688d86"
+        ],
+        "neutral": true
+      }
+    ],
+    "forest_cabinet": [
+      {
+        "id": "body",
+        "name": "柜体",
+        "family": "wood",
+        "colors": [
+          "e5c994"
+        ]
+      },
+      {
+        "id": "front",
+        "name": "柜门",
+        "family": "wood",
+        "colors": [
+          "789a7d"
+        ]
+      },
+      {
+        "id": "handle",
+        "name": "拉手",
+        "family": "metal",
+        "colors": [
+          "d5ba70"
+        ]
+      }
+    ],
+    "hearth": [
+      {
+        "id": "base",
+        "name": "底座",
+        "family": "stone",
+        "colors": [
+          "b7ac92"
+        ]
+      },
+      {
+        "id": "surround",
+        "name": "炉身",
+        "family": "stone",
+        "colors": [
+          "b49b7d"
+        ]
+      },
+      {
+        "id": "mantel",
+        "name": "壁炉台面",
+        "family": "wood",
+        "colors": [
+          "cba87c"
+        ]
+      },
+      {
+        "id": "inside",
+        "name": "炉膛",
+        "family": "stone",
+        "colors": [
+          "4d5148"
+        ]
+      },
+      {
+        "id": "logs",
+        "name": "木柴",
+        "family": "wood",
+        "colors": [
+          "806044"
+        ]
+      }
+    ],
+    "tea_table": [
+      {
+        "id": "top",
+        "name": "桌面",
+        "family": "wood",
+        "colors": [
+          "c29a68"
+        ]
+      },
+      {
+        "id": "legs",
+        "name": "桌腿",
+        "family": "wood",
+        "colors": [
+          "96754f"
+        ]
+      }
+    ],
+    "table_lamp": [
+      {
+        "id": "base",
+        "name": "底座",
+        "family": "metal",
+        "colors": [
+          "c8a16c"
+        ]
+      },
+      {
+        "id": "stem",
+        "name": "灯杆",
+        "family": "metal",
+        "colors": [
+          "b59b66"
+        ]
+      },
+      {
+        "id": "shade",
+        "name": "灯罩",
+        "family": "fabric",
+        "colors": [
+          "efe0ad"
+        ]
+      }
+    ],
+    "pendant": [
+      {
+        "id": "stem",
+        "name": "吊杆与底座",
+        "family": "metal",
+        "colors": [
+          "a88b57"
+        ]
+      },
+      {
+        "id": "shade",
+        "name": "灯罩",
+        "family": "fabric",
+        "colors": [
+          "e9d4a2"
+        ]
+      }
+    ],
+    "book": [
+      {
+        "id": "cover",
+        "name": "书封",
+        "family": "fabric",
+        "colors": [
+          "6d9c95"
+        ]
+      },
+      {
+        "id": "pages",
+        "name": "书页",
+        "family": "paper",
+        "colors": [
+          "e9dfc6"
+        ],
+        "neutral": true
+      }
+    ],
+    "standing_book": [
+      {
+        "id": "cover",
+        "name": "书封",
+        "family": "fabric",
+        "colors": [
+          "789b8d"
+        ]
+      }
+    ],
+    "letter": [
+      {
+        "id": "paper",
+        "name": "信纸",
+        "family": "paper",
+        "colors": [
+          "eee5cb"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "ink",
+        "name": "字迹",
+        "family": "solid",
+        "colors": [
+          "b2ac91"
+        ]
+      }
+    ],
+    "cup": [
+      {
+        "id": "body",
+        "name": "杯身与杯柄",
+        "family": "ceramic",
+        "colors": [
+          "efe4ca"
+        ]
+      },
+      {
+        "id": "drink",
+        "name": "杯中饮品",
+        "family": "solid",
+        "colors": [
+          "9a6948"
+        ]
+      }
+    ],
+    "clock": [
+      {
+        "id": "body",
+        "name": "钟壳",
+        "family": "wood",
+        "colors": [
+          "a58c60"
+        ]
+      },
+      {
+        "id": "face",
+        "name": "表盘",
+        "family": "ceramic",
+        "colors": [
+          "eee4c8"
+        ],
+        "neutral": true
+      },
+      {
+        "id": "hands",
+        "name": "指针",
+        "family": "metal",
+        "colors": [
+          "576d60"
+        ]
+      }
+    ],
+    "small_plant": [
+      {
+        "id": "pot",
+        "name": "花盆",
+        "family": "ceramic",
+        "colors": [
+          "cd9d74"
+        ]
+      },
+      {
+        "id": "rim",
+        "name": "盆沿",
+        "family": "ceramic",
+        "colors": [
+          "e0ba8c"
+        ]
+      },
+      {
+        "id": "soil",
+        "name": "泥土",
+        "family": "stone",
+        "colors": [
+          "6a6550"
+        ]
+      },
+      {
+        "id": "leaves",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "7ca86c",
+          "5c9767",
+          "5c8653"
+        ]
+      }
+    ],
+    "forest_planter": [
+      {
+        "id": "pot",
+        "name": "花盆",
+        "family": "ceramic",
+        "colors": [
+          "cd9d74"
+        ]
+      },
+      {
+        "id": "rim",
+        "name": "盆沿",
+        "family": "ceramic",
+        "colors": [
+          "e0ba8c"
+        ]
+      },
+      {
+        "id": "soil",
+        "name": "泥土",
+        "family": "stone",
+        "colors": [
+          "6a6550"
+        ]
+      },
+      {
+        "id": "leaves",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "7ca86c",
+          "5c9767",
+          "5c8653"
+        ]
+      }
+    ],
+    "forest_rug": [
+      {
+        "id": "fabric",
+        "name": "织物",
+        "family": "fabric",
+        "colors": [
+          "d8ba80"
+        ]
+      },
+      {
+        "id": "edge",
+        "name": "包边",
+        "family": "fabric",
+        "colors": [
+          "8fae8e"
+        ]
+      }
+    ],
+    "flowerbed": [
+      {
+        "id": "stone",
+        "name": "石砌边框",
+        "family": "stone",
+        "colors": [
+          "ffffff"
+        ],
+        "names": [
+          "BeveledStoneBorder"
+        ]
+      },
+      {
+        "id": "soil",
+        "name": "泥土",
+        "family": "stone",
+        "colors": [
+          "694b35"
+        ],
+        "names": [
+          "PlantingSoil"
+        ]
+      },
+      {
+        "id": "leaves",
+        "name": "叶片",
+        "family": "foliage",
+        "colors": [
+          "ffffff"
+        ],
+        "names": [
+          "PlantLeaves"
+        ]
+      },
+      {
+        "id": "flowers",
+        "name": "花朵",
+        "family": "flowers",
+        "colors": [
+          "ffffff"
+        ],
+        "names": [
+          "PlantBlooms"
+        ]
+      }
+    ],
+    "fountain": [
+      {
+        "id": "stone",
+        "name": "底座与石柱",
+        "family": "stone",
+        "colors": [
+          "d0d0b8"
+        ]
+      },
+      {
+        "id": "trim",
+        "name": "池沿与收边",
+        "family": "stone",
+        "colors": [
+          "e2d9bb"
+        ]
+      },
+      {
+        "id": "tile",
+        "name": "花碗与马赛克",
+        "family": "ceramic",
+        "colors": [
+          "618f87"
+        ]
+      },
+      {
+        "id": "metal",
+        "name": "金属喷头",
+        "family": "metal",
+        "colors": [
+          "b89a5e"
+        ]
+      }
+    ]
+  },
+  "presets": {
+    "warm": {
+      "name": "暖木奶油",
+      "wood": "ba9365",
+      "fabric": "c39c72",
+      "neutral": "f0e4ce",
+      "metal": "b79a61",
+      "ceramic": "e5d8bd",
+      "stone": "c4b69f",
+      "foliage": "789865",
+      "flowers": "f0cbb3",
+      "paper": "eee4ce",
+      "solid": "716c59"
+    },
+    "sea": {
+      "name": "海风青绿",
+      "wood": "a48a69",
+      "fabric": "7fa79e",
+      "neutral": "e5e7dc",
+      "metal": "9d9d82",
+      "ceramic": "8eafa5",
+      "stone": "b5c3ba",
+      "foliage": "749a76",
+      "flowers": "d1dce6",
+      "paper": "e9e8da",
+      "solid": "647b76"
+    },
+    "rose": {
+      "name": "玫瑰暖白",
+      "wood": "b99b84",
+      "fabric": "c2939c",
+      "neutral": "f1e3dc",
+      "metal": "b99a7a",
+      "ceramic": "dbb8b7",
+      "stone": "c7b8b6",
+      "foliage": "81947b",
+      "flowers": "e8b0c4",
+      "paper": "f2e5dd",
+      "solid": "8b7477"
+    }
+  }
+}

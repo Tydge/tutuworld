@@ -1,0 +1,408 @@
+{
+  "date": "2026-11-03",
+  "status": "local-only-unreleased",
+  "official_version": "0.3.3/build6/launcher2/protocol3",
+  "environment": {
+    "godot": "4.6.3",
+    "device": "Apple M1 Pro 14-core GPU / 16 GB",
+    "renderer": "Metal Forward+",
+    "output": "1920x1080",
+    "render_pixels": 2000000,
+    "msaa": "4x",
+    "vsync": false,
+    "fps_cap": false
+  },
+  "tests": [
+    {
+      "name": "project_integrity",
+      "checks": 323,
+      "result": "PASS",
+      "log": "logs/project_integrity.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015830-200588/project_integrity/run.log"
+    },
+    {
+      "name": "building_rules",
+      "checks": 22,
+      "result": "PASS",
+      "log": "logs/building_rules.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015830-200588/building_rules/run.log"
+    },
+    {
+      "name": "city_rules",
+      "checks": 56,
+      "result": "PASS",
+      "log": "logs/city_rules.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015830-200588/city_rules/run.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "checks": 39,
+      "result": "PASS",
+      "log": "logs/character_roster_rules.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015830-200588/character_roster_rules/run.log"
+    },
+    {
+      "name": "food_save_migration",
+      "checks": 6,
+      "result": "PASS",
+      "log": "logs/food_save_migration.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015830-200588/food_save_migration/run.log"
+    },
+    {
+      "name": "building_flow",
+      "checks": 27,
+      "result": "PASS",
+      "log": "logs/building_flow.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015951-411375/building_flow/run.log"
+    },
+    {
+      "name": "building_mouse_flow",
+      "checks": 27,
+      "result": "PASS",
+      "log": "logs/building_mouse_flow.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-015951-411375/building_mouse_flow/run.log"
+    },
+    {
+      "name": "valley_journey",
+      "checks": 18,
+      "result": "PASS",
+      "log": "logs/valley_journey.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-013748-123741/valley_journey/run.log"
+    },
+    {
+      "name": "terrain_surface",
+      "checks": 25,
+      "result": "PASS",
+      "log": "logs/terrain_surface.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-011616-796287/terrain_surface/run.log"
+    },
+    {
+      "name": "forest_art_structure",
+      "checks": 20,
+      "result": "PASS",
+      "log": "logs/forest_art_structure.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-011616-796287/forest_art_structure/run.log"
+    },
+    {
+      "name": "production_flow",
+      "checks": 28,
+      "result": "PASS",
+      "log": "logs/production_flow.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-012211-028531/production_flow/run.log"
+    },
+    {
+      "name": "valley_movement",
+      "checks": 85,
+      "result": "PASS",
+      "log": "logs/valley_movement.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-012211-028531/valley_movement/run.log"
+    },
+    {
+      "name": "valley_camera_regression",
+      "checks": 217,
+      "result": "PASS",
+      "log": "logs/valley_camera_regression.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-012211-028531/valley_camera_regression/run.log"
+    },
+    {
+      "name": "home_lighting_stability",
+      "checks": 22,
+      "result": "PASS",
+      "log": "logs/home_lighting_stability.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-012211-028531/home_lighting_stability/run.log"
+    },
+    {
+      "name": "normal_editor_source",
+      "checks": 11,
+      "result": "PASS",
+      "log": "logs/normal_editor_source.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/environment-polish-local/final-checks/normal_editor_source/run.log"
+    }
+  ],
+  "total_checks": 926,
+  "performance": {
+    "environment_groups": 36,
+    "environment_sampled_frames": 5237,
+    "environment_warm_frames_per_group": 50,
+    "environment_sample_seconds_per_group": 1.2,
+    "environment_comparison": [
+      {
+        "view": "fountain",
+        "before_median_mean_ms": 10.04,
+        "after_median_mean_ms": 10.207,
+        "delta_ms": 0.167,
+        "before_draws": 1133,
+        "after_draws": 1107
+      },
+      {
+        "view": "beach",
+        "before_median_mean_ms": 4.8735,
+        "after_median_mean_ms": 5.093,
+        "delta_ms": 0.2195,
+        "before_draws": 314,
+        "after_draws": 308
+      },
+      {
+        "view": "walls",
+        "before_median_mean_ms": 10.343,
+        "after_median_mean_ms": 10.4265,
+        "delta_ms": 0.0835,
+        "before_draws": 485,
+        "after_draws": 497
+      },
+      {
+        "view": "bark",
+        "before_median_mean_ms": 9.9245,
+        "after_median_mean_ms": 9.914,
+        "delta_ms": -0.0105,
+        "before_draws": 1142,
+        "after_draws": 1123
+      },
+      {
+        "view": "bridge",
+        "before_median_mean_ms": 7.502,
+        "after_median_mean_ms": 7.7425,
+        "delta_ms": 0.2405,
+        "before_draws": 947,
+        "after_draws": 963
+      },
+      {
+        "view": "cascade",
+        "before_median_mean_ms": 7.4785,
+        "after_median_mean_ms": 7.653,
+        "delta_ms": 0.1745,
+        "before_draws": 763,
+        "after_draws": 773
+      },
+      {
+        "view": "cottage",
+        "before_median_mean_ms": 8.5045,
+        "after_median_mean_ms": 8.749,
+        "delta_ms": 0.2445,
+        "before_draws": 692,
+        "after_draws": 708
+      },
+      {
+        "view": "woodland",
+        "before_median_mean_ms": 9.2805,
+        "after_median_mean_ms": 9.448,
+        "delta_ms": 0.1675,
+        "before_draws": 1448,
+        "after_draws": 1503
+      },
+      {
+        "view": "valley-wide",
+        "before_median_mean_ms": 8.881,
+        "after_median_mean_ms": 8.934,
+        "delta_ms": 0.053,
+        "before_draws": 1117,
+        "after_draws": 1137
+      }
+    ],
+    "baseline": "Snapshot of the working tree before this round; includes the preceding unpublished terrain, continuous paving and flowerbed changes. Each phase uses its own process, fixed camera/simulation, two consecutive rounds per view. Not a pure material-only comparison; includes regenerated maps and eastern site. Short sequential measurements can contain thermal/load and NPC variation.",
+    "building_groups": 6,
+    "building_sampled_frames": 1449,
+    "building_warm_frames_per_group": 60,
+    "building_sample_seconds_per_group": 1.5,
+    "building_scope": "Same east-plot camera: empty plot, editable 16-element cottage with roof cut away, then building UI/grid active. Not a 200-element capacity benchmark.",
+    "notes": "No whole-game FPS promise, GPU-only time measurement, Windows runtime measurement, or performance stress test."
+  },
+  "textures": [
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "spring_lawn_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "packed_earth_path_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "cultivated_soil_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "village_stone_paving_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "warm_tree_bark_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "soft_lime_plaster_v1",
+      "mipmaps": true,
+      "width": 1024
+    },
+    {
+      "bytes": 699064,
+      "compressed": true,
+      "format": 17,
+      "height": 1024,
+      "id": "fine_beach_sand_v1",
+      "mipmaps": true,
+      "width": 1024
+    }
+  ],
+  "texture_total_bytes": 4893448,
+  "new_texture_bytes": 2097192,
+  "texture_bytes_meaning": "Compressed Image payload including mipmaps, not driver physical VRAM or total process memory; format17 is DXT1/BC1 RGB.",
+  "asset_manifest": "../../../assets/terrain/environment_assets_v1.json",
+  "screenshots": [
+    "screenshots/fountain.png",
+    "screenshots/bark.png",
+    "screenshots/walls.png",
+    "screenshots/beach.png",
+    "screenshots/cascade.png",
+    "screenshots/valley-wide.png",
+    "screenshots/building-editor.png",
+    "screenshots/building-exterior.png",
+    "screenshots/built-from-empty.png",
+    "screenshots/built-interior.png",
+    "screenshots/before-fountain.png",
+    "screenshots/before-valley-wide.png"
+  ],
+  "scope": [
+    "Single-player in-game east-plot editor: floor, axis wall, attached openings, gabled roof, 12 catalog entries, appearance, move/rotate/remove, undo/redo, automatic local persistence",
+    "Actual mouse construction from empty plot and native F6/HUD opening",
+    "Three species physically traverse causeway and doorway; visible door leaf and collider rotate together",
+    "Legacy save/character/food progress; disk round-trip, failed-save rollback, character sharing and valley round-trip",
+    "Default inward-open workshop door, existing production flow, valley movement/camera, indoor lighting",
+    "Tree bark, plaster, sand, ocean/river, fountain and 355 understory / 40 riverbank placements; modular local coordinates and shared textures"
+  ],
+  "limitations": [
+    "Single floor, fixed height, axis walls, rectangular roofs; eastern 36x34 plot only, maximum200 elements",
+    "Built bed is decorative; sofa/desk retain seat interaction; no building costs or multiplayer building",
+    "No full-game regression, multiplayer test, Windows machine test, 200-element stress benchmark, exports, uploads, deployment, commit, push or version change",
+    "GL map generation retained its pre-existing two sky texture leak diagnostics at exit; final Metal runtime checks report no script or shader errors"
+  ],
+  "protected_assets": "protected-assets.json",
+  "generation": "City and valley generated with the graphical OpenGL generator; never saved MultiMesh maps from headless. Original residence/shop/animal artifacts and release configuration protected, workshop metadata intentionally updated.",
+  "final_source_hashes": {
+    "scripts/building/catalog.gd": "124765a9e612cbaded65810fa29d38342b213049f69450e62c04f4ef9d1c3677",
+    "scripts/building/editable_builder.gd": "5e6c446a6428468b17fbbd5eba9f4bf16a060992c10330708cf4feb41d741385",
+    "scripts/building/editor.gd": "0dd5380babe37763d7089400261d0610b82252279575029e7823292b7e820a3f",
+    "scripts/building/editor_ui.gd": "b420afac8795b4aad0b3e5fd98acc5d2bbd077e3e2f0778d20a35dc8d9fd2f66",
+    "scripts/building/layout.gd": "6fa206ed91e1c2b6e12d2c5e281cdcdaa9efdd1f1ef01100e81b50c47b891e15",
+    "scripts/building/module_factory.gd": "cd0add424d2909576da14a337898bf4a56509d62da07c8ae66b5e67b582b83ef",
+    "scripts/building/room_door.gd": "3b7260c11d464a9ed18938bdafdb6fa55136dc29c49a97cdd5d7ae4f806cfaa1",
+    "scripts/building/site.gd": "d5c6b3b3a9642edd48a6c0fca33a78266497cc9755a3b768eb172fe8e4452261",
+    "scripts/building/templates.gd": "1ac133b187b1b4e528ea78e9d7613d7be9809d91e778e2e3c5986e83614bc583",
+    "scripts/city/ambient_life.gd": "ad6c0ec4ee9a3fd7786074a03c0e421fca0e60a9dbd8f6a436ba46a45a79c530",
+    "scripts/city/bow_accessory.gd": "edfe4ccb787bbbd74c6d227efaeb2046f2c21b7d88da9cc607f76c9ba6d9b476",
+    "scripts/city/build_city.gd": "a5a46f3494de89b9d1bbac580f00aa8c1d71b7208e1e608b0f02416cd0c6c76c",
+    "scripts/city/city_world.gd": "c9913c45351cf089a3e9f6c1b6dcc00121820315f87dd6115d70b07e7ed2289d",
+    "scripts/city/crop_visual.gd": "050176469bebd080e58068dfca35cf7477da08405c976fdf0c68fb929aaf70f4",
+    "scripts/city/culinary.gd": "2ae248b3d1d7ed3f9780cc2a5f0a76c5f6ff251f9420b495e4196214fb79f3aa",
+    "scripts/city/environment_materials.gd": "2744aad4aa6e359d3f7b44ea1238bdb83c85148deea2f7a7776ce8623a2da4da",
+    "scripts/city/fabric_library.gd": "e42a209a8760f1bc4a03a01dc3a070f20461aa015532a7f6f763a012d97cae84",
+    "scripts/city/food_visual.gd": "3d7d9434c6fa30d0176ed7db7668a1bd3fcfac583d084902c002a374ef023560",
+    "scripts/city/forest_builder.gd": "4311f3596510b8e161842de169540272ace8a45afe5a7b7dcbd95245229895dc",
+    "scripts/city/forest_furniture.gd": "31da2b6af0064b0ead5b043988acf1e85849f94769561e4a3ce6fc027e84032f",
+    "scripts/city/frame_pacer.gd": "7c9d662f2513c58ea38bb52ebfe64563e5e4a8427a43238f2ade550edd30cefc",
+    "scripts/city/home_builder.gd": "4dc2c2b77884b59f710fc9c21cd979e52674d849188b8686868d7e08371f52ab",
+    "scripts/city/interaction_targets.gd": "aad268f2864755f2984f85908fedb1b73e5c4eccb6d0954db0853eb8576dc711",
+    "scripts/city/kitchen_scenery.gd": "e4d0b0e64e53fb79535bb4ff591efcd1ffe50f1d80e2acb34aaae02755a3733b",
+    "scripts/city/lamp_builder.gd": "a68dba8497eec82e8913f0a6d9a2c9313a9de711ebac7a3e19b3cd68c60b3a94",
+    "scripts/city/meadow_blossoms.gd": "cca5856aac54b8205ff5e51db59253d14986833ebc631a90e55cb48341372bd0",
+    "scripts/city/npc_driver.gd": "33e9fa8642d006956c416c75e7ddb6b7d68a2d3bae829e91b7b3feeb7533553c",
+    "scripts/city/npc_profiles.gd": "8565f1401cea80886085a645f84a9f092c752469c09d1d660e86b826b7e5d6b7",
+    "scripts/city/online_world.gd": "8dfb692d7e2e545c04a6170389bc96bcfdc1e51e66fd7fc3542c443bf6243f17",
+    "scripts/city/outfit.gd": "082cc87f754e6c751ea9b3a11170d20304412da8dbadb6875e89b87bb0f367bf",
+    "scripts/city/plaza_flowerbed.gd": "1315539371b26eea2109d67acbf73399731031943c2604e5b787d820a1b873c6",
+    "scripts/city/plaza_fountain.gd": "0f355c6a289f37a0a8c5d54b0bee090cc340ebe4f29ed1a64df472c379e3cd94",
+    "scripts/city/production_builder.gd": "ee8d9bf4f5fe7c388ef1c0c49cd5f266ff0211fe862580be1937b9c78f230403",
+    "scripts/city/production_facilities.gd": "7314128b460b2896cf39e33bacac93b080b96db3be52a4f7c11230af4031cff1",
+    "scripts/city/prop_collisions.gd": "a4a67765d768acb509633437672861c6af869793adb5d1470fa6b7aa033f4997",
+    "scripts/city/render_budget.gd": "30f6656c4e1f07377cf0f9ff15c1bfa81c224962a25569f9711f2e9341cb983e",
+    "scripts/city/resource_visual.gd": "d9fafda93f18106d0d4300253dd226f4ae58d0860f1a63fb9b0c2847c345d17a",
+    "scripts/city/reward_sparkle.gd": "98ec687ba72e1fe76b1adaa39ac1045ffa68b7b83792f0f2122a7bb7f997e854",
+    "scripts/city/scene_preparation.gd": "873a705ad44dfceed20ab1db7e3665c53a1fa8fce567965b4ca46eb7e32e62d4",
+    "scripts/city/scenery_polish.gd": "03ce02a2e4149601aa5c8ccd47a11b5d5eac2ea7ba3908353c46a56de54933f2",
+    "scripts/city/seabreeze_home.gd": "13ecd60498bcfbdceac1e09b40b3be8f129fc05739b22135d9c13eac584c2e21",
+    "scripts/city/shop_builder.gd": "bef0527dec1d3846933403f93fc70a0eb0316beae41137d891ed2dc2285836a1",
+    "scripts/city/sky_palette.gd": "5211e3054ec76097af57bfdd196b78d420ddbd32724458544689214563835674",
+    "scripts/city/static_batches.gd": "314dc695808e08b896ccee25611d172f3ca42474d25656117b7bcd31c647210d",
+    "scripts/city/terrain_materials.gd": "5295766f8b61efc21ad0ba6a6f8b5dea118f8b8be3e429f3b5a7e9d5e6a0704f",
+    "scripts/city/tool_models.gd": "d41f9aa7b525cfa6c8339f20b2cb8535662a12797b8c88b75c458685a76eff64",
+    "scripts/city/town_gardens.gd": "bb4171ed92697c045b6d608a74a551b28ea4e7ca71141dd71d6229e2272f4f40",
+    "scripts/city/wander_navigation.gd": "42ae8a21eb50632e4244481513960b73f03b817b7c4dce58fcfea3eaf41e8948",
+    "scripts/city/work_props.gd": "3470fedd2988d21efdac47bfaf6da912d1cf5852d082f12d2a4fc01c6d576fc5",
+    "scripts/valley/boat_travel.gd": "93819e8ad079250129ea242feed3846f2a07805a518be3ba3b7a926a984d1f6a",
+    "scripts/valley/build_valley.gd": "c268d5e3398d911aa5be6f406a347d28b1dd339093cf371ad98cbbcf7687e06b",
+    "scripts/valley/panda_routine.gd": "67a35d42c63ff696e6723b826515677bd2c896de872786fdbb5887afc0a5ff7e",
+    "scripts/valley/valley_layout.gd": "7c6266bcca4567318f3dc412c324e5b6caa2f697bfa6975af7c92d74a45aec09",
+    "scripts/valley/valley_world.gd": "b3f6d653a2e1a5b2b8a53fe0462ccca740b61771e0ee84cd5f803498a6896a06",
+    "scripts/valley/visitor_routine.gd": "72defa611a132297d6c69927668eabb996178374ed24f1f0b5bb7a1b51b8f548",
+    "scripts/valley/woodland_dressing.gd": "fa6e7619558594e2c5afe78d3254c976b48c885553d6ede96f6ace0ebfe2652e",
+    "assets/shaders/avatar_mask.gdshader": "3944c76abe709a7a41aea061f5d6fb82fadb57f71f0eed905ad4f4a9c57b9b1c",
+    "assets/shaders/beach_sand.gdshader": "601218ddd755934c2ad0236a227a2d48404d5ba60be6a2708e2e4e8d94a863b0",
+    "assets/shaders/birch_bark.gdshader": "e09dba9bc5e13c06c568a7707142c44065d4cf02a9a097cc1a8bdc13cdecf62a",
+    "assets/shaders/build_grid.gdshader": "f91774a22bf8942b74de306de156eee85eb30a31da46eb25c27acca023db3634",
+    "assets/shaders/cascade_spray.gdshader": "7a2016e7c53d25a2ad5d0a4b9f2f2deda916ee2e5815ea104cdd7b61a481abc7",
+    "assets/shaders/contact_shadow.gdshader": "6df5860896e03d8070af747fceba46143a94bbc2e16eb2df9e48d5fec26e2b00",
+    "assets/shaders/farm_soil.gdshader": "c068c8feff9c2cfbd96d2801bf5939aa845468db244bb4ba79e2a6766450f723",
+    "assets/shaders/forest_blossoms.gdshader": "b8e367dde0450ec4cd28401877372d8d9efa583710976be056e9e63bf1c272a1",
+    "assets/shaders/forest_cliff.gdshader": "db5a2f4cd028abf06f047194577dcc1051bb365de648ff4cfa1f62eeb3e1cfce",
+    "assets/shaders/forest_falls.gdshader": "42d42e129eae99b184c294583a2186b456062faac3e54e92af277934156a34d6",
+    "assets/shaders/forest_floor.gdshader": "94bcf5c692bfbb2cc81f79e829125359c2d70fc7968e5b2c581f219cce80946e",
+    "assets/shaders/forest_foam.gdshader": "5dfcecfc97fadbd08df4462f3a791393d4fc15bfa12b80d75d0ff3d8436c8b4a",
+    "assets/shaders/forest_ridge.gdshader": "37180d4e9ceff14ce1405fdef9b4b1b8a6193673b733be67dcfe5af15ba69634",
+    "assets/shaders/forest_stream.gdshader": "42246bdbf99242f501a7bda725eedf898ed40a717c4559231b61415531379e0f",
+    "assets/shaders/fountain_water.gdshader": "af948c72eb69f0de38753fd8bd23a4fdc18e3cf82b85ee1b59d423d52d0e6b24",
+    "assets/shaders/hearth_embers.gdshader": "470be9c927b57bcc8b95bcf1032fac59b84e75653afda179dd854c34b256f7a7",
+    "assets/shaders/hearth_fire.gdshader": "f34ce964f3b769c4a826d899af0faa8c8837b2d7c2ba9f1bd212e68bc9eb5f4d",
+    "assets/shaders/home_floor.gdshader": "2812a5073cf0dd7f4932d8301caa71a4f253bfc7a376d05d52027f76cbc05165",
+    "assets/shaders/home_surface.gdshader": "35e8cbe7acda1b4753df740fc6941952d5f7ae7dff849327156f574940b11a09",
+    "assets/shaders/island_ocean.gdshader": "2bc4bc435858bc3d5234fe44d6d955ddec3e926ad8b41d4962632ff425c0ca72",
+    "assets/shaders/island_sky.gdshader": "30ae2ee8c9d61ddda3caa1c48a9ad7f311729b771d69a9ed711eeaabd31ee9b5",
+    "assets/shaders/lamp_glow.gdshader": "8801c17fc799b035a8c6b202b93932cc895ff7d7f424e2dc7a11b93d89ae8091",
+    "assets/shaders/lawn_surface.gdshaderinc": "0ef7e6309e23abd07ec201f62f8ee2ac7863fb765f1232fe473551927b997e50",
+    "assets/shaders/log_rings.gdshader": "5f761e669d51c99502393542fc0c151575492046112c57dc2ce2a10097a4f86a",
+    "assets/shaders/meadow.gdshader": "e6d9617e43c4342e3e27ee16b6c2813b27b3ba429ebf10692644237a98c462c7",
+    "assets/shaders/meadow_blades.gdshader": "f1acacba3126996d0007e2feaf5eea08bee04dfa6cab3531e0e22233bba2f20e",
+    "assets/shaders/occlusion_fade.gdshader": "687817d73c6974bff181d840f09ea61cf6940cfede9cb9e14ff3d17deaf704aa",
+    "assets/shaders/ocean_surface.gdshaderinc": "1b9defd5e694a4534ffacc4db39a567e61b39fc4bbb5cf4a1439e13227827c94",
+    "assets/shaders/paving.gdshader": "ef455318b67247ba92fd5a566003dda2636ecaaa6d4fdb199bdd84fe92e9417f",
+    "assets/shaders/shore_foam.gdshader": "174379d42b3dc9a8da7ef7ba6289e77921a431aceb0b4d84dd99a4d82a898943",
+    "assets/shaders/sleep_quilt.gdshader": "4c67f5026ca96955236dfbbb38214853feec3c73b628fe0b86a8f5d16d134e48",
+    "assets/shaders/town_roof.gdshader": "4c6dcd860b56f3375d02b05a8c48998d42698803c229c16d98945901b6c683e4",
+    "assets/shaders/tree_bark.gdshader": "5433270d16949fad382df239600dda7a0e37b5b209d4b9f8a7742ff864c5b53d",
+    "assets/shaders/water_splash.gdshader": "f84c36584c42afb8ee12367bff9fccd26cfdd125e82a57303564f3c3e53af1ae",
+    "assets/shaders/watering_stream.gdshader": "a245c37cd172ee8e4995443f0fb6689c0b6e24827b73ac2db9dc56c8b367afe1",
+    "assets/shaders/work_particles.gdshader": "826ae45e01172081cd6be01593d5f4ad39de519b1bc0cf7e2f871f6a62c1f017",
+    "scenes/city_map.tscn": "827e7d8a6b7b85124cded81a8c107d3d2e940a852195506e0e9f9c4d4bef1386",
+    "scenes/valley_map.scn": "48d798edabe39a5223ad96e085a760cd4517039f61e214e082eecf5f2b3c7ce3",
+    "scenes/workshop.scn": "b27936623d21925fc8e27789489031a0e5bf109918ef4e3d853e6af0a3aed1de",
+    "scripts/services/session.gd": "e877b914fac9d47ca9fb84bf3f877b03c686aebf2802ccaf3fcb35a54555d032",
+    "scripts/services/local_authority.gd": "f3d774f45f99c409cf356ccf3b4582dc7d8749f21bb92076a83dac45b6457c60"
+  }
+}

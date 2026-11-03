@@ -36,7 +36,8 @@ func run() -> void:
 			actor.walking=pose!="站立";actor.velocity=Vector3(0,0,4.76 if pose=="跑步" else 2.8);actor.step_phase=1.10
 			for i in range(30): actor.animate_pose(1.0/60)
 			check(actor.get_node("Visual/LeftLeg/Wardrobe_body_leg").get_parent()==actor.left_leg,"Cuff follows the shared animated leg: "+actor.rig_profile.species_id+" "+pose)
-		await create_timer(.15).timeout;await RenderingServer.frame_post_draw
+		await create_timer(.15).timeout
+		for frame in range(3):await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/裤腿修正-三角色-"+pose+".png")
 	check(Outfit.trouser_meshes.size()==3,"Cuff geometry is cached once per species and reused")
 	print("TROUSER_COMPATIBILITY_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)

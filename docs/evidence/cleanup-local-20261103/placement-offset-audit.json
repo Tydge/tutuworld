@@ -1,0 +1,59 @@
+{
+  "status": "confirmed-open",
+  "source": "scripts/building/catalog.gd:footprint; scripts/building/module_factory.gd:object rotation",
+  "method": "Engine Basis(Y,yaw) applied to the catalog local offset versus the center of Catalog.footprint; this is a coordinate audit, not a full physics placement test.",
+  "rows": [
+    {
+      "kind": "bed",
+      "yaw": 0,
+      "center_error_m": 0.0,
+      "result": "ALIGNED"
+    },
+    {
+      "kind": "bed",
+      "yaw": 90,
+      "center_error_m": 0.9,
+      "result": "OPEN"
+    },
+    {
+      "kind": "bed",
+      "yaw": 180,
+      "center_error_m": 0.0,
+      "result": "ALIGNED"
+    },
+    {
+      "kind": "bed",
+      "yaw": 270,
+      "center_error_m": 0.9,
+      "result": "OPEN"
+    },
+    {
+      "kind": "desk",
+      "yaw": 0,
+      "center_error_m": 0.0,
+      "result": "ALIGNED"
+    },
+    {
+      "kind": "desk",
+      "yaw": 90,
+      "center_error_m": 0.9,
+      "result": "OPEN"
+    },
+    {
+      "kind": "desk",
+      "yaw": 180,
+      "center_error_m": 0.0,
+      "result": "ALIGNED"
+    },
+    {
+      "kind": "desk",
+      "yaw": 270,
+      "center_error_m": 0.9,
+      "result": "OPEN"
+    }
+  ],
+  "probe": "probes/placement-offset-audit.gd",
+  "log": "logs/placement-offset-audit.log",
+  "followup": "Correct rotation convention and add actual bed/desk placement checks for90/270 degrees. Preserve or explicitly migrate old layouts; do not let stricter normalization silently discard a room.",
+  "runtime_changed": false
+}

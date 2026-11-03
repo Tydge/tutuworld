@@ -1,5 +1,6 @@
 extends RefCounted
 static var _catalog: Dictionary = {}
+const Clothes=preload("res://scripts/appearance/clothing_catalog.gd")
 static var _plots: Array = []
 static var _resources: Array = []
 static var _valley_resources: Array=[]
@@ -7,24 +8,7 @@ const Valley=preload("res://scripts/valley/valley_layout.gd")
 static func catalog() -> Dictionary:
 	if _catalog.is_empty():
 		_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://data/catalog.json"))
-		var colors := {"rose":["莓果红","c8767a"],"sage":["鼠尾草绿","629184"],"honey":["蜂蜜黄","dfb660"]}
-		for type_ in ["bow","beret","overalls","vest"]:
-			for color in colors:
-				var names := {"bow":"蝴蝶结","beret":"贝雷帽","overalls":"背带裤","vest":"马甲"}
-				_catalog.items[type_+"_"+color] = {"name":colors[color][0]+names[type_],"kind":"clothing","slot":"head" if type_ in ["bow","beret"] else "body","style":type_,"color":colors[color][1],"price":65 if type_ in ["overalls","vest"] else 40,"sell":0,"shop":"clothes","description":"头部装饰，同位置只能佩戴一件。" if type_ in ["bow","beret"] else "身体装饰，同位置只能穿着一件。"}
-		var neck_colors := {"red":["莓红","be5864","ffe7c8"],"blue":["海蓝","527fa7","d5e7e7"],"green":["森林绿","4c8973","f5db99"]}
-		for color in neck_colors:
-			var dye: Array=neck_colors[color]
-			_catalog.items["scarf_"+color]={"name":dye[0]+"格纹围巾","kind":"clothing","slot":"neck","style":"scarf","color":dye[1],"accent":dye[2],"price":55,"sell":0,"shop":"clothes","description":"柔软的格纹围巾。脖子装饰，同位置只佩戴一件。"}
-			_catalog.items["bell_"+color]={"name":dye[0]+"带金铃铛","kind":"clothing","slot":"neck","style":"bell","color":dye[1],"price":60,"sell":0,"shop":"clothes","description":"彩色颈带搭配金黄色铃铛。脖子装饰，同位置只佩戴一件。"}
-		for id in _catalog.items:
-			var item_: Dictionary=_catalog.items[id]
-			if item_.kind=="clothing": item_["pattern"]="tartan" if item_.style=="scarf" else "solid"
-		for color in colors:
-			var dye: Array=colors[color]
-			_catalog.items["bow_plaid_"+color]={"name":dye[0]+"格纹蝴蝶结","kind":"clothing","slot":"head","style":"bow","pattern":"tartan","pattern_scale":7.0,"color":dye[1],"accent":"f4e4bf","price":58,"sell":0,"shop":"clothes","description":"带着细格纹的柔软蝴蝶结，轻轻系在耳边。"}
-			_catalog.items["beret_plaid_"+color]={"name":dye[0]+"格纹贝雷帽","kind":"clothing","slot":"head","style":"beret","pattern":"tartan","pattern_scale":9.0,"color":dye[1],"accent":"f4e4bf","price":58,"sell":0,"shop":"clothes","description":"柔软的暖格纹贝雷帽。"}
-			_catalog.items["apron_"+color]={"name":dye[0]+"花叶围裙","kind":"clothing","slot":"body","style":"apron","pattern":"sprig","color":dye[1],"accent":"f8e7c4","price":72,"sell":0,"shop":"clothes","description":"口袋里装一点花香。"}
+		_catalog.items.merge(Clothes.items())
 	return _catalog
 static func item(id: String) -> Dictionary: return catalog().items.get(id,{})
 static func recipe(id: String) -> Dictionary: return catalog().recipes.get(id,{})
@@ -98,12 +82,7 @@ static func effect_summary(id: String) -> String:
 	return str(definition.get("effect_text",""))+(" · 1游戏天" if not definition.get("effect",{}).is_empty() else "")
 
 static func starter_clothes() -> Array[String]:
-	var out: Array[String]=[]
-	for style in ["bow","scarf","vest"]:
-		for id in catalog().items:
-			var definition:=item(id)
-			if definition.get("style","")==style and (style!="bow" or definition.get("pattern","solid")=="solid"): out.append(id)
-	return out
+	return Clothes.starters()
 
 static func valley_resources() -> Array:
 	if not _valley_resources.is_empty(): return _valley_resources

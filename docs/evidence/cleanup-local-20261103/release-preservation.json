@@ -1,0 +1,22 @@
+[
+  {
+    "path": "releases/0.3.3/city.pck",
+    "sha256": "1ab33e08d325826819c7e7b6688ae533dc551e85d145903c4c6a3cb56d4ada9b",
+    "matches_published_record": true
+  },
+  {
+    "path": "releases/0.3.3/server.pck",
+    "sha256": "4f0dd3c7349d49092d4ca922425438993a094b298ea8936d634b06ff0d89daaf",
+    "matches_published_record": true
+  },
+  {
+    "path": "releases/0.3.3/TutuWorld-macOS.zip",
+    "sha256": "89f37f168ad9e176f81581c34905cee48fd2b7b43d275df513828421484aab66",
+    "matches_published_record": true
+  },
+  {
+    "path": "releases/0.3.3/TutuWorld-Windows.zip",
+    "sha256": "c9dfdd0a39562b17e6bc77d6f61aa12672e01bbbe682cb2cef3b76330d9c4ce2",
+    "matches_published_record": true
+  }
+]

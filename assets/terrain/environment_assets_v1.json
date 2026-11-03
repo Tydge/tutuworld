@@ -1,0 +1,46 @@
+{
+  "generator": "built-in image_gen",
+  "date": "2026-11-02",
+  "status": "local-only-unreleased",
+  "assets": [
+    {
+      "id": "warm_tree_bark_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable RGB albedo bark texture for tree trunks and roots in a polished cozy 3D life-simulation game. Generate one square texture filling the whole canvas, perfectly straight-on flat material. Soft warm chestnut/tan brown bark, gently twisting mostly vertical fine ridges, rounded layered fiber, occasional tiny elongated knots. Hand-painted clean game art, delicate readable grain, restrained variation, medium-low contrast, warm natural palette. Same density and scale everywhere. Seamlessly wrap horizontally and vertically. Neutral flat diffuse illumination, no cast shadow, no directional highlights, no vignette, no harsh dark crevices. No whole tree, leaves, branches, scenery, perspective, letters, border, watermark, material sphere or collage. Output a usable single material bitmap, not an illustration of a tree.",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-836dadce-3851-4408-8679-8e305e107902.png",
+      "path": "assets/terrain/warm_tree_bark_v1.png",
+      "sha256": "537a65320dbebeda4489f41ed6e12889ec7e7191c6ae3f6eabf34db6a448de2f",
+      "import": {
+        "size_limit": 1024,
+        "VRAM_compressed": true,
+        "high_quality": false,
+        "mipmaps": true
+      }
+    },
+    {
+      "id": "soft_lime_plaster_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable RGB albedo texture for painted lime-plaster house walls in a cozy hand-painted 3D village. Generate one square texture entirely filled with a uniform pale warm-gray/ivory plaster surface, orthographic straight-on flat material. Subtle fine sandy lime grains, faint irregular soft trowel texture, delicate tiny pores; smooth cared-for charming walls, not ruined. Very low contrast, evenly distributed fine material detail. No broad patches or pronounced streaks because the game supplies house colors. Perfectly tileable on all four edges. Neutral flat diffuse albedo only, no cast shadows, directional shading, vignette, perspective or baked ambient occlusion. No wall outlines, bricks, cracks, peeling paint, mold, dirt stains, windows, plants, objects, text, border, watermark or material sphere. Output one usable neutral material bitmap.",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-7b3546b6-48e9-4544-8d9d-0b98fb7a6d54.png",
+      "path": "assets/terrain/soft_lime_plaster_v1.png",
+      "sha256": "f424515b3ed01e479330e1a70747981457f77302794260c4a4ac038343ad9f88",
+      "import": {
+        "size_limit": 1024,
+        "VRAM_compressed": true,
+        "high_quality": false,
+        "mipmaps": true
+      }
+    },
+    {
+      "id": "fine_beach_sand_v1",
+      "prompt": "Use case: stylized-concept. Asset type: seamless tileable RGB albedo texture for a soft sandy beach in a cozy hand-painted 3D island life simulation game. One square image filling every pixel, perfectly orthographic top-down. Fine warm golden-beige beach sand, softly rounded tiny sand grains, subtle delicate shallow wind-ripple traces without strong lines, restrained tonal variation and a few barely visible tiny mineral grains. Clean inviting soft hand-painted game art, low-to-medium contrast, even density and scale, calm natural color. Seamless wrapping on all four edges. Neutral flat diffuse color only, no cast shadows, directional sunlight, vignette or baked directional relief. No water, foam, shells, pebbles, footprints, plants, dunes, objects, large patches, perspective, horizon, lettering, borders, watermark, material sphere or collage. Output one single usable ground texture.",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a19af9-56c3-7de3-9a46-70c6bb0e5941/exec-8fd692c2-1324-4924-a4dd-79ea0cda8dc0.png",
+      "path": "assets/terrain/fine_beach_sand_v1.png",
+      "sha256": "443eb8d2c8dfd1aa091e6095486e5ce8bd3afa0ef92b204e0bb0883bba3964f2",
+      "import": {
+        "size_limit": 1024,
+        "VRAM_compressed": true,
+        "high_quality": false,
+        "mipmaps": true
+      }
+    }
+  ]
+}

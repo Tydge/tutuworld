@@ -49,7 +49,7 @@ static func can_navigate(p: Vector3) -> bool:
 static func valid_saved_position(map_id: String,p: Vector3) -> bool:
 	if not p.is_finite(): return false
 	if map_id=="valley": return absf(p.x)<55 and p.z> -46 and p.z<56 and p.y> -6 and p.y<18
-	return absf(p.x)<48 and absf(p.z)<43
+	return (absf(p.x)<48 and absf(p.z)<43) or preload("res://scripts/building/site.gd").contains(p)
 static func scene_path(map_id: String) -> String: return "res://scenes/valley.tscn" if map_id=="valley" else "res://scenes/city.tscn"
 static func dock(map_id: String) -> Vector2: return Vector2(-5.8,47.2) if map_id=="valley" else Vector2(13,41.5)
 static func arrival(map_id: String) -> Array: return [-11,.2,43] if map_id=="valley" else [13,.2,39.5]

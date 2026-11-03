@@ -22,6 +22,7 @@ const RECOVERY_POINT_SECONDS:=30.0
 func _init() -> void:
 	reward_random.randomize()
 	state = {"schema":2,"player_id":"local_bunny","character_name":"兔兔","species":"bunny","map_id":"city","world_id":"peace_island_v1","time":DAY_SECONDS/3,"coins":650,"inventory":{"seed_carrot":3,"seed_lettuce":3,"seed_tomato":2,"seed_pumpkin":2},"equipment":{"head":"","body":"","neck":""},"plots":{},"resources":{},"player_position":[0,.1,9],"revision":0,"food_effect":{},"experience":0,"stamina":100.0,"attributes":Stats.defaults(),"skills":Stats.skill_defaults(),"skill_experience":Stats.skill_xp_defaults()}
+	state["build_layout"]=preload("res://scripts/building/layout.gd").empty()
 	for p in DB.plots(): state.plots[p.id] = empty_plot()
 	for r in DB.all_resources(): state.resources[r.id] = {"available":true,"respawn_at":0.0,"generation":0}
 	state.stamina_run_elapsed=0.0

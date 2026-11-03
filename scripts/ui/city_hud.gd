@@ -14,6 +14,8 @@ var content: VBoxContainer
 var mode := ""
 var shop := ""
 var selected_seed := "seed_carrot"
+var clock_card: PanelContainer
+var camera_control: Control
 var clock_label: Label
 var coin_label: Label
 var water_label: Label
@@ -59,7 +61,7 @@ func _ready() -> void:
 	root_ui.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	root_ui.theme=UI.theme()
 	add_child(root_ui)
-	var top:=UI.panel(Color("fff9e9",.95),24,15)
+	var top:=UI.panel(Color("fff9e9",.95),24,15);clock_card=top
 	top.anchor_left=1
 	top.anchor_right=1
 	top.position=Vector2(-302,26)
@@ -73,6 +75,7 @@ func _ready() -> void:
 	coin_label=UI.label("",16,Color("a77b39"))
 	top_col.add_child(clock_label)
 	top_col.add_child(coin_label)
+	camera_control=preload("res://scripts/ui/indoor_camera_control.gd").new();camera_control.session=session;camera_control.anchor_left=1;camera_control.anchor_right=1;root_ui.add_child(camera_control)
 	water_label=UI.label("",15,Color("537f88"));top_col.add_child(water_label)
 	buff_icon=BuffIcon.new()
 	buff_icon.position=Vector2(28,26)
@@ -99,6 +102,7 @@ func _ready() -> void:
 	bar.anchor_bottom=1
 	bar.position=Vector2(-400,-88)
 	bar.custom_minimum_size=Vector2(800,62)
+	if city.map_id=="city" and not session.is_online():bar.position.x=-460;bar.custom_minimum_size.x=920
 	root_ui.add_child(bar)
 	var buttons:=UI.row(10)
 	bar.add_child(buttons)
@@ -106,6 +110,8 @@ func _ready() -> void:
 		var b:=UI.button(row[0],func(): open_panel(row[1]))
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
+	if city.map_id=="city" and not session.is_online():
+		var build_button:=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
 	prompt_card.custom_minimum_size=Vector2(470,57)
@@ -208,6 +214,9 @@ func refresh_stats() -> void:
 			if plot_history_open:show_plot_history(plot_history_target)
 			else:rebuild()
 func _process(delta: float) -> void:
+	camera_control.position=Vector2(clock_card.position.x,clock_card.position.y+clock_card.size.y+10)
+	var inside: bool=preload("res://scripts/city/interior_view.gd").indoors(city,city.bunny.get_global_transform_interpolated().origin)
+	camera_control.update_context(inside and not photo_mode and not overlay.visible and not city.paused and not city.preparing,delta)
 	player_status.visible=not photo_mode
 	prompt_card.position=Vector2((root_ui.size.x-prompt_card.size.x)*.5,root_ui.size.y-190)
 	prompt_card.visible=prompt.text!="" and not photo_mode and not overlay.visible
@@ -696,6 +705,10 @@ func build_settings() -> void:
 			if not result.get("ok",false):notify(str(result.get("message","稍等一下再试吧。")))
 			else:
 				var p: Array=session.state().player_position;city.bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])));city.sleep_active=false;city.nap_active=false;city.finish_action()))
+	options.add_child(UI.label("室内视角",17))
+	var view:=OptionButton.new();view.name="IndoorViewSetting"
+	for label_ in preload("res://scripts/city/interior_view.gd").NAMES:view.add_item(label_)
+	view.selected=int(session.settings.interior_view_mode);view.item_selected.connect(func(index):session.set_setting("interior_view_mode",index));options.add_child(view)
 	var sound:=CheckButton.new()
 	sound.text="环境声音"
 	sound.button_pressed=session.settings.sound

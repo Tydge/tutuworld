@@ -10,6 +10,8 @@ var destinations: Dictionary={}
 var sampling_ready:=false
 var sampling_revision:=0
 var floor_heights: Dictionary={}
+const GROUND_MARGIN:=.45
+const SUPPORT_OFFSETS=[Vector2.ZERO,Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN,Vector2(.7071,.7071),Vector2(.7071,-.7071),Vector2(-.7071,.7071),Vector2(-.7071,-.7071)]
 func _ready() -> void:
 	if get_parent().has_method("navigation_bounds"): map_bounds=get_parent().navigation_bounds()
 	grid.region=map_bounds;grid.cell_size=Vector2.ONE
@@ -24,10 +26,31 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 	if not get_parent().can_navigate(Vector3(x,0,z)): return true
 	floor_query.from=Vector3(x,18,z);floor_query.to=Vector3(x,-1.5,z)
 	var floor_hit:=space.intersect_ray(floor_query)
-	var height_: float=0.0 if floor_hit.is_empty() else float(floor_hit.position.y)
+	if floor_hit.is_empty():
+		floor_heights.erase(Vector2i(x,z));return true
+	var height_: float=floor_hit.position.y
+	# A legal center is insufficient at a bridge or cliff edge. Keep the feet supported.
+	if not supported(Vector3(x,height_,z),space):return true
 	floor_heights[Vector2i(x,z)]=height_
 	query.transform=Transform3D(Basis.IDENTITY,Vector3(x,height_+1.39,z))
 	return not space.intersect_shape(query,1).is_empty()
+func supported(point: Vector3,space: PhysicsDirectSpaceState3D,margin: float=GROUND_MARGIN) -> bool:
+	for sample: Vector2 in SUPPORT_OFFSETS:
+		var offset:=Vector3(sample.x*margin,0,sample.y*margin)
+		floor_query.from=point+offset+Vector3.UP*.4;floor_query.to=point+offset-Vector3.UP*.45
+		var hit:=space.intersect_ray(floor_query)
+		if hit.is_empty() or hit.normal.y<.7:return false
+	return true
+func can_step(from: Vector3,to: Vector3) -> bool:
+	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
+	var next:=Vector3(to.x,from.y,to.z)
+	if supported(next,space):return true
+	# A previously displaced actor can walk back toward supported ground, without teleporting.
+	if supported(from,space) or not supported(next,space,0.):return false
+	var cell:=closest_free(from)
+	if cell.x==999:return false
+	var safe:=Vector2(cell.x,cell.y)
+	return Vector2(to.x,to.z).distance_squared_to(safe)<Vector2(from.x,from.z).distance_squared_to(safe)
 func build() -> void:
 	await get_tree().physics_frame
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state

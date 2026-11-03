@@ -19,7 +19,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 	# Keep bootstrap independent of release.gd so patched gameplay is first loaded after mounting.
 	var build:=6
-	if not OS.get_cmdline_user_args().has("--test"):
+	# Editor play must use the working tree, even when an installed client has
+	# downloaded a signed pack with the same build number.
+	if not OS.has_feature("editor") and not OS.get_cmdline_user_args().has("--test"):
 		for file in ["pending.json","active.json"]:
 			var path: String="user://updates/"+file
 			if not FileAccess.file_exists(path): continue

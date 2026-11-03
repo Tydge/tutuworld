@@ -13,7 +13,7 @@ const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["world_id","time","plots","resources"]
+const WORLD_KEYS=["world_id","time","plots","resources","build_layout"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water"]
 var authority=Authority.new()
 var active:=false
@@ -21,8 +21,9 @@ var test_mode:=false
 var save_path:=SAVE
 var sequence:=0
 var save_timer:=0.0
+var building_generation:=""
 var ui_timer:=0.0
-var settings:={"sound":true,"volume":.55,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true}
+var settings:={"sound":true,"volume":.55,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true,"interior_view_mode":2,"interior_view_hint_seen":false}
 var characters: Dictionary={}
 var active_character_id:=""
 var world: Dictionary={}
@@ -52,6 +53,7 @@ func _ready() -> void:
 		if preferences is Dictionary:
 			for key in settings:
 				if preferences.has(key):settings[key]=preferences[key]
+	normalize_view_settings()
 	if not test_mode:DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 	get_tree().auto_accept_quit=false
 	get_tree().root.close_requested.connect(func(): save_game(); get_tree().quit())
@@ -259,7 +261,8 @@ func save_game() -> bool:
 	if is_online():return save_online_login()
 	sync_current()
 	if test_mode: return true
-	var data:={"schema":3,"saved_at":Time.get_unix_time_from_system(),"world":world,"characters":characters,"active_character":active_character_id,"settings":settings}
+	var next_generation:=Crypto.new().generate_random_bytes(8).hex_encode()
+	var data:={"schema":3,"building_generation":next_generation,"saved_at":Time.get_unix_time_from_system(),"world":world,"characters":characters,"active_character":active_character_id,"settings":settings}
 	var temp:=save_path+".tmp"
 	var file:=FileAccess.open(temp,FileAccess.WRITE)
 	if file==null: return false
@@ -270,8 +273,23 @@ func save_game() -> bool:
 	if FileAccess.file_exists(save_path):
 		if DirAccess.copy_absolute(save_path,save_path+".bak")!=OK: return false
 	var saved:=DirAccess.rename_absolute(temp,save_path)==OK
-	if saved: legacy_source=""
+	if saved:
+		legacy_source="";building_generation=next_generation;preload("res://scripts/building/layout_store.gd").consolidate(save_path)
 	return saved
+func set_build_layout(candidate: Dictionary) -> Dictionary:
+	if is_online():return {"ok":false,"message":"建造园目前只在单人模式开放。"}
+	if not job().is_empty():return {"ok":false,"message":"请先完成手上的工作。"}
+	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate)
+	if not checked.ok:return checked
+	if state().build_layout==checked.layout:return checked
+	var previous: Dictionary=state().build_layout;var revision_before: int=authority.revision
+	state()["build_layout"]=checked.layout
+	authority.revision+=1
+	if not test_mode and not preload("res://scripts/building/layout_store.gd").write(save_path,building_generation,str(state().get("world_id","local")),checked.layout):
+		state().build_layout=previous;authority.revision=revision_before
+		return {"ok":false,"message":"布局保存失败，已保留修改前的房间。"}
+	changed.emit()
+	return checked
 func valid_save(data: Variant) -> bool:
 	if not data is Dictionary: return false
 	if data.get("schema",0)==2: return data.get("state") is Dictionary
@@ -284,8 +302,11 @@ func load_save() -> void:
 		var candidate: Variant=JSON.parse_string(FileAccess.get_file_as_string(filename))
 		if valid_save(candidate): data=candidate; loaded=filename; break
 	if data==null: return
+	building_generation=str(data.get("building_generation",""))
+	preload("res://scripts/building/layout_store.gd").replay(save_path,data,building_generation)
 	for key in settings:
 		if data.get("settings",{}) is Dictionary and data.get("settings",{}).has(key): settings[key]=data.settings[key]
+	normalize_view_settings()
 	if not Animals.supports(settings.player_species): settings.player_species="bunny"
 	if settings.render_quality not in ["balanced","native"]: settings.render_quality="balanced"
 	if int(settings.get("fps_limit",60)) not in [60,90,120]: settings.fps_limit=60
@@ -324,6 +345,7 @@ func load_save() -> void:
 func restore_state(raw: Dictionary):
 	var restored:=Authority.new()
 	var s: Dictionary=restored.state
+	s["build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("build_layout",{}))
 	s.player_id=str(raw.get("player_id","local_bunny")).left(80)
 	s.character_name=str(raw.get("character_name","")).strip_edges().left(12)
 	if valid_name(s.character_name)!="": s.character_name=Animals.display_name(str(raw.get("species","bunny")))
@@ -376,8 +398,13 @@ func restore_state(raw: Dictionary):
 	if pos is Array and pos.size()==3 and preload("res://scripts/valley/valley_layout.gd").valid_saved_position(s.map_id,Vector3(float(pos[0]),float(pos[1]),float(pos[2]))): s.player_position=pos.duplicate()
 	restored.normalize_production_state()
 	return restored
+func normalize_view_settings() -> void:
+	if not settings.get("interior_view_mode") is int and not settings.get("interior_view_mode") is float:settings.interior_view_mode=2
+	settings.interior_view_mode=clampi(int(settings.interior_view_mode),0,2)
+	settings.interior_view_hint_seen=bool(settings.get("interior_view_hint_seen",false))
 func set_setting(key: String,value: Variant) -> void:
 	if not settings.has(key): return
+	if key=="interior_view_mode" and (not value is int or value<0 or value>2):return
 	if key=="fps_limit" and int(value) not in [60,90,120]: return
 	settings[key]=value
 	settings_changed.emit(key)

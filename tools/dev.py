@@ -97,6 +97,7 @@ def main():
     test.add_argument('names', nargs='*', help='tests/<name>.gd, or a named entry in test_suites.json')
     test.add_argument('--suite', choices=SUITES['suites'], help='Run sequentially; default smoke')
     test.add_argument('--timeout', type=int, default=180)
+    test.add_argument('--windowed', action='store_true', help='Run graphical checks windowed and on top (useful on macOS)')
     test.add_argument('--allow-network', action='store_true', help='Required for the live update download test')
     test.add_argument('--game-arg', action='append', default=[])
     build = commands.add_parser('build')
@@ -130,6 +131,8 @@ def main():
         if script == 'update_integrity' and '--fixture' not in args.game_arg:
             parser.error('update_integrity requires --game-arg=--fixture --game-arg=/path/to/signed/manifest.json')
         flags = ['--headless'] if entry.get('headless', False) else []
+        if args.windowed and not entry.get('headless', False):
+            flags += ['--windowed', '--always-on-top']
         flags += ['--script', f'res://tests/{script}.gd', '--', '--test']
         flags += entry.get('args', []) + args.game_arg
         if guarded(binary, name, flags, output, args.timeout):

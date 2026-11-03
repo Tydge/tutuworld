@@ -1,0 +1,38 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+PASS Default free-occlusion camera has no outdoor HUD button
+PASS First indoor entry displays the camera button and one-time nearby hint
+PASS The indoor camera button opens all three named modes
+PASS Selecting full view records the choice and dismisses the hint
+PASS Full view retains walls and roof with no cutaway shader
+PASS Full-view camera respects real walls and ceiling instead of crossing them
+PASS V cycles from full view to free occlusion
+PASS Free occlusion preserves the player's shallow pitch indoors
+PASS Free occlusion hides whole blocking wall faces while retaining other walls
+PASS Automatic view retains the original raised indoor pitch
+PASS Leaving indoors hides both camera button and guidance
+PASS The indoor shortcut does not change camera modes outdoors
+PASS Re-entering preserves mode without repeating the first-time hint
+PASS Construction keeps its own camera and hides the gameplay camera control
+PASS Furniture placement does not expose a whole-object color brush
+PASS The actual appearance button exposes four named bed parts
+PASS Live appearance preview does not save or modify layout
+PASS Apply persists only the chosen frame appearance
+PASS Applying a patterned quilt preserves the frame and original pillow
+PASS The selection thumbnail shows the saved custom part appearance
+PASS Escape closes the appearance panel and cancels unsaved material preview
+PASS Cancelling preview restores the saved quilt color on the actual model
+PASS A customized bed remains movable
+PASS Moving preserves part appearance and model visibility
+PASS Resetting a part restores only that part
+PASS Reset all restores the furniture's complete original appearance
+PASS One undo restores a reset custom appearance
+PASS A coordinated preset assigns each bed part separately
+PASS All material runs on the blocking wall hide together, leaving no hole or colored strip
+PASS The separate house's non-blocking roof remains visible
+PASS A hidden standalone wall also hides its endpoint trims, leaving no floating posts
+APPEARANCE_CAMERA_FLOW_RESULT PASS checks=31 failures=[]

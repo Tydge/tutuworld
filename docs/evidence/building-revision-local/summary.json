@@ -1,0 +1,118 @@
+{
+  "date": "2026-11-03",
+  "scope": "Unpublished local single-player construction revision and door swing behavior; no exports, deployment, commit or push",
+  "official": "0.3.3/build6/launcher2/protocol3",
+  "features": [
+    "Correct engine Y-axis footprint rotation and schema1 to schema2 migration",
+    "Bottom category catalog with cached real-model thumbnails and contextual selection controls",
+    "Independent furniture and ornaments, tabletop/shelf attachment, parent move/rotate/delete and atomic undo",
+    "Real fixture lighting with shadows; no automatic room key/fill for player-built rooms",
+    "Actual model previews with red conflict overlay for furniture, structures and entire houses",
+    "Symmetric player-built wall faces and visibility-only cutaways",
+    "Whole-house mouse placement beside existing buildings with unique IDs and attachment remapping",
+    "Door leaf and portal pass through actors while swinging; normal collision restored at rest",
+    "Local-only navigation bounds guard also supports server hosts"
+  ],
+  "environment": "macOS / Apple M1 Pro / Godot 4.6.3 / Metal Forward+; isolated test progress",
+  "building_suite_checks": 569,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 329,
+      "log": "logs/project_integrity.log"
+    },
+    {
+      "name": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "log": "logs/building_rules.log"
+    },
+    {
+      "name": "building_revision_rules",
+      "result": "PASS",
+      "checks": 53,
+      "log": "logs/building_revision_rules.log"
+    },
+    {
+      "name": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "log": "logs/building_controls.log"
+    },
+    {
+      "name": "building_mouse_flow",
+      "result": "PASS",
+      "checks": 30,
+      "log": "logs/building_mouse_flow.log"
+    },
+    {
+      "name": "building_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_flow.log"
+    },
+    {
+      "name": "building_revision_flow",
+      "result": "PASS",
+      "checks": 55,
+      "log": "logs/building_revision_flow.log"
+    },
+    {
+      "name": "interaction_revision_rules",
+      "result": "PASS",
+      "checks": 47,
+      "log": "logs/interaction_revision_rules.log"
+    },
+    {
+      "name": "production_rules",
+      "result": "PASS",
+      "checks": 71,
+      "log": "logs/production_rules.log"
+    },
+    {
+      "name": "chat_seat_rules",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/chat_seat_rules.log"
+    },
+    {
+      "name": "seamless_home",
+      "result": "PASS",
+      "checks": 57,
+      "log": "logs/seamless_home.log"
+    }
+  ],
+  "total_checks": 771,
+  "local_save_migration": {
+    "date": "2026-11-03",
+    "source_elements": 22,
+    "migrated_elements": 30,
+    "schema": 2,
+    "unchanged_character_and_other_world_data": true,
+    "backup": "/Users/wangtaizhi/Library/Application Support/TutuWorld/island_city_v2.json.pre-building-20261103-133205.bak",
+    "roundtrip_verified": true,
+    "placement_exemptions": 0
+  },
+  "manual_visual_review": [
+    "new-building-interface",
+    "furnished-room-fixture-lighting",
+    "real-model-preview-valid",
+    "real-model-preview-conflict",
+    "template-placement-preview",
+    "two-houses-bottom-catalog"
+  ],
+  "not_verified": [
+    "Windows physical hardware",
+    "200-element worst-case lighting/build pressure",
+    "Production deployment or public server state",
+    "Capacity above five clients",
+    "Full gameplay and IME regression"
+  ],
+  "test_environment_notes": [
+    "Graphical tests wait for macOS window resize before routing input. Forced render calls are confined to screenshot helpers to avoid waiting indefinitely for frame_post_draw on an occluded/idle native window.",
+    "An early local multiplayer probe exposed a pre-existing server-host navigation guard issue; it was fixed and isolated interaction/chat checks passed. The temporary auth service on loopback 18912 was stopped.",
+    "The legacy seamless-home mesh check now converts PackedInt32Array to Array before max(); original home entry, seats, cutaway, navigation and door behavior passed for bunny and cat."
+  ],
+  "related_regression_checks": 202
+}

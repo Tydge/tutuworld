@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-03",
+  "scope": "Shared data-driven appearance/material/clothing catalogs; three new fabrics and matching shop garments; preserve player location on construction exit",
+  "architecture": {
+    "materials": "data/appearance/materials.json",
+    "clothing": "data/appearance/clothing.json: defaults -> style -> item overrides; explicit starter IDs",
+    "furniture": "data/furniture_appearance.json: part definitions, eligibility restrictions and palettes",
+    "rendering": "scripts/appearance/fabric_material.gd and shared shader includes; preserve deformable quilt shader",
+    "compatibility": "Old fabric script path delegates to new implementation; original 27 garment configurations match an independent snapshot; 9 starter choices unchanged; layout schema3 unchanged"
+  },
+  "new_patterns": [
+    {
+      "id": "stripes",
+      "origin": "SVG vector",
+      "garment": "vest_stripes_sage"
+    },
+    {
+      "id": "dots",
+      "origin": "SVG vector",
+      "garment": "apron_dots_rose"
+    },
+    {
+      "id": "daisies",
+      "origin": "Built-in image_gen; seam and density edits; current dense trial accepted by user",
+      "garment": "apron_daisies_sage",
+      "asset": "assets/fabrics/daisies_ai_v2.png",
+      "provenance": "assets/fabrics/daisies_ai_v2.source.json"
+    }
+  ],
+  "clothing_count": 30,
+  "tests": [
+    {
+      "name": "appearance_camera_flow",
+      "checks": 33,
+      "result": "PASS",
+      "log": "logs/appearance_camera_flow.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/run.log"
+    },
+    {
+      "name": "appearance_rules",
+      "checks": 112,
+      "result": "PASS",
+      "log": "logs/appearance_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/appearance_rules/run.log"
+    },
+    {
+      "name": "building_exit_flow",
+      "checks": 15,
+      "result": "PASS",
+      "log": "logs/building_exit_flow.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/building_exit_flow/run.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "checks": 39,
+      "result": "PASS",
+      "log": "logs/character_roster_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/character_roster_rules/run.log"
+    },
+    {
+      "name": "city_rules",
+      "checks": 56,
+      "result": "PASS",
+      "log": "logs/city_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/city_rules/run.log"
+    },
+    {
+      "name": "material_catalog_rules",
+      "checks": 155,
+      "result": "PASS",
+      "log": "logs/material_catalog_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/material_catalog_rules/run.log"
+    },
+    {
+      "name": "material_expansion_flow",
+      "checks": 35,
+      "result": "PASS",
+      "log": "logs/material_expansion_flow.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/run.log"
+    },
+    {
+      "name": "panda_rules",
+      "checks": 52,
+      "result": "PASS",
+      "log": "logs/panda_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/panda_rules/run.log"
+    },
+    {
+      "name": "progression_rules",
+      "checks": 24,
+      "result": "PASS",
+      "log": "logs/progression_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/progression_rules/run.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 352,
+      "result": "PASS",
+      "log": "logs/project_integrity.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/project_integrity/run.log"
+    },
+    {
+      "name": "skills_quality_rules",
+      "checks": 568,
+      "result": "PASS",
+      "log": "logs/skills_quality_rules.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/skills_quality_rules/run.log"
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "checks": 43,
+      "result": "PASS",
+      "log": "logs/thumbnail_preview_flow.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/run.log"
+    },
+    {
+      "name": "trouser_compatibility",
+      "checks": 22,
+      "result": "PASS",
+      "log": "logs/trouser_compatibility.log",
+      "source_run": ".qa-artifacts/20261103-220259-710388/trouser_compatibility/run.log"
+    },
+    {
+      "name": "building_flow",
+      "checks": 27,
+      "result": "PASS",
+      "log": "logs/building_flow.log",
+      "source_run": ".qa-artifacts/20261103-220022-729537/building_flow/run.log"
+    },
+    {
+      "name": "building_controls",
+      "checks": 34,
+      "result": "PASS",
+      "log": "logs/building_controls.log",
+      "source_run": ".qa-artifacts/20261103-220022-729537/building_controls/run.log"
+    }
+  ],
+  "total_checks": 1567,
+  "test_groups": 15,
+  "ai_fabric_metrics": {
+    "bytes": 1048575,
+    "edge_mae": 0.000750612789488514,
+    "height": 512,
+    "maximum_region_coverage": 0.20574951171875,
+    "minimum_region_coverage": 0.0997314453125,
+    "mipmaps": true,
+    "width": 512
+  },
+  "coverage": [
+    "Data-only unrecognized probe ID automatically reaches furniture choices and deformable quilt rendering without runtime code branches",
+    "Part material restriction and explicit mesh part IDs",
+    "Shared texture caching with independent dye materials",
+    "Three new fabrics through real furniture panel, unsaved preview, apply, thumbnail and undo",
+    "Real clothing-shop cards and no-cost fitting; all three new clothes on bunny/cat/panda rigs",
+    "Isolated full-save reload for new material and garment IDs; legacy configuration snapshot",
+    "Existing whole-wall camera, appearance reset, movement, real-model catalog thumbnails and empty-cache repair",
+    "Completion button, Esc and F6 preserve exact actor position, stored player position and follow-camera focus at three locations",
+    "Existing constructed doorway traversal and camera controls"
+  ],
+  "screenshots": [
+    "screenshots/bed-stripes.png",
+    "screenshots/bed-dots.png",
+    "screenshots/bed-daisies.png",
+    "screenshots/shop-stripes.png",
+    "screenshots/shop-dots.png",
+    "screenshots/shop-daisies.png",
+    "screenshots/daisies-bunny.png",
+    "screenshots/daisies-cat_teacher.png",
+    "screenshots/daisies-panda.png"
+  ],
+  "test_fixture_updates": [
+    "Progression fixture supplies water in its watering can, consistent with the existing finite-water rule; no production progression changes",
+    "Clothing count assertions allow data additions while the independent 27-item compatibility fixture protects original IDs and values"
+  ],
+  "source_sha256": {
+    "scripts/appearance/material_catalog.gd": "e92c334e4abb3cfd1982c402f861c3a90f7a65d8e1d3172ee4eb14b515c5f385",
+    "scripts/appearance/clothing_catalog.gd": "0499db6c397347ba22ef57dc1737b33f278eda9d922a35c87b54e45e77709489",
+    "scripts/appearance/fabric_material.gd": "a7e85991caa65bff9a6bc8d2ecffc5576e830eed38775fddbb85c83e74d6e9b2",
+    "scripts/city/fabric_library.gd": "3def98ea9966b3b14527f1b93dec2a7aeae3297bd0218efd83bcf77cb0189b31",
+    "scripts/city/home_builder.gd": "2c39818448e6999ff11cc3f40ccbec20862b59eab3e65a5700fdecfe27c2fdca",
+    "scripts/city/outfit.gd": "11d8a48e6d8d5b962cfe5e507de7363dd98628a4cb976c59b867f26d84d95474",
+    "scripts/city/bow_accessory.gd": "e2d27ad0c6ccde52cacdf717ce2f02b6e1c1a32f46ab6116fa1971fc5c1beba8",
+    "scripts/city/forest_furniture.gd": "cfb7c897aa2a4062fea71f3fa76f392dac0cd7591a68e6dde217a94cd7f7036b",
+    "scripts/services/game_data.gd": "97c528fafd908f056954bb00fb59dc22254c1b4c9943ee3f3d6b2477dda4f0e7",
+    "scripts/ui/fabric_swatch.gd": "df81182e401920b03e05ab4e673cc5662bc14e63c2be6a8e40fd563c99fa7b03",
+    "scripts/ui/item_icon.gd": "01d67f0462606893e5c409f2070851d0202de6ee59766fc60292c393ad0b0b53",
+    "scripts/building/appearance.gd": "45441aa884fe2cc1d0f77ca44aa66f885985877fefdd9454e61cc9cf644c6c7e",
+    "scripts/building/appearance_panel.gd": "07e1eb62f47684eb7e0f9e82aef62dd19e2f501e8c7a11955f9d51ad5e65fe43",
+    "scripts/building/editor.gd": "be70a7a98f050bea2a604dd2ae4ba4e393c193827bda5d47c8a965402968a1c5",
+    "data/appearance/materials.json": "2f50380685b986e345a3ad03b5f8f23d73d305c7f02fcbdd83df71d07123d1d2",
+    "data/appearance/clothing.json": "65ae30c20eb9aad779bacff45a192b289f10550eb2c4561d84a834ddcb303abf",
+    "data/furniture_appearance.json": "63ae182cfbbc6af6b4ce0183a352dcff11f7832d0c2e9d1a76654c0993734abb",
+    "assets/shaders/fabric.gdshader": "cf3c95189f5806c307a2508f3f8209b133ce05334582ec3997fa889879ce415e",
+    "assets/shaders/fabric_double_sided.gdshader": "f48f47a114fe0e99a2b9e0fe137587abd86e7a35654533e05a55e9394cd2906b",
+    "assets/shaders/fabric_surface.gdshaderinc": "01f70ed3a7fba18331ebf411bed94ef274128e93ac619fe41c13a347ac2d5762",
+    "assets/shaders/fabric_color.gdshaderinc": "514af320d187e1e572b0912aaf0bfa06946af61ca17900157b2349c104aded2f",
+    "assets/shaders/sleep_quilt.gdshader": "b480044304806dd87287714ce6481a1412de7c9f38e532318484cd448e7cfacf",
+    "assets/fabrics/stripes.svg": "0e8fae5e5039b126b8992a8a10111b821c95a586ff5d4e192ff67c7e150cb25c",
+    "assets/fabrics/stripes.svg.import": "7b084ee09f4af97a72367f524bbd99c89141b858a85cc083dadc839a5e47afd2",
+    "assets/fabrics/dots.svg": "23920e3656dec07157c089086e50c6d7c526a15f6686bf5691e841b29a9e5569",
+    "assets/fabrics/dots.svg.import": "b4b638c3d42df76b743e998c71be8bfd23c106b5e097a3ee96f65c3fc726db0c",
+    "assets/fabrics/daisies_ai_v2.png": "d411d563aa41788304ed4f292aa1616ed74f903c0f7d0add3bdd8ca3da6554ef",
+    "assets/fabrics/daisies_ai_v2.png.import": "b700a12826fcb88ca24c6c1a2fe9cdf67cbd4e539f25c0492b78711de2402b0f",
+    "assets/fabrics/daisies_ai_v2.source.json": "07b162e8ed3feb698db240db5b3bff0b99c5449cbb5216381935faf6d5218e05",
+    "tests/material_catalog_rules.gd": "7a04dd07787811c5c665a5ecd0fe28d11e1c39492408be935150a563a91059bd",
+    "tests/material_expansion_flow.gd": "b59905eee2f1378828ef1fb342bf038e595fbc1d8bc7e4eb147ec5eb8f82309a",
+    "tests/building_exit_flow.gd": "66837d68739234722c31f3a3f5bc06df70de9268c03b9d60931b669ded346676",
+    "tests/fixtures/appearance_legacy_clothes.json": "3444987aa430dd9c366ae0edc38f5df481f945e22ebb95409dfd40f69a7ebe02",
+    "tests/appearance_rules.gd": "51f7d97bd237751cca0da941e02e1a1667f3387505304f2e1eae4c571ed95cd0",
+    "tests/city_rules.gd": "37c16d8c5f39d21e4fdb9099971eaee0b0e415e2e272b36390269aab63eb5367",
+    "tests/progression_rules.gd": "3d00427c5fdbafd2a350b48c73b7d7ac6a59157e674fba8de8f9f501c860f208",
+    "tests/panda_rules.gd": "213f14953d09d4f3ee4fd46f4fbf8742c949304d9f001d5ae72c9615fd0ae7f8",
+    "tests/building_flow.gd": "f09f270881b6d8a51e91379fa7b111e3f6b7829c66cd1bb32b1afdfaa4f2489a",
+    "tests/progression_playthrough.gd": "422633cad3b484667015689d8605869fa94e383bfd67b581d84ddc1334311895",
+    "tools/test_suites.json": "8fc9f105dbbc4bc00b97a14d524e4bce1319352968cc5f78d0f85dfb907c8ed1"
+  },
+  "environment": "macOS Apple M1 Pro / Godot4.6.3 Metal Forward+; isolated test progress",
+  "limits": [
+    "No Windows physical-hardware run",
+    "No full-game capacity/FPS measurement for the added fabrics",
+    "Monochrome two-color fabric masks; furniture UI edits base dye only, no separate petals/leaves channels",
+    "AI motif density kept as the currently accepted trial version"
+  ],
+  "deployment": "Local source/assets only; no release/version bump, export, deployment, commit or push; no real player progress manually modified"
+}

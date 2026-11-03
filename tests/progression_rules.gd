@@ -35,7 +35,7 @@ func _initialize() -> void:
 	var clothes:=0
 	for id in DB.catalog().items:
 		if DB.item(id).kind=="clothing": clothes+=1
-	check(clothes==27,"Twenty-seven clothes include three patterned bows")
+	check(clothes>=27 and not DB.item("vest_stripes_sage").is_empty() and not DB.item("apron_daisies_sage").is_empty(),"Shared catalog includes existing and newly registered clothes")
 	for color in ["rose","sage","honey"]:
 		check(DB.item("beret_plaid_"+color).pattern=="tartan" and DB.item("apron_"+color).pattern=="sprig","Pattern references are independent of color: "+color)
 	# Every successful work completes once; aborted / rejected / duplicate requests do not grant XP.
@@ -52,7 +52,7 @@ func _initialize() -> void:
 	check(a.state.experience==1,"Planting grants one XP")
 	a.execute(command)
 	check(a.state.experience==1 and a.job.is_empty(),"Repeated command cannot award twice")
-	a.add("watering_can",1)
+	a.add("watering_can",1);a.state.watering_water.watering_can=6
 	a.execute({"verb":"water","target":"plot_00"}); a.tick(2)
 	check(a.state.experience==2,"Watering grants one XP")
 	a.state.plots.plot_00.growth=1200

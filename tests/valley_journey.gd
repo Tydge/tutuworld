@@ -19,6 +19,8 @@ func run() -> void:
 	game.hud.shop_rows.copper_axe.buy.pressed.emit()
 	check(session.authority.count("copper_axe")==1 and session.state().coins==initial_coins-160,"Buy permanent copper axe through shop UI")
 	game.hud.close_panel()
+	check(game.build_mode.commit(preload("res://scripts/building/templates.gd").cottage()),"Construct a local room before leaving the city")
+	var saved_layout: Dictionary=session.state().build_layout.duplicate(true)
 	game.bunny.position=Vector3(13,.2,40.5);game.bunny.velocity=Vector3.ZERO;game.bunny.can_move=false;session.set_player_position(game.bunny.position);game.update_target()
 	check(game.current_target=="boat" and game.hud.prompt.text.contains("10"),"Boat selection and fare hint")
 	var before_coins: int=session.state().coins;var before_xp: int=session.state().experience
@@ -34,6 +36,7 @@ func run() -> void:
 	check(game.bunny.position.distance_to(Vector3(-11,.18,43))<.5,"Arrival position survives outgoing world")
 	check(game.resources.size()==27 and game.npcs.size()==3 and game.targets.Panda.name=="潘达","Valley resources and resident")
 	check(not session.state().resources.resource_00.available and session.state().experience==before_xp,"Shared island progress retained")
+	check(session.state().build_layout==saved_layout,"Construction is retained while travelling through the valley")
 	game.hud.open_panel("map");await create_timer(.2).timeout
 	check(game.hud.mode=="map" and game.hud.map_draw!=null,"Valley map interface")
 	await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/山谷-地图.png")
@@ -49,5 +52,6 @@ func run() -> void:
 		check(game.bunny.position.distance_to(Vector3(13,.15,39.5))<.5,"Return to city pier")
 		check(root.find_children("FramePacer","Node",false,false).size()==1,"Single pacing service across maps")
 		check(session.state().skill_experience.mining==73,"Skill XP survives outbound and return journey")
+		check(game.build_mode.layout==saved_layout and is_instance_valid(game.build_mode.room),"Returning rebuilds the complete house from persistent layout data")
 	print("VALLEY_JOURNEY_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

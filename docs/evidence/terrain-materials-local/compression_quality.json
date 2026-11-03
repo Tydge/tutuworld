@@ -1,0 +1,24 @@
+{
+  "reference": "original resized to matching 1024 RGB8; sRGB channel metrics",
+  "excluded": "Native-size BC7 cross-size metric is not comparable and omitted.",
+  "assets": {
+    "lawn_bc1_1024": {
+      "mean_bias_rgb8": [
+        -1.31408309936523,
+        -0.349183082580566,
+        -2.57878971099854
+      ],
+      "mse_srgb8": 35.728884379069,
+      "psnr_db": 32.6006090513506
+    },
+    "lawn_bc7_1024": {
+      "mean_bias_rgb8": [
+        -0.143105506896973,
+        0.00696659088134766,
+        -0.335697174072266
+      ],
+      "mse_srgb8": 5.2377560933431,
+      "psnr_db": 40.9393509010468
+    }
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-03",
+  "scope": "Local unpublished fixes for furniture move visibility, type-locked hammer gestures without a selector, and structural tool detail thumbnails; material-part and camera proposals are discussion only",
+  "environment": "macOS / Apple M1 Pro / Godot4.6.3 / Metal Forward+ / isolated test progress",
+  "total_checks": 543,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 338,
+      "log": "logs/project_integrity.log"
+    },
+    {
+      "name": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "log": "logs/building_rules.log"
+    },
+    {
+      "name": "building_grid_rules",
+      "result": "PASS",
+      "checks": 29,
+      "log": "logs/building_grid_rules.log"
+    },
+    {
+      "name": "building_editing_regression",
+      "result": "PASS",
+      "checks": 23,
+      "log": "logs/building_editing_regression.log"
+    },
+    {
+      "name": "building_grid_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_grid_flow.log"
+    },
+    {
+      "name": "building_revision_flow",
+      "result": "PASS",
+      "checks": 55,
+      "log": "logs/building_revision_flow.log"
+    },
+    {
+      "name": "building_mouse_flow",
+      "result": "PASS",
+      "checks": 30,
+      "log": "logs/building_mouse_flow.log"
+    }
+  ],
+  "root_causes": [
+    "Moving hides source furniture and mounted objects; incremental commit reused hidden nodes but never restored their visibility",
+    "Default all-types range demolition swept floor, walls and objects together",
+    "Structural placement tools did not populate the detail panel preview row, despite valid catalog thumbnail textures"
+  ],
+  "fixes": [
+    "Restore furniture and attached-object visibility after successful moves including no-op drops, while keeping the same mesh/light instances",
+    "Infer and lock the gesture type at mouse-down; wall/floor/object drags cannot sweep other categories, while normal support cascades still apply",
+    "Remove the demolition dropdown and manual filter state; retain click removal for roof, doors and windows",
+    "Populate floor/wall/roof/door/window tool details from cached real-model thumbnails"
+  ],
+  "reproduced_before_fix": {
+    "run": "20261103-183437-430817",
+    "checks": 21,
+    "failures": 9
+  },
+  "screenshots": [
+    "floor-tool-thumbnail",
+    "moved-furniture-visible",
+    "wall-drag-type-locked",
+    "floor-drag-type-locked"
+  ],
+  "not_implemented": [
+    "Per-part furniture appearance editing",
+    "Three indoor camera modes and switching controls"
+  ],
+  "proposal_runtime_paths_verified_unchanged": [
+    "scripts/city/city_world.gd",
+    "scripts/building/building_world.gd",
+    "scripts/building/furniture_builder.gd",
+    "scripts/building/module_factory.gd",
+    "scripts/building/layout.gd",
+    "assets/shaders/home_surface.gdshader"
+  ],
+  "player_save_migration": "Not needed in this revision; no player progress files were edited",
+  "source_sha256": {
+    "scripts/building/editor.gd": "5ff5bea5928393c41ddd306bb2c366b0bdecfa71a28b7e89e59b66bce27eeb90",
+    "scripts/building/editor_ui.gd": "8eb968454dd648f34984fd1d9e9c72fd02c953836233ad2d74b72cbd0da0e557",
+    "tests/building_editing_regression.gd": "907e87af491322e4803a9720cf8f1d1af3e8930ba12ba02cf76ceade972c598a",
+    "tests/building_grid_flow.gd": "731aeb6eae0cc44102bff3cf875eca4afacd837a82924ac103139e4cc893b8bf",
+    "tools/test_suites.json": "50c0d369e20ad31cc232d63947b1168183b7191a5a4fa94d81a5370e8ded9ffd"
+  }
+}

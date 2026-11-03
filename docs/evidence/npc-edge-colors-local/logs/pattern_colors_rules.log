@@ -1,0 +1,41 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Two independent color channels validate for SVG or AI pattern: tartan
+PASS Base and pattern colors reach their separate shader channels: tartan
+PASS Explicit pattern colors use the full mask instead of mixing extra base dye into the pattern: tartan
+PASS Pattern recoloring preserves quilt deformation and the neighboring part: tartan
+PASS Changing only the accent retains the base color: tartan
+PASS Independent pattern colors survive compact layout JSON: tartan
+PASS Two independent color channels validate for SVG or AI pattern: sprig
+PASS Base and pattern colors reach their separate shader channels: sprig
+PASS Explicit pattern colors use the full mask instead of mixing extra base dye into the pattern: sprig
+PASS Pattern recoloring preserves quilt deformation and the neighboring part: sprig
+PASS Changing only the accent retains the base color: sprig
+PASS Independent pattern colors survive compact layout JSON: sprig
+PASS Two independent color channels validate for SVG or AI pattern: stripes
+PASS Base and pattern colors reach their separate shader channels: stripes
+PASS Explicit pattern colors use the full mask instead of mixing extra base dye into the pattern: stripes
+PASS Pattern recoloring preserves quilt deformation and the neighboring part: stripes
+PASS Changing only the accent retains the base color: stripes
+PASS Independent pattern colors survive compact layout JSON: stripes
+PASS Two independent color channels validate for SVG or AI pattern: dots
+PASS Base and pattern colors reach their separate shader channels: dots
+PASS Explicit pattern colors use the full mask instead of mixing extra base dye into the pattern: dots
+PASS Pattern recoloring preserves quilt deformation and the neighboring part: dots
+PASS Changing only the accent retains the base color: dots
+PASS Independent pattern colors survive compact layout JSON: dots
+PASS Two independent color channels validate for SVG or AI pattern: daisies
+PASS Base and pattern colors reach their separate shader channels: daisies
+PASS Explicit pattern colors use the full mask instead of mixing extra base dye into the pattern: daisies
+PASS Pattern recoloring preserves quilt deformation and the neighboring part: daisies
+PASS Changing only the accent retains the base color: daisies
+PASS Independent pattern colors survive compact layout JSON: daisies
+PASS Original patterned fabric can change the accent while preserving its original base dye
+PASS Original patterned material exposes two channels; plain wood exposes one
+PASS Malformed secondary colors are rejected
+PASS Non-fabric parts reject unused secondary channels
+PASS Old one-color saves retain their representation and default accent
+PASS Existing custom fabrics keep the previous cream accent
+PASS Existing single-color fabrics preserve their original pattern contrast
+PASS Secondary color changes invalidate the real-model thumbnail variant
+PATTERN_COLORS_RULES_RESULT PASS checks=38 failures=[]

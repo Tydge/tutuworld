@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode diffuse_burley, specular_disabled;
 uniform vec4 forest_color:source_color=vec4(.322,.635,.255,1.);
 uniform vec4 path_color:source_color=vec4(.682,.533,.341,1.);
+uniform sampler2D path_texture:source_color,filter_linear_mipmap_anisotropic,repeat_enable;
 #include "res://assets/shaders/lawn_surface.gdshaderinc"
 varying vec3 p;
 varying vec3 world_normal;
@@ -16,9 +17,15 @@ void fragment(){
  float pathdist=min(west,min(p.z<12.?north:100.,abs(p.x)<27.?crosspath:100.));
  if(p.x>10. && p.x<24.) pathdist=min(pathdist,abs(p.z+29.));
  float patch=noise(p.xz*.7)*.6+noise(p.xz*4.)*.4;
- vec3 lawn=lawn_albedo(p.xz,patch);
- vec3 earth=path_color.rgb*(.92+noise(p.xz*2.)*.17);
  float path=1.-smoothstep(1.15+patch*.4,1.65+patch*.5,pathdist);
+ vec3 lawn=vec3(0.);
+ vec3 earth=vec3(0.);
+ if(path<.999) lawn=lawn_albedo(p.xz,patch);
+ if(path>.001){
+  vec3 detail=texture(path_texture,p.xz*.48).rgb;
+  vec3 variation=clamp(detail/vec3(.644,.309,.086),vec3(.60),vec3(1.45));
+  earth=path_color.rgb*mix(vec3(1.),variation,.70);
+ }
  vec3 color=mix(lawn,earth,path*.99);
  color=mix(color,vec3(.49,.40,.25),smoothstep(48.,58.,p.z)*.85);
  color=mix(vec3(.39,.32,.21),color,smoothstep(.45,.86,normalize(world_normal).y));

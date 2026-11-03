@@ -1,0 +1,216 @@
+{
+  "date": "2026-11-03",
+  "scope": "Fix NPC bridge/land-corner falls and expose independent base/pattern colors for every existing grayscale fabric including AI daisies",
+  "root_causes": [
+    "Logical connector z bounds 9.5..16.5 exceeded the actual bridge surface 9.835..16.165",
+    "Navigation only checked a cell center and substituted height zero when the ground ray missed, allowing unsupported edge clearance",
+    "Mainland grass collider still used default obstacle layer1 while actual walking-ground queries require layer8; correcting it is necessary for complete real-ground validation"
+  ],
+  "npc_fixes": [
+    "Logical connector uses the same rectangle as its generated model/collision",
+    "Real ground must exist; center plus eight foot-margin samples reject unsupported convex/concave edge points",
+    "NPC steering and avoidance recheck ground before stepping and can retreat toward the nearest supported node",
+    "Mainland GroundCollision uses layer8/mask0 in both current packed scene and generator",
+    "No added NPC teleport or collider blanket over the water; existing packed map changed only two collision properties"
+  ],
+  "color_fixes": [
+    "All five SVG/AI patterns expose base and named accent colors in the real furniture panel",
+    "Original patterned materials expose their existing accent, while solid/wood hide the unused color picker",
+    "Optional validated six-digit accent field preserves schema3 and legacy single-color records",
+    "New explicit accent overrides use full grayscale-mask strength; old records keep the prior cream/original accent and 0.78 contrast",
+    "Live previews remain unsaved, closing cancels, and apply/undo/reset/thumbnails/save-reload preserve both channels"
+  ],
+  "tests": [
+    {
+      "name": "city_rules",
+      "checks": 56,
+      "result": "PASS",
+      "log": "logs/city_rules.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/city_rules/run.log"
+    },
+    {
+      "name": "progression_rules",
+      "checks": 24,
+      "result": "PASS",
+      "log": "logs/progression_rules.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/progression_rules/run.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "checks": 39,
+      "result": "PASS",
+      "log": "logs/character_roster_rules.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/character_roster_rules/run.log"
+    },
+    {
+      "name": "panda_rules",
+      "checks": 52,
+      "result": "PASS",
+      "log": "logs/panda_rules.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/panda_rules/run.log"
+    },
+    {
+      "name": "skills_quality_rules",
+      "checks": 568,
+      "result": "PASS",
+      "log": "logs/skills_quality_rules.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/skills_quality_rules/run.log"
+    },
+    {
+      "name": "appearance_camera_flow",
+      "checks": 33,
+      "result": "PASS",
+      "log": "logs/appearance_camera_flow.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/run.log"
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "checks": 43,
+      "result": "PASS",
+      "log": "logs/thumbnail_preview_flow.log",
+      "source_run": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/run.log"
+    },
+    {
+      "name": "npc_edge_flow",
+      "checks": 15,
+      "result": "PASS",
+      "log": "logs/npc_edge_flow.log",
+      "source_run": ".qa-artifacts/20261103-232112-201688/npc_edge_flow/run.log"
+    },
+    {
+      "name": "navigation_roam",
+      "checks": null,
+      "result": "PASS",
+      "log": "logs/navigation_roam.log",
+      "source_run": ".qa-artifacts/20261103-232112-201688/navigation_roam/run.log"
+    },
+    {
+      "name": "valley_journey",
+      "checks": 18,
+      "result": "PASS",
+      "log": "logs/valley_journey.log",
+      "source_run": ".qa-artifacts/20261103-232112-201688/valley_journey/run.log"
+    },
+    {
+      "name": "panda_valley_routine",
+      "checks": 9,
+      "result": "PASS",
+      "log": "logs/panda_valley_routine.log",
+      "source_run": ".qa-artifacts/20261103-232112-201688/panda_valley_routine/run.log"
+    },
+    {
+      "name": "valley_visitors_night",
+      "checks": 25,
+      "result": "PASS",
+      "log": "logs/valley_visitors_night.log",
+      "source_run": ".qa-artifacts/20261103-232112-201688/valley_visitors_night/run.log"
+    },
+    {
+      "name": "trouser_compatibility",
+      "checks": 22,
+      "result": "PASS",
+      "log": "logs/trouser_compatibility.log",
+      "source_run": ".qa-artifacts/20261103-232800-394268/trouser_compatibility/run.log"
+    },
+    {
+      "name": "building_exit_flow",
+      "checks": 15,
+      "result": "PASS",
+      "log": "logs/building_exit_flow.log",
+      "source_run": ".qa-artifacts/20261103-232800-394268/building_exit_flow/run.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 355,
+      "result": "PASS",
+      "log": "logs/project_integrity.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/project_integrity/run.log"
+    },
+    {
+      "name": "material_catalog_rules",
+      "checks": 155,
+      "result": "PASS",
+      "log": "logs/material_catalog_rules.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/material_catalog_rules/run.log"
+    },
+    {
+      "name": "appearance_rules",
+      "checks": 112,
+      "result": "PASS",
+      "log": "logs/appearance_rules.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/appearance_rules/run.log"
+    },
+    {
+      "name": "pattern_colors_rules",
+      "checks": 38,
+      "result": "PASS",
+      "log": "logs/pattern_colors_rules.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/pattern_colors_rules/run.log"
+    },
+    {
+      "name": "pattern_colors_flow",
+      "checks": 23,
+      "result": "PASS",
+      "log": "logs/pattern_colors_flow.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/run.log"
+    },
+    {
+      "name": "material_expansion_flow",
+      "checks": 35,
+      "result": "PASS",
+      "log": "logs/material_expansion_flow.log",
+      "source_run": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/run.log"
+    }
+  ],
+  "test_groups": 20,
+  "counted_assertions": 1637,
+  "uncounted_checks": "navigation_roam: six NPCs observed for 60 simulated seconds; not added to assertion total",
+  "roaming_metrics": [
+    "ROAM Passerby0 distance=76.2 recoveries=0 repaths=1 max_stall_seconds=1",
+    "ROAM Passerby1 distance=77.89 recoveries=1 repaths=3 max_stall_seconds=1",
+    "ROAM Passerby2 distance=75.95 recoveries=2 repaths=4 max_stall_seconds=1",
+    "ROAM Passerby3 distance=70.43 recoveries=0 repaths=1 max_stall_seconds=1",
+    "ROAM CatTeacher distance=77.9 recoveries=0 repaths=1 max_stall_seconds=1",
+    "ROAM Youmu distance=78.46 recoveries=0 repaths=2 max_stall_seconds=1"
+  ],
+  "map_change_verification": {
+    "before_sha256": "827e7d8a6b7b85124cded81a8c107d3d2e940a852195506e0e9f9c4d4bef1386",
+    "only_two_collision_properties_changed": true
+  },
+  "screenshots": [
+    "screenshots/before-user-report.png",
+    "screenshots/supported-bridge-corner.png",
+    "screenshots/two-color-panel-720.png",
+    "screenshots/two-colors-daisies.png",
+    "screenshots/two-colors-dots.png"
+  ],
+  "source_sha256": {
+    "scripts/building/site.gd": "bdc995a53d79cddec751d5ff45a9732d04faea73cc3a714d77ab4adce783ad8e",
+    "scripts/city/build_city.gd": "ff79b69366e55f6afd66f14629e636df37286e5ce5390eba97fbb7b0d8127e1f",
+    "scripts/city/wander_navigation.gd": "a82202493f8b0a0a5f0c059c98030dc78c2bf90e8f134b19bde0c52292266e1e",
+    "scripts/city/npc_driver.gd": "1799d735d3fb06d7bea4db7489ea855fd01766ff13d5cd2cc882197c0cf68262",
+    "scenes/city_map.tscn": "b3e6c476a9266a63e534af7f6417a9cf655099cb4cb7499c5715562231669c8f",
+    "scripts/building/appearance.gd": "174432b9a6d9b361a188a8b5261c3c312c9ba027c493a22e9e337fa7214ade1d",
+    "scripts/building/editor.gd": "ba42b87ba7cd2820892f8332c44ea4fc6481e94263cf490668262c83db89f128",
+    "scripts/building/appearance_panel.gd": "cb177282512e0cd4a359cfecaf7460667b3e2158b7aa456667a08b31a3c464b1",
+    "scripts/appearance/fabric_material.gd": "015f5acf4d30c061e81cc5aae1bbf32b1e9c8d132c955aafe0ddf68455319c1f",
+    "scripts/ui/fabric_swatch.gd": "3a9c30b27715d6aa499d6d947b52efb9dfd4189e02c1097d6a77b094343ff848",
+    "assets/shaders/fabric_surface.gdshaderinc": "eefaa1f2aa68f7c0ebed61597431eaa42e5bb5517f40674aebf4da0e34f96853",
+    "assets/shaders/fabric_color.gdshaderinc": "2baab2dd6edecdf9be41d0b8e93f0d64d9a6374dd4ba04cc6061703e3e374ab9",
+    "assets/shaders/sleep_quilt.gdshader": "d144a6e9d50914b46deab4f857a09ca804e5596bd31d0ed4851837bdcd9ae59d",
+    "data/appearance/materials.json": "715bcb2b13f95c7ffb8d17f5ac7673d70cea5466c33241dcf100ef6dce959598",
+    "tests/npc_edge_flow.gd": "566948963e7335fba2470215a6a6241888a03a9d61cda48ca67408bc971110eb",
+    "tests/pattern_colors_rules.gd": "721b4e3ab6d4b5ca5f56a7492570dac69bf34600eeaeed35ec53f824ffa86598",
+    "tests/pattern_colors_flow.gd": "d0ea40546dc83870ac3a5489a24b0687217421c65ee8f6a6a903cdb904c3cae9",
+    "tests/trouser_compatibility.gd": "81cbf082703d9571d537b1590899c42e2b986b61badc4ab147e8790ccea4fef2",
+    "tools/test_suites.json": "6a07e61d504ca5e5b9ab84898a8268e9159a98acb9dd4c50bcabafc9485c4265"
+  },
+  "test_harness_note": "A legacy trouser screenshot capture stalled waiting for frame_post_draw on macOS; changed capture to process frames plus explicit draws and reran successfully. Product behavior assertions were retained.",
+  "environment": "macOS Apple M1 Pro / Godot4.6.3 / Metal Forward+ / isolated test saves",
+  "limits": [
+    "No Windows physical-hardware run",
+    "NPC regression covers the reported connector and current city/valley routes, not every future edited layout",
+    "Two grayscale color channels do not independently segment petals, centers and leaves"
+  ],
+  "deployment": "Local source/assets only; no map rebuild, version bump, export, deployment, commit or push; no real player progress files manually modified"
+}

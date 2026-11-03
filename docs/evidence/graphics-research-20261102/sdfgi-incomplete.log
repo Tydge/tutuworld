@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+2026-11-02 18:02:38.363 Godot[15315:96766594] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+WANDER_GRID_READY cells=9765 components=5
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+MEASURE_VIEWPORT (1920, 1080) scale=0.98209273815155
+AB_SAMPLE {"cpu_process_median_ms":13.157,"draw_calls":1536,"map":"city","median_ms":9.683,"p95_ms":10.367,"preset":"baseline","render_memory_mb":472.734375,"round":0,"samples":144,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":275.611,"draw_calls":1536,"map":"city","median_ms":9.769,"p95_ms":10.795,"preset":"agx","render_memory_mb":472.734375,"round":0,"samples":142,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":282.313,"draw_calls":1536,"map":"city","median_ms":9.881,"p95_ms":10.664,"preset":"sky_reflection","render_memory_mb":472.734375,"round":0,"samples":141,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":12.856,"draw_calls":1536,"map":"city","median_ms":11.359,"p95_ms":12.259,"preset":"ssil","render_memory_mb":515.640625,"round":0,"samples":124,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":282.514,"draw_calls":1536,"map":"city","median_ms":10.049,"p95_ms":10.747,"preset":"glow","render_memory_mb":540.703125,"round":0,"samples":139,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":14.235,"draw_calls":1536,"map":"city","median_ms":9.927,"p95_ms":10.753,"preset":"volumetric_fog","render_memory_mb":558.703125,"round":0,"samples":140,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":11.633,"draw_calls":1536,"map":"city","median_ms":10.611,"p95_ms":11.343,"preset":"ssr","render_memory_mb":549.578125,"round":0,"samples":132,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":10.214,"draw_calls":1536,"map":"city","median_ms":8.728,"p95_ms":9.617,"preset":"no_ssao","render_memory_mb":549.578125,"round":0,"samples":160,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":13.436,"draw_calls":1536,"map":"city","median_ms":11.954,"p95_ms":12.797,"preset":"sdfgi_low","render_memory_mb":792.453125,"round":0,"samples":118,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":13.271,"draw_calls":1536,"map":"city","median_ms":11.973,"p95_ms":12.666,"preset":"sdfgi_low","render_memory_mb":792.453125,"round":1,"samples":117,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":12.824,"draw_calls":1536,"map":"city","median_ms":8.832,"p95_ms":9.811,"preset":"no_ssao","render_memory_mb":579.640625,"round":1,"samples":157,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":11.48,"draw_calls":1536,"map":"city","median_ms":10.949,"p95_ms":12.337,"preset":"ssr","render_memory_mb":579.640625,"round":1,"samples":127,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":16.869,"draw_calls":1536,"map":"city","median_ms":10.485,"p95_ms":12.115,"preset":"volumetric_fog","render_memory_mb":597.640625,"round":1,"samples":132,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":26.412,"draw_calls":1536,"map":"city","median_ms":10.842,"p95_ms":11.855,"preset":"glow","render_memory_mb":579.640625,"round":1,"samples":130,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":26.186,"draw_calls":1536,"map":"city","median_ms":11.165,"p95_ms":12.038,"preset":"ssil","render_memory_mb":595.734375,"round":1,"samples":125,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":11.855,"draw_calls":1536,"map":"city","median_ms":10.239,"p95_ms":11.122,"preset":"sky_reflection","render_memory_mb":595.734375,"round":1,"samples":137,"view":"garden"}
+AB_SAMPLE {"cpu_process_median_ms":11.691,"draw_calls":1536,"map":"city","median_ms":10.058,"p95_ms":22.363,"preset":"agx","render_memory_mb":595.734375,"round":1,"samples":49,"view":"garden"}

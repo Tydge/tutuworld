@@ -25,7 +25,7 @@ func run() -> void:
 		total+=1;Outfit.apply(actor,{item.slot:id})
 		var path: String="Visual/Head/Wardrobe_head" if item.slot=="head" else "Visual/Wardrobe_"+item.slot
 		check(actor.has_node(path),"Existing garment attaches without a species-specific copy: "+id)
-	check(total==27,"All twenty-seven current clothes are supported")
+	check(total>=27,"All registered clothes are supported")
 	var session:=S.new();root.add_child(session)
 	var first: Dictionary=session.create_character("原岛民","bunny","vest_sage")
 	session.state().experience=7;session.authority.add("branch",4);session.state().plots.plot_00.crop="carrot"

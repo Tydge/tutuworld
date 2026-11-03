@@ -1,0 +1,44 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Editable sample room contains valid floor, walls, openings, roof and furniture
+PASS Old single-player saves start with an empty building plot
+PASS Duplicate stable IDs rejected
+PASS Construction cannot escape the test plot
+PASS Unsupported diagonal wall cannot create mismatched collision
+PASS Indoor furniture requires a complete floor footprint
+PASS Outdoor objects can be placed on lawn
+PASS Roof requires matching floor support
+PASS Furniture overlap is rejected
+PASS Furniture cannot be embedded in walls
+PASS Openings cannot be detached from a wall
+PASS Window keeps its supporting corner pier
+PASS Door and window cannot overlap
+PASS Deleting a wall removes its door attachment
+PASS Storage furniture snaps close to each wall without intersecting: forest_cabinet 0
+PASS Wall snapping stays stable on repeated preview: forest_cabinet 0
+PASS Storage furniture snaps close to each wall without intersecting: forest_cabinet 90
+PASS Wall snapping stays stable on repeated preview: forest_cabinet 90
+PASS Storage furniture snaps close to each wall without intersecting: forest_cabinet 180
+PASS Wall snapping stays stable on repeated preview: forest_cabinet 180
+PASS Storage furniture snaps close to each wall without intersecting: forest_cabinet 270
+PASS Wall snapping stays stable on repeated preview: forest_cabinet 270
+PASS Storage furniture snaps close to each wall without intersecting: bookshelf 0
+PASS Wall snapping stays stable on repeated preview: bookshelf 0
+PASS Storage furniture snaps close to each wall without intersecting: bookshelf 90
+PASS Wall snapping stays stable on repeated preview: bookshelf 90
+PASS Storage furniture snaps close to each wall without intersecting: bookshelf 180
+PASS Wall snapping stays stable on repeated preview: bookshelf 180
+PASS Storage furniture snaps close to each wall without intersecting: bookshelf 270
+PASS Wall snapping stays stable on repeated preview: bookshelf 270
+PASS Precise wall-snapped coordinates survive layout serialization
+PASS Precise positioning still rejects a cabinet penetrating a wall
+PASS Furniture in open space stays on its ordinary grid position
+PASS Layout commits through Session validation
+PASS Failed validation leaves the previous room intact
+PASS Characters on the same local island share their building layout
+PASS Switching back preserves the complete room
+PASS Room saved through the actual atomic single-player writer
+PASS Disk reload restores stable IDs, materials, openings and placements
+PASS Save migration accepts the expanded east-side player position
+PASS Failed disk save rolls back building, revision and player progress
+BUILDING_RULES_RESULT PASS checks=41 failures=[]

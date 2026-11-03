@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-03",
+  "scope": "Follow-up local fixes for missing/tiny catalog thumbnails and persistent selection tint while changing appearance",
+  "root_causes": [
+    "A newly staged model could be captured before a full offscreen render, and transparent empty images were accepted into the cache",
+    "Reusing an interpolated thumbnail camera across model sizes produced inconsistent framing; a repeated lamp after a floor used only 24x31 pixels versus its intended 60x75 in the standalone probe",
+    "Selecting or modifying a material part repeatedly applied a persistent green mesh overlay"
+  ],
+  "fixes": [
+    "Disable physical interpolation for the offscreen camera and model stage; force and reset camera transforms after reframing",
+    "Render at least two complete frames, reject empty image content, retry failed captures and repair invalid cached images",
+    "Deduplicate an in-flight thumbnail key and keep custom variants separate from catalog defaults",
+    "Part identification is a brief neutral hint of 0.35 seconds; color/texture adjustments clear it immediately, and saving does not restart it"
+  ],
+  "tests": [
+    {
+      "name": "project_integrity",
+      "checks": 345,
+      "result": "PASS",
+      "log": "logs/project_integrity.log"
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "checks": 43,
+      "result": "PASS",
+      "log": "logs/thumbnail_preview_flow.log"
+    },
+    {
+      "name": "appearance_camera_flow",
+      "checks": 33,
+      "result": "PASS",
+      "log": "logs/appearance_camera_flow.log"
+    },
+    {
+      "name": "building_revision_flow",
+      "checks": 55,
+      "result": "PASS",
+      "log": "logs/building_revision_flow.log"
+    },
+    {
+      "name": "building_mouse_flow",
+      "checks": 31,
+      "result": "PASS",
+      "log": "logs/building_mouse_flow.log"
+    }
+  ],
+  "total_checks": 507,
+  "coverage": [
+    "All 27 catalog images contain visible image pixels",
+    "Three independent cold viewport startups capture a floor followed by a legibly sized lamp",
+    "Alternating large floor and small lamp retains consistent framing",
+    "Injected transparent cached image is regenerated and rebound",
+    "Customized lamp image contains changed pixels and does not overwrite the catalog default",
+    "Appearance hint clears automatically and is absent during actual color preview",
+    "Prior whole-wall camera, resets, save/undo, movement and mouse building regressions"
+  ],
+  "probe_pixels": {
+    "lamp_first_before": [
+      60,
+      75
+    ],
+    "lamp_after_floor_before": [
+      24,
+      31
+    ],
+    "lamp_first_after": [
+      60,
+      75
+    ],
+    "lamp_after_floor_after": [
+      60,
+      75
+    ]
+  },
+  "manual_visual_review": [
+    "lighting-catalog-icons",
+    "floor-catalog-and-detail-icons",
+    "table_lamp-icon",
+    "appearance-without-selection-tint"
+  ],
+  "environment": "macOS / Apple M1 Pro / Godot4.6.3 / Metal Forward+; isolated progress",
+  "unchanged_previous_feature_sources": [
+    "scripts/city/interior_view.gd",
+    "scripts/ui/indoor_camera_control.gd",
+    "scripts/building/appearance.gd",
+    "data/furniture_appearance.json"
+  ],
+  "source_sha256": {
+    "scripts/building/thumbnail_studio.gd": "e6a913b63dbf0990f0264452b291552049544698acfb3a3cfc6e969ef89f7651",
+    "scripts/building/appearance_panel.gd": "53abb6cd66ce6afd0bea1405b114f79fc0c1f0fd05797be9e4d0c5b1c2c6225d",
+    "scripts/building/editor.gd": "c1acb46667b8a9c3f86aa0cd4c5f42b1c0b0730527c78830005c586b2787d060",
+    "scripts/building/editor_ui.gd": "b3c67d10d938f6f4fb7fc86643874bc81737eb5ca6f61079f00af2aa84402c03",
+    "tests/thumbnail_preview_flow.gd": "53bfd841bfd4ea0f03768a8a131a2dfed0c3ea86a034b5eb7e8a34aea0c3739a",
+    "tests/appearance_camera_flow.gd": "0312bc60b6815ed90dfc39282730a6b994dbb6cf5e5cce60090551973034de57",
+    "tools/test_suites.json": "56c8b88ceff99062aa282278084a57d90057d21398a68d621ebc167db70f3c7e"
+  },
+  "limits": [
+    "No Windows physical-hardware run",
+    "Rendering and framing assertions cover the current catalog, not arbitrary future models"
+  ],
+  "deployment": "No export, deployment, version bump, commit or push; no real player progress files manually modified"
+}

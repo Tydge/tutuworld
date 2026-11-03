@@ -1,0 +1,260 @@
+{
+  "schema": 1,
+  "defaults": {
+    "kind": "clothing",
+    "sell": 0,
+    "shop": "clothes",
+    "pattern": "solid"
+  },
+  "styles": {
+    "apron": {
+      "slot": "body",
+      "price": 72,
+      "description": "口袋里装一点花香。"
+    },
+    "bell": {
+      "slot": "neck",
+      "price": 60,
+      "description": "彩色颈带搭配金黄色铃铛。脖子装饰，同位置只佩戴一件。"
+    },
+    "beret": {
+      "slot": "head",
+      "price": 40,
+      "description": "头部装饰，同位置只能佩戴一件。"
+    },
+    "bow": {
+      "slot": "head",
+      "price": 40,
+      "description": "头部装饰，同位置只能佩戴一件。"
+    },
+    "overalls": {
+      "slot": "body",
+      "price": 65,
+      "description": "身体装饰，同位置只能穿着一件。"
+    },
+    "scarf": {
+      "slot": "neck",
+      "price": 55,
+      "description": "柔软的格纹围巾。脖子装饰，同位置只佩戴一件。"
+    },
+    "vest": {
+      "slot": "body",
+      "price": 65,
+      "description": "身体装饰，同位置只能穿着一件。"
+    }
+  },
+  "items": {
+    "apron_honey": {
+      "accent": "f8e7c4",
+      "color": "dfb660",
+      "name": "蜂蜜黄花叶围裙",
+      "pattern": "sprig",
+      "style": "apron"
+    },
+    "apron_rose": {
+      "accent": "f8e7c4",
+      "color": "c8767a",
+      "name": "莓果红花叶围裙",
+      "pattern": "sprig",
+      "style": "apron"
+    },
+    "apron_sage": {
+      "accent": "f8e7c4",
+      "color": "629184",
+      "name": "鼠尾草绿花叶围裙",
+      "pattern": "sprig",
+      "style": "apron"
+    },
+    "bell_blue": {
+      "color": "527fa7",
+      "name": "海蓝带金铃铛",
+      "style": "bell"
+    },
+    "bell_green": {
+      "color": "4c8973",
+      "name": "森林绿带金铃铛",
+      "style": "bell"
+    },
+    "bell_red": {
+      "color": "be5864",
+      "name": "莓红带金铃铛",
+      "style": "bell"
+    },
+    "beret_honey": {
+      "color": "dfb660",
+      "name": "蜂蜜黄贝雷帽",
+      "style": "beret"
+    },
+    "beret_plaid_honey": {
+      "accent": "f4e4bf",
+      "color": "dfb660",
+      "description": "柔软的暖格纹贝雷帽。",
+      "name": "蜂蜜黄格纹贝雷帽",
+      "pattern": "tartan",
+      "pattern_scale": 9.0,
+      "price": 58,
+      "style": "beret"
+    },
+    "beret_plaid_rose": {
+      "accent": "f4e4bf",
+      "color": "c8767a",
+      "description": "柔软的暖格纹贝雷帽。",
+      "name": "莓果红格纹贝雷帽",
+      "pattern": "tartan",
+      "pattern_scale": 9.0,
+      "price": 58,
+      "style": "beret"
+    },
+    "beret_plaid_sage": {
+      "accent": "f4e4bf",
+      "color": "629184",
+      "description": "柔软的暖格纹贝雷帽。",
+      "name": "鼠尾草绿格纹贝雷帽",
+      "pattern": "tartan",
+      "pattern_scale": 9.0,
+      "price": 58,
+      "style": "beret"
+    },
+    "beret_rose": {
+      "color": "c8767a",
+      "name": "莓果红贝雷帽",
+      "style": "beret"
+    },
+    "beret_sage": {
+      "color": "629184",
+      "name": "鼠尾草绿贝雷帽",
+      "style": "beret"
+    },
+    "bow_honey": {
+      "color": "dfb660",
+      "name": "蜂蜜黄蝴蝶结",
+      "style": "bow"
+    },
+    "bow_plaid_honey": {
+      "accent": "f4e4bf",
+      "color": "dfb660",
+      "description": "带着细格纹的柔软蝴蝶结，轻轻系在耳边。",
+      "name": "蜂蜜黄格纹蝴蝶结",
+      "pattern": "tartan",
+      "pattern_scale": 7.0,
+      "price": 58,
+      "style": "bow"
+    },
+    "bow_plaid_rose": {
+      "accent": "f4e4bf",
+      "color": "c8767a",
+      "description": "带着细格纹的柔软蝴蝶结，轻轻系在耳边。",
+      "name": "莓果红格纹蝴蝶结",
+      "pattern": "tartan",
+      "pattern_scale": 7.0,
+      "price": 58,
+      "style": "bow"
+    },
+    "bow_plaid_sage": {
+      "accent": "f4e4bf",
+      "color": "629184",
+      "description": "带着细格纹的柔软蝴蝶结，轻轻系在耳边。",
+      "name": "鼠尾草绿格纹蝴蝶结",
+      "pattern": "tartan",
+      "pattern_scale": 7.0,
+      "price": 58,
+      "style": "bow"
+    },
+    "bow_rose": {
+      "color": "c8767a",
+      "name": "莓果红蝴蝶结",
+      "style": "bow"
+    },
+    "bow_sage": {
+      "color": "629184",
+      "name": "鼠尾草绿蝴蝶结",
+      "style": "bow"
+    },
+    "overalls_honey": {
+      "color": "dfb660",
+      "name": "蜂蜜黄背带裤",
+      "style": "overalls"
+    },
+    "overalls_rose": {
+      "color": "c8767a",
+      "name": "莓果红背带裤",
+      "style": "overalls"
+    },
+    "overalls_sage": {
+      "color": "629184",
+      "name": "鼠尾草绿背带裤",
+      "style": "overalls"
+    },
+    "scarf_blue": {
+      "accent": "d5e7e7",
+      "color": "527fa7",
+      "name": "海蓝格纹围巾",
+      "pattern": "tartan",
+      "style": "scarf"
+    },
+    "scarf_green": {
+      "accent": "f5db99",
+      "color": "4c8973",
+      "name": "森林绿格纹围巾",
+      "pattern": "tartan",
+      "style": "scarf"
+    },
+    "scarf_red": {
+      "accent": "ffe7c8",
+      "color": "be5864",
+      "name": "莓红格纹围巾",
+      "pattern": "tartan",
+      "style": "scarf"
+    },
+    "vest_honey": {
+      "color": "dfb660",
+      "name": "蜂蜜黄马甲",
+      "style": "vest"
+    },
+    "vest_rose": {
+      "color": "c8767a",
+      "name": "莓果红马甲",
+      "style": "vest"
+    },
+    "vest_sage": {
+      "color": "629184",
+      "name": "鼠尾草绿马甲",
+      "style": "vest"
+    },
+    "vest_stripes_sage": {
+      "name": "鼠尾草绿细条纹马甲",
+      "style": "vest",
+      "pattern": "stripes",
+      "color": "629184",
+      "accent": "f7e5bc",
+      "description": "奶油细条纹，配上柔和的鼠尾草绿。"
+    },
+    "apron_dots_rose": {
+      "name": "莓果红波点围裙",
+      "style": "apron",
+      "pattern": "dots",
+      "color": "c8767a",
+      "accent": "f8e7c4",
+      "description": "像撒了一把奶油小圆点的柔软围裙。"
+    },
+    "apron_daisies_sage": {
+      "name": "鼠尾草绿雏菊围裙",
+      "style": "apron",
+      "pattern": "daisies",
+      "color": "629184",
+      "accent": "f8e7c4",
+      "description": "奶油小雏菊，像把一小片花园穿在身上。"
+    }
+  },
+  "starters": [
+    "bow_honey",
+    "bow_rose",
+    "bow_sage",
+    "scarf_blue",
+    "scarf_green",
+    "scarf_red",
+    "vest_honey",
+    "vest_rose",
+    "vest_sage"
+  ]
+}

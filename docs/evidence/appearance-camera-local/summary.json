@@ -1,0 +1,204 @@
+{
+  "date": "2026-11-03",
+  "scope": "Unpublished local furniture material parts and three indoor camera modes; includes the user correction to hide complete blocking wall faces",
+  "official": "0.3.3/build6/launcher2/protocol3",
+  "furniture_types": 22,
+  "editable_parts": 65,
+  "part_definitions": "../../../data/furniture_appearance.json",
+  "features": [
+    "Data-defined material slots for every catalog object, with validated source-geometry mapping",
+    "Per-part tint and texture, live unsaved preview, apply, Esc/close cancellation, part/all reset and coordinated presets",
+    "Original wood grain and fabric shape/pattern preservation; legacy whole-object tint compatibility without manual save migration",
+    "Appearance-aware model cache, movement, attachment behavior, thumbnails, layout checkpoints and undo",
+    "Default free-occlusion mode; indoor-only top-right camera menu with three modes, V shortcut and one-time nearby guidance",
+    "Local preference persistence for mode and hint state across full save reloads",
+    "Whole blocking wall-face visibility, including differently painted connected runs and standalone endpoints; other walls remain visible",
+    "Door/window apertures excluded from wall hits and actual swinging-door leaf bounds checked independently",
+    "0.18-second release hold plus fading; persistent shadows, lights and physical collision remain active",
+    "Complete view uses physical wall/ceiling collision; automatic view preserves the earlier pitch and per-room cutaway; construction camera stays independent"
+  ],
+  "user_clarification": "Free occlusion hides the entire wall face that obstructs the current camera-to-player sightline. No circular, tubular or per-fragment hole masking remains. Roof occlusion hides the obstructing roof module.",
+  "default_preferences": {
+    "interior_view_mode": 2,
+    "interior_view_hint_seen": false
+  },
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 344,
+      "log": "logs/project_integrity.log",
+      "qa_run": "20261103-195002-934971"
+    },
+    {
+      "name": "appearance_rules",
+      "result": "PASS",
+      "checks": 112,
+      "log": "logs/appearance_rules.log",
+      "qa_run": "20261103-194526-012323"
+    },
+    {
+      "name": "appearance_camera_flow",
+      "result": "PASS",
+      "checks": 31,
+      "log": "logs/appearance_camera_flow.log",
+      "qa_run": "20261103-195002-934971"
+    },
+    {
+      "name": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "log": "logs/building_rules.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_revision_rules",
+      "result": "PASS",
+      "checks": 53,
+      "log": "logs/building_revision_rules.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "log": "logs/building_controls.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_mouse_flow",
+      "result": "PASS",
+      "checks": 31,
+      "log": "logs/building_mouse_flow.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_flow.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_revision_flow",
+      "result": "PASS",
+      "checks": 55,
+      "log": "logs/building_revision_flow.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_grid_rules",
+      "result": "PASS",
+      "checks": 29,
+      "log": "logs/building_grid_rules.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_store_rules",
+      "result": "PASS",
+      "checks": 13,
+      "log": "logs/building_store_rules.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_grid_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_grid_flow.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "building_editing_regression",
+      "result": "PASS",
+      "checks": 23,
+      "log": "logs/building_editing_regression.log",
+      "qa_run": "20261103-193303-844745"
+    },
+    {
+      "name": "seamless_home",
+      "result": "PASS",
+      "checks": 57,
+      "log": "logs/seamless_home.log",
+      "qa_run": "20261103-193658-527430"
+    },
+    {
+      "name": "home_lighting_stability",
+      "result": "PASS",
+      "checks": 22,
+      "log": "logs/home_lighting_stability.log",
+      "qa_run": "20261103-193658-527430"
+    },
+    {
+      "name": "building_capacity",
+      "result": "PASS",
+      "checks": null,
+      "log": "logs/building_capacity.log",
+      "qa_run": "20261103-193658-527430"
+    }
+  ],
+  "building_checks": 820,
+  "related_home_and_lighting_checks": 79,
+  "total_checks": 899,
+  "capacity_cases": 8,
+  "capacity": {
+    "data": "capacity.json",
+    "environment": "macOS / Apple M1 Pro / Godot4.6.3 / Metal Forward+ / balanced ~2M 3D pixels / 4x MSAA",
+    "method": "Same eight isolated fixtures as the grid baseline. force_draw is CPU submission wall time, not FPS or isolated GPU completion; edit timing omits Session disk writes in test mode, measured checkpoint writes are separate.",
+    "movement_256_objects_ms": 31.674,
+    "movement_256_objects_16_lights_ms": 32.288,
+    "movement_models_created": 0,
+    "full_checkerboard_edit_ms": 337.902,
+    "checkpoint_ms_max": 27.809
+  },
+  "manual_visual_review": [
+    "first-indoor-camera-hint",
+    "free-occlusion-indoor-camera",
+    "bed-part-colors-and-pattern",
+    "custom-room-whole-wall-occlusion"
+  ],
+  "not_verified": [
+    "Windows physical hardware",
+    "Manual artistic approval of every color/texture combination on all 65 slots",
+    "Long-duration editing soak or simultaneous maxima of all capacity budgets",
+    "Production deployment or full multiplayer regression"
+  ],
+  "unchanged_generators": [
+    "scripts/city/home_builder.gd",
+    "scripts/city/forest_furniture.gd"
+  ],
+  "save_compatibility": "build_layout remains schema3 with optional appearance slots; existing whole-object colors remain as a compatibility layer. No real player progress files were manually edited in this task.",
+  "source_sha256": {
+    "assets/shaders/forest_blossoms.gdshader": "31fc5b3d6a597edf0fae133ea96396631452e22e3d85af6f4458fbe264ea8aff",
+    "assets/shaders/home_surface.gdshader": "4f5fd42229e14d48db9d32cdf4fa5f1741ca0e1241cb47fdedb065c7979cc797",
+    "assets/shaders/sleep_quilt.gdshader": "d6ba68f9b9da791cab3e0d46a73b55b47a3a2c05a785ee269989e070d06458b9",
+    "data/furniture_appearance.json": "55c7d59750fe9ded627c386cdd1ee7f3832f279469466e226ec6b7dfcce5dc2a",
+    "scripts/building/appearance.gd": "ee026edd580b4c5eca90f832c4726a2cbe7241395a5d916ffcbec9181b623866",
+    "scripts/building/appearance_panel.gd": "1929be8eeefaefa47b20faf82cfa56c694dd0e4a0cf43b32ebc4471032a108a9",
+    "scripts/building/building_world.gd": "cbb58447ea2ce0739e3223ca91093e727dac5876c69e17f4a6b81ccfb7dd6479",
+    "scripts/building/catalog.gd": "70e0eae7d9ee46e588bafa8a2c3d88b91fb82fef3e9705dd4fcc153a54891d20",
+    "scripts/building/editable_builder.gd": "5c5f1479c21c74fe9b097b8e4de045b2450be6b433d3b8970f99c680a1e199d3",
+    "scripts/building/editor.gd": "de44a84c7f03a7c377691562f6340c365bb85a1e4011890afa0fbfb2506a643c",
+    "scripts/building/editor_ui.gd": "187b314e86afa581ad8705cf808d9f4a68801f6272d4565a3b6cbd660ddfa1e1",
+    "scripts/building/furniture_builder.gd": "31f7962f071aeead3521b3c7e04e4e5735f5a8715c300bcd204be131dcaec199",
+    "scripts/building/grid_layout.gd": "97bcc764cc53de8d83a3877fef7fa57dee71227da29dbfeadc86ccfa6c9efe95",
+    "scripts/building/layout.gd": "706389271c88a695438380e7fea048af96cbe0bc70d5b09994ea8ab2e77f6358",
+    "scripts/building/layout_store.gd": "5f4c226b0fb192c66c86c03cfe1f75998db8977896d3e80519049bebc49f4a38",
+    "scripts/building/module_factory.gd": "911d2dc2b0dea019a1266be19fc82214339fcc481d133e957f7dda97eba4af30",
+    "scripts/building/room_door.gd": "05b06a37b08b4d683b4693ac4c5f245abde378896a9647ac55edb54910e36565",
+    "scripts/building/room_plan.gd": "5ffbd1e837d68db9cf7cc680a3ff0afd007c5df95c75593a6827775cbf3b5e74",
+    "scripts/building/site.gd": "488e0bd15f11aa9589ebf57b053293d0b84f94e4dd34dc5953792d2c88f65985",
+    "scripts/building/templates.gd": "19e8c478693bfefcfdf3dd3c1ab87a4ca3901ed2dcf4720f7623a01fada78964",
+    "scripts/building/thumbnail_studio.gd": "e7940a4fd50d7ab4162633810de0ac914c8a5efe8e9dcf7994ce626024c0762a",
+    "scripts/building/tool_icon.gd": "ed0b45c740b5f4be55f17ed1ce7c48f2384707fccd37fc8211db1560c33c84b2",
+    "scripts/city/city_world.gd": "cb652c9fd4a0c8182c45da429b6365c9a927ad3045c5a97222f0cfdc97d13d67",
+    "scripts/city/interior_view.gd": "6a463a2233324014bc67add6015ff4c0d409960380ecebea0aa39e81e1eccf6b",
+    "scripts/city/plaza_fountain.gd": "0262e1ad45fd6916d77d2815818ebff79ee505592e7c20811bc7d05f7cd1e77d",
+    "scripts/city/seabreeze_home.gd": "7a756c5f5be05a0efe974544e457d7481cfc3d3bba8a2af6135e3763a610c480",
+    "scripts/services/session.gd": "bb6f972318fb2aea6bfcd47a6656fdc5a125c13fbc9e52e7098c16f19407bc7d",
+    "scripts/ui/city_hud.gd": "a19f66e8bc093d618ce91194b0c2bdf925c0c743195a1087b2bfde13c4a3a22a",
+    "scripts/ui/indoor_camera_control.gd": "4915c400c98dac187e1b9236d8c52a9470a5dcb0de8202f9f999ba27f1d85b1b",
+    "tests/appearance_camera_flow.gd": "412361f7df183fc9b879d7e5e3a11fda8286dfa5f20c002fa935f3189e007f61",
+    "tests/appearance_rules.gd": "303cf890ff9c4b7691b9dfc4e225b472c14d578cb9b855abda80b6554f39f70a",
+    "tools/test_suites.json": "1c492f882585ca680e19136a8ff2893dbc137352f996e361b1989b8434871a1f"
+  }
+}

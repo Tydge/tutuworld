@@ -22,11 +22,12 @@ func walk(action: String,seconds: float) -> void:
 	Input.action_release(action)
 	await create_timer(.2).timeout
 func capture(label_: String) -> void:
-	await RenderingServer.frame_post_draw
+	await process_frame
+	RenderingServer.force_draw()
 	root.get_texture().get_image().save_png(output+label_+".png")
 func run() -> void:
 	root.size=Vector2i(1440,900)
-	session=S.new();session.name="Session";root.add_child(session)
+	session=S.new();session.name="Session";root.add_child(session);session.settings.interior_view_mode=0
 	for species in ["bunny","cat_teacher"]:
 		session.create_character("木棉" if species=="bunny" else "糯米",species,"vest_sage")
 		game=load("res://scenes/city.tscn").instantiate();root.add_child(game)
@@ -44,7 +45,7 @@ func run() -> void:
 			for surface in range(mesh.mesh.get_surface_count()):
 				var arrays: Array=mesh.mesh.surface_get_arrays(surface)
 				var indices=arrays[Mesh.ARRAY_INDEX]
-				if indices!=null and indices.size()>0 and indices.max()!=arrays[Mesh.ARRAY_VERTEX].size()-1: complete_meshes=false
+				if indices!=null and indices.size()>0 and Array(indices).max()!=arrays[Mesh.ARRAY_VERTEX].size()-1: complete_meshes=false
 		check(complete_meshes,"Every merged furniture and house mesh renders all its vertices")
 		check(game.bunny.rig_profile.species_id==species,"Actual controlled species: "+species)
 		var scene_id: int=game.get_instance_id()
@@ -71,9 +72,8 @@ func run() -> void:
 		check(game.home.sections[0].alpha<.001 and game.home.get_node("Structure/Roof").find_children("PersistentShadow*","MeshInstance3D",true,false).size()>0,"Roof disappears for viewing while its shadow geometry stays")
 		var south: Dictionary=game.home.sections[1]
 		check(south.alpha<.01 and south.materials[0].get_shader_parameter("cut_base_height")>.6,"Near-side cutaway keeps a visible low wall boundary")
-		var blocked: Dictionary=game.home.toggle_door(game.bunny)
-		# Near the inward-open door the body is protected; move back to a neutral room position afterwards.
-		if game.home.door_open and local.z>1.0: check(not blocked.ok,"Door will not sweep through an occupant")
+		var toggled: Dictionary=game.home.toggle_door(game.bunny)
+		check(toggled.ok,"Door may swing through the actor without requiring them to move: "+species)
 		if not game.home.door_open:
 			await create_timer(.7).timeout
 			game.home.toggle_door(game.bunny)
@@ -105,11 +105,7 @@ func run() -> void:
 		await create_timer(.4).timeout
 		check(game.home.sections[0].alpha>.99,"Roof restores smoothly outside")
 		game.current_target="home_door";game.interact();await create_timer(.85).timeout
-		if game.home.door_open:
-			check(game.hud.toast_label.text.contains("让开"),"Closing protects a player standing in the door sweep")
-			await walk("move_down",.45)
-			game.current_target="home_door";game.interact();await create_timer(.85).timeout
-		check(not game.home.door_open and game.navigation.grid.is_point_solid(Vector2i(-34,3)),"Door closes safely and restores its navigation obstruction")
+		check(not game.home.door_open and game.navigation.grid.is_point_solid(Vector2i(-34,3)),"Door closes through the sweep and restores its navigation obstruction")
 		var white: MeshInstance3D=game.bunny.get_node("Visual/Head/RoundHead") if species=="bunny" else game.bunny.get_node("Visual/Head/RoundCatHead")
 		if species=="bunny": check(white.material_override is StandardMaterial3D,"Rabbit white skin now receives actual scene lights without changing its model")
 		session.state().time=.92*3600;game.update_lighting();await create_timer(.3).timeout

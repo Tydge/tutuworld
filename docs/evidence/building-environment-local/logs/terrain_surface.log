@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+PASS Latest continuous road surface is loaded
+PASS Latest shared terrain materials are loaded
+PASS Former curb and road junction are level: (3.1, 0.0, 20.0)
+PASS Former curb and road junction are level: (3.6, 0.0, 20.0)
+PASS Former curb and road junction are level: (0.0, 0.0, 13.0)
+PASS Former curb and road junction are level: (3.4, 0.0, 13.0)
+PASS Former curb and road junction are level: (0.0, 0.0, -19.0)
+PASS Former curb and road junction are level: (3.4, 0.0, -19.0)
+WANDER_GRID_READY cells=14229 components=4
+PASS Walk across former road divider without jumping: bunny (3.55, 0.08, 20.0)
+PASS Walk across former road divider without jumping: bunny (5.0, 0.08, 13.0)
+PASS Walk across former road divider without jumping: bunny (5.0, 0.08, -19.0)
+PASS Walk across former road divider without jumping: cat_teacher (3.55, 0.08, 20.0)
+PASS Walk across former road divider without jumping: cat_teacher (5.0, 0.08, 13.0)
+PASS Walk across former road divider without jumping: cat_teacher (5.0, 0.08, -19.0)
+PASS Walk across former road divider without jumping: panda (3.55, 0.08, 20.0)
+PASS Walk across former road divider without jumping: panda (5.0, 0.08, 13.0)
+PASS Walk across former road divider without jumping: panda (5.0, 0.08, -19.0)
+PASS Four plaza flowerbeds replace the former flat disks
+PASS Flowerbeds share geometry instead of duplicating meshes
+PASS Moving a flowerbed also moves its collision
+PASS Flowerbed uses actual soil instead of a green disk
+PASS Supported VRAM compression and mipmaps: spring_lawn_v1
+PASS Supported VRAM compression and mipmaps: packed_earth_path_v1
+PASS Supported VRAM compression and mipmaps: cultivated_soil_v1
+PASS Supported VRAM compression and mipmaps: village_stone_paving_v1
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+TERRAIN_SURFACE_RESULT PASS checks=25 failures=[]

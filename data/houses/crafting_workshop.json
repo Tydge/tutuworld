@@ -2,6 +2,7 @@
   "schema": 1,
   "id": "crafting_workshop",
   "name": "铜叶工坊",
+  "default_door_open": true,
   "origin": [
     34,
     0,

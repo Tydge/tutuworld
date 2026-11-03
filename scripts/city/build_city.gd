@@ -4,6 +4,7 @@ var lamps: Node3D
 var meadow_material: ShaderMaterial
 var paving_material: ShaderMaterial
 var roof_materials: Dictionary={}
+var road_footprints: Array[Rect2]=[]
 func _initialize() -> void:
 	call_deferred("build")
 func build() -> void:
@@ -51,6 +52,7 @@ func build() -> void:
 	paving_material.shader=load("res://assets/shaders/paving.gdshader")
 	paving_material.set_shader_parameter("stone_color",Color("87939e"))
 	build_city_island()
+	preload("res://scripts/building/site.gd").build(world,meadow_material,paving_material)
 	build_streets()
 	build_plaza()
 	build_districts()
@@ -88,7 +90,7 @@ func build_city_island() -> void:
 	shore.scale.z=.88
 	var grass := G.cylinder(terrain,Vector3(0,-.18,0),55,.3,meadow_material)
 	grass.scale.z=.88
-	G.solid_box(terrain,Vector3(0,-.55,0),Vector3(114,1.05,106),"GroundCollision")
+	var ground:=G.solid_box(terrain,Vector3(0,-.55,0),Vector3(114,1.05,106),"GroundCollision");ground.collision_layer=8;ground.collision_mask=0
 	var beach_top:=G.mesh(terrain,beach_top_mesh(),Vector3(0,.02,34),G.mat("ebd8a7"),"SouthBeach")
 	beach_top.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for i in range(14):
@@ -103,19 +105,44 @@ func road(a: Vector3,b: Vector3,width: float=5.0) -> void:
 	var roads:=world.get_node("Streets")
 	var n:=group(roads,"Lane",(a+b)*.5)
 	n.rotation.y=atan2((b-a).x,(b-a).z)
-	floor_box(n,Vector3(0,-.10,0),Vector3(width,.294,a.distance_to(b)))
-	for side in [-1,1]: floor_box(n,Vector3(side*(width*.5+.34),-.10,0),Vector3(.65,.34,a.distance_to(b)))
+	# Absorb the former curb strips into one level walking surface.
+	var paved_width:=width+1.33
 	var length_:=a.distance_to(b)
-	var count:=int(ceil(length_/7.0))
-	var segment:=length_/count
-	for k in range(count):
-		var z: float=-length_*.5+(k+.5)*segment
-		G.box(n,Vector3(0,.012,z),Vector3(width,.07,segment),paving_material)
-		for side in [-1,1]:
-			G.box(n,Vector3(side*(width*.5+.34),.025,z),Vector3(.65,.09,segment),G.mat("c2baa2"))
-	for side in [-1,1]:
-		for k in range(int(length_/2)):
-			G.box(n,Vector3(side*(width*.5+.34),.076,-length_*.5+k*2),Vector3(.59,.008,.035),G.mat("c4baa0"))
+	floor_box(n,Vector3(0,-.10,0),Vector3(paved_width,.294,length_))
+	var size_:=Vector2(paved_width,length_) if is_equal_approx(a.x,b.x) else Vector2(length_,paved_width)
+	road_footprints.append(Rect2(Vector2(n.position.x,n.position.z)-size_*.5,size_))
+func road_quad(surface: SurfaceTool,a: Vector3,b: Vector3,c: Vector3,d: Vector3,normal: Vector3) -> void:
+	for point in [a,b,c,a,c,d]:
+		surface.set_normal(normal);surface.set_uv(Vector2(point.x,point.z));surface.add_vertex(point)
+func build_road_surface() -> void:
+	# Tile the union of the orthogonal strips so crossroads have no overlapping
+	# coplanar meshes, yellow dividers or internal raised edges.
+	var xs: Array[float]=[];var zs: Array[float]=[]
+	for rect in road_footprints:
+		for value in [rect.position.x,rect.end.x]:
+			if not xs.has(value): xs.append(value)
+		for value in [rect.position.y,rect.end.y]:
+			if not zs.has(value): zs.append(value)
+	xs.sort();zs.sort()
+	var occupied: Dictionary={}
+	for z in range(zs.size()-1):
+		for x in range(xs.size()-1):
+			var center:=Vector2((xs[x]+xs[x+1])*.5,(zs[z]+zs[z+1])*.5)
+			for rect in road_footprints:
+				if rect.has_point(center): occupied[Vector2i(x,z)]=true;break
+	var surface:=SurfaceTool.new();surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var top:=.047;var bottom:=-.023
+	for cell: Vector2i in occupied:
+		var x0: float=xs[cell.x];var x1: float=xs[cell.x+1]
+		var z0: float=zs[cell.y];var z1: float=zs[cell.y+1]
+		road_quad(surface,Vector3(x0,top,z0),Vector3(x1,top,z0),Vector3(x1,top,z1),Vector3(x0,top,z1),Vector3.UP)
+		if not occupied.has(cell+Vector2i.LEFT): road_quad(surface,Vector3(x0,top,z1),Vector3(x0,top,z0),Vector3(x0,bottom,z0),Vector3(x0,bottom,z1),Vector3.LEFT)
+		if not occupied.has(cell+Vector2i.RIGHT): road_quad(surface,Vector3(x1,top,z0),Vector3(x1,top,z1),Vector3(x1,bottom,z1),Vector3(x1,bottom,z0),Vector3.RIGHT)
+		if not occupied.has(cell+Vector2i.UP): road_quad(surface,Vector3(x0,top,z0),Vector3(x0,bottom,z0),Vector3(x1,bottom,z0),Vector3(x1,top,z0),Vector3.FORWARD)
+		if not occupied.has(cell+Vector2i.DOWN): road_quad(surface,Vector3(x1,top,z1),Vector3(x1,bottom,z1),Vector3(x0,bottom,z1),Vector3(x0,top,z1),Vector3.BACK)
+	G.mesh(world.get_node("Streets"),surface.commit(),Vector3.ZERO,paving_material,"ContinuousPaving")
+	world.get_node("Streets").set_meta("paved_footprints",road_footprints)
+	world.set_meta("street_surface_revision",2)
 func build_streets() -> void:
 	group(world,"Streets")
 	road(Vector3(0,0,-40),Vector3(0,0,33),6)
@@ -124,6 +151,7 @@ func build_streets() -> void:
 	road(Vector3(-30,0,-19),Vector3(39,0,-19),4)
 	road(Vector3(-25,0,-26),Vector3(-25,0,27),4)
 	road(Vector3(17,0,-26),Vector3(17,0,24),4)
+	build_road_surface()
 	lamps=group(world,"Streetlights")
 	for z in range(-31,30,9):
 		for x in [-4.6,4.6]: lamp(Vector3(x,0,z))
@@ -188,50 +216,10 @@ func build_plaza() -> void:
 	floor_shape.shape=floor_cylinder
 	floor_body.add_child(floor_shape)
 	park.add_child(floor_body)
-	var stone:=G.mat("d9d4ba")
-	var porcelain:=G.mat("83aaa4")
-	G.cylinder(park,Vector3(0,.13,0),3.22,.20,stone)
-	G.cylinder(park,Vector3(0,.28,0),3.02,.28,porcelain)
-	var rim:=TorusMesh.new()
-	rim.inner_radius=2.65
-	rim.outer_radius=3.07
-	rim.rings=48
-	rim.ring_segments=10
-	G.mesh(park,rim,Vector3(0,.53,0),stone,"RoundedFountainRim")
-	G.solid_cylinder(park,Vector3(0,.4,0),3.05,.8)
-	var water:=ShaderMaterial.new()
-	water.shader=load("res://assets/shaders/fountain_water.gdshader")
-	G.cylinder(park,Vector3(0,.48,0),2.67,.025,water,-1,"FountainWater")
-	G.cylinder(park,Vector3(0,.92,0),.30,1.10,stone,.25)
-	G.cylinder(park,Vector3(0,1.44,0),.90,.15,porcelain,1.06)
-	var upper_rim:=TorusMesh.new()
-	upper_rim.inner_radius=.86
-	upper_rim.outer_radius=1.08
-	upper_rim.rings=40
-	upper_rim.ring_segments=8
-	G.mesh(park,upper_rim,Vector3(0,1.55,0),stone,"UpperBowlRim")
-	G.cylinder(park,Vector3(0,1.55,0),.88,.02,water)
-	G.cylinder(park,Vector3(0,1.78,0),.13,.48,stone,.09)
-	G.ball(park,Vector3(0,2.02,0),Vector3.ONE*.20,stone)
-	var jet_material:=water.duplicate() as ShaderMaterial
-	jet_material.set_shader_parameter("jet",true)
-	G.mesh(park,fountain_jets(),Vector3.ZERO,jet_material,"FlowingWaterArcs")
-	for i in range(12):
-		var a:=i*TAU/12
-		G.ball(park,Vector3(cos(a)*2.85,.32,sin(a)*2.85),Vector3(.11,.14,.07),G.mat("b6c6b3"))
-	var fountain_light:=OmniLight3D.new()
-	fountain_light.name="FountainGlow"
-	fountain_light.position=Vector3(0,.9,0)
-	fountain_light.light_color=Color("9dd9d2")
-	fountain_light.light_energy=0
-	fountain_light.omni_range=7
-	fountain_light.shadow_enabled=false
-	park.add_child(fountain_light)
+	preload("res://scripts/city/plaza_fountain.gd").build(park)
 	for i in range(4):
 		var p:=Vector3(-8 if i%2==0 else 8,0,-7 if i<2 else 7)
-		G.cylinder(park,p+Vector3(0,.18,0),1.6,.4,G.mat("c7b48a"))
-		G.cylinder(park,p+Vector3(0,.39,0),1.45,.07,G.mat("75985b"))
-		for k in range(12): flower(park,p+Vector3(cos(k)*1.15,.46,sin(k)*1.15),G.mat("e9b6a6" if i%2 else "f3df9f"),.18)
+		preload("res://scripts/city/plaza_flowerbed.gd").build(park,p,i)
 	for x in [-7.5,7.5]:
 		for z in [-3.5,3.5]: bench(park,Vector3(x,0,z),PI*.5 if x>0 else -PI*.5)
 	var sign:=group(park,"WelcomeSign",Vector3(-5.8,0,10))
@@ -505,32 +493,6 @@ func build_beach() -> void:
 	lifesaver.rotation.x=PI*.5
 	G.capsule(beach,Vector3(14.6,1.20,33.12),Vector3(14.6,1.38,33.12),.018,G.mat("c9b88d"))
 	bench(beach,Vector3(4,0,29),0)
-
-func fountain_jets() -> ArrayMesh:
-	var st:=SurfaceTool.new()
-	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for arc in range(8):
-		var angle:=arc*TAU/8
-		var outward:=Vector3(cos(angle),0,sin(angle))
-		var start:=outward*.16+Vector3(0,1.98,0)
-		var end:=outward*2.12+Vector3(0,.49,0)
-		var offset:=arc*21*7
-		for step in range(21):
-			var t:=float(step)/20
-			var center:=start.lerp(end,t)+Vector3(0,sin(t*PI)*.52,0)
-			var tangent: Vector3=(end-start+Vector3(0,cos(t*PI)*PI*.52,0)).normalized()
-			var right:=tangent.cross(Vector3.UP).normalized()
-			var up:=right.cross(tangent).normalized()
-			for side in range(7):
-				var a:=side*TAU/6
-				st.set_uv(Vector2(float(side)/6,t))
-				st.add_vertex(center+(cos(a)*right+sin(a)*up)*lerpf(.036,.024,t))
-		for step in range(20):
-			for side in range(6):
-				var i:=offset+step*7+side
-				for index in [i,i+7,i+1,i+1,i+7,i+8]: st.add_index(index)
-	st.generate_normals()
-	return st.commit()
 
 func beach_top_mesh() -> ArrayMesh:
 	var st:=SurfaceTool.new()

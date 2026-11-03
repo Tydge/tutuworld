@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+2026-11-03 18:39:13.048 Godot[54758:98283390] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Floor catalog thumbnail contains rendered pixels on first load
+PASS The visible floor catalog card activates the floor tool
+PASS Choosing the floor tool also displays its thumbnail in the detail panel
+PASS Hammer has no demolition-effect selector
+PASS Create a desk with an attached lamp and letter
+PASS Move preview temporarily hides the source furniture and its attachments
+PASS A world click completes the furniture move
+PASS Moving restores visible furniture, lamp and ornament meshes
+PASS Restoring visibility keeps incremental mesh reuse
+PASS Moved lamp resumes actual illumination
+PASS Dropping at the original position is a valid no-op
+PASS A no-op move also restores the original models
+PASS Cancelling a move restores all source models
+PASS Create adjacent floor, wall, doorway, roof and furnished area
+PASS Default wall drag locks to walls and protects floor, furniture and roof
+PASS Committing the wall drag preserves other object types
+PASS A removed wall still removes its dependent doorway
+PASS One undo restores the wall and its doorway
+PASS Default floor drag locks to floors even when crossing a wall
+PASS Floor demolition removes unsupported furniture and its lamp without sweeping the separate roof
+PASS Floor drag commits its own cells and supported-furniture cascade
+PASS Undo restores the floor and all cascaded furniture
+PASS Dragging from furniture cannot sweep floor, wall or roof
+BUILDING_EDITING_REGRESSION_RESULT PASS checks=23 failures=[]

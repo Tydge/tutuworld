@@ -32,8 +32,6 @@ static func build(world: Node3D) -> void:
 		if building.has_meta("walk_in_shop"): continue
 		if str(building.name).begins_with("Shop_") or str(building.name) in ["Kitchen","PostOffice","Cafe"]:
 			for side in [-1,1]: box(building,"PlanterCollision",Vector3(side*3.0,.37,3.7),Vector3(.95,.74,.85))
-	for x in [-8,8]:
-		for z in [-7,7]: cylinder(world.get_node("CentralPark"),"FlowerbedCollision",Vector3(x,.27,z),1.58,.54)
 	box(world.get_node("CentralPark/WelcomeSign"),"WelcomeSignCollision",Vector3(0,.9,0),Vector3(3.65,1.8,.22))
 	var farm: Node3D=world.get_node("EastFarm")
 	box(farm,"BackFenceCollision",Vector3(30,.58,-9.6),Vector3(20.15,1.16,.20))

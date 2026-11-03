@@ -1,0 +1,124 @@
+{
+  "date": "2026-11-02",
+  "scope": "local-only; single-player; no version bump/export/upload/deployment; no full gameplay regression",
+  "engine": "4.6.3.stable.official.7d41c59c4",
+  "machine": "Apple M1 Pro, 14-core GPU, 16GB; Metal Forward+",
+  "tests": [
+    {
+      "name": "project_integrity",
+      "checks": 300,
+      "result": "PASS",
+      "log": "project_integrity.log",
+      "original_log": ".qa-artifacts/20261102-230619-376811/project_integrity/run.log"
+    },
+    {
+      "name": "terrain_surface",
+      "checks": 25,
+      "result": "PASS",
+      "log": "terrain_surface.log",
+      "original_log": ".qa-artifacts/20261102-224052-891900/terrain_surface/run.log"
+    },
+    {
+      "name": "forest_art_structure",
+      "checks": 19,
+      "result": "PASS",
+      "log": "forest_art_structure.log",
+      "original_log": ".qa-artifacts/20261102-225014-012019/forest_art_structure/run.log"
+    },
+    {
+      "name": "production_flow",
+      "checks": 26,
+      "result": "PASS",
+      "log": "production_flow.log",
+      "original_log": ".qa-artifacts/20261102-225609-439532/production_flow/run.log"
+    },
+    {
+      "name": "interaction_revision_rules",
+      "checks": 47,
+      "result": "PASS",
+      "log": "interaction_revision_rules.log",
+      "original_log": ".qa-artifacts/20261102-225609-439532/interaction_revision_rules/run.log"
+    },
+    {
+      "name": "valley_journey",
+      "checks": 15,
+      "result": "PASS",
+      "log": "valley_journey.log",
+      "original_log": ".qa-artifacts/20261102-225831-722012/valley_journey/run.log"
+    },
+    {
+      "name": "editor_source",
+      "checks": 6,
+      "result": "PASS",
+      "log": "editor_source.log",
+      "original_log": ".qa-artifacts/terrain-materials-local/editor-source.log"
+    }
+  ],
+  "total_checks": 438,
+  "performance": {
+    "groups": 22,
+    "sampled_frames": 4267,
+    "output": [
+      1920,
+      1080
+    ],
+    "render_3d_pixels": 2000000,
+    "cap": "off",
+    "vsync": "off",
+    "msaa": "4x",
+    "warm_frames_per_group": 55,
+    "seconds_per_group": 1.5,
+    "pair_order": "reversed on second round",
+    "freeze": "simulation and camera fixed",
+    "comparison": "Before/after shaders and lawn import at the same final road/flowerbed geometry, not a complete pre-change map comparison.",
+    "views": [
+      {
+        "map": "city",
+        "view": "garden",
+        "before_median_ms_mean": 10.4515,
+        "after_median_ms_mean": 10.806000000000001,
+        "delta_ms": 0.3545000000000016
+      },
+      {
+        "map": "city",
+        "view": "grass_near",
+        "before_median_ms_mean": 8.111,
+        "after_median_ms_mean": 8.354500000000002,
+        "delta_ms": 0.24350000000000094
+      },
+      {
+        "map": "city",
+        "view": "paving_near",
+        "before_median_ms_mean": 7.0885,
+        "after_median_ms_mean": 7.2055,
+        "delta_ms": 0.11699999999999999
+      },
+      {
+        "map": "valley",
+        "view": "path",
+        "before_median_ms_mean": 6.952,
+        "after_median_ms_mean": 7.316,
+        "delta_ms": 0.3639999999999999
+      },
+      {
+        "map": "valley",
+        "view": "path_near",
+        "before_median_ms_mean": 6.397,
+        "after_median_ms_mean": 6.33,
+        "delta_ms": -0.06700000000000017
+      }
+    ],
+    "limits": "Short local measurements; wall frame time includes CPU/GPU/presentation, not isolated GPU time; no FPS or Windows performance guarantee.",
+    "metadata_note": "comparison.json records actual lawn selection; requested_lawn preserves the logged input label. The comparison script forces original lossless reference in before mode."
+  },
+  "fixtures": "Graphical snapshots used windowed copies of the original test scripts with identical assertions and --always-on-top to avoid macOS fullscreen/occlusion waits. Final material comparison used the same source/assets in an isolated windowed project. Normal boot used signed same-build pending PCK and a separate QA user directory, without --test.",
+  "source_assets": "../../../assets/terrain/surface_assets_v1.json",
+  "review_images": [
+    "plaza-flowerbed.png",
+    "continuous-stone-roads.png",
+    "garden-earth.png",
+    "valley-path.png"
+  ],
+  "production_version": "0.3.3 / build6 / launcher2 / protocol3; unchanged",
+  "cleanup": "Temporary compression comparison assets moved out of assets/terrain before final integrity check; final runtime has four surface textures only."
+}

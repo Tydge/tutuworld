@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+BUILD_PERF {"draws":227,"frames":274,"median_ms":5.38,"p95_ms":6.141,"primitives":410120,"round":0,"view":"empty_plot"}
+BUILD_PERF {"draws":227,"frames":278,"median_ms":5.341,"p95_ms":5.958,"primitives":410120,"round":1,"view":"empty_plot"}
+BUILD_PERF {"draws":316,"frames":226,"median_ms":6.583,"p95_ms":7.378,"primitives":674058,"round":0,"view":"sample_room"}
+BUILD_PERF {"draws":316,"frames":230,"median_ms":6.47,"p95_ms":6.92,"primitives":674058,"round":1,"view":"sample_room"}
+BUILD_PERF {"draws":398,"frames":217,"median_ms":6.787,"p95_ms":7.567,"primitives":680932,"round":0,"view":"editor_with_room"}
+BUILD_PERF {"draws":398,"frames":224,"median_ms":6.639,"p95_ms":7.087,"primitives":680932,"round":1,"view":"editor_with_room"}
+BUILDING_PERFORMANCE_RESULT PASS groups=6

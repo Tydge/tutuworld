@@ -1,0 +1,56 @@
+[
+  {
+    "source": ".qa-artifacts/graphics-research-20261102/city-garden-baseline.png",
+    "saved_as": "docs/evidence/graphics-research-20261102/screenshots/city-garden-baseline.png",
+    "bytes": 2734897,
+    "sha256": "50fc34052fb845c0358c752baa349674bcbe4335d2aa6bcc1ad4a2ad6fa1a71d"
+  },
+  {
+    "source": ".qa-artifacts/graphics-research-20261102/city-garden-agx.png",
+    "saved_as": "docs/evidence/graphics-research-20261102/screenshots/city-garden-agx.png",
+    "bytes": 2646668,
+    "sha256": "26c6eb38e6b09ad97e0fa5b5fd2c9815e762a8daf5cd1b6079fb2c2705baa5bd"
+  },
+  {
+    "source": ".qa-artifacts/graphics-research-20261102/city-workshop_night-baseline.png",
+    "saved_as": "docs/evidence/graphics-research-20261102/screenshots/city-workshop_night-baseline.png",
+    "bytes": 1848650,
+    "sha256": "5856dcea51d59d06557047a88a9ac0fa749b16f89a0238f7287d1d4624a25ff0"
+  },
+  {
+    "source": ".qa-artifacts/graphics-research-20261102/city-workshop_night-volumetric_fog.png",
+    "saved_as": "docs/evidence/graphics-research-20261102/screenshots/city-workshop_night-volumetric_fog.png",
+    "bytes": 1763854,
+    "sha256": "7b32d4c08ba726fbb127d009dca5ada1cf9130f790d933215727d8fc7a027474"
+  },
+  {
+    "source": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-正面.png",
+    "saved_as": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-bow_rose-正面.png",
+    "bytes": 170330,
+    "sha256": "fd2158b1583790e35a42e5093b3e92ee730d81de4f3367cee166bb5ba37790ec"
+  },
+  {
+    "source": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-bow_rose-右侧.png",
+    "saved_as": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-bow_rose-右侧.png",
+    "bytes": 467615,
+    "sha256": "0fc8282e26b6e82b6317e663c38763898a06f89cc65103b57c464636ee431962"
+  },
+  {
+    "source": ".qa-artifacts/20261102-150318-424058/bow_revision_preview/screenshots/蝴蝶结-全身试穿.png",
+    "saved_as": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-全身试穿.png",
+    "bytes": 692865,
+    "sha256": "d8e6d90697c8fa724f037e87bfb735ee9b3ee8f8c4243b6fd18438ad9671cf6e"
+  },
+  {
+    "source": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜叶工坊-制造面板.png",
+    "saved_as": "docs/evidence/production-local/screenshots/铜叶工坊-制造面板.png",
+    "bytes": 1837813,
+    "sha256": "7bf5c2753b8949939425c665c0122f15140c00b394349262e97b893924515d18"
+  },
+  {
+    "source": ".qa-artifacts/20261102-155555-942079/production_flow/screenshots/铜水壶-浇水动作.png",
+    "saved_as": "docs/evidence/production-local/screenshots/铜水壶-浇水动作.png",
+    "bytes": 5860237,
+    "sha256": "5b77a2987a5b80d91a83208fd73c037705732d8f17939050461c07446ce7ea06"
+  }
+]

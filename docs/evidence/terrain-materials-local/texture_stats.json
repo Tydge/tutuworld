@@ -1,0 +1,98 @@
+{
+  "cultivated_soil_v1": {
+    "data_bytes": 699064,
+    "decompress": 0,
+    "format": 17,
+    "height": 1024,
+    "mean_linear": [
+      0.16760241985321,
+      0.0570030622184277,
+      0.0172370802611113
+    ],
+    "width": 1024
+  },
+  "packed_earth_path_v1": {
+    "data_bytes": 699064,
+    "decompress": 0,
+    "format": 17,
+    "height": 1024,
+    "mean_linear": [
+      0.625573515892029,
+      0.291812568902969,
+      0.0764803439378738
+    ],
+    "width": 1024
+  },
+  "qa_compression/lawn_bc1_1024": {
+    "data_bytes": 699064,
+    "decompress": 0,
+    "format": 17,
+    "height": 1024,
+    "mean_linear": [
+      0.105371616780758,
+      0.35098260641098,
+      0.0167100913822651
+    ],
+    "width": 1024
+  },
+  "qa_compression/lawn_bc7_1024": {
+    "data_bytes": 1398128,
+    "decompress": 0,
+    "format": 22,
+    "height": 1024,
+    "mean_linear": [
+      0.117147594690323,
+      0.368942856788635,
+      0.0203775931149721
+    ],
+    "width": 1024
+  },
+  "qa_compression/lawn_bc7_native": {
+    "data_bytes": 2105968,
+    "decompress": 0,
+    "format": 22,
+    "height": 1254,
+    "mean_linear": [
+      0.117232546210289,
+      0.368968486785889,
+      0.0204325597733259
+    ],
+    "width": 1254
+  },
+  "qa_compression/lawn_reference": {
+    "data_bytes": 6288054,
+    "decompress": 0,
+    "format": 4,
+    "height": 1254,
+    "mean_linear": [
+      0.117551803588867,
+      0.368980437517166,
+      0.0207693725824356
+    ],
+    "width": 1254
+  },
+  "spring_lawn_v1": {
+    "data_bytes": 699064,
+    "decompress": 0,
+    "format": 17,
+    "height": 1024,
+    "mean_linear": [
+      0.105371616780758,
+      0.35098260641098,
+      0.0167100913822651
+    ],
+    "width": 1024
+  },
+  "village_stone_paving_v1": {
+    "data_bytes": 699064,
+    "decompress": 0,
+    "format": 17,
+    "height": 1024,
+    "mean_linear": [
+      0.264832586050034,
+      0.281400948762894,
+      0.284060299396515
+    ],
+    "width": 1024
+  }
+}

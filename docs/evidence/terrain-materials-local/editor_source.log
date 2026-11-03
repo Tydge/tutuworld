@@ -1,0 +1,14 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Real editor launch path, without test bypass
+TUTU_CLIENT_READY version=0.3.3 build=6
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+PASS Normal boot reaches title scene
+PASS Downloaded same-build pack does not mask new source materials
+PASS Signed same-build pending pack remains untouched in editor
+PASS Single-player character starts using isolated local data
+WANDER_GRID_READY cells=9765 components=5
+SCENE_PREPARED ms=6870
+PASS Normal source boot reaches latest single-player terrain
+EDITOR_SOURCE_RESULT PASS checks=6 failures=[]

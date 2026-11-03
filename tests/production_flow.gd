@@ -59,7 +59,10 @@ func run() -> void:
 		check(end.x>41.2,"Garden east gate is passable without jumping: "+species)
 		actor.position=Vector3(0,10,0);actor.collision_layer=0;actor.collision_mask=0
 	# Door collision is genuinely opened before entry.
-	pose(Vector3(34,.2,-20.6));check(workshop.toggle_door(city.bunny).ok,"Workshop door opens independently")
+	pose(Vector3(34,.2,-20.6));check(workshop.door_open,"Workshop door starts open")
+	check(workshop.toggle_door(city.bunny).ok,"Workshop door closes independently")
+	await create_timer(.8).timeout
+	check(workshop.toggle_door(city.bunny).ok,"Workshop door opens independently")
 	await create_timer(.8).timeout
 	check(workshop.door_open and workshop.portal_shape.disabled,"Open workshop door releases its portal collision")
 	pose(Vector3(27,.2,-15))

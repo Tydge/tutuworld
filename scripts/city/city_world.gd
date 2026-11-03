@@ -71,6 +71,7 @@ var online_view: Node
 var network_action_pending:=false
 var network_action_approved:=false
 var network_interaction_pending:=false
+var build_mode: Node
 func _ready() -> void:
 	preload("res://scripts/city/render_budget.gd").ensure(self)
 	session=get_node("/root/Session")
@@ -86,7 +87,8 @@ func _ready() -> void:
 		if is_instance_valid(interior) and interior.get_script()==load("res://scripts/city/seabreeze_home.gd"): interiors.append(interior)
 	prepare_scenery()
 	sun=scenery.get_node("Sun")
-	fountain_glow=scenery.get_node_or_null("CentralPark/FountainGlow")
+	fountain_glow=scenery.get_node_or_null("CentralPark/Fountain/FountainGlow")
+	if fountain_glow==null:fountain_glow=scenery.get_node_or_null("CentralPark/FountainGlow")
 	lamps=scenery.get_node("Streetlights").get_children()
 	var window_copies: Dictionary={}
 	var sea_original: ShaderMaterial=scenery.get_node("Island").get_meta("sea_material")
@@ -193,6 +195,8 @@ func _ready() -> void:
 	AudioServer.set_bus_mute(0,not session.settings.sound)
 	session.active=true
 	refresh_world()
+	if map_id=="city" and not session.is_online():
+		build_mode=preload("res://scripts/building/editor.gd").new();build_mode.name="BuildingEditor";build_mode.city=self;add_child(build_mode)
 	if session.state().get("rest_mode","")=="sleep": enter_sleep(true)
 	if not session.test_mode or OS.get_cmdline_user_args().has("--warmup-test"):
 		await preload("res://scripts/city/scene_preparation.gd").run(self)
@@ -289,6 +293,7 @@ func spawn_npc(id: String,label_: String,p: Vector3,equipment: Dictionary,specie
 	return n
 func _process(delta: float) -> void:
 	if preparing: return
+	if is_instance_valid(build_mode) and build_mode.active:return
 	clock+=delta
 	bunny.speed_multiplier=session.authority.multiplier("move")
 	bunny.run_speed_multiplier=session.authority.multiplier("run_speed")
@@ -327,7 +332,7 @@ func _process(delta: float) -> void:
 func update_camera(delta: float) -> void:
 	camera_focus=camera_focus.lerp(bunny.get_global_transform_interpolated().origin+Vector3(0,.35, -.45) if sleep_active else bunny.get_global_transform_interpolated().origin+Vector3(0,1.35,0),1-exp(-delta*9))
 	var room_weight: float=interior_weight()
-	var view_pitch: float=lerpf(pitch,maxf(pitch,.65),room_weight)
+	var view_pitch: float=lerpf(pitch,maxf(pitch,.65),room_weight) if preload("res://scripts/city/interior_view.gd").mode(self)==0 else pitch
 	var offset:=Vector3(sin(yaw)*cos(view_pitch),sin(view_pitch),cos(yaw)*cos(view_pitch))*distance_
 	var desired:=camera_focus+offset
 	var candidate: Vector3=camera.position.lerp(desired,1-exp(-delta*8))
@@ -336,6 +341,8 @@ func update_camera(delta: float) -> void:
 	camera.position.y=maxf(1,camera.position.y)
 	camera.look_at(camera_focus)
 func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
+	var view=preload("res://scripts/city/interior_view.gd");var full: bool=view.mode(self)==view.FULL and view.indoors(self,pivot-Vector3.UP*1.35)
+	camera_query.collision_mask=13 if full else 9
 	var space:=get_world_3d().direct_space_state
 	# A cliff can overlap the small camera pivot even when the avatar's feet are clear.
 	# Resolve that overlap before sweeping; cast_motion intentionally ignores initial overlaps.
@@ -351,13 +358,15 @@ func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
 	var safe:=desired
 	if fractions.size()==2 and fractions[0]<1:
 		safe=pivot+(desired-pivot)*maxf(0,fractions[0]-.05/maxf(.1,pivot.distance_to(desired)))
-	return safe
+	return view.roof_limit(self,pivot,safe) if full else safe
 func respawn_position() -> Vector3: return Vector3(0,1,7)
+func navigation_bounds() -> Rect2i:
+	return Rect2i(-52,-46,153,93) if session.has_method("is_online") and not session.is_online() else Rect2i(-52,-46,105,93)
 func can_navigate(p: Vector3) -> bool: return can_walk(p)
 func can_walk(p: Vector3) -> bool:
 	for building_ in interiors:
 		if building_.contains_position(p): return true
-	return Vector2(p.x,p.z/.88).length()<52
+	return Vector2(p.x,p.z/.88).length()<52 or (session.has_method("is_online") and not session.is_online() and preload("res://scripts/building/site.gd").contains(p))
 func update_target() -> void:
 	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active:
@@ -434,6 +443,7 @@ func is_text_entry_active() -> bool:
 	return focus is LineEdit or focus is TextEdit
 func _unhandled_input(event: InputEvent) -> void:
 	if preparing:return
+	if is_instance_valid(build_mode) and build_mode.active:return
 	if is_instance_valid(online_view) and is_instance_valid(online_view.chat_card) and online_view.chat_card.visible:return
 	if event.is_action_pressed("pause"):
 		if sleep_active and not hud.overlay.visible: wake_from_bed()
@@ -445,6 +455,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if is_text_entry_active():return
 	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode==KEY_V and not paused and hud.camera_control.visible:hud.camera_control.cycle();get_viewport().set_input_as_handled();return
+		if event.keycode==KEY_F6:open_build_mode();get_viewport().set_input_as_handled();return
 		if event.keycode==KEY_C: toggle_panel("profile"); return
 		if event.keycode in [KEY_I,KEY_B]: toggle_panel("bag"); return
 		if event.keycode==KEY_TAB: toggle_panel("wardrobe"); return
@@ -467,6 +479,10 @@ func _unhandled_input(event: InputEvent) -> void:
 func toggle_panel(kind: String) -> void:
 	if hud.overlay.visible and hud.mode==kind: hud.close_panel()
 	else: hud.open_panel(kind)
+func open_build_mode() -> void:
+	if not is_instance_valid(build_mode):hud.notify("建造园目前只在单人城镇开放。");return
+	var result: Dictionary=build_mode.open_editor()
+	if not result.ok:hud.notify(result.message)
 func interact() -> void:
 	if sleep_active: wake_from_bed();return
 	if session.is_online() and nap_active:online_stand();return
@@ -760,7 +776,7 @@ func setup_occluders() -> void:
 		var materials: Array[ShaderMaterial]=[]
 		var copies: Dictionary={}
 		for mesh_ in tree_.find_children("*","GeometryInstance3D",true,false):
-			if mesh_.material_override is ShaderMaterial and mesh_.material_override.shader==fade_shader:
+			if mesh_.material_override is ShaderMaterial and mesh_.material_override.shader in [fade_shader,preload("res://assets/shaders/tree_bark.gdshader")]:
 				var copy: ShaderMaterial=mesh_.material_override.duplicate()
 				mesh_.material_override=copy;materials.append(copy)
 				continue

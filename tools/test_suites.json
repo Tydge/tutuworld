@@ -1,5 +1,25 @@
 {
   "suites": {
+    "building": [
+      "project_integrity",
+      "building_rules",
+      "building_revision_rules",
+      "building_controls",
+      "building_mouse_flow",
+      "building_flow",
+      "building_revision_flow",
+      "building_grid_rules",
+      "building_store_rules",
+      "building_grid_flow",
+      "building_editing_regression",
+      "appearance_rules",
+      "appearance_camera_flow",
+      "thumbnail_preview_flow",
+      "building_exit_flow",
+      "pattern_colors_rules",
+      "pattern_colors_flow",
+      "npc_edge_flow"
+    ],
     "smoke": [
       "project_integrity",
       "city_rules",
@@ -46,6 +66,23 @@
     "performance": [
       "valley_performance",
       "town_performance"
+    ],
+    "appearance": [
+      "project_integrity",
+      "material_catalog_rules",
+      "appearance_rules",
+      "city_rules",
+      "progression_rules",
+      "character_roster_rules",
+      "panda_rules",
+      "skills_quality_rules",
+      "material_expansion_flow",
+      "appearance_camera_flow",
+      "thumbnail_preview_flow",
+      "trouser_compatibility",
+      "building_exit_flow",
+      "pattern_colors_rules",
+      "pattern_colors_flow"
     ]
   },
   "tests": {
@@ -139,6 +176,32 @@
       "headless": true
     },
     "production_multiplayer_rules": {
+      "headless": true
+    },
+    "building_rules": {
+      "headless": true
+    },
+    "building_revision_rules": {
+      "headless": true
+    },
+    "building_grid_rules": {
+      "headless": true
+    },
+    "building_store_rules": {
+      "headless": true
+    },
+    "building_capacity": {
+      "args": [
+        "--benchmark"
+      ]
+    },
+    "appearance_rules": {
+      "headless": true
+    },
+    "material_catalog_rules": {
+      "headless": true
+    },
+    "pattern_colors_rules": {
       "headless": true
     }
   }

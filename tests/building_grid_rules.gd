@@ -1,0 +1,67 @@
+extends SceneTree
+const L=preload("res://scripts/building/layout.gd")
+const Grid=preload("res://scripts/building/grid_layout.gd")
+const Rooms=preload("res://scripts/building/room_plan.gd")
+var checks:=0
+var failures: Array=[]
+func _initialize() -> void:call_deferred("run")
+func check(ok: bool,label_: String) -> void:
+	checks+=1;print("PASS " if ok else "FAIL ",label_)
+	if not ok:failures.append(label_)
+func clean(data: Dictionary) -> Dictionary:
+	var result:=L.validate(data)
+	if not result.ok:print("INVALID ",result.message);return data
+	return result.layout
+func room(data: Dictionary,a: Vector2,b: Vector2) -> Dictionary:
+	data=L.add(data,{"type":"floor","a":[a.x,a.y],"b":[b.x,b.y]})
+	for ends in [[a,Vector2(b.x,a.y)],[Vector2(b.x,a.y),b],[b,Vector2(a.x,b.y)],[Vector2(a.x,b.y),a]]:data=L.add(data,{"type":"wall","a":[ends[0].x,ends[0].y],"b":[ends[1].x,ends[1].y]})
+	return clean(data)
+func run() -> void:
+	var data:=L.add(L.empty(),{"type":"wall","a":[70.,5.],"b":[74.,5.]});data=L.add(data,{"type":"wall","a":[74.,5.],"b":[80.,5.]});data=clean(data)
+	check(data.elements.size()==1 and L.usage(data).wall_edges==20,"Collinear wall drags merge into one continuous styled run")
+	var removed:=clean(L.demolish(data,Rect2(74,4.75,2,1),"wall"));check(L.usage(removed).wall_edges==16 and removed.elements.size()==2,"Range demolition removes only selected wall edges and splits the remaining run")
+	var unit:=L.unit_at(data,data.elements[0].id,Vector2(73.2,5));check(is_equal_approx(L.rect(unit).size.x,.5),"Wall selection addresses a single half-metre edge")
+	var single:=L.demolish(data,Rect2(),"wall",Grid.edges(unit)[0]);check(L.usage(single).wall_edges==19,"Single click removes only one wall edge")
+	var floor_:=clean(L.add(L.empty(),{"type":"floor","a":[70.,0.],"b":[82.,10.]}))
+	check(L.usage(floor_).floor_cells==480 and floor_.elements.size()==1,"Floor cells are logically independent but stored as one compact rectangle")
+	var hole:=clean(L.demolish(floor_,Rect2(72,2,.5,.5),"floor"));check(L.usage(hole).floor_cells==479 and hole.elements.size()<8,"Deleting one floor cell preserves and compacts the surrounding floor")
+	check(not L.supported(Rect2(70,0,12,10),hole.elements),"Exact support catches a tiny off-sample hole missed by nine-point sampling")
+	var quilt:=L.add(hole,{"type":"object","kind":"bed","position":[72.,3.]});check(not L.validate(quilt).ok,"Furniture cannot span a missing floor cell")
+	var repaint:=L.unit_at(floor_,floor_.elements[0].id,Vector2(71.1,1.1));repaint.color="ff0000";repaint.style="plaster";var colored:=clean(L.replace_unit(floor_,L.unit_at(floor_,floor_.elements[0].id,Vector2(71.1,1.1)),repaint))
+	check(L.usage(colored).floor_cells==480 and Grid.style_key(L.compiled(colored).floors[Vector2i(142,2)])=="ff0000:plaster:false","Painting one floor cell preserves total floor coverage")
+	data=room(L.empty(),Vector2(70,0),Vector2(82,10));var south: Dictionary=data.elements.filter(func(row):return row.type=="wall" and is_equal_approx(row.a[1],10.) and is_equal_approx(row.b[1],10.))[0]
+	data=clean(L.add(data,{"type":"door","wall":south.id,"offset":6.}));var door: Dictionary=data.elements.filter(func(row):return row.type=="door")[0];var original_anchor: Array=door.anchor.duplicate()
+	var paint_wall:=L.unit_at(data,south.id,Vector2(75.2,10));var before:=paint_wall.duplicate(true);paint_wall.color="ff0000";paint_wall.style="brick";data=clean(L.replace_unit(data,before,paint_wall))
+	check(L.validate(data).ok and L.find(data,door.id).anchor==original_anchor,"Door remains anchored across differently painted wall edges")
+	var away:=clean(L.demolish(data,Rect2(70,9.75,1,1),"wall"));check(not L.find(away,door.id).is_empty() and L.find(away,door.id).anchor==original_anchor,"Cutting wall far from a door preserves its world position")
+	var through:=clean(L.demolish(data,Rect2(75.5,9.75,.5,1),"wall"));check(L.find(through,door.id).is_empty(),"Cutting a door's support removes the door in the same transaction")
+	var plan:=Rooms.make(L.compiled(data));check(plan.rooms.size()==1 and Rooms.room_at(plan,Vector2(75,5))!="","Closed wall loop forms a room")
+	var partition:=clean(L.add(data,{"type":"wall","a":[76.,0.],"b":[76.,10.]}));var split:=Rooms.make(L.compiled(partition))
+	check(split.rooms.size()==2 and Rooms.room_at(split,Vector2(73,5))!=Rooms.room_at(split,Vector2(79,5)),"Internal wall separates two independent rooms")
+	var open_partition:=L.demolish(partition,Rect2(75.75,4,.5,1),"wall");var merged:=Rooms.make(L.compiled(open_partition));check(merged.rooms.size()==1,"Removing part of an internal wall merges rooms")
+	var open_exterior:=L.demolish(data,Rect2(69.75,4,.5,1),"wall");check(Rooms.make(L.compiled(open_exterior)).rooms.is_empty(),"Opening the exterior wall changes the enclosed region to outdoors")
+	var pair:=room(data,Vector2(85,15),Vector2(95,25));var separate:=Rooms.make(L.compiled(pair));check(separate.rooms.size()==2,"Two separated houses form independent rooms")
+	var no_wall:=Rooms.make(L.compiled(floor_));check(no_wall.rooms.is_empty(),"An uncovered floor alone is not an indoor room")
+	var sample:=preload("res://scripts/building/templates.gd").cottage();var snapshot:=JSON.stringify(sample)
+	var dismantled:=L.demolish(sample,Rect2(79.5,6.5,1.5,1.5),"floor");check(L.validate(dismantled).ok and L.usage(dismantled).objects<L.usage(sample).objects,"Floor range demolition removes unsupported furniture and dependent fixtures atomically")
+	check(JSON.stringify(sample)==snapshot,"Demolition preview is pure and does not mutate the original layout")
+	check(L.normalize(JSON.parse_string(JSON.stringify(dismantled)))==L.validate(dismantled).layout,"Fragmented floor and wall data survive exact save round-trip")
+	var capacity:=floor_.duplicate(true)
+	for i in range(L.MAX_ELEMENTS):capacity=L.add(capacity,{"type":"object","kind":"forest_planter","position":[61.75+(i%24)*1.5,-6.25+floori(i/24.)*1.5]})
+	check(L.validate(capacity).ok and L.usage(capacity).objects==L.MAX_ELEMENTS,"Furniture budget counts objects separately from floor cells")
+	var excess:=L.add(capacity,{"type":"object","kind":"forest_planter","position":[96.,26.]});check(not L.validate(excess).ok and "家具" in L.validate(excess).message,"Object budget rejects one above the tested limit")
+	var lights:=L.add(floor_,{"type":"roof","a":[70.,0.],"b":[82.,10.]});var roof_id: String=lights.elements[-1].id
+	for i in range(L.MAX_LIGHTS):lights=L.add(lights,{"type":"object","kind":"pendant","position":[71.+(i%6)*1.5,1.+floori(i/6.)*1.5],"support":roof_id})
+	check(L.validate(lights).ok,"The actual light limit is usable with valid ceiling attachments")
+	lights=L.add(lights,{"type":"object","kind":"pendant","position":[80.,8.],"support":roof_id});check(not L.validate(lights).ok and "灯具" in L.validate(lights).message,"Shadow-casting fixtures have a separate capacity budget")
+	var dense:=L.empty()
+	for i in range(32):dense=L.add(dense,{"type":"wall","a":[62.,-5.+i],"b":[94.,-5.+i]})
+	check(L.validate(dense).ok and L.usage(dense).wall_edges==L.MAX_WALL_EDGES,"The wall-edge length limit is independent of furniture count")
+	dense=L.add(dense,{"type":"wall","a":[96.,27.],"b":[96.5,27.]});check(not L.validate(dense).ok,"Exceeding the wall-edge budget is rejected")
+	var fragments:=L.empty()
+	for i in range(L.MAX_WALL_RUNS):fragments=L.add(fragments,{"type":"wall","a":[62.+i%32,-5.+floori(i/32.)*1.5],"b":[62.5+i%32,-5.+floori(i/32.)*1.5]})
+	check(L.validate(fragments).ok,"The fragmented-wall budget allows the tested limit")
+	var i:=L.MAX_WALL_RUNS;fragments=L.add(fragments,{"type":"wall","a":[62.+i%32,-5.+floori(i/32.)*1.5],"b":[62.5+i%32,-5.+floori(i/32.)*1.5]});check(not L.validate(fragments).ok,"Fragmented walls have a separate render-cost guardrail")
+
+	print("BUILDING_GRID_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
+	quit(0 if failures.is_empty() else 1)

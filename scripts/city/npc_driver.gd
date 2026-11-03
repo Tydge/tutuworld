@@ -105,9 +105,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		bunny.velocity.x=move_toward(bunny.velocity.x,target.x,delta*6)
 		bunny.velocity.z=move_toward(bunny.velocity.z,target.z,delta*6)
-	if not city.can_walk(bunny.position+Vector3(bunny.velocity.x,0,bunny.velocity.z)*delta):
+	var next_position:=bunny.position+Vector3(bunny.velocity.x,0,bunny.velocity.z)*delta
+	var moving:=Vector2(bunny.velocity.x,bunny.velocity.z).length_squared()>.0001
+	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position)):
 		bunny.velocity.x=0;bunny.velocity.z=0
-		last_normal=Vector3(-bunny.position.x,0,-bunny.position.z).normalized()
+		var safe: Vector2i=city.navigation.closest_free(bunny.position)
+		last_normal=(Vector3(safe.x,bunny.position.y,safe.y)-bunny.position).normalized() if safe.x!=999 else -direction.normalized()
 		if cooldown<=0: recover()
 	bunny.move_on_ground(delta)
 	bunny.walking=not stopped and Vector2(bunny.velocity.x,bunny.velocity.z).length()>.15

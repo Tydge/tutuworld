@@ -1,0 +1,64 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+2026-11-03 16:28:19.216 Godot[50036:98134650] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Create a clean supported construction area
+PASS All catalog cards have rendered real-model thumbnails
+PASS Construction controls occupy only the bottom of the scene
+PASS Bottom control is visible: Category_桌柜
+PASS Bottom control is visible: Tool_object_desk
+PASS Desk is placed independently from its chair and decorations
+PASS Bottom control is visible: Category_照明
+PASS Bottom control is visible: Tool_object_table_lamp
+PASS Actual mouse ray places a lamp onto the desk surface
+PASS Lamp light follows the actual fixture height and casts shadows
+PASS There are no hidden automatic room lights
+PASS Bottom control is visible: Category_装饰
+PASS Bottom control is visible: Tool_object_letter
+PASS Small decoration is placed separately on the same surface
+PASS Bottom control is visible: Tool_select
+PASS Thin tabletop decoration can be selected without the desk collision stealing the click
+PASS Selection panel shows the clicked lamp name and thumbnail
+PASS Valid preview shows the actual bed, with only a thin footprint marker
+PASS Invalid preview remains a recognizable desk with a red overlay
+PASS Structure preview uses real geometry: floor
+PASS Structure preview uses real geometry: wall
+PASS Structure preview uses real geometry: roof
+PASS Structure preview uses real geometry: door
+PASS Structure preview uses real geometry: window
+PASS Bottom control is visible: MoveBuildElement
+PASS Mouse move and R rotate the support and its attached light together
+PASS Actual light instance moves to the new fixture position
+PASS Esc cancels moving without changing the layout or hiding the original
+PASS Bottom control is visible: Tool_delete
+PASS Hammer click removes support, lamp and decoration together
+PASS Hammer remains active for repeated demolition
+PASS Bottom control is visible: BuildUndo
+PASS One undo restores the complete surface group
+PASS Bottom control is visible: Category_照明
+PASS Bottom control is visible: Tool_object_pendant
+PASS Mouse places a pendant at the real ceiling height
+PASS Bottom control is visible: Tool_select
+PASS Bottom control is visible: NightPreview
+PASS Real fixtures visibly illuminate surrounding surfaces at night
+PASS Bottom control is visible: PlaceSampleRoom
+PASS Sample button enters placement mode without immediately changing the layout
+PASS Whole-house preview follows the pointer with actual roof and walls
+PASS Mouse chooses the first whole-house position
+PASS A second house can be mouse-placed beside the existing house
+PASS Overlapping whole-house placement is rejected
+PASS Bottom control is visible: BuildUndo
+PASS One undo removes only the most recently placed whole house
+PASS Bottom control is visible: BuildRedo
+PASS One redo restores the complete second house with its attachments
+PASS Constructed door closes even while the player occupies its sweep
+PASS Door portal and leaf allow passage throughout the swing
+PASS Closed door restores normal collision after its animation
+PASS Existing town home also closes without asking the player to move away
+PASS Existing home disables both blockers during the sweep
+PASS Existing home restores its closed-door collision
+BUILDING_REVISION_FLOW_RESULT PASS checks=55 failures=[]

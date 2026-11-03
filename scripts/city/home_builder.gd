@@ -2,7 +2,7 @@ extends RefCounted
 ## Blueprint -> independently replaceable floor, wall, opening, roof and furniture modules.
 const G=preload("res://scripts/geometry.gd")
 const P=preload("res://scripts/city/prop_collisions.gd")
-const Fabric=preload("res://scripts/city/fabric_library.gd")
+const Fabric=preload("res://scripts/appearance/fabric_material.gd")
 var blueprint: Dictionary
 var root: Node3D
 var materials: Dictionary={}
@@ -260,8 +260,7 @@ func build_bed(n: Node3D) -> void:
 	else: rounded(n,Vector3(0,.85,-2.14),Vector3(2.6,1.5,.16),.08,oak)
 	rounded(n,Vector3(0,.75,0),Vector3(2.37,.30,4.04),.13,material("eee6d4"))
 	var quilt:=ShaderMaterial.new();quilt.shader=load("res://assets/shaders/sleep_quilt.gdshader")
-	quilt.set_shader_parameter("fabric_mask",load("res://assets/fabrics/tartan.svg"))
-	quilt.set_shader_parameter("dye",Color("bb885a" if blueprint.get("theme","")=="forest" else "719e9c"));quilt.set_shader_parameter("accent",Color("e8dfbf"))
+	Fabric.configure(quilt,{"pattern":"tartan","color":"bb885a" if blueprint.get("theme","")=="forest" else "719e9c","accent":"e8dfbf"},"quilt")
 	var cloth:=PlaneMesh.new();cloth.size=Vector2(2.48,2.34);cloth.subdivide_width=30;cloth.subdivide_depth=32
 	var blanket:=G.mesh(n,cloth,Vector3(0,.985,.78),quilt,"Quilt")
 	blanket.set_meta("dynamic_mesh",true)

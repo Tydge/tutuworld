@@ -1,0 +1,40 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=9765 components=5
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actual city registers well, workbench and independent workshop door
+PASS Workshop is east of the kitchen
+PASS New modules preserve building / placement definitions
+PASS Moving the well moves its actual interaction anchor
+PASS Authority uses moved well rather than original coordinates
+PASS Well collision travels with the same root
+PASS Moving and rotating workbench moves the use position
+PASS Workbench geometry and collisions stay in an independent furniture module
+WALK_END bunny (37.8, 0.2, 3.0) -> (41.60109, 0.021426, 2.998946) contacts=["/root/IslandCity/CityMap/GardenWell/Structure/WellCollision"]
+PASS Garden east gate is passable without jumping: bunny
+WALK_END cat_teacher (37.8, 0.2, 3.0) -> (41.48634, 0.038592, 2.999823) contacts=["/root/IslandCity/CityMap/GardenWell/Structure/WellCollision"]
+PASS Garden east gate is passable without jumping: cat_teacher
+WALK_END panda (37.8, 0.2, 3.0) -> (41.57744, 0.040152, 2.997967) contacts=["/root/IslandCity/CityMap/GardenWell/Structure/WellCollision"]
+PASS Garden east gate is passable without jumping: panda
+PASS Workshop door opens independently
+PASS Open workshop door releases its portal collision
+WALK_END bunny (34.0, 0.2, -19.2) -> (34.0, 0.180912, -26.75317) contacts=["/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor", "/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor"]
+PASS Real shop-sized door, porch and floor support entry: bunny
+WALK_END cat_teacher (34.0, 0.2, -19.2) -> (34.0, 0.180912, -27.12045) contacts=["/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor", "/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor"]
+PASS Real shop-sized door, porch and floor support entry: cat_teacher
+WALK_END panda (34.0, 0.2, -19.2) -> (34.0, 0.180912, -27.13175) contacts=["/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor", "/root/IslandCity/CityMap/Workshop/Structure/Floor/WalkFloor"]
+PASS Real shop-sized door, porch and floor support entry: panda
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+PASS Workshop UI offers only its two manufacturing recipes
+PASS Manufacturing starts through real city interaction
+PASS Workshop uses shared two-handed hammer animation
+PASS Real UI / session manufacturing settles exact output, materials and XP
+PASS Character panel exposes manufacturing skill and speed
+PASS Well E interaction starts fixed-duration refill
+PASS Well roof fades when it blocks the operating character
+PASS Refill fills copper can and returns movement control
+PASS Charged copper can can water a real garden plot
+PASS Real watering consumes one charge and satisfies crop
+PRODUCTION_FLOW_RESULT PASS checks=26 failures=[]

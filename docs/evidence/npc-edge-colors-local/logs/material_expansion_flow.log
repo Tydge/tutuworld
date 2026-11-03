@@ -1,0 +1,44 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-03 23:30:30.125 Godot[65041:98736468] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS The real furniture panel discovers a registered fabric: stripes
+PASS New pattern preview stays unsaved and shows its true colors: stripes
+PASS Applying the fabric updates the stored part and actual quilt mask: stripes
+PASS Quilt deformation and per-context pattern size are retained: stripes
+PASS Saved pattern appears in the selected item thumbnail: stripes
+PASS Different fabrics have different rendered thumbnails: stripes
+PASS The real furniture panel discovers a registered fabric: dots
+PASS New pattern preview stays unsaved and shows its true colors: dots
+PASS Applying the fabric updates the stored part and actual quilt mask: dots
+PASS Quilt deformation and per-context pattern size are retained: dots
+PASS Saved pattern appears in the selected item thumbnail: dots
+PASS Different fabrics have different rendered thumbnails: dots
+PASS The real furniture panel discovers a registered fabric: daisies
+PASS New pattern preview stays unsaved and shows its true colors: daisies
+PASS Applying the fabric updates the stored part and actual quilt mask: daisies
+PASS Quilt deformation and per-context pattern size are retained: daisies
+PASS Saved pattern appears in the selected item thumbnail: daisies
+PASS Different fabrics have different rendered thumbnails: daisies
+PASS One undo restores the previous fabric choice
+PASS Data-defined garment is offered by the real clothing shop: vest_stripes_sage
+PASS Try-on uses the new fabric without buying or changing inventory: vest_stripes_sage
+PASS Data-defined garment is offered by the real clothing shop: apron_dots_rose
+PASS Try-on uses the new fabric without buying or changing inventory: apron_dots_rose
+PASS Data-defined garment is offered by the real clothing shop: apron_daisies_sage
+PASS Try-on uses the new fabric without buying or changing inventory: apron_daisies_sage
+PASS Registered fabric renders on the shared species rig: bunny/vest_stripes_sage
+PASS Registered fabric renders on the shared species rig: bunny/apron_dots_rose
+PASS Registered fabric renders on the shared species rig: bunny/apron_daisies_sage
+PASS Registered fabric renders on the shared species rig: cat_teacher/vest_stripes_sage
+PASS Registered fabric renders on the shared species rig: cat_teacher/apron_dots_rose
+PASS Registered fabric renders on the shared species rig: cat_teacher/apron_daisies_sage
+PASS Registered fabric renders on the shared species rig: panda/vest_stripes_sage
+PASS Registered fabric renders on the shared species rig: panda/apron_dots_rose
+PASS Registered fabric renders on the shared species rig: panda/apron_daisies_sage
+PASS A real isolated save reloads the new furniture pattern and garment IDs
+MATERIAL_EXPANSION_FLOW_RESULT PASS checks=35 failures=[]

@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-03",
+  "status": "local-only-unreleased",
+  "official_version": "0.3.3/build6",
+  "environment": "Godot 4.6.3 / macOS / Apple M1 Pro / Metal Forward+; graphical tests run in isolated windowed source fixture",
+  "tests": [
+    {
+      "name": "building_controls",
+      "checks": 34,
+      "result": "PASS",
+      "log": "logs/building_controls.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-102238-345305/building_controls/run.log"
+    },
+    {
+      "name": "building_mouse_flow",
+      "checks": 27,
+      "result": "PASS",
+      "log": "logs/building_mouse_flow.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-102238-345305/building_mouse_flow/run.log"
+    },
+    {
+      "name": "building_flow",
+      "checks": 27,
+      "result": "PASS",
+      "log": "logs/building_flow.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-102238-345305/building_flow/run.log"
+    },
+    {
+      "name": "building_rules",
+      "checks": 41,
+      "result": "PASS",
+      "log": "logs/building_rules.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-102114-410457/building_rules/run.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 324,
+      "result": "PASS",
+      "log": "logs/project_integrity.log",
+      "original_log": "/Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261103-102323-616025/project_integrity/run.log"
+    }
+  ],
+  "targeted_checks": 129,
+  "integrity_checks": 324,
+  "changes": [
+    "Indoor furniture snaps within0.45m of a wall onto its face/skirting clearance, including normal placement/move and selected rotation; exact coordinates persist while structural half-metre grid remains enforced",
+    "Storage cabinet and bookshelf wall checks use solid-body bounds; floor support and furniture overlap retain their larger footprints; wall penetration still rejected",
+    "WASD and Shift-right drag pan in the current camera yaw rather than fixed world axes; actual mouse/key events tested at four orientations"
+  ],
+  "lighting_source": {
+    "generator": "scripts/building/module_factory.gd:92",
+    "lights": [
+      "Lighting/RoomKey: SpotLight3D, automatic room key",
+      "Lighting/RoomFill: OmniLight3D, automatic fill"
+    ],
+    "behavior": "Existing room script sets light energy by day/night; no user-placed fixtures required. Bedside lamp shade has a little emissive material, but no corresponding light source in player-built rooms. This follow-up explains the behavior and does not alter it.",
+    "buildable_lights": false
+  },
+  "preserved": "No automatic relocation of existing saved furniture, map regeneration, player-save writes, version bump, export, upload, commit, push or server action. Existing single-player build schema1 retained; no global or multiplayer regression.",
+  "screenshot": "screenshots/storage-against-wall-night.png",
+  "source_hashes": {
+    "scripts/building/catalog.gd": "1ca99f8608f32e3f972afb57193b235ea4e0203a0297cc3d0164141b01a5df16",
+    "scripts/building/layout.gd": "7c1e662fb1f6a68df51bc46034dcfd41d4ce18faa7230200272e3649e8a448eb",
+    "scripts/building/editor.gd": "b396130ae7855eefa2cf7f44546a22dbc6d97c4b970ba6532fdb48d75dacd899",
+    "scripts/building/editor_ui.gd": "2de11c375e37b70864a960d086f9439d6876a75ef9acb48a04d19bc32ba60d14",
+    "tests/building_controls.gd": "8abef2c5df686429a1b3d2bf1a93fb903004330e7fc6200e746c23496f581386",
+    "tests/building_rules.gd": "a3dd154ecd57cf59ddf11163e27aee6706fd95982c6073b5d566b4d31d242bf5"
+  }
+}

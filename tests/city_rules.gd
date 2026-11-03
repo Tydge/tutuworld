@@ -15,7 +15,7 @@ func _initialize() -> void:
 	var clothes:=0
 	for id in DB.catalog().items:
 		if DB.item(id).kind=="clothing": clothes+=1
-	check(clothes==27,"Twenty-seven clothing items across three slots")
+	check(clothes>=27 and not DB.item("vest_stripes_sage").is_empty() and not DB.item("apron_daisies_sage").is_empty(),"Original clothing and data-defined additions are available")
 	check(a.state.plots.size()==48,"48 independent plots")
 	a.state.player_position=[22,.1,-6]
 	var seed_before: int=a.count("seed_carrot")

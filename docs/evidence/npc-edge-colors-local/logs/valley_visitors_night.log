@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=11554 components=25
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Exactly Panda plus two rabbit visitors
+PASS Random outfit, shared rabbit actor ValleyVisitor0
+PASS 21:30 visitor still present ValleyVisitor0
+PASS Random outfit, shared rabbit actor ValleyVisitor1
+PASS 21:30 visitor still present ValleyVisitor1
+PASS Visitor supports normal dialogue
+PASS 22:00 fade cancels active conversation
+PASS Smooth partial fade and no ghost collision ValleyVisitor0
+PASS All body and clothes fade together; unavailable ValleyVisitor0
+PASS Smooth partial fade and no ghost collision ValleyVisitor1
+PASS All body and clothes fade together; unavailable ValleyVisitor1
+PASS Selection skips fading visitor
+PASS Stale selection cannot start dialogue
+PASS Fully hidden and idle overnight ValleyVisitor0
+PASS Fully hidden and idle overnight ValleyVisitor1
+PASS Still absent before 06:00, including world culling updates
+PASS 06:00 smooth fade in blocks interaction
+PASS After fade restores walk, collision and dialogue ValleyVisitor0
+PASS After fade restores walk, collision and dialogue ValleyVisitor1
+PASS Visitor roams connected forest 0
+PASS Visitor roams connected forest 1
+PASS Forest uses moonlight and only three trail lamps
+PASS Night-only fireflies have halos and three cheap real lights
+PASS Butterflies absent at night
+PASS Firefly lights disappear in daylight
+VALLEY_VISITORS_NIGHT_RESULT PASS checks=25 failures=[]

@@ -1,0 +1,16 @@
+{
+  "scripts/building/module_factory.gd": "9c9a3f8f359c5ee7856f26bfc49353c48fd1c5ea0575a49e42c0dd4f3bb5496e",
+  "scripts/building/templates.gd": "19e8c478693bfefcfdf3dd3c1ab87a4ca3901ed2dcf4720f7623a01fada78964",
+  "scripts/building/editor_ui.gd": "a71bb4214997ff1f071b7b71bcca005c754e1682a5bbc39355b8f1ccbbb637bb",
+  "scripts/building/site.gd": "488e0bd15f11aa9589ebf57b053293d0b84f94e4dd34dc5953792d2c88f65985",
+  "scripts/building/editor.gd": "0c42ccef8626f03bf34fd9b73f7e3119e924a5b9a1845477f6177f8da631d6de",
+  "scripts/building/thumbnail_studio.gd": "b43d1d84e6cc713a10348abda43305375e0c82106c37f49f05f286d07d8960d1",
+  "scripts/building/catalog.gd": "70e0eae7d9ee46e588bafa8a2c3d88b91fb82fef3e9705dd4fcc153a54891d20",
+  "scripts/building/tool_icon.gd": "ed0b45c740b5f4be55f17ed1ce7c48f2384707fccd37fc8211db1560c33c84b2",
+  "scripts/building/editable_builder.gd": "8d6ec16a32d8443e68f17627e7f778a22772651fe15dee24f5bd9df36ec55e90",
+  "scripts/building/furniture_builder.gd": "f4bd9b3657f7cb1cb7d460c30c2041874c988d96ab66e896ceb7637a851c6d92",
+  "scripts/building/layout.gd": "d2226da6d38ade59019cbd81ade4b2f41b07b170861d05eb8453f9cb1f3e24af",
+  "scripts/building/room_door.gd": "05b06a37b08b4d683b4693ac4c5f245abde378896a9647ac55edb54910e36565",
+  "scripts/city/seabreeze_home.gd": "832b9193b9c90e7c25463fdf094d7c8730c6a9c54e8d783efc5ec30f2a63719b",
+  "scripts/city/city_world.gd": "9e1e83ea1a9702cb6748f7110f923ab56519ec605b42b36cdc3df7075d0456a6"
+}

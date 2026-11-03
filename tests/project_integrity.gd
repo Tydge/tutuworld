@@ -20,6 +20,7 @@ func run() -> void:
 			check(script!=null and script.can_instantiate(),"Parse "+path)
 	for folder in ["res://scenes","res://config"]:
 		for path in files_at(folder,["tscn","scn","tres"]):
+			check(load(path)!=null,"Load resource "+path)
 			for dependency in ResourceLoader.get_dependencies(path):
 				var parts: PackedStringArray=dependency.split("::")
 				var target: String=parts[-1]

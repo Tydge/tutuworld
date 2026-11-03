@@ -3,7 +3,7 @@ extends RefCounted
 static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 	var G=preload("res://scripts/geometry.gd")
 	var P=preload("res://scripts/city/prop_collisions.gd")
-	var F=preload("res://scripts/city/fabric_library.gd")
+	var F=preload("res://scripts/appearance/fabric_material.gd")
 	var oak: Material=b.material("b58b54",1)
 	var pale: Material=b.material("e5c994",1)
 	match kind:

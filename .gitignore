@@ -6,6 +6,10 @@
 __pycache__/
 *.pyc
 
+# Godot-generated sidecars for archived screenshots/probes, not runtime assets.
+docs/evidence/**/*.import
+docs/evidence/**/*.uid
+
 .DS_Store
 exports/
 releases/

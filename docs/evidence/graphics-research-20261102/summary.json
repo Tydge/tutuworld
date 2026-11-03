@@ -1,0 +1,244 @@
+{
+  "date": "2026-11-02",
+  "game_version": "0.3.3",
+  "release_commit": "743c269",
+  "hardware": {
+    "chip": "Apple M1 Pro",
+    "gpu_cores": 14,
+    "memory_gb": 16
+  },
+  "environment": {
+    "godot": "4.6.3",
+    "renderer": "Forward+",
+    "driver": "Metal",
+    "output": [
+      1920,
+      1080
+    ],
+    "scale": 0.98209273815155,
+    "render_pixels": 2000000,
+    "msaa": "4x",
+    "frame_limit": 0,
+    "vsync": "disabled"
+  },
+  "method": {
+    "view_count": 3,
+    "presets": 8,
+    "rounds": 2,
+    "groups": 48,
+    "frame_samples": 7359,
+    "warmup_frames_per_preset": 60,
+    "sample_duration_seconds": 1.4,
+    "order": "forward then reverse",
+    "metric": "RenderingServer.frame_post_draw间隔的墙钟时间；每视角两轮中位数取均值",
+    "simulation": "冻结地图场景节点（角色/NPC等）、固定相机、隐藏HUD；Session计时与着色器TIME继续运行",
+    "user_data": "--test隔离；没有修改运行时源码、场景或发布包"
+  },
+  "groups": [
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "baseline",
+      "mean_of_two_medians_ms": 9.7335,
+      "delta_from_baseline_ms": 0.0,
+      "max_run_p95_ms": 10.854
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "agx",
+      "mean_of_two_medians_ms": 9.826,
+      "delta_from_baseline_ms": 0.09250000000000114,
+      "max_run_p95_ms": 10.963
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "sky_reflection",
+      "mean_of_two_medians_ms": 10.003,
+      "delta_from_baseline_ms": 0.26950000000000074,
+      "max_run_p95_ms": 10.949
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "ssil",
+      "mean_of_two_medians_ms": 11.276499999999999,
+      "delta_from_baseline_ms": 1.5429999999999993,
+      "max_run_p95_ms": 12.531
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "glow",
+      "mean_of_two_medians_ms": 10.072500000000002,
+      "delta_from_baseline_ms": 0.3390000000000022,
+      "max_run_p95_ms": 11.078
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "volumetric_fog",
+      "mean_of_two_medians_ms": 9.9665,
+      "delta_from_baseline_ms": 0.23300000000000054,
+      "max_run_p95_ms": 10.841
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "ssr",
+      "mean_of_two_medians_ms": 10.629999999999999,
+      "delta_from_baseline_ms": 0.8964999999999996,
+      "max_run_p95_ms": 11.53
+    },
+    {
+      "map": "city",
+      "view": "garden",
+      "preset": "no_ssao",
+      "mean_of_two_medians_ms": 8.755500000000001,
+      "delta_from_baseline_ms": -0.977999999999998,
+      "max_run_p95_ms": 9.58
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "baseline",
+      "mean_of_two_medians_ms": 9.290500000000002,
+      "delta_from_baseline_ms": 0.0,
+      "max_run_p95_ms": 10.258
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "agx",
+      "mean_of_two_medians_ms": 9.030000000000001,
+      "delta_from_baseline_ms": -0.2605000000000004,
+      "max_run_p95_ms": 9.56
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "sky_reflection",
+      "mean_of_two_medians_ms": 9.4785,
+      "delta_from_baseline_ms": 0.18799999999999883,
+      "max_run_p95_ms": 10.633
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "ssil",
+      "mean_of_two_medians_ms": 10.545,
+      "delta_from_baseline_ms": 1.2544999999999984,
+      "max_run_p95_ms": 11.587
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "glow",
+      "mean_of_two_medians_ms": 9.711500000000001,
+      "delta_from_baseline_ms": 0.4209999999999994,
+      "max_run_p95_ms": 10.841
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "volumetric_fog",
+      "mean_of_two_medians_ms": 9.554,
+      "delta_from_baseline_ms": 0.26349999999999874,
+      "max_run_p95_ms": 10.749
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "ssr",
+      "mean_of_two_medians_ms": 10.024000000000001,
+      "delta_from_baseline_ms": 0.7334999999999994,
+      "max_run_p95_ms": 11.124
+    },
+    {
+      "map": "city",
+      "view": "workshop_night",
+      "preset": "no_ssao",
+      "mean_of_two_medians_ms": 8.493500000000001,
+      "delta_from_baseline_ms": -0.7970000000000006,
+      "max_run_p95_ms": 9.522
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "baseline",
+      "mean_of_two_medians_ms": 7.942,
+      "delta_from_baseline_ms": 0.0,
+      "max_run_p95_ms": 8.928
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "agx",
+      "mean_of_two_medians_ms": 7.773999999999999,
+      "delta_from_baseline_ms": -0.16800000000000104,
+      "max_run_p95_ms": 8.254
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "sky_reflection",
+      "mean_of_two_medians_ms": 8.149000000000001,
+      "delta_from_baseline_ms": 0.20700000000000074,
+      "max_run_p95_ms": 9.199
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "ssil",
+      "mean_of_two_medians_ms": 9.2805,
+      "delta_from_baseline_ms": 1.3384999999999998,
+      "max_run_p95_ms": 10.497
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "glow",
+      "mean_of_two_medians_ms": 8.3,
+      "delta_from_baseline_ms": 0.35800000000000054,
+      "max_run_p95_ms": 9.308
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "volumetric_fog",
+      "mean_of_two_medians_ms": 8.043000000000001,
+      "delta_from_baseline_ms": 0.10100000000000087,
+      "max_run_p95_ms": 8.899
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "ssr",
+      "mean_of_two_medians_ms": 8.887,
+      "delta_from_baseline_ms": 0.9450000000000003,
+      "max_run_p95_ms": 10.257
+    },
+    {
+      "map": "valley",
+      "view": "bridge",
+      "preset": "no_ssao",
+      "mean_of_two_medians_ms": 6.83,
+      "delta_from_baseline_ms": -1.112,
+      "max_run_p95_ms": 7.423
+    }
+  ],
+  "not_used_for_conclusions": [
+    "TIME_PROCESS监视值受截图等前序工作影响，不作为CPU耗时证据",
+    "RENDER_VIDEO_MEM_USED包含已缓存缓冲，不作为每种特效独立显存增量",
+    "SDFGI预热阶段未得到有效结果；中止并从正式对比排除"
+  ],
+  "limitations": [
+    "非GPU纯时间，不能与厂商GPU计时直接比较",
+    "固定视角短采样；没有导航、移动镜头、完整NPC/多人/长期发热负载",
+    "只有一台Mac，无Windows或弱显卡测量",
+    "各特效逐项开启，不能简单相加为组合成本",
+    "体积雾使用默认质量和少量现有灯，不能外推到密集体积光",
+    "AgX未调曝光/对比度，图片用于诊断，非最终美术方案"
+  ]
+}

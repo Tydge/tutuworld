@@ -1,0 +1,28 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=11554 components=26
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Valley has no seedling or clover groundcover geometry
+PASS Grouped wildflowers and low shrub groves replace scattered spikes
+PASS Forest terrain uses imported lawn texture
+PASS Mipmaps enabled for stable distant leaf detail
+PASS New cottage keeps the same twelve-by-ten footprint
+PASS Different interior layout stored in editable building blueprint
+PASS Independent furniture module bed
+PASS Independent furniture module sofa
+PASS Independent furniture module desk
+PASS Independent furniture module hearth
+PASS Independent furniture module tea_table
+PASS Independent furniture module bookshelf
+PASS Independent furniture module rug
+PASS Independent furniture module fern
+PASS Moving a furniture module also moves its collision geometry
+PASS New furniture layout leaves a connected bed route
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=9765 components=5
+PASS City also removes all scattered seedling geometry
+PASS City meadow shares the accepted lawn texture
+PASS City meadow material is present
+FOREST_ART_STRUCTURE_RESULT PASS checks=19 failures=[]

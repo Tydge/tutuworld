@@ -1,7 +1,7 @@
 extends RefCounted
 const G = preload("res://scripts/geometry.gd")
 const DB = preload("res://scripts/services/game_data.gd")
-const Fabric=preload("res://scripts/city/fabric_library.gd")
+const Fabric=preload("res://scripts/appearance/fabric_material.gd")
 const Bow=preload("res://scripts/city/bow_accessory.gd")
 static var trouser_meshes: Dictionary={}
 static func clear_slot(bunny: Node3D, slot: String) -> void:

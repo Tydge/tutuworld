@@ -1,0 +1,361 @@
+{
+  "driver": "metal",
+  "forced_frames": 0,
+  "limits": {
+    "lights": 16,
+    "objects": 256,
+    "wall_edges": 2048,
+    "wall_runs": 256
+  },
+  "metric": "synchronous force_draw CPU wall time; excludes GPU completion; no FPS claim",
+  "msaa": 2,
+  "renderer": "forward_plus",
+  "rows": [
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 14.119,
+      "draw_calls": 325,
+      "edit": {
+        "cell_paint_ms": 59.876,
+        "sync": {
+          "created": 1,
+          "modules": 90,
+          "moved": 0,
+          "removed": 1,
+          "reused": 89,
+          "usec": 27581
+        }
+      },
+      "initial_commit_ms": 158.862,
+      "layout_checkpoint_ms": 3.583,
+      "modules": 90,
+      "name": "full_floor",
+      "primitives": 239535,
+      "records": 5,
+      "render_submit_max_ms": 4.359,
+      "render_submit_median_ms": 4.026,
+      "render_submit_p95_ms": 4.263,
+      "samples": 30,
+      "static_memory_bytes": 418992327,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 128.106,
+      "draw_calls": 505,
+      "edit": {
+        "cell_paint_ms": 337.902,
+        "sync": {
+          "created": 1,
+          "modules": 90,
+          "moved": 0,
+          "removed": 1,
+          "reused": 89,
+          "usec": 66877
+        }
+      },
+      "initial_commit_ms": 354.107,
+      "layout_checkpoint_ms": 27.809,
+      "modules": 90,
+      "name": "checkerboard_floor",
+      "primitives": 356199,
+      "records": 4896,
+      "render_submit_max_ms": 6.559,
+      "render_submit_median_ms": 4.657,
+      "render_submit_p95_ms": 5.242,
+      "samples": 30,
+      "static_memory_bytes": 477187747,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 20.525,
+      "draw_calls": 426,
+      "edit": {
+        "sync": {
+          "created": 2,
+          "modules": 186,
+          "moved": 0,
+          "removed": 2,
+          "reused": 184,
+          "usec": 59315
+        },
+        "wall_cut_ms": 140.685
+      },
+      "initial_commit_ms": 212.184,
+      "layout_checkpoint_ms": 1.657,
+      "modules": 186,
+      "name": "wall_runs_2048_edges",
+      "primitives": 380535,
+      "records": 33,
+      "render_submit_max_ms": 5.587,
+      "render_submit_median_ms": 4.893,
+      "render_submit_p95_ms": 5.439,
+      "samples": 30,
+      "static_memory_bytes": 456723411,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 2048,
+        "wall_length": 1024.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 2047,
+        "wall_length": 1023.5
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 25.892,
+      "draw_calls": 1097,
+      "edit": {
+        "sync": {
+          "created": 0,
+          "modules": 855,
+          "moved": 0,
+          "removed": 3,
+          "reused": 855,
+          "usec": 65724
+        },
+        "wall_cut_ms": 145.289
+      },
+      "initial_commit_ms": 233.268,
+      "layout_checkpoint_ms": 2.222,
+      "modules": 855,
+      "name": "fragmented_wall_limit",
+      "primitives": 1375239,
+      "records": 256,
+      "render_submit_max_ms": 9.338,
+      "render_submit_median_ms": 6.439,
+      "render_submit_p95_ms": 9.337,
+      "samples": 30,
+      "static_memory_bytes": 459643487,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 256,
+        "wall_length": 128.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 0,
+        "roofs": 0,
+        "wall_edges": 255,
+        "wall_length": 127.5
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 27.726,
+      "draw_calls": 342,
+      "edit": {
+        "move_ms": 31.674,
+        "sync": {
+          "created": 0,
+          "modules": 346,
+          "moved": 1,
+          "removed": 0,
+          "reused": 346,
+          "usec": 11928
+        }
+      },
+      "initial_commit_ms": 305.332,
+      "layout_checkpoint_ms": 3.563,
+      "modules": 346,
+      "name": "plants_256",
+      "primitives": 4918067,
+      "records": 257,
+      "render_submit_max_ms": 11.386,
+      "render_submit_median_ms": 10.791,
+      "render_submit_p95_ms": 11.248,
+      "samples": 30,
+      "static_memory_bytes": 453876727,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 256,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 0,
+        "objects": 256,
+        "roofs": 0,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 0.74,
+      "draw_calls": 290,
+      "edit": {
+
+      },
+      "initial_commit_ms": 76.069,
+      "layout_checkpoint_ms": 1.014,
+      "modules": 103,
+      "name": "lights_12",
+      "primitives": 41892,
+      "records": 14,
+      "render_submit_max_ms": 6.08,
+      "render_submit_median_ms": 5.113,
+      "render_submit_p95_ms": 5.654,
+      "samples": 30,
+      "static_memory_bytes": 445633585,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 12,
+        "objects": 12,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 12,
+        "objects": 12,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 1.011,
+      "draw_calls": 290,
+      "edit": {
+
+      },
+      "initial_commit_ms": 13.597,
+      "layout_checkpoint_ms": 1.056,
+      "modules": 107,
+      "name": "lights_limit",
+      "primitives": 53028,
+      "records": 18,
+      "render_submit_max_ms": 5.789,
+      "render_submit_median_ms": 5.473,
+      "render_submit_p95_ms": 5.758,
+      "samples": 30,
+      "static_memory_bytes": 446770925,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 16,
+        "objects": 16,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 16,
+        "objects": 16,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    },
+    {
+      "checkpoint_ok": true,
+      "cold_validation_ms": 20.957,
+      "draw_calls": 335,
+      "edit": {
+        "move_ms": 32.288,
+        "sync": {
+          "created": 0,
+          "modules": 347,
+          "moved": 1,
+          "removed": 0,
+          "reused": 347,
+          "usec": 14740
+        }
+      },
+      "initial_commit_ms": 127.999,
+      "layout_checkpoint_ms": 2.559,
+      "modules": 347,
+      "name": "combined_limits",
+      "primitives": 4621984,
+      "records": 258,
+      "render_submit_max_ms": 16.25,
+      "render_submit_median_ms": 15.456,
+      "render_submit_p95_ms": 16.011,
+      "samples": 30,
+      "static_memory_bytes": 460906449,
+      "usage": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 16,
+        "objects": 256,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      },
+      "usage_after_edit": {
+        "floor_area": 1224.0,
+        "floor_cells": 4896,
+        "lights": 16,
+        "objects": 256,
+        "roofs": 1,
+        "wall_edges": 0,
+        "wall_length": 0.0
+      }
+    }
+  ],
+  "scale": 0.98209273815155,
+  "window": "(1920, 1080)"
+}

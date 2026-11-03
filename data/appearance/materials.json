@@ -1,0 +1,159 @@
+{
+  "schema": 1,
+  "families": {
+    "wood": "木质",
+    "fabric": "布料",
+    "metal": "金属",
+    "stone": "石材",
+    "ceramic": "陶瓷",
+    "paper": "纸张",
+    "solid": "其他",
+    "foliage": "叶片",
+    "flowers": "花朵"
+  },
+  "materials": {
+    "original": {
+      "name": "原始纹理",
+      "renderer": "original",
+      "families": [
+        "*"
+      ],
+      "uses": [
+        "furniture"
+      ],
+      "order": 0
+    },
+    "solid": {
+      "name": "纯色",
+      "renderer": "solid",
+      "families": [
+        "*"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 20
+    },
+    "wood": {
+      "name": "木纹",
+      "renderer": "surface",
+      "families": [
+        "wood"
+      ],
+      "uses": [
+        "furniture"
+      ],
+      "order": 10,
+      "surface_pattern": 1
+    },
+    "stone": {
+      "name": "石材",
+      "renderer": "surface",
+      "families": [
+        "stone",
+        "ceramic"
+      ],
+      "uses": [
+        "furniture"
+      ],
+      "order": 30,
+      "surface_pattern": 3
+    },
+    "tartan": {
+      "name": "暖格纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 30,
+      "texture": "res://assets/fabrics/tartan.svg",
+      "scale": {
+        "clothing": 12.0,
+        "furniture": 3.5,
+        "quilt": 3.5
+      },
+      "accent_label": "格纹色"
+    },
+    "sprig": {
+      "name": "花叶纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 40,
+      "texture": "res://assets/fabrics/sprig.svg",
+      "scale": {
+        "clothing": 3.2,
+        "furniture": 3.5,
+        "quilt": 3.5
+      },
+      "accent_label": "花叶色"
+    },
+    "stripes": {
+      "name": "细条纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 50,
+      "texture": "res://assets/fabrics/stripes.svg",
+      "scale": {
+        "clothing": 2.5,
+        "furniture": 1.8,
+        "quilt": 1.8
+      },
+      "accent_label": "条纹色"
+    },
+    "dots": {
+      "name": "奶油波点",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 60,
+      "texture": "res://assets/fabrics/dots.svg",
+      "scale": {
+        "clothing": 3.0,
+        "furniture": 1.7,
+        "quilt": 1.7
+      },
+      "accent_label": "波点色"
+    },
+    "daisies": {
+      "name": "雏菊印花",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "furniture",
+        "clothing"
+      ],
+      "order": 70,
+      "texture": "res://assets/fabrics/daisies_ai_v2.png",
+      "scale": {
+        "clothing": 1.35,
+        "furniture": 0.9,
+        "quilt": 0.9
+      },
+      "accent_label": "花纹色"
+    }
+  }
+}

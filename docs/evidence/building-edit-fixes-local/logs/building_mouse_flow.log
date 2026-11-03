@@ -1,0 +1,39 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+2026-11-03 18:40:07.035 Godot[54788:98285159] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS F6 actually opens the in-game construction UI
+PASS Visible editor control exists: Tool_floor
+PASS Floor catalog click activates the floor tool
+PASS Two mouse clicks create the actual floor rectangle
+PASS Visible editor control exists: Tool_wall
+PASS Mouse tool creates all four walls from scratch
+PASS Visible editor control exists: Tool_door
+PASS Mouse attaches a door to a real wall
+PASS Visible editor control exists: Tool_window
+PASS Mouse attaches a window with a real wall opening
+PASS Visible editor control exists: Tool_roof
+PASS Mouse tool creates a supported gabled roof
+PASS Visible editor control exists: Category_床
+PASS Visible editor control exists: Tool_object_bed
+PASS Furniture can be placed through the visible palette and world click
+PASS Construction clicks and shortcuts do not move the player
+PASS Visible editor control exists: Tool_select
+PASS Mouse ray selects furniture through a wall cutaway at a low camera angle
+PASS Visible editor control exists: ApplyBuildAppearance
+PASS Inspector apply button commits the chosen appearance
+PASS Visible editor control exists: DeleteBuildElement
+PASS Delete button removes furniture without touching walls
+PASS Visible editor control exists: BuildUndo
+PASS Undo button restores the same stable furniture ID
+PASS Visible editor control exists: BuildRedo
+PASS Redo button repeats deletion
+PASS Visible editor control exists: BuildUndo
+PASS Visible editor control exists: Category_床
+PASS Visible editor control exists: Tool_object_bed
+PASS Invalid overlapping placement is rejected through the mouse UI
+BUILDING_MOUSE_FLOW_RESULT PASS checks=30 failures=[]

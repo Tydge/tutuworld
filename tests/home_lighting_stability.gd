@@ -9,7 +9,7 @@ func check(ok: bool,label_: String) -> void:
 	if not ok: failures.append(label_)
 func run() -> void:
 	root.size=Vector2i(2400,1440)
-	session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
+	session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session);session.settings.interior_view_mode=0
 	for species in ["bunny","cat_teacher"]:
 		check(session.create_character("稳稳兔" if species=="bunny" else "稳稳猫",species,"vest_sage").ok,"Create "+species)
 		game=load("res://scenes/city.tscn").instantiate();root.add_child(game)

@@ -20,6 +20,9 @@ func build() -> void:
 	world.set_meta("scenery_polished",true)
 	forest.world=world;forest.rng.seed=45921
 	build_environment();build_terrain();build_backing();build_stream();build_bridge();build_steps();build_house();build_forest();build_details();build_flower_meadows();build_lamps()
+	preload("res://scripts/valley/woodland_dressing.gd").build(self)
+	preload("res://scripts/city/terrain_materials.gd").apply(world)
+	preload("res://scripts/city/environment_materials.gd").apply(world)
 	preload("res://scripts/city/static_batches.gd").bake(world)
 	own_map(world,world)
 	# Keep the reusable building referenced, not copied into the terrain file.

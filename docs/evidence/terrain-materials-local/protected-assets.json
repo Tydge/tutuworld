@@ -1,0 +1,72 @@
+[
+  {
+    "path": "scenes/bunny.tscn",
+    "unchanged_from_head": true,
+    "sha256": "bb813047b57b0aeba47a9a7cefadf0f71fb977e7b89f8964c993e73a2fabbef4"
+  },
+  {
+    "path": "scenes/cat_teacher.tscn",
+    "unchanged_from_head": true,
+    "sha256": "058f64428bd35fee007dffe87708e68df8813de30a99ddda3263b56893307fb5"
+  },
+  {
+    "path": "scenes/panda.tscn",
+    "unchanged_from_head": true,
+    "sha256": "5baa86b9c9116fe7406526e757b168197cc27ad18df82cab017a22f6c2778656"
+  },
+  {
+    "path": "scenes/valley_map.scn",
+    "unchanged_from_head": true,
+    "sha256": "1047e395c5cb22cf9e75faf04d15901c389b438701289b2be14c826b7cf9bc59"
+  },
+  {
+    "path": "scenes/valley_home.scn",
+    "unchanged_from_head": true,
+    "sha256": "d925a963ae2bf96b17985037fd5be24c9a94279dfdd5d6bac11e5f4aaca6c260"
+  },
+  {
+    "path": "scenes/seabreeze_home.scn",
+    "unchanged_from_head": true,
+    "sha256": "66075256a6ff28bbabfde8fd23316cbc3c1089c788b6dd22e05032ef3e0295c3"
+  },
+  {
+    "path": "scenes/shop_farm.scn",
+    "unchanged_from_head": true,
+    "sha256": "41f57876efe535f598ab0f34f6aa62d2f43650b422bc43833b5541204eee4554"
+  },
+  {
+    "path": "scenes/shop_tools.scn",
+    "unchanged_from_head": true,
+    "sha256": "90c4f47998b4102e95548b3d66b51fc27ed7c93b3a8f72eb63e34b5a7083e843"
+  },
+  {
+    "path": "scenes/shop_clothes.scn",
+    "unchanged_from_head": true,
+    "sha256": "ccfbbfbde03736e68be5cc2fbeaaecd1f2ef30cf032351ac52578da68517997c"
+  },
+  {
+    "path": "scenes/workshop.scn",
+    "unchanged_from_head": true,
+    "sha256": "e79056ba57e8e8181f3820ff301a4f5431f660111abdfe2cff7d05a335aa4b52"
+  },
+  {
+    "path": "project.godot",
+    "unchanged_from_head": true,
+    "sha256": "1662245cdb685bea302c15f8823807cca9dc53a01c9649d43c45de6f0efaf4a1"
+  },
+  {
+    "path": "export_presets.cfg",
+    "unchanged_from_head": true,
+    "sha256": "cd3cb6f592f84024c7f601d6f2f9cc82c244810d07eb88042dfe733518e54141"
+  },
+  {
+    "path": "scripts/services/release.gd",
+    "unchanged_from_head": true,
+    "sha256": "ab6673d3315c1d86adf98513c1d2101cad5318c1099fe5bf4845192792e5c2f5"
+  },
+  {
+    "path": "assets/terrain/spring_lawn_v1.png",
+    "unchanged_from_head": true,
+    "sha256": "8e750bc1d79530cd54a2d6aad478134d9be287643ef71f63aa3a8591c5be6c18"
+  }
+]

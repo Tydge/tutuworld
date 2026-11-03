@@ -1,4 +1,5 @@
 extends Control
+const Swatch=preload("res://scripts/ui/fabric_swatch.gd")
 var definition: Dictionary={}
 var item_id := ""
 var icon_extent:=56
@@ -66,45 +67,32 @@ func _draw() -> void:
 		draw_circle(Vector2(-4,-4),4,Color("83aa63"))
 	elif shape=="bow":
 		for side in [-1,1]:
-			draw_colored_polygon(PackedVector2Array([Vector2(side*4,-4),Vector2(side*20,-13),Vector2(side*22,-9),Vector2(side*22,10),Vector2(side*19,13),Vector2(side*4,4)]),color)
+			cloth_polygon(PackedVector2Array([Vector2(side*4,-4),Vector2(side*20,-13),Vector2(side*22,-9),Vector2(side*22,10),Vector2(side*19,13),Vector2(side*4,4)]),color)
 			draw_line(Vector2(side*6,0),Vector2(side*18,-3),color.darkened(.15),2,true)
-			if definition.get("pattern","")=="tartan":
-				for x in [11,16]: draw_line(Vector2(side*x,-7),Vector2(side*x,7),Color("f4e4bf",.7),2,true)
-				draw_line(Vector2(side*9,4),Vector2(side*21,4),Color("f4e4bf",.65),2,true)
 		draw_style_box(_box(color.darkened(.05)),Rect2(-5,-6,10,12))
 	elif shape=="beret":
 		draw_set_transform(c,0,Vector2(scale_,scale_*.65))
-		draw_circle(Vector2(0,1),20,color)
+		var outline:=PackedVector2Array()
+		for i in range(40):outline.append(Vector2(cos(i*TAU/40)*20,1+sin(i*TAU/40)*20))
+		cloth_polygon(outline,color)
 		draw_line(Vector2(-17,10),Vector2(17,10),color.darkened(.2),5,true)
-		if definition.get("pattern","")=="tartan":
-			var accent:=Color(definition.get("accent","f4e4bf"))
-			for x in [-12,-4,4,12]:
-				var edge:=sqrt(400-x*x)
-				draw_line(Vector2(x,1-edge),Vector2(x,1+edge),Color(accent,.6),2,true)
-			for y in [-12,-4,4,12]:
-				var edge:=sqrt(400-y*y)
-				draw_line(Vector2(-edge,1+y),Vector2(edge,1+y),Color(accent,.6),2,true)
 		draw_line(Vector2(1,-15),Vector2(3,-23),color,4,true)
 	elif shape=="scarf":
 		draw_arc(Vector2(0,-6),14,0,PI,24,color,10,true)
-		draw_style_box(_box(color),Rect2(-12,-2,10,23))
-		draw_style_box(_box(color),Rect2(0,-2,10,18))
-		var accent:=Color(definition.get("accent","ffe7c8"))
-		for y in [3,10,17]: draw_line(Vector2(-12,y),Vector2(-2,y),accent,2,true)
-		draw_line(Vector2(-8,0),Vector2(-8,20),accent,1,true)
+		cloth_polygon(PackedVector2Array([Vector2(-12,-2),Vector2(-2,-2),Vector2(-2,21),Vector2(-12,21)]),color)
+		cloth_polygon(PackedVector2Array([Vector2(0,-2),Vector2(10,-2),Vector2(10,16),Vector2(0,16)]),color)
 	elif shape=="bell":
 		draw_arc(Vector2(0,-9),17,0,PI,24,color,7,true)
 		draw_circle(Vector2(0,9),11,Color("efc34d"))
 		draw_circle(Vector2(0,9),2,Color("926628"))
 		draw_line(Vector2(0,11),Vector2(0,19),Color("926628"),2,true)
 	elif shape=="apron":
-		draw_colored_polygon(PackedVector2Array([Vector2(-9,-15),Vector2(9,-15),Vector2(10,0),Vector2(18,19),Vector2(-18,19),Vector2(-10,0)]),color)
+		cloth_polygon(PackedVector2Array([Vector2(-9,-15),Vector2(9,-15),Vector2(10,0),Vector2(18,19),Vector2(-18,19),Vector2(-10,0)]),color)
 		draw_arc(Vector2(0,-16),8,PI,TAU,20,Color("f6e7c8"),3,true)
 		draw_line(Vector2(-16,2),Vector2(16,2),Color("f6e7c8"),3,true)
-		for i in range(5): draw_circle(Vector2(cos(i*TAU/5)*4,10+sin(i*TAU/5)*4),3,Color("f5e6c7"))
-		draw_circle(Vector2(0,10),2,color.lightened(.15))
 	elif kind=="clothing":
 		draw_style_box(_box(color),Rect2(-16,-14,32,32))
+		cloth_polygon(PackedVector2Array([Vector2(-15,-13),Vector2(15,-13),Vector2(15,17),Vector2(-15,17)]),color)
 		draw_line(Vector2(-9,-20),Vector2(-9,-5),color,6,true)
 		draw_line(Vector2(9,-20),Vector2(9,-5),color,6,true)
 		if shape=="overalls":
@@ -147,6 +135,13 @@ func _draw() -> void:
 		draw_circle(Vector2(0,4),16,color)
 		draw_circle(Vector2(-7,-13),7,Color("75a567"))
 		draw_circle(Vector2(5,-14),6,Color("88b46f"))
+func cloth_polygon(points: PackedVector2Array,color: Color) -> void:
+	var pattern:=Swatch.texture(definition)
+	if pattern==null:
+		draw_colored_polygon(points,color);return
+	var uv:=PackedVector2Array()
+	for point in points:uv.append((point+Vector2(28,28))/56.)
+	draw_polygon(points,PackedColorArray([Color.WHITE]),uv,pattern)
 func _box(color: Color) -> StyleBoxFlat:
 	var b:=StyleBoxFlat.new()
 	b.bg_color=color

@@ -1,0 +1,3890 @@
+{
+  "date": "2026-11-03",
+  "removed_files": 776,
+  "removed_logical_bytes": 1876729664,
+  "private_recovery_archive": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/archives/2026-11-03-接手收尾备份.tar.gz",
+  "private_archive_sha256": "bb044037ae8d71f486ecbe275bb10c38a60cd3f1c26ec724c5817b2c9ff9f9a1",
+  "entries": [
+    {
+      "path": ".qa-artifacts/cleanup-protected.json",
+      "bytes": 11886,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230306-643552/project_integrity/run.log",
+      "bytes": 376,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/run.log",
+      "bytes": 2553,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2625709,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2012034,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2787830,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2890636,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2401360,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2488379,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2623742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201326-808662/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131436-896368/building_revision_rules/run.log",
+      "bytes": 3127,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/run.log",
+      "bytes": 2455,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6589781,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5116678,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 7313515,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7581061,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 6079040,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6567248,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6586489,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194526-012323/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183834-708317/building_editing_regression/run.log",
+      "bytes": 481,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155944-200912/building_grid_flow/run.log",
+      "bytes": 2005,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155944-200912/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7229061,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155944-200912/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7247544,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155944-200912/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7223869,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155944-200912/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7249113,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192711-415738/appearance_rules/run.log",
+      "bytes": 7148,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192711-415738/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-auth/accounts.sqlite3",
+      "bytes": 4096,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-auth/accounts.sqlite3-shm",
+      "bytes": 32768,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-auth/accounts.sqlite3-wal",
+      "bytes": 61832,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131311-465098/building_flow/run.log",
+      "bytes": 1410,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/production-save/progress.json.bak",
+      "bytes": 9422,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/production-save/progress.json",
+      "bytes": 9463,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192425-737883/project_integrity/run.log",
+      "bytes": 1243,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-134038-505960/seamless_home/run.log",
+      "bytes": 4059,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-134038-505960/seamless_home/screenshots/无缝小屋-bunny-沙发小憩.png",
+      "bytes": 6398664,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-134038-505960/seamless_home/screenshots/无缝小屋-cat_teacher-沙发小憩.png",
+      "bytes": 6392911,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/trouser_compatibility/run.log",
+      "bytes": 1519,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/trouser_compatibility/screenshots/裤腿修正-三角色-跑步.png",
+      "bytes": 464935,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/trouser_compatibility/screenshots/裤腿修正-三角色-走路.png",
+      "bytes": 158583,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/trouser_compatibility/screenshots/裤腿修正-三角色-站立.png",
+      "bytes": 153161,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/run.log",
+      "bytes": 3046,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 2625814,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 1101872,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 1077737,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 1064727,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15674,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 1078256,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 1074901,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 2629840,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 1106558,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 2628240,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/character_roster_rules/run.log",
+      "bytes": 1985,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/run.log",
+      "bytes": 3946,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 2709509,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 2368,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 2711565,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/skills_quality_rules/run.log",
+      "bytes": 129,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/city_rules/run.log",
+      "bytes": 2350,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/run.log",
+      "bytes": 2553,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2626076,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2012072,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2788139,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2891151,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2400389,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2488258,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2624468,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/panda_rules/run.log",
+      "bytes": 3531,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/progression_rules/run.log",
+      "bytes": 1216,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215619-387645/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162342-559971/project_integrity/run.log",
+      "bytes": 926,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155602-453591/building_grid_rules/run.log",
+      "bytes": 1524,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155602-453591/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/run.log",
+      "bytes": 3081,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 5675391,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 5676745,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6289400,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6288012,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 5605839,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132301-794841/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6259679,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/run.log",
+      "bytes": 3186,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6516913,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 2673984,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 2610674,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 2576971,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15692,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 2636896,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 2598209,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6531618,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 2659537,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6525424,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/run.log",
+      "bytes": 2021,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/screenshots/two-colors-dots.png",
+      "bytes": 1767972,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/screenshots/two-colors-daisies.png",
+      "bytes": 1772925,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/screenshots/isolated-save.json",
+      "bytes": 15647,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_flow/screenshots/two-color-panel-720.png",
+      "bytes": 948583,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/pattern_colors_rules/run.log",
+      "bytes": 3013,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-233000-801240/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133118-189580/chat_seat_rules/run.log",
+      "bytes": 349,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-130708-734032/building_rules/run.log",
+      "bytes": 3354,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_capacity/run.log",
+      "bytes": 5947,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_capacity/capacity.json",
+      "bytes": 8731,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8058236,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_flow/screenshots/editor-room.png",
+      "bytes": 6238360,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/run.log",
+      "bytes": 2158,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7239348,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7288604,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7272720,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7256863,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163436-660583/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6491248,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/run.log",
+      "bytes": 2093,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 2848444,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 2866834,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 2865471,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 2856990,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 2544296,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163959-065928/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132755-690806/building_flow/run.log",
+      "bytes": 1987,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132755-690806/building_flow/screenshots/editor-room.png",
+      "bytes": 5942823,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132755-690806/building_mouse_flow/run.log",
+      "bytes": 1954,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132755-690806/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 2602237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155228-018825/building_grid_rules/run.log",
+      "bytes": 1524,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154031-546866/project_integrity/run.log",
+      "bytes": 1226,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155304-201612/building_grid_rules/run.log",
+      "bytes": 1524,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155304-201612/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131143-184312/project_integrity/run.log",
+      "bytes": 1488,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133827-946052/seamless_home/run.log",
+      "bytes": 779,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-570105/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131441-070082/building_mouse_flow/run.log",
+      "bytes": 2044,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131441-070082/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 6542099,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-130752-879922/building_rules/run.log",
+      "bytes": 2811,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214051-614923/material_catalog_rules/run.log",
+      "bytes": 10818,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/thumbnail-preview-before/source.tar.gz",
+      "bytes": 23784,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-614230/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/editor-before-exit-fix.gd",
+      "bytes": 43823,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/panda_rules.gd",
+      "bytes": 4096,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/import-512.log",
+      "bytes": 1961,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/daisies-ai-first-integrated.png.import",
+      "bytes": 959,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/image_edges.gd",
+      "bytes": 754,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/source.tar.gz",
+      "bytes": 39377,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/catalog_snapshot.gd",
+      "bytes": 407,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/import-density.log",
+      "bytes": 2354,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/clothes.json",
+      "bytes": 8526,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/import-final.log",
+      "bytes": 2567,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/building-flow-before-exit-fix.gd",
+      "bytes": 6409,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/daisies-ai-first-integrated.png",
+      "bytes": 872612,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/material-system-before/import.log",
+      "bytes": 2354,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_controls/run.log",
+      "bytes": 2409,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 2255026,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/run.log",
+      "bytes": 2233,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7230298,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7264045,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7271502,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7235858,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6495056,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_mouse_flow/run.log",
+      "bytes": 2094,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7554607,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-164419-809186/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_controls/run.log",
+      "bytes": 2549,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 5795520,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_mouse_flow/run.log",
+      "bytes": 2448,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 6644820,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132501-350432/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_controls/run.log",
+      "bytes": 2409,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 2009442,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_flow/run.log",
+      "bytes": 2170,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_flow/screenshots/constructed-interior.png",
+      "bytes": 7417779,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_flow/screenshots/editor-room.png",
+      "bytes": 6571162,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/run.log",
+      "bytes": 3186,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6592120,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 2672241,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 2617388,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 2579034,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15684,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 2643334,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 2600541,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6607192,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 2652561,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6601340,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/building_exit_flow/run.log",
+      "bytes": 1221,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220022-729537/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_controls/run.log",
+      "bytes": 2549,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 5791993,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8091314,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_flow/screenshots/editor-room.png",
+      "bytes": 6217032,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_mouse_flow/run.log",
+      "bytes": 2094,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7448539,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/run.log",
+      "bytes": 3667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6236275,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5526547,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6237738,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6868469,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 7456192,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 6599958,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6874651,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 6707503,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6164494,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6874636,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133448-588101/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214910-111609/material_catalog_rules/run.log",
+      "bytes": 9877,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214910-111609/material_expansion_flow/run.log",
+      "bytes": 2203,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214910-111609/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6590002,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214910-111609/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6603249,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-214910-111609/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6595267,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131153-953285/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/run.log",
+      "bytes": 2233,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7223460,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7257628,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7259917,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7244568,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6491511,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/run.log",
+      "bytes": 1940,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/screenshots/floor-drag-type-locked.png",
+      "bytes": 7086600,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/screenshots/wall-drag-type-locked.png",
+      "bytes": 7101242,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/screenshots/floor-tool-thumbnail.png",
+      "bytes": 7395096,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/screenshots/floor-thumbnail.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_editing_regression/screenshots/moved-furniture-visible.png",
+      "bytes": 7039727,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_mouse_flow/run.log",
+      "bytes": 2094,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7552037,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/run.log",
+      "bytes": 3667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6688158,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5653202,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6688045,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6707581,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 7610914,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 6703957,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6710009,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 6758292,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6653103,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183906-561767/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6723242,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131926-749942/building_revision_flow/run.log",
+      "bytes": 474,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132142-439757/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-276262/save.json.bak",
+      "bytes": 8509,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-276262/save.json",
+      "bytes": 8734,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155650-565095/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155650-565095/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8012018,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155650-565095/building_flow/screenshots/editor-room.png",
+      "bytes": 6248184,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-607681/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_flow/run.log",
+      "bytes": 2162,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_flow/screenshots/two-colors-dots.png",
+      "bytes": 6513388,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_flow/screenshots/two-colors-daisies.png",
+      "bytes": 6522530,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_flow/screenshots/isolated-save.json",
+      "bytes": 15637,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_flow/screenshots/two-color-panel-720.png",
+      "bytes": 947729,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/npc_edge_flow/run.log",
+      "bytes": 6519,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230759-078984/pattern_colors_rules/run.log",
+      "bytes": 2413,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231921-054597/npc_edge_flow/run.log",
+      "bytes": 2584,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231921-054597/npc_edge_flow/screenshots/supported-bridge-corner.png",
+      "bytes": 7150829,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-190006-412359/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/probe.gd",
+      "bytes": 1138,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/local-layout-migrated.json",
+      "bytes": 4411,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/local-save-migration.json",
+      "bytes": 329,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/source.tar.gz",
+      "bytes": 49741,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/probe.json.bak",
+      "bytes": 11700,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/local-layout.json",
+      "bytes": 3084,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/migrate-local.gd",
+      "bytes": 843,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/probe.json",
+      "bytes": 11699,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/godot-sample.txt",
+      "bytes": 105005,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-revision-before/status.txt",
+      "bytes": 3676,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/run.log",
+      "bytes": 2315,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2621965,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2012718,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2788151,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2890196,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2405632,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2487777,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-194719-027940/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2621868,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183437-430817/building_editing_regression/run.log",
+      "bytes": 2385,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183437-430817/building_editing_regression/screenshots/floor-drag-type-locked.png",
+      "bytes": 7087950,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183437-430817/building_editing_regression/screenshots/wall-drag-type-locked.png",
+      "bytes": 7099891,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183437-430817/building_editing_regression/screenshots/floor-thumbnail.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183437-430817/building_editing_regression/screenshots/moved-furniture-visible.png",
+      "bytes": 7033953,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-camera-before/source.tar.gz",
+      "bytes": 91618,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-camera-before/materials.json",
+      "bytes": 14689,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-130836-043756/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201936-387452/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/trouser_compatibility/run.log",
+      "bytes": 1519,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/trouser_compatibility/screenshots/裤腿修正-三角色-跑步.png",
+      "bytes": 464935,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/trouser_compatibility/screenshots/裤腿修正-三角色-走路.png",
+      "bytes": 158583,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/trouser_compatibility/screenshots/裤腿修正-三角色-站立.png",
+      "bytes": 153161,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/run.log",
+      "bytes": 3186,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6592041,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 2670948,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 2621698,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 2578888,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15674,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 2646403,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 2601365,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6606921,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 2649455,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6601652,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/character_roster_rules/run.log",
+      "bytes": 1985,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/run.log",
+      "bytes": 3946,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 2712467,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 2368,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 2717475,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/skills_quality_rules/run.log",
+      "bytes": 129,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/city_rules/run.log",
+      "bytes": 2350,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/building_exit_flow/run.log",
+      "bytes": 1221,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/run.log",
+      "bytes": 2553,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2626160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2012773,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2788494,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2890403,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2399795,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2487708,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2624484,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/panda_rules/run.log",
+      "bytes": 3531,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/progression_rules/run.log",
+      "bytes": 1216,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-220259-710388/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/run.log",
+      "bytes": 2162,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6568614,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5117352,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 5792121,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7587458,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/custom-room-free-occlusion.png",
+      "bytes": 4914706,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6167275,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191715-680317/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6565557,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131147-221292/project_integrity/run.log",
+      "bytes": 1212,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231310-940094/npc_edge_flow/run.log",
+      "bytes": 2419,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231310-940094/npc_edge_flow/screenshots/supported-bridge-corner.png",
+      "bytes": 7157647,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231310-940094/navigation_roam/run.log",
+      "bytes": 764,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160221-570535/building_store_rules/run.log",
+      "bytes": 1312,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132823-988318/chat_seat_rules/run.log",
+      "bytes": 667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_store_rules/run.log",
+      "bytes": 1003,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_controls/run.log",
+      "bytes": 2549,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 5066514,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_flow/run.log",
+      "bytes": 2165,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_flow/screenshots/constructed-interior.png",
+      "bytes": 7415906,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_flow/screenshots/editor-room.png",
+      "bytes": 6536153,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/run.log",
+      "bytes": 2233,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7229759,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7267606,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7266076,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7243477,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6459334,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_rules/run.log",
+      "bytes": 7076,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_grid_rules/run.log",
+      "bytes": 1933,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/run.log",
+      "bytes": 1800,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/screenshots/floor-drag-type-locked.png",
+      "bytes": 2796527,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/screenshots/wall-drag-type-locked.png",
+      "bytes": 2804634,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/screenshots/floor-tool-thumbnail.png",
+      "bytes": 2919170,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/screenshots/floor-thumbnail.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_editing_regression/screenshots/moved-furniture-visible.png",
+      "bytes": 2765521,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_mouse_flow/run.log",
+      "bytes": 2162,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7545302,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/run.log",
+      "bytes": 2235,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6573595,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5117007,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 7312837,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7582778,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 6071270,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6567001,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6572039,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/run.log",
+      "bytes": 3527,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 2657119,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 2392736,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 2657404,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 2572254,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 3001785,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 2657403,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 2578877,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 2677293,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 2644301,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 2588731,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193303-844745/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-289173/save.json.bak",
+      "bytes": 8454,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-289173/save.json",
+      "bytes": 8681,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_store_rules/run.log",
+      "bytes": 924,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_controls/run.log",
+      "bytes": 2549,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_controls/screenshots/storage-against-wall-night.png",
+      "bytes": 5719803,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8060534,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_flow/screenshots/editor-room.png",
+      "bytes": 6233386,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/run.log",
+      "bytes": 1682,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7230564,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7252958,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7244126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7243703,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6489697,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_grid_rules/run.log",
+      "bytes": 1933,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_mouse_flow/run.log",
+      "bytes": 2094,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7558917,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/run.log",
+      "bytes": 3667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6695114,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5459083,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6695114,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6706026,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 7614508,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 6710241,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6722432,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 6764497,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6660751,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6728412,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162707-585257/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155127-415047/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155127-415047/building_revision_rules/run.log",
+      "bytes": 3523,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-155127-415047/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-622664/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-618164/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215318-778716/material_catalog_rules/run.log",
+      "bytes": 10492,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230409-944855/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230409-944855/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-230409-944855/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154239-868499/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-2555493/save.json.bak",
+      "bytes": 8454,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-2555493/save.json",
+      "bytes": 8681,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/run.log",
+      "bytes": 1682,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7229608,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7257390,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7133222,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7246825,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160718-202166/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6487248,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-153201-058966/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-153201-058966/building_revision_rules/run.log",
+      "bytes": 3695,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_rules/run.log",
+      "bytes": 7076,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/run.log",
+      "bytes": 2235,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6573752,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5118239,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 7312616,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7582119,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 6073448,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6567075,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-192936-180870/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6574488,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8085625,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_flow/screenshots/editor-room.png",
+      "bytes": 5928873,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/run.log",
+      "bytes": 3908,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6038580,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5144576,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6040141,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6198429,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 6645204,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 5810800,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6193000,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 5167173,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6030842,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133034-427959/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6180632,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/trouser_compatibility/run.log",
+      "bytes": 1232,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/trouser_compatibility/screenshots/裤腿修正-三角色-站立.png",
+      "bytes": 435468,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/run.log",
+      "bytes": 3186,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6515539,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 2631630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 2666635,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 2659285,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15691,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 2634795,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 2671101,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6527030,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 2616625,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6526128,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/character_roster_rules/run.log",
+      "bytes": 1985,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/run.log",
+      "bytes": 4086,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 6859075,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 2368,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 6855195,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/skills_quality_rules/run.log",
+      "bytes": 129,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/city_rules/run.log",
+      "bytes": 2350,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/run.log",
+      "bytes": 2693,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6508351,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5053692,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 7241402,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7508773,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 6059575,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6537142,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6503973,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/panda_rules/run.log",
+      "bytes": 3531,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/progression_rules/run.log",
+      "bytes": 1216,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232332-131085/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-190233-239453/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/run.log",
+      "bytes": 3667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6663008,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5480607,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6661928,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6736034,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 7460806,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 6603243,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6735591,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 6704186,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6629507,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-133331-381822/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6738436,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132000-080091/building_revision_flow/run.log",
+      "bytes": 1435,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162434-004866/building_grid_rules/run.log",
+      "bytes": 1454,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162434-004866/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191326-829759/appearance_rules/run.log",
+      "bytes": 391,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-185633-322395/project_integrity/run.log",
+      "bytes": 1134,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-153634-074580/project_integrity/run.log",
+      "bytes": 681,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213906-134022/panda_rules/run.log",
+      "bytes": 4444,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213906-134022/progression_rules/run.log",
+      "bytes": 1216,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/diagnose.log",
+      "bytes": 1055,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/diagnose.gd",
+      "bytes": 1035,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/city-ground-before.json",
+      "bytes": 254,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/source.tar.gz",
+      "bytes": 21313,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/build-city-before-ground-layer.gd",
+      "bytes": 36675,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/npc-edge-colors-before/trouser-capture-before.gd",
+      "bytes": 3307,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/trouser_compatibility/run.log",
+      "bytes": 1519,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/trouser_compatibility/screenshots/裤腿修正-三角色-跑步.png",
+      "bytes": 464935,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/trouser_compatibility/screenshots/裤腿修正-三角色-走路.png",
+      "bytes": 455747,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/trouser_compatibility/screenshots/裤腿修正-三角色-站立.png",
+      "bytes": 153161,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_flow/run.log",
+      "bytes": 2161,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_flow/screenshots/two-colors-dots.png",
+      "bytes": 6515048,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_flow/screenshots/two-colors-daisies.png",
+      "bytes": 6520819,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_flow/screenshots/isolated-save.json",
+      "bytes": 15647,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_flow/screenshots/two-color-panel-720.png",
+      "bytes": 948369,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/building_exit_flow/run.log",
+      "bytes": 1221,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232800-394268/pattern_colors_rules/run.log",
+      "bytes": 2413,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-153329-955080/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/building_editing_regression/run.log",
+      "bytes": 1906,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/building_editing_regression/screenshots/floor-drag-type-locked.png",
+      "bytes": 7084839,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/building_editing_regression/screenshots/wall-drag-type-locked.png",
+      "bytes": 7102216,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/building_editing_regression/screenshots/floor-thumbnail.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/building_editing_regression/screenshots/moved-furniture-visible.png",
+      "bytes": 7041849,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183606-615725/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132947-358695/interaction_revision_rules/run.log",
+      "bytes": 254,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-132947-358695/production_rules/run.log",
+      "bytes": 124,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-292094/save.json.bak",
+      "bytes": 8453,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-292094/save.json",
+      "bytes": 8679,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/valley_journey/run.log",
+      "bytes": 1180,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/valley_journey/screenshots/山谷-地图.png",
+      "bytes": 2902907,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/panda_valley_routine/run.log",
+      "bytes": 755,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/panda_valley_routine/screenshots/山谷-潘达夜眠.png",
+      "bytes": 5237017,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/npc_edge_flow/run.log",
+      "bytes": 2503,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/npc_edge_flow/screenshots/supported-bridge-corner.png",
+      "bytes": 7163836,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/navigation_roam/run.log",
+      "bytes": 729,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/valley_visitors_night/run.log",
+      "bytes": 1674,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-232112-201688/valley_visitors_night/screenshots/山谷-月光萤火.png",
+      "bytes": 5672168,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-297972/save.json.bak",
+      "bytes": 8454,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-store-297972/save.json",
+      "bytes": 8681,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/rules-293989/world.json.bak",
+      "bytes": 7119,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/rules-293989/world.json",
+      "bytes": 7117,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/chat-330874/world.json.bak",
+      "bytes": 8201,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/0.3.2/chat-330874/world.json",
+      "bytes": 8201,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-574153/save.json",
+      "bytes": 15626,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-153838-286999/project_integrity/run.log",
+      "bytes": 3531,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131656-916248/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131656-916248/building_revision_rules/run.log",
+      "bytes": 3127,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-185525-866496/project_integrity/run.log",
+      "bytes": 678,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160222-777286/building_grid_flow/run.log",
+      "bytes": 1192,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/seamless_home/run.log",
+      "bytes": 4060,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/seamless_home/screenshots/无缝小屋-bunny-沙发小憩.png",
+      "bytes": 6335366,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/seamless_home/screenshots/无缝小屋-cat_teacher-沙发小憩.png",
+      "bytes": 6392541,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/building_capacity/run.log",
+      "bytes": 5949,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/building_capacity/capacity.json",
+      "bytes": 8733,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/run.log",
+      "bytes": 2163,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2622800,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2035903,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2813188,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2915062,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2410335,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2498682,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2622359,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-193658-527430/home_lighting_stability/run.log",
+      "bytes": 2465,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-grid-before/migration-audit.json",
+      "bytes": 594,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-grid-before/source.tar.gz",
+      "bytes": 185402,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-grid-before/expected-save-sha.txt",
+      "bytes": 64,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-grid-before/migrated-layout.json",
+      "bytes": 13384,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-local/save-rules/single-player.json",
+      "bytes": 15542,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-local/save-rules/single-player.json.bak",
+      "bytes": 15542,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-161452-454735/building_capacity/run.log",
+      "bytes": 463,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131349-416255/building_flow/run.log",
+      "bytes": 2160,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131349-416255/building_flow/screenshots/constructed-interior.png",
+      "bytes": 8098952,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131349-416255/building_flow/screenshots/editor-room.png",
+      "bytes": 5911377,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_rules/run.log",
+      "bytes": 6716,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/run.log",
+      "bytes": 1851,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 7581326,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5116455,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 5803996,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7581884,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-191410-110822/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6161678,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-migrated-preview/run.log",
+      "bytes": 380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-migrated-preview/save.json",
+      "bytes": 23754,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-migrated-preview/current-layout.png",
+      "bytes": 2219043,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162510-000158/building_capacity/run.log",
+      "bytes": 4661,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-162510-000158/building_capacity/capacity.json",
+      "bytes": 6226,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-131203-024906/building_flow/run.log",
+      "bytes": 652,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-161609-492274/building_capacity/run.log",
+      "bytes": 3766,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/run.log",
+      "bytes": 3570,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 6862677,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 795,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 6886194,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_mouse_flow/run.log",
+      "bytes": 2162,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_mouse_flow/screenshots/built-from-empty.png",
+      "bytes": 7545228,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/run.log",
+      "bytes": 3667,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/fixture-lighting-night.png",
+      "bytes": 6687075,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/template-placement-preview.png",
+      "bytes": 5667881,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/lights-on.png",
+      "bytes": 6687885,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/bottom-catalog-selection.png",
+      "bytes": 6694785,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/new-building-interface.png",
+      "bytes": 7602460,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/furnished-room-fixture-lighting.png",
+      "bytes": 6700655,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/real-model-preview-conflict.png",
+      "bytes": 6715185,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/two-houses-bottom-catalog.png",
+      "bytes": 6768535,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/lights-off.png",
+      "bytes": 6656427,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-201644-510570/building_revision_flow/screenshots/real-model-preview-valid.png",
+      "bytes": 6721478,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231041-557065/npc_edge_flow/run.log",
+      "bytes": 2335,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-231041-557065/npc_edge_flow/screenshots/supported-bridge-corner.png",
+      "bytes": 7172024,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-183259-415062/building_editing_regression/run.log",
+      "bytes": 482,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/run.log",
+      "bytes": 3946,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 2712295,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 2368,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 2717538,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/run.log",
+      "bytes": 2693,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 6586970,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 5054802,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 7241979,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 7514066,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 6071974,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 6536960,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 6581288,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-203015-546552/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-160717-504834/building_store_rules/run.log",
+      "bytes": 772,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/seamless_home/run.log",
+      "bytes": 4061,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/seamless_home/screenshots/无缝小屋-bunny-沙发小憩.png",
+      "bytes": 6411913,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/seamless_home/screenshots/无缝小屋-cat_teacher-沙发小憩.png",
+      "bytes": 6391451,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_capacity/run.log",
+      "bytes": 5953,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_capacity/capacity.json",
+      "bytes": 8737,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/run.log",
+      "bytes": 2158,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7226831,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7264233,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7248803,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7248015,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6489936,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/production_rules/run.log",
+      "bytes": 124,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/city_rules/run.log",
+      "bytes": 2338,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163001-229521/home_lighting_stability/run.log",
+      "bytes": 2465,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-capacity-store/save.json.building",
+      "bytes": 53738,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-capacity-store/save.json.building.bak",
+      "bytes": 3747,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154454-369423/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/building-edit-fixes-before/source.tar.gz",
+      "bytes": 78736,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/run.log",
+      "bytes": 2402,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/bed-frame-appearance-preview.png",
+      "bytes": 2623908,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/free-full-indoor-camera.png",
+      "bytes": 2011645,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/first-indoor-camera-hint.png",
+      "bytes": 2788035,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/automatic-indoor-camera.png",
+      "bytes": 2891450,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/custom-room-whole-wall-occlusion.png",
+      "bytes": 2405107,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/free-occlusion-indoor-camera.png",
+      "bytes": 2487862,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/appearance_camera_flow/screenshots/bed-part-colors-and-pattern.png",
+      "bytes": 2622912,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-195002-934971/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-184111-170847/building_grid_rules/run.log",
+      "bytes": 1933,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-184111-170847/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-184111-170847/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-190738-175970/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-190738-175970/building_revision_rules/run.log",
+      "bytes": 3380,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-190738-175970/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213831-151035/appearance_rules/run.log",
+      "bytes": 7237,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213831-151035/city_rules/run.log",
+      "bytes": 2337,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213831-151035/progression_rules/run.log",
+      "bytes": 1452,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-213831-151035/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_catalog_rules/run.log",
+      "bytes": 9958,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/run.log",
+      "bytes": 3258,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/bed-dots.png",
+      "bytes": 6592154,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/daisies-cat_teacher.png",
+      "bytes": 2615528,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/shop-daisies.png",
+      "bytes": 2656452,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/shop-stripes.png",
+      "bytes": 2659665,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/isolated-save.json",
+      "bytes": 15666,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/daisies-bunny.png",
+      "bytes": 2624711,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/shop-dots.png",
+      "bytes": 2665304,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/bed-stripes.png",
+      "bytes": 6604467,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/daisies-panda.png",
+      "bytes": 2605360,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-215044-053068/material_expansion_flow/screenshots/bed-daisies.png",
+      "bytes": 6597089,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-571759/save.json",
+      "bytes": 15627,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_store_rules/run.log",
+      "bytes": 1003,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/run.log",
+      "bytes": 2158,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/screenshots/continuous-wall.png",
+      "bytes": 7239451,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/screenshots/floor-range-preview.png",
+      "bytes": 7288301,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/screenshots/wall-range-preview.png",
+      "bytes": 7273531,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/screenshots/floor-hole.png",
+      "bytes": 7256523,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/building_grid_flow/screenshots/independent-room-roof.png",
+      "bytes": 6492208,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-163313-906630/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154643-846722/building_flow/run.log",
+      "bytes": 2191,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154643-846722/building_flow/screenshots/constructed-interior.png",
+      "bytes": 2842418,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": ".qa-artifacts/20261103-154643-846722/building_flow/screenshots/editor-room.png",
+      "bytes": 2695338,
+      "reason": "regenerable QA output; named recovery/source snapshots preserved in private archive"
+    },
+    {
+      "path": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-bow_rose-正面.png.import",
+      "bytes": 1022,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-bow_rose-右侧.png.import",
+      "bytes": 1021,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/production-0.3.3/screenshots/蝴蝶结-全身试穿.png.import",
+      "bytes": 1013,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/automatic-indoor-camera.png.import",
+      "bytes": 1023,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/bed-part-colors-and-pattern.png.import",
+      "bytes": 1035,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/custom-room-whole-wall-occlusion.png.import",
+      "bytes": 1050,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/free-full-indoor-camera.png.import",
+      "bytes": 1023,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/free-occlusion-indoor-camera.png.import",
+      "bytes": 1038,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/appearance-camera-local/screenshots/first-indoor-camera-hint.png.import",
+      "bytes": 1025,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/production-local/screenshots/铜水壶-浇水动作.png.import",
+      "bytes": 1013,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/production-local/screenshots/铜叶工坊-制造面板.png.import",
+      "bytes": 1022,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/floor-range-preview.png.import",
+      "bytes": 1007,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/independent-room-roof.png.import",
+      "bytes": 1013,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/current-player-layout.png.import",
+      "bytes": 1013,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/floor-hole.png.import",
+      "bytes": 980,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/continuous-wall.png.import",
+      "bytes": 995,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-grid-local/screenshots/wall-range-preview.png.import",
+      "bytes": 1004,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/template-placement-preview.png.import",
+      "bytes": 1032,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/lights-off.png.import",
+      "bytes": 984,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/real-model-preview-conflict.png.import",
+      "bytes": 1035,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/furnished-room-fixture-lighting.png.import",
+      "bytes": 1046,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/two-houses-bottom-catalog.png.import",
+      "bytes": 1028,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/real-model-preview-valid.png.import",
+      "bytes": 1026,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/lights-on.png.import",
+      "bytes": 981,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-revision-local/screenshots/new-building-interface.png.import",
+      "bytes": 1020,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/plaza-flowerbed.png.import",
+      "bytes": 987,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/continuous-stone-roads.png.import",
+      "bytes": 1007,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/garden-earth.png.import",
+      "bytes": 978,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/terrain-materials-local/valley-path.png.import",
+      "bytes": 975,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/floor-icon.png.import",
+      "bytes": 983,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/table_lamp-icon.png.import",
+      "bytes": 998,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/pendant-icon.png.import",
+      "bytes": 990,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/appearance-without-selection-tint.png.import",
+      "bytes": 1053,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/lighting-catalog-icons.png.import",
+      "bytes": 1020,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/thumbnail-preview-local/screenshots/floor-catalog-and-detail-icons.png.import",
+      "bytes": 1043,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/cleanup-local-20261103/probes/placement-offset-audit.gd.uid",
+      "bytes": 19,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/cleanup-local-20261103/probes/catalog-doc-audit.gd.uid",
+      "bytes": 19,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/render_ab.gd.uid",
+      "bytes": 20,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/screenshots/city-workshop_night-baseline.png.import",
+      "bytes": 1041,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/screenshots/city-garden-baseline.png.import",
+      "bytes": 1017,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/screenshots/city-workshop_night-volumetric_fog.png.import",
+      "bytes": 1059,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/graphics-research-20261102/screenshots/city-garden-agx.png.import",
+      "bytes": 1002,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-edit-fixes-local/screenshots/floor-tool-thumbnail.png.import",
+      "bytes": 1015,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-edit-fixes-local/screenshots/wall-drag-type-locked.png.import",
+      "bytes": 1018,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-edit-fixes-local/screenshots/moved-furniture-visible.png.import",
+      "bytes": 1025,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-edit-fixes-local/screenshots/floor-drag-type-locked.png.import",
+      "bytes": 1022,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/probes/building-performance.gd.uid",
+      "bytes": 20,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/probes/environment-preview.gd.uid",
+      "bytes": 20,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/probes/normal-editor-source.gd.uid",
+      "bytes": 20,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/valley-wide.png.import",
+      "bytes": 990,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/bark.png.import",
+      "bytes": 968,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/beach.png.import",
+      "bytes": 971,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/built-interior.png.import",
+      "bytes": 999,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/before-fountain.png.import",
+      "bytes": 1002,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/building-exterior.png.import",
+      "bytes": 1008,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/walls.png.import",
+      "bytes": 972,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/building-editor.png.import",
+      "bytes": 1001,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/fountain.png.import",
+      "bytes": 981,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/cascade.png.import",
+      "bytes": 977,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/before-valley-wide.png.import",
+      "bytes": 1010,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-environment-local/screenshots/built-from-empty.png.import",
+      "bytes": 1005,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": "docs/evidence/building-controls-local/screenshots/storage-against-wall-night.png.import",
+      "bytes": 1032,
+      "reason": "Godot-generated metadata for archived evidence; not runtime asset import configuration"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/material_catalog_rules/run.log",
+      "bytes": 10384,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/run.log",
+      "bytes": 4086,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/screenshots/floor-catalog-and-detail-icons.png",
+      "bytes": 6850131,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/screenshots/floor-icon.png",
+      "bytes": 4630,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/screenshots/pendant-icon.png",
+      "bytes": 2208,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/screenshots/table_lamp-icon.png",
+      "bytes": 2368,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/thumbnail_preview_flow/screenshots/lighting-catalog-icons.png",
+      "bytes": 6839708,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/building_grid_rules/run.log",
+      "bytes": 1933,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/building_exit_flow/run.log",
+      "bytes": 1221,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/building_rules/run.log",
+      "bytes": 2742,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/pattern_colors_rules/run.log",
+      "bytes": 3013,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/20261103-235907-393505/project_integrity/run.log",
+      "bytes": 126,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    },
+    {
+      "path": ".qa-artifacts/building-local/save-rules/single-player.json",
+      "bytes": 15542,
+      "reason": "post-cleanup validation output; passing logs retained under docs/evidence"
+    }
+  ],
+  "completed_date": "2026-11-04"
+}

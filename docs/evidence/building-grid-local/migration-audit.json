@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "from_schema": 2,
+  "to_schema": 3,
+  "records_before": 84,
+  "records_after": 83,
+  "other_fields_equal": true,
+  "all_objects_and_roofs_equal": true,
+  "opening_world_anchors_equal": true,
+  "floor_cells_and_materials_equal": true,
+  "wall_edges_and_materials_equal": true,
+  "backup": "/Users/wangtaizhi/Library/Application Support/TutuWorld/island_city_v2.json.pre-grid-20261103-163535.bak",
+  "before_sha256": "7b7fca211ede14ff6ae1df1ae1cc9344331ceb25f27ddf83289b833ea587eb45",
+  "after_sha256": "9740b9f11c5f4ac08fe2d4d1b4bea17206be87cc9d7d791ab119520bad9d80db"
+}

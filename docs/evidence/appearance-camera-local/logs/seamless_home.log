@@ -1,0 +1,65 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=5
+PASS Two old west-side residences removed
+PASS Neighboring buildings remain
+PASS House keeps a real blueprint and four separately replaceable walls
+PASS Furnished single-floor house includes a physical ceiling
+PASS Every merged furniture and house mesh renders all its vertices
+PASS Actual controlled species: bunny
+PASS Closed physical door prevents walking through: bunny at (0.0, 0.171, 5.97586)
+PASS Door has the selected E action prompt: bunny
+PASS Closed door blocks the shared navigation cell
+PASS E opens a real animated door: bunny
+PASS Opening updates only the local navigation footprint
+PASS Walks directly from outside into the room: bunny at (0.0, 0.181, -0.243077)
+PASS Entry reuses the same map and scene without teleporting or loading
+PASS Feet meet the actual wood floor: bunny y=0.18099997937679
+PASS Roof disappears for viewing while its shadow geometry stays
+PASS Near-side cutaway keeps a visible low wall boundary
+PASS Door may swing through the actor without requiring them to move: bunny
+PASS Full indoor camera turn avoids repeated wall zooming: bunny min=13.1208305358887
+PASS Physical window sill / wall remains after visual cutaway: bunny
+PASS Shared sitting pose works on home_sofa: bunny
+PASS Rest returns to a clear exit without camera shake: home_sofa bunny
+PASS Shared sitting pose works on home_desk: bunny
+PASS Rest returns to a clear exit without camera shake: home_desk bunny
+PASS Walks back outside in the same world: bunny at (0.0, 0.076, 8.286514)
+PASS Roof restores smoothly outside
+PASS Door closes through the sweep and restores its navigation obstruction
+PASS Rabbit white skin now receives actual scene lights without changing its model
+PASS Warm room and porch lights remain active at night
+PASS Far streetlights remain lit; lighting does not wait for the player to approach
+WANDER_GRID_READY cells=14229 components=5
+PASS Two old west-side residences removed
+PASS Neighboring buildings remain
+PASS House keeps a real blueprint and four separately replaceable walls
+PASS Furnished single-floor house includes a physical ceiling
+PASS Every merged furniture and house mesh renders all its vertices
+PASS Actual controlled species: cat_teacher
+PASS Closed physical door prevents walking through: cat_teacher at (0.0, 0.170303, 5.815426)
+PASS Door has the selected E action prompt: cat_teacher
+PASS Closed door blocks the shared navigation cell
+PASS E opens a real animated door: cat_teacher
+PASS Opening updates only the local navigation footprint
+PASS Walks directly from outside into the room: cat_teacher at (0.0, 0.181, -0.34982)
+PASS Entry reuses the same map and scene without teleporting or loading
+PASS Feet meet the actual wood floor: cat_teacher y=0.18099994957447
+PASS Roof disappears for viewing while its shadow geometry stays
+PASS Near-side cutaway keeps a visible low wall boundary
+PASS Door may swing through the actor without requiring them to move: cat_teacher
+PASS Full indoor camera turn avoids repeated wall zooming: cat_teacher min=13.1216707229614
+PASS Physical window sill / wall remains after visual cutaway: cat_teacher
+PASS Shared sitting pose works on home_sofa: cat_teacher
+PASS Rest returns to a clear exit without camera shake: home_sofa cat_teacher
+PASS Shared sitting pose works on home_desk: cat_teacher
+PASS Rest returns to a clear exit without camera shake: home_desk cat_teacher
+PASS Walks back outside in the same world: cat_teacher at (0.0, 0.076, 8.399261)
+PASS Roof restores smoothly outside
+PASS Door closes through the sweep and restores its navigation obstruction
+PASS Warm room and porch lights remain active at night
+PASS Far streetlights remain lit; lighting does not wait for the player to approach
+SEAMLESS_HOME_RESULT PASS checks=57 failures=[]

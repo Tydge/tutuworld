@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-03",
+  "scope": "Local project/document cleanup and handoff; no gameplay rule changes, map/model regeneration, player data writes, network access, exports, deployment, commit or push",
+  "official": "0.3.3/build6/launcher2/protocol3",
+  "local_working_tree": "Existing unpublished environment/building changes retained; still uncommitted",
+  "cleanup": {
+    "manifest": "cleanup.json",
+    "files_removed": 870,
+    "symlinks_removed": 60,
+    "logical_bytes_removed": 1945715820,
+    "selected_previews_preserved": 9,
+    "preview_manifest": "preserved-previews.json",
+    "notes": "Logical source-file size; physical disk release may differ. New verification temporaries were also removed. Formal installers, packs, manifests, canonical build dependencies, engine imports, external archives and user state retained."
+  },
+  "source_preservation": {
+    "checked_files": 530,
+    "unchanged": 522,
+    "intentional_changes": [
+      "scripts/city/environment_materials.gd",
+      "scripts/building/module_factory.gd",
+      "scripts/building/site.gd",
+      "scripts/building/editor.gd",
+      "assets/terrain/ASSET_NOTES.md",
+      "assets/terrain/SURFACE_NOTES.md",
+      "tools/test_suites.json",
+      "tools/dev.py"
+    ],
+    "before_hashes": "before-source-hashes.json",
+    "note": "Only four runtime files lost unused imports/constants/state; two developer-tool files add the building suite/windowed option, and two terrain docs are updated. Every other captured source/test/model/map/shader/config/data file is byte-identical to task start."
+  },
+  "release_preservation": "release-preservation.json",
+  "tests": [
+    {
+      "name": "project_integrity",
+      "checks": 324,
+      "log": "logs/project_integrity.log",
+      "result": "PASS"
+    },
+    {
+      "name": "building_rules",
+      "checks": 41,
+      "log": "logs/building_rules.log",
+      "result": "PASS"
+    },
+    {
+      "name": "building_controls",
+      "checks": 34,
+      "log": "logs/building_controls.log",
+      "result": "PASS"
+    },
+    {
+      "name": "building_mouse_flow",
+      "checks": 27,
+      "log": "logs/building_mouse_flow.log",
+      "result": "PASS"
+    },
+    {
+      "name": "building_flow",
+      "checks": 27,
+      "log": "logs/building_flow.log",
+      "result": "PASS"
+    }
+  ],
+  "total_related_checks": 453,
+  "post_cleanup_integrity": 324,
+  "data_docs": {
+    "checks": 273,
+    "passed": 273,
+    "record": "data-doc-audit.json"
+  },
+  "documentation": {
+    "local_links_and_anchors_checked": 150,
+    "all_passed": true,
+    "guide_lines_before": 214,
+    "guide_lines_after": 133,
+    "validation_lines_before": 140,
+    "validation_lines_after": 49,
+    "canonical_entries": [
+      "docs/开发接手指南.md",
+      "docs/验证基线.md",
+      "docs/策划数值与机制/README.md",
+      "docs/建造模式与环境美化_本地首版.md",
+      "assets/terrain/SURFACE_NOTES.md",
+      "docs/服务器运维.md"
+    ],
+    "wrapper_entry": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/WORK_STATUS.md"
+  },
+  "checks": [
+    "Godot doctor resource paths",
+    "Python tool syntax and test-suite targets",
+    "git diff --check",
+    "Generated texture SHA256 against source manifests"
+  ],
+  "known_open_issue": {
+    "record": "placement-offset-audit.json",
+    "description": "Bed and desk asymmetric footprint offsets rotate opposite to module Y rotation; center discrepancy0.9m at90/270 degrees, aligned at0/180. Confirmed by engine coordinate audit, not included as passing physics placement checks. Correct with old-layout compatibility in a separate gameplay change."
+  },
+  "not_run": [
+    "Global gameplay regression",
+    "Multiplayer or external services",
+    "Windows runtime",
+    "200-element build stress benchmark"
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "started": "2026-11-03",
+  "completed": "2026-11-04",
+  "scope": "Clean regenerable QA data and dead declarations, consolidate current documentation, update local handoff; source commit/push authorized without deployment",
+  "cleanup": {
+    "files_removed": 776,
+    "logical_bytes_removed": 1876729664,
+    "manifest": "cleanup.json",
+    "private_archive": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/archives/2026-11-03-接手收尾备份.tar.gz",
+    "private_archive_sha256": "bb044037ae8d71f486ecbe275bb10c38a60cd3f1c26ec724c5817b2c9ff9f9a1"
+  },
+  "documentation": {
+    "canonical_building_guide": "docs/建造模式.md",
+    "removed_obsolete_documents": [
+      "docs/建造后续方案讨论.md",
+      "docs/建造模式与环境美化_本地首版.md"
+    ],
+    "handoff": "docs/开发接手指南.md",
+    "local_entry": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/WORK_STATUS.md",
+    "checked_markdown_files": 19,
+    "checked_local_links": 150,
+    "broken_links": 0,
+    "catalog": {
+      "items": 65,
+      "clothes": 30,
+      "starter_clothes": 9
+    }
+  },
+  "code_cleanup": [
+    "Unused Site.ENTRY constant after construction stopped teleporting the player",
+    "Unused editor_ui.catalog_title member",
+    "Unused Site preload in grid_layout",
+    "Removed a redundant blank line at module_factory.gd EOF found by the staged diff check"
+  ],
+  "preserved": [
+    "Release packages, dependency downloads, runtime assets/import settings and packed scenes",
+    "Fixed historical evidence and asset-generation provenance",
+    "Old-save migrations, color compatibility, tested fabric path alias and standalone generators",
+    "Real player save/checkpoint/backup files, credentials and running network-monitor data"
+  ],
+  "unchanged_protected_file_hashes": 105,
+  "live_sqlite_sidecars_excluded_from_static_hash_comparison": 2,
+  "tests": [
+    {
+      "name": "building_exit_flow",
+      "checks": 15,
+      "result": "PASS",
+      "log": "logs/building_exit_flow.log"
+    },
+    {
+      "name": "building_grid_rules",
+      "checks": 29,
+      "result": "PASS",
+      "log": "logs/building_grid_rules.log"
+    },
+    {
+      "name": "building_rules",
+      "checks": 41,
+      "result": "PASS",
+      "log": "logs/building_rules.log"
+    },
+    {
+      "name": "material_catalog_rules",
+      "checks": 155,
+      "result": "PASS",
+      "log": "logs/material_catalog_rules.log"
+    },
+    {
+      "name": "pattern_colors_rules",
+      "checks": 38,
+      "result": "PASS",
+      "log": "logs/pattern_colors_rules.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 355,
+      "result": "PASS",
+      "log": "logs/project_integrity.log"
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "checks": 43,
+      "result": "PASS",
+      "log": "logs/thumbnail_preview_flow.log"
+    }
+  ],
+  "total_checks": 676,
+  "doctor": "PASS",
+  "source_sha256": {
+    "README.md": "7cf7682c0c7f29112ddbe7cbcec56cd0bdbe0c4be5bcd0fa9e67b6317bfcbcd6",
+    "docs/开发接手指南.md": "8dce7e914435fc71b787237d7556103aa903536267cfa29aeded0951abdea2e6",
+    "docs/建造模式.md": "b925e68cb766c11fddad9d786a82a970e6efa97ca7b35733af2b3d318f53bb6c",
+    "docs/外观与纹理开发.md": "e50d1b7cd7a1010f73f1b0ef6ffeda49546052ef3063dd62c94c489decbbd1ed",
+    "docs/整理清单.md": "ba02eb942d1ae59b8fe151356817a489e66d8170331276ee288f6e81747f4f9a",
+    "docs/策划数值与机制/README.md": "5319aa16a6cf822ac1aea9c7556e35e2dadde2abeba9988c7a88cc1534423724",
+    "docs/策划数值与机制/04_物品商店与服装.md": "e875bfcddcc24c7f0f4181354d708751577792a6353a054fb34d58150ac139aa",
+    "scripts/building/site.gd": "e7570004444d3e3d7d26e91fcf382b3f927642ab9742dce69c97e399cb9b0f2a",
+    "scripts/building/editor_ui.gd": "41e966e026dda3afddc7c023a981b2e9c138ef9559f5d98bb8f78e0f4975ca1a",
+    "scripts/building/grid_layout.gd": "67bc915159fa5f7fa3ac4d6477837ed250838ecbe39c325a5327e0cdcf2188b7",
+    "scripts/building/module_factory.gd": "3c1e48f6e0743e0549915e6f63ba1ced15e0eb37218ab488b1976e22e3eb1d85"
+  },
+  "git_scope": "One source commit and push on existing main; release tag/configuration unchanged. Final commit is recorded in the local WORK_STATUS after push.",
+  "deployment": "No map regeneration, export, server operation, deployment or real player-progress writes."
+}

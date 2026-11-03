@@ -4,8 +4,14 @@ const DB=preload("res://scripts/services/game_data.gd")
 const Blooms=preload("res://scripts/city/meadow_blossoms.gd")
 static func off_pavement(world: Node3D,point: Vector3,radius: float) -> bool:
 	if Vector2(point.x,point.z).length()<10.1+radius: return false
-	for lane in world.get_node("Streets").get_children():
-		var floor_: StaticBody3D=lane.get_child(0)
+	var streets:=world.get_node("Streets")
+	if streets.has_meta("paved_footprints"):
+		for rect: Rect2 in streets.get_meta("paved_footprints"):
+			if rect.grow(radius+.025).has_point(Vector2(point.x,point.z)): return false
+		return true
+	for lane in streets.get_children():
+		var floor_: StaticBody3D=lane.get_node_or_null("WalkFloor")
+		if floor_==null: continue
 		var size_: Vector3=floor_.get_child(0).shape.size
 		var p: Vector3=lane.to_local(point)
 		if absf(p.x)<size_.x*.5+.69+radius and absf(p.z)<size_.z*.5+radius: return false

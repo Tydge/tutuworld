@@ -1,0 +1,188 @@
+{
+  "driver": "metal",
+  "output_texture": "(1920.0, 1080.0)",
+  "output_window": "(1920, 1080)",
+  "rows": [
+    {
+      "draws": 1133,
+      "frames": 121,
+      "median_ms": 9.937,
+      "p95_ms": 10.404,
+      "phase": "before",
+      "primitives": 2609821,
+      "round": 0,
+      "view": "fountain"
+    },
+    {
+      "draws": 1133,
+      "frames": 118,
+      "median_ms": 10.143,
+      "p95_ms": 11.173,
+      "phase": "before",
+      "primitives": 2609821,
+      "round": 1,
+      "view": "fountain"
+    },
+    {
+      "draws": 314,
+      "frames": 243,
+      "median_ms": 4.879,
+      "p95_ms": 5.499,
+      "phase": "before",
+      "primitives": 458566,
+      "round": 0,
+      "view": "beach"
+    },
+    {
+      "draws": 314,
+      "frames": 244,
+      "median_ms": 4.868,
+      "p95_ms": 5.467,
+      "phase": "before",
+      "primitives": 458566,
+      "round": 1,
+      "view": "beach"
+    },
+    {
+      "draws": 485,
+      "frames": 116,
+      "median_ms": 10.42,
+      "p95_ms": 10.946,
+      "phase": "before",
+      "primitives": 1697991,
+      "round": 0,
+      "view": "walls"
+    },
+    {
+      "draws": 485,
+      "frames": 116,
+      "median_ms": 10.266,
+      "p95_ms": 10.841,
+      "phase": "before",
+      "primitives": 1697991,
+      "round": 1,
+      "view": "walls"
+    },
+    {
+      "draws": 1142,
+      "frames": 120,
+      "median_ms": 10.031,
+      "p95_ms": 10.94,
+      "phase": "before",
+      "primitives": 2594180,
+      "round": 0,
+      "view": "bark"
+    },
+    {
+      "draws": 1142,
+      "frames": 122,
+      "median_ms": 9.818,
+      "p95_ms": 10.25,
+      "phase": "before",
+      "primitives": 2594180,
+      "round": 1,
+      "view": "bark"
+    },
+    {
+      "draws": 947,
+      "frames": 160,
+      "median_ms": 7.516,
+      "p95_ms": 8.061,
+      "phase": "before",
+      "primitives": 1492082,
+      "round": 0,
+      "view": "bridge"
+    },
+    {
+      "draws": 947,
+      "frames": 160,
+      "median_ms": 7.488,
+      "p95_ms": 8.065,
+      "phase": "before",
+      "primitives": 1492082,
+      "round": 1,
+      "view": "bridge"
+    },
+    {
+      "draws": 763,
+      "frames": 159,
+      "median_ms": 7.478,
+      "p95_ms": 8.062,
+      "phase": "before",
+      "primitives": 1304838,
+      "round": 0,
+      "view": "cascade"
+    },
+    {
+      "draws": 763,
+      "frames": 160,
+      "median_ms": 7.479,
+      "p95_ms": 7.923,
+      "phase": "before",
+      "primitives": 1304838,
+      "round": 1,
+      "view": "cascade"
+    },
+    {
+      "draws": 692,
+      "frames": 140,
+      "median_ms": 8.518,
+      "p95_ms": 9.103,
+      "phase": "before",
+      "primitives": 1337377,
+      "round": 0,
+      "view": "cottage"
+    },
+    {
+      "draws": 692,
+      "frames": 141,
+      "median_ms": 8.491,
+      "p95_ms": 9.015,
+      "phase": "before",
+      "primitives": 1337377,
+      "round": 1,
+      "view": "cottage"
+    },
+    {
+      "draws": 1448,
+      "frames": 128,
+      "median_ms": 9.333,
+      "p95_ms": 10.157,
+      "phase": "before",
+      "primitives": 2338532,
+      "round": 0,
+      "view": "woodland"
+    },
+    {
+      "draws": 1448,
+      "frames": 130,
+      "median_ms": 9.228,
+      "p95_ms": 9.771,
+      "phase": "before",
+      "primitives": 2338532,
+      "round": 1,
+      "view": "woodland"
+    },
+    {
+      "draws": 1117,
+      "frames": 133,
+      "median_ms": 9.008,
+      "p95_ms": 9.898,
+      "phase": "before",
+      "primitives": 1832537,
+      "round": 0,
+      "view": "valley-wide"
+    },
+    {
+      "draws": 1117,
+      "frames": 137,
+      "median_ms": 8.754,
+      "p95_ms": 9.289,
+      "phase": "before",
+      "primitives": 1832537,
+      "round": 1,
+      "view": "valley-wide"
+    }
+  ],
+  "scale": 0.98209273815155
+}

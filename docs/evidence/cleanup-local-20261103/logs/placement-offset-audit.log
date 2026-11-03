@@ -1,0 +1,10 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+OFFSET_AUDIT kind=bed yaw=0 center_error_m=0.0 result=ALIGNED
+OFFSET_AUDIT kind=bed yaw=90 center_error_m=0.9 result=OPEN
+OFFSET_AUDIT kind=bed yaw=180 center_error_m=0.0 result=ALIGNED
+OFFSET_AUDIT kind=bed yaw=270 center_error_m=0.9 result=OPEN
+OFFSET_AUDIT kind=desk yaw=0 center_error_m=0.0 result=ALIGNED
+OFFSET_AUDIT kind=desk yaw=90 center_error_m=0.9 result=OPEN
+OFFSET_AUDIT kind=desk yaw=180 center_error_m=0.0 result=ALIGNED
+OFFSET_AUDIT kind=desk yaw=270 center_error_m=0.9 result=OPEN

@@ -1,0 +1,56 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Asymmetric offset follows engine Y rotation: 0.0
+PASS Real standalone collider fits rotated footprint: bed 0.0
+PASS Real standalone collider fits rotated footprint: desk 0.0
+PASS Legacy bed splits into three independent elements without losing room: 0.0
+PASS Legacy bedside and attached lamp retain actual world pose: 0.0
+PASS Migration is idempotent across disk serialization: 0.0
+PASS Legacy exceptions do not permit new furniture overlap: 0.0
+PASS Asymmetric offset follows engine Y rotation: 90.0
+PASS Real standalone collider fits rotated footprint: bed 90.0
+PASS Real standalone collider fits rotated footprint: desk 90.0
+PASS Legacy bed splits into three independent elements without losing room: 90.0
+PASS Legacy bedside and attached lamp retain actual world pose: 90.0
+PASS Migration is idempotent across disk serialization: 90.0
+PASS Legacy exceptions do not permit new furniture overlap: 90.0
+PASS Asymmetric offset follows engine Y rotation: 180.0
+PASS Real standalone collider fits rotated footprint: bed 180.0
+PASS Real standalone collider fits rotated footprint: desk 180.0
+PASS Legacy bed splits into three independent elements without losing room: 180.0
+PASS Legacy bedside and attached lamp retain actual world pose: 180.0
+PASS Migration is idempotent across disk serialization: 180.0
+PASS Legacy exceptions do not permit new furniture overlap: 180.0
+PASS Asymmetric offset follows engine Y rotation: 270.0
+PASS Real standalone collider fits rotated footprint: bed 270.0
+PASS Real standalone collider fits rotated footprint: desk 270.0
+PASS Legacy bed splits into three independent elements without losing room: 270.0
+PASS Legacy bedside and attached lamp retain actual world pose: 270.0
+PASS Migration is idempotent across disk serialization: 270.0
+PASS Legacy exceptions do not permit new furniture overlap: 270.0
+PASS Independent object snaps onto a valid tabletop: table_lamp
+PASS Surface object cannot float unsupported: table_lamp
+PASS Independent object snaps onto a valid tabletop: small_plant
+PASS Surface object cannot float unsupported: small_plant
+PASS Independent object snaps onto a valid tabletop: book
+PASS Surface object cannot float unsupported: book
+PASS Independent object snaps onto a valid tabletop: cup
+PASS Surface object cannot float unsupported: cup
+PASS Independent object snaps onto a valid tabletop: letter
+PASS Surface object cannot float unsupported: letter
+PASS Independent object snaps onto a valid tabletop: clock
+PASS Surface object cannot float unsupported: clock
+PASS Moving and rotating a desk carries its attached light
+PASS Moved surface group remains valid
+PASS Deleting a support deletes attached objects as one layout operation
+PASS Deleting a lamp leaves its table intact
+PASS A lamp can move independently to another table
+PASS Pendant is attached to ceiling height with a valid roof
+PASS A pendant requires ceiling support
+PASS Removing a roof also removes its pendant
+PASS Unreadable layout retains original data for recovery
+PASS Whole house can be placed at a chosen point
+PASS A second complete house fits on empty space beside an existing one
+PASS Whole-house overlap is rejected before placement
+PASS Template copies receive unique stable IDs and correct support references
+BUILDING_REVISION_RULES_RESULT PASS checks=53 failures=[]

@@ -1,0 +1,26 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Clean cuff mesh attached to moving leg: bunny LeftLeg
+PASS Cloth stays outside the black/white leg surface: bunny
+PASS Clean cuff mesh attached to moving leg: bunny RightLeg
+PASS Cloth stays outside the black/white leg surface: bunny
+PASS Clean cuff mesh attached to moving leg: cat_teacher LeftLeg
+PASS Cloth stays outside the black/white leg surface: cat_teacher
+PASS Clean cuff mesh attached to moving leg: cat_teacher RightLeg
+PASS Cloth stays outside the black/white leg surface: cat_teacher
+PASS Clean cuff mesh attached to moving leg: panda LeftLeg
+PASS Cloth stays outside the black/white leg surface: panda
+PASS Clean cuff mesh attached to moving leg: panda RightLeg
+PASS Cloth stays outside the black/white leg surface: panda
+PASS Cuff follows the shared animated leg: bunny 站立
+PASS Cuff follows the shared animated leg: cat_teacher 站立
+PASS Cuff follows the shared animated leg: panda 站立
+PASS Cuff follows the shared animated leg: bunny 走路
+PASS Cuff follows the shared animated leg: cat_teacher 走路
+PASS Cuff follows the shared animated leg: panda 走路
+PASS Cuff follows the shared animated leg: bunny 跑步
+PASS Cuff follows the shared animated leg: cat_teacher 跑步
+PASS Cuff follows the shared animated leg: panda 跑步
+PASS Cuff geometry is cached once per species and reused
+TROUSER_COMPATIBILITY_RESULT PASS checks=22 failures=[]

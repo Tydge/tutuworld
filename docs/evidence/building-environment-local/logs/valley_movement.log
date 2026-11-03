@@ -1,0 +1,92 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=11554 components=26
+VALLEY_COMPONENTS 26
+PASS Reachable resource valley_branch_0
+PASS Height-aware path valley_branch_0
+PASS Reachable resource valley_branch_1
+PASS Height-aware path valley_branch_1
+PASS Reachable resource valley_branch_2
+PASS Height-aware path valley_branch_2
+PASS Reachable resource valley_branch_3
+PASS Height-aware path valley_branch_3
+PASS Reachable resource valley_branch_4
+PASS Height-aware path valley_branch_4
+PASS Reachable resource valley_birch_0
+PASS Height-aware path valley_birch_0
+PASS Reachable resource valley_birch_1
+PASS Height-aware path valley_birch_1
+PASS Reachable resource valley_birch_2
+PASS Height-aware path valley_birch_2
+PASS Reachable resource valley_birch_3
+PASS Height-aware path valley_birch_3
+PASS Reachable resource valley_birch_4
+PASS Height-aware path valley_birch_4
+PASS Reachable resource valley_orange_0
+PASS Height-aware path valley_orange_0
+PASS Reachable resource valley_orange_1
+PASS Height-aware path valley_orange_1
+PASS Reachable resource valley_orange_2
+PASS Height-aware path valley_orange_2
+PASS Reachable resource valley_orange_3
+PASS Height-aware path valley_orange_3
+PASS Reachable resource valley_orange_4
+PASS Height-aware path valley_orange_4
+PASS Reachable resource valley_copper_0
+PASS Height-aware path valley_copper_0
+PASS Reachable resource valley_copper_1
+PASS Height-aware path valley_copper_1
+PASS Reachable resource valley_copper_2
+PASS Height-aware path valley_copper_2
+PASS Reachable resource valley_copper_3
+PASS Height-aware path valley_copper_3
+PASS Reachable resource valley_iron_0
+PASS Height-aware path valley_iron_0
+PASS Reachable resource valley_iron_1
+PASS Height-aware path valley_iron_1
+PASS Reachable resource valley_limestone_0
+PASS Height-aware path valley_limestone_0
+PASS Reachable resource valley_limestone_1
+PASS Height-aware path valley_limestone_1
+PASS Reachable resource valley_limestone_2
+PASS Height-aware path valley_limestone_2
+PASS Reachable resource valley_limestone_3
+PASS Height-aware path valley_limestone_3
+PASS Reachable resource valley_sandstone_0
+PASS Height-aware path valley_sandstone_0
+PASS Reachable resource valley_sandstone_1
+PASS Height-aware path valley_sandstone_1
+PASS Connected cottage doorway and bed approach
+PASS Physical traversal bunny up low
+PASS Feet on actual height bunny up low y=2.00098395347595
+PASS Physical traversal bunny up high
+PASS Feet on actual height bunny up high y=4.00098371505737
+PASS Physical traversal bunny down high
+PASS Feet on actual height bunny down high y=2.00098419189453
+PASS Physical traversal bunny cottage steps
+PASS Feet on actual height bunny cottage steps y=4.00098371505737
+PASS Physical traversal bunny bridge
+PASS Feet on actual height bunny bridge y=0.00098393112421
+PASS Physical traversal cat_teacher up low
+PASS Feet on actual height cat_teacher up low y=2.00099968910217
+PASS Physical traversal cat_teacher up high
+PASS Feet on actual height cat_teacher up high y=4.00099992752075
+PASS Physical traversal cat_teacher down high
+PASS Feet on actual height cat_teacher down high y=2.02069139480591
+PASS Physical traversal cat_teacher cottage steps
+PASS Feet on actual height cat_teacher cottage steps y=4.00099992752075
+PASS Physical traversal cat_teacher bridge
+PASS Feet on actual height cat_teacher bridge y=0.00158137083054
+PASS Physical traversal panda up low
+PASS Feet on actual height panda up low y=2.00099968910217
+PASS Physical traversal panda up high
+PASS Feet on actual height panda up high y=4.00099992752075
+PASS Physical traversal panda down high
+PASS Feet on actual height panda down high y=2.00099992752075
+PASS Physical traversal panda cottage steps
+PASS Feet on actual height panda cottage steps y=4.00099992752075
+PASS Physical traversal panda bridge
+PASS Feet on actual height panda bridge y=0.00158155709505
+VALLEY_MOVEMENT_RESULT PASS checks=85 failures=[]

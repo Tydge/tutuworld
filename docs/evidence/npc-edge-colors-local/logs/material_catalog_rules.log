@@ -1,0 +1,159 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Material catalog has valid IDs, families, resources and scales: []
+PASS Data-defined clothing styles, colors, patterns and starter IDs validate: []
+PASS Existing clothing configuration is preserved exactly: apron_honey
+PASS Existing clothing configuration is preserved exactly: apron_rose
+PASS Existing clothing configuration is preserved exactly: apron_sage
+PASS Existing clothing configuration is preserved exactly: bell_blue
+PASS Existing clothing configuration is preserved exactly: bell_green
+PASS Existing clothing configuration is preserved exactly: bell_red
+PASS Existing clothing configuration is preserved exactly: beret_honey
+PASS Existing clothing configuration is preserved exactly: beret_plaid_honey
+PASS Existing clothing configuration is preserved exactly: beret_plaid_rose
+PASS Existing clothing configuration is preserved exactly: beret_plaid_sage
+PASS Existing clothing configuration is preserved exactly: beret_rose
+PASS Existing clothing configuration is preserved exactly: beret_sage
+PASS Existing clothing configuration is preserved exactly: bow_honey
+PASS Existing clothing configuration is preserved exactly: bow_plaid_honey
+PASS Existing clothing configuration is preserved exactly: bow_plaid_rose
+PASS Existing clothing configuration is preserved exactly: bow_plaid_sage
+PASS Existing clothing configuration is preserved exactly: bow_rose
+PASS Existing clothing configuration is preserved exactly: bow_sage
+PASS Existing clothing configuration is preserved exactly: overalls_honey
+PASS Existing clothing configuration is preserved exactly: overalls_rose
+PASS Existing clothing configuration is preserved exactly: overalls_sage
+PASS Existing clothing configuration is preserved exactly: scarf_blue
+PASS Existing clothing configuration is preserved exactly: scarf_green
+PASS Existing clothing configuration is preserved exactly: scarf_red
+PASS Existing clothing configuration is preserved exactly: vest_honey
+PASS Existing clothing configuration is preserved exactly: vest_rose
+PASS Existing clothing configuration is preserved exactly: vest_sage
+PASS Compatibility fixture covers all original 27 clothing IDs
+PASS New shop garments do not change starter gifts
+PASS Garment references a supported fabric and slot: apron_honey
+PASS Garment references a supported fabric and slot: apron_rose
+PASS Garment references a supported fabric and slot: apron_sage
+PASS Garment references a supported fabric and slot: bell_blue
+PASS Garment references a supported fabric and slot: bell_green
+PASS Garment references a supported fabric and slot: bell_red
+PASS Garment references a supported fabric and slot: beret_honey
+PASS Garment references a supported fabric and slot: beret_plaid_honey
+PASS Garment references a supported fabric and slot: beret_plaid_rose
+PASS Garment references a supported fabric and slot: beret_plaid_sage
+PASS Garment references a supported fabric and slot: beret_rose
+PASS Garment references a supported fabric and slot: beret_sage
+PASS Garment references a supported fabric and slot: bow_honey
+PASS Garment references a supported fabric and slot: bow_plaid_honey
+PASS Garment references a supported fabric and slot: bow_plaid_rose
+PASS Garment references a supported fabric and slot: bow_plaid_sage
+PASS Garment references a supported fabric and slot: bow_rose
+PASS Garment references a supported fabric and slot: bow_sage
+PASS Garment references a supported fabric and slot: overalls_honey
+PASS Garment references a supported fabric and slot: overalls_rose
+PASS Garment references a supported fabric and slot: overalls_sage
+PASS Garment references a supported fabric and slot: scarf_blue
+PASS Garment references a supported fabric and slot: scarf_green
+PASS Garment references a supported fabric and slot: scarf_red
+PASS Garment references a supported fabric and slot: vest_honey
+PASS Garment references a supported fabric and slot: vest_rose
+PASS Garment references a supported fabric and slot: vest_sage
+PASS Garment references a supported fabric and slot: vest_stripes_sage
+PASS Garment references a supported fabric and slot: apron_dots_rose
+PASS Garment references a supported fabric and slot: apron_daisies_sage
+PASS Every part resolves its material family: bed/frame
+PASS Every part resolves its material family: bed/sheet
+PASS Every part resolves its material family: bed/quilt
+PASS Every part resolves its material family: bed/pillow
+PASS Every part resolves its material family: bedside/body
+PASS Every part resolves its material family: bedside/handle
+PASS Every part resolves its material family: sofa/frame
+PASS Every part resolves its material family: sofa/body
+PASS Every part resolves its material family: sofa/seat
+PASS Every part resolves its material family: sofa/pillow
+PASS Every part resolves its material family: sofa/throw
+PASS Every part resolves its material family: chair/frame
+PASS Every part resolves its material family: chair/seat
+PASS Every part resolves its material family: tea_table/top
+PASS Every part resolves its material family: tea_table/legs
+PASS Every part resolves its material family: desk/top
+PASS Every part resolves its material family: desk/frame
+PASS Every part resolves its material family: desk/drawer
+PASS Every part resolves its material family: desk/handle
+PASS Every part resolves its material family: bookshelf/frame
+PASS Every part resolves its material family: bookshelf/back
+PASS Every part resolves its material family: hearth/base
+PASS Every part resolves its material family: hearth/surround
+PASS Every part resolves its material family: hearth/mantel
+PASS Every part resolves its material family: hearth/inside
+PASS Every part resolves its material family: hearth/logs
+PASS Every part resolves its material family: forest_cabinet/body
+PASS Every part resolves its material family: forest_cabinet/front
+PASS Every part resolves its material family: forest_cabinet/handle
+PASS Every part resolves its material family: table_lamp/base
+PASS Every part resolves its material family: table_lamp/stem
+PASS Every part resolves its material family: table_lamp/shade
+PASS Every part resolves its material family: pendant/stem
+PASS Every part resolves its material family: pendant/shade
+PASS Every part resolves its material family: book/cover
+PASS Every part resolves its material family: book/pages
+PASS Every part resolves its material family: standing_book/cover
+PASS Every part resolves its material family: cup/body
+PASS Every part resolves its material family: cup/drink
+PASS Every part resolves its material family: letter/paper
+PASS Every part resolves its material family: letter/ink
+PASS Every part resolves its material family: small_plant/pot
+PASS Every part resolves its material family: small_plant/rim
+PASS Every part resolves its material family: small_plant/soil
+PASS Every part resolves its material family: small_plant/leaves
+PASS Every part resolves its material family: clock/body
+PASS Every part resolves its material family: clock/face
+PASS Every part resolves its material family: clock/hands
+PASS Every part resolves its material family: forest_settee/frame
+PASS Every part resolves its material family: forest_settee/seat
+PASS Every part resolves its material family: forest_settee/pillow
+PASS Every part resolves its material family: forest_rug/fabric
+PASS Every part resolves its material family: forest_rug/edge
+PASS Every part resolves its material family: forest_planter/pot
+PASS Every part resolves its material family: forest_planter/rim
+PASS Every part resolves its material family: forest_planter/soil
+PASS Every part resolves its material family: forest_planter/leaves
+PASS Every part resolves its material family: flowerbed/stone
+PASS Every part resolves its material family: flowerbed/soil
+PASS Every part resolves its material family: flowerbed/leaves
+PASS Every part resolves its material family: flowerbed/flowers
+PASS Every part resolves its material family: fountain/stone
+PASS Every part resolves its material family: fountain/trim
+PASS Every part resolves its material family: fountain/tile
+PASS Every part resolves its material family: fountain/metal
+PASS Existing wood material order is unchanged
+PASS A specific part can restrict the shared choices without code
+PASS A part cannot opt into an incompatible material family
+PASS New fabric is shared by furniture and clothing: stripes
+PASS New fabric is excluded from the wooden bed frame: stripes
+PASS Pattern texture is shared while dye instances stay independent: stripes
+PASS Object colors cannot leak through shared textures: stripes
+PASS New pattern survives schema3 validation and JSON round-trip: stripes
+PASS New fabric is shared by furniture and clothing: dots
+PASS New fabric is excluded from the wooden bed frame: dots
+PASS Pattern texture is shared while dye instances stay independent: dots
+PASS Object colors cannot leak through shared textures: dots
+PASS New pattern survives schema3 validation and JSON round-trip: dots
+PASS New fabric is shared by furniture and clothing: daisies
+PASS New fabric is excluded from the wooden bed frame: daisies
+PASS Pattern texture is shared while dye instances stay independent: daisies
+PASS Object colors cannot leak through shared textures: daisies
+PASS New pattern survives schema3 validation and JSON round-trip: daisies
+PASS Existing clothing pattern sizes retain their original defaults
+PASS An individual garment can override its pattern scale
+PASS Unknown rendering-only patterns fall back to solid safely
+PASS Unknown saved furniture material IDs are rejected explicitly
+PASS AI fabric imports at 512px with mipmaps instead of loading the full original
+PASS AI fabric meets at the tile edges without a visible brightness jump
+PASS All sixteen AI tile regions contain motifs without empty central patches
+AI_FABRIC_METRICS {"bytes":1048575,"edge_mae":0.000750612789488514,"height":512,"maximum_region_coverage":0.20574951171875,"minimum_region_coverage":0.0997314453125,"mipmaps":true,"width":512}
+PASS A data-only registration automatically becomes a furniture choice
+PASS A data-only pattern works on the deformable quilt without a renderer branch
+PASS Explicit model part IDs work independently of mesh names and source colors
+PASS Legacy fabric entry delegates to the shared renderer and cache
+MATERIAL_CATALOG_RULES_RESULT PASS checks=155 failures=[]

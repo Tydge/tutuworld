@@ -1,0 +1,1106 @@
+{
+  "date": "2026-11-03",
+  "method": "Actual Godot GameData export compared with active item, crop, cooking and manufacturing Markdown tables",
+  "checks": 273,
+  "passed": 273,
+  "details": [
+    {
+      "check": "All62 item IDs documented",
+      "passed": true
+    },
+    {
+      "check": "seed_carrot name",
+      "passed": true
+    },
+    {
+      "check": "seed_carrot buy",
+      "passed": true
+    },
+    {
+      "check": "seed_carrot sell",
+      "passed": true
+    },
+    {
+      "check": "seed_carrot shop",
+      "passed": true
+    },
+    {
+      "check": "seed_lettuce name",
+      "passed": true
+    },
+    {
+      "check": "seed_lettuce buy",
+      "passed": true
+    },
+    {
+      "check": "seed_lettuce sell",
+      "passed": true
+    },
+    {
+      "check": "seed_lettuce shop",
+      "passed": true
+    },
+    {
+      "check": "seed_tomato name",
+      "passed": true
+    },
+    {
+      "check": "seed_tomato buy",
+      "passed": true
+    },
+    {
+      "check": "seed_tomato sell",
+      "passed": true
+    },
+    {
+      "check": "seed_tomato shop",
+      "passed": true
+    },
+    {
+      "check": "seed_pumpkin name",
+      "passed": true
+    },
+    {
+      "check": "seed_pumpkin buy",
+      "passed": true
+    },
+    {
+      "check": "seed_pumpkin sell",
+      "passed": true
+    },
+    {
+      "check": "seed_pumpkin shop",
+      "passed": true
+    },
+    {
+      "check": "herbicide name",
+      "passed": true
+    },
+    {
+      "check": "herbicide buy",
+      "passed": true
+    },
+    {
+      "check": "herbicide sell",
+      "passed": true
+    },
+    {
+      "check": "herbicide shop",
+      "passed": true
+    },
+    {
+      "check": "watering_can name",
+      "passed": true
+    },
+    {
+      "check": "watering_can buy",
+      "passed": true
+    },
+    {
+      "check": "watering_can sell",
+      "passed": true
+    },
+    {
+      "check": "watering_can shop",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can name",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can buy",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can sell",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can shop",
+      "passed": true
+    },
+    {
+      "check": "stone_hammer name",
+      "passed": true
+    },
+    {
+      "check": "stone_hammer buy",
+      "passed": true
+    },
+    {
+      "check": "stone_hammer sell",
+      "passed": true
+    },
+    {
+      "check": "stone_hammer shop",
+      "passed": true
+    },
+    {
+      "check": "pickaxe name",
+      "passed": true
+    },
+    {
+      "check": "pickaxe buy",
+      "passed": true
+    },
+    {
+      "check": "pickaxe sell",
+      "passed": true
+    },
+    {
+      "check": "pickaxe shop",
+      "passed": true
+    },
+    {
+      "check": "carrot name",
+      "passed": true
+    },
+    {
+      "check": "carrot buy",
+      "passed": true
+    },
+    {
+      "check": "carrot sell",
+      "passed": true
+    },
+    {
+      "check": "carrot shop",
+      "passed": true
+    },
+    {
+      "check": "lettuce name",
+      "passed": true
+    },
+    {
+      "check": "lettuce buy",
+      "passed": true
+    },
+    {
+      "check": "lettuce sell",
+      "passed": true
+    },
+    {
+      "check": "lettuce shop",
+      "passed": true
+    },
+    {
+      "check": "tomato name",
+      "passed": true
+    },
+    {
+      "check": "tomato buy",
+      "passed": true
+    },
+    {
+      "check": "tomato sell",
+      "passed": true
+    },
+    {
+      "check": "tomato shop",
+      "passed": true
+    },
+    {
+      "check": "pumpkin name",
+      "passed": true
+    },
+    {
+      "check": "pumpkin buy",
+      "passed": true
+    },
+    {
+      "check": "pumpkin sell",
+      "passed": true
+    },
+    {
+      "check": "pumpkin shop",
+      "passed": true
+    },
+    {
+      "check": "limestone name",
+      "passed": true
+    },
+    {
+      "check": "limestone buy",
+      "passed": true
+    },
+    {
+      "check": "limestone sell",
+      "passed": true
+    },
+    {
+      "check": "limestone shop",
+      "passed": true
+    },
+    {
+      "check": "copper name",
+      "passed": true
+    },
+    {
+      "check": "copper buy",
+      "passed": true
+    },
+    {
+      "check": "copper sell",
+      "passed": true
+    },
+    {
+      "check": "copper shop",
+      "passed": true
+    },
+    {
+      "check": "branch name",
+      "passed": true
+    },
+    {
+      "check": "branch buy",
+      "passed": true
+    },
+    {
+      "check": "branch sell",
+      "passed": true
+    },
+    {
+      "check": "branch shop",
+      "passed": true
+    },
+    {
+      "check": "sea_salt name",
+      "passed": true
+    },
+    {
+      "check": "sea_salt buy",
+      "passed": true
+    },
+    {
+      "check": "sea_salt sell",
+      "passed": true
+    },
+    {
+      "check": "sea_salt shop",
+      "passed": true
+    },
+    {
+      "check": "olive_oil name",
+      "passed": true
+    },
+    {
+      "check": "olive_oil buy",
+      "passed": true
+    },
+    {
+      "check": "olive_oil sell",
+      "passed": true
+    },
+    {
+      "check": "olive_oil shop",
+      "passed": true
+    },
+    {
+      "check": "cream name",
+      "passed": true
+    },
+    {
+      "check": "cream buy",
+      "passed": true
+    },
+    {
+      "check": "cream sell",
+      "passed": true
+    },
+    {
+      "check": "cream shop",
+      "passed": true
+    },
+    {
+      "check": "food_carrot_soup name",
+      "passed": true
+    },
+    {
+      "check": "food_carrot_soup buy",
+      "passed": true
+    },
+    {
+      "check": "food_carrot_soup sell",
+      "passed": true
+    },
+    {
+      "check": "food_carrot_soup shop",
+      "passed": true
+    },
+    {
+      "check": "food_garden_salad name",
+      "passed": true
+    },
+    {
+      "check": "food_garden_salad buy",
+      "passed": true
+    },
+    {
+      "check": "food_garden_salad sell",
+      "passed": true
+    },
+    {
+      "check": "food_garden_salad shop",
+      "passed": true
+    },
+    {
+      "check": "food_tomato_stew name",
+      "passed": true
+    },
+    {
+      "check": "food_tomato_stew buy",
+      "passed": true
+    },
+    {
+      "check": "food_tomato_stew sell",
+      "passed": true
+    },
+    {
+      "check": "food_tomato_stew shop",
+      "passed": true
+    },
+    {
+      "check": "food_pumpkin_soup name",
+      "passed": true
+    },
+    {
+      "check": "food_pumpkin_soup buy",
+      "passed": true
+    },
+    {
+      "check": "food_pumpkin_soup sell",
+      "passed": true
+    },
+    {
+      "check": "food_pumpkin_soup shop",
+      "passed": true
+    },
+    {
+      "check": "orange name",
+      "passed": true
+    },
+    {
+      "check": "orange buy",
+      "passed": true
+    },
+    {
+      "check": "orange sell",
+      "passed": true
+    },
+    {
+      "check": "orange shop",
+      "passed": true
+    },
+    {
+      "check": "copper_axe name",
+      "passed": true
+    },
+    {
+      "check": "copper_axe buy",
+      "passed": true
+    },
+    {
+      "check": "copper_axe sell",
+      "passed": true
+    },
+    {
+      "check": "copper_axe shop",
+      "passed": true
+    },
+    {
+      "check": "birch name",
+      "passed": true
+    },
+    {
+      "check": "birch buy",
+      "passed": true
+    },
+    {
+      "check": "birch sell",
+      "passed": true
+    },
+    {
+      "check": "birch shop",
+      "passed": true
+    },
+    {
+      "check": "iron name",
+      "passed": true
+    },
+    {
+      "check": "iron buy",
+      "passed": true
+    },
+    {
+      "check": "iron sell",
+      "passed": true
+    },
+    {
+      "check": "iron shop",
+      "passed": true
+    },
+    {
+      "check": "sandstone name",
+      "passed": true
+    },
+    {
+      "check": "sandstone buy",
+      "passed": true
+    },
+    {
+      "check": "sandstone sell",
+      "passed": true
+    },
+    {
+      "check": "sandstone shop",
+      "passed": true
+    },
+    {
+      "check": "seed_wheat name",
+      "passed": true
+    },
+    {
+      "check": "seed_wheat buy",
+      "passed": true
+    },
+    {
+      "check": "seed_wheat sell",
+      "passed": true
+    },
+    {
+      "check": "seed_wheat shop",
+      "passed": true
+    },
+    {
+      "check": "wheat name",
+      "passed": true
+    },
+    {
+      "check": "wheat buy",
+      "passed": true
+    },
+    {
+      "check": "wheat sell",
+      "passed": true
+    },
+    {
+      "check": "wheat shop",
+      "passed": true
+    },
+    {
+      "check": "honey name",
+      "passed": true
+    },
+    {
+      "check": "honey buy",
+      "passed": true
+    },
+    {
+      "check": "honey sell",
+      "passed": true
+    },
+    {
+      "check": "honey shop",
+      "passed": true
+    },
+    {
+      "check": "egg name",
+      "passed": true
+    },
+    {
+      "check": "egg buy",
+      "passed": true
+    },
+    {
+      "check": "egg sell",
+      "passed": true
+    },
+    {
+      "check": "egg shop",
+      "passed": true
+    },
+    {
+      "check": "food_honey_wheat_cake name",
+      "passed": true
+    },
+    {
+      "check": "food_honey_wheat_cake buy",
+      "passed": true
+    },
+    {
+      "check": "food_honey_wheat_cake sell",
+      "passed": true
+    },
+    {
+      "check": "food_honey_wheat_cake shop",
+      "passed": true
+    },
+    {
+      "check": "food_rustic_wheat_bread name",
+      "passed": true
+    },
+    {
+      "check": "food_rustic_wheat_bread buy",
+      "passed": true
+    },
+    {
+      "check": "food_rustic_wheat_bread sell",
+      "passed": true
+    },
+    {
+      "check": "food_rustic_wheat_bread shop",
+      "passed": true
+    },
+    {
+      "check": "food_vegetable_omelette name",
+      "passed": true
+    },
+    {
+      "check": "food_vegetable_omelette buy",
+      "passed": true
+    },
+    {
+      "check": "food_vegetable_omelette sell",
+      "passed": true
+    },
+    {
+      "check": "food_vegetable_omelette shop",
+      "passed": true
+    },
+    {
+      "check": "bow_rose name",
+      "passed": true
+    },
+    {
+      "check": "bow_rose buy",
+      "passed": true
+    },
+    {
+      "check": "bow_rose sell",
+      "passed": true
+    },
+    {
+      "check": "bow_rose shop",
+      "passed": true
+    },
+    {
+      "check": "bow_sage name",
+      "passed": true
+    },
+    {
+      "check": "bow_sage buy",
+      "passed": true
+    },
+    {
+      "check": "bow_sage sell",
+      "passed": true
+    },
+    {
+      "check": "bow_sage shop",
+      "passed": true
+    },
+    {
+      "check": "bow_honey name",
+      "passed": true
+    },
+    {
+      "check": "bow_honey buy",
+      "passed": true
+    },
+    {
+      "check": "bow_honey sell",
+      "passed": true
+    },
+    {
+      "check": "bow_honey shop",
+      "passed": true
+    },
+    {
+      "check": "beret_rose name",
+      "passed": true
+    },
+    {
+      "check": "beret_rose buy",
+      "passed": true
+    },
+    {
+      "check": "beret_rose sell",
+      "passed": true
+    },
+    {
+      "check": "beret_rose shop",
+      "passed": true
+    },
+    {
+      "check": "beret_sage name",
+      "passed": true
+    },
+    {
+      "check": "beret_sage buy",
+      "passed": true
+    },
+    {
+      "check": "beret_sage sell",
+      "passed": true
+    },
+    {
+      "check": "beret_sage shop",
+      "passed": true
+    },
+    {
+      "check": "beret_honey name",
+      "passed": true
+    },
+    {
+      "check": "beret_honey buy",
+      "passed": true
+    },
+    {
+      "check": "beret_honey sell",
+      "passed": true
+    },
+    {
+      "check": "beret_honey shop",
+      "passed": true
+    },
+    {
+      "check": "overalls_rose name",
+      "passed": true
+    },
+    {
+      "check": "overalls_rose buy",
+      "passed": true
+    },
+    {
+      "check": "overalls_rose sell",
+      "passed": true
+    },
+    {
+      "check": "overalls_rose shop",
+      "passed": true
+    },
+    {
+      "check": "overalls_sage name",
+      "passed": true
+    },
+    {
+      "check": "overalls_sage buy",
+      "passed": true
+    },
+    {
+      "check": "overalls_sage sell",
+      "passed": true
+    },
+    {
+      "check": "overalls_sage shop",
+      "passed": true
+    },
+    {
+      "check": "overalls_honey name",
+      "passed": true
+    },
+    {
+      "check": "overalls_honey buy",
+      "passed": true
+    },
+    {
+      "check": "overalls_honey sell",
+      "passed": true
+    },
+    {
+      "check": "overalls_honey shop",
+      "passed": true
+    },
+    {
+      "check": "vest_rose name",
+      "passed": true
+    },
+    {
+      "check": "vest_rose buy",
+      "passed": true
+    },
+    {
+      "check": "vest_rose sell",
+      "passed": true
+    },
+    {
+      "check": "vest_rose shop",
+      "passed": true
+    },
+    {
+      "check": "vest_sage name",
+      "passed": true
+    },
+    {
+      "check": "vest_sage buy",
+      "passed": true
+    },
+    {
+      "check": "vest_sage sell",
+      "passed": true
+    },
+    {
+      "check": "vest_sage shop",
+      "passed": true
+    },
+    {
+      "check": "vest_honey name",
+      "passed": true
+    },
+    {
+      "check": "vest_honey buy",
+      "passed": true
+    },
+    {
+      "check": "vest_honey sell",
+      "passed": true
+    },
+    {
+      "check": "vest_honey shop",
+      "passed": true
+    },
+    {
+      "check": "scarf_red name",
+      "passed": true
+    },
+    {
+      "check": "scarf_red buy",
+      "passed": true
+    },
+    {
+      "check": "scarf_red sell",
+      "passed": true
+    },
+    {
+      "check": "scarf_red shop",
+      "passed": true
+    },
+    {
+      "check": "bell_red name",
+      "passed": true
+    },
+    {
+      "check": "bell_red buy",
+      "passed": true
+    },
+    {
+      "check": "bell_red sell",
+      "passed": true
+    },
+    {
+      "check": "bell_red shop",
+      "passed": true
+    },
+    {
+      "check": "scarf_blue name",
+      "passed": true
+    },
+    {
+      "check": "scarf_blue buy",
+      "passed": true
+    },
+    {
+      "check": "scarf_blue sell",
+      "passed": true
+    },
+    {
+      "check": "scarf_blue shop",
+      "passed": true
+    },
+    {
+      "check": "bell_blue name",
+      "passed": true
+    },
+    {
+      "check": "bell_blue buy",
+      "passed": true
+    },
+    {
+      "check": "bell_blue sell",
+      "passed": true
+    },
+    {
+      "check": "bell_blue shop",
+      "passed": true
+    },
+    {
+      "check": "scarf_green name",
+      "passed": true
+    },
+    {
+      "check": "scarf_green buy",
+      "passed": true
+    },
+    {
+      "check": "scarf_green sell",
+      "passed": true
+    },
+    {
+      "check": "scarf_green shop",
+      "passed": true
+    },
+    {
+      "check": "bell_green name",
+      "passed": true
+    },
+    {
+      "check": "bell_green buy",
+      "passed": true
+    },
+    {
+      "check": "bell_green sell",
+      "passed": true
+    },
+    {
+      "check": "bell_green shop",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_rose name",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_rose buy",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_rose sell",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_rose shop",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_rose name",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_rose buy",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_rose sell",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_rose shop",
+      "passed": true
+    },
+    {
+      "check": "apron_rose name",
+      "passed": true
+    },
+    {
+      "check": "apron_rose buy",
+      "passed": true
+    },
+    {
+      "check": "apron_rose sell",
+      "passed": true
+    },
+    {
+      "check": "apron_rose shop",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_sage name",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_sage buy",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_sage sell",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_sage shop",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_sage name",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_sage buy",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_sage sell",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_sage shop",
+      "passed": true
+    },
+    {
+      "check": "apron_sage name",
+      "passed": true
+    },
+    {
+      "check": "apron_sage buy",
+      "passed": true
+    },
+    {
+      "check": "apron_sage sell",
+      "passed": true
+    },
+    {
+      "check": "apron_sage shop",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_honey name",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_honey buy",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_honey sell",
+      "passed": true
+    },
+    {
+      "check": "bow_plaid_honey shop",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_honey name",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_honey buy",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_honey sell",
+      "passed": true
+    },
+    {
+      "check": "beret_plaid_honey shop",
+      "passed": true
+    },
+    {
+      "check": "apron_honey name",
+      "passed": true
+    },
+    {
+      "check": "apron_honey buy",
+      "passed": true
+    },
+    {
+      "check": "apron_honey sell",
+      "passed": true
+    },
+    {
+      "check": "apron_honey shop",
+      "passed": true
+    },
+    {
+      "check": "carrot crop core fields",
+      "passed": true
+    },
+    {
+      "check": "lettuce crop core fields",
+      "passed": true
+    },
+    {
+      "check": "tomato crop core fields",
+      "passed": true
+    },
+    {
+      "check": "pumpkin crop core fields",
+      "passed": true
+    },
+    {
+      "check": "wheat crop core fields",
+      "passed": true
+    },
+    {
+      "check": "carrot_soup cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "garden_salad cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "tomato_stew cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "pumpkin_soup cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "honey_wheat_cake cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "rustic_wheat_bread cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "vegetable_omelette cooking core fields",
+      "passed": true
+    },
+    {
+      "check": "carrot_soup ingredients",
+      "passed": true
+    },
+    {
+      "check": "garden_salad ingredients",
+      "passed": true
+    },
+    {
+      "check": "tomato_stew ingredients",
+      "passed": true
+    },
+    {
+      "check": "pumpkin_soup ingredients",
+      "passed": true
+    },
+    {
+      "check": "honey_wheat_cake ingredients",
+      "passed": true
+    },
+    {
+      "check": "rustic_wheat_bread ingredients",
+      "passed": true
+    },
+    {
+      "check": "vegetable_omelette ingredients",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can manufacturing core fields",
+      "passed": true
+    },
+    {
+      "check": "copper_watering_can manufacturing ingredients",
+      "passed": true
+    },
+    {
+      "check": "copper_axe manufacturing core fields",
+      "passed": true
+    },
+    {
+      "check": "copper_axe manufacturing ingredients",
+      "passed": true
+    },
+    {
+      "check": "Documented species/plots/resources/clothing counts",
+      "passed": true
+    }
+  ],
+  "counts": {
+    "clothing": 27,
+    "plots": 48,
+    "resources": 46,
+    "species": 3
+  }
+}
