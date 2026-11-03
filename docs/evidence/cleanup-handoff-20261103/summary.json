@@ -17,8 +17,8 @@
     ],
     "handoff": "docs/开发接手指南.md",
     "local_entry": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/WORK_STATUS.md",
-    "checked_markdown_files": 19,
-    "checked_local_links": 150,
+    "checked_markdown_files": 22,
+    "checked_local_links": 158,
     "broken_links": 0,
     "catalog": {
       "items": 65,
@@ -38,7 +38,7 @@
     "Old-save migrations, color compatibility, tested fabric path alias and standalone generators",
     "Real player save/checkpoint/backup files, credentials and running network-monitor data"
   ],
-  "unchanged_protected_file_hashes": 105,
+  "unchanged_protected_file_hashes": 104,
   "live_sqlite_sidecars_excluded_from_static_hash_comparison": 2,
   "tests": [
     {
@@ -97,8 +97,10 @@
     "scripts/building/site.gd": "e7570004444d3e3d7d26e91fcf382b3f927642ab9742dce69c97e399cb9b0f2a",
     "scripts/building/editor_ui.gd": "41e966e026dda3afddc7c023a981b2e9c138ef9559f5d98bb8f78e0f4975ca1a",
     "scripts/building/grid_layout.gd": "67bc915159fa5f7fa3ac4d6477837ed250838ecbe39c325a5327e0cdcf2188b7",
-    "scripts/building/module_factory.gd": "3c1e48f6e0743e0549915e6f63ba1ced15e0eb37218ab488b1976e22e3eb1d85"
+    "scripts/building/module_factory.gd": "3c1e48f6e0743e0549915e6f63ba1ced15e0eb37218ab488b1976e22e3eb1d85",
+    "assets/terrain/SURFACE_NOTES.md": "867b6106c47ac77e9e2dae6c66fc119fc3e4d0607c78fd91e133d59d916398d9"
   },
-  "git_scope": "One source commit and push on existing main; release tag/configuration unchanged. Final commit is recorded in the local WORK_STATUS after push.",
-  "deployment": "No map regeneration, export, server operation, deployment or real player-progress writes."
+  "git_scope": "Source and final documentation-link correction pushed on the existing main branch; release tag/configuration unchanged. Final commit recorded in local WORK_STATUS.",
+  "deployment": "No map regeneration, export, server operation, deployment or real player-progress writes.",
+  "intentional_protected_documentation_change": "assets/terrain/SURFACE_NOTES.md: update the merged building-guide link; runtime asset bytes and import settings unchanged"
 }
