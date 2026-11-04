@@ -47,6 +47,10 @@ func _process(delta: float) -> void:
 			owner=city.session.online_locks.get(city.map_id+":dining",{}).get("owner","")
 			var remote_job: Dictionary=city.online_view.motion.get(owner,{}).get("job",{})
 			if remote_job.get("verb","")=="eat":job=remote_job
+	if cooking:
+		var target: Dictionary=city.targets.get(job.get("target","kitchen"),{})
+		if target.has("effect_anchor"):steam.global_position=target.effect_anchor.global_position
+		else:steam.global_position=city.scenery.get_node("Kitchen/PotSteam").global_position
 	steam.visible=cooking or city.preparing
 	if steam.visible:
 		for i in range(6):

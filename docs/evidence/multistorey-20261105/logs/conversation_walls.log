@@ -1,0 +1,33 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+PASS The merchant has no E prompt through the back wall: farm
+PASS A stale selection cannot open conversation/shop through the wall: farm
+PASS Offline authority denies buying through a wall without changing assets: farm
+PASS Selling is denied outside the shop as well
+PASS The actual counter approach keeps its merchant prompt: farm
+PASS Normal face-to-face merchant dialogue still works: farm
+PASS The second E interaction opens the correct shop: farm
+PASS Buying at the real counter succeeds
+PASS The merchant has no E prompt through the back wall: tools
+PASS A stale selection cannot open conversation/shop through the wall: tools
+PASS Offline authority denies buying through a wall without changing assets: tools
+PASS The actual counter approach keeps its merchant prompt: tools
+PASS Normal face-to-face merchant dialogue still works: tools
+PASS The second E interaction opens the correct shop: tools
+PASS The merchant has no E prompt through the back wall: clothes
+PASS A stale selection cannot open conversation/shop through the wall: clothes
+PASS Offline authority denies buying through a wall without changing assets: clothes
+PASS The actual counter approach keeps its merchant prompt: clothes
+PASS Normal face-to-face merchant dialogue still works: clothes
+PASS The second E interaction opens the correct shop: clothes
+PASS Ordinary NPCs also suppress their prompt through a wall
+PASS Direct ordinary-NPC interaction is blocked through a wall
+PASS Clearing the wall restores the ordinary NPC prompt
+PASS Unobstructed ordinary NPC dialogue works
+TUTU_SERVER_READY version=0.3.3 build=6
+PASS Server denies an outside-wall buy request independently
+PASS Server accepts a valid counter transaction
+PASS Server denies NPC conversation through a wall
+PASS Server accepts unobstructed NPC conversation
+CONVERSATION_WALLS_RESULT PASS checks=28 failures=[]

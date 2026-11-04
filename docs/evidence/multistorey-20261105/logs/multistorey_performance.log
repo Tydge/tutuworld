@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=15
+2026-11-05 00:42:43.199 Godot[96524:99650670] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+MULTISTOREY_PERFORMANCE {"camera_mode":0,"draws_median":1039.0,"frame_median_ms":12.497,"frame_p95_ms":12.931,"frames":161,"material_writes":27,"render_submission_median_ms":0.853999972343445,"scale":0.591552376747131,"shadow_draws_median":857.0,"stable_window":true,"storey":1,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE {"camera_mode":1,"draws_median":1735.0,"frame_median_ms":14.209,"frame_p95_ms":20.046,"frames":132,"material_writes":0,"render_submission_median_ms":1.58399999141693,"scale":0.591552376747131,"shadow_draws_median":843.0,"stable_window":true,"storey":1,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE {"camera_mode":2,"draws_median":1920.0,"frame_median_ms":16.095,"frame_p95_ms":21.584,"frames":123,"material_writes":198,"render_submission_median_ms":1.66999995708466,"scale":0.591552376747131,"shadow_draws_median":936.0,"stable_window":true,"storey":1,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE {"camera_mode":0,"draws_median":1222.0,"frame_median_ms":13.587,"frame_p95_ms":13.93,"frames":148,"material_writes":92,"render_submission_median_ms":1.0349999666214,"scale":0.591552376747131,"shadow_draws_median":1003.0,"stable_window":true,"storey":2,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE {"camera_mode":1,"draws_median":1761.0,"frame_median_ms":15.483,"frame_p95_ms":17.351,"frames":142,"material_writes":0,"render_submission_median_ms":1.692999958992,"scale":0.591552376747131,"shadow_draws_median":894.0,"stable_window":true,"storey":2,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE {"camera_mode":2,"draws_median":2025.0,"frame_median_ms":17.565,"frame_p95_ms":22.786,"frames":114,"material_writes":211,"render_submission_median_ms":1.83299994468689,"scale":0.591552376747131,"shadow_draws_median":976.0,"stable_window":true,"storey":2,"window":"(3024, 1890)"}
+MULTISTOREY_PERFORMANCE_RESULT PASS cases=6 previews=3

@@ -70,7 +70,10 @@ static func runs(walls: Dictionary) -> Array:
 		result.append(row)
 		for i in range(length_):pending.erase(p+step*i)
 	return result
-static func compress(layout: Dictionary,grid: Dictionary) -> Dictionary:
+static func compress(layout: Dictionary,grid: Dictionary,level: int=0) -> Dictionary:
+	var Storeys=preload("res://scripts/building/storeys.gd")
+	var other: Array=layout.elements.filter(func(row):return Storeys.of(row)!=level)
+	layout=Storeys.subset(layout,level)
 	var next:=layout.duplicate(true);var generated: Array=[]
 	if not grid.has("compressed_floor"):grid["compressed_floor"]=rectangles(grid.floors);grid["compressed_wall"]=runs(grid.walls)
 	for row in grid.compressed_floor+grid.compressed_wall:generated.append(row.duplicate(true))
@@ -97,7 +100,7 @@ static func compress(layout: Dictionary,grid: Dictionary) -> Dictionary:
 			if absf(float(row.a[1-axis])-opening.p[1-axis])>.001:continue
 			if opening.p[axis]<r.position[axis]-.001 or opening.p[axis]>r.end[axis]+.001:continue
 			opening.row.wall=row.id;opening.row.offset=Vector2(row.a[0],row.a[1]).distance_to(opening.p);break
-	next.elements=generated+retained;next.schema=3;return next
+	next.elements=generated+retained+other;next.schema=4;return next
 static func vertex_degrees(walls: Dictionary) -> Dictionary:
 	var vertices: Dictionary={}
 	for e in walls:
@@ -105,8 +108,10 @@ static func vertex_degrees(walls: Dictionary) -> Dictionary:
 			if not vertices.has(p):vertices[p]=[]
 			vertices[p].append(e)
 	return vertices
-static func cut(layout: Dictionary,bounds: Rect2,filter: String="all",only_edge: Variant=null) -> Dictionary:
-	var next:=layout.duplicate(true);var grid:=index(next.elements);var selected: Dictionary={};var old_walls: Dictionary={}
+static func cut(layout: Dictionary,bounds: Rect2,filter: String="all",only_edge: Variant=null,level: int=0) -> Dictionary:
+	var Storeys=preload("res://scripts/building/storeys.gd")
+	var other: Array=layout.elements.filter(func(row):return Storeys.of(row)!=level)
+	var next:=Storeys.subset(layout,level).duplicate(true);var grid:=index(next.elements);var selected: Dictionary={};var old_walls: Dictionary={}
 	for row in next.elements:
 		if row.type=="wall":old_walls[row.id]=row
 	if filter in ["all","floor"]:
@@ -127,5 +132,5 @@ static func cut(layout: Dictionary,bounds: Rect2,filter: String="all",only_edge:
 		for i in range(first,last):
 			var e:=Vector3i(i,plane_,0) if axis==0 else Vector3i(plane_,i,1)
 			if not grid.walls.has(e):selected[row.id]=true;break
-	next.elements=next.elements.filter(func(row):return not selected.has(row.id));next=compress(next,grid)
+	next.elements=next.elements.filter(func(row):return not selected.has(row.id));next=compress(next,grid,level);next.elements.append_array(other)
 	return next

@@ -1,0 +1,43 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-04 22:58:17.086 Godot[92598:99534155] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actual right drag rotates the construction view: 0
+PASS WASD follows the rotated camera, key=87 quarter=0
+PASS WASD follows the rotated camera, key=65 quarter=0
+PASS WASD follows the rotated camera, key=83 quarter=0
+PASS WASD follows the rotated camera, key=68 quarter=0
+PASS Shift-right drag follows the same rotated screen axes: 0
+PASS Actual right drag rotates the construction view: 1
+PASS WASD follows the rotated camera, key=87 quarter=1
+PASS WASD follows the rotated camera, key=65 quarter=1
+PASS WASD follows the rotated camera, key=83 quarter=1
+PASS WASD follows the rotated camera, key=68 quarter=1
+PASS Shift-right drag follows the same rotated screen axes: 1
+PASS Actual right drag rotates the construction view: 2
+PASS WASD follows the rotated camera, key=87 quarter=2
+PASS WASD follows the rotated camera, key=65 quarter=2
+PASS WASD follows the rotated camera, key=83 quarter=2
+PASS WASD follows the rotated camera, key=68 quarter=2
+PASS Shift-right drag follows the same rotated screen axes: 2
+PASS Actual right drag rotates the construction view: 3
+PASS WASD follows the rotated camera, key=87 quarter=3
+PASS WASD follows the rotated camera, key=65 quarter=3
+PASS WASD follows the rotated camera, key=83 quarter=3
+PASS WASD follows the rotated camera, key=68 quarter=3
+PASS Shift-right drag follows the same rotated screen axes: 3
+PASS Construction camera controls do not move the player
+PASS Existing structural layout accepts precise wall placement
+PASS Normal placement tool snaps storage to the wall: forest_cabinet
+PASS Rendered module and real collision share the precise wall pose: forest_cabinet
+PASS Normal placement tool snaps storage to the wall: bookshelf
+PASS Rendered module and real collision share the precise wall pose: bookshelf
+PASS Rotating near a wall rechecks and snaps the wider furniture body
+PASS Undo restores the precise wall-snapped placement
+PASS Snapped placement survives the exact persisted layout representation
+PASS Unlit construction has no invisible room key or fill lights
+BUILDING_CONTROLS_RESULT PASS checks=34 failures=[]

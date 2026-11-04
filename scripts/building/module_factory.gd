@@ -1,4 +1,6 @@
 extends RefCounted
+const Storeys=preload("res://scripts/building/storeys.gd")
+const Stairs=preload("res://scripts/building/stairs.gd")
 const G=preload("res://scripts/geometry.gd")
 const Layout=preload("res://scripts/building/layout.gd")
 const Catalog=preload("res://scripts/building/catalog.gd")
@@ -35,40 +37,47 @@ static func make(layout: Dictionary,city: Node3D) -> Node3D:
 	root.set_meta("buildable_reference",true);root.set_meta("module_type","player_building")
 	city.scenery.add_child(root)
 	var structure:=group(root,"Structure")
-	for id in ["Floor","Walls","Roof"]:group(structure,id)
+	for id in ["Floor","Walls","Roof","Stairs"]:group(structure,id)
 	for id in ["Furnishing","Doors","Lighting","Joints"]:group(root,id)
 	sync(root,layout,city);root.assembling=false;return root
 static func descriptor(path: String,row: Dictionary,geometry: Variant) -> Dictionary:
 	return {"path":path,"row":row,"signature":JSON.stringify(geometry).sha256_text()}
-static func structure_descriptors(layout: Dictionary,grid: Dictionary,previous: Dictionary={}) -> Dictionary:
+static func structure_descriptors(layout: Dictionary,_grid: Dictionary,previous: Dictionary={}) -> Dictionary:
+	var result: Dictionary={}
+	for level in range(Storeys.MAX):result.merge(story_descriptors(Storeys.subset(layout,level),Layout.walkable_grid(layout,level),previous,level))
+	return result
+static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dictionary,level: int) -> Dictionary:
+	var prefix: String="" if level==0 else "s%d_"%level
 	var result: Dictionary={};var chunks: Dictionary={}
 	for c in grid.floors:
 		var key:=Vector2i(floori(float(c.x)/Grid.CHUNK),floori(float(c.y)/Grid.CHUNK))
 		if not chunks.has(key):chunks[key]={}
 		chunks[key][c]=grid.floors[c]
 	for key in chunks:
-		var id:="floor_%d_%d"%[key.x,key.y];var ordered: Array=chunks[key].keys();ordered.sort();var fingerprint: Array=[]
+		var id:=prefix+"floor_%d_%d"%[key.x,key.y];var ordered: Array=chunks[key].keys();ordered.sort();var fingerprint: Array=[]
 		for c in ordered:fingerprint.append([c,Grid.style_key(chunks[key][c])])
 		var signature:=JSON.stringify(fingerprint).sha256_text()
 		if previous.has(id) and previous[id].signature==signature:result[id]=previous[id];continue
 		var rows:=Grid.rectangles(chunks[key])
-		result[id]={"path":"Structure/Floor","row":{"id":id,"type":"floor_chunk","rects":rows,"cells":chunks[key],"origin":Vector2(key)*Grid.CHUNK*.5},"signature":signature}
+		result[id]={"path":"Structure/Floor","row":{"id":id,"type":"floor_chunk","storey":level,"rects":rows,"cells":chunks[key],"origin":Vector2(key)*Grid.CHUNK*.5},"signature":signature}
 	for row in layout.elements:
 		if row.type=="floor":continue
 		if row.type=="object":continue
 		elif row.type=="wall":result[row.id]=descriptor("Structure/Walls",row,[row,wall_data(layout,row,Vector2.ZERO)])
 		elif row.type=="roof":result[row.id]=descriptor("Structure/Roof",row,row)
-		elif row.type in ["door","window"]:result[row.id]=descriptor("Doors",row,[row.type,row.color,row.style,row.painted])
+		elif row.type in ["door","window"]:result[row.id]=descriptor("Doors",row,[row.type,row.color,row.style,row.painted,row.get("form","classic"),row.get("default_open",true)])
+		elif row.type=="stairs":result[row.id]=descriptor("Structure/Stairs",row,[row.form,row.color,row.style])
+		elif row.type=="railing":result[row.id]=descriptor("Structure/Walls",row,row)
 	var vertices:=Grid.vertex_degrees(grid.walls)
 	for p in vertices:
 		var connected: Array=vertices[p]
 		if connected.size()!=1 and connected.size()!=2:continue
 		if connected.size()==2 and connected[0].z==connected[1].z:continue
-		var row: Dictionary=grid.walls[connected[0]];var id:="joint_%d_%d"%[p.x,p.y]
-		result[id]=descriptor("Joints",{"id":id,"type":"joint","point":Grid.point(p),"corner":connected.size()==2,"wall":row.id,"color":row.color,"axis":connected[0].z},[p,connected.size(),row.color])
+		var row: Dictionary=grid.walls[connected[0]];var id:=prefix+"joint_%d_%d"%[p.x,p.y]
+		result[id]=descriptor("Joints",{"id":id,"type":"joint","storey":level,"point":Grid.point(p),"corner":connected.size()==2,"wall":row.id,"color":row.color,"axis":connected[0].z},[p,connected.size(),row.color])
 	return result
 static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
-	var started:=Time.get_ticks_usec();var grid:=Layout.compiled(layout);var structure_key: String=grid.signature+JSON.stringify(layout.elements.filter(func(row):return row.type in ["roof","door","window"]))
+	var started:=Time.get_ticks_usec();var grid:=Layout.compiled(layout);var structure_key: String=JSON.stringify(layout.elements.filter(func(row):return row.type!="object"))
 	if root.get_meta("structure_key","")!=structure_key:root.set_meta("structure_descriptors",structure_descriptors(layout,grid,root.get_meta("structure_descriptors",{})));root.set_meta("structure_key",structure_key)
 	var desired: Dictionary=root.get_meta("structure_descriptors").duplicate()
 	for row in layout.elements:
@@ -86,25 +95,35 @@ static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
 		else:
 			module=build_module(root,layout,row,root.get_node(entry.path),city);root.render_cache[id]={"signature":entry.signature,"node":module};created+=1;mark_navigation(root,row)
 		if row.type in ["door","window"]:
-			module.position=Vector3(row.anchor[0]-Site.CENTER.x,.18 if row.type=="door" else 0.,row.anchor[1]-Site.CENTER.z);module.rotation.y=-(PI*.5 if row.axis==1 else 0.)+(PI if row.reverse else 0.);module.set_meta("outward",Vector3.BACK.rotated(Vector3.UP,module.rotation.y))
+			module.position=Vector3(row.anchor[0]-Site.CENTER.x,Storeys.elevation(row)+(.18 if row.type=="door" else 0.),row.anchor[1]-Site.CENTER.z);module.rotation.y=-(PI*.5 if row.axis==1 else 0.)+(PI if row.reverse else 0.);module.set_meta("outward",Vector3.BACK.rotated(Vector3.UP,module.rotation.y))
+		module.set_meta("storey",Storeys.of(row))
+		if row.type=="stairs":
+			var target:=Vector3(row.position[0]-Site.CENTER.x,Storeys.elevation(row)+.18,row.position[1]-Site.CENTER.z)
+			if module.position.distance_to(target)>.0001 or absf(module.rotation.y-deg_to_rad(row.yaw))>.0001:moved+=1;mark_navigation(root,root.render_cache[id].get("row",{}));mark_navigation(root,row)
+			module.position=target;module.rotation.y=deg_to_rad(row.yaw)
 		if row.type=="object":
 			var target:=Vector3(row.position[0]-Site.CENTER.x,.18+Layout.base_height(layout,row),row.position[1]-Site.CENTER.z)
 			if module.position.distance_to(target)>.0001 or absf(module.rotation.y-deg_to_rad(row.yaw))>.0001:moved+=1;mark_navigation(root,root.render_cache[id].get("row",{}));mark_navigation(root,row)
 			module.position=target;module.rotation.y=deg_to_rad(row.yaw)
 		root.render_cache[id]["row"]=row.duplicate(true)
-	root.configure(grid);root.blueprint=blueprint()
+		if not root.render_cache[id].has("bodies"):
+			var bodies: Array[RID]=[]
+			for body in module.find_children("*","CollisionObject3D",true,false):bodies.append(body.get_rid())
+			root.render_cache[id].bodies=bodies
+			root.render_cache[id].visuals=module.find_children("*","MeshInstance3D",true,false)
+	root.configure_layout(layout);root.blueprint=blueprint()
 	for entry in root.render_cache.values():
 		var row: Dictionary=entry.row
 		if row.type in ["wall","door","window"]:entry.node.set_meta("view_face",root.wall_faces.get(row.id if row.type=="wall" else row.wall,row.id))
 		elif row.type=="joint" and not row.corner:entry.node.set_meta("view_face",root.wall_faces.get(row.wall,row.id))
 	root.set_meta("building_definition",root.blueprint);root.floor_size=Site.PLOT.size
 	# Only new surfaces pass through the environment material binder.
-	if created>0 or removed>0:root.view_dirty=true
+	if created>0 or removed>0 or moved>0:root.view_dirty=true;root.storey_view_key=""
 	root.last_sync={"created":created,"removed":removed,"reused":reused,"moved":moved,"usec":Time.get_ticks_usec()-started,"modules":desired.size()}
 	return root.last_sync
 static func floor_material(row: Dictionary) -> Material:
 	var material:=ShaderMaterial.new()
-	if row.style in ["herringbone","terrazzo","botanical"]:
+	if row.style in ["herringbone","terrazzo","botanical","cottage_tile","glazed_tile"]:
 		material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",preload("res://scripts/building/structure_catalog.gd").pattern(row.style,true));material.set_shader_parameter("building_world_pattern",true)
 	elif row.style=="stone":material.shader=preload("res://assets/shaders/paving.gdshader");material.set_shader_parameter("paving_texture",preload("res://assets/terrain/village_stone_paving_v1.png"));material.set_shader_parameter("stone_color",Color(row.color))
 	elif row.style in ["brick","plaster"]:material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",2 if row.style=="brick" else 0);material.set_shader_parameter("building_world_pattern",true)
@@ -116,11 +135,11 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 	if prototype_key!="" and root.module_prototypes.has(prototype_key):
 		module=root.module_prototypes[prototype_key].duplicate();module.name=row.id;parent.add_child(module)
 		if row.type=="wall":pose_wall(module,row)
-		if row.type=="joint":module.position=Vector3(row.point.x-Site.CENTER.x,0,row.point.y-Site.CENTER.z)
+		if row.type=="joint":module.position=Vector3(row.point.x-Site.CENTER.x,Storeys.elevation(row),row.point.y-Site.CENTER.z)
 		finish_module(root,module,row);return module
 	match row.type:
 		"floor_chunk":
-			module=group(parent,row.id);module.position=Vector3(row.origin.x-Site.CENTER.x,0,row.origin.y-Site.CENTER.z);module.set_meta("build_grid_type","floor")
+			module=group(parent,row.id);module.position=Vector3(row.origin.x-Site.CENTER.x,Storeys.elevation(row),row.origin.y-Site.CENTER.z);module.set_meta("build_grid_type","floor")
 			build_floor_mesh(module,row)
 			var solid: Dictionary={}
 			for c in row.cells:solid[c]={"id":"floor","type":"floor","color":"ffffff","style":"original"}
@@ -128,10 +147,14 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 				var r:=Layout.rect(part);var mid: Vector2=r.get_center()-row.origin;b.floor_collision(module,Vector3(mid.x,.03,mid.y),Vector3(r.size.x,.30,r.size.y))
 		"wall":
 			b.blueprint.materials.plaster=row.color;b.build_wall(parent,wall_data(layout,row,Vector2(Site.CENTER.x,Site.CENTER.z)));module=parent.get_node(NodePath(row.id))
-			b.bake_section(module)
+			b.bake_section(module);module.position.y=Storeys.elevation(row)
 		"roof":
-			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,0,mid.y)
+			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
 			b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
+		"stairs":
+			module=group(parent,row.id);Stairs.build(b,module,row)
+		"railing":
+			module=group(parent,row.id);var a:=Vector3(row.a[0]-Site.CENTER.x,.18,row.a[1]-Site.CENTER.z);var end:=Vector3(row.b[0]-Site.CENTER.x,.18,row.b[1]-Site.CENTER.z);Stairs.rail(b,module,a,end);module.position.y=Storeys.elevation(row)
 		"object":
 			module=group(parent,row.id)
 			b.build_item(module,row.kind)
@@ -158,16 +181,18 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 				b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(module);b.bake_section(module.get_node("Hinge"))
 				if row.get("form","classic")=="classic" or row.painted:paint(module,row,true)
 				module.configure(city)
+				if not row.get("default_open",true):
+					module.door_open=false;module.door_angle=0.;module.door_target=0.;module.hinge.rotation.y=0.;module.portal.set_deferred("disabled",false)
 			var frame:=group(module,"Frame");frame.position.y=-.18 if row.type=="door" else 0.;b.build_opening(frame,0,opening);b.bake_section(frame)
 			if row.type=="window":
 				var picker:=StaticBody3D.new();picker.collision_layer=16;picker.collision_mask=0;var shape:=BoxShape3D.new();shape.size=Vector3(2.2,2.,.10);var collision:=CollisionShape3D.new();collision.shape=shape;collision.position.y=2.28;picker.add_child(collision);module.add_child(picker)
 		"joint":
-			module=group(parent,row.id);module.position=Vector3(row.point.x-Site.CENTER.x,0,row.point.y-Site.CENTER.z)
+			module=group(parent,row.id);module.position=Vector3(row.point.x-Site.CENTER.x,Storeys.elevation(row),row.point.y-Site.CENTER.z)
 			b.rounded(module,Vector3(0,2.38,0),Vector3(.30,4.4,.30) if row.corner else Vector3(.28,4.4,.28),.015,b.material("eee2c6"),"JunctionTrim");b.bake_section(module);module.set_meta("outward",Vector3.BACK if row.axis==0 else Vector3.RIGHT)
 	if prototype_key!="" and root.module_prototypes.size()<128:root.module_prototypes[prototype_key]=module.duplicate()
 	finish_module(root,module,row);return module
 static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
-	module.set_meta("module_type",row.type);module.set_meta("module_id",row.id)
+	module.set_meta("storey",Storeys.of(row));module.set_meta("module_type",row.type);module.set_meta("module_id",row.id)
 	if row.type not in ["floor_chunk","joint"]:module.set_meta("build_element_id",row.id)
 	if row.type=="object" and Catalog.OBJECTS[row.kind].get("bed",false):
 		for mesh in module.find_children("*","MeshInstance3D",true,false):
@@ -182,6 +207,7 @@ static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
 	preload("res://scripts/city/environment_materials.gd").apply(module)
 static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 	match row.type:
+		"stairs":return "stairs:"+JSON.stringify([row.form,row.color,row.style])
 		"object":
 			if row.kind in ["flowerbed","fountain"]:return ""
 			return "object:"+JSON.stringify([row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
@@ -193,7 +219,7 @@ static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 	return ""
 static func pose_wall(module: Node3D,row: Dictionary) -> void:
 	var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var direction: Vector2=(b-a).normalized()
-	module.position=Vector3((a.x+b.x)*.5-Site.CENTER.x,0,(a.y+b.y)*.5-Site.CENTER.z);module.rotation.y=-atan2(direction.y,direction.x);module.set_meta("outward",Vector3(-direction.y,0,direction.x))
+	module.position=Vector3((a.x+b.x)*.5-Site.CENTER.x,Storeys.elevation(row),(a.y+b.y)*.5-Site.CENTER.z);module.rotation.y=-atan2(direction.y,direction.x);module.set_meta("outward",Vector3(-direction.y,0,direction.x))
 static func build_floor_mesh(module: Node3D,row: Dictionary) -> void:
 	# Emit boxes directly into one mesh per material, without temporary nodes or surfaces per cell.
 	var groups: Dictionary={}
@@ -212,7 +238,7 @@ static func build_floor_mesh(module: Node3D,row: Dictionary) -> void:
 static func wall_data(layout: Dictionary,row: Dictionary,center: Vector2) -> Dictionary:
 	var openings: Array=[];var axis:=0 if is_equal_approx(row.a[1],row.b[1]) else 1;var first:=minf(row.a[axis],row.b[axis]);var last:=maxf(row.a[axis],row.b[axis]);var plane_: float=row.a[1-axis]
 	for item in layout.elements:
-		if item.type not in ["door","window"]:continue
+		if item.type not in ["door","window"] or Storeys.of(item)!=Storeys.of(row):continue
 		var p: Vector2
 		if item.has("anchor"):
 			if item.axis!=axis:continue
@@ -231,7 +257,8 @@ static func mark_navigation(root: Node3D,row: Dictionary) -> void:
 	if row.is_empty():return
 	var bounds:=Rect2()
 	if row.type=="object":bounds=Catalog.footprint(row)
-	elif row.type in ["wall","roof"]:bounds=Layout.rect(row).grow(.4)
+	elif row.type=="stairs":bounds=Stairs.bounds(row)
+	elif row.type in ["wall","roof","railing"]:bounds=Layout.rect(row).grow(.4)
 	elif row.type=="floor_chunk":bounds=Rect2(row.origin,Vector2.ONE*4.)
 	elif row.type in ["door","window"]:bounds=Rect2(Vector2(row.anchor[0],row.anchor[1])-Vector2.ONE*2.,Vector2.ONE*4.)
 	if bounds.size==Vector2.ZERO:return

@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Collinear wall drags merge into one continuous styled run
+PASS Range demolition removes only selected wall edges and splits the remaining run
+PASS Wall selection addresses a single half-metre edge
+PASS Single click removes only one wall edge
+PASS Floor cells are logically independent but stored as one compact rectangle
+PASS Deleting one floor cell preserves and compacts the surrounding floor
+PASS Exact support catches a tiny off-sample hole missed by nine-point sampling
+PASS Furniture cannot span a missing floor cell
+PASS Painting one floor cell preserves total floor coverage
+PASS Door remains anchored across differently painted wall edges
+PASS Cutting wall far from a door preserves its world position
+PASS Cutting a door's support removes the door in the same transaction
+PASS Closed wall loop forms a room
+PASS Internal wall separates two independent rooms
+PASS Removing part of an internal wall merges rooms
+PASS Opening the exterior wall changes the enclosed region to outdoors
+PASS Two separated houses form independent rooms
+PASS An uncovered floor alone is not an indoor room
+PASS Floor range demolition removes unsupported furniture and dependent fixtures atomically
+PASS Demolition preview is pure and does not mutate the original layout
+PASS Fragmented floor and wall data survive exact save round-trip
+PASS Furniture budget counts objects separately from floor cells
+PASS Object budget rejects one above the tested limit
+PASS The actual light limit is usable with valid ceiling attachments
+PASS Shadow-casting fixtures have a separate capacity budget
+PASS The wall-edge length limit is independent of furniture count
+PASS Exceeding the wall-edge budget is rejected
+PASS The fragmented-wall budget allows the tested limit
+PASS Fragmented walls have a separate render-cost guardrail
+BUILDING_GRID_RULES_RESULT PASS checks=29 failures=[]

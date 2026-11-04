@@ -92,6 +92,15 @@
       "building_exit_flow",
       "pattern_colors_rules",
       "pattern_colors_flow"
+    ],
+    "multistorey": [
+      "multistorey_rules",
+      "multistorey_persistence_rules",
+      "multistorey_interactions",
+      "multistorey_flow",
+      "multistorey_showcase_walk",
+      "multistorey_editor_flow",
+      "multistorey_visual"
     ]
   },
   "tests": {
@@ -240,6 +249,36 @@
       "headless": true
     },
     "conversation_walls": {
+      "headless": true
+    },
+    "multistorey_rules": {
+      "headless": true
+    },
+    "multistorey_interactions": {
+      "headless": true
+    },
+    "multistorey_flow": {
+      "headless": true
+    },
+    "multistorey_visual": {
+      "script": "multistorey_flow",
+      "args": [
+        "--skip-walk"
+      ]
+    },
+    "multistorey_migration": {
+      "headless": true
+    },
+    "multistorey_editor_flow": {},
+    "multistorey_performance": {
+      "args": [
+        "--benchmark"
+      ]
+    },
+    "multistorey_persistence_rules": {
+      "headless": true
+    },
+    "multistorey_showcase_walk": {
       "headless": true
     }
   }

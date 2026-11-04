@@ -12,7 +12,7 @@ static func inside_side(plan: Dictionary,row: Dictionary,camera: Vector2) -> Str
 	if sides.negative!="" and sides.positive=="":return "negative"
 	return "positive" if (camera-L.rect(row).get_center()).dot(C.normal(row))>=0. else "negative"
 static func paint(layout: Dictionary,unit: Dictionary,color: Color,style: String,batch: bool,face_mode: int,camera: Vector2) -> Dictionary:
-	var source:=L.compiled(layout);var plan:=R.make(source)
+	var source:=L.compiled(layout,int(unit.get("storey",0)));var plan:=R.make(source)
 	var grid:={"floors":source.floors.duplicate(),"walls":source.walls.duplicate()}
 	var finish:={"color":color.to_html(false),"style":style,"painted":true}
 	if unit.type=="floor":
@@ -38,4 +38,4 @@ static func paint(layout: Dictionary,unit: Dictionary,color: Color,style: String
 			else:
 				row["faces"]=row.get("faces",{}).duplicate(true);row.faces[target_side]=finish.duplicate()
 			grid.walls[edge]=row
-	return G.compress(layout,grid)
+	return G.compress(layout,grid,int(unit.get("storey",0)))

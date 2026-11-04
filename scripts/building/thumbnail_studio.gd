@@ -52,6 +52,8 @@ func render_next() -> void:
 				for opening in data.openings:opening.geometry_only=false
 				builder.build_wall(model,data);walls.append(data)
 		builder.blueprint.walls=walls;model.set_script(preload("res://scripts/building/room_door.gd"));var door:=Node3D.new();model.add_child(door);builder.build_door(door)
+	elif id=="stairs":preload("res://scripts/building/stairs.gd").build(builder,model,{"form":form if form in ["straight","l","u"] else "straight","color":"c6a373"})
+	elif id=="railing":preload("res://scripts/building/stairs.gd").rail(builder,model,Vector3(-2,0,0),Vector3(2,0,0))
 	elif Catalog.OBJECTS.has(id):builder.build_item(model,id)
 	else:
 		match id:

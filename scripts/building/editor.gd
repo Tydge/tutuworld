@@ -1,4 +1,10 @@
 extends Node
+const Storeys=preload("res://scripts/building/storeys.gd")
+const Stairs=preload("res://scripts/building/stairs.gd")
+var editing_storey:=0
+var show_entire:=false
+var entire_previous_roof:=false
+var template_kind:="cottage"
 const Grid=preload("res://scripts/building/grid_layout.gd")
 const Layout=preload("res://scripts/building/layout.gd")
 const Catalog=preload("res://scripts/building/catalog.gd")
@@ -57,8 +63,13 @@ var wall_hint: Dictionary={}
 var preview_walls: Array=[]
 func _ready() -> void:
 	layout=Layout.normalize(city.session.state().get("build_layout",{}))
+	if not city.session.test_mode:
+		var added:=preload("res://scripts/building/showcase.gd").ensure(layout)
+		if added!=layout:
+			var result: Dictionary=city.session.set_build_layout(added)
+			if result.ok:layout=result.layout
 	ui=preload("res://scripts/building/editor_ui.gd").new();ui.editor=self;add_child(ui)
-	var shape:=PlaneMesh.new();shape.size=Site.PLOT.size;grid=MeshInstance3D.new();grid.mesh=shape;grid.position=Site.CENTER+Vector3(0,.205,0);grid.position.z=Site.PLOT.get_center().y
+	var shape:=PlaneMesh.new();shape.size=Site.PLOT.size;grid=MeshInstance3D.new();grid.mesh=shape;grid.position=Vector3(Site.PLOT.get_center().x,.205,Site.PLOT.get_center().y)
 	var material:=ShaderMaterial.new();material.shader=preload("res://assets/shaders/build_grid.gdshader");grid.material_override=material;grid.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(grid);grid.hide()
 	ghost=MeshInstance3D.new();var box:=BoxMesh.new();box.size=Vector3.ONE;ghost.mesh=box;ghost_material=StandardMaterial3D.new();ghost_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ghost_material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ghost_material.cull_mode=BaseMaterial3D.CULL_DISABLED;ghost.material_override=ghost_material;ghost.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(ghost);ghost.hide()
 	selection_outline=MeshInstance3D.new();selection_outline.name="BuildSelectionOutline";selection_outline.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(selection_outline)
@@ -68,7 +79,7 @@ func open_editor() -> Dictionary:
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
 	active=true;previous_active=city.session.active;city.session.active=false;city.paused=true;city.bunny.can_move=false;city.bunny.velocity=Vector3.ZERO;city.hud.hide();InputGuard.release_controls()
 	for npc in city.npcs:npc_modes[npc]=npc.process_mode;npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.velocity=Vector3.ZERO
-	grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
+	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if Site.PLOT.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Site.CENTER;focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
 	if layout.has("recovery_message"):ui.message("旧布局需要恢复，原记录已保留，请先勿清空地块。",true)
 	return {"ok":true}
 func close_editor() -> void:
@@ -82,6 +93,7 @@ func close_editor() -> void:
 	npc_modes.clear()
 	if is_instance_valid(room):
 		room.set_editor_view(false,false);room.set_process(true);room.get_node("Structure/Roof").show()
+		room.storey_view_key="";room.apply_storey_visibility(city.bunny.global_position)
 		for section in room.sections:
 			section.alpha=1.;section.target=1.
 			for material in section.materials:material.set_shader_parameter("opacity",1.)
@@ -90,7 +102,7 @@ func close_editor() -> void:
 	InputGuard.release_controls();city.paused=false;city.session.active=previous_active;city.bunny.can_move=true;city.bunny.velocity=Vector3.ZERO;city.bunny.reset_physics_interpolation();city.session.set_player_position(city.bunny.position)
 	city.camera_focus=city.bunny.position+Vector3.UP*1.35;city.camera.position=city.bunny.position+Vector3(5,8,13);city.hud.show();city.update_target()
 	if is_instance_valid(city.navigation) and is_instance_valid(room) and room.pending_navigation.size!=Vector2.ZERO:
-		var bounds: Rect2=room.pending_navigation.grow(.6);city.navigation.refresh_region(AABB(Vector3(bounds.position.x,-1,bounds.position.y),Vector3(bounds.size.x,8,bounds.size.y)));room.pending_navigation=Rect2()
+		var bounds: Rect2=room.pending_navigation.grow(.6);city.navigation.refresh_region(AABB(Vector3(bounds.position.x,-1,bounds.position.y),Vector3(bounds.size.x,Storeys.MAX*Storeys.HEIGHT+4,bounds.size.y)));room.pending_navigation=Rect2()
 	if not city.session.save_game():city.hud.notify("进度合并保存失败；建造检查点仍保留，请稍后重试。")
 func rebuild() -> void:
 	ghost_key="";highlighted_key="";clear_highlight();clear_preview()
@@ -105,6 +117,8 @@ func rebuild() -> void:
 			if not door.has_method("door_action_position"):continue
 			city.targets["build:"+str(door.name)]={"kind":"home_door","name":"我的小屋","node":door,"anchor":door.get_node("ActionAnchor"),"position":door.door_action_position(),"radius":3.8}
 		for module in room.get_node("Furnishing").get_children():
+			if module.has_node("WorkAnchor"):
+				city.targets["build:"+str(module.name)]={"kind":"kitchen","node":module,"name":"青瓷料理台","anchor":module.get_node("ActionAnchor"),"work_anchor":module.get_node("WorkAnchor"),"effect_anchor":module.get_node("EffectAnchor"),"position":module.get_node("ActionAnchor").global_position,"radius":2.6}
 			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.global_position,"radius":1.65,"label":"坐下来休息一会"}
 			if module.has_node("SleepExit"):
 				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.global_position,"radius":1.65}
@@ -119,8 +133,8 @@ func choose_tool(id: String) -> void:
 	ui.appearance_panel.close()
 	restore_moving()
 	var parts:=id.split(":")
-	structure_form=parts[1] if parts.size()==2 and parts[0] in ["door","window","roof"] else "classic"
-	if parts[0] in ["door","window","roof"]:id=parts[0]
+	structure_form=parts[1] if parts.size()==2 and parts[0] in ["door","window","roof","stairs"] else ("straight" if parts[0]=="stairs" else "classic")
+	if parts[0] in ["door","window","roof","stairs"]:id=parts[0]
 	tool=id;start_point=null;moving_id="";moving_unit.clear();demolition_start=null;demolition_target_type="";demolition_dragging=false;demolition_candidate.clear();demolition_key="";rotation=0.;ghost_key="";ghost.hide();clear_preview()
 	if id.begins_with("object:"):ui.show_category(Catalog.OBJECTS[id.trim_prefix("object:")].category)
 	if id!="select":
@@ -139,8 +153,11 @@ func set_roof_visible(value: bool) -> void:
 	room.set_process(false);room.get_node("Structure/Roof").visible=value
 	apply_editor_cutaway()
 func apply_editor_cutaway() -> void:
-	if is_instance_valid(room):room.set_editor_view(true,show_roof)
+	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,show_entire)
 func commit(candidate: Dictionary,history: bool=true) -> bool:
+	# Editing cannot remove the support beneath the paused player or strand them upstairs.
+	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
+		ui.message("角色正在使用这层地板或楼梯，请先步行离开再修改。",true);return false
 	var result: Dictionary=city.session.set_build_layout(candidate)
 	if not result.ok:ui.message(result.message,true);return false
 	if result.layout==layout:return true
@@ -162,11 +179,14 @@ func redo() -> void:
 	choose_tool("select")
 	var next: Dictionary=redo_stack[-1];var previous:=layout.duplicate(true)
 	if commit(next,false):redo_stack.pop_back();undo_stack.append(previous);selected_id="";selected_unit.clear();refresh_ui()
-func place_template() -> bool:
+func place_template(kind: String="cottage") -> bool:
+	template_kind=kind;set_storey(0)
 	choose_tool("template");ui.message("整栋样板房跟随鼠标 · 点击空地放置 · Esc 取消")
 	return true
 func clear_plot() -> void:
-	if commit(Layout.empty()):selected_id="";choose_tool("select")
+	var empty:=Layout.empty()
+	if layout.has("multistorey_showcase"):empty.multistorey_showcase=layout.multistorey_showcase
+	if commit(empty):selected_id="";choose_tool("select")
 func paint_selected(color: Color,style: String) -> void:
 	if selected_id=="":return
 	if selected_row().get("type","")=="object":
@@ -231,23 +251,24 @@ func delete_selected() -> void:
 	var candidate:=Layout.remove(layout,selected_id)
 	if not selected_unit.is_empty():
 		var r:=Layout.rect(selected_unit)
-		candidate=Layout.demolish(layout,r,"floor") if selected_unit.type=="floor" else Layout.demolish(layout,r.grow(.001),"wall",Grid.edges(selected_unit)[0])
+		candidate=Layout.demolish(layout,r,"floor",null,editing_storey) if selected_unit.type=="floor" else Layout.demolish(layout,r.grow(.001),"wall",Grid.edges(selected_unit)[0],editing_storey)
 	if commit(candidate):
 		selected_id="";selected_unit.clear()
 		if tool=="move":choose_tool("select")
 		refresh_ui()
 func rotate_selected() -> void:
-	if tool.begins_with("object:") or tool=="move":rotation=fposmod(rotation+90.,360.);ghost_key="";return
+	if tool.begins_with("object:") or tool in ["move","stairs"]:rotation=fposmod(rotation+90.,360.);ghost_key="";return
 	var next:=layout.duplicate(true);var row:=Layout.find(next,selected_id)
-	if row.get("type","")!="object":return
+	if row.get("type","") not in ["object","stairs"]:return
 	row.yaw=fposmod(float(row.yaw)+90.,360.)
-	var snapped:=Layout.snap_object(next,row) if Catalog.mount(row)=="floor" else Layout.attach_at(next,row,Vector2(row.position[0],row.position[1]),str(row.support),int(row.support_level));row.position=snapped.position
+	var snapped:=Layout.snap_object(next,row) if row.type=="stairs" or Catalog.mount(row)=="floor" else Layout.attach_at(next,row,Vector2(row.position[0],row.position[1]),str(row.support),int(row.support_level));row.position=snapped.position
 	commit(Layout.replace(layout,row))
 func begin_move() -> void:
 	ui.appearance_panel.close()
 	if selected_id=="":return
 	moving_unit=selected_unit.duplicate(true);moving_id=selected_id;tool="move";start_point=null;rotation=float(Layout.find(layout,selected_id).get("yaw",0));ghost_key="";refresh_ui()
 	if is_instance_valid(room):
+		if room.render_cache.has(moving_id):room.render_cache[moving_id].node.hide()
 		for module in room.get_node("Furnishing").get_children():
 			var row:=Layout.find(layout,str(module.name))
 			if str(module.name)==moving_id or row.get("support","")==moving_id:module.hide()
@@ -258,10 +279,10 @@ func point_at(mouse: Vector2) -> Variant:
 	if placing in ["door","window"]:
 		var nearest:=250.
 		for wall in layout.elements:
-			if wall.type!="wall":continue
+			if wall.type!="wall" or Storeys.of(wall)!=editing_storey:continue
 			var a:=Vector3(wall.a[0],0,wall.a[1]);var end:=Vector3(wall.b[0],0,wall.b[1]);var along: Vector3=(end-a).normalized();var normal:=Vector3(-along.z,0,along.x)
 			var hit: Variant=Plane(normal,normal.dot(a)).intersects_ray(origin,direction)
-			if hit==null or hit.y<.18 or hit.y>4.58:continue
+			if hit==null or hit.y<.18+editing_storey*Storeys.HEIGHT or hit.y>4.58+editing_storey*Storeys.HEIGHT:continue
 			var offset: float=(hit-a).dot(along);var distance_: float=origin.distance_to(hit)
 			if offset<0. or offset>a.distance_to(end) or distance_>=nearest:continue
 			var snapped_offset:=snappedf(offset,.5);var snapped_point:=a+along*snapped_offset
@@ -273,37 +294,38 @@ func point_at(mouse: Vector2) -> Variant:
 		if mount=="surface":
 			var best: Variant=null;var gap:=INF
 			for parent in layout.elements:
-				if parent.type!="object" or not Catalog.OBJECTS[parent.kind].has("surface"):continue
+				if Storeys.of(parent)!=editing_storey or parent.type!="object" or not Catalog.OBJECTS[parent.kind].has("surface"):continue
 				var definition: Dictionary=Catalog.OBJECTS[parent.kind];var levels: Array=definition.get("surface_levels",[definition.surface_height])
 				for level in range(levels.size()):
-					var point: Variant=Plane(Vector3.UP,.18+float(levels[level])).intersects_ray(origin,direction)
+					var point: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT+float(levels[level])).intersects_ray(origin,direction)
 					if point==null:continue
 					var local:=Catalog.rotate_xz(Vector2(point.x-parent.position[0],point.z-parent.position[1]),-float(parent.yaw))
 					if Rect2(definition.get("surface_offset",Vector2.ZERO)-definition.surface*.5,definition.surface).has_point(local) and origin.distance_to(point)<gap:best=point;gap=origin.distance_to(point);placement_support=parent.id;placement_level=level
 			if best!=null:return Vector2(snappedf(best.x,.05),snappedf(best.z,.05))
 		elif mount=="ceiling":
-			var point: Variant=Plane(Vector3.UP,4.58).intersects_ray(origin,direction)
+			var point: Variant=Plane(Vector3.UP,4.58+editing_storey*Storeys.HEIGHT).intersects_ray(origin,direction)
 			if point!=null:return Vector2(snappedf(point.x,.1),snappedf(point.z,.1))
-	var hit: Variant=Plane(Vector3.UP,.18).intersects_ray(origin,direction)
+	var hit: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT).intersects_ray(origin,direction)
 	if hit==null:return null
 	return Vector2(snappedf(hit.x,.5),snappedf(hit.z,.5))
 func closest_wall(point_: Vector2) -> Dictionary:
 	if not wall_hint.is_empty() and point_.distance_to(wall_hint.point)<.01:return wall_hint
 	var best: Dictionary={};var gap:=2.5
 	for row in layout.elements:
-		if row.type!="wall":continue
+		if row.type!="wall" or Storeys.of(row)!=editing_storey:continue
 		var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var dir: Vector2=(b-a).normalized();var offset: float=clampf((point_-a).dot(dir),0,a.distance_to(b));var distance_to: float=point_.distance_to(a+dir*offset)
 		if distance_to<gap:gap=distance_to;best={"wall":row.id,"offset":snappedf(offset,.5)}
 	return best
 func row_at(point_: Vector2) -> Dictionary:
-	var row:={"type":tool,"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
-	if tool in ["door","window","roof"] and structure_form!="classic":row.form=structure_form
+	var row:={"type":tool,"storey":editing_storey,"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
+	if tool in ["door","window","roof","stairs"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y]}
-	if tool.begins_with("object:"):row.type="object";row.kind=tool.trim_prefix("object:");row.position=[point_.x,point_.y];row.yaw=rotation;row.painted=brush_painted
-	elif tool in ["floor","roof","wall"]:
+	if tool=="stairs":row.form=structure_form;row.position=[point_.x,point_.y];row.yaw=rotation
+	elif tool.begins_with("object:"):row.type="object";row.kind=tool.trim_prefix("object:");row.position=[point_.x,point_.y];row.yaw=rotation;row.painted=brush_painted
+	elif tool in ["floor","roof","wall","railing"]:
 		if start_point==null:return {}
 		var end:=point_
-		if tool=="wall":end=Vector2(point_.x,start_point.y) if absf(point_.x-start_point.x)>=absf(point_.y-start_point.y) else Vector2(start_point.x,point_.y)
+		if tool in ["wall","railing"]:end=Vector2(point_.x,start_point.y) if absf(point_.x-start_point.x)>=absf(point_.y-start_point.y) else Vector2(start_point.x,point_.y)
 		row.a=[start_point.x,start_point.y];row.b=[end.x,end.y]
 	elif tool in ["door","window"]:
 		var near:=closest_wall(point_)
@@ -312,7 +334,7 @@ func row_at(point_: Vector2) -> Dictionary:
 	elif tool=="move":
 		row=(moving_unit if not moving_unit.is_empty() else Layout.find(layout,moving_id)).duplicate(true)
 		if row.is_empty():return {}
-		if row.type=="object":row.position=[point_.x,point_.y];row.yaw=rotation
+		if row.type in ["object","stairs"]:row.position=[point_.x,point_.y];row.yaw=rotation
 		elif row.type in ["door","window"]:
 			var near:=closest_wall(point_)
 			if near.is_empty():return {}
@@ -323,17 +345,20 @@ func row_at(point_: Vector2) -> Dictionary:
 	if row.type=="object" and Catalog.mount(row)!="floor":return Layout.attach_at(layout,row,point_,placement_support,placement_level)
 	return Layout.snap_object(layout,row)
 func candidate_layout(row: Dictionary) -> Dictionary:
-	if row.type=="template":return Layout.merge_template(layout,preload("res://scripts/building/templates.gd").cottage(),Vector2(row.position[0],row.position[1]))
+	if row.type=="template":return Layout.merge_template(layout,template_source(),Vector2(row.position[0],row.position[1]))
 	if moving_id=="":return Layout.add(layout,row)
 	return Layout.replace_unit(layout,moving_unit,row) if not moving_unit.is_empty() else Layout.replace(layout,row)
 func place_at(point_: Vector2) -> bool:
-	if tool in ["floor","wall","roof"] and start_point==null:start_point=point_;return true
+	if tool in ["floor","wall","roof","railing"] and start_point==null:start_point=point_;return true
 	var row:=row_at(point_)
 	if row.is_empty():ui.message("请把门窗放到足够长的墙面上。",true);return false
+	var placed_id: String=row.get("id","build_%d"%layout.next_id)
 	if not commit(candidate_layout(row)):return false
 	if moving_id!="":restore_moving();ghost.hide()
 	if row.type=="template":selected_id="";selected_unit.clear();refresh_ui();return true
-	selected_id=row.get("id",layout.elements[-1].id);start_point=null;clear_preview()
+	selected_id=placed_id;selected_unit.clear()
+	if row.type in ["floor","wall"]:reselect_unit(row)
+	start_point=null;clear_preview()
 	if moving_id!="":
 		var unit_move:=not moving_unit.is_empty();moving_id="";moving_unit.clear();selected_unit.clear();tool="select"
 		if unit_move:reselect_unit(row)
@@ -346,6 +371,8 @@ func element_id(node: Node) -> String:
 func pick_at(mouse: Vector2) -> String:
 	var origin: Vector3=city.camera.project_ray_origin(mouse);var direction: Vector3=city.camera.project_ray_normal(mouse);var query:=PhysicsRayQueryParameters3D.create(origin,origin+direction*250,28)
 	var excluded: Array[RID]=[]
+	if is_instance_valid(room):
+		excluded.assign(room.other_storey_bodies)
 	var hidden_walls: Dictionary={}
 	if is_instance_valid(room) and not show_roof:
 		for section in room.sections:
@@ -362,30 +389,31 @@ func pick_at(mouse: Vector2) -> String:
 		var node: Node=hit.collider
 		while node!=null and node!=city.scenery:
 			if node.get_meta("build_grid_type","")=="floor":
-				var floor_: Dictionary=Layout.compiled(layout).floors.get(Grid.cell(picked_world),{});picked_id=str(floor_.get("id",""));break
+				var floor_: Dictionary=Layout.walkable_grid(layout,editing_storey).floors.get(Grid.cell(picked_world),{});picked_id=str(floor_.get("id",""));break
 			node=node.get_parent()
 	# A cutaway changes visibility, not physics. Pick the visible low wall without
 	# letting its hidden upper collision intercept furniture selection.
 	for row in layout.elements:
-		if row.type!="wall":continue
+		if row.type!="wall" or Storeys.of(row)!=editing_storey:continue
 		var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var dir: Vector2=(b-a).normalized();var normal:=Vector3(-dir.y,0,dir.x)
 		var point_: Variant=Plane(normal,normal.dot(Vector3(a.x,0,a.y))).intersects_ray(origin,direction)
 		if point_==null:continue
-		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var top:=.80 if hidden_walls.has(row.id) else 4.58
-		if along>=0 and along<=a.distance_to(b) and point_.y>=.18 and point_.y<top and origin.distance_to(point_)<max_distance+.15:picked_id=row.id;picked_world=Vector2(point_.x,point_.z);max_distance=origin.distance_to(point_)
+		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var top: float=(.80 if hidden_walls.has(row.id) else 4.58)+editing_storey*Storeys.HEIGHT
+		if along>=0 and along<=a.distance_to(b) and point_.y>=.18+editing_storey*Storeys.HEIGHT and point_.y<top and origin.distance_to(point_)<max_distance+.15:picked_id=row.id;picked_world=Vector2(point_.x,point_.z);max_distance=origin.distance_to(point_)
 	# Real window holes have no blocking pane collider; pick their wall-plane opening.
 	for row in layout.elements:
-		if row.type not in ["door","window"]:continue
+		if row.type not in ["door","window"] or Storeys.of(row)!=editing_storey:continue
 		var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(b-a).normalized();var normal:=Vector3(-dir.y,0,dir.x)
 		var point_: Variant=Plane(normal,normal.dot(Vector3(a.x,0,a.y))).intersects_ray(origin,direction)
 		if point_==null:continue
-		if hidden_walls.has(row.wall) and point_.y>.8:continue
-		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var width:=2.86 if row.type=="door" else 2.2;var bottom:=.18 if row.type=="door" else 1.28;var height:=3.5 if row.type=="door" else 2.
+		if hidden_walls.has(row.wall) and point_.y>.8+editing_storey*Storeys.HEIGHT:continue
+		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var width:=2.86 if row.type=="door" else 2.2;var bottom: float=(.18 if row.type=="door" else 1.28)+editing_storey*Storeys.HEIGHT;var height:=3.5 if row.type=="door" else 2.
 		if absf(along-row.offset)<width*.5+.13 and point_.y>bottom-.1 and point_.y<bottom+height+.15 and origin.distance_to(point_)<max_distance+.2:picked_id=row.id;picked_world=Vector2(point_.x,point_.z);max_distance=origin.distance_to(point_)
 	for row in layout.elements:
-		if row.type!="object" or not Catalog.OBJECTS[row.kind].get("overlay",false):continue
-		var p: Variant=Plane(Vector3.UP,.245).intersects_ray(origin,direction)
+		if Storeys.of(row)!=editing_storey or row.type!="object" or not Catalog.OBJECTS[row.kind].get("overlay",false):continue
+		var p: Variant=Plane(Vector3.UP,.245+editing_storey*Storeys.HEIGHT).intersects_ray(origin,direction)
 		if p!=null and Catalog.footprint(row).has_point(Vector2(p.x,p.z)) and origin.distance_to(p)<max_distance:picked_id=row.id;picked_world=Vector2(p.x,p.z);max_distance=origin.distance_to(p)
+	if picked_id!="" and Storeys.of(Layout.find(layout,picked_id))!=editing_storey:return ""
 	return picked_id
 func select_at(mouse: Vector2) -> void:
 	selected_id=pick_at(mouse);selected_unit.clear()
@@ -396,7 +424,7 @@ func update_ghost(point_: Vector2) -> void:
 	var row:=row_at(point_);ghost.visible=not row.is_empty()
 	if not ghost.visible:
 		clear_preview();return
-	var result:=Layout.validate(candidate_layout(row))
+	var result:=Stairs.preview(layout,row,moving_id) if row.type=="stairs" else Layout.validate(candidate_layout(row))
 	if row.type=="template":
 		update_template_preview(Vector2(row.position[0],row.position[1]),result.ok)
 		if not result.ok:ui.message(result.message,true)
@@ -407,12 +435,15 @@ func update_ghost(point_: Vector2) -> void:
 	if row.type=="object":
 		var rect_:=Catalog.footprint(row);mid=rect_.get_center();size_=Vector3(rect_.size.x,.035,rect_.size.y)
 		update_preview(row,result.ok)
-	elif row.type in ["floor","roof","wall"]:
+	elif row.type=="stairs":
+		var area:=Stairs.bounds(row);mid=area.get_center();size_=Vector3(area.size.x,.04,area.size.y)
+	elif row.type in ["floor","roof","wall","railing"]:
 		var rect_:=Layout.rect(row);mid=rect_.get_center();size_=Vector3(maxf(.16,rect_.size.x),.10 if row.type=="floor" else (1.8 if row.type=="roof" else 4.4),maxf(.16,rect_.size.y))
 	else:
 		var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(b-a).normalized();mid=a+dir*row.offset;size_=Vector3(2.86 if row.type=="door" else 2.2,3.5 if row.type=="door" else 2.,.30);ghost.rotation.y=-atan2(dir.y,dir.x)
-	ghost.scale=size_;ghost.position=Vector3(mid.x,.18+(Layout.base_height(layout,row) if row.type=="object" else 0.)+size_.y*.5+(4.4 if row.type=="roof" else (1.1 if row.type=="window" else 0.)),mid.y)
-	if row.type!="object":update_structure_preview(row,result.ok)
+	ghost.scale=size_;ghost.position=Vector3(mid.x,.18+(Layout.base_height(layout,row) if row.type=="object" else Storeys.elevation(row))+size_.y*.5+(4.4 if row.type=="roof" else (1.1 if row.type=="window" else 0.)),mid.y)
+	if row.type=="stairs":update_stair_preview(row,result.ok)
+	elif row.type!="object":update_structure_preview(row,result.ok)
 	if not result.ok:ui.message(result.message,true)
 	else:ui.message("点击放置 · "+Catalog.name_for(row))
 func update_camera() -> void:
@@ -423,7 +454,7 @@ func update_camera() -> void:
 	if active:apply_editor_cutaway()
 func pan_camera(local_offset: Vector2) -> void:
 	focus+=Vector3(local_offset.x,0,local_offset.y).rotated(Vector3.UP,yaw)
-	focus.x=clampf(focus.x,60,98);focus.z=clampf(focus.z,-7,28)
+	focus.x=clampf(focus.x,Site.PLOT.position.x,Site.PLOT.end.x);focus.z=clampf(focus.z,Site.PLOT.position.y,Site.PLOT.end.y)
 func clear_preview() -> void:
 	for entry in preview_walls:
 		if is_instance_valid(entry[0]):entry[0].visible=entry[1]
@@ -434,8 +465,11 @@ func hide_preview() -> void:
 	if not preview_walls.is_empty():clear_preview();ghost_key=""
 	elif is_instance_valid(preview):preview.hide()
 func restore_moving() -> void:
+	clear_preview()
 	if is_instance_valid(room):
-		for module in room.get_node("Furnishing").get_children():module.show()
+		for entry in room.render_cache.values():entry.node.show()
+		room.storey_view_key=""
+		if active:apply_editor_cutaway()
 func update_preview(row: Dictionary,valid: bool) -> void:
 	var key: String=str(row.get("kind",row.type))+":"+moving_id+":"+str(row.get("painted",false))+":"+str(row.get("color",""))+":"+str(row.get("style",""))+JSON.stringify(row.get("appearance",{}))
 	if key!=preview_key:
@@ -454,11 +488,12 @@ func update_preview(row: Dictionary,valid: bool) -> void:
 	overlay.no_depth_test=Catalog.OBJECTS[row.kind].has("wall_size")
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay;mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 func update_template_preview(p: Vector2,valid: bool) -> void:
-	if preview_key!="template":
-		clear_preview();preview_key="template";preview=Factory.make(preload("res://scripts/building/templates.gd").cottage(),city);preview.name="TemplatePlacementPreview";preview.set_process(false)
+	if preview_key!="template:"+template_kind:
+		clear_preview();preview_key="template:"+template_kind;preview=Factory.make(template_source(),city);preview.name="TemplatePlacementPreview";preview.set_process(false)
 		for body in preview.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
 		for light in preview.find_children("*","Light3D",true,false):light.hide()
-	preview.position=Vector3(p.x,0,p.y);preview.show();ghost.hide()
+	var origin:=Layout.template_origin(template_source())
+	preview.position=Site.CENTER+Vector3(p.x-origin.x,0,p.y-origin.y);preview.show();ghost.hide()
 	var overlay: StandardMaterial3D=null
 	if not valid:overlay=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.95,.22,.15,.48)
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay
@@ -467,8 +502,8 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 	if key!=preview_key:
 		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildStructurePreview";city.add_child(preview)
 		var b:=Factory.builder(preview);var area:=Rect2();var mid:=Vector2.ZERO
-		if row.type in ["floor","roof","wall"]:
-			area=Layout.rect(row);mid=area.get_center();preview.position=Vector3(mid.x,0,mid.y)
+		if row.type in ["floor","roof","wall","railing"]:
+			area=Layout.rect(row);mid=area.get_center();preview.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
 		match row.type:
 			"floor":
 				if minf(area.size.x,area.size.y)<.01:return
@@ -477,12 +512,14 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 			"wall":
 				if area.size.length()<.01:return
 				b.blueprint.materials.plaster=row.color;b.build_wall(preview,{"id":"WallPreview","a":[row.a[0]-mid.x,row.a[1]-mid.y],"b":[row.b[0]-mid.x,row.b[1]-mid.y],"openings":[],"color":row.color,"style":row.style,"faces":row.get("faces",{})})
+			"railing":
+				Stairs.rail(b,preview,Vector3(row.a[0]-mid.x,.18,row.a[1]-mid.y),Vector3(row.b[0]-mid.x,.18,row.b[1]-mid.y))
 			"roof":
 				if minf(area.size.x,area.size.y)<.01:return
 				b.roof_form=row.get("form","classic");b.blueprint.size=[area.size.x,area.size.y];b.blueprint.materials.roof=row.color;b.build_roof(preview)
 			"door","window":
 				var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var end:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(end-a).normalized();var p:=a+dir*float(row.offset)
-				preview.position=Vector3(p.x,0,p.y);var holder:=Node3D.new();preview.add_child(holder);holder.rotation.y=-atan2(dir.y,dir.x)
+				preview.position=Vector3(p.x,Storeys.elevation(row),p.y);var holder:=Node3D.new();preview.add_child(holder);holder.rotation.y=-atan2(dir.y,dir.x)
 				var opening:={"id":"opening","type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style,"form":row.get("form","classic")}
 				b.build_opening(holder,0,opening)
 				if row.type=="door":
@@ -510,7 +547,7 @@ func preview_opening_wall(builder: RefCounted,row: Dictionary,point_: Vector2) -
 	var pending:=row.duplicate(true);pending.id="__placement_opening";pending.anchor=[point_.x,point_.y]
 	var supporting:=Layout.find(layout,row.wall);pending.axis=0 if is_equal_approx(supporting.a[1],supporting.b[1]) else 1;candidate.elements.append(pending)
 	for wall in layout.elements:
-		if wall.type!="wall":continue
+		if wall.type!="wall" or Storeys.of(wall)!=editing_storey:continue
 		var data:=Factory.wall_data(candidate,wall,point_)
 		if not data.openings.any(func(opening):return opening.id==pending.id):continue
 		var original: Node3D=room.render_cache[wall.id].node;preview_walls.append([original,original.visible]);original.hide()
@@ -530,7 +567,7 @@ func update_highlight(id: String) -> void:
 	if key==highlighted_key:return
 	clear_highlight();highlighted_key=key;selection_outline.hide()
 	if row.is_empty() or not is_instance_valid(room):return
-	var area:=Catalog.footprint(row) if row.type=="object" else (Layout.rect(row) if row.type in ["floor","roof","wall"] else Rect2())
+	var area:=Catalog.footprint(row) if row.type=="object" else (Stairs.bounds(row) if row.type=="stairs" else (Layout.rect(row) if row.type in ["floor","roof","wall","railing"] else Rect2()))
 	var color_:=Color(.95,.27,.16,.32) if tool=="delete" else Color(.28,.78,.56,.17)
 	if row.type=="wall":
 		var bounds:=area
@@ -549,7 +586,7 @@ func update_highlight(id: String) -> void:
 			if mesh.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:continue
 			highlighted.append([mesh,mesh.material_overlay]);mesh.material_overlay=overlay
 	if area.size==Vector2.ZERO:return
-	var y:=.23+(Layout.base_height(layout,row) if row.type=="object" else 0.);var mesh:=ImmediateMesh.new();mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+	var y:=.23+(Layout.base_height(layout,row) if row.type=="object" else Storeys.elevation(row));var mesh:=ImmediateMesh.new();mesh.surface_begin(Mesh.PRIMITIVE_LINES)
 	var corners: Array=[Vector3(area.position.x,y,area.position.y),Vector3(area.end.x,y,area.position.y),Vector3(area.end.x,y,area.end.y),Vector3(area.position.x,y,area.end.y)]
 	for i in range(4):mesh.surface_add_vertex(corners[i]);mesh.surface_add_vertex(corners[(i+1)%4])
 	mesh.surface_end();var m:=StandardMaterial3D.new();m.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;m.albedo_color=Color("df6245") if tool=="delete" else Color("4fba8a");selection_outline.mesh=mesh;selection_outline.material_override=m;selection_outline.show()
@@ -598,6 +635,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.shift_pressed:redo()
 			else:undo()
 		elif event.is_command_or_control_pressed() and event.keycode==KEY_Y:redo()
+		elif event.keycode==KEY_PAGEUP:set_storey(editing_storey+1)
+		elif event.keycode==KEY_PAGEDOWN:set_storey(editing_storey-1)
 		elif event.keycode==KEY_R:rotate_selected()
 		elif event.keycode==KEY_B:choose_tool("delete")
 		elif event.keycode==KEY_H:choose_tool("select")
@@ -631,7 +670,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func ground_at(mouse: Vector2) -> Variant:
-	var p: Variant=Plane(Vector3.UP,.18).intersects_ray(city.camera.project_ray_origin(mouse),city.camera.project_ray_normal(mouse))
+	var p: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT).intersects_ray(city.camera.project_ray_origin(mouse),city.camera.project_ray_normal(mouse))
 	return Vector2(p.x,p.z) if p!=null else null
 func begin_demolition(mouse: Vector2) -> void:
 	demolition_pressed_id=pick_at(mouse);demolition_mouse=mouse;demolition_pointer=mouse;demolition_start=ground_at(mouse);demolition_dragging=false;demolition_candidate.clear();demolition_key=""
@@ -651,7 +690,7 @@ func preview_demolition(mouse: Vector2) -> void:
 	demolition_pointer=mouse
 	var bounds:=demolition_area(mouse);var key:=str(bounds)+demolition_target_type
 	if key==demolition_key:return
-	demolition_key=key;demolition_candidate=Layout.demolish(layout,bounds,demolition_target_type);clear_highlight();selection_outline.hide()
+	demolition_key=key;demolition_candidate=Layout.demolish(layout,bounds,demolition_target_type,null,editing_storey);clear_highlight();selection_outline.hide()
 	var changed:=0;var ids: Dictionary={}
 	for row in demolition_candidate.elements:ids[row.id]=row
 	var red:=StandardMaterial3D.new();red.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;red.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;red.albedo_color=Color(.95,.18,.10,.35)
@@ -662,7 +701,7 @@ func preview_demolition(mouse: Vector2) -> void:
 			if id=="" or ids.get(id,{})==Layout.find(layout,id):continue
 			if mesh.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:continue
 			highlighted.append([mesh,mesh.material_overlay]);mesh.material_overlay=clipped_red if Layout.find(layout,id).get("type","")=="wall" else red;changed+=1
-	ghost.show();ghost_material.albedo_color=Color(.94,.22,.13,.24);ghost.rotation=Vector3.ZERO;ghost.scale=Vector3(maxf(.01,bounds.size.x),.04,maxf(.01,bounds.size.y));var center:=bounds.get_center();ghost.position=Vector3(center.x,.23,center.y)
+	ghost.show();ghost_material.albedo_color=Color(.94,.22,.13,.24);ghost.rotation=Vector3.ZERO;ghost.scale=Vector3(maxf(.01,bounds.size.x),.04,maxf(.01,bounds.size.y));var center:=bounds.get_center();ghost.position=Vector3(center.x,.23+editing_storey*Storeys.HEIGHT,center.y)
 	var before:=Layout.usage(layout);var after:=Layout.usage(demolition_candidate)
 	var openings_before: int=layout.elements.filter(func(row):return row.type in ["door","window"]).size();var openings_after: int=demolition_candidate.elements.filter(func(row):return row.type in ["door","window"]).size()
 	ui.message("松开拆除 %.2f㎡地面、%.1f米墙、%d件物品、%d处门窗、%d块屋顶（含失去支撑者） · Esc取消"%[maxf(0,before.floor_area-after.floor_area),maxf(0,before.wall_length-after.wall_length),maxi(0,before.objects-after.objects),maxi(0,openings_before-openings_after),maxi(0,before.roofs-after.roofs)])
@@ -678,10 +717,49 @@ func finish_demolition(mouse: Vector2) -> void:
 	demolition_start=null;demolition_target_type="";demolition_dragging=false;demolition_candidate.clear();demolition_key="";clear_highlight();ghost.hide();selected_unit.clear();selected_id="";refresh_ui()
 
 func reselect_unit(row: Dictionary) -> void:
-	var index:=Layout.compiled(layout);var source: Dictionary={}
+	var index:=Layout.compiled(layout,Storeys.of(row));var source: Dictionary={}
 	if row.type=="floor":source=index.floors.get(Grid.coordinates(row)[0],{})
 	elif row.type=="wall":source=index.walls.get(Grid.edges(row)[0],{})
 	selected_id=str(source.get("id",""));selected_unit=Layout.unit_at(layout,selected_id,Layout.rect(row).get_center()) if not source.is_empty() else {}
 func _input(event: InputEvent) -> void:
 	if active and demolition_start!=null and event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT and not event.pressed:
 		finish_demolition(event.position);get_viewport().set_input_as_handled()
+
+func set_storey(level: int) -> void:
+	if show_entire:set_entire(false)
+	choose_tool("select");selected_id="";selected_unit.clear();editing_storey=clampi(level,0,Storeys.MAX-1);show_entire=false
+	focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+focus.y;ghost_key="";set_roof_visible(false);apply_editor_cutaway();refresh_ui()
+	ui.message("正在编辑 %d 楼 · 上方隐藏，下方仅作参照 · PageUp / PageDown 切层"%(editing_storey+1))
+func set_entire(value: bool) -> void:
+	if value and not show_entire:entire_previous_roof=show_roof
+	show_entire=value;clear_preview();ghost_key="";set_roof_visible(true if value else entire_previous_roof);apply_editor_cutaway();refresh_ui()
+	ui.message("整栋外观 · 仍只选取和修改 %d 楼；关闭后恢复逐层编辑"%(editing_storey+1) if value else "正在编辑 %d 楼"%(editing_storey+1))
+func template_source() -> Dictionary:
+	return preload("res://scripts/building/templates.gd").two_storey() if template_kind=="two_storey" else preload("res://scripts/building/templates.gd").cottage()
+func update_stair_preview(row: Dictionary,valid: bool) -> void:
+	var key: String=JSON.stringify(row)+str(valid)
+	if key!=preview_key:
+		clear_preview();preview_key=key;preview=Node3D.new();preview.name="StairPlacementPreview";city.add_child(preview)
+		preview.position=Vector3(row.position[0],.18+Storeys.elevation(row),row.position[1]);preview.rotation.y=deg_to_rad(row.yaw)
+		if is_instance_valid(room):
+			var description:=row.duplicate(true);description.id="StairModelPreview";Factory.build_module(room,layout,description,preview,city)
+		else:Stairs.build(Factory.builder(preview),preview,row)
+		for body in preview.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
+		var overlay:=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.25,.85,.55,.18) if valid else Color(1.,.20,.13,.48);overlay.no_depth_test=true
+		for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay;mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		for info in [["入口 · %dF"%(editing_storey+1),Stairs.definition(row.form).bottom.get_center(),.5],["出口 · %dF"%(editing_storey+2),Stairs.definition(row.form).top.get_center(),Storeys.HEIGHT+.5]]:
+			var label:=Label3D.new();label.text=info[0];label.font_size=48;label.pixel_size=.01;label.position=Vector3(info[1].x,info[2],info[1].y);label.no_depth_test=true;preview.add_child(label)
+		if valid and show_entire:preview_stair_opening(row)
+	preview.position=Vector3(row.position[0],.18+Storeys.elevation(row),row.position[1]);preview.rotation.y=deg_to_rad(row.yaw);preview.show();ghost.hide()
+
+func preview_stair_opening(row: Dictionary) -> void:
+	if not is_instance_valid(room):return
+	for entry in room.render_cache.values():
+		if entry.row.type!="floor_chunk" or Storeys.of(entry.row)!=Storeys.of(row)+1 or not entry.node.visible:continue
+		var cells: Dictionary=entry.row.cells.duplicate();var changed:=false
+		for cell in cells.keys():
+			if Stairs.is_hole(row,Grid.point(cell)+Vector2.ONE*.25):cells.erase(cell);changed=true
+		if not changed:continue
+		preview_walls.append([entry.node,entry.node.visible]);entry.node.hide()
+		var holder:=Node3D.new();holder.name="StairOpeningPreview";preview.add_child(holder);holder.global_transform=entry.node.global_transform
+		var description: Dictionary=entry.row.duplicate();description.rects=Grid.rectangles(cells);Factory.build_floor_mesh(holder,description)

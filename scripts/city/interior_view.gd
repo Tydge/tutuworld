@@ -47,6 +47,7 @@ static func targets(sections: Array,camera: Vector3,actor: Vector3) -> Dictionar
 	var hidden: Dictionary={}
 	var ends:=probes(camera,actor)
 	for section in sections:
+		if not section.node.is_visible_in_tree():continue
 		var id:=face(section)
 		if not hidden.has(id) and obstructs(section,camera,actor,ends):hidden[id]=true
 	return hidden
@@ -80,6 +81,7 @@ static func roof_limit(city: Node,pivot: Vector3,desired: Vector3) -> Vector3:
 	for room in city.interiors:
 		if not is_instance_valid(room) or not room.contains_position(pivot-Vector3.UP*1.35):continue
 		var top: float=room.global_position.y+room.floor_level+room.wall_height-.22
+		if room.has_method("room_at_position"):top+=int(room.visible_storey)*preload("res://scripts/building/storeys.gd").HEIGHT
 		var hit: Variant=Plane(Vector3.UP,top).intersects_segment(pivot,result)
 		if hit==null:continue
 		var covered:=false

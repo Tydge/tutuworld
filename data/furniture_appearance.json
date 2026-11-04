@@ -967,6 +967,61 @@
           "c59d9c"
         ]
       }
+    ],
+    "cooking_counter": [
+      {
+        "id": "cabinet",
+        "name": "柜体",
+        "family": "wood",
+        "colors": [
+          "819f8c"
+        ]
+      },
+      {
+        "id": "counter",
+        "name": "台面与瓷砖",
+        "family": "stone",
+        "colors": [
+          "eee2c6"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木饰与砧板",
+        "family": "wood",
+        "colors": [
+          "c6a373"
+        ]
+      },
+      {
+        "id": "hardware",
+        "name": "五金与灶具",
+        "family": "metal",
+        "colors": [
+          "9caeaa",
+          "475b54",
+          "b89b63",
+          "7b8e83",
+          "b79161"
+        ]
+      },
+      {
+        "id": "linen",
+        "name": "挂巾",
+        "family": "fabric",
+        "colors": [
+          "e9d4a2"
+        ]
+      },
+      {
+        "id": "produce",
+        "name": "台面食材",
+        "family": "foliage",
+        "colors": [
+          "cb7953",
+          "8caa69"
+        ]
+      }
     ]
   },
   "presets": {

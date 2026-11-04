@@ -1,0 +1,103 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Single-storey template still validates
+TWO_STOREY_VALIDATION 已保存建造布局。
+PASS Furnished two-storey sample validates
+PASS Sample footprint is exactly twice the old 120sqm
+PASS Upper floor has 240sqm including open balcony and stair opening source
+PASS Stair owns a derived upper-floor opening
+PASS All levels, fittings, openings and stairs survive JSON round trip
+PASS Existing cottage gains a separate east sample additively
+PASS Sample migration is idempotent
+PASS Old element preserved: build_1
+PASS Old element preserved: build_3
+PASS Old element preserved: build_2
+PASS Old element preserved: build_4
+PASS Old element preserved: build_5
+PASS Old element preserved: build_6
+PASS Old element preserved: build_7
+PASS Old element preserved: build_8
+PASS Old element preserved: build_9
+PASS Old element preserved: build_10
+PASS Old element preserved: build_11
+PASS Old element preserved: build_12
+PASS Old element preserved: build_13
+PASS Old element preserved: build_14
+PASS Old element preserved: build_15
+PASS Old element preserved: build_16
+PASS Old element preserved: build_17
+PASS Old element preserved: build_18
+PASS Old element preserved: build_19
+PASS Old element preserved: build_20
+PASS Old element preserved: build_21
+PASS Old element preserved: build_22
+PASS Old element preserved: build_23
+PASS Old element preserved: build_24
+PASS Old element preserved: build_25
+PASS Old element preserved: build_26
+PASS Old element preserved: build_27
+PASS Old element preserved: build_28
+PASS Old element preserved: build_29
+PASS Old element preserved: build_30
+PASS Old element preserved: build_31
+PASS Old element preserved: build_32
+PASS Old element preserved: build_33
+PASS Old element preserved: build_34
+PASS Old element preserved: build_35
+PASS Old element preserved: build_36
+PASS Old element preserved: build_37
+PASS Old element preserved: build_38
+PASS Old element preserved: build_39
+PASS Old element preserved: build_40
+PASS Old element preserved: build_41
+PASS Old element preserved: build_42
+PASS Fast stair preview agrees with full validation: straight/0.0
+PASS Stair validates both landings: straight/0.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: straight/90.0
+PASS Stair validates both landings: straight/90.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: straight/180.0
+PASS Stair validates both landings: straight/180.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: straight/270.0
+PASS Stair validates both landings: straight/270.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: l/0.0
+PASS Stair validates both landings: l/0.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: l/90.0
+PASS Stair validates both landings: l/90.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: l/180.0
+PASS Stair validates both landings: l/180.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: l/270.0
+PASS Stair validates both landings: l/270.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: u/0.0
+PASS Stair validates both landings: u/0.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: u/90.0
+PASS Stair validates both landings: u/90.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: u/180.0
+PASS Stair validates both landings: u/180.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Fast stair preview agrees with full validation: u/270.0
+PASS Stair validates both landings: u/270.0
+PASS Removing stairs restores only their derived opening
+PASS Continuous stair route connects actual floor elevations
+PASS Reject a fifth floor
+MULTISTOREY_RULES_RESULT PASS checks=99 failures=[]

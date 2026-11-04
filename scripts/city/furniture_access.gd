@@ -17,6 +17,7 @@ static func closest(node: Node3D,point: Vector3) -> Vector3:
 	var p:=node.to_local(point);var area:=bounds(node);var q:=Vector2(p.x,p.z).clamp(area.position,area.end)
 	return node.to_global(Vector3(q.x,.65,q.y))
 static func distance(node: Node3D,point: Vector3) -> float:
+	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(point.y)!=int(node.get_meta("storey")):return INF
 	if absf(point.y-node.global_position.y)>1.7:return INF
 	var q:=closest(node,point);return Vector2(point.x-q.x,point.z-q.z).length()
 static func excluded(node: Node3D,actor: CharacterBody3D) -> Array[RID]:
@@ -24,7 +25,7 @@ static func excluded(node: Node3D,actor: CharacterBody3D) -> Array[RID]:
 	for body in node.find_children("*","CollisionObject3D",true,false):ids.append(body.get_rid())
 	return ids
 static func clear_segment(host: Node3D,node: Node3D,actor: CharacterBody3D,from: Vector3,to: Vector3) -> bool:
-	var ray:=PhysicsRayQueryParameters3D.create(from,to,5,excluded(node,actor))
+	var ray:=PhysicsRayQueryParameters3D.create(from,to,13,excluded(node,actor))
 	return host.get_world_3d().direct_space_state.intersect_ray(ray).is_empty()
 static func reachable(host: Node3D,node: Node3D,actor: CharacterBody3D,reach: float=REACH) -> bool:
 	return distance(node,actor.global_position)<=reach and clear_segment(host,node,actor,actor.global_position+Vector3.UP,closest(node,actor.global_position))
@@ -34,6 +35,8 @@ static func same_room(host: Node3D,node: Node3D,point: Vector3) -> bool:
 		if not room.contains_position(point):return false
 		if "plan" in room:
 			var rooms=preload("res://scripts/building/room_plan.gd")
+			if room.has_method("room_at_position"):
+				return preload("res://scripts/building/storeys.gd").at_height(node.global_position.y)==preload("res://scripts/building/storeys.gd").at_height(point.y) and room.room_at_position(node.global_position)==room.room_at_position(point)
 			return rooms.room_at(room.plan,Vector2(node.global_position.x,node.global_position.z))==rooms.room_at(room.plan,Vector2(point.x,point.z))
 	return true
 static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: Vector3) -> Dictionary:

@@ -1,4 +1,6 @@
 extends RefCounted
+const Storeys=preload("res://scripts/building/storeys.gd")
+const Stairs=preload("res://scripts/building/stairs.gd")
 const Site=preload("res://scripts/building/site.gd")
 const Catalog=preload("res://scripts/building/catalog.gd")
 const Grid=preload("res://scripts/building/grid_layout.gd")
@@ -8,10 +10,11 @@ const MAX_WALL_EDGES:=2048
 const MAX_WALL_RUNS:=256
 const MAX_ROOFS:=128
 static var grid_cache: Dictionary={}
+static var walk_cache: Dictionary={}
 static var last_validation_usec:=0
 const STYLES=preload("res://scripts/building/structure_catalog.gd").STYLES
 const Structures=preload("res://scripts/building/structure_catalog.gd")
-static func empty() -> Dictionary:return {"schema":3,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
+static func empty() -> Dictionary:return {"schema":4,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
 static func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
 static func point(value: Variant,grid: bool=true) -> bool:
 	if not value is Array or value.size()!=2:return false
@@ -31,8 +34,8 @@ static func contains_in_floor(p: Vector2,floors: Array) -> bool:
 	return false
 static func supported(footprint: Rect2,floors: Array) -> bool:
 	return Grid.covered(footprint,Grid.index(floors).floors)
-static func compiled(layout: Dictionary) -> Dictionary:
-	var structures: Array=layout.elements.filter(func(row):return row.type in ["floor","wall"])
+static func compiled(layout: Dictionary,level: int=0) -> Dictionary:
+	var structures: Array=layout.elements.filter(func(row):return row.type in ["floor","wall"] and Storeys.of(row)==level)
 	var cache_key:=hash(structures)
 	if grid_cache.has(cache_key) and grid_cache[cache_key].source==structures:return grid_cache[cache_key].compiled
 	var key:=JSON.stringify(structures).sha256_text()
@@ -48,13 +51,15 @@ static func compiled(layout: Dictionary) -> Dictionary:
 	if grid_cache.size()>=4:grid_cache.erase(grid_cache.keys()[0])
 	grid_cache[cache_key]={"source":structures.duplicate(true),"compiled":result};return result
 static func usage(layout: Dictionary) -> Dictionary:
-	var grid:=compiled(layout);var objects:=0;var lights:=0;var roofs:=0
+	var cells:=0;var edges:=0;var objects:=0;var lights:=0;var roofs:=0
+	for level in Storeys.levels(layout):
+		var grid:=compiled(layout,level);cells+=grid.floors.size();edges+=grid.walls.size()
 	for row in layout.elements:
 		if row.type=="object":
 			objects+=1
 			if Catalog.OBJECTS[row.kind].get("light",false):lights+=1
 		elif row.type=="roof":roofs+=1
-	return {"floor_cells":grid.floors.size(),"floor_area":grid.floors.size()*.25,"wall_edges":grid.walls.size(),"wall_length":grid.walls.size()*.5,"objects":objects,"lights":lights,"roofs":roofs}
+	return {"floor_cells":cells,"floor_area":cells*.25,"wall_edges":edges,"wall_length":edges*.5,"objects":objects,"lights":lights,"roofs":roofs}
 static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
 	var row:=item.duplicate(true)
 	if row.get("type","")!="object" or Catalog.mount(row)!="floor" or Catalog.OBJECTS[row.kind].get("outdoor",false) or Catalog.OBJECTS[row.kind].get("overlay",false):return row
@@ -63,7 +68,7 @@ static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
 	for axis in [0,1]:
 		var bounds:=Catalog.wall_footprint(row);var best:=.451;var shift:=0.
 		for wall in layout.elements:
-			if wall.type!="wall" or absf(float(wall.a[axis])-float(wall.b[axis]))>.001:continue
+			if wall.type!="wall" or Storeys.of(wall)!=Storeys.of(row) or absf(float(wall.a[axis])-float(wall.b[axis]))>.001:continue
 			var across: int=1-axis;var start:=minf(wall.a[across],wall.b[across]);var end:=maxf(wall.a[across],wall.b[across])
 			if minf(bounds.end[across],end)-maxf(bounds.position[across],start)<.05:continue
 			var plane_: float=wall.a[axis];var side: float=signf(bounds.get_center()[axis]-plane_)
@@ -75,7 +80,7 @@ static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
 	return row
 static func validate(raw: Variant) -> Dictionary:
 	var started:=Time.get_ticks_usec()
-	if not raw is Dictionary or not (raw.get("schema",1)==1 or raw.get("schema",1)==2 or raw.get("schema",1)==3) or not raw.get("elements",[]) is Array:return fail("建造布局格式不正确。")
+	if not raw is Dictionary or not (raw.get("schema",1)==1 or raw.get("schema",1)==2 or raw.get("schema",1)==3 or raw.get("schema",1)==4) or not raw.get("elements",[]) is Array:return fail("建造布局格式不正确。")
 	var migrating: bool=raw.get("schema",1)==1
 	if migrating:raw=split_legacy(raw)
 
@@ -84,12 +89,16 @@ static func validate(raw: Variant) -> Dictionary:
 		if not value is Dictionary:return fail("物件记录不完整。")
 		var id:=str(value.get("id",""));var type:=str(value.get("type",""))
 		if id.is_empty() or id.length()>64 or ids.has(id):return fail("物件编号无效或重复。")
+		var level: Variant=value.get("storey",0)
+		if not (level is int or level is float) or not is_finite(float(level)) or float(level)!=int(level) or int(level)<0 or int(level)>=Storeys.MAX:return fail("目前支持1至4层，请选择有效楼层。")
 		var row:={"id":id,"type":type,"color":str(value.get("color","eadcc5")),"style":str(value.get("style","original")),"painted":bool(value.get("painted",false))}
+		if int(level)>0:row.storey=int(level)
 		if row.color.length()!=6 or not Color.html_is_valid(row.color) or not row.style in STYLES:return fail("请选择有效的颜色和材质。")
 		if type in ["door","window","roof"]:
 			var form:=str(value.get("form","classic"))
 			if not Structures.FORMS[type].has(form):return fail("请选择已有的门窗或屋顶造型。")
 			if form!="classic":row.form=form
+			if type=="door" and not bool(value.get("default_open",true)):row.default_open=false
 		if type=="wall" and value.has("faces"):
 			if not value.faces is Dictionary:return fail("墙面装修格式不正确。")
 			var faces: Dictionary={}
@@ -103,13 +112,13 @@ static func validate(raw: Variant) -> Dictionary:
 			if faces.size()!=value.faces.size():return fail("未知的墙面方向。")
 			if not faces.is_empty():row.faces=faces
 		match type:
-			"floor","roof","wall":
+			"floor","roof","wall","railing":
 				if not point(value.get("a")) or not point(value.get("b")):return fail("结构要对齐半米网格，并留在建造园地块内。")
 				row.a=value.a.duplicate();row.b=value.b.duplicate()
 				var size_: Vector2=rect(row).size
-				if type=="wall":
+				if type in ["wall","railing"]:
 					if minf(size_.x,size_.y)>.001 or maxf(size_.x,size_.y)<.5:return fail("墙壁至少长半米，并沿网格方向建造。")
-					walls.append(row)
+					if type=="wall":walls.append(row)
 				elif minf(size_.x,size_.y)<(.5 if type=="floor" else 1.):return fail("地板至少半米，屋顶至少1米。")
 				elif type=="floor":floors.append(row)
 				else:roofs.append(row)
@@ -120,6 +129,11 @@ static func validate(raw: Variant) -> Dictionary:
 					if not point(value.anchor,false) or not int(value.get("axis",-1)) in [0,1]:return fail("门窗挂点无效。")
 					row.anchor=value.anchor.duplicate();row.axis=int(value.axis);row.reverse=bool(value.get("reverse",false))
 				holes.append(row)
+			"stairs":
+				if Storeys.of(row)>=Storeys.MAX-1 or not Stairs.FORMS.has(value.get("form","")) or not point(value.get("position")):return fail("楼梯需要有效造型、半米网格，并连接相邻的两层。")
+				var turn: float=float(value.get("yaw",0))
+				if not is_finite(turn) or absf(turn/90.-roundf(turn/90.))>.001:return fail("楼梯旋转须对齐90度。")
+				row.form=value.form;row.position=value.position.duplicate();row.yaw=fposmod(turn,360.)
 			"object":
 				if not Catalog.OBJECTS.has(value.get("kind","")) or not point(value.get("position"),false):return fail("请选择有效物件，并放在建造园地块内。")
 				var yaw: float=float(value.get("yaw",0))
@@ -131,8 +145,14 @@ static func validate(raw: Variant) -> Dictionary:
 				row.kind=value.kind;row.position=[float(String.num(float(value.position[0]),3)),float(String.num(float(value.position[1]),3))];row.yaw=fposmod(yaw,360);row.support=str(value.get("support",""));row.support_level=int(value.get("support_level",0));objects.append(row)
 			_:return fail("暂不支持这种结构。")
 		ids[id]=row;clean.elements.append(row)
+	if clean.elements.filter(func(row):return row.type=="railing").size()>128:return fail("护栏最多128段，请合并相邻护栏。")
 	var grid:=compiled(clean)
-	if grid.error!="":return fail(grid.error)
+	var wall_runs:=0
+	for story in Storeys.levels(clean):
+		var layer:=compiled(clean,story)
+		if layer.error!="":return fail(layer.error)
+		if not layer.has("compressed_wall"):layer.compressed_wall=Grid.runs(layer.walls);layer.compressed_floor=Grid.rectangles(layer.floors)
+		wall_runs+=layer.compressed_wall.size()
 	# Older layouts did not count their fireplaces as lights. Preserve those exact
 	# existing IDs without allowing newly placed fireplaces to evade the budget.
 	var old_fires: Array=raw.get("legacy_fireplaces",[]) if raw.get("legacy_fireplaces",[]) is Array else []
@@ -152,20 +172,20 @@ static func validate(raw: Variant) -> Dictionary:
 	if counts.objects>MAX_ELEMENTS:return fail("家具和摆件最多%d件；地板、墙体另计。"%MAX_ELEMENTS)
 	if counts.lights>light_limit:return fail("实际照明灯具最多%d盏。"%MAX_LIGHTS)
 	if not grid.has("compressed_wall"):grid["compressed_wall"]=Grid.runs(grid.walls);grid["compressed_floor"]=Grid.rectangles(grid.floors)
-	if counts.wall_edges>MAX_WALL_EDGES or grid.compressed_wall.size()>MAX_WALL_RUNS:return fail("墙体超过当前容量，请减少密集或碎片墙段。")
+	if counts.wall_edges>MAX_WALL_EDGES or wall_runs>MAX_WALL_RUNS:return fail("墙体超过当前容量，请减少密集或碎片墙段。")
 	if counts.roofs>MAX_ROOFS:return fail("屋顶模块超过当前容量。")
 	for i in range(roofs.size()):
 		for j in range(i):
-			if rect(roofs[i]).grow(-.005).intersects(rect(roofs[j]).grow(-.005)):return fail("屋顶不能重叠。")
+			if Storeys.of(roofs[i])==Storeys.of(roofs[j]) and rect(roofs[i]).grow(-.005).intersects(rect(roofs[j]).grow(-.005)):return fail("屋顶不能重叠。")
 	for hole in holes:
 		var wall: Dictionary=ids.get(hole.wall,{})
-		if wall.get("type","")!="wall":return fail("门窗必须安装在墙上。")
+		if wall.get("type","")!="wall" or Storeys.of(wall)!=Storeys.of(hole):return fail("门窗必须安装在墙上。")
 		if not hole.has("anchor"):
 			var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var p:=a+(b-a).normalized()*float(hole.offset)
 			hole.anchor=[p.x,p.y];hole.axis=0 if is_equal_approx(a.y,b.y) else 1;hole.reverse=wall.a[hole.axis]>wall.b[hole.axis]
-		if not opening_supported(hole,grid.walls):return fail("墙段太短，或门窗离断口/墙角太近。")
+		if not opening_supported(hole,compiled(clean,Storeys.of(hole)).walls):return fail("墙段太短，或门窗离断口/墙角太近。")
 		for other in holes:
-			if other.id==hole.id or not other.has("anchor") or other.axis!=hole.axis:continue
+			if Storeys.of(other)!=Storeys.of(hole) or other.id==hole.id or not other.has("anchor") or other.axis!=hole.axis:continue
 			if absf(hole.anchor[1-hole.axis]-other.anchor[1-hole.axis])>.001:continue
 			var width:=2.86 if hole.type=="door" else 2.2;var other_width:=2.86 if other.type=="door" else 2.2
 			if absf(hole.anchor[hole.axis]-other.anchor[hole.axis])<(width+other_width)*.5+.15:return fail("门窗之间需要留出墙柱。")
@@ -176,8 +196,10 @@ static func validate(raw: Variant) -> Dictionary:
 		if mount=="floor":
 			if item.support!="":return fail("落地家具不能依附在其他物件上。")
 		else:
+			if mount=="ceiling" and ceiling_covered(clean,Catalog.footprint(item),Storeys.of(item)):
+				item.support="ceiling:%d"%Storeys.of(item);continue
 			var parent: Dictionary=ids.get(item.support,{})
-			if parent.is_empty():return fail("台灯和摆件需要放在桌柜表面，吊灯需要天花板。")
+			if parent.is_empty() or Storeys.of(parent)!=Storeys.of(item):return fail("台灯和摆件需要放在桌柜表面，吊灯需要天花板。")
 			if mount=="ceiling" and parent.type!="roof":return fail("请先盖好屋顶，再安装吊灯。")
 			if mount=="surface" and (item.support_level<0 or item.support_level>=Catalog.OBJECTS.get(parent.get("kind",""),{}).get("surface_levels",[0]).size()):return fail("请选择有效的台面或层板。")
 			if mount=="surface" and (parent.type!="object" or not Catalog.OBJECTS[parent.kind].has("surface") or Catalog.mount(parent)!="floor"):return fail("这里没有可摆放物品的台面。")
@@ -188,9 +210,14 @@ static func validate(raw: Variant) -> Dictionary:
 		if migrating or previous.get(key,"")==issue.signature:clean.grandfathered[key]=issue.signature
 		else:return fail(issue.message)
 	for roof in roofs:
-		if not Grid.covered(rect(roof),grid.floors):return fail("请先在屋顶下铺好地板。")
+		for upper in floors:
+			if Storeys.of(upper)==Storeys.of(roof)+1 and rect(roof).grow(-.01).intersects(rect(upper).grow(-.01)):return fail("上层地板与下层旧屋顶相交。完整覆盖会自动换成楼板；局部扩建请先调整旧屋顶。")
+		if not Grid.covered(rect(roof),compiled(clean,Storeys.of(roof)).floors):return fail("请先在屋顶下铺好地板。")
 	if raw.has("recovery_source"):clean.recovery_source=raw.recovery_source.duplicate(true);clean.recovery_message=raw.get("recovery_message","旧布局需要恢复。")
-	clean=Grid.compress(clean,grid)
+	var stairs_result:=Stairs.validate(clean)
+	if not stairs_result.ok:return stairs_result
+	if raw.has("multistorey_showcase"):clean.multistorey_showcase=int(raw.multistorey_showcase)
+	for story in Storeys.levels(clean):clean=Grid.compress(clean,compiled(clean,story),story)
 	last_validation_usec=Time.get_ticks_usec()-started
 	return {"ok":true,"layout":clean,"message":"已保存建造布局。"}
 static func normalize(raw: Variant) -> Dictionary:
@@ -201,19 +228,27 @@ static func normalize(raw: Variant) -> Dictionary:
 	if raw is Dictionary and not raw.is_empty():recovered["recovery_source"]=raw.duplicate(true);recovered["recovery_message"]=result.message
 	return recovered
 static func add(layout: Dictionary,row: Dictionary) -> Dictionary:
-	var next: Dictionary=layout.duplicate(true);var copy:=row.duplicate(true);copy.id="build_%d"%next.next_id;next.next_id+=1;next.elements.append(copy);return next
+	var next: Dictionary=layout.duplicate(true);var copy:=row.duplicate(true);copy.id="build_%d"%next.next_id;next.next_id+=1;next.elements.append(copy)
+	if copy.type=="floor" and Storeys.of(copy)>0:
+		# A complete new slab replaces an old lower roof, retaining ceiling fittings.
+		var roofs: Array=next.elements.filter(func(item):return item.type=="roof" and Storeys.of(item)==Storeys.of(copy)-1)
+		for roof in roofs:
+			if Grid.covered(rect(roof),compiled(next,Storeys.of(copy)).floors):next=remove(next,roof.id)
+	return next
 static func remove(layout: Dictionary,id: String) -> Dictionary:
 	var next:=layout.duplicate(true);var removed: Dictionary={id:true}
 	for row in next.elements:
-		if row.get("wall","")==id or row.get("support","")==id:removed[row.id]=true
-	next.elements=next.elements.filter(func(row):return not removed.has(row.id));return next
+		if row.get("wall","")==id or (row.get("support","")==id and not (row.type=="object" and Catalog.mount(row)=="ceiling" and ceiling_covered(next,Catalog.footprint(row),Storeys.of(row),id))):removed[row.id]=true
+	next.elements=next.elements.filter(func(row):return not removed.has(row.id))
+	next.elements=next.elements.filter(func(row):return row.type!="object" or Catalog.mount(row)!="ceiling" or ceiling_covered(next,Catalog.footprint(row),Storeys.of(row)))
+	return next
 
 static func base_height(layout: Dictionary,item: Dictionary) -> float:
-	if Catalog.mount(item)=="ceiling":return 4.4-float(Catalog.OBJECTS[item.kind].height)
+	if Catalog.mount(item)=="ceiling":return Storeys.elevation(item)+4.4-float(Catalog.OBJECTS[item.kind].height)
 	if Catalog.mount(item)=="surface":
 		var parent:=find(layout,str(item.get("support","")))
-		if not parent.is_empty():return surface_height(parent,int(item.get("support_level",0)))
-	return 0.
+		if not parent.is_empty():return Storeys.elevation(item)+surface_height(parent,int(item.get("support_level",0)))
+	return Storeys.elevation(item)
 static func surface_height(parent: Dictionary,level: int=0) -> float:
 	var definition: Dictionary=Catalog.OBJECTS[parent.kind]
 	var levels: Array=definition.get("surface_levels",[definition.get("surface_height",0)])
@@ -221,7 +256,10 @@ static func surface_height(parent: Dictionary,level: int=0) -> float:
 static func attach_at(layout: Dictionary,item: Dictionary,p: Vector2,support_id: String="",level: int=0) -> Dictionary:
 	var row:=item.duplicate(true);row.position=[p.x,p.y];row.support="";row.support_level=0
 	var mount:=Catalog.mount(row)
+	if mount=="ceiling" and ceiling_covered(layout,Catalog.footprint(row),Storeys.of(row)):
+		row.support="ceiling:%d"%Storeys.of(row);return row
 	for parent in layout.elements:
+		if Storeys.of(parent)!=Storeys.of(row):continue
 		if support_id!="" and parent.id!=support_id:continue
 		if mount=="ceiling" and parent.type=="roof" and rect(parent).has_point(p):row.support=parent.id;break
 		if mount=="surface" and parent.type=="object" and Catalog.OBJECTS[parent.kind].has("surface"):
@@ -239,7 +277,7 @@ static func replace(layout: Dictionary,row: Dictionary) -> Dictionary:
 	var next:=layout.duplicate(true);var old:=find(next,row.id).duplicate(true)
 	if old.is_empty():return next
 	var origin:=Vector2.ZERO;var target:=Vector2.ZERO;var turn:=0.
-	if old.type=="object":
+	if old.type in ["object","stairs"]:
 		origin=Vector2(old.position[0],old.position[1]);target=Vector2(row.position[0],row.position[1]);turn=float(row.yaw)-float(old.yaw)
 	elif old.type in ["floor","wall","roof"]:origin=rect(old).get_center();target=rect(row).get_center()
 	for i in range(next.elements.size()):
@@ -256,17 +294,19 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 		if row.type=="floor":floors.append(row)
 		elif row.type=="wall":walls.append(row)
 		elif row.type=="object":objects.append(row)
-	var buckets: Dictionary={}
+	var buckets: Dictionary={};var layers: Dictionary={}
 	for i in range(objects.size()):
-		var item: Dictionary=objects[i];var footprint:=Catalog.footprint(item);var mount:=Catalog.mount(item)
+		var item: Dictionary=objects[i];var level:=Storeys.of(item)
+		if not layers.has(level):layers[level]=walkable_grid(layout,level)
+		grid=layers[level];var footprint:=Catalog.footprint(item);var mount:=Catalog.mount(item)
 		if not Site.within(footprint.position) or not Site.within(footprint.end):add_issue(issues,"plot",[item],"物件边缘超出了建造地块。")
 		if mount=="floor":
-			if not Catalog.OBJECTS[item.kind].get("outdoor",false) and not Grid.covered(footprint,grid.floors):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
+			if (Storeys.of(item)>0 or not Catalog.OBJECTS[item.kind].get("outdoor",false)) and not Grid.covered(footprint,grid.floors):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
 		else:
 			var parent:=find(layout,str(item.get("support","")))
-			if parent.is_empty():continue
+			if parent.is_empty() and mount!="ceiling":continue
 			var inside:=true
-			if mount=="ceiling":inside=rect(parent).grow(.002).encloses(footprint)
+			if mount=="ceiling":inside=ceiling_covered(layout,footprint,Storeys.of(item))
 			else:
 				var definition: Dictionary=Catalog.OBJECTS[parent.kind];var surface:=Rect2(definition.get("surface_offset",Vector2.ZERO)-definition.surface*.5,definition.surface).grow(.002)
 				for x in [-.5,.5]:
@@ -274,7 +314,7 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 						var p:=Vector2(item.position[0],item.position[1])+Catalog.rotate_xz(Catalog.OBJECTS[item.kind].get("offset",Vector2.ZERO)+Catalog.OBJECTS[item.kind].size*Vector2(x,z),float(item.yaw))
 						var local:=Catalog.rotate_xz(p-Vector2(parent.position[0],parent.position[1]),-float(parent.yaw))
 						if not surface.has_point(local):inside=false
-			if not inside:add_issue(issues,"surface",[item,parent],"物品超出台面或天花板边缘，请往里移动。")
+			if not inside:add_issue(issues,"surface",[item]+([parent] if not parent.is_empty() else []),"物品超出台面或天花板边缘，请往里移动。")
 		if mount!="ceiling" and not Catalog.OBJECTS[item.kind].get("overlay",false):
 			var candidates: Dictionary={};var a:=Vector2i(floori(footprint.position.x/3.),floori(footprint.position.y/3.));var b:=Vector2i(floori(footprint.end.x/3.),floori(footprint.end.y/3.))
 			for z in range(a.y,b.y+1):
@@ -303,7 +343,7 @@ static func add_issue(issues: Dictionary,type: String,rows: Array,message: Strin
 	for row in rows:
 		ids.append(row.id)
 		var data:={}
-		for key in ["id","type","kind","position","yaw","support","support_level","a","b"]:
+		for key in ["id","type","storey","kind","position","yaw","support","support_level","a","b"]:
 			if row.has(key):data[key]=row[key]
 		geometry.append(data)
 	issues[type+":"+":".join(ids)]={"signature":JSON.stringify(geometry).sha256_text(),"message":message}
@@ -335,37 +375,43 @@ static func merge_template(layout: Dictionary,source: Dictionary,p: Vector2) -> 
 	var next:=layout.duplicate(true);var ids: Dictionary={}
 	for row in source.elements:
 		ids[row.id]="build_%d"%next.next_id;next.next_id+=1
-	var first_floor: Dictionary=source.elements.filter(func(row):return row.type=="floor")[0]
-	var shift:=p-rect(first_floor).get_center()
+	var shift:=p-template_origin(source)
 	for row in source.elements:
 		var item: Dictionary=row.duplicate(true);item.id=ids[row.id]
-		if item.type in ["floor","roof","wall"]:
+		if item.type in ["floor","roof","wall","railing"]:
 			item.a=[float(item.a[0])+shift.x,float(item.a[1])+shift.y];item.b=[float(item.b[0])+shift.x,float(item.b[1])+shift.y]
-		elif item.type=="object":item.position=[float(String.num(float(item.position[0])+shift.x,3)),float(String.num(float(item.position[1])+shift.y,3))]
+		elif item.type in ["object","stairs"]:item.position=[float(String.num(float(item.position[0])+shift.x,3)),float(String.num(float(item.position[1])+shift.y,3))]
 		if item.has("anchor"):item.anchor=[float(item.anchor[0])+shift.x,float(item.anchor[1])+shift.y]
 		if item.get("wall","")!="":item.wall=ids[item.wall]
-		if item.get("support","")!="":item.support=ids[item.support]
+		if ids.has(item.get("support","")):item.support=ids[item.support]
 		next.elements.append(item)
 	return next
 
 static func cleanup_dependents(layout: Dictionary) -> Dictionary:
-	var next:=layout.duplicate(true);var floors: Dictionary=compiled(next).floors;var removed: Dictionary={};var ids: Dictionary={}
+	var next:=layout.duplicate(true);var floors: Dictionary={};var removed: Dictionary={};var ids: Dictionary={}
+	var layers: Dictionary={}
+	for level in Storeys.levels(next):layers[level]=compiled(next,level)
 	for row in next.elements:ids[row.id]=row
 	for row in next.elements:
+		floors=layers[Storeys.of(row)].floors
 		if row.type=="roof" and not Grid.covered(rect(row),floors):removed[row.id]=true
 		elif row.type in ["door","window"]:
-			if not opening_supported(row,compiled(next).walls):removed[row.id]=true
-		elif row.type=="object" and Catalog.mount(row)=="floor" and not Catalog.OBJECTS[row.kind].get("outdoor",false) and not Grid.covered(Catalog.footprint(row),floors):removed[row.id]=true
+			if not opening_supported(row,layers[Storeys.of(row)].walls):removed[row.id]=true
+		elif row.type=="object" and Catalog.mount(row)=="floor" and (Storeys.of(row)>0 or not Catalog.OBJECTS[row.kind].get("outdoor",false)) and not Grid.covered(Catalog.footprint(row),floors):removed[row.id]=true
 	for row in next.elements:
-		if row.get("support","")!="" and (not ids.has(row.support) or removed.has(row.support)):removed[row.id]=true
-	next.elements=next.elements.filter(func(row):return not removed.has(row.id));return next
-static func demolish(layout: Dictionary,bounds: Rect2,filter: String="all",edge: Variant=null) -> Dictionary:
-	return cleanup_dependents(Grid.cut(layout,bounds,filter,edge))
+		if row.type=="object" and Catalog.mount(row)=="ceiling":
+			if not ceiling_covered(next,Catalog.footprint(row),Storeys.of(row)):removed[row.id]=true
+		elif row.get("support","")!="" and (not ids.has(row.support) or removed.has(row.support)):removed[row.id]=true
+	next.elements=next.elements.filter(func(row):return not removed.has(row.id))
+	next.elements=next.elements.filter(func(row):return row.type!="object" or Catalog.mount(row)!="ceiling" or ceiling_covered(next,Catalog.footprint(row),Storeys.of(row)))
+	return next
+static func demolish(layout: Dictionary,bounds: Rect2,filter: String="all",edge: Variant=null,level: int=0) -> Dictionary:
+	return cleanup_dependents(Grid.cut(layout,bounds,filter,edge,level))
 static func unit_at(layout: Dictionary,id: String,p: Vector2) -> Dictionary:
 	var row:=find(layout,id)
 	if row.is_empty():return {}
 	if row.type=="floor":
-		var c:=Grid.cell(p);var result: Dictionary=compiled(layout).floors.get(c,{})
+		var c:=Grid.cell(p);var result: Dictionary=compiled(layout,Storeys.of(row)).floors.get(c,{})
 		if result.is_empty():return {}
 		result=result.duplicate(true);result.a=[c.x*.5,c.y*.5];result.b=[c.x*.5+.5,c.y*.5+.5];return result
 	if row.type=="wall":
@@ -374,11 +420,11 @@ static func unit_at(layout: Dictionary,id: String,p: Vector2) -> Dictionary:
 		var result:=row.duplicate(true);result.a=[a.x,a.y];result.b=[b.x,b.y];return result
 	return row
 static func replace_unit(layout: Dictionary,old: Dictionary,row: Dictionary) -> Dictionary:
-	var grid:=compiled(layout);grid={"floors":grid.floors.duplicate(),"walls":grid.walls.duplicate()}
+	var grid:=compiled(layout,Storeys.of(old));grid={"floors":grid.floors.duplicate(),"walls":grid.walls.duplicate()}
 	var keys: Array=Grid.coordinates(old) if old.type=="floor" else Grid.edges(old)
 	var target: Dictionary=grid.floors if old.type=="floor" else grid.walls
 	for key in keys:target.erase(key)
-	var next:=Grid.compress(layout,grid)
+	var next:=Grid.compress(layout,grid,Storeys.of(old))
 	# Reinsert as a new record; normal validation prevents unsupported moves.
 	return add(next,row)
 
@@ -389,3 +435,29 @@ static func opening_supported(row: Dictionary,walls: Dictionary) -> bool:
 		var e:=Vector3i(i,plane_,0) if axis==0 else Vector3i(plane_,i,1)
 		if not walls.has(e):return false
 	return true
+
+static func ceiling_covered(layout: Dictionary,bounds: Rect2,level: int,ignore: String="") -> bool:
+	if level<Storeys.MAX-1 and Grid.covered(bounds,walkable_grid(layout,level+1).floors):return true
+	for row in layout.elements:
+		if row.type=="roof" and Storeys.of(row)==level and row.id!=ignore and rect(row).grow(.002).encloses(bounds):return true
+	return false
+static func walkable_grid(layout: Dictionary,level: int) -> Dictionary:
+	var source:=compiled(layout,level)
+	var stairs: Array=layout.elements.filter(func(row):return row.type=="stairs" and Storeys.of(row)+1==level)
+	if stairs.is_empty():return source
+	var key: String=source.signature+JSON.stringify(stairs)
+	if walk_cache.has(key):return walk_cache[key]
+	var result:=source.duplicate();result.floors=source.floors.duplicate();result.erase("compressed_floor");result.erase("compressed_wall")
+	for stair in stairs:
+		for c in Stairs.hole_cells(stair):result.floors.erase(c)
+	result.signature=key.sha256_text()
+	if walk_cache.size()>=8:walk_cache.erase(walk_cache.keys()[0])
+	walk_cache[key]=result;return result
+
+static func template_origin(source: Dictionary) -> Vector2:
+	var floors: Array=source.elements.filter(func(row):return row.type=="floor" and Storeys.of(row)==0)
+	if floors.is_empty():floors=source.elements.filter(func(row):return row.type=="floor")
+	if floors.is_empty():return Vector2.ZERO
+	var area:=rect(floors[0])
+	for row in floors:area=area.merge(rect(row))
+	return area.get_center()

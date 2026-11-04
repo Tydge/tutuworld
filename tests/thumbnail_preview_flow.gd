@@ -28,8 +28,9 @@ func run() -> void:
 	while city.camera==null:await process_frame
 	await create_timer(.6).timeout;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await create_timer(1.2).timeout;await frames(8)
 	editor=city.build_mode;editor.open_editor()
-	for category in ["结构","照明","床","庭院","桌柜","装饰","座椅","照明"]:editor.ui.show_category(category)
-	var ids: Array=["floor","wall","door","window","roof"];ids.append_array(C.OBJECTS.keys());await wait_for(editor.ui.studio,ids)
+	for category in C.CATEGORIES+["照明"]:editor.ui.show_category(category)
+	editor.ui.choose_card("stairs")
+	var ids: Array=["floor","wall","door","window","roof","stairs","railing","stairs:straight","stairs:l","stairs:u"];ids.append_array(C.OBJECTS.keys());await wait_for(editor.ui.studio,ids)
 	for id in ids:check(ready_for(editor.ui.studio,[id]),"Catalog icon contains actual visible pixels after rapid category changes: "+id)
 	check(editor.ui.studio.pending.is_empty() and not editor.ui.studio.busy,"The serial thumbnail queue completes without a stuck or duplicate active job")
 	for id in ["floor","table_lamp","pendant"]:editor.ui.studio.cache[id].get_image().save_png(out+"/"+id+"-icon.png")

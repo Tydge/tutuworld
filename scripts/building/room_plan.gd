@@ -8,7 +8,12 @@ static func key(walls: Dictionary,floors: Dictionary) -> String:
 static func make(grid: Dictionary) -> Dictionary:
 	var signature:=key(grid.walls,grid.floors)
 	if cache.has(signature):return cache[signature]
-	var first:=Grid.cell(Site.PLOT.position);var last:=Grid.cell(Site.PLOT.end);var visited: Dictionary={};var regions: Dictionary={};var cell_rooms: Dictionary={}
+	var first:=Grid.cell(Site.PLOT.end);var last:=Grid.cell(Site.PLOT.position)
+	for c: Vector2i in grid.floors:first=first.min(c);last=last.max(c+Vector2i.ONE)
+	for edge: Vector3i in grid.walls:
+		for c in Grid.ends(edge):first=first.min(c);last=last.max(c+Vector2i.ONE)
+	first-=Vector2i.ONE;last+=Vector2i.ONE
+	var visited: Dictionary={};var regions: Dictionary={};var cell_rooms: Dictionary={}
 	for z in range(first.y,last.y):
 		for x in range(first.x,last.x):
 			var start:=Vector2i(x,z)

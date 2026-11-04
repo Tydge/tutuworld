@@ -747,14 +747,19 @@ func build_settings() -> void:
 	options.add_child(UI.button("保存并退出游戏",func(): session.save_game(); get_tree().quit()))
 func build_map() -> void:
 	if city.map_id=="valley": build_valley_map();return
-	content.add_child(UI.label("北 · 商业街     东 · 菜园     南 · 沙滩     西 · 住宅
+	var east_building: bool=not session.is_online()
+	content.add_child(UI.label("北 · 商业街     东 · 菜园"+("与建造园 · 东庭两层样板房" if east_building else "")+"     南 · 沙滩     西 · 住宅
 散步寻找石灰石、铜矿与树枝 · 公园有四棵橘子树",17,UI.MUTED))
 	map_draw=Control.new()
 	map_draw.custom_minimum_size=Vector2(890,480)
 	content.add_child(map_draw)
 	map_draw.draw.connect(func():
 		var center:=Vector2(445,238)
-		map_draw.draw_set_transform(center,0,Vector2(4.6,4.1))
+		map_draw.draw_set_transform(center-Vector2(53.5*3.65,0) if east_building else center,0,Vector2(3.65,3.25) if east_building else Vector2(4.6,4.1))
+		if east_building:
+			map_draw.draw_rect(preload("res://scripts/building/site.gd").PAD,Color("a8c68c"));map_draw.draw_rect(preload("res://scripts/building/site.gd").CONNECTOR,Color("eee4c8"))
+			map_draw.draw_line(Vector2(97,29),Vector2(159,29),Color("eee4c8"),1.2)
+			map_draw.draw_rect(Rect2(131,2.5,16,15),Color("eadcc5"));map_draw.draw_rect(Rect2(131,2.5,16,12),Color("688d81"))
 		map_draw.draw_circle(Vector2.ZERO,55,Color("a8c68c"))
 		map_draw.draw_rect(Rect2(-36,28,72,13),Color("e4cc94"))
 		map_draw.draw_rect(Rect2(-39,-31,70,12),Color("d7b99c"))

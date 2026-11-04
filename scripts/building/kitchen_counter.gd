@@ -1,0 +1,28 @@
+extends RefCounted
+const G=preload("res://scripts/geometry.gd")
+const P=preload("res://scripts/city/prop_collisions.gd")
+static func build(b: RefCounted,n: Node3D) -> void:
+	var green: Material=b.material("819f8c");var cream: Material=b.material("eee2c6");var oak: Material=b.material("c6a373",1);var metal:=G.mat("9caeaa",.28);var dark:=G.mat("475b54",.5)
+	b.rounded(n,Vector3(0,.56,0),Vector3(3.8,1.02,1.15),.065,green,"Cabinet")
+	b.rounded(n,Vector3(0,1.12,0),Vector3(3.9,.16,1.3),.04,cream,"StoneWorktop")
+	b.block(n,Vector3(0,.09,.02),Vector3(3.6,.17,1.02),oak,"Plinth")
+	for x in [-1.3,0.,1.3]:
+		b.rounded(n,Vector3(x,.56,.593),Vector3(1.20,.84,.07),.035,green,"Panel")
+		b.rounded(n,Vector3(x,.60,.635),Vector3(1.03,.65,.018),.025,cream,"PanelInset")
+		G.capsule(n,Vector3(x-.14,.90,.68),Vector3(x+.14,.90,.68),.025,G.mat("b89b63",.35),"BrassPull")
+	b.rounded(n,Vector3(0,1.52,-.57),Vector3(3.8,.65,.09),.02,cream,"Backsplash")
+	for x in [-1.5,-.75,0.,.75,1.5]:b.block(n,Vector3(x,1.52,-.512),Vector3(.012,.58,.005),green,"TileJoint")
+	b.rounded(n,Vector3(-1.16,1.216,0),Vector3(.92,.025,.73),.09,metal,"SinkRim")
+	b.rounded(n,Vector3(-1.16,1.233,0),Vector3(.74,.018,.56),.07,dark,"SinkBowl")
+	G.capsule(n,Vector3(-1.16,1.20,-.37),Vector3(-1.16,1.66,-.37),.035,metal,"TapUpright");G.capsule(n,Vector3(-1.16,1.66,-.37),Vector3(-1.16,1.66,-.05),.035,metal,"TapSpout")
+	b.rounded(n,Vector3(1.12,1.22,-.01),Vector3(1.14,.04,.91),.035,dark,"Stovetop")
+	for x in [.84,1.4]:
+		for z in [-.25,.23]:G.cylinder(n,Vector3(x,1.25,z),.19,.025,G.mat("7b8e83"),-1,"Burner")
+	G.cylinder(n,Vector3(.83,1.42,-.22),.24,.32,G.mat("b79161",.35),.28,"CopperPot");G.cylinder(n,Vector3(.83,1.60,-.22),.28,.05,cream,-1,"PotLid");G.ball(n,Vector3(.83,1.66,-.22),Vector3.ONE*.055,oak,"LidKnob")
+	for sign_ in [-1,1]:G.capsule(n,Vector3(.83+sign_*.24,1.48,-.22),Vector3(.83+sign_*.37,1.48,-.22),.035,oak,"PotHandle")
+	b.rounded(n,Vector3(-.12,1.22,.03),Vector3(.73,.045,.55),.035,oak,"ChoppingBoard")
+	for i in range(3):G.ball(n,Vector3(-.27+i*.16,1.29,.06),Vector3(.08,.065,.08),G.mat("cb7953" if i<2 else "8caa69"),"FreshProduce")
+	b.rounded(n,Vector3(1.42,.55,.68),Vector3(.40,.55,.03),.035,b.material("e9d4a2"),"LinenTowel")
+	P.box(n,"CounterCollision",Vector3(0,.61,0),Vector3(3.85,1.22,1.22))
+	P.box(n,"BacksplashCollision",Vector3(0,1.52,-.57),Vector3(3.8,.65,.09))
+	for info in [["ActionAnchor",Vector3(0,.03,1.8)],["WorkAnchor",Vector3(0,.03,1.8)],["EffectAnchor",Vector3(.83,1.75,-.22)]]:b.group(n,info[0],info[1])

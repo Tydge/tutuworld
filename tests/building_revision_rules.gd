@@ -28,7 +28,7 @@ func run() -> void:
 			check(aligned,"Real standalone collider fits rotated footprint: "+kind+" "+str(yaw));n.free()
 		var legacy:={"schema":1,"next_id":3,"elements":[{"id":"floor","type":"floor","a":[73.,5.],"b":[85.,15.]},{"id":"bed","type":"object","kind":"bed","position":[82.,8.],"yaw":yaw}]}
 		var migrated:=L.normalize(legacy)
-		check(migrated.schema==3 and migrated.elements.size()==4,"Legacy bed splits into three independent elements without losing room: "+str(yaw))
+		check(migrated.schema==4 and migrated.elements.size()==4,"Legacy bed splits into three independent elements without losing room: "+str(yaw))
 		var bedside: Dictionary=migrated.elements.filter(func(item):return item.get("kind","")=="bedside")[0]
 		var lamp: Dictionary=migrated.elements.filter(func(item):return item.get("kind","")=="table_lamp")[0]
 		var offset: Vector3=Basis(Vector3.UP,deg_to_rad(yaw))*Vector3(-1.9,0,-.9)

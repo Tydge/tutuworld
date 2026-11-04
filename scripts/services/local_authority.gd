@@ -12,6 +12,7 @@ var job: Dictionary = {}
 var facility_positions: Dictionary={}
 var facility_kinds: Dictionary={}
 var trade_access: Callable
+var facility_access: Callable
 var seen_commands: Dictionary = {}
 var revision := 0
 var running:=false
@@ -34,8 +35,17 @@ func _init() -> void:
 	state.watering_water={}
 	for id in preload("res://scripts/city/production_facilities.gd").defaults():
 		facility_kinds[id]=preload("res://scripts/city/production_facilities.gd").defaults()[id].kind
-func facility_position(id: String) -> Vector2: return facility_positions.get(id,DB.facilities().get(id,Vector2(INF,INF)))
-func facility_kind(id: String) -> String: return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
+func built_kitchen(id: String) -> Dictionary:
+	if not id.begins_with("build:"):return {}
+	var row:=preload("res://scripts/building/layout.gd").find(state.build_layout,id.trim_prefix("build:"))
+	return row if row.get("type","")=="object" and row.get("kind","")=="cooking_counter" else {}
+func facility_position(id: String) -> Vector2:
+	var row:=built_kitchen(id)
+	if not row.is_empty():return Vector2(row.position[0],row.position[1])+preload("res://scripts/building/catalog.gd").rotate_xz(Vector2(0,1.8),row.yaw)
+	return facility_positions.get(id,DB.facilities().get(id,Vector2(INF,INF)))
+func facility_kind(id: String) -> String:
+	if not built_kitchen(id).is_empty():return "kitchen"
+	return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
 func watering_can_id() -> String:
 	for id in ["copper_watering_can","watering_can"]:
 		if count(id)>0: return id
@@ -205,12 +215,12 @@ func _apply(c: Dictionary) -> Dictionary:
 		state.rest_mode="";state.rest_bed="";sleeping=false
 		return {"ok":true,"message":""}
 	if verb=="rest":
-		var bed_id:=str(c.get("target",""));var point: Vector2=DB.facilities().home_bed if bed_id=="home_bed" else Vector2(INF,INF);var yaw:=0.
+		var bed_id:=str(c.get("target",""));var point: Vector2=DB.facilities().home_bed if bed_id=="home_bed" else Vector2(INF,INF);var yaw:=0.;var bed_height:=.18;var bed_story:=-1
 		if bed_id.begins_with("build:"):
 			var row:=preload("res://scripts/building/layout.gd").find(state.build_layout,bed_id.trim_prefix("build:"))
-			if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[row.kind].get("bed",false):point=Vector2(row.position[0],row.position[1]);yaw=float(row.yaw)
+			if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[row.kind].get("bed",false):point=Vector2(row.position[0],row.position[1]);yaw=float(row.yaw);bed_height=preload("res://scripts/building/storeys.gd").elevation(row)+.18;bed_story=int(row.get("storey",0))
 		var player: Array=state.player_position;var local: Vector2=(Vector2(player[0],player[2])-point).rotated(deg_to_rad(yaw))
-		if not point.is_finite() or not job.is_empty() or preload("res://scripts/city/furniture_access.gd").bed_distance(local)>2.0:return fail("先来到床边，再好好睡一觉吧。")
+		if not point.is_finite() or (bed_story>=0 and preload("res://scripts/building/storeys.gd").at_height(float(player[1]))!=bed_story) or absf(float(player[1])-bed_height)>1.7 or not job.is_empty() or preload("res://scripts/city/furniture_access.gd").bed_distance(local)>2.0:return fail("先来到床边，再好好睡一觉吧。")
 		state.rest_mode="sleep";state.rest_bed=bed_id;sleeping=true;running=false
 		return {"ok":true,"message":""}
 	if state.get("rest_mode","")=="sleep": return fail("先起床，伸个懒腰吧。")
@@ -220,6 +230,8 @@ func _apply(c: Dictionary) -> Dictionary:
 		var recipe_id: String=c.get("recipe","")
 		var recipe:=DB.recipe(recipe_id)
 		if recipe.is_empty() or facility_kind(target)!=recipe.station or not near_position(facility_position(target),3.8): return fail("请来到对应的料理台或工坊工作台。")
+		var built:=built_kitchen(target)
+		if not built.is_empty() and (preload("res://scripts/building/storeys.gd").at_height(float(state.player_position[1]))!=int(built.get("storey",0)) or absf(float(state.player_position[1])-(preload("res://scripts/building/storeys.gd").elevation(built)+.18))>1.25 or (facility_access.is_valid() and not facility_access.call(target))):return fail("请来到料理台前，留出操作空间。")
 		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return fail("这件工具已经拥有啦。")
 		var locked := recipe_lock_reason(recipe_id)
 		if locked!="": return fail(locked)

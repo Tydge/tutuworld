@@ -9,7 +9,7 @@ static func can_talk(host: Node3D,actor: CharacterBody3D,target: Dictionary) -> 
 		if not is_instance_valid(shop) or not shop.contains_position(actor.global_position):return false
 	var excluded: Array[RID]=[actor.get_rid()]
 	if other is CollisionObject3D:excluded.append(other.get_rid())
-	var ray:=PhysicsRayQueryParameters3D.create(actor.global_position+Vector3.UP*1.15,other.global_position+Vector3.UP*1.15,5,excluded)
+	var ray:=PhysicsRayQueryParameters3D.create(actor.global_position+Vector3.UP*1.15,other.global_position+Vector3.UP*1.15,13,excluded)
 	return host.get_world_3d().direct_space_state.intersect_ray(ray).is_empty()
 static func can_trade(host: Node3D,actor: CharacterBody3D,shop: String) -> bool:
 	for target in host.targets.values():

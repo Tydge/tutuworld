@@ -1,0 +1,24 @@
+{
+  "all_existing_rows_preserved": true,
+  "live_save_written": false,
+  "merged_rows": 167,
+  "merged_usage": {
+    "floor_area": 719.75,
+    "floor_cells": 2879,
+    "lights": 15,
+    "objects": 90,
+    "roofs": 5,
+    "wall_edges": 508,
+    "wall_length": 254.0
+  },
+  "old_rows": 96,
+  "old_usage": {
+    "floor_area": 239.75,
+    "floor_cells": 959,
+    "lights": 8,
+    "objects": 60,
+    "roofs": 3,
+    "wall_edges": 212,
+    "wall_length": 106.0
+  }
+}

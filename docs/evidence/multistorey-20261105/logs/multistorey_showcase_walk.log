@@ -1,0 +1,26 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+PASS Furnished showcase validates
+WANDER_GRID_READY cells=19995 components=6
+PASS Walk through the real front door into the furnished entrance
+PASS Walk the sample's U stair with its real walls, ceilings and furniture
+PASS Walk the clear upstairs corridor before opening the study door
+PASS Real door E prompt is available from the walking approach
+PASS Reach the actual upstairs study through its door
+PASS Return through the landing toward the bedroom
+PASS Real door E prompt is available from the walking approach
+PASS Reach the bedroom from the shared landing corridor
+PASS Walk around the bed and through its glass door onto the balcony
+PASS Balcony remains outdoors and has open sky
+PASS Walk into the balcony chair's real approach space
+PASS Balcony chair can be selected naturally beside the glass door
+PASS Actual E sits on the balcony chair
+PASS Leaving the balcony chair stays on 2F
+PASS Return from the balcony through the bedroom to the landing
+PASS Descend the furnished sample's stair
+PASS Walk from the stair to the closed kitchen door
+PASS Real door E prompt is available from the walking approach
+PASS Walk from the kitchen door up to its cooking counter
+PASS Kitchen interaction is available after physically walking there
+MULTISTOREY_SHOWCASE_WALK_RESULT PASS checks=21 failures=[]

@@ -10,6 +10,7 @@ func build_item(n: Node3D,kind: String) -> void:
 		preload("res://scripts/city/seating.gd").ensure(n,int(preload("res://scripts/building/catalog.gd").OBJECTS[kind].get("seats",1)))
 		return
 	match kind:
+		"cooking_counter":preload("res://scripts/building/kitchen_counter.gd").build(self,n)
 		"bed":
 			build_bed(n);discard(n.get_node("Bedside"))
 		"desk":

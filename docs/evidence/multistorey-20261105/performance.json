@@ -1,0 +1,122 @@
+{
+  "device": "Apple M1 Pro (Apple7)",
+  "driver": "metal",
+  "metric": "Uncapped, vsync-off complete frames; short orbit in two rooms. Submission CPU is not GPU time. Other local Godot processes may affect wall time; no steady-60FPS claim.",
+  "msaa": 2,
+  "preview": [
+    {
+      "first_ms": 80.86,
+      "form": "straight",
+      "hot_median_ms": 7.398,
+      "hot_p95_ms": 8.173
+    },
+    {
+      "first_ms": 104.556,
+      "form": "l",
+      "hot_median_ms": 8.235,
+      "hot_p95_ms": 8.326
+    },
+    {
+      "first_ms": 110.68,
+      "form": "u",
+      "hot_median_ms": 8.287,
+      "hot_p95_ms": 8.857
+    }
+  ],
+  "renderer": "forward_plus",
+  "rows": [
+    {
+      "camera_mode": 0,
+      "draws_median": 1039.0,
+      "frame_median_ms": 12.497,
+      "frame_p95_ms": 12.931,
+      "frames": 161,
+      "material_writes": 27,
+      "render_submission_median_ms": 0.853999972343445,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 857.0,
+      "stable_window": true,
+      "storey": 1,
+      "window": "(3024, 1890)"
+    },
+    {
+      "camera_mode": 1,
+      "draws_median": 1735.0,
+      "frame_median_ms": 14.209,
+      "frame_p95_ms": 20.046,
+      "frames": 132,
+      "material_writes": 0,
+      "render_submission_median_ms": 1.58399999141693,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 843.0,
+      "stable_window": true,
+      "storey": 1,
+      "window": "(3024, 1890)"
+    },
+    {
+      "camera_mode": 2,
+      "draws_median": 1920.0,
+      "frame_median_ms": 16.095,
+      "frame_p95_ms": 21.584,
+      "frames": 123,
+      "material_writes": 198,
+      "render_submission_median_ms": 1.66999995708466,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 936.0,
+      "stable_window": true,
+      "storey": 1,
+      "window": "(3024, 1890)"
+    },
+    {
+      "camera_mode": 0,
+      "draws_median": 1222.0,
+      "frame_median_ms": 13.587,
+      "frame_p95_ms": 13.93,
+      "frames": 148,
+      "material_writes": 92,
+      "render_submission_median_ms": 1.0349999666214,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 1003.0,
+      "stable_window": true,
+      "storey": 2,
+      "window": "(3024, 1890)"
+    },
+    {
+      "camera_mode": 1,
+      "draws_median": 1761.0,
+      "frame_median_ms": 15.483,
+      "frame_p95_ms": 17.351,
+      "frames": 142,
+      "material_writes": 0,
+      "render_submission_median_ms": 1.692999958992,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 894.0,
+      "stable_window": true,
+      "storey": 2,
+      "window": "(3024, 1890)"
+    },
+    {
+      "camera_mode": 2,
+      "draws_median": 2025.0,
+      "frame_median_ms": 17.565,
+      "frame_p95_ms": 22.786,
+      "frames": 114,
+      "material_writes": 211,
+      "render_submission_median_ms": 1.83299994468689,
+      "scale": 0.591552376747131,
+      "shadow_draws_median": 976.0,
+      "stable_window": true,
+      "storey": 2,
+      "window": "(3024, 1890)"
+    }
+  ],
+  "usage": {
+    "floor_area": 719.75,
+    "floor_cells": 2879,
+    "lights": 15,
+    "objects": 90,
+    "roofs": 5,
+    "wall_edges": 508,
+    "wall_length": 254.0
+  }
+}

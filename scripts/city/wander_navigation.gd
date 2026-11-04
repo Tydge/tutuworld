@@ -10,6 +10,7 @@ var destinations: Dictionary={}
 var sampling_ready:=false
 var sampling_revision:=0
 var floor_heights: Dictionary={}
+var stair_reservations: Array=[]
 const GROUND_MARGIN:=.45
 const SUPPORT_OFFSETS=[Vector2.ZERO,Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN,Vector2(.7071,.7071),Vector2(.7071,-.7071),Vector2(-.7071,.7071),Vector2(-.7071,-.7071)]
 func _ready() -> void:
@@ -24,7 +25,12 @@ func _ready() -> void:
 	build.call_deferred()
 func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 	if not get_parent().can_navigate(Vector3(x,0,z)): return true
-	floor_query.from=Vector3(x,18,z);floor_query.to=Vector3(x,-1.5,z)
+	for area: Rect2 in stair_reservations:
+		if area.has_point(Vector2(x,z)):return true
+	# The outdoor grid samples ground near its own height. Upper storeys must
+	# never replace a street cell with the roof / highest floor above it.
+	var top:=.75 if preload("res://scripts/building/site.gd").contains(Vector3(x,0,z)) and get_parent().get("map_id")=="city" else 18.
+	floor_query.from=Vector3(x,top,z);floor_query.to=Vector3(x,-1.5,z)
 	var floor_hit:=space.intersect_ray(floor_query)
 	if floor_hit.is_empty():
 		floor_heights.erase(Vector2i(x,z));return true
@@ -53,6 +59,7 @@ func can_step(from: Vector3,to: Vector3) -> bool:
 	return Vector2(to.x,to.z).distance_squared_to(safe)<Vector2(from.x,from.z).distance_squared_to(safe)
 func build() -> void:
 	await get_tree().physics_frame
+	reserve_stairs()
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
 	var count_:=0
 	for z in range(map_bounds.position.y,map_bounds.end.y):
@@ -129,9 +136,18 @@ func path_between(from: Vector3,to: Vector3) -> PackedVector3Array:
 func refresh_region(bounds: AABB) -> void:
 	if not ready_for_paths: return
 	await get_tree().physics_frame;await get_tree().physics_frame
+	reserve_stairs()
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
 	for z in range(floori(bounds.position.z)-1,ceili(bounds.end.z)+2):
 		for x in range(floori(bounds.position.x)-1,ceili(bounds.end.x)+2):
 			var cell:=Vector2i(x,z)
 			if grid.is_in_boundsv(cell): grid.set_point_solid(cell,blocked(space,x,z))
 	await rebuild_destinations()
+
+func reserve_stairs() -> void:
+	stair_reservations.clear()
+	var editor: Variant=get_parent().get("build_mode")
+	if not is_instance_valid(editor):return
+	for row in editor.layout.elements:
+		if row.type=="stairs" and int(row.get("storey",0))==0:
+			for area in preload("res://scripts/building/stairs.gd").parts(row):stair_reservations.append(area.grow(.45))

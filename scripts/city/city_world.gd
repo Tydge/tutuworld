@@ -73,6 +73,7 @@ var online_view: Node
 var network_action_pending:=false
 var network_action_approved:=false
 var network_interaction_pending:=false
+var kitchen_target:="kitchen"
 var build_mode: Node
 func _ready() -> void:
 	preload("res://scripts/city/render_budget.gd").ensure(self)
@@ -88,6 +89,7 @@ func _ready() -> void:
 		var interior:=scenery.get_node_or_null("Workshop" if id=="workshop" else "Shop_"+id)
 		if is_instance_valid(interior) and interior.get_script()==load("res://scripts/city/seabreeze_home.gd"): interiors.append(interior)
 	prepare_scenery()
+	if map_id=="city" and not session.is_online():preload("res://scripts/building/site.gd").ensure(scenery)
 	sun=scenery.get_node("Sun")
 	fountain_glow=scenery.get_node_or_null("CentralPark/Fountain/FountainGlow")
 	if fountain_glow==null:fountain_glow=scenery.get_node_or_null("CentralPark/FountainGlow")
@@ -347,6 +349,10 @@ func update_camera(delta: float) -> void:
 func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
 	var view=preload("res://scripts/city/interior_view.gd");var full: bool=view.mode(self)==view.FULL and view.indoors(self,pivot-Vector3.UP*1.35)
 	camera_query.collision_mask=13 if full else 9
+	camera_query.exclude=[]
+	if is_instance_valid(build_mode) and is_instance_valid(build_mode.room):
+		build_mode.room.apply_storey_visibility(bunny.global_position)
+		camera_query.exclude=build_mode.room.hidden_camera_bodies
 	var space:=get_world_3d().direct_space_state
 	# A cliff can overlap the small camera pivot even when the avatar's feet are clear.
 	# Resolve that overlap before sweeping; cast_motion intentionally ignores initial overlaps.
@@ -365,7 +371,7 @@ func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
 	return view.roof_limit(self,pivot,safe) if full else safe
 func respawn_position() -> Vector3: return Vector3(0,1,7)
 func navigation_bounds() -> Rect2i:
-	return Rect2i(-52,-46,153,93) if session.has_method("is_online") and not session.is_online() else Rect2i(-52,-46,105,93)
+	return Rect2i(-52,-46,215,93) if session.has_method("is_online") and not session.is_online() else Rect2i(-52,-46,105,93)
 func can_navigate(p: Vector3) -> bool: return can_walk(p)
 func can_walk(p: Vector3) -> bool:
 	for building_ in interiors:
@@ -392,6 +398,8 @@ func update_target() -> void:
 		if t.kind=="npc" and not t.node.get_meta("interaction_available",true): continue
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
 		var distance: float=Vector2(bunny.position.x-t.position.x,bunny.position.z-t.position.z).length()
+		if t.kind not in ["bed","bench","npc","shop"] and absf(bunny.position.y-t.position.y)>1.7:continue
+		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue
 		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
 		if t.kind in ["bed","bench"] and t.has("node"):
 			distance=FurnitureAccess.distance(t.node,bunny.global_position)
@@ -409,7 +417,7 @@ func update_target() -> void:
 			"home_door": text="E   "+("轻轻关上门" if t.get("node",home).door_open else "推开门，走进"+t.get("name","海风小屋"))
 			"well": text="E   打水 · 2 秒 · 水量 %d/%d"%[session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())]
 			"workshop": text="E   制造工作台 · 制造道具"
-			"kitchen": text="E   海风小厨房 · 烹饪料理"
+			"kitchen": text="E   "+t.get("name","海风小厨房")+" · 烹饪料理"
 			"dining": text="E   入座用餐 · 选择料理"
 			"boat": text="E   坐船回海岛城 · 免费" if map_id=="valley" else "E   坐船去眠风山谷 · 10 贝壳币"
 			"resource":
@@ -519,6 +527,7 @@ func interact() -> void:
 	if current_target=="": return
 	var t: Dictionary=targets[current_target]
 	if t.kind in ["shop","npc"] and not ConversationAccess.can_talk(self,bunny,t):update_target();return
+	if t.kind in ["bed","bench"] and t.has("node") and not FurnitureAccess.reachable(self,t.node,bunny):update_target();return
 	if session.is_online() and t.kind in ["npc","bench","bed","home_door"]:
 		online_interact(current_target);return
 	match t.kind:
@@ -527,7 +536,9 @@ func interact() -> void:
 			if result.message!="": hud.notify(result.message)
 			update_target()
 		"plot": hud.open_panel("plot")
-		"kitchen": hud.open_panel("kitchen")
+		"kitchen":
+			if t.has("node") and not facility_access(current_target):update_target();return
+			kitchen_target=current_target;hud.open_panel("kitchen")
 		"workshop": hud.open_panel("workshop")
 		"well": begin_action("refill",current_target)
 		"dining": hud.open_panel("dining")
@@ -591,7 +602,7 @@ func wake_from_bed() -> void:
 	if not result.ok:session.state().player_position=previous;return
 	sleep_active=false;set_meta("sleeping_bed",null);bunny.stand_up(landing.position);session.set_player_position(landing.position);update_target()
 
-func begin_cooking(recipe: String) -> Dictionary: return begin_action("craft","kitchen",recipe)
+func begin_cooking(recipe: String) -> Dictionary: return begin_action("craft",kitchen_target,recipe)
 func begin_manufacturing(recipe: String) -> Dictionary: return begin_action("craft",current_target,recipe)
 func begin_dining(item: String) -> Dictionary: return begin_action("eat","dining",item)
 func begin_snack(item: String) -> Dictionary: return begin_action("snack","",item)
@@ -604,6 +615,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 	if sleep_active: return {"ok":false,"message":"先起床，伸个懒腰吧。"}
 	if verb!="snack" and bunny.position.distance_to(target_position(target))>3.3: return {"ok":false,"message":"再靠近一点吧。"}
 	if verb=="gather" and targets[target].item!="orange" and bunny.position.distance_to(target_position(target))>2.0: return {"ok":false,"message":"再靠近一点，让工具够得着吧。"}
+	if targets.get(target,{}).get("kind","")=="kitchen" and targets[target].has("node") and not facility_access(target):return {"ok":false,"message":"料理台前需要留出安全的操作空间。"}
 	if targets.get(target,{}).get("kind","")=="workshop" and not targets[target].building.contains_position(bunny.global_position): return {"ok":false,"message":"先走进工坊，再使用工作台吧。"}
 	var result: Dictionary={"ok":true} if network_action_approved else session.dispatch(verb,{"target":target,"item":item,"recipe":item})
 	if result.ok:
@@ -666,7 +678,7 @@ func on_event(event: Dictionary) -> void:
 		sparkle.position=target_position(str(event.get("target","")))+Vector3(0,.75,0)
 	if event.type in ["completed","rejected"]: finish_action(); refresh_world(); play_tone(620,.12,.10)
 func refresh_world() -> void:
-	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access")
+	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access");session.authority.facility_access=Callable(self,"facility_access")
 	for id in crops:
 		var p: Dictionary=session.state().plots[id]
 		crops[id].refresh(p,session.authority.needs(p))
@@ -864,3 +876,13 @@ func update_occluders(delta: float) -> void:
 		if is_equal_approx(alpha,tree_.alpha): continue
 		tree_.alpha=alpha
 		for material in tree_.materials: material.set_shader_parameter("opacity",alpha)
+
+func facility_access(id: String) -> bool:
+	var target: Dictionary=targets.get(id,{})
+	if target.get("kind","")!="kitchen" or not target.has("node"):return id=="kitchen"
+	var node: Node3D=target.node
+	if not is_instance_valid(node) or bunny.global_position.distance_to(target.position)>3.3:return false
+	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(bunny.position.y)!=int(node.get_meta("storey")):return false
+	if absf(bunny.position.y-node.global_position.y)>1.25:return false
+	if not FurnitureAccess.clear_segment(self,node,bunny,bunny.global_position+Vector3.UP,target.position+Vector3.UP):return false
+	return not preload("res://scripts/city/local_landing.gd").find(self,node.get_node("WorkAnchor").global_position,bunny,false).is_empty()

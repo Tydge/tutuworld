@@ -1,7 +1,8 @@
 extends RefCounted
 ## X/Z offsets follow Godot's positive Y rotation (opposite Vector2 rotation).
-const CATEGORIES:=["结构","床","座椅","桌柜","照明","装饰","庭院"]
+const CATEGORIES:=["结构","床","座椅","桌柜","厨房","照明","装饰","庭院"]
 const OBJECTS:={
+	"cooking_counter":{"name":"青瓷料理台","size":Vector2(3.9,1.3),"height":1.85,"category":"厨房","facility":"kitchen"},
 	"bed":{"name":"木床","size":Vector2(2.7,4.5),"height":1.8,"category":"床","bed":true},
 	"bedside":{"name":"床头柜","size":Vector2(.8,.8),"height":.8,"surface":Vector2(.74,.70),"surface_height":.8,"category":"桌柜"},
 	"sofa":{"name":"双人沙发","size":Vector2(3.5,1.6),"height":1.7,"category":"座椅","seats":2},
@@ -52,5 +53,7 @@ static func wall_footprint(item: Dictionary) -> Rect2:
 static func mount(item: Dictionary) -> String:return str(OBJECTS.get(item.get("kind",""),{}).get("mount","floor"))
 static func name_for(row: Dictionary) -> String:
 	if row.get("type","")=="object":return OBJECTS.get(row.get("kind",""),{}).get("name","物件")
+	if row.get("type","")=="stairs":return preload("res://scripts/building/storeys.gd").STAIR_FORMS.get(row.get("form","straight"),"楼梯")
+	if row.get("type","")=="railing":return "木质阳台护栏"
 	if row.get("type","") in ["door","window","roof"]:return preload("res://scripts/building/structure_catalog.gd").label(row)
 	return {"template":"整栋样板房","floor":"地板","wall":"墙壁","window":"窗户","door":"门","roof":"屋顶"}.get(row.get("type",""),"物件")

@@ -1,0 +1,47 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Fixture validates: 已保存建造布局。
+PASS Fixture validates: 已保存建造布局。
+PASS Disabling room paint changes exactly one half-metre cell
+PASS Fixture validates: 已保存建造布局。
+PASS Default batch changes every matching cell in this room
+PASS The neighboring room keeps its original floor
+PASS Fixture validates: 已保存建造布局。
+PASS Fixture validates: 已保存建造布局。
+PASS A different existing floor finish stays unchanged by batch paint
+PASS Fixture validates: 已保存建造布局。
+PASS Only the inside of a reversed or forward wall changes
+PASS A shared partition preserves the neighboring room's wall face
+PASS Wall batching does not reach the adjacent room
+PASS Two wall finishes survive compact save and reload
+PASS Each structural form validates: door/classic
+PASS Form persists: door/classic
+PASS Each structural form validates: door/arch
+PASS Form persists: door/arch
+PASS Each structural form validates: door/glass
+PASS Form persists: door/glass
+PASS Each structural form validates: window/classic
+PASS Form persists: window/classic
+PASS Each structural form validates: window/arch
+PASS Form persists: window/arch
+PASS Each structural form validates: window/round
+PASS Form persists: window/round
+PASS Each structural form validates: roof/classic
+PASS Form persists: roof/classic
+PASS Each structural form validates: roof/hip
+PASS Form persists: roof/hip
+PASS Each structural form validates: roof/shed
+PASS Form persists: roof/shed
+PASS Unknown forms cannot enter the save
+PASS Authoritative sleep accepts the actual rotated built bed: bed
+PASS Reload preserves sleep on the same built bed: bed
+PASS Wake clears the selected bed: bed
+PASS Authoritative sleep accepts the actual rotated built bed: canopy_bed
+PASS Reload preserves sleep on the same built bed: canopy_bed
+PASS Wake clears the selected bed: canopy_bed
+PASS Authoritative sleep accepts the actual rotated built bed: cloud_bed
+PASS Reload preserves sleep on the same built bed: cloud_bed
+PASS Wake clears the selected bed: cloud_bed
+PASS Prototype reuse gives every bed its own animated quilt material
+PASS Sleeping in one same-kind bed never raises the other bed's covers
+BUILDING_EXPANSION_RULES_RESULT PASS checks=44 failures=[]

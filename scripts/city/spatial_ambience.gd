@@ -37,7 +37,8 @@ func ocean_point(p: Vector2) -> Vector3:
 	var point:=nearest_on(shore,p)
 	# The eastern construction island shares the same voice instead of adding
 	# a decoder at every shore marker. The connector's inland edge is omitted.
-	var plot:=PackedVector2Array([Vector2(61,-7),Vector2(97,-7),Vector2(97,27),Vector2(61,27)])
+	var site: Rect2=preload("res://scripts/building/site.gd").PAD
+	var plot:=PackedVector2Array([site.position,Vector2(site.end.x,site.position.y),site.end,Vector2(site.position.x,site.end.y)])
 	var east:=nearest_on(plot,p)
 	if east.distance_squared_to(p)<point.distance_squared_to(p):point=east
 	return Vector3(point.x,-.10,point.y)
@@ -51,7 +52,7 @@ func update_sources() -> void:
 	if creek!=null:creek.global_position=creek_point(p)
 	var bird_time:=gulls.get_playback_position();var between_calls: bool=bird_time<5. or (bird_time>14. and bird_time<22.) or (bird_time>27. and bird_time<37.) or bird_time>42.
 	if between_calls or gulls.position==Vector3.ZERO:
-		var anchors: Array=[Vector3(-13,5,47)] if city.map_id=="valley" else [Vector3(-24,5,-35),Vector3(18,5,40),Vector3(95,5,19)]
+		var anchors: Array=[Vector3(-13,5,47)] if city.map_id=="valley" else [Vector3(-24,5,-35),Vector3(18,5,40),Vector3(95,5,19),Vector3(156,5,19)]
 		anchors.sort_custom(func(a,b):return Vector2(a.x,a.z).distance_squared_to(p)<Vector2(b.x,b.z).distance_squared_to(p));gulls.global_position=anchors[0]
 	var indoors: float=city.interior_weight()
 	for player in base_volumes:

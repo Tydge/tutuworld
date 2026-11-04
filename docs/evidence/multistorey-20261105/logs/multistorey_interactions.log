@@ -1,0 +1,32 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+PASS Fully furnished two-storey sample loads
+PASS Neither prompt nor authority permits sleeping through the upper slab
+PASS A partial stair height still cannot reach the next floor through its slab
+PASS Upper bedroom bed offers E at its physical side
+WANDER_GRID_READY cells=19995 components=6
+PASS Actual E sleeps in upper bedroom
+PASS Save restores upper-floor sleeping bed and approach height
+PASS Waking stays beside the bed on 2F
+PASS Upper study chair offers E
+PASS Upper study chair can be sat on
+PASS Leaving upper study chair preserves floor
+PASS Cooking cannot reach a lower kitchen through the slab
+PASS Craft authority independently checks the selected counter's floor
+PASS Kitchen counter offers real E cooking prompt
+PASS E opens existing recipe interface for this counter
+PASS Recipe starts at this buildable counter
+PASS Completed cooking uses real ingredients and grants one dish
+PASS Adding a complete upper slab replaces lower roof and retains its ceiling light
+PASS Bedroom has a continuous floor/door/stair route downstairs
+PASS Cannot demolish the only stair while player is upstairs
+PASS Cannot remove the floor under an upstairs player
+PASS Leaving the house allows deliberate stair demolition
+PASS Four-storey building has three real floor connections
+PASS 4F has a connected route down to ground
+PASS Fourth-floor layout and player Y survive save migration
+PASS Moving stairs away from actual supported landings is rejected
+PASS Failed stair move cannot alter original opening
+PASS Kitchen uses new selectable floor and wall textures
+MULTISTOREY_INTERACTIONS_RESULT PASS checks=27 failures=[]

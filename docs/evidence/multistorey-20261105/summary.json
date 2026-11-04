@@ -1,0 +1,325 @@
+{
+  "date": "2026-11-05",
+  "timezone": "Asia/Hong_Kong",
+  "status": "PASS",
+  "scope": "Targeted multistorey, showcase, kitchen, terrain, building and interaction checks; no full regression or deployment.",
+  "engine": "Godot 4.6.3 stable; Apple M1 Pro; Metal Forward+",
+  "functional_groups": 24,
+  "counted_checks": 1435,
+  "performance_cases": 6,
+  "preview_forms": 3,
+  "tests": [
+    {
+      "name": "multistorey_rules",
+      "source_run": "20261105-004107-377835",
+      "log": "logs/multistorey_rules.log",
+      "status": "PASS",
+      "checks": 99,
+      "note": ""
+    },
+    {
+      "name": "multistorey_persistence_rules",
+      "source_run": "20261105-004107-377835",
+      "log": "logs/multistorey_persistence_rules.log",
+      "status": "PASS",
+      "checks": 10,
+      "note": ""
+    },
+    {
+      "name": "multistorey_interactions",
+      "source_run": "20261105-004107-377835",
+      "log": "logs/multistorey_interactions.log",
+      "status": "PASS",
+      "checks": 27,
+      "note": ""
+    },
+    {
+      "name": "multistorey_showcase_walk",
+      "source_run": "20261105-004107-377835",
+      "log": "logs/multistorey_showcase_walk.log",
+      "status": "PASS",
+      "checks": 21,
+      "note": ""
+    },
+    {
+      "name": "multistorey_migration",
+      "source_run": "20261105-004107-377835",
+      "log": "logs/multistorey_migration.log",
+      "status": "PASS",
+      "checks": 101,
+      "note": ""
+    },
+    {
+      "name": "multistorey_flow",
+      "source_run": "20261105-004108-478196",
+      "log": "logs/multistorey_flow.log",
+      "status": "PASS",
+      "checks": 32,
+      "note": ""
+    },
+    {
+      "name": "multistorey_editor_flow",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/multistorey_editor_flow.log",
+      "status": "PASS",
+      "checks": 31,
+      "note": ""
+    },
+    {
+      "name": "multistorey_visual",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/multistorey_visual.log",
+      "status": "PASS",
+      "checks": 8,
+      "note": ""
+    },
+    {
+      "name": "opening_placement_flow",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/opening_placement_flow.log",
+      "status": "PASS",
+      "checks": 50,
+      "note": ""
+    },
+    {
+      "name": "thumbnail_preview_flow",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/thumbnail_preview_flow.log",
+      "status": "PASS",
+      "checks": 62,
+      "note": ""
+    },
+    {
+      "name": "furniture_access_flow",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/furniture_access_flow.log",
+      "status": "PASS",
+      "checks": 51,
+      "note": ""
+    },
+    {
+      "name": "ambient_fire_flow",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/ambient_fire_flow.log",
+      "status": "PASS",
+      "checks": 9,
+      "note": "Known native Variant pool exit diagnostic; no script/shader errors"
+    },
+    {
+      "name": "multistorey_performance",
+      "source_run": "20261105-004109-622075",
+      "log": "logs/multistorey_performance.log",
+      "status": "PASS",
+      "checks": null,
+      "note": ""
+    },
+    {
+      "name": "building_grid_rules",
+      "source_run": "20261105-000035-152706",
+      "log": "logs/building_grid_rules.log",
+      "status": "PASS",
+      "checks": 29,
+      "note": ""
+    },
+    {
+      "name": "building_revision_rules",
+      "source_run": "20261105-000035-152706",
+      "log": "logs/building_revision_rules.log",
+      "status": "PASS",
+      "checks": 53,
+      "note": ""
+    },
+    {
+      "name": "production_rules",
+      "source_run": "20261105-000035-152706",
+      "log": "logs/production_rules.log",
+      "status": "PASS",
+      "checks": 71,
+      "note": ""
+    },
+    {
+      "name": "project_integrity",
+      "source_run": "20261105-005146-890148",
+      "log": "logs/project_integrity.log",
+      "status": "PASS",
+      "checks": 401,
+      "note": ""
+    },
+    {
+      "name": "building_rules",
+      "source_run": "20261104-235150-602807",
+      "log": "logs/building_rules.log",
+      "status": "PASS",
+      "checks": 41,
+      "note": ""
+    },
+    {
+      "name": "building_store_rules",
+      "source_run": "20261104-235150-602807",
+      "log": "logs/building_store_rules.log",
+      "status": "PASS",
+      "checks": 14,
+      "note": ""
+    },
+    {
+      "name": "conversation_walls",
+      "source_run": "20261104-235150-602807",
+      "log": "logs/conversation_walls.log",
+      "status": "PASS",
+      "checks": 28,
+      "note": ""
+    },
+    {
+      "name": "building_expansion_rules",
+      "source_run": "20261104-232434-240027",
+      "log": "logs/building_expansion_rules.log",
+      "status": "PASS",
+      "checks": 44,
+      "note": ""
+    },
+    {
+      "name": "appearance_rules",
+      "source_run": "20261104-232434-240027",
+      "log": "logs/appearance_rules.log",
+      "status": "PASS",
+      "checks": 168,
+      "note": ""
+    },
+    {
+      "name": "building_mouse_flow",
+      "source_run": "20261104-230441-281168",
+      "log": "logs/building_mouse_flow.log",
+      "status": "PASS",
+      "checks": 36,
+      "note": ""
+    },
+    {
+      "name": "building_exit_flow",
+      "source_run": "20261104-230441-281168",
+      "log": "logs/building_exit_flow.log",
+      "status": "PASS",
+      "checks": 15,
+      "note": ""
+    },
+    {
+      "name": "building_controls",
+      "source_run": "20261104-225810-534034",
+      "log": "logs/building_controls.log",
+      "status": "PASS",
+      "checks": 34,
+      "note": ""
+    }
+  ],
+  "source_sha256": {
+    "assets/shaders/home_surface.gdshader": "a430d03b802a276a1cc3ce33b5019ffb7d076573ac9b13553917c606f2b8e3ed",
+    "data/furniture_appearance.json": "e90043d3183f104bade519a798aa054a8ccaf4c82ab9037cb55a1cfd5314d0e2",
+    "docs/外观与纹理开发.md": "9e473fb023d9d7dffd48a5c5cbab2945c38e32a982e21a70372c74a709237b81",
+    "docs/多楼层验证与性能_2026-11-05.md": "a3d3d49621402ae2c4d642dbd8f68009b84ab5349a86fde061955956d318599d",
+    "docs/建造模式.md": "7d92eaa46a4b587de2938735fb2e424c192fc6238b34d4dbe591c4946ed1733b",
+    "docs/开发接手指南.md": "5f00ade03174f7763611d4d2d76db2feecc9f59e4eb88d31c6c61b694b78462c",
+    "docs/策划数值与机制/03_烹饪与食物效果.md": "d2088e8deb9c188e2e5c4a046b997d19362a933f012675788bb5e0b972b91bec",
+    "docs/策划数值与机制/05_地图交互与旅行.md": "633d8b91029153d0c7d46f987f5310d157e2b690fbfacb06c240464de08cd8a6",
+    "docs/策划数值与机制/README.md": "eadbaa2f123105a60deeefd009e611872a089af7001210064e1fea4598c982af",
+    "docs/验证基线.md": "aaa2e612792456b10fcc1b2c59caae228806d64df857fe6b5d5402402eab7e54",
+    "scripts/building/build_safety.gd": "269ea4553e7d35d99035b75ba7714490f92d4b57a969c970955ab3387e522132",
+    "scripts/building/build_safety.gd.uid": "9de1e96d656758910a09b8a5773d4c8e5e7e8836360de5527b44e094a3df5603",
+    "scripts/building/building_world.gd": "1441d012d50a1e049ec49fbefe19f7c364d9351fe77753d18f1cde7b6f9cf84c",
+    "scripts/building/catalog.gd": "85765c899ce85f2a0d219a48b2458189aa3dfefca5881cf6764b19f7b479796e",
+    "scripts/building/editor.gd": "53f2370da038a15667fbec4e1e0e56390fab8365de84a1cef204d4e55f37da1f",
+    "scripts/building/editor_ui.gd": "a30062dea5e1c3e84c9b15ce9dfd24995b8b692756d31b4595807e7b5feb0fc8",
+    "scripts/building/furniture_builder.gd": "e021c51fcebf9e0a3067a5cbc33704d2acfb3569ca58d2e754bd037a5d42816d",
+    "scripts/building/grid_layout.gd": "72700c30e416b56af0e9066c5f03fa9238e81b27fb4c02d4ad87770a540ad088",
+    "scripts/building/kitchen_counter.gd": "d6704ccd9811a1d35518c3868499cf78c535357417ab9db95bedb715f550fa09",
+    "scripts/building/kitchen_counter.gd.uid": "254e7a53f8d940488eb9f0e0b4b2abd82f1a7d6883429eb15180892f2f145b3a",
+    "scripts/building/layout.gd": "73365da322d6f35e4e2dfe1106ef839e2e1ce1c48bbf8e2247103008319f85a0",
+    "scripts/building/module_factory.gd": "d356e6608b01cb5e2379b5023d356e8fec4eab7bbd2743d1964dd9056bfe2351",
+    "scripts/building/room_plan.gd": "3ac4ffe4254b9762fe5d73c05d3b6c25bab07c57469622924ad4cc4dedfb7c30",
+    "scripts/building/showcase.gd": "837aee474abe281f938e6ba77045104a424c42c449ba866f29eebfa2ed5363ff",
+    "scripts/building/showcase.gd.uid": "754b0cf0ac8381b311f134d59a435148145e68badc383b01ac831ed7f348d889",
+    "scripts/building/site.gd": "ebb7a2324db5d9b4c8fca812e7c1381024d6cfc3724b1f9fc40c29d0f49a4eb7",
+    "scripts/building/stair_mesh.gd": "d3667b6152a64859ca352db950b8dab5932b87ae6f0c6c7f7834e78908b3e3e5",
+    "scripts/building/stair_mesh.gd.uid": "57943bd71e8816a2974619ea8a138b596d0d044913a1761fcb45547e1bba15eb",
+    "scripts/building/stairs.gd": "7b3c1335079bdbed8c495c1a777633ed9142e9ccc314a2c82d4803313e6494b6",
+    "scripts/building/stairs.gd.uid": "969a728fc33299afa4cba8d30c6502826be7203dae55e0a66602cf3351ba2fbc",
+    "scripts/building/storeys.gd": "04d712d7997644282d9bce0e102acaa17b22ca3b8f4fd72abe0c713aa3cdcdcf",
+    "scripts/building/storeys.gd.uid": "14e1ad125a32404da9cf99f38af48d03eb3025f80950f4857136d41ada81f3fb",
+    "scripts/building/structure_catalog.gd": "ad99eaaed51ea70933fd813dac8364f4e56bd42867e426302d4e3bbb03aa39db",
+    "scripts/building/surface_edit.gd": "16454b610f1af1ea79fa718fe3a0ec74de1160f0e5eca8671146d008e7333d16",
+    "scripts/building/templates.gd": "9dae7d64616f04fd76c3a0c39218c16c3fc132a6fab7f7f4034c01e28e087f0a",
+    "scripts/building/thumbnail_studio.gd": "e6ccc7f7d8ff3ad5697a82a5b02f424c21df0261b769d54e307525d733e907b4",
+    "scripts/city/city_world.gd": "c399ff40a1d0a6fbcf7b09f27a3e086a50ba56b8afa723cf1d2a322507be4157",
+    "scripts/city/conversation_access.gd": "43b28125f3fef3f49acfdcc6aa99ec6c91ecba0632946083f24042897e4baa2f",
+    "scripts/city/culinary.gd": "3f9748eca0550889ac85028083c4b305caee39ffd0e57bf3158555347ea23b21",
+    "scripts/city/furniture_access.gd": "045c1a6a8798b34e5460eb9dadac0f3ca85ea66a0befa1eb693e4bbcaaf4294f",
+    "scripts/city/interior_view.gd": "226d4ea0a922b4ade0170624104c3b010a97e718a721ef404afa5a722f3379db",
+    "scripts/city/local_landing.gd": "5d589444110747ce973d02b27d2714462aa83ee2ff2f217c97d0ce3ffcf4b490",
+    "scripts/city/spatial_ambience.gd": "805d24d7a976a63240fd9b2eb10646dabf4c329062a446b28bd6000410da3057",
+    "scripts/city/wander_navigation.gd": "5c0bb5d11af26e5acb73516fb9cd8d2889c661890bc73573d71ae312fe79feff",
+    "scripts/services/local_authority.gd": "4ad246a3e2f14ee34f3d9d33b709f5813a39a5e36cad275dce4d8025a01d76d3",
+    "scripts/ui/city_hud.gd": "179900c92aa52d39b5f4b1740506ef74c17bfa48f57f9ce989d8f29c8c819941",
+    "tests/building_revision_rules.gd": "e04287deb2732f309d0989f854eab16dd372884a4a10b4e55e32e1b440e883d8",
+    "tests/multistorey_editor_flow.gd": "9e2895ac2271bfb420b58941745d2b5f732f5a06629def7113b0f1328ed483c7",
+    "tests/multistorey_editor_flow.gd.uid": "5676605d8af71fc145c38b6f35478b08c052f9b5b82004ea953ee867b91cd57c",
+    "tests/multistorey_flow.gd": "1696f88f9088fd0c2ac8bf532b21c2f99f3a2f2bd3749759655f0f8b7c4d0352",
+    "tests/multistorey_flow.gd.uid": "3b87bcafb7610105e3b5e06da842400ba09892f7cc10665543486f28667e0872",
+    "tests/multistorey_interactions.gd": "955373e5837d6e11b38a115cd7fc2bfadcfbdb48fffae8e0e78cd9a1c0c13ba2",
+    "tests/multistorey_interactions.gd.uid": "1e239be3980bd098789361debd7b4f2d7a2451d33dd5d99a862a3a203d180094",
+    "tests/multistorey_migration.gd": "03a86d879f3f97e2a239bbb1d4afdb96729799f38ab911f1964ad142112a51df",
+    "tests/multistorey_migration.gd.uid": "30b13556609d32f2a592f3697fcd5e68dc83cac8990bea62e56be739d6b7dff4",
+    "tests/multistorey_performance.gd": "a3f300ce84dc63eda95617c0b01f8fb49e99ed0ae98eebad6e59c1f9abc3e4a1",
+    "tests/multistorey_performance.gd.uid": "7b52a123f70d9cf9c57c89782953fa2ab3c73adc6e3814341ee28f533e2c545b",
+    "tests/multistorey_persistence_rules.gd": "b5296da4ae60a7f118281a13a54dcd566a80a2f502a0c68ab0a6b9fdbf18186b",
+    "tests/multistorey_persistence_rules.gd.uid": "5b009d8607162ebfb8eea2c7584bd93081d78867e7f86040a5931ae66dc9043e",
+    "tests/multistorey_rules.gd": "f0c10e3a58284f86519d08bc3db7e73aa0e63b7574c529465781971618485e0b",
+    "tests/multistorey_rules.gd.uid": "598bbd1d95bc62df75f8d59f2be1a4780bc5882a32ff637762bb9ea7bbcdfa6b",
+    "tests/multistorey_showcase_walk.gd": "cbda86236f6f605415a4ecf7d11e6a101d5195e861c85ffece20f5c711a510b9",
+    "tests/multistorey_showcase_walk.gd.uid": "60ec8071d10c57df13953beb8715578e6519ec835218c7e5c9dfe86196468a2a",
+    "tests/thumbnail_preview_flow.gd": "99710fa83d1a74a5fc41808b73fdd77ea93313e6710cf4cbfa13ebde0c6864ce",
+    "tools/test_suites.json": "7ff64b4996306a97a82063cfa565004dbb4782c50fc1ae5e383b0b0d52f730e6"
+  },
+  "save_protection": {
+    "only_read_only_layout_clone_used": true,
+    "all_96_existing_rows_preserved": true,
+    "real_world_layout_matches_read_only_fixture_at_finish": true,
+    "live_save_written": false,
+    "private_source_or_tokens_in_evidence": false,
+    "addition_on_next_normal_offline_load": "atomic additive construction checkpoint; idempotent; preserve existing layout on conflict"
+  },
+  "artifacts": {
+    "performance": "performance.json",
+    "before_preview": "preview-before.json",
+    "compatibility": "compatibility.json",
+    "screenshots": [
+      "two-storey-edit-1f.png",
+      "two-storey-edit-2f.png",
+      "two-storey-exterior.png",
+      "kitchen-tiles-and-counter.png",
+      "expanded-east-map.png",
+      "stair-subcatalog.png"
+    ]
+  },
+  "limitations": [
+    "No Windows hardware coverage",
+    "No full multiplayer regression or multiplayer building",
+    "No NPC upper-floor schedules",
+    "No long-session or simultaneous all-limits four-storey stress",
+    "Short frame samples do not guarantee steady 60 FPS",
+    "Cold first stair preview retains an 81-111 ms spike",
+    "ambient_fire_flow passes but retains known native Variant-pool exit diagnostic; no script/shader errors"
+  ],
+  "release": {
+    "source_only": true,
+    "deploy": false,
+    "export": false,
+    "constants_unchanged": "0.3.3/build6/launcher2/protocol3"
+  },
+  "protected_paths_unchanged": [
+    "scenes",
+    "config",
+    "project.godot",
+    "export_presets.cfg",
+    "scripts/animals",
+    "assets/animals",
+    "scripts/services/release.gd"
+  ]
+}

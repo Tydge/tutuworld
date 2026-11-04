@@ -88,11 +88,36 @@ void fragment(){
   vec2 bell=f-vec2(.01,.34);float bloom=1.-smoothstep(.8,1.,length(bell/vec2(.07,.075)));
   vec3 ink=mix(base*.62,vec3(.39,.54,.40),.40);
   color=mix(base*(1.+grain),ink,max(leaf*.7,stem*step(-.37,f.y)*step(f.y,.34))*.43);color=mix(color,mix(base,vec3(1.),.70),bloom);
+ }else if(pattern==7){
+  // Half-metre, antialiased ceramic tiles with a small sage quatrefoil.
+  vec2 uv=(abs(local_normal.y)>.6?local_pos.xz:(abs(local_normal.z)>.6?local_pos.xy:local_pos.zy))*2.;
+  vec2 cell=floor(uv);vec2 f=fract(uv)-.5;vec2 q=abs(f);
+  float edge=min(.5-q.x,.5-q.y);float aa=max(fwidth(edge),.001);
+  float seam=smoothstep(.008-aa,.019+aa,edge);
+  vec3 sage=mix(base*.46,vec3(.16,.27,.19),.50);
+  color=base*(.965+hash(cell)*.045);
+  float petal=min(length((q-vec2(.14,0.))/vec2(.15,.070)),length((q-vec2(0.,.14))/vec2(.070,.15)));
+  float motif=(1.-smoothstep(.89,1.04+fwidth(petal),petal))*step(.5,mod(cell.x+cell.y,2.));
+  float line=1.-smoothstep(.006,.014+aa,abs(max(q.x,q.y)-.435));
+  color=mix(color,sage,motif*.77+line*.30);
+  color=mix(base*.76,color,seam);
+ }else if(pattern==8){
+  // Cream glazed subway tile, sage lower courses and an inset border.
+  vec2 wall=abs(local_normal.y)>.6?local_pos.xz:(abs(local_normal.z)>.6?local_pos.xy:local_pos.zy);
+  vec2 uv=wall*vec2(2.5,5.);uv.x+=mod(floor(uv.y),2.)*.5;
+  vec2 f=fract(uv);float edge=min(min(f.x,1.-f.x),min(f.y,1.-f.y));float aa=max(fwidth(edge),.002);
+  float seam=smoothstep(.009-aa,.024+aa,edge);
+  float course=mod(p.y-.18,4.7);vec3 sage=mix(base*.60,vec3(.22,.34,.25),.48);
+  vec3 glaze=mix(base,sage,1.-smoothstep(1.03,1.06,course));
+  float border=1.-smoothstep(.025,.045+fwidth(course),abs(course-1.10));
+  glaze=mix(glaze,sage,border*.80);
+  glaze*=.97+hash(floor(uv))*.045+sin(f.x*3.14159)*sin(f.y*3.14159)*.025;
+  color=mix(base*.73,glaze,seam);
  }else{color*=1.0+grain*.65;}
  if(plaster_strength>.001 && pattern==0){
   vec2 wall_uv=(abs(local_normal.z)>.6?p.xy:p.zy)*.65;
   float plaster=dot(texture(plaster_texture,wall_uv).rgb,vec3(.333333));
   color*=mix(1.,clamp(plaster/.72,.82,1.13),plaster_strength);
  }
- ALBEDO=color;ROUGHNESS=roughness_value;SPECULAR=.22;
+ ALBEDO=color;ROUGHNESS=pattern==8?.34:(pattern==7?.58:roughness_value);SPECULAR=pattern==8?.36:.22;
 }
