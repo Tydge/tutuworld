@@ -13,7 +13,7 @@ func run() -> void:
 	var minimum:=INF;var maximum:=0.;var before: int=motion.updates;var started:=Time.get_ticks_usec()
 	for i in range(600):motion._process(1./60.);minimum=minf(minimum,fire.light_energy);maximum=maxf(maximum,fire.light_energy)
 	var elapsed:=Time.get_ticks_usec()-started
-	check(maximum-minimum>.06 and minimum>=motion.base_energy*.92 and maximum<=motion.base_energy*1.08,"Warm firelight varies subtly within a stable brightness envelope")
+	check(maximum-minimum>motion.base_energy*.32 and minimum>=motion.base_energy*.735 and maximum<=motion.base_energy*1.265,"Warm firelight has a perceptible smooth envelope without flashes or blackouts")
 	check(motion.updates-before<=201 and motion.updates-before>=195,"Energy updates at twenty Hz instead of every rendered frame")
 	motion.reduced=true;fire.light_energy=motion.base_energy;motion._process(.2);check(fire.light_energy==motion.base_energy,"Reduced motion keeps a steady flame light")
 	print("FIRELIGHT_CPU elapsed_usec=",elapsed," simulated_frames=600 updates=",motion.updates-before)

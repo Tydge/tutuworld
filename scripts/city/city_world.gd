@@ -12,6 +12,7 @@ const SkyPalette=preload("res://scripts/city/sky_palette.gd")
 const AmbientLife=preload("res://scripts/city/ambient_life.gd")
 const Culinary=preload("res://scripts/city/culinary.gd")
 const Props=preload("res://scripts/city/work_props.gd")
+const FurnitureAccess=preload("res://scripts/city/furniture_access.gd")
 @export var map_id:="city"
 var preparing := false
 var session: Node
@@ -205,7 +206,8 @@ func prepare_scenery() -> void: pass
 func setup_targets() -> void:
 	if is_instance_valid(home):
 		if home.has_node("Furnishing/bed/ActionAnchor"):
-			targets["home_bed"]={"kind":"bed","position":home.get_node("Furnishing/bed/ActionAnchor").global_position,"radius":2.3}
+			var bed: Node3D=home.get_node("Furnishing/bed")
+			targets["home_bed"]={"kind":"bed","node":bed,"position":bed.global_position,"radius":1.65}
 		targets["home_door"]={"kind":"home_door","position":home.door_action_position(),"radius":4.6,"node":home}
 		for id in ["home_sofa","home_desk"]:
 			var seat: Node3D=home.seat_node(id)
@@ -309,9 +311,7 @@ func _process(delta: float) -> void:
 		var face: Vector3=bunny.position-actor.position
 		actor.visual.rotation.y=lerp_angle(actor.visual.rotation.y,atan2(face.x,face.z),1-exp(-delta*9))
 	if nap_active and bunny.action=="":
-		var landing:=preload("res://scripts/city/local_landing.gd").find(self,nap_exit,bunny)
-		if landing.is_empty():bunny.play_action("nap",1)
-		else:bunny.stand_up(landing.position);nap_active=false
+		if not leave_seat():bunny.play_action("nap",1)
 	update_camera(delta)
 	update_ambient_lighting()
 	update_occluders(delta)
@@ -375,6 +375,9 @@ func update_target() -> void:
 	if sleep_active:
 		current_target=str(session.state().get("rest_bed","home_bed"));quick_action.clear();hud.set_prompt("E   起床，伸个懒腰     ·     睡眠中 · 耐力恢复 +100%")
 		return
+	if nap_active:
+		quick_action.clear();hud.set_prompt("E   起身，继续散步")
+		return
 	if talking_npc!="":
 		quick_action.clear()
 		hud.set_prompt("E   看看商品     Esc 离开" if targets.get(talking_npc,{}).get("kind","")=="shop" else "E   结束聊天，继续散步")
@@ -388,6 +391,9 @@ func update_target() -> void:
 		if t.kind=="npc" and not t.node.get_meta("interaction_available",true): continue
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
 		var distance: float=Vector2(bunny.position.x-t.position.x,bunny.position.z-t.position.z).length()
+		if t.kind in ["bed","bench"] and t.has("node"):
+			distance=FurnitureAccess.distance(t.node,bunny.global_position)
+			if distance>=FurnitureAccess.REACH or not FurnitureAccess.reachable(self,t.node,bunny):continue
 		if distance<float(t.radius) and distance<nearest:
 			nearest=distance
 			current_target=id
@@ -446,7 +452,10 @@ func quick_interact() -> Dictionary:
 	quick_action=find_quick_action()
 	if quick_action.is_empty(): return {"ok":false,"message":"选中的这块地暂时没有可快捷完成的照料。"}
 	return begin_action(quick_action.verb,quick_action.target)
-func target_position(id: String) -> Vector3: return targets.get(id,{}).get("position",bunny.position)
+func target_position(id: String) -> Vector3:
+	var target: Dictionary=targets.get(id,{})
+	if target.get("kind","") in ["bed","bench"] and target.has("node"):return FurnitureAccess.closest(target.node,bunny.global_position)
+	return target.get("position",bunny.position)
 func is_text_entry_active() -> bool:
 	if is_instance_valid(online_view) and is_instance_valid(online_view.chat_card) and online_view.chat_card.visible:return true
 	var focus:=get_viewport().gui_get_focus_owner()
@@ -484,7 +493,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("quick_interact") and not event.is_echo():
 		quick_interact()
 		get_viewport().set_input_as_handled()
-	if event.is_action_pressed("interact") and (bunny.action=="" or sleep_active or (session.is_online() and nap_active)): interact()
+	if event.is_action_pressed("interact") and (bunny.action=="" or sleep_active or nap_active): interact()
 	if event.is_action_pressed("daydream") and bunny.action=="": bunny.play_action("confused",2.5,"?")
 func toggle_panel(kind: String) -> void:
 	if hud.overlay.visible and hud.mode==kind: hud.close_panel()
@@ -496,6 +505,7 @@ func open_build_mode() -> void:
 func interact() -> void:
 	if sleep_active: wake_from_bed();return
 	if session.is_online() and nap_active:online_stand();return
+	if nap_active:leave_seat();return
 	if talking_npc!="":
 		if targets.get(talking_npc,{}).get("kind","")=="shop":
 			hud.shop=targets[talking_npc].shop;hud.shop_tab="buy"
@@ -535,7 +545,14 @@ func interact() -> void:
 		"bench":
 			var seats=preload("res://scripts/city/seating.gd");var slot: int=seats.local_slot(self,t.node,bunny)
 			if slot<0:hud.notify("座位已坐满，稍等一下吧。");return
-			bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action("nap",6,"z z Z")
+			var landing:=FurnitureAccess.landing(self,t.node,bunny,bunny.global_position)
+			if landing.is_empty():hud.notify("座位旁暂时没有起身的位置，请先留出通道。");return
+			nap_exit=landing.position;set_meta("resting_furniture",t.node);bunny.sit_on_surface(seats.seat(t.node,slot));nap_active=true;bunny.play_action("nap",6,"z z Z");update_target()
+func leave_seat() -> bool:
+	var seat: Node3D=get_meta("resting_furniture",null)
+	var landing:=FurnitureAccess.landing(self,seat,bunny,nap_exit) if is_instance_valid(seat) else {}
+	if landing.is_empty():hud.notify("座位旁暂时没有空位，请稍后起身。");return false
+	bunny.stand_up(landing.position);nap_active=false;set_meta("resting_furniture",null);session.set_player_position(landing.position);update_target();return true
 func end_dialogue() -> void:
 	if session.is_online() and talking_npc!="" and targets.get(talking_npc,{}).get("kind","")=="npc":session.dispatch("end_talk")
 	talking_npc=""
@@ -547,17 +564,22 @@ func enter_sleep(restoring: bool=false) -> void:
 	if not is_instance_valid(bed) or not bed.has_node("SleepExit"):return
 	var exit_: Vector3=bed.get_node("SleepExit").global_position
 	if not restoring:
-		var landing:=preload("res://scripts/city/local_landing.gd").find(self,exit_,bunny)
+		var landing:=FurnitureAccess.landing(self,bed,bunny,bunny.global_position)
 		if landing.is_empty():hud.notify("床边暂时没有起身的位置，请先留出通道。");return
 		exit_=landing.position
+		session.set_player_position(bunny.global_position)
 		var result: Dictionary=session.dispatch("rest",{"target":id})
 		if not result.ok:return
+	else:
+		var saved: Array=session.state().get("net_pose",{}).get("exit",session.state().player_position) if session.is_online() else session.state().player_position
+		exit_=Vector3(saved[0],saved[1],saved[2])
 	sleep_exit=exit_;set_meta("sleeping_bed",bed)
 	nap_active=false;sleep_active=true;bunny.lie_in_bed(bed)
 	session.authority.sleeping=true;session.set_player_position(sleep_exit);update_target()
 func wake_from_bed() -> void:
 	if session.is_online():online_stand();return
-	var landing:=preload("res://scripts/city/local_landing.gd").find(self,sleep_exit,bunny)
+	var bed: Node3D=get_meta("sleeping_bed",null)
+	var landing:=FurnitureAccess.landing(self,bed,bunny,sleep_exit) if is_instance_valid(bed) else {}
 	if landing.is_empty():hud.notify("床边暂时有人或有家具，请稍后起身。");return
 	var previous: Array=session.state().player_position.duplicate()
 	session.set_player_position(landing.position)

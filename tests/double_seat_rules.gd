@@ -25,13 +25,14 @@ func run() -> void:
 	var ids: Array=["home_sofa"]
 	for id in host.targets:
 		if str(id).begins_with("bench:"):ids.append(id)
+	var model_index:=0
 	for kind in ["sofa","forest_settee","chair","petal_armchair"]:
-		var model:=Node3D.new();host.add_child(model);model.position=Vector3(20,.18,30);preload("res://scripts/building/module_factory.gd").builder(model).build_item(model,kind)
+		var model:=Node3D.new();host.add_child(model);model.position=Vector3(20.+model_index*5.,.18,30);model_index+=1;preload("res://scripts/building/module_factory.gd").builder(model).build_item(model,kind)
 		var id: String="built:"+kind;host.targets[id]={"kind":"bench","node":model,"position":model.get_node("ExitAnchor").global_position};ids.append(id)
 	for target in ids:
 		var node: Node3D=host.targets[target].node;var count_:=Seats.capacity(node)
 		for i in range(3):
-			var id:="test"+str(i);server.release_all(id);server.actors[id].state.net_pose={};server.pawns[id].stand_up(node.to_global(Vector3(0,.2,3.3+i*.12)))
+			var id:="test"+str(i);server.release_all(id);server.actors[id].state.net_pose={};server.pawns[id].stand_up(node.to_global(Vector3(0,.2,2.1+i*.12)))
 		await physics_frame
 		var first:=act(server,100,"sit",target);if not first.ok:print("SEAT_REJECT ",target," ",first)
 		check(first.ok,"Single interaction automatically finds the first seat: "+target)

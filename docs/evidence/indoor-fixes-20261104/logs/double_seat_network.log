@@ -1,0 +1,21 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TUTU_SERVER_READY version=0.3.3 build=6
+WANDER_GRID_READY cells=9765 components=5
+WANDER_GRID_READY cells=11554 components=25
+PASS Real WebSocket connection: 0
+PASS Isolated account registration: 0
+PASS Join the shared physical world: 0
+PASS Real WebSocket connection: 1
+PASS Isolated account registration: 1
+PASS Join the shared physical world: 1
+PASS Real WebSocket connection: 2
+PASS Isolated account registration: 2
+PASS Join the shared physical world: 2
+PASS Two concurrent interactions claim different automatic seats
+PASS Third network client receives a full-seat rejection
+PASS Both client snapshots carry their own physical slot
+PASS Standing releases only that player's seat
+PASS One interaction automatically reuses the released slot
+PASS Disconnect releases the correct slot and preserves the other seated player
+DOUBLE_SEAT_NETWORK_RESULT PASS checks=15 failures=[]

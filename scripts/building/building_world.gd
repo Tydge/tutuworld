@@ -19,6 +19,7 @@ var editor_roof:=false
 var current_room:=""
 var last_sync: Dictionary={}
 var pending_navigation:=Rect2()
+var material_updates:=0
 const MASK_ORIGIN:=Vector2i(120,-16)
 const MASK_SIZE:=Vector2i(76,72)
 func _ready() -> void:pass
@@ -70,9 +71,10 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 	var mode_: int=View.AUTO if editor_active else View.mode(city)
 	var view_key:=str(hidden)+str(editor_active)+str(editor_roof)+str(mode_)
 	if mode_!=View.OCCLUSION and not view_dirty and view_key==last_view_key and camera_.distance_squared_to(last_view_camera)<.0001 and actor.distance_squared_to(last_view_actor)<.0001:return
+	var force_update:=view_dirty
 	last_view_key=view_key;last_view_camera=camera_;last_view_actor=actor;view_dirty=false
 	set_mask(hidden if mode_==View.AUTO else {});roof_hidden=not hidden.is_empty() and mode_==View.AUTO
-	var occluded:=View.targets(sections,camera_,actor) if mode_==View.OCCLUSION else {}
+	var occluded:=View.sample_targets(sections,camera_,actor,occlusion_cache,force_update) if mode_==View.OCCLUSION else {}
 	var now:=Time.get_ticks_usec();var delta:=clampf((now-visibility_tick)/1000000.,.001,.05);visibility_tick=now
 	for section in sections:
 		var wall: Node3D=section.get("parent_wall",section.node);var normal: Vector3=wall.get_meta("outward",Vector3.BACK)
@@ -83,6 +85,12 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 			View.fade(section,occluded.has(View.face(section)),delta)
 			if section.roof and section.target<.5:roof_hidden=true
 		else:section.erase("occlusion_hold");section.alpha=0. if hide_wall else 1.;section.target=section.alpha
+		# Shader inputs depend on camera side, not its exact position. Stable walls
+		# must not dirty their material buffers every frame.
+		var state_: Array=[mode_,editor_active,editor_roof,signf(side) if mode_==View.AUTO else 0.,section.alpha]
+		if not force_update and section.get("render_state",[])==state_:continue
+		section.render_state=state_
+		material_updates+=section.materials.size()
 		for material in section.materials:
 			material.set_shader_parameter("opacity",section.alpha if mode_==View.OCCLUSION else 1.);material.set_shader_parameter("cut_base_height",-100. if section.roof or mode_==View.OCCLUSION else global_position.y+floor_level+.62);material.set_shader_parameter("building_cut_mask",mask_texture);material.set_shader_parameter("building_view_position",camera_);material.set_shader_parameter("building_roof_cut",mode_==View.AUTO and section.roof and not editor_active);material.set_shader_parameter("building_wall_cut",mode_==View.AUTO and not section.roof and (not editor_active or not editor_roof));material.set_shader_parameter("building_wall_normal",Vector2(normal.x,normal.z))
 		for visual in section.visuals:visual.visible=mode_!=View.OCCLUSION or section.alpha>.002

@@ -50,8 +50,9 @@ static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 			b.rounded(n,Vector3(0,.83,.17),Vector3(1.12,.18,1.0),.09,cream,"SeatCushion");P.box(n,"ArmchairCollision",Vector3(0,.75,0),Vector3(1.50,1.45,1.35));b.group(n,"SeatAnchor",Vector3(0,.94,.21));b.group(n,"ExitAnchor",Vector3(0,.20,1.45))
 		"floor_lamp":
 			G.cylinder(n,Vector3(0,.07,0),.34,.14,brass);G.cylinder(n,Vector3(0,1.20,0),.035,2.3,brass)
-			G.cylinder(n,Vector3(0,2.28,0),.43,.50,cream,.27)
-			for i in range(16):var a:=i*TAU/16.;G.capsule(n,Vector3(cos(a)*.42,2.04,sin(a)*.42),Vector3(cos(a)*.27,2.52,sin(a)*.27),.012,brass)
+			var shade:=G.cylinder(n,Vector3(0,2.28,0),.43,.50,cream,.27);shade.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			for i in range(16):
+				var a:=i*TAU/16.;var rib:=G.capsule(n,Vector3(cos(a)*.42,2.04,sin(a)*.42),Vector3(cos(a)*.27,2.52,sin(a)*.27),.012,brass);rib.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			b.bulb(n,Vector3(0,2.13,0),.11);light(n,Vector3(0,2.08,0),1.8,7.);P.cylinder(n,"LampCollision",Vector3(0,.3,0),.34,.60)
 		"lotus_pendant":
 			G.cylinder(n,Vector3(0,1.01,0),.17,.07,brass);G.cylinder(n,Vector3(0,.75,0),.018,.5,brass)
@@ -107,3 +108,4 @@ static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 		mesh.set_meta("appearance_part",slot)
 static func light(n: Node3D,p: Vector3,energy: float,range_: float) -> void:
 	var lamp:=OmniLight3D.new();lamp.name="FixtureLight";lamp.position=p;lamp.light_color=Color("ffdfa8");lamp.light_energy=energy;lamp.omni_range=range_;lamp.omni_attenuation=1.5;lamp.shadow_enabled=true;n.add_child(lamp)
+	preload("res://scripts/city/fixture_lighting.gd").configure(lamp)

@@ -315,7 +315,9 @@ func build_hearth(n: Node3D) -> void:
 func build_fire(n: Node3D) -> void:
 	var flame_material:=ShaderMaterial.new();flame_material.shader=load("res://assets/shaders/hearth_fire.gdshader")
 	var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var tongues: Array=[[-.33,.0,.10,.55,.80,0.0],[.06,.0,.04,.83,.99,.12],[.35,.01,-.02,.53,.88,-.28],[0.0,.0,.05,.82,.93,PI*.5]]
+	# Keep the crossed flame entirely in front of the opaque firebox back (z=-.21).
+	# The former perpendicular .82 m quad pierced it and shimmered from behind.
+	var tongues: Array=[[-.33,.0,.10,.55,.80,0.0],[.06,.0,.04,.83,.99,.12],[.35,.01,-.02,.53,.88,-.28],[0.0,.0,.22,.70,.93,PI/3.]]
 	for i in range(tongues.size()):
 		var t: Array=tongues[i];var basis:=Basis(Vector3.UP,t[5])
 		for corner in [Vector2(0,0),Vector2(0,1),Vector2(1,0),Vector2(1,0),Vector2(0,1),Vector2(1,1)]:

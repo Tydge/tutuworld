@@ -25,7 +25,9 @@
       "double_seat_rules",
       "firelight_rules",
       "building_surface_flow",
-      "thumbnail_lifecycle"
+      "thumbnail_lifecycle",
+      "furniture_access_flow",
+      "fixture_lighting_flow"
     ],
     "smoke": [
       "project_integrity",
@@ -228,6 +230,11 @@
     },
     "thumbnail_lifecycle": {
       "headless": true
+    },
+    "indoor_performance": {
+      "args": [
+        "--benchmark"
+      ]
     }
   }
 }

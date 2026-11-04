@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 	if reduced or not light.is_visible_in_tree():return
 	var camera:=get_viewport().get_camera_3d()
 	if camera!=null and camera.global_position.distance_squared_to(light.global_position)>1600.:return
-	light.light_energy=base_energy*(1.+.045*sin(clock*4.1+phase)+.025*sin(clock*7.7+phase*1.7))
+	light.light_energy=base_energy*(1.+.17*sin(clock*3.3+phase)+.07*sin(clock*6.9+phase*1.7)+.025*sin(clock*12.4+phase*.7))
 	updates+=1
 static func attach(light_: Light3D) -> void:
 	if light_.has_node("FireFlicker"):return

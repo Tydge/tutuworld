@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 10:50:12.886 Godot[81527:99204249] not in fullscreen state
+PASS A bed fits a narrow room with its left approach behind a wall: bed
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+PASS A real E prompt appears at the right side or foot without selecting a target: bed
+PASS The actual E key sleeps in the nearby furniture: bed
+PASS E wakes on the same accessible side inside the room: bed
+PASS A real E prompt appears at the right side or foot without selecting a target: bed
+PASS The actual E key sleeps in the nearby furniture: bed
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS E wakes on the same accessible side inside the room: bed
+PASS A nearby bed cannot be used through its left wall: bed
+PASS An occupied approach chooses a clear side of the same room, never the fixed left exit: bed
+PASS No clear exit keeps the sleeper in bed instead of teleporting outside: bed
+PASS Freeing a real exit permits waking in the same room: bed
+PASS A bed fits a narrow room with its left approach behind a wall: canopy_bed
+PASS A real E prompt appears at the right side or foot without selecting a target: canopy_bed
+PASS The actual E key sleeps in the nearby furniture: canopy_bed
+PASS E wakes on the same accessible side inside the room: canopy_bed
+PASS A real E prompt appears at the right side or foot without selecting a target: canopy_bed
+PASS The actual E key sleeps in the nearby furniture: canopy_bed
+PASS E wakes on the same accessible side inside the room: canopy_bed
+PASS A nearby bed cannot be used through its left wall: canopy_bed
+PASS An occupied approach chooses a clear side of the same room, never the fixed left exit: canopy_bed
+PASS No clear exit keeps the sleeper in bed instead of teleporting outside: canopy_bed
+PASS Freeing a real exit permits waking in the same room: canopy_bed
+PASS A bed fits a narrow room with its left approach behind a wall: cloud_bed
+PASS A real E prompt appears at the right side or foot without selecting a target: cloud_bed
+PASS The actual E key sleeps in the nearby furniture: cloud_bed
+PASS E wakes on the same accessible side inside the room: cloud_bed
+PASS A real E prompt appears at the right side or foot without selecting a target: cloud_bed
+PASS The actual E key sleeps in the nearby furniture: cloud_bed
+PASS E wakes on the same accessible side inside the room: cloud_bed
+PASS A nearby bed cannot be used through its left wall: cloud_bed
+PASS An occupied approach chooses a clear side of the same room, never the fixed left exit: cloud_bed
+PASS No clear exit keeps the sleeper in bed instead of teleporting outside: cloud_bed
+PASS Freeing a real exit permits waking in the same room: cloud_bed
+PASS Rotated seating fixture: sofa
+PASS E is offered at the furniture side, away from its authored exit: sofa
+PASS E sits on the actual rotated chair: sofa
+PASS E leaves the chair through the approach side: sofa
+PASS Rotated seating fixture: forest_settee
+PASS E is offered at the furniture side, away from its authored exit: forest_settee
+PASS E sits on the actual rotated chair: forest_settee
+PASS E leaves the chair through the approach side: forest_settee
+PASS Rotated seating fixture: chair
+PASS E is offered at the furniture side, away from its authored exit: chair
+PASS E sits on the actual rotated chair: chair
+PASS E leaves the chair through the approach side: chair
+PASS Rotated seating fixture: petal_armchair
+PASS E is offered at the furniture side, away from its authored exit: petal_armchair
+PASS E sits on the actual rotated chair: petal_armchair
+PASS E leaves the chair through the approach side: petal_armchair
+PASS The original house bed also exposes interaction at its foot
+PASS The original bed still sleeps via E
+FURNITURE_ACCESS_FLOW_RESULT PASS checks=51 failures=[]

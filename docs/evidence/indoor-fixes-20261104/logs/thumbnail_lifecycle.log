@@ -1,0 +1,6 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS A pending render owns a real model before any completed draw
+PASS The thumbnail has a live generated material
+PASS Removing a map cancels its pending draw and releases generated resources
+THUMBNAIL_LIFECYCLE_RESULT PASS checks=3 failures=[]

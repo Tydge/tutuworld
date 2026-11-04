@@ -1,11 +1,11 @@
 extends RefCounted
 ## Reuse real floor and avatar clearance when leaving a movable seat or bed.
-static func find(host: Node3D,desired: Vector3,actor: CharacterBody3D) -> Dictionary:
+static func find(host: Node3D,desired: Vector3,actor: CharacterBody3D,search: bool=true) -> Dictionary:
 	var space:=host.get_world_3d().direct_space_state;var floor_query:=PhysicsRayQueryParameters3D.new();floor_query.collision_mask=8
 	var query:=PhysicsShapeQueryParameters3D.new();query.collision_mask=7;query.exclude=[actor.get_rid()]
 	var body:=CylinderShape3D.new();body.radius=maxf(.36,actor.rig_profile.body_radii.x+.04);body.height=1.0
 	var head:=SphereShape3D.new();head.radius=maxf(actor.rig_profile.head_collision_radius,actor.rig_profile.head_radii.x+.03)
-	for ring in range(9):
+	for ring in range(9 if search else 1):
 		var count_: int=1 if ring==0 else 16
 		for i in range(count_):
 			var p:=desired+Vector3(cos(i*TAU/count_),0,sin(i*TAU/count_))*ring*.55

@@ -1,0 +1,36 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 10:46:22.998 Godot[81362:99198218] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Expanded east plot is present and walkable
+PASS Workshop starts with its real door open
+PASS Single-player HUD exposes the building mode
+PASS Build mode pauses gameplay and controls its own camera
+PASS Residents also pause while the construction camera is active
+PASS In-game sample command builds editable structure and independently editable furnishings
+PASS Player-built doorway starts open with a real independent door leaf
+PASS Inspector part color and material changes are persisted
+PASS Delete removes the selected module
+PASS Undo restores the deleted module
+PASS Redo removes it again
+PASS Moving a bookshelf commits its new position
+PASS Furniture collision actually follows the edited module
+PASS Finishing restores normal player controls at the current location
+PASS Constructed door keeps its rendered leaf beneath the moving hinge
+PASS Constructed door supports normal closing interaction
+PASS Closing the constructed door restores its real portal collision
+PASS Rendered door leaf actually rotates together with its physical collider
+PASS Constructed door can reopen
+PASS Physical causeway connects the original island to the east plot: bunny
+PASS Actual actor enters constructed doorway without jumping: bunny
+PASS Physical causeway connects the original island to the east plot: cat_teacher
+PASS Actual actor enters constructed doorway without jumping: cat_teacher
+PASS Physical causeway connects the original island to the east plot: panda
+PASS Actual actor enters constructed doorway without jumping: panda
+PASS Constructed room uses normal interior lighting and real roof cutaway
+PASS Outdoor plot is not treated as an indoor room
+BUILDING_FLOW_RESULT PASS checks=27 failures=[]

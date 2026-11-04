@@ -1,0 +1,65 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 10:48:21.042 Godot[81435:99200896] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Catalog icon contains actual visible pixels after rapid category changes: floor
+PASS Catalog icon contains actual visible pixels after rapid category changes: wall
+PASS Catalog icon contains actual visible pixels after rapid category changes: door
+PASS Catalog icon contains actual visible pixels after rapid category changes: window
+PASS Catalog icon contains actual visible pixels after rapid category changes: roof
+PASS Catalog icon contains actual visible pixels after rapid category changes: bed
+PASS Catalog icon contains actual visible pixels after rapid category changes: bedside
+PASS Catalog icon contains actual visible pixels after rapid category changes: sofa
+PASS Catalog icon contains actual visible pixels after rapid category changes: chair
+PASS Catalog icon contains actual visible pixels after rapid category changes: tea_table
+PASS Catalog icon contains actual visible pixels after rapid category changes: desk
+PASS Catalog icon contains actual visible pixels after rapid category changes: bookshelf
+PASS Catalog icon contains actual visible pixels after rapid category changes: hearth
+PASS Catalog icon contains actual visible pixels after rapid category changes: forest_cabinet
+PASS Catalog icon contains actual visible pixels after rapid category changes: table_lamp
+PASS Catalog icon contains actual visible pixels after rapid category changes: pendant
+PASS Catalog icon contains actual visible pixels after rapid category changes: book
+PASS Catalog icon contains actual visible pixels after rapid category changes: standing_book
+PASS Catalog icon contains actual visible pixels after rapid category changes: cup
+PASS Catalog icon contains actual visible pixels after rapid category changes: letter
+PASS Catalog icon contains actual visible pixels after rapid category changes: small_plant
+PASS Catalog icon contains actual visible pixels after rapid category changes: clock
+PASS Catalog icon contains actual visible pixels after rapid category changes: forest_settee
+PASS Catalog icon contains actual visible pixels after rapid category changes: forest_rug
+PASS Catalog icon contains actual visible pixels after rapid category changes: forest_planter
+PASS Catalog icon contains actual visible pixels after rapid category changes: flowerbed
+PASS Catalog icon contains actual visible pixels after rapid category changes: fountain
+PASS Catalog icon contains actual visible pixels after rapid category changes: tea_service
+PASS Catalog icon contains actual visible pixels after rapid category changes: field_journal
+PASS Catalog icon contains actual visible pixels after rapid category changes: pressed_leaves
+PASS Catalog icon contains actual visible pixels after rapid category changes: ceramic_vases
+PASS Catalog icon contains actual visible pixels after rapid category changes: woven_basket
+PASS Catalog icon contains actual visible pixels after rapid category changes: moon_mobile
+PASS Catalog icon contains actual visible pixels after rapid category changes: petal_armchair
+PASS Catalog icon contains actual visible pixels after rapid category changes: floor_lamp
+PASS Catalog icon contains actual visible pixels after rapid category changes: lotus_pendant
+PASS Catalog icon contains actual visible pixels after rapid category changes: canopy_bed
+PASS Catalog icon contains actual visible pixels after rapid category changes: cloud_bed
+PASS Catalog icon contains actual visible pixels after rapid category changes: rose_arch
+PASS Catalog icon contains actual visible pixels after rapid category changes: lily_pond
+PASS The serial thumbnail queue completes without a stuck or duplicate active job
+PASS Floor detail icon and its catalog icon both render actual geometry
+PASS A cold offscreen viewport renders its first floor and lamp: round 1
+PASS A lamp stays legibly framed immediately after a large floor: round 1
+PASS A cold offscreen viewport renders its first floor and lamp: round 2
+PASS A lamp stays legibly framed immediately after a large floor: round 2
+PASS A cold offscreen viewport renders its first floor and lamp: round 3
+PASS A lamp stays legibly framed immediately after a large floor: round 3
+PASS Alternating large and small icons keeps consistent framing: floor
+PASS Alternating large and small icons keeps consistent framing: table_lamp
+PASS Alternating large and small icons keeps consistent framing: floor
+PASS Alternating large and small icons keeps consistent framing: table_lamp
+PASS An empty cached image is rejected, re-rendered and rebound to the visible card
+PASS Custom material thumbnails pass the same nonempty-image validation
+PASS A custom lamp thumbnail captures the new material rather than the previous render
+PASS A custom thumbnail does not replace the catalog's default lamp image
+THUMBNAIL_PREVIEW_FLOW_RESULT PASS checks=56 failures=[]

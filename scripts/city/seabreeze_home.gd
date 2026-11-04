@@ -37,6 +37,7 @@ var pillow: MeshInstance3D
 var quilt: MeshInstance3D
 var quilt_occupancy:=0.0
 var bed_occupant: CharacterBody3D
+var occlusion_cache: Dictionary={}
 func _ready() -> void:
 	if assembling: return
 	blueprint=get_meta("building_definition",{})
@@ -50,6 +51,8 @@ func _ready() -> void:
 			door_open=true;door_angle=deg_to_rad(102);door_target=door_angle;hinge.rotation.y=door_angle
 			portal_shape.set_deferred("disabled",true)
 	key_light=get_node_or_null("Lighting/RoomKey");fill_light=get_node_or_null("Lighting/RoomFill");bedside=get_node_or_null("Lighting/BedsideLight");porch=get_node_or_null("Lighting/PorchLight");hearth=get_node_or_null("Lighting/HearthLight")
+	for light in [key_light,fill_light,bedside,porch]:
+		if is_instance_valid(light):preload("res://scripts/city/fixture_lighting.gd").configure(light)
 	if is_instance_valid(hearth):preload("res://scripts/city/fire_flicker.gd").attach(hearth)
 	register_cutaway($Structure/Roof,true)
 	for wall in $Structure/Walls.get_children():
@@ -146,7 +149,7 @@ func _process(delta: float) -> void:
 	var remove_roof:=roof_hidden
 	if view_mode==View.FULL:roof_hidden=false
 	if view_mode!=View.AUTO:remove_roof=false
-	var occluded:=View.targets(sections,city.camera.global_position,point) if view_mode==View.OCCLUSION and (inside or obstructs) else {}
+	var occluded:=View.sample_targets(sections,city.camera.global_position,point,occlusion_cache,view_changed) if view_mode==View.OCCLUSION and (inside or obstructs) else {}
 	if view_mode==View.OCCLUSION:roof_hidden=false
 	for section in sections:
 		var hide_section:=false
@@ -183,6 +186,7 @@ func _process(delta: float) -> void:
 
 	if is_instance_valid(quilt):
 		var occupied: bool=bed_occupant.sleeping if is_instance_valid(bed_occupant) else city.sleep_active and city.get_meta("sleeping_bed",null)==get_node("Furnishing/bed")
+		if not occupied and quilt_occupancy<=0.:return
 		quilt_occupancy=move_toward(quilt_occupancy,1.0 if occupied else 0.0,delta*2.2)
 		quilt.material_override.set_shader_parameter("occupancy",quilt_occupancy)
 		var profile: Resource=bed_occupant.rig_profile if is_instance_valid(bed_occupant) else city.bunny.rig_profile

@@ -1,0 +1,66 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TUTU_SERVER_READY version=0.3.3 build=6
+PASS Single interaction automatically finds the first seat: home_sofa
+PASS Capacity allows the second character only on a double seat: home_sofa
+PASS A third character is rejected at capacity: home_sofa
+PASS Two different species occupy separate real positions: home_sofa
+PASS Standing finds a clear landing and preserves the other occupant: home_sofa
+PASS A failed save rolls back only the new seat claim: home_sofa
+PASS The next interaction automatically fills the released seat: home_sofa
+PASS Single interaction automatically finds the first seat: bench:CentralPark:0
+PASS Capacity allows the second character only on a double seat: bench:CentralPark:0
+PASS A third character is rejected at capacity: bench:CentralPark:0
+PASS Two different species occupy separate real positions: bench:CentralPark:0
+PASS Standing finds a clear landing and preserves the other occupant: bench:CentralPark:0
+PASS A failed save rolls back only the new seat claim: bench:CentralPark:0
+PASS The next interaction automatically fills the released seat: bench:CentralPark:0
+PASS Single interaction automatically finds the first seat: bench:CentralPark:1
+PASS Capacity allows the second character only on a double seat: bench:CentralPark:1
+PASS A third character is rejected at capacity: bench:CentralPark:1
+PASS Two different species occupy separate real positions: bench:CentralPark:1
+PASS Standing finds a clear landing and preserves the other occupant: bench:CentralPark:1
+PASS A failed save rolls back only the new seat claim: bench:CentralPark:1
+PASS The next interaction automatically fills the released seat: bench:CentralPark:1
+PASS Single interaction automatically finds the first seat: bench:CentralPark:2
+PASS Capacity allows the second character only on a double seat: bench:CentralPark:2
+PASS A third character is rejected at capacity: bench:CentralPark:2
+PASS Two different species occupy separate real positions: bench:CentralPark:2
+PASS Standing finds a clear landing and preserves the other occupant: bench:CentralPark:2
+PASS A failed save rolls back only the new seat claim: bench:CentralPark:2
+PASS The next interaction automatically fills the released seat: bench:CentralPark:2
+PASS Single interaction automatically finds the first seat: bench:CentralPark:3
+PASS Capacity allows the second character only on a double seat: bench:CentralPark:3
+PASS A third character is rejected at capacity: bench:CentralPark:3
+PASS Two different species occupy separate real positions: bench:CentralPark:3
+PASS Standing finds a clear landing and preserves the other occupant: bench:CentralPark:3
+PASS A failed save rolls back only the new seat claim: bench:CentralPark:3
+PASS The next interaction automatically fills the released seat: bench:CentralPark:3
+PASS Single interaction automatically finds the first seat: bench:SouthBeach:0
+PASS Capacity allows the second character only on a double seat: bench:SouthBeach:0
+PASS A third character is rejected at capacity: bench:SouthBeach:0
+PASS Two different species occupy separate real positions: bench:SouthBeach:0
+PASS Standing finds a clear landing and preserves the other occupant: bench:SouthBeach:0
+PASS A failed save rolls back only the new seat claim: bench:SouthBeach:0
+PASS The next interaction automatically fills the released seat: bench:SouthBeach:0
+PASS Single interaction automatically finds the first seat: built:sofa
+PASS Capacity allows the second character only on a double seat: built:sofa
+PASS A third character is rejected at capacity: built:sofa
+PASS Two different species occupy separate real positions: built:sofa
+PASS Standing finds a clear landing and preserves the other occupant: built:sofa
+PASS A failed save rolls back only the new seat claim: built:sofa
+PASS The next interaction automatically fills the released seat: built:sofa
+PASS Single interaction automatically finds the first seat: built:forest_settee
+PASS Capacity allows the second character only on a double seat: built:forest_settee
+PASS A third character is rejected at capacity: built:forest_settee
+PASS Two different species occupy separate real positions: built:forest_settee
+PASS Standing finds a clear landing and preserves the other occupant: built:forest_settee
+PASS A failed save rolls back only the new seat claim: built:forest_settee
+PASS The next interaction automatically fills the released seat: built:forest_settee
+PASS Single interaction automatically finds the first seat: built:chair
+PASS Capacity allows the second character only on a double seat: built:chair
+PASS A third character is rejected at capacity: built:chair
+PASS Single interaction automatically finds the first seat: built:petal_armchair
+PASS Capacity allows the second character only on a double seat: built:petal_armchair
+PASS A third character is rejected at capacity: built:petal_armchair
+DOUBLE_SEAT_RULES_RESULT PASS checks=62 failures=[]

@@ -103,9 +103,9 @@ func rebuild() -> void:
 			if not door.has_method("door_action_position"):continue
 			city.targets["build:"+str(door.name)]={"kind":"home_door","name":"我的小屋","node":door,"anchor":door.get_node("ActionAnchor"),"position":door.door_action_position(),"radius":3.8}
 		for module in room.get_node("Furnishing").get_children():
-			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.get_node("ExitAnchor").global_position,"radius":1.65,"label":"坐下来休息一会"}
+			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.global_position,"radius":1.65,"label":"坐下来休息一会"}
 			if module.has_node("SleepExit"):
-				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.get_node("ActionAnchor").global_position,"radius":2.3}
+				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.global_position,"radius":1.65}
 				if not module.has_node("BedComfort"):
 					var comfort:=preload("res://scripts/building/bed_comfort.gd").new();comfort.name="BedComfort";comfort.bed=module;comfort.city=city;module.add_child(comfort)
 		if active:set_roof_visible(show_roof)

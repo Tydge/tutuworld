@@ -28,7 +28,7 @@ func run() -> void:
 		if not result.get("ok",false):check(false,"Create network fixture");print(result);finish(server);return
 		ids.append(result.character);result=await client.request("join",{"character":result.character});check(result.get("ok",false),"Join the shared physical world: "+str(i))
 	var seat: Node3D=server.maps.city.targets.home_sofa.node
-	for i in range(3):var pawn=server.pawns[ids[i]];pawn.position=seat.to_global(Vector3((i-1)*1.8,.2,3.2));pawn.velocity=Vector3.ZERO;pawn.reset_network_motion()
+	for i in range(3):var pawn=server.pawns[ids[i]];pawn.position=seat.to_global(Vector3((i-1)*1.8,.2,2.5));pawn.velocity=Vector3.ZERO;pawn.reset_network_motion()
 	await create_timer(.2).timeout;submit(0);submit(1)
 	var deadline:=Time.get_ticks_msec()+12000
 	while answers.size()<2 and Time.get_ticks_msec()<deadline:await process_frame

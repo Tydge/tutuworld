@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Buildable hearth has a bounded real light without shadow-map passes
+PASS Warm firelight has a perceptible smooth envelope without flashes or blackouts
+PASS Energy updates at twenty Hz instead of every rendered frame
+PASS Reduced motion keeps a steady flame light
+FIRELIGHT_CPU elapsed_usec=338 simulated_frames=600 updates=200
+PASS Fireplaces share the actual-light capacity budget
+PASS A seventeenth new fireplace cannot evade the light limit
+PASS An old layout retains its formerly uncounted fireplace light without losing furniture
+PASS The old-save exemption cannot expand to a newly placed fireplace
+FIRELIGHT_RULES_RESULT PASS checks=8 failures=[]

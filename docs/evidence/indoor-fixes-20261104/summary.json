@@ -1,0 +1,233 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "722a70b0a8e98647aadaa0ce86cd7664dca2fa96",
+  "scope": "Furniture perimeter interaction and same-room egress, smooth perceptible firelight, flame/back-panel depth repair, no rib shadows, bounded fixture lighting and visibility CPU work. Source only, no deployment or scene regeneration.",
+  "functional_groups": 32,
+  "building_suite_groups": 27,
+  "tests": {
+    "building_store_rules": {
+      "result": "PASS",
+      "checks": 14,
+      "log": "logs/building_store_rules.log"
+    },
+    "save_transactions": {
+      "result": "PASS",
+      "checks": 10,
+      "log": "logs/save_transactions.log"
+    },
+    "building_controls": {
+      "result": "PASS",
+      "checks": 34,
+      "log": "logs/building_controls.log"
+    },
+    "building_flow": {
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_flow.log"
+    },
+    "fixture_lighting_flow": {
+      "result": "PASS",
+      "checks": 8,
+      "log": "logs/fixture_lighting_flow.log"
+    },
+    "building_grid_flow": {
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/building_grid_flow.log"
+    },
+    "appearance_rules": {
+      "result": "PASS",
+      "checks": 164,
+      "log": "logs/appearance_rules.log"
+    },
+    "building_surface_flow": {
+      "result": "PASS",
+      "checks": 9,
+      "log": "logs/building_surface_flow.log"
+    },
+    "thumbnail_preview_flow": {
+      "result": "PASS",
+      "checks": 56,
+      "log": "logs/thumbnail_preview_flow.log"
+    },
+    "building_grid_rules": {
+      "result": "PASS",
+      "checks": 29,
+      "log": "logs/building_grid_rules.log"
+    },
+    "pattern_colors_flow": {
+      "result": "PASS",
+      "checks": 23,
+      "log": "logs/pattern_colors_flow.log"
+    },
+    "thumbnail_lifecycle": {
+      "result": "PASS",
+      "checks": 3,
+      "log": "logs/thumbnail_lifecycle.log"
+    },
+    "building_expansion_rules": {
+      "result": "PASS",
+      "checks": 44,
+      "log": "logs/building_expansion_rules.log"
+    },
+    "double_seat_rules": {
+      "result": "PASS",
+      "checks": 62,
+      "log": "logs/double_seat_rules.log"
+    },
+    "building_editing_regression": {
+      "result": "PASS",
+      "checks": 23,
+      "log": "logs/building_editing_regression.log"
+    },
+    "firelight_rules": {
+      "result": "PASS",
+      "checks": 8,
+      "log": "logs/firelight_rules.log"
+    },
+    "building_exit_flow": {
+      "result": "PASS",
+      "checks": 15,
+      "log": "logs/building_exit_flow.log"
+    },
+    "building_mouse_flow": {
+      "result": "PASS",
+      "checks": 36,
+      "log": "logs/building_mouse_flow.log"
+    },
+    "npc_edge_flow": {
+      "result": "PASS",
+      "checks": 15,
+      "log": "logs/npc_edge_flow.log"
+    },
+    "appearance_camera_flow": {
+      "result": "PASS",
+      "checks": 33,
+      "log": "logs/appearance_camera_flow.log"
+    },
+    "building_rules": {
+      "result": "PASS",
+      "checks": 41,
+      "log": "logs/building_rules.log"
+    },
+    "building_expansion_flow": {
+      "result": "PASS",
+      "checks": 62,
+      "log": "logs/building_expansion_flow.log"
+    },
+    "building_revision_rules": {
+      "result": "PASS",
+      "checks": 53,
+      "log": "logs/building_revision_rules.log"
+    },
+    "furniture_access_flow": {
+      "result": "PASS",
+      "checks": 51,
+      "log": "logs/furniture_access_flow.log"
+    },
+    "pattern_colors_rules": {
+      "result": "PASS",
+      "checks": 38,
+      "log": "logs/pattern_colors_rules.log"
+    },
+    "building_revision_flow": {
+      "result": "PASS",
+      "checks": 55,
+      "log": "logs/building_revision_flow.log"
+    },
+    "project_integrity": {
+      "result": "PASS",
+      "checks": 381,
+      "log": "logs/project_integrity.log"
+    },
+    "interaction_revision_rules": {
+      "result": "PASS",
+      "checks": 47,
+      "log": "logs/interaction_revision_rules.log"
+    },
+    "double_seat_network": {
+      "result": "PASS",
+      "checks": 15,
+      "log": "logs/double_seat_network.log"
+    },
+    "city_rules": {
+      "result": "PASS",
+      "checks": 56,
+      "log": "logs/city_rules.log"
+    },
+    "chat_seat_rules": {
+      "result": "PASS",
+      "checks": 27,
+      "log": "logs/chat_seat_rules.log"
+    },
+    "home_lighting_stability": {
+      "result": "PASS",
+      "checks": 22,
+      "log": "logs/home_lighting_stability.log"
+    }
+  },
+  "python_tests": {
+    "tests": 4,
+    "result": "PASS",
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'"
+  },
+  "baseline_visual_reproduction": {
+    "log": "logs/lighting-before-expected-failures.log",
+    "expected_failed_checks": [
+      "shade/rib shadow casters",
+      "missing fixture distance fades",
+      "crossed flame rear penetration",
+      "rear panel flame leakage"
+    ],
+    "old_flame_min_z": -0.36000061035156,
+    "new_flame_min_z": -0.09323501586914,
+    "old_rear_pixel_difference": 2.33725493401289,
+    "new_rear_pixel_difference": 0.0,
+    "new_sample_floor_brightness_ratio": 1.21034441635906
+  },
+  "performance": {
+    "before": "performance-before.json",
+    "after": "performance-after.json",
+    "detail": "performance-detail.json",
+    "paired_conditions": 30,
+    "supplementary_conditions": 12,
+    "cpu_occlusion_usec_before": 140.636,
+    "cpu_occlusion_usec_after": 107.203,
+    "unchanged_full_view_material_updates": 0,
+    "gpu_timing": "Unavailable: Metal returned zero despite measurement enabled.",
+    "metric": "Complete-frame wall time and CPU submission separately recorded, not a guarantee of steady FPS."
+  },
+  "limitations": [
+    "Other local Godot processes remained open; short sequential samples, not thermally controlled hardware tests.",
+    "Complex room still exceeds 16.7ms at times; Windows physical hardware and prolonged/all-capacity-limit combinations not tested.",
+    "Existing audio-capture shutdown diagnostic not rerun/reclassified in this change."
+  ],
+  "source_sha256": {
+    "scripts/building/building_world.gd": "72057c0e531e393493940b5192816090e5b70e4c4a1ddc5d4409856c2b3158a9",
+    "scripts/building/editor.gd": "cf98946f2d3cee6b1226121a9a26e48e36c9a8bcd1617e4f362fda6872b0b136",
+    "scripts/building/furniture_builder.gd": "8d77b5a255e2ed586cff100fee0ae78006c19d8c0dafcbbc5fc7a1bf4b0e09ba",
+    "scripts/building/new_furniture.gd": "281fa475210f59036e348b5c6e092fe9696b7667e63cf4aa0af9373b4430b0c2",
+    "scripts/city/city_world.gd": "215ae097c6a12bb638dc2d2707dcc9355eb18f6d21729cbd7ce9612ceddb54ec",
+    "scripts/city/fire_flicker.gd": "72edc0dbf1e4618c44aa55e5d1ce7fe6fe4830a2ef273f80c7fa42cf245f2a08",
+    "scripts/city/fixture_lighting.gd": "ef2d6a106388c6a944f354fe2be38594c88a26caa976eedf8144ff871ece63b4",
+    "scripts/city/fixture_lighting.gd.uid": "52335ca7b29b32afe07b2053b5b54e21d861881f8487413c770191869a80ff52",
+    "scripts/city/furniture_access.gd": "f27211cce53729b1e9f1f52b3b3d7baa6a4a410f8fb290a785d2c5a81d03a0aa",
+    "scripts/city/furniture_access.gd.uid": "e575f2a20e94c99d84d054ad2bb36053d254557f62588fadf0219de9d9a43970",
+    "scripts/city/home_builder.gd": "d36f534a3b4d38f7e16ac5cb33835528f0f5f96664d69785209a46eff03bc7f9",
+    "scripts/city/interior_view.gd": "5d872380b7f05b9f77e5a55523b374bfa34a190f6b9ac56c475eecef8ecdb947",
+    "scripts/city/local_landing.gd": "a0069e5985b3040ed02ecb37c08515a2dda59ca34fd4610275b995065853ab33",
+    "scripts/city/seabreeze_home.gd": "7146e081a68ef5231d236d2bef66962c6bd72c7887bf6e1140558b5afbb9c7fb",
+    "scripts/services/local_authority.gd": "96b8cfc66bd5cc41cf1216e7a0d07e96c638b2ef9c34ba2fbd261f2934715f18",
+    "server/world_server.gd": "f9b736bf05a8763119dcc5e8a303acb6e9b23321b6617bf9d53e6580e7d07833",
+    "tests/double_seat_network.gd": "d0d057add3b1300de2c17675737c9485d77342ac479e745a654dff829a53726d",
+    "tests/double_seat_rules.gd": "61bb34a11b71d31b54c55156ac6f7fc5aa7aed1a202d2110739ccf134b89e974",
+    "tests/firelight_rules.gd": "a437413f9c1993f250e64fdba62e9ae10a958544bddd88fd1f28131c9d663db6",
+    "tests/fixture_lighting_flow.gd": "1bbde6293c7b5927d8d7131d3f7736dfa1158617abb95a6b5e93a2ca4f650fe3",
+    "tests/fixture_lighting_flow.gd.uid": "7a291b1c18ab1a7cb7b90ca07ab76592cec904db38e749a9db1e3e796c78375a",
+    "tests/furniture_access_flow.gd": "e3e6021c2571bb7e48f34519d517da09a287da11bf3fb43d6910165c56500ace",
+    "tests/furniture_access_flow.gd.uid": "3754f5bd7f861afe82b21a95031b831e8c06afb21d0236830a464ec43b592642",
+    "tests/indoor_performance.gd": "9fa59bf61009ffeda4405dd5cc0c2f3782445bde2a3c16a213390e13cc387f64",
+    "tests/indoor_performance.gd.uid": "7d609c9e9e8f6bb6f3943b73979e8b7561b37c835754854e8bc91847a7a1b2f6",
+    "tools/test_suites.json": "fe1de30cac59a0454af7814418fde70e6df30503a089a96375e4538e556e8684"
+  }
+}

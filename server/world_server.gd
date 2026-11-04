@@ -367,7 +367,9 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if not a.job.is_empty() or not a.state.get("net_pose",{}).is_empty():return fail("先结束手上的事情吧。")
 		if not host.targets.has(target):return fail("这里暂时不能互动。")
 		var object_: Dictionary=host.targets[target]
-		if pawn.position.distance_to(object_.position)>4:return fail("再靠近一点吧。")
+		if verb=="sit":
+			if object_.kind!="bench" or not preload("res://scripts/city/furniture_access.gd").reachable(host,object_.node,pawn,2.0):return fail("再靠近座位一点吧。")
+		elif pawn.position.distance_to(object_.position)>4:return fail("再靠近一点吧。")
 		var reason:=lock_reason(map_id,target,id)
 		if reason!="" and verb=="talk":return fail(reason)
 		if verb=="talk":
@@ -382,8 +384,9 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 				if lock_reason(map_id,seating.lock_target(target,index),id)!="":continue
 				if seat_clear(map_id,seating.seat(seat,index).origin,id,target):slot=index;break
 			if slot<0:return fail("座位已坐满，或旁边有人，稍等一下吧。")
+			var exit_: Array=vector_array(pawn.position)
 			pawn.sit_on_surface(seating.seat(seat,slot));pawn.play_action("nap",INF)
-			a.state.net_pose={"kind":"sit","target":target,"slot":slot,"exit":vector_array(seating.exit_position(seat,slot))}
+			a.state.net_pose={"kind":"sit","target":target,"slot":slot,"exit":exit_}
 			occupy(map_id,seating.lock_target(target,slot),id,"sit");pawn.reset_network_motion()
 		return {"ok":true,"message":""}
 	if verb=="cancel":
@@ -406,7 +409,9 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 	if not a.state.get("net_pose",{}).is_empty():return fail("先起身或结束交谈吧。")
 	if needs_lock:
 		if not host.targets.has(target):return fail("请来到对应地点。")
-		if pawn.position.distance_to(host.targets[target].position)>4:return fail("再靠近一点吧。")
+		if verb=="rest":
+			if host.targets[target].kind!="bed" or not preload("res://scripts/city/furniture_access.gd").reachable(host,host.targets[target].node,pawn,2.0):return fail("再靠近床边一点吧。")
+		elif pawn.position.distance_to(host.targets[target].position)>4:return fail("再靠近一点吧。")
 		var reason:=lock_reason(map_id,target,id)
 		if reason!="":return fail(reason)
 		if host.targets[target].kind=="workshop" and not host.targets[target].building.contains_position(pawn.global_position): return fail("先走进工坊，再使用工作台吧。")
@@ -420,8 +425,9 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if needs_lock:occupy(map_id,target,id,"sleep" if verb=="rest" else "job")
 		if verb=="rest":
 			var bed: Node3D=host.home.get_node("Furnishing/bed")
+			var exit_: Array=vector_array(pawn.position)
 			pawn.lie_in_bed(bed);host.home.bed_occupant=pawn
-			a.state.net_pose={"kind":"sleep","target":target,"exit":vector_array(bed.get_node("SleepExit").global_position)};pawn.reset_network_motion()
+			a.state.net_pose={"kind":"sleep","target":target,"exit":exit_};pawn.reset_network_motion()
 		elif not a.job.is_empty():begin_job_pose(id)
 	return result
 func command_for(id: String,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
@@ -448,20 +454,20 @@ func begin_job_pose(id: String) -> void:
 	pawn.play_action(animation,INF);a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 func finish_pose(id: String) -> void:
 	var a=actors[id];var pawn=pawns[id]
-	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
-	var point:=safe_position(a.state.map_id,vector_from(standing_exit(id)),id,pawn)
-	if point.is_empty() and pawn.seated:
+	var point:=pose_landing(id,vector_from(standing_exit(id)))
+	if point.is_empty() and (pawn.seated or pawn.sleeping):
 		var pose: Dictionary=a.state.get("net_pose",{})
-		pose.kind="waiting_exit";a.state.net_pose=pose
-		occupy(a.state.map_id,str(pose.get("target","dining")),id,"seat")
-		pawn.play_action("nap",INF)
+		pose.kind="sleep" if pawn.sleeping else "waiting_exit";a.state.net_pose=pose
+		occupy(a.state.map_id,str(pose.get("target","dining")),id,"sleep" if pawn.sleeping else "seat")
+		if pawn.seated:pawn.play_action("nap",INF)
 		return
+	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
 	pawn.stand_up(point.position if not point.is_empty() else pawn.position)
 	pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO;a.state.net_pose={};a.state.rest_mode="";a.sleeping=false;pawn.reset_network_motion()
 	a.state.player_position=vector_array(pawn.position)
 func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
-	var point:=safe_position(a.state.map_id,desired,id,pawn)
+	var point:=safe_position(a.state.map_id,desired,id,pawn) if unstuck else pose_landing(id,desired)
 	if point.is_empty() and unstuck:point=safe_position(a.state.map_id,maps[a.state.map_id].respawn_position(),id,pawn)
 	if point.is_empty():return fail("附近有点挤，稍等一下再试吧。")
 	a.execute({"verb":"cancel"});release_all(id)
@@ -469,6 +475,12 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	pawn.stand_up(point.position);pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO
 	a.state.net_pose={};a.state.rest_mode="";a.state.rest_bed="";a.sleeping=false;a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 	return {"ok":true,"message":"找到可以落脚的地方啦。" if unstuck else ""}
+func pose_landing(id: String,desired: Vector3) -> Dictionary:
+	var a=actors[id];var host=maps[a.state.map_id];var pose: Dictionary=a.state.get("net_pose",{});var target: Dictionary=host.targets.get(str(pose.get("target","")),{})
+	if pose.get("kind","") in ["sit","sleep","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
+		var result:=preload("res://scripts/city/furniture_access.gd").landing(host,target.node,pawns[id],desired)
+		return result if not result.is_empty() and body_clear(a.state.map_id,result.position,id) else {}
+	return safe_position(a.state.map_id,desired,id,pawns[id])
 func tick_actor(id: String,delta: float) -> void:
 	var a=actors[id];var pawn=pawns[id]
 	var peer: Dictionary=peers.get(int(pawn.get_meta("peer_id",0)),{})
