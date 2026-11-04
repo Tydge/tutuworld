@@ -301,7 +301,9 @@ func build_hearth(n: Node3D) -> void:
 	rounded(n,Vector3(0,.11,.15),Vector3(2.85,.22,1.20),.06,material("b7ac92"))
 	for x in [-.94,.94]: block(n,Vector3(x,.82,0),Vector3(.48,1.48,.62),stone)
 	block(n,Vector3(0,1.48,0),Vector3(2.4,.35,.65),stone)
-	block(n,Vector3(0,.83,-.26),Vector3(1.6,1.16,.10),material("4d5148"))
+	# Recess both faces from the pillars: their rear is z=-.31. Coplanar
+	# overlapping back edges otherwise fight the depth buffer during orbiting.
+	block(n,Vector3(0,.83,-.23),Vector3(1.6,1.16,.08),material("4d5148"),"FireboxBack")
 	rounded(n,Vector3(0,1.73,.04),Vector3(2.85,.18,.88),.04,material("cba87c",1),"Mantel")
 	P.box(n,"HearthCollision",Vector3(0,.88,.10),Vector3(2.8,1.76,1.1))
 	for i in range(3):

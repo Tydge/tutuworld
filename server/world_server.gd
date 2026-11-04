@@ -374,6 +374,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if reason!="" and verb=="talk":return fail(reason)
 		if verb=="talk":
 			if object_.kind!="npc" or not object_.node.get_meta("interaction_available",true) or object_.node.sleeping:return fail("现在先别打扰它吧。")
+			if not preload("res://scripts/city/conversation_access.gd").can_talk(host,pawn,object_):return fail("请来到面前，隔着墙听不清哦。")
 			occupy(map_id,target,id,"talk");host.talking_npc=target;host.bunny=pawn
 			a.state.net_pose={"kind":"talk","target":target}
 		else:
@@ -405,6 +406,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 		return result
 	if verb not in ["buy","sell","equip","plant","water","weed","harvest","gather","craft","refill","eat","snack","rest"]:return fail("这项操作暂时不能使用。")
+	if verb in ["buy","sell"] and not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,str(args.get("shop",""))):return fail("请走进店里，来到商人面前再交易。")
 	var needs_lock:=verb in ["plant","water","weed","harvest","gather","craft","refill","eat","rest"]
 	if not a.state.get("net_pose",{}).is_empty():return fail("先起身或结束交谈吧。")
 	if needs_lock:
@@ -521,7 +523,7 @@ func refresh_occupancy() -> void:
 		if not actors.has(id):locks.erase(key);continue
 		if row.kind=="talk":
 			var target: Dictionary=maps[row.map].targets.get(row.target,{})
-			if target.is_empty() or pawns[id].position.distance_to(target.position)>4 or not target.node.get_meta("interaction_available",true):
+			if target.is_empty() or pawns[id].position.distance_to(target.position)>4 or not target.node.get_meta("interaction_available",true) or not preload("res://scripts/city/conversation_access.gd").can_talk(maps[row.map],pawns[id],target):
 				release_all(id);actors[id].state.net_pose={}
 func seat_clear(map_id: String,point: Vector3,ignore: String,target: String) -> bool:
 	for id in pawns:

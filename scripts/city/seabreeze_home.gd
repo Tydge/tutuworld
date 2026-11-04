@@ -42,6 +42,8 @@ func _ready() -> void:
 	if assembling: return
 	blueprint=get_meta("building_definition",{})
 	if blueprint.is_empty(): blueprint=JSON.parse_string(FileAccess.get_file_as_string("res://data/houses/seabreeze_cottage.json"))
+	for item in $Furnishing.get_children():
+		if item.get_meta("module_type","")=="hearth":preload("res://scripts/city/hearth_backing.gd").repair_legacy(item)
 	var candidate:=get_parent().get_parent()
 	if candidate.has_method("update_target"): city=candidate
 	hinge=get_node_or_null("Door/Hinge")

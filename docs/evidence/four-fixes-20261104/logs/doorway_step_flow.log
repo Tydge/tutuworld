@@ -1,0 +1,48 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / 0
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / 30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / 45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / 60
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / -30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / -45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: bunny / -60
+PASS Open doorway keeps valid oblique entries walkable: bunny / 0
+PASS Open doorway keeps valid oblique entries walkable: bunny / 30
+PASS Open doorway keeps valid oblique entries walkable: bunny / 45
+PASS Open doorway keeps valid oblique entries walkable: bunny / -30
+PASS Open doorway keeps valid oblique entries walkable: bunny / -45
+PASS A closed door still blocks the character: bunny
+PASS A step above 32 cm is not climbed: bunny
+PASS A low lintel rejects stepping without head clearance: bunny
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / 0
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / 30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / 45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / 60
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / -30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / -45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: cat_teacher / -60
+PASS Open doorway keeps valid oblique entries walkable: cat_teacher / 0
+PASS Open doorway keeps valid oblique entries walkable: cat_teacher / 30
+PASS Open doorway keeps valid oblique entries walkable: cat_teacher / 45
+PASS Open doorway keeps valid oblique entries walkable: cat_teacher / -30
+PASS Open doorway keeps valid oblique entries walkable: cat_teacher / -45
+PASS A closed door still blocks the character: cat_teacher
+PASS A step above 32 cm is not climbed: cat_teacher
+PASS A low lintel rejects stepping without head clearance: cat_teacher
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / 0
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / 30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / 45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / 60
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / -30
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / -45
+PASS Real movement climbs an 18 cm doorway threshold diagonally: panda / -60
+PASS Open doorway keeps valid oblique entries walkable: panda / 0
+PASS Open doorway keeps valid oblique entries walkable: panda / 30
+PASS Open doorway keeps valid oblique entries walkable: panda / 45
+PASS Open doorway keeps valid oblique entries walkable: panda / -30
+PASS Open doorway keeps valid oblique entries walkable: panda / -45
+PASS A closed door still blocks the character: panda
+PASS A step above 32 cm is not climbed: panda
+PASS A low lintel rejects stepping without head clearance: panda
+DOORWAY_STEP_FLOW_RESULT PASS checks=45 failures=[]

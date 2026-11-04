@@ -53,6 +53,8 @@ var right_origin:=Vector2.ZERO
 var right_dragged:=false
 var placement_support:=""
 var placement_level:=0
+var wall_hint: Dictionary={}
+var preview_walls: Array=[]
 func _ready() -> void:
 	layout=Layout.normalize(city.session.state().get("build_layout",{}))
 	ui=preload("res://scripts/building/editor_ui.gd").new();ui.editor=self;add_child(ui)
@@ -130,6 +132,7 @@ func set_night_preview(value: bool) -> void:
 	night_preview=value;city.update_lighting(.92 if value else -1)
 	ui.root_ui.find_child("NightPreview",true,false).set_pressed_no_signal(value)
 func set_roof_visible(value: bool) -> void:
+	clear_preview();ghost_key=""
 	show_roof=value
 	ui.root_ui.find_child("ShowRoof",true,false).set_pressed_no_signal(value)
 	if not is_instance_valid(room) or not active:return
@@ -249,13 +252,21 @@ func begin_move() -> void:
 			var row:=Layout.find(layout,str(module.name))
 			if str(module.name)==moving_id or row.get("support","")==moving_id:module.hide()
 func point_at(mouse: Vector2) -> Variant:
-	placement_support="";placement_level=0
+	placement_support="";placement_level=0;wall_hint.clear()
 	var origin: Vector3=city.camera.project_ray_origin(mouse);var direction: Vector3=city.camera.project_ray_normal(mouse)
-	if tool in ["door","window"]:
-		var query:=PhysicsRayQueryParameters3D.create(origin,origin+direction*250,4);var hit: Dictionary=city.get_world_3d().direct_space_state.intersect_ray(query)
-		if not hit.is_empty():
-			var id:=element_id(hit.collider)
-			if Layout.find(layout,id).get("type","")=="wall":return Vector2(hit.position.x,hit.position.z)
+	var placing: String=Layout.find(layout,moving_id).get("type","") if tool=="move" else tool
+	if placing in ["door","window"]:
+		var nearest:=250.
+		for wall in layout.elements:
+			if wall.type!="wall":continue
+			var a:=Vector3(wall.a[0],0,wall.a[1]);var end:=Vector3(wall.b[0],0,wall.b[1]);var along: Vector3=(end-a).normalized();var normal:=Vector3(-along.z,0,along.x)
+			var hit: Variant=Plane(normal,normal.dot(a)).intersects_ray(origin,direction)
+			if hit==null or hit.y<.18 or hit.y>4.58:continue
+			var offset: float=(hit-a).dot(along);var distance_: float=origin.distance_to(hit)
+			if offset<0. or offset>a.distance_to(end) or distance_>=nearest:continue
+			var snapped_offset:=snappedf(offset,.5);var snapped_point:=a+along*snapped_offset
+			nearest=distance_;wall_hint={"wall":wall.id,"offset":snapped_offset,"point":Vector2(snapped_point.x,snapped_point.z)}
+		return wall_hint.get("point")
 	var kind:=tool.trim_prefix("object:") if tool.begins_with("object:") else str(Layout.find(layout,moving_id).get("kind",""))
 	if Catalog.OBJECTS.has(kind):
 		var mount: String=Catalog.OBJECTS[kind].get("mount","floor")
@@ -277,6 +288,7 @@ func point_at(mouse: Vector2) -> Variant:
 	if hit==null:return null
 	return Vector2(snappedf(hit.x,.5),snappedf(hit.z,.5))
 func closest_wall(point_: Vector2) -> Dictionary:
+	if not wall_hint.is_empty() and point_.distance_to(wall_hint.point)<.01:return wall_hint
 	var best: Dictionary={};var gap:=2.5
 	for row in layout.elements:
 		if row.type!="wall":continue
@@ -413,8 +425,14 @@ func pan_camera(local_offset: Vector2) -> void:
 	focus+=Vector3(local_offset.x,0,local_offset.y).rotated(Vector3.UP,yaw)
 	focus.x=clampf(focus.x,60,98);focus.z=clampf(focus.z,-7,28)
 func clear_preview() -> void:
+	for entry in preview_walls:
+		if is_instance_valid(entry[0]):entry[0].visible=entry[1]
+	preview_walls.clear()
 	preview_key=""
 	if is_instance_valid(preview):preview.get_parent().remove_child(preview);preview.free()
+func hide_preview() -> void:
+	if not preview_walls.is_empty():clear_preview();ghost_key=""
+	elif is_instance_valid(preview):preview.hide()
 func restore_moving() -> void:
 	if is_instance_valid(room):
 		for module in room.get_node("Furnishing").get_children():module.show()
@@ -433,6 +451,7 @@ func update_preview(row: Dictionary,valid: bool) -> void:
 		for light in preview.find_children("*","Light3D",true,false):light.hide()
 	preview.position=Vector3(row.position[0],.18+Layout.base_height(layout,row),row.position[1]);preview.rotation.y=deg_to_rad(row.yaw);preview.show()
 	var overlay:=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.24,.75,.48,.20) if valid else Color(.95,.22,.15,.45)
+	overlay.no_depth_test=Catalog.OBJECTS[row.kind].has("wall_size")
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay;mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 func update_template_preview(p: Vector2,valid: bool) -> void:
 	if preview_key!="template":
@@ -444,7 +463,7 @@ func update_template_preview(p: Vector2,valid: bool) -> void:
 	if not valid:overlay=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.95,.22,.15,.48)
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay
 func update_structure_preview(row: Dictionary,valid: bool) -> void:
-	var key:=JSON.stringify(row)
+	var key:=JSON.stringify(row)+str(valid)+str(show_roof)
 	if key!=preview_key:
 		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildStructurePreview";city.add_child(preview)
 		var b:=Factory.builder(preview);var area:=Rect2();var mid:=Vector2.ZERO
@@ -469,11 +488,36 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 				if row.type=="door":
 					var leaf:=Node3D.new();leaf.set_script(preload("res://scripts/building/room_door.gd"));holder.add_child(leaf);b.root=leaf;b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(leaf)
 					if row.get("form","classic")=="classic" or row.get("painted",false):Factory.paint(leaf,row,true)
+				if moving_id!="" and room.render_cache.has(moving_id):
+					var original: Node3D=room.render_cache[moving_id].node;preview_walls.append([original,original.visible]);original.hide()
+				if show_roof and valid:preview_opening_wall(b,row,p)
 		for body in preview.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
-		for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		for mesh in preview.find_children("*","MeshInstance3D",true,false):
+			mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			for wall in preview.get_children():
+				if wall.has_meta("preview_wall") and wall.is_ancestor_of(mesh):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON;break
 	preview.show();ghost.hide()
 	var overlay:=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.2,.75,.48,.08) if valid else Color(.95,.22,.15,.48)
-	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay
+	overlay.no_depth_test=row.type in ["door","window"]
+	for mesh in preview.find_children("*","MeshInstance3D",true,false):
+		var wall_mesh:=false
+		for wall in preview.get_children():
+			if wall.has_meta("preview_wall") and wall.is_ancestor_of(mesh):wall_mesh=true;break
+		mesh.material_overlay=null if wall_mesh else overlay
+func preview_opening_wall(builder: RefCounted,row: Dictionary,point_: Vector2) -> void:
+	var candidate:=layout.duplicate(true)
+	if moving_id!="":candidate.elements=candidate.elements.filter(func(item):return item.id!=moving_id)
+	var pending:=row.duplicate(true);pending.id="__placement_opening";pending.anchor=[point_.x,point_.y]
+	var supporting:=Layout.find(layout,row.wall);pending.axis=0 if is_equal_approx(supporting.a[1],supporting.b[1]) else 1;candidate.elements.append(pending)
+	for wall in layout.elements:
+		if wall.type!="wall":continue
+		var data:=Factory.wall_data(candidate,wall,point_)
+		if not data.openings.any(func(opening):return opening.id==pending.id):continue
+		var original: Node3D=room.render_cache[wall.id].node;preview_walls.append([original,original.visible]);original.hide()
+		builder.build_wall(preview,data)
+		var temporary: Node3D=preview.get_node(NodePath(wall.id));temporary.set_meta("preview_wall",true);builder.bake_section(temporary)
+		for mesh in temporary.find_children("*","MeshInstance3D",true,false):
+			if mesh.material_override is ShaderMaterial:mesh.material_override.set_shader_parameter("building_world_pattern",true)
 func clear_highlight() -> void:
 	part_hint_left=0.
 	for entry in highlighted:
@@ -526,7 +570,7 @@ func _process(delta: float) -> void:
 		return
 	if get_viewport().gui_get_hovered_control()!=null:
 		ghost.hide()
-		if is_instance_valid(preview):preview.hide()
+		hide_preview()
 		update_highlight(selected_id);return
 	if tool in ["select","delete"]:
 		hovered_id=pick_at(get_viewport().get_mouse_position());update_highlight(hovered_id if hovered_id!="" else selected_id)
@@ -537,7 +581,7 @@ func _process(delta: float) -> void:
 		if tool.begins_with("object:") or (tool=="move" and Layout.find(layout,moving_id).get("type","")=="object"):ghost.show()
 	else:
 		ghost.hide()
-		if is_instance_valid(preview):preview.hide()
+		hide_preview()
 func _unhandled_input(event: InputEvent) -> void:
 	if not active:return
 	var input_focus:=get_viewport().gui_get_focus_owner()

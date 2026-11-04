@@ -11,6 +11,7 @@ var state: Dictionary
 var job: Dictionary = {}
 var facility_positions: Dictionary={}
 var facility_kinds: Dictionary={}
+var trade_access: Callable
 var seen_commands: Dictionary = {}
 var revision := 0
 var running:=false
@@ -175,6 +176,7 @@ func _apply(c: Dictionary) -> Dictionary:
 	if verb in ["buy","sell"]:
 		var shop: String=c.get("shop","")
 		if not DB.shops().has(shop) or not near_position(DB.shops()[shop],4.8): return fail("请先来到对应商店，再进行交易。")
+		if trade_access.is_valid() and not trade_access.call(shop):return fail("请走进店里，来到商人面前再交易。")
 		if quantity<1 or quantity>99 or definition.is_empty(): return fail("物品或数量不正确。")
 		if not job.is_empty(): return fail("先完成手上的事情吧。")
 		if verb=="buy":

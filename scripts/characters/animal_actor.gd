@@ -226,13 +226,17 @@ func move_on_ground(delta: float,grounded_state: Variant=null) -> void:
 	var grounded: bool=is_on_floor() if grounded_state==null else bool(grounded_state)
 	var horizontal:=Vector3(velocity.x,0,velocity.z)
 	if grounded and velocity.y<=0 and horizontal.length_squared()>.01:
-		var ahead: Vector3=global_position+horizontal.normalized()*rig_profile.step_probe_distance
-		floor_query.from=ahead+Vector3(0,.38,0)
-		floor_query.to=ahead-Vector3(0,.12,0)
-		var hit:=get_world_3d().direct_space_state.intersect_ray(floor_query)
-		if not hit.is_empty() and hit.normal.y>cos(floor_max_angle):
-			var rise: float=hit.position.y+step_floor_offset-global_position.y
-			if rise>.006 and rise<.32 and not test_move(global_transform,Vector3.UP*rise):global_position.y+=rise
+		var direction:=horizontal.normalized();var ahead: Vector3=global_position+direction*rig_profile.step_probe_distance
+		var right:=Vector3(-direction.z,0,direction.x);var width_: float=maxf(rig_profile.body_radii.x,rig_profile.body_radii.z)*.85+.02;var rise:=0.
+		# A diagonal body's leading corner reaches a threshold before its center
+		# ray does. Sample the foot width while keeping the same step/clearance cap.
+		for side in [0.,-width_,width_]:
+			floor_query.from=ahead+right*side+Vector3(0,.38,0);floor_query.to=ahead+right*side-Vector3(0,.12,0)
+			var hit:=get_world_3d().direct_space_state.intersect_ray(floor_query)
+			if hit.is_empty() or hit.normal.y<=cos(floor_max_angle):continue
+			var height_: float=hit.position.y+step_floor_offset-global_position.y
+			if height_>.006 and height_<.32:rise=maxf(rise,height_)
+		if rise>0. and not test_move(global_transform,Vector3.UP*rise):global_position.y+=rise
 	move_and_slide()
 func animate_pose(delta: float) -> void:
 	left_arm.position=arm_rest_left

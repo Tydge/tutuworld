@@ -13,6 +13,7 @@ const AmbientLife=preload("res://scripts/city/ambient_life.gd")
 const Culinary=preload("res://scripts/city/culinary.gd")
 const Props=preload("res://scripts/city/work_props.gd")
 const FurnitureAccess=preload("res://scripts/city/furniture_access.gd")
+const ConversationAccess=preload("res://scripts/city/conversation_access.gd")
 @export var map_id:="city"
 var preparing := false
 var session: Node
@@ -304,7 +305,7 @@ func _process(delta: float) -> void:
 	bunny.stamina_fraction=float(session.state().stamina)/session.authority.stamina_max()
 	session.authority.running=bunny.is_running and not paused and not preparing
 	session.authority.sleeping=sleep_active
-	if talking_npc!="" and (not targets.has(talking_npc) or bunny.position.distance_to(targets[talking_npc].node.position)>4.0):
+	if talking_npc!="" and (not targets.has(talking_npc) or not ConversationAccess.can_talk(self,bunny,targets[talking_npc])):
 		end_dialogue()
 	elif talking_npc!="" and targets[talking_npc].kind=="shop":
 		var actor: Node3D=targets[talking_npc].node
@@ -391,6 +392,7 @@ func update_target() -> void:
 		if t.kind=="npc" and not t.node.get_meta("interaction_available",true): continue
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
 		var distance: float=Vector2(bunny.position.x-t.position.x,bunny.position.z-t.position.z).length()
+		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
 		if t.kind in ["bed","bench"] and t.has("node"):
 			distance=FurnitureAccess.distance(t.node,bunny.global_position)
 			if distance>=FurnitureAccess.REACH or not FurnitureAccess.reachable(self,t.node,bunny):continue
@@ -507,6 +509,7 @@ func interact() -> void:
 	if session.is_online() and nap_active:online_stand();return
 	if nap_active:leave_seat();return
 	if talking_npc!="":
+		if not targets.has(talking_npc) or not ConversationAccess.can_talk(self,bunny,targets[talking_npc]):end_dialogue();update_target();return
 		if targets.get(talking_npc,{}).get("kind","")=="shop":
 			hud.shop=targets[talking_npc].shop;hud.shop_tab="buy"
 			end_dialogue();hud.open_panel("shop")
@@ -515,6 +518,7 @@ func interact() -> void:
 		return
 	if current_target=="": return
 	var t: Dictionary=targets[current_target]
+	if t.kind in ["shop","npc"] and not ConversationAccess.can_talk(self,bunny,t):update_target();return
 	if session.is_online() and t.kind in ["npc","bench","bed","home_door"]:
 		online_interact(current_target);return
 	match t.kind:
@@ -662,10 +666,12 @@ func on_event(event: Dictionary) -> void:
 		sparkle.position=target_position(str(event.get("target","")))+Vector3(0,.75,0)
 	if event.type in ["completed","rejected"]: finish_action(); refresh_world(); play_tone(620,.12,.10)
 func refresh_world() -> void:
+	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access")
 	for id in crops:
 		var p: Dictionary=session.state().plots[id]
 		crops[id].refresh(p,session.authority.needs(p))
 	for id in resources: resources[id].visible=session.state().resources[id].available
+func trade_access(shop: String) -> bool:return ConversationAccess.can_trade(self,bunny,shop)
 func interior_weight() -> float:
 	var weight:=0.0
 	for building_ in interiors: weight=maxf(weight,building_.interior_weight)

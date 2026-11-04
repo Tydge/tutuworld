@@ -1,0 +1,14 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=14229 components=6
+2026-11-04 12:27:45.863 Godot[83936:99276792] not in fullscreen state
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS New hearth backing has four centimetres of separation from the pillar rear, including its overlapped edges
+PASS An existing packed house hearth is repaired at load without rebuilding the map
+BACK_EDGE_ORBIT min_stone_ratio=0.86423624833631 max_stone_ratio=1.00899724915366 frames=51 samples=102 flame_effects=hidden
+PASS Rear pillar edge pixels stay stone through seventeen angles with all flame effects hidden
+PASS The packed-mesh repair runs only once per loaded hearth
+FIREBOX_EDGE_FLOW_RESULT PASS checks=4 failures=[]

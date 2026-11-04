@@ -235,6 +235,12 @@
       "args": [
         "--benchmark"
       ]
+    },
+    "doorway_step_flow": {
+      "headless": true
+    },
+    "conversation_walls": {
+      "headless": true
     }
   }
 }

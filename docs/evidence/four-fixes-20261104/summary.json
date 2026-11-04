@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "f882b9dcee656aadc3326ab48fc6c2663696d3b2",
+  "scope": "Only the four requested fixes and targeted validation. No full regression suite, deployment, release, scene generation or real-player progress writes.",
+  "engine": "Godot 4.6.3; Jolt headless for movement/conversation, Metal Forward+ for edge/preview images.",
+  "tests": {
+    "doorway_step_flow": {
+      "result": "PASS",
+      "checks": 45,
+      "log": "logs/doorway_step_flow.log"
+    },
+    "conversation_walls": {
+      "result": "PASS",
+      "checks": 28,
+      "log": "logs/conversation_walls.log"
+    },
+    "firebox_edge_flow": {
+      "result": "PASS",
+      "checks": 4,
+      "log": "logs/firebox_edge_flow.log"
+    },
+    "opening_placement_flow": {
+      "result": "PASS",
+      "checks": 50,
+      "log": "logs/opening_placement_flow.log"
+    }
+  },
+  "total_checks": 127,
+  "fixes": {
+    "back_panel_edge": {
+      "cause": "Rear panel and overlapping stone pillar faces shared z=-0.31; independent from flame animation.",
+      "new_panel_faces_z": [
+        -0.27,
+        -0.19
+      ],
+      "legacy_packed_homes": "Once-per-instance mesh repair; handles packed color quantization without regenerating maps.",
+      "orbit_angles": 17,
+      "rendered_frames": 51,
+      "sample_points": 102,
+      "minimum_edge_to_stone_luminance_ratio": 0.86423624833631,
+      "flame_effects": "Hidden during edge-pixel verification."
+    },
+    "conversation": {
+      "merchant_shops": [
+        "farm",
+        "tools",
+        "clothes"
+      ],
+      "checks": "Prompts, stale selection, offline buy/sell guard, normal merchant conversation/menu, normal counter buy, ordinary NPC wall blocking and clear path. Server apply_player independently checks talk and buy requests; no live transport/auth regression requested."
+    },
+    "doorway": {
+      "reproduced_before": "Bunny at ±45 degrees stalled at z≈0.2958 on an 18cm step while center probe missed the platform.",
+      "repair": "Three floor probes across foot width instead of one center point; same 32cm cap, floor-normal and overhead-clearance rules.",
+      "species": [
+        "bunny",
+        "cat_teacher",
+        "panda"
+      ],
+      "angles_degrees": [
+        0,
+        30,
+        45,
+        60,
+        -30,
+        -45,
+        -60
+      ],
+      "negative_cases": [
+        "closed door",
+        "step taller than 32cm",
+        "low lintel sized to each actual collision body"
+      ]
+    },
+    "placement_preview": {
+      "forms": [
+        "window/classic",
+        "window/arch",
+        "window/round",
+        "door/classic",
+        "door/arch",
+        "door/glass"
+      ],
+      "view": "Complete roof/walls remain enabled. Mouse ray picks the actual vertical wall; unsaved preview temporarily replaces only affected wall visuals with matching openings.",
+      "additional_checks": [
+        "window-view pixels",
+        "original physical wall retained",
+        "cancel restores wall",
+        "toolbar hover restores wall",
+        "roof toggle restores wall",
+        "invalid overlap keeps real wall",
+        "wall-snapped shelf/cabinet silhouettes",
+        "moving an existing window",
+        "one final placement persists one opening"
+      ]
+    }
+  },
+  "limitations": [
+    "Only these four related test groups were run. No claim of full regression or Windows physical-hardware validation."
+  ],
+  "source_sha256": {
+    "docs/建造模式.md": "8d27fe7dd935a40508c5c14584d8c3dbf7de48ed7971fac8555fb46fee80e660",
+    "docs/开发接手指南.md": "d048de0f15ae4b3e49cdb5e7e5dd683d3c1987cdec11e946792446f67779a4e9",
+    "docs/策划数值与机制/05_地图交互与旅行.md": "0efe77645fd99300578629c5fec87f443c7ebb73554b06e4fb5cab26d7ac0604",
+    "docs/策划数值与机制/07_多人公共世界.md": "d84c915d645b6400ff75c3b31f77af7cde03c17eb187ce06f08aefffe42952ab",
+    "docs/验证基线.md": "f1c79ca8f6e908aa563dfc0b2ae88a8f987f8b8d447eb9fe251176dd48cec11c",
+    "scripts/building/editor.gd": "a22629f565d9732e7f7355384f1b7e9cb1e5e953ed0b731b15e5f05dc950f888",
+    "scripts/characters/animal_actor.gd": "6e31a59e8e489cfecd3cd7f96b478531df95ffaacdfcfe720ea915d36f398353",
+    "scripts/city/city_world.gd": "03048a39ad4d35a4058a58326919ac64ea91d6277d8b5ec445a78a4a0988d9e2",
+    "scripts/city/conversation_access.gd": "b314c94a1474195b6dd314d00ec8f2571b12d026fb96ebf26880ed7afee6089f",
+    "scripts/city/conversation_access.gd.uid": "644242c9feaa820f00a5f767f3725ecae43c11c3a6a00131d9154379031462f3",
+    "scripts/city/hearth_backing.gd": "57e141bc46aaebe0f521bfb87fdb9fa1b7ace22a7746462dbe58f5fbd2621cd2",
+    "scripts/city/hearth_backing.gd.uid": "da9b088b2a235c09a97ccfe44aa5946b1b4550a587f49799cfcaae8a6a565f23",
+    "scripts/city/home_builder.gd": "d949109fefd8583f9f3bfb31536f6ce4571b5ee7a9ce8bef379547e74e7c92d2",
+    "scripts/city/seabreeze_home.gd": "8a21e9334363a60f2b04927409eb886580b73134ebe0791cffb5ec6209c4cbe5",
+    "scripts/services/local_authority.gd": "223f2c2ec167ac0c5ab2de6ab2471ecfc86cac412eb2bed515035fc63e6dfaa2",
+    "server/world_server.gd": "e51ad94bd268fd977962975815bea4556375071660b277f521c3f9febf8a68c6",
+    "tests/conversation_walls.gd": "23abc97e3b899c7c0f6cf87900f6b1a69800214c615e3c43242b3fae88a95a65",
+    "tests/conversation_walls.gd.uid": "b03df281a5dd002f86081cf32c48c01424bcd0de29764f54a211a9ab19c7d8e6",
+    "tests/doorway_step_flow.gd": "5bc3fa1da3c37460d9cc752c028badb8311482636732133bf6b0baab80697def",
+    "tests/doorway_step_flow.gd.uid": "a6adba019c28983ce8f96239a5b2dc0e3d7d3a3192162190113db89b02b83857",
+    "tests/firebox_edge_flow.gd": "1e0f0cfc34ca2abe67d4559fc715ff620f84aa9895ba76f30d7d5b1b357a3d37",
+    "tests/firebox_edge_flow.gd.uid": "ff7984c32c361e66a5cc55cecf2c464f27b59330f146c387c4125b4395207bfb",
+    "tests/opening_placement_flow.gd": "a4250879b9847665e3a6d507b19b3395a36a8c804183e883c7a5fb93b5c8d92b",
+    "tests/opening_placement_flow.gd.uid": "d800c95a9ab4fd5238272e896be93eeef45c206b448bc0de970d90e495bf5108",
+    "tools/test_suites.json": "01f129716068db4ebc52d4aa7a26c1fc416a8ed817ad33f97ba01a12ffa1f9ed"
+  }
+}
