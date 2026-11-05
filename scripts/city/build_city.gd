@@ -702,7 +702,7 @@ func optimize_static_geometry() -> void:
 		instance.multimesh=mm
 		instance.material_override=entry.material
 		instance.cast_shadow=entry.shadow
-		instance.visibility_range_end=145
+		instance.visibility_range_end=0. if entry.material==world.get_node("Island").get_meta("sea_material",null) else 145.
 		instance.visibility_range_end_margin=12
 		entry.parent.add_child(instance)
 	for entry in detail_groups.values():
@@ -712,7 +712,7 @@ func optimize_static_geometry() -> void:
 			for surface in range(part.mesh.get_surface_count()): surfaces.append_from(part.mesh,surface,part.transform)
 		var instance:=G.mesh(entry.parent,surfaces.commit(),Vector3.ZERO,entry.material,"SceneryDetailBatch")
 		instance.cast_shadow=entry.shadow
-		instance.visibility_range_end=145
+		instance.visibility_range_end=0. if entry.material==world.get_node("Island").get_meta("sea_material",null) else 145.
 		instance.visibility_range_end_margin=12
 	print("CITY_BATCHES ",groups.size()," DETAILS ",detail_groups.size())
 

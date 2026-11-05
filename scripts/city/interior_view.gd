@@ -80,13 +80,15 @@ static func roof_limit(city: Node,pivot: Vector3,desired: Vector3) -> Vector3:
 	var result:=desired
 	for room in city.interiors:
 		if not is_instance_valid(room) or not room.contains_position(pivot-Vector3.UP*1.35):continue
-		var top: float=room.global_position.y+room.floor_level+room.wall_height-.22
-		if room.has_method("room_at_position"):top+=int(room.visible_storey)*preload("res://scripts/building/storeys.gd").HEIGHT
-		var hit: Variant=Plane(Vector3.UP,top).intersects_segment(pivot,result)
-		if hit==null:continue
-		var covered:=false
-		if room.has_method("has_roof_at"):covered=room.has_roof_at(Vector2(hit.x,hit.z))
-		else:
-			var local: Vector3=room.to_local(hit);covered=Rect2(-room.floor_size*.5-Vector2.ONE*.6,room.floor_size+Vector2.ONE*1.2).has_point(Vector2(local.x,local.z))
-		if covered:result=pivot+(hit-pivot)*.97
+		var levels: Array=range(int(room.visible_storey),preload("res://scripts/building/storeys.gd").MAX) if room.has_method("room_at_position") else [0]
+		# A stair opening skips the adjacent slab, not the roof of the building above it.
+		for level in levels:
+			var top: float=room.global_position.y+room.floor_level+room.wall_height-.22+level*preload("res://scripts/building/storeys.gd").HEIGHT
+			var hit: Variant=Plane(Vector3.UP,top).intersects_segment(pivot,result)
+			if hit==null:continue
+			var covered:=false
+			if room.has_method("room_at_position"):covered=room.has_roof_at(Vector2(hit.x,hit.z),level)
+			else:
+				var local: Vector3=room.to_local(hit);covered=Rect2(-room.floor_size*.5-Vector2.ONE*.6,room.floor_size+Vector2.ONE*1.2).has_point(Vector2(local.x,local.z))
+			if covered:result=pivot+(hit-pivot)*.97
 	return result

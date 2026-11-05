@@ -1,0 +1,33 @@
+PASS Old packed map expands east at runtime
+PASS Commit walkable straight stairs
+PASS Walk upstairs without teleport: straight/bunny
+PASS Walk downstairs without teleport: straight/bunny
+PASS Walk upstairs without teleport: straight/cat_teacher
+PASS Walk downstairs without teleport: straight/cat_teacher
+PASS Walk upstairs without teleport: straight/panda
+PASS Walk downstairs without teleport: straight/panda
+PASS Commit walkable l stairs
+PASS Walk upstairs without teleport: l/bunny
+PASS Walk downstairs without teleport: l/bunny
+PASS Walk upstairs without teleport: l/cat_teacher
+PASS Walk downstairs without teleport: l/cat_teacher
+PASS Walk upstairs without teleport: l/panda
+PASS Walk downstairs without teleport: l/panda
+PASS Commit walkable u stairs
+PASS Walk upstairs without teleport: u/bunny
+PASS Walk downstairs without teleport: u/bunny
+PASS Walk upstairs without teleport: u/cat_teacher
+PASS Walk downstairs without teleport: u/cat_teacher
+PASS Walk upstairs without teleport: u/panda
+PASS Walk downstairs without teleport: u/panda
+PASS Build a complete four-storey physics fixture
+PASS Physically walk all three connections to 4F
+PASS Physically return from 4F to the ground floor
+PASS Commit finished 240sqm two-floor showcase
+PASS Editing 2F isolates all walls and furniture to that floor
+PASS Whole-building exterior shows both storeys
+PASS Normal play follows actor floor automatically: 1
+PASS Hidden geometry is excluded from camera sweeps; current floor stays present
+PASS Normal play follows actor floor automatically: 2
+PASS Hidden geometry is excluded from camera sweeps; current floor stays present
+MULTISTOREY_FLOW_RESULT PASS checks=32 failures=[]

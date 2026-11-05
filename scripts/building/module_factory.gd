@@ -147,6 +147,10 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 				var r:=Layout.rect(part);var mid: Vector2=r.get_center()-row.origin;b.floor_collision(module,Vector3(mid.x,.03,mid.y),Vector3(r.size.x,.30,r.size.y))
 		"wall":
 			b.blueprint.materials.plaster=row.color;b.build_wall(parent,wall_data(layout,row,Vector2(Site.CENTER.x,Site.CENTER.z)));module=parent.get_node(NodePath(row.id))
+			# Close the slab band at wall boundaries, including walls beside stair holes.
+			if Storeys.of(row)>0:
+				var length_: float=Vector2(row.a[0],row.a[1]).distance_to(Vector2(row.b[0],row.b[1]))
+				b.block(module,Vector3(0,.03,0),Vector3(length_,.302,.24),b.material("eee2c6"),"StoreyFascia",true)
 			b.bake_section(module);module.position.y=Storeys.elevation(row)
 		"roof":
 			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
@@ -214,7 +218,7 @@ static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 		"wall":
 			var data:=wall_data(layout,row,Vector2.ZERO)
 			for opening in data.openings:opening.erase("id")
-			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.color,row.style,row.get("faces",{}),row.a[0]<row.b[0] if is_equal_approx(row.a[1],row.b[1]) else row.a[1]>row.b[1],data.openings])
+			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.color,row.style,row.get("faces",{}),row.a[0]<row.b[0] if is_equal_approx(row.a[1],row.b[1]) else row.a[1]>row.b[1],data.openings,Storeys.of(row)>0])
 		"joint":return "joint:"+JSON.stringify([row.corner,row.color,row.axis])
 	return ""
 static func pose_wall(module: Node3D,row: Dictionary) -> void:

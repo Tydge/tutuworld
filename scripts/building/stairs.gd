@@ -96,7 +96,7 @@ static func rail(builder: RefCounted,parent: Node3D,a: Vector3,b: Vector3,shared
 	batch.capsule(a+Vector3.UP*1.1,b+Vector3.UP*1.1,.055,wood)
 	var steps:=maxi(1,ceili(Vector2(a.x-b.x,a.z-b.z).length()/.65))
 	for i in range(steps+1):
-		var p:=a.lerp(b,float(i)/steps);batch.box(p+Vector3.UP*.51,Vector3(.075,1.02,.075),cream)
+		var p:=a.lerp(b,float(i)/steps);batch.box(p+Vector3.UP*.54,Vector3(.075,1.12,.075),cream)
 	# One continuous solid safety panel, rather than collisions for every baluster.
 	var horizontal:=Vector3(b.x-a.x,0,b.z-a.z)
 	var body:=StaticBody3D.new();body.name="RailCollision";body.collision_layer=4;body.collision_mask=0
@@ -150,10 +150,13 @@ static func build(builder: RefCounted,parent: Node3D,row: Dictionary) -> void:
 			var e:=Vector3i(cell.x+(1 if direction==Vector2i.RIGHT else 0),cell.y+(1 if direction==Vector2i.DOWN else 0),1 if direction.x!=0 else 0);var ends:=Grid.ends(e);var middle: Vector2=(Grid.point(ends[0])+Grid.point(ends[1]))*.5;var diff:=Vector3(middle.x-top.x,0,middle.y-top.z)
 			if absf(diff.dot(end_dir))<.05 and Vector2(diff.x,diff.z).length()<WIDTH*.5+.05:continue
 			edges[e]={"id":"guard","type":"wall","a":[ends[0].x*.5,ends[0].y*.5],"b":[ends[1].x*.5,ends[1].y*.5]}
+	var guard:=Node3D.new();guard.name="UpperGuard";parent.add_child(guard)
+	var guard_batch:=preload("res://scripts/building/stair_mesh.gd").new(builder)
 	for edge in Grid.runs(edges):
 		var a:=Vector3(edge.a[0],Storeys.HEIGHT,edge.a[1]);var b:=Vector3(edge.b[0],Storeys.HEIGHT,edge.b[1]);var mid: Vector3=(a+b)*.5;var diff: Vector3=mid-top
 		if absf(diff.dot(end_dir))<.05 and Vector2(diff.x,diff.z).length()<WIDTH*.5+.05:continue
-		rail(builder,parent,a,b,batch)
+		rail(builder,guard,a,b,guard_batch)
+	guard_batch.finish(guard)
 	batch.finish(parent)
 
 static func hole_cells(row: Dictionary) -> Array:

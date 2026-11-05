@@ -81,7 +81,8 @@ func apply_storey_visibility(actor: Vector3) -> void:
 		# Keep the floor stable on the flight; the camera itself follows every step.
 		while visible_storey<Storeys.MAX-1 and actor.y>=(visible_storey+1)*Storeys.HEIGHT+Storeys.FLOOR-.16:visible_storey+=1
 		while visible_storey>0 and actor.y<visible_storey*Storeys.HEIGHT+Storeys.FLOOR-.55:visible_storey-=1
-	var key:=str([visible_storey,editor_active,editor_roof,entire_building,in_house])
+	var mode_: int=View.mode(city)
+	var key:=str([visible_storey,editor_active,editor_roof,entire_building,in_house,mode_])
 	if key==storey_view_key:return
 	storey_view_key=key;view_dirty=true;hidden_camera_bodies.clear();other_storey_bodies.clear();occlusion_cache.clear()
 	for entry in render_cache.values():
@@ -89,14 +90,25 @@ func apply_storey_visibility(actor: Vector3) -> void:
 		if editor_active and not entire_building:
 			visible_=level==visible_storey or (row.type=="floor_chunk" and level<visible_storey) or (row.type=="stairs" and level+1==visible_storey)
 		elif not editor_active and in_house:
-			visible_=level<=visible_storey
+			visible_=level<=visible_storey or (mode_!=View.AUTO and row.type!="object")
 			# A solid upper slab hides the indoor furnishings and lamps below it.
 			# Keep objects visible through a stair opening or outside on the grounds.
 			if visible_ and level<visible_storey and row.type=="object" and plans.has(level) and Rooms.room_at(plans[level],Vector2(row.position[0],row.position[1]))!="" and Grid.covered(Catalog.footprint(row),plans[visible_storey].floors):visible_=false
-		var ceiling_shadow: bool=not visible_ and row.type=="floor_chunk" and level==visible_storey+1 and (editor_active or in_house)
-		entry.node.visible=visible_ or ceiling_shadow
-		if row.type=="floor_chunk":
-			for visual in entry.get("visuals",[]):visual.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY if ceiling_shadow else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		# Hidden structural shells still cast shadows. Free modes keep the actual shell.
+		var shadow_only: bool=not visible_ and row.type in ["floor_chunk","wall","roof","joint","door","window"] and not editor_active
+		var ceiling_shadow: bool=not visible_ and row.type=="floor_chunk" and level==visible_storey+1 and editor_active
+		entry.node.visible=visible_ or shadow_only or ceiling_shadow
+		entry.node.set_meta("storey_cut",shadow_only)
+		for visual in entry.get("visuals",[]):
+			if not visual.has_meta("storey_shadow"):visual.set_meta("storey_shadow",visual.cast_shadow)
+			var original: int=visual.get_meta("storey_shadow")
+			visual.visible=not shadow_only or original!=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			visual.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY if (shadow_only or ceiling_shadow) and original!=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF else original
+		if row.type=="stairs":
+			var guard: Node3D=entry.node.get_node_or_null("UpperGuard")
+			if guard!=null:
+				var isolate: bool=(editor_active and not entire_building) or (not editor_active and mode_==View.AUTO and in_house)
+				guard.visible=not isolate or level+1<=visible_storey
 		if level!=visible_storey:other_storey_bodies.append_array(entry.get("bodies",[]))
 		if not visible_:hidden_camera_bodies.append_array(entry.get("bodies",[]))
 	plan=plans.get(visible_storey,plans.get(0,{}));mask_key=""
@@ -141,7 +153,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 	var occluded:=View.sample_targets(sections,camera_,actor,occlusion_cache,force_update) if mode_==View.OCCLUSION else {}
 	var now:=Time.get_ticks_usec();var delta:=clampf((now-visibility_tick)/1000000.,.001,.05);visibility_tick=now
 	for section in sections:
-		if not section.node.is_visible_in_tree():continue
+		if not section.node.is_visible_in_tree() or section.node.get_meta("storey_cut",false):continue
 		var wall: Node3D=section.get("parent_wall",section.node);var normal: Vector3=wall.get_meta("outward",Vector3.BACK)
 		var center: Vector3=wall.global_position;var side: float=normal.dot(camera_-center)
 		var hide_wall: bool=mode_==View.AUTO and not section.roof and (not editor_active or not editor_roof) and hidden_at(Vector2(center.x,center.z)-Vector2(normal.x,normal.z)*signf(side)*.28)
@@ -172,9 +184,10 @@ func _notification(what: int) -> void:
 		for prototype in module_prototypes.values():
 			if is_instance_valid(prototype):prototype.free()
 
-func has_roof_at(p: Vector2) -> bool:
-	if plans.has(visible_storey+1) and plans[visible_storey+1].floors.has(Grid.cell(p)):return true
+func has_roof_at(p: Vector2,level: int=-1) -> bool:
+	if level<0:level=visible_storey
+	if plans.has(level+1) and plans[level+1].floors.has(Grid.cell(p)):return true
 	for entry in render_cache.values():
 		var row: Dictionary=entry.get("row",{})
-		if row.get("type","")=="roof" and Storeys.of(row)==visible_storey and preload("res://scripts/building/layout.gd").rect(row).grow(.6).has_point(p):return true
+		if row.get("type","")=="roof" and Storeys.of(row)==level and preload("res://scripts/building/layout.gd").rect(row).grow(.6).has_point(p):return true
 	return false

@@ -98,7 +98,11 @@ func _ready() -> void:
 	var sea_original: ShaderMaterial=scenery.get_node("Island").get_meta("sea_material")
 	var sea_copy: ShaderMaterial=sea_original.duplicate()
 	for node in scenery.find_children("*","GeometryInstance3D",true,false):
-		if node.material_override==sea_original: node.material_override=sea_copy
+		if node.material_override==sea_original:
+			node.material_override=sea_copy
+			# The ocean spans the map; distance to its batch origin is not distance to water.
+			node.visibility_range_end=0.
+			node.visibility_range_end_margin=0.
 		if node.material_override is StandardMaterial3D and node.material_override.albedo_color.is_equal_approx(Color("638c8b")):
 			var id: int=node.material_override.get_instance_id()
 			if not window_copies.has(id):

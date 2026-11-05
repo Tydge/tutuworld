@@ -100,7 +100,8 @@
       "multistorey_flow",
       "multistorey_showcase_walk",
       "multistorey_editor_flow",
-      "multistorey_visual"
+      "multistorey_visual",
+      "multistorey_repairs"
     ]
   },
   "tests": {

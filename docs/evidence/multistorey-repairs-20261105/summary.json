@@ -1,0 +1,176 @@
+{
+  "date": "2026-11-05",
+  "scope": "M01-M05 related checks only; no full regression, save changes, map rebuild, deployment or release",
+  "results": {
+    "before": [
+      "MULTISTOREY_REPAIRS_RESULT FAIL checks=611 failures=71"
+    ],
+    "multistorey_repairs": [
+      "MULTISTOREY_REPAIRS_RESULT PASS checks=651 failures=0"
+    ],
+    "multistorey_editor_flow": [
+      "MULTISTOREY_EDITOR_FLOW_RESULT PASS checks=31 failures=[]"
+    ],
+    "multistorey_showcase_walk": [
+      "MULTISTOREY_SHOWCASE_WALK_RESULT PASS checks=21 failures=[]"
+    ],
+    "multistorey_flow": [
+      "MULTISTOREY_FLOW_RESULT PASS checks=32 failures=[]"
+    ],
+    "multistorey_performance": [
+      "MULTISTOREY_PERFORMANCE_RESULT PASS cases=6 previews=3"
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "exterior-seam.jpg",
+      "source_sha256": "5a9b66027ccad5679a2431cd6a46215f3ab046d2d1461fb04c4743b9ad6f80bd"
+    },
+    {
+      "file": "ground-mode0.jpg",
+      "source_sha256": "59100f0bfbfb828619f322de3a406603affd92f48d436ea6ec8e12ce25809776"
+    },
+    {
+      "file": "ground-mode1.jpg",
+      "source_sha256": "749a7cf475bcafbe776b10516f9cb62645b1ee06059b4a06867e28f4844ccb70"
+    },
+    {
+      "file": "ground-mode2.jpg",
+      "source_sha256": "374efb61ddc6b148ae1b9619eac974a3972a0180e9c880e7a28d33c90510f29d"
+    },
+    {
+      "file": "night-stairs-mode0.jpg",
+      "source_sha256": "c5d0f987a9080f5f1b391ef251a11fcc54754c3a3dae2526a539756eba1e0a6d"
+    },
+    {
+      "file": "night-stairs-mode1.jpg",
+      "source_sha256": "9d406c9b93a333c79c6192b366054057844111e4a4826a1915e87b5f5209d0a0"
+    },
+    {
+      "file": "night-stairs-mode2.jpg",
+      "source_sha256": "9d406c9b93a333c79c6192b366054057844111e4a4826a1915e87b5f5209d0a0"
+    },
+    {
+      "file": "ocean-140.jpg",
+      "source_sha256": "f9be8af7b460219587a5a53859b6be3adf5ec8d526351a62516b7e5cf30df358"
+    },
+    {
+      "file": "ocean-146.jpg",
+      "source_sha256": "a4bd00d292bed0f0ce5dc7d43f4331e30748157e8435497ec36626c232d54e5a"
+    },
+    {
+      "file": "ocean-154.jpg",
+      "source_sha256": "a7338d5ac6a2258d0f05a3c43575edcffcacce7d1590f56b277e9ac263f4842b"
+    },
+    {
+      "file": "ocean-165.jpg",
+      "source_sha256": "d10bdfc43d28dc05db06abca34353482eb5ccfe2be695181ed8f41b92b089403"
+    },
+    {
+      "file": "rails-l-0.jpg",
+      "source_sha256": "cd9f0de794bb883739a0ae462296d1aa7d899b43e32a6c58f2197c55f1af4ee6"
+    },
+    {
+      "file": "rails-l-180.jpg",
+      "source_sha256": "2cb7504b4fbb691d22eef00f36d1621bc75270914e66a1a5d6097388307db41b"
+    },
+    {
+      "file": "rails-l-270.jpg",
+      "source_sha256": "5a0091cf3133e5ba7eb780c1c7d9cb9173ee078ad56002d693adf8393a0dd386"
+    },
+    {
+      "file": "rails-l-90.jpg",
+      "source_sha256": "bceabc6190175cd647695737a362e96163eb85e732653a7cecc7da55fc9849c0"
+    },
+    {
+      "file": "rails-straight-0.jpg",
+      "source_sha256": "d5d479056a2f48442adb6cb9268ea94eb8bc9327f7a216147d26d00d3078f337"
+    },
+    {
+      "file": "rails-straight-180.jpg",
+      "source_sha256": "6391524aaec6067d9c0545a363999a9be209a32135a8f3bc9bb77118bb8d3b47"
+    },
+    {
+      "file": "rails-straight-270.jpg",
+      "source_sha256": "a48216f394059baac4fcd453513fed67e49268df947939c19045f76a9db7b678"
+    },
+    {
+      "file": "rails-straight-90.jpg",
+      "source_sha256": "bfc520e689c28142184bdc5af39bc05b91ffc8fb725b4805796633ad936ee3df"
+    },
+    {
+      "file": "rails-u-0.jpg",
+      "source_sha256": "5b8dff0e8ad282dd6c96dc2eceba366b65f3807d07217d69e95993e33aae096b"
+    },
+    {
+      "file": "rails-u-180.jpg",
+      "source_sha256": "adfe4667b48210a7e6a96d35061b4eb014047dd7b508af93b60dbc8dde431c38"
+    },
+    {
+      "file": "rails-u-270.jpg",
+      "source_sha256": "c9ac9f8aacf35273f453688f1f7c7e64b8403f67204ddc8f3140a377e1b536b0"
+    },
+    {
+      "file": "rails-u-90.jpg",
+      "source_sha256": "eab007593776e293acedde56ba13894d637a002ef4969dff38a397caf3ea3eee"
+    },
+    {
+      "file": "stair-guards.jpg",
+      "source_sha256": "77dbc17b202c960ab4fe5073d8f09a564b4475cda7b9408f9533f58abc882b1e"
+    },
+    {
+      "file": "stairs-mode0.jpg",
+      "source_sha256": "7e5a0cd52480cea5b357fd0b712d46bd875732597426ae758a2d601d344476c1"
+    },
+    {
+      "file": "stairs-mode1.jpg",
+      "source_sha256": "393fa7ac5c4aab1c296d75a91486f06492a268de16fc5b6c910c030659381900"
+    },
+    {
+      "file": "stairs-mode2.jpg",
+      "source_sha256": "393fa7ac5c4aab1c296d75a91486f06492a268de16fc5b6c910c030659381900"
+    },
+    {
+      "file": "upper-mode0.jpg",
+      "source_sha256": "e4a28decc66ea6757fca35ec3b259521cce3e2233920df45fed6cbac4a9f525c"
+    },
+    {
+      "file": "upper-mode1.jpg",
+      "source_sha256": "e4a28decc66ea6757fca35ec3b259521cce3e2233920df45fed6cbac4a9f525c"
+    },
+    {
+      "file": "upper-mode2.jpg",
+      "source_sha256": "e4a28decc66ea6757fca35ec3b259521cce3e2233920df45fed6cbac4a9f525c"
+    },
+    {
+      "file": "before-ocean-165.jpg",
+      "source_sha256": "e9e9e2f43d2b8e1aad3ba7e2b0d3b5afd6b525798d41233b05ee2f35f08f6389"
+    },
+    {
+      "file": "before-ground-mode1.jpg",
+      "source_sha256": "fdb58b49cd340da2ff5573d44fe3c879909e4223b3bb253922baa85e0df74f91"
+    },
+    {
+      "file": "before-stairs-mode1.jpg",
+      "source_sha256": "c3aa1601f5ee36610a68897a59eaa4367cb63d4d3bfd53f98d513d7b0aab6f99"
+    },
+    {
+      "file": "before-stair-guards.jpg",
+      "source_sha256": "089de179dd56c86a76547c0709041e9452423321fdf31aed98d637529edc8c9c"
+    },
+    {
+      "file": "before-exterior-seam.jpg",
+      "source_sha256": "0c8abf47e379857c7420aa7d6d6b7784cf8db929f6e0acf76ea0f350dbcaca24"
+    }
+  ],
+  "source_sha256": {
+    "scripts/building/building_world.gd": "4b8962e5488d98cdf5634b39ff6b9280ded3b3ab2cfe2ac0cba00e4991d17aaf",
+    "scripts/building/module_factory.gd": "490bce0c4f72ea5f34fef0595eb55a2683a248ad014c086ba456145624de5108",
+    "scripts/building/stairs.gd": "179a65ce328b17f2cae7a7b26bef313a1464bc0f02d76e49dc1128d78d3ab9de",
+    "scripts/city/build_city.gd": "2b73f3df1a53b0010874d371d05861a15c9b148adbcebba8d74210ee5028ed73",
+    "scripts/city/city_world.gd": "723a8426c00f73cd313ad4500231490387836c311f214a01fc4297c481c81a70",
+    "scripts/city/interior_view.gd": "451a4783186f8438952e12b9e73fa09e382dc2e45069bf57d24212f436dd8d51",
+    "scripts/city/static_batches.gd": "99ceb3add4d96de11d1df6f55d76a8dcad168c17a9094a909268cb58b2873829",
+    "tests/multistorey_repairs.gd": "5606bf273ee6157227dd03ddd03e9a244665937d56c4723983ef9eb134562465"
+  }
+}
