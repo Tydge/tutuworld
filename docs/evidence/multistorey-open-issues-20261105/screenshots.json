@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-05",
+  "code_baseline": "cb6723bb55433e76ffcff461f7c1f75e0b48d8e8",
+  "status": "UNFIXED; handoff only",
+  "derivation": "sips, max dimension 1600px, JPEG quality 82; original PNGs in private local recovery archive",
+  "images": [
+    {
+      "image": "01-balcony-ocean.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "ffdb5654fe1abb5fb925151074aee81b5610861c5996365a206bbb2e11cd6bd2",
+      "sha256": "b00fa60a7b5d0911de2236fbc4d1cefcecba8aef851ce18cff99e2f9c1065ee6",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "02-stairs-occlusion.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "afb1e403663b56a1ff6255227cea2fd3eaa66fc942415e80a8a51457c94c5274",
+      "sha256": "f285327d5474cbbbbeddad9cbca66960f5b80f28039818789ce8efe7cda1b6ac",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "03-stairs-full.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "3aaaca8c6719ea6efd18d7cbe60371415a745627d7bd5ea79d51759ae2aeff14",
+      "sha256": "9b4ff8125a3a655546918f546b09528dbf9c4ac0535cd2bc6ac0a98c819d88be",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "04-ground-full.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "c05488315b2a6e32aecdc8e9df837011437261474a0c7a4915cdfdb3f6353794",
+      "sha256": "9951b7749ed19c118bfe0b671a8669a2b4d87e136b3fe47b74d198b9fc6fe235",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "05-floating-guard.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "0c6fedd815e8c9c0f117927bad0ba1518d329b5bd91e8840844d26318e8ed8cc",
+      "sha256": "0854e74088659cbaeacaeedcea8525d4860bad8053c1054da8b72d2d3e3bde8a",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "06-upper-wall-seam.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "8602b4755fde3e3ec2996c3b5e1b1ef8fb738824d36f2aa44b5e2498e500f0ba",
+      "sha256": "83acd94c11ae7baa1e37cade5819be25c1d10c2eda57b99acbe362a568daf1b0",
+      "issue_status": "UNFIXED"
+    },
+    {
+      "image": "07-exterior-wall-seam.jpg",
+      "source": "User attached screenshot; not an automated test",
+      "original_sha256": "a41e328ac419e99b44838fa0ad528aee2bdd2457a8b6db23392a75a07fe665fc",
+      "sha256": "743997ea1da66e4cb6b1c0b0bca772275c2e3af8bc4f1c52f430a6171912d05a",
+      "issue_status": "UNFIXED"
+    }
+  ]
+}
