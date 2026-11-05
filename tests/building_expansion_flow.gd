@@ -20,7 +20,7 @@ func run() -> void:
 	while city.camera==null:await process_frame
 	await create_timer(.7).timeout;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1280,720);await create_timer(.6).timeout;editor=city.build_mode;editor.open_editor()
 	check(editor.ui.batch_paint.button_pressed,"Room-wide matching paint is enabled by default")
-	check(editor.ui.root_ui.find_child("ShowRoof",true,false).text=="查看完整屋顶/墙壁","The complete building visibility switch names both walls and roof")
+	check(editor.ui.root_ui.find_child("ShowRoof",true,false).text=="查看完整墙壁","The complete-wall switch is independent of roof navigation")
 	for family in Forms.FORMS:
 		editor.ui.show_category("结构");editor.ui.tools[family].pressed.emit();await process_frame
 		var count_:=0
@@ -45,7 +45,7 @@ func run() -> void:
 	for row in [{"kind":"moon_mobile","position":[67.,10.],"support":roofs[0]},{"kind":"lotus_pendant","position":[79.,10.],"support":roofs[1]},{"kind":"woven_basket","position":[94.,18.]},{"kind":"rose_arch","position":[66.,23.]},{"kind":"lily_pond","position":[75.,23.]}]:row.type="object";row.yaw=0.;data=L.add(data,row)
 	check(editor.commit(data),"All new models and all nine structural forms coexist in one valid layout")
 	if not failures.is_empty():print("FIXTURE ",L.validate(data));finish();return
-	editor.set_roof_visible(true);editor.focus=Vector3(79,1,10);editor.distance_=45.;editor.pitch=.90;editor.update_camera();await photo("full-building-showcase")
+	editor.set_storey(preload("res://scripts/building/storeys.gd").highest(editor.layout)+1);editor.set_roof_visible(true);editor.focus=Vector3(79,1,10);editor.distance_=45.;editor.pitch=.90;editor.update_camera();await photo("full-building-showcase")
 	for section in editor.room.sections:check(not section.get("editor_hidden",false),"Complete view keeps every wall face visible")
 	for kind in ["bed","canopy_bed","cloud_bed"]:
 		var row: Dictionary=editor.layout.elements.filter(func(item):return item.get("kind","")==kind)[0];var module: Node3D=editor.room.render_cache[row.id].node;var target:="build:"+str(row.id)

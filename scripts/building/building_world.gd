@@ -30,6 +30,7 @@ var last_view_camera:=Vector3(INF,INF,INF)
 var last_view_key:=""
 var editor_active:=false
 var editor_roof:=false
+var editor_roof_view:=false
 var current_room:=""
 var last_sync: Dictionary={}
 var pending_navigation:=Rect2()
@@ -68,10 +69,10 @@ func stair_at(point_: Vector3) -> bool:
 	for row in stair_rows:
 		if point_.y>=Storeys.elevation(row)-.1 and point_.y<=Storeys.elevation(row)+Storeys.HEIGHT+.4 and Stairs.bounds(row).has_point(Vector2(point_.x,point_.z)):return true
 	return false
-func set_editor_view(enabled: bool,roof: bool,level: int=0,entire: bool=false) -> void:
-	if editor_active!=enabled or editor_roof!=roof or editing_storey!=level or entire_building!=entire:mask_key="";view_dirty=true;storey_view_key=""
-	editor_active=enabled;editor_roof=roof;editing_storey=level;entire_building=entire
-	get_node("Structure/Roof").visible=not enabled or roof
+func set_editor_view(enabled: bool,roof: bool,level: int=0,entire: bool=false,roof_view: bool=false) -> void:
+	if editor_active!=enabled or editor_roof!=roof or editing_storey!=level or entire_building!=entire or editor_roof_view!=roof_view:mask_key="";view_dirty=true;storey_view_key=""
+	editor_roof_view=roof_view;editor_active=enabled;editor_roof=roof;editing_storey=level;entire_building=entire
+	get_node("Structure/Roof").visible=not enabled or roof_view
 	if is_instance_valid(city) and is_instance_valid(city.camera):refresh_view(city.camera.global_position,city.bunny.global_position)
 func apply_storey_visibility(actor: Vector3) -> void:
 	var in_house:=surface_at(actor) or stair_at(actor)
@@ -82,12 +83,12 @@ func apply_storey_visibility(actor: Vector3) -> void:
 		while visible_storey<Storeys.MAX-1 and actor.y>=(visible_storey+1)*Storeys.HEIGHT+Storeys.FLOOR-.16:visible_storey+=1
 		while visible_storey>0 and actor.y<visible_storey*Storeys.HEIGHT+Storeys.FLOOR-.55:visible_storey-=1
 	var mode_: int=View.mode(city)
-	var key:=str([visible_storey,editor_active,editor_roof,entire_building,in_house,mode_])
+	var key:=str([visible_storey,editor_active,editor_roof,editor_roof_view,entire_building,in_house,mode_])
 	if key==storey_view_key:return
 	storey_view_key=key;view_dirty=true;hidden_camera_bodies.clear();other_storey_bodies.clear();occlusion_cache.clear()
 	for entry in render_cache.values():
 		var row: Dictionary=entry.row;var level:=Storeys.of(row);var visible_:=true
-		if editor_active and not entire_building:
+		if editor_active and not entire_building and not editor_roof_view:
 			visible_=level==visible_storey or (row.type=="floor_chunk" and level<visible_storey) or (row.type=="stairs" and level+1==visible_storey)
 		elif not editor_active and in_house:
 			visible_=level<=visible_storey or (mode_!=View.AUTO and row.type!="object")
@@ -144,7 +145,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 	if ray!=null:
 		var id:=Rooms.room_at(plan,Vector2(ray.x,ray.z),false)
 		if id!="":hidden[id]=true
-	var mode_: int=(View.FULL if editor_roof else View.AUTO) if editor_active else View.mode(city)
+	var mode_: int=(View.FULL if editor_roof or editor_roof_view else View.AUTO) if editor_active else View.mode(city)
 	var view_key:=str(hidden)+str(editor_active)+str(editor_roof)+str(mode_)
 	if mode_!=View.OCCLUSION and not view_dirty and view_key==last_view_key and camera_.distance_squared_to(last_view_camera)<.0001 and actor.distance_squared_to(last_view_actor)<.0001:return
 	var force_update:=view_dirty

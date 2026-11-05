@@ -45,13 +45,7 @@ func render_next() -> void:
 	if id.contains(":"):
 		var parts:=id.split(":");id=parts[0];form=parts[1]
 	if id=="template":
-		var source:=preload("res://scripts/building/templates.gd").cottage();builder.blueprint.size=[12.,10.];builder.build_floor(model);builder.build_roof(model);var walls: Array=[]
-		for row in source.elements:
-			if row.type=="wall":
-				var data:=Factory.wall_data(source,row,Vector2(79,10))
-				for opening in data.openings:opening.geometry_only=false
-				builder.build_wall(model,data);walls.append(data)
-		builder.blueprint.walls=walls;model.set_script(preload("res://scripts/building/room_door.gd"));var door:=Node3D.new();model.add_child(door);builder.build_door(door)
+		build_template_thumbnail(model,preload("res://scripts/building/templates.gd").player_sample(form))
 	elif id=="stairs":preload("res://scripts/building/stairs.gd").build(builder,model,{"form":form if form in ["straight","l","u"] else "straight","color":"c6a373"})
 	elif id=="railing":preload("res://scripts/building/stairs.gd").rail(builder,model,Vector3(-2,0,0),Vector3(2,0,0))
 	elif Catalog.OBJECTS.has(id):builder.build_item(model,id)
@@ -105,3 +99,22 @@ func _exit_tree() -> void:
 	# Resolve the owned wait while the studio/model still exist. Waiting directly
 	# on RenderingServer kept coroutine resources alive after a map was removed.
 	draw_ready.emit()
+
+func build_template_thumbnail(model: Node3D,source: Dictionary) -> void:
+	# Catalog silhouettes need only floors, walls/openings and roofs, not furniture or live lights.
+	var origin:=preload("res://scripts/building/layout.gd").template_origin(source)
+	for level in preload("res://scripts/building/storeys.gd").levels(source):
+		var layer:=Node3D.new();model.add_child(layer);layer.position.y=level*4.7
+		var builder:=Factory.builder(layer)
+		for row in source.elements:
+			if int(row.get("storey",0))!=level:continue
+			if row.type=="wall":
+				var data:=Factory.wall_data(source,row,origin)
+				for opening in data.openings:opening.geometry_only=false
+				builder.blueprint.materials.plaster=row.color;builder.build_wall(layer,data)
+			elif row.type in ["floor","roof"]:
+				var rect:=preload("res://scripts/building/layout.gd").rect(row);var center:=rect.get_center()-origin
+				var part:=Node3D.new();layer.add_child(part);part.position=Vector3(center.x,0,center.y)
+				if row.type=="floor":preload("res://scripts/geometry.gd").box(part,Vector3(0,.03,0),Vector3(rect.size.x,.3,rect.size.y),Factory.floor_material(row))
+				else:
+					builder.blueprint.size=[rect.size.x,rect.size.y];builder.blueprint.materials.roof=row.color;builder.roof_form=row.get("form","classic");builder.build_roof(part)

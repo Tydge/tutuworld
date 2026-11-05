@@ -18,14 +18,21 @@ static func build(world: Node3D,grass: Material,paving: Material) -> void:
 	for z in [-6.,26.]:
 		for x in [62.,96.]:
 			G.cylinder(root,Vector3(x,.30,z),.055,.65,G.mat("9d8967"))
-	G.box(root,Vector3(60.5,1.3,17.5),Vector3(.15,2.6,.15),G.mat("aa8458"))
+	G.box(root,Vector3(60.5,1.3,17.39),Vector3(.15,2.6,.15),G.mat("aa8458"))
 	G.box(root,Vector3(60.5,2.2,17.5),Vector3(3.5,.95,.12),G.mat("eee3be"))
 	G.text3d(root,"东岸建造园",Vector3(60.5,2.32,17.58),27,Color("426e5c"))
 	G.text3d(root,"F6 · 建造与布置",Vector3(60.5,1.98,17.58),18,Color("617d67"))
 	world.set_meta("building_site_revision",2)
 
 static func ensure(world: Node3D) -> void:
-	if int(world.get_meta("building_site_revision",0))>=2:return
+	if int(world.get_meta("building_site_revision",0))>=2:
+		var existing:=world.get_node_or_null("EastBuildingSite")
+		if existing!=null:
+			for mesh in existing.get_children():
+				if mesh is MeshInstance3D and mesh.mesh is BoxMesh:
+					if mesh.mesh.size.is_equal_approx(Vector3(.12,2.4,.12)):mesh.position.z=27.68
+					if mesh.mesh.size.is_equal_approx(Vector3(.15,2.6,.15)):mesh.position.z=17.39
+		return
 	var old:=world.get_node_or_null("EastBuildingSite")
 	if not is_instance_valid(old):return
 	var grass: Material=old.get_node("Lawn").material_override;var paving: Material=old.get_node("PavedConnection").material_override
@@ -36,6 +43,6 @@ static func ensure(world: Node3D) -> void:
 	G.box(root,Vector3(128,.002,29),Vector3(64,.07,2.2),paving,"EastPromenade")
 	for x in [108.,124.,156.]:
 		G.cylinder(root,Vector3(x,.3,30.5),.055,.65,G.mat("9d8967"))
-	G.box(root,Vector3(129,1.2,27.8),Vector3(.12,2.4,.12),G.mat("aa8458"))
+	G.box(root,Vector3(129,1.2,27.68),Vector3(.12,2.4,.12),G.mat("aa8458"))
 	G.box(root,Vector3(129,2.,27.8),Vector3(4.,.9,.12),G.mat("eee3be"))
 	G.text3d(root,"东庭 · 两层样板房",Vector3(129,2.05,27.87),25,Color("426e5c"))

@@ -51,7 +51,7 @@ func run() -> void:
 	check(L.validate(capacity).ok and L.usage(capacity).objects==L.MAX_ELEMENTS,"Furniture budget counts objects separately from floor cells")
 	var excess:=L.add(capacity,{"type":"object","kind":"forest_planter","position":[96.,26.]});check(not L.validate(excess).ok and "家具" in L.validate(excess).message,"Object budget rejects one above the tested limit")
 	var lights:=L.add(floor_,{"type":"roof","a":[70.,0.],"b":[82.,10.]});var roof_id: String=lights.elements[-1].id
-	for i in range(L.MAX_LIGHTS):lights=L.add(lights,{"type":"object","kind":"pendant","position":[71.+(i%6)*1.5,1.+floori(i/6.)*1.5],"support":roof_id})
+	for i in range(L.MAX_LIGHTS):lights=L.add(lights,{"type":"object","kind":"pendant","position":[71.+(i%8)*1.3,1.+floori(i/8.)*1.5],"support":roof_id})
 	check(L.validate(lights).ok,"The actual light limit is usable with valid ceiling attachments")
 	lights=L.add(lights,{"type":"object","kind":"pendant","position":[80.,8.],"support":roof_id});check(not L.validate(lights).ok and "灯具" in L.validate(lights).message,"Shadow-casting fixtures have a separate capacity budget")
 	var dense:=L.empty()

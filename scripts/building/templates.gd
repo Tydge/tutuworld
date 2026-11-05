@@ -1,4 +1,5 @@
 extends RefCounted
+const SAMPLE_NAMES:={"single_one":"温馨小屋","two_storey":"两层楼阁"}
 const Layout=preload("res://scripts/building/layout.gd")
 static func cottage() -> Dictionary:
 	var data:={"schema":1,"next_id":1,"elements":[]}
@@ -83,3 +84,13 @@ static func two_storey() -> Dictionary:
 	data=preload("res://scripts/building/grid_layout.gd").compress(data,grid,0)
 	_two_storey=data.duplicate(true)
 	return data
+
+static var _player_samples: Dictionary={}
+static func player_sample(kind: String) -> Dictionary:
+	if kind not in ["single_one","two_storey"]:return cottage()
+	if not _player_samples.has(kind):
+		var raw: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/building_templates/"+kind+".json"))
+		var result:=Layout.validate(raw)
+		if not result.ok:push_error("Invalid building template: "+kind+" "+str(result.get("message")));return {}
+		_player_samples[kind]=result.layout
+	return _player_samples[kind].duplicate(true)

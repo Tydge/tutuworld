@@ -2,6 +2,7 @@ extends Node
 const Storeys=preload("res://scripts/building/storeys.gd")
 const Stairs=preload("res://scripts/building/stairs.gd")
 var editing_storey:=0
+var roof_view:=false
 var show_entire:=false
 var entire_previous_roof:=false
 var template_kind:="cottage"
@@ -38,7 +39,7 @@ var redo_stack: Array=[]
 var grid: MeshInstance3D
 var ghost: MeshInstance3D
 var ghost_material: StandardMaterial3D
-var show_roof:=false
+var show_roof:=false # Legacy property name: complete walls only; roof_view controls roofs.
 var night_preview:=false
 var focus:=Site.CENTER
 var yaw:=.35
@@ -77,6 +78,7 @@ func _ready() -> void:
 func open_editor() -> Dictionary:
 	if city.session.is_online() or city.map_id!="city":return {"ok":false,"message":"建造园目前只在单人城镇开放。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
+	roof_view=false;show_entire=false
 	active=true;previous_active=city.session.active;city.session.active=false;city.paused=true;city.bunny.can_move=false;city.bunny.velocity=Vector3.ZERO;city.hud.hide();InputGuard.release_controls()
 	for npc in city.npcs:npc_modes[npc]=npc.process_mode;npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.velocity=Vector3.ZERO
 	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if Site.PLOT.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Site.CENTER;focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
@@ -150,10 +152,10 @@ func set_roof_visible(value: bool) -> void:
 	show_roof=value
 	ui.root_ui.find_child("ShowRoof",true,false).set_pressed_no_signal(value)
 	if not is_instance_valid(room) or not active:return
-	room.set_process(false);room.get_node("Structure/Roof").visible=value
+	room.set_process(false);room.get_node("Structure/Roof").visible=roof_view
 	apply_editor_cutaway()
 func apply_editor_cutaway() -> void:
-	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,show_entire)
+	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,show_entire,roof_view)
 func commit(candidate: Dictionary,history: bool=true) -> bool:
 	# Editing cannot remove the support beneath the paused player or strand them upstairs.
 	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
@@ -162,7 +164,11 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	if not result.ok:ui.message(result.message,true);return false
 	if result.layout==layout:return true
 	if history:undo_stack.append(layout.duplicate(true));redo_stack.clear();if_history_limit()
+	var old_highest:=Storeys.highest(layout)
 	layout=result.layout
+	if roof_view and Storeys.highest(layout)>old_highest:roof_view=false;editing_storey=Storeys.highest(layout)
+	editing_storey=mini(editing_storey,Storeys.highest(layout))
+	focus.y=(editing_storey+1 if roof_view else editing_storey)*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=active and not roof_view
 	if not selected_unit.is_empty():reselect_unit(selected_unit)
 	elif selected_id!="" and Layout.find(layout,selected_id).is_empty():selected_id=""
 	rebuild();ui.message("已保存 · "+str(Layout.usage(layout).objects)+" 件家具与摆件")
@@ -181,7 +187,7 @@ func redo() -> void:
 	if commit(next,false):redo_stack.pop_back();undo_stack.append(previous);selected_id="";selected_unit.clear();refresh_ui()
 func place_template(kind: String="cottage") -> bool:
 	template_kind=kind;set_storey(0)
-	choose_tool("template");ui.message("整栋样板房跟随鼠标 · 点击空地放置 · Esc 取消")
+	choose_tool("template");ui.message(preload("res://scripts/building/templates.gd").SAMPLE_NAMES.get(kind,"整栋样板房")+"跟随鼠标 · 点击空地放置 · Esc 取消")
 	return true
 func clear_plot() -> void:
 	var empty:=Layout.empty()
@@ -305,7 +311,7 @@ func point_at(mouse: Vector2) -> Variant:
 		elif mount=="ceiling":
 			var point: Variant=Plane(Vector3.UP,4.58+editing_storey*Storeys.HEIGHT).intersects_ray(origin,direction)
 			if point!=null:return Vector2(snappedf(point.x,.1),snappedf(point.z,.1))
-	var hit: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT).intersects_ray(origin,direction)
+	var hit: Variant=Plane(Vector3.UP,.18+(editing_storey+(1 if roof_view and tool=="floor" else 0))*Storeys.HEIGHT).intersects_ray(origin,direction)
 	if hit==null:return null
 	return Vector2(snappedf(hit.x,.5),snappedf(hit.z,.5))
 func closest_wall(point_: Vector2) -> Dictionary:
@@ -317,7 +323,7 @@ func closest_wall(point_: Vector2) -> Dictionary:
 		if distance_to<gap:gap=distance_to;best={"wall":row.id,"offset":snappedf(offset,.5)}
 	return best
 func row_at(point_: Vector2) -> Dictionary:
-	var row:={"type":tool,"storey":editing_storey,"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
+	var row:={"type":tool,"storey":editing_storey+(1 if roof_view and tool=="floor" else 0),"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
 	if tool in ["door","window","roof","stairs"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y]}
 	if tool=="stairs":row.form=structure_form;row.position=[point_.x,point_.y];row.yaw=rotation
@@ -374,7 +380,7 @@ func pick_at(mouse: Vector2) -> String:
 	if is_instance_valid(room):
 		excluded.assign(room.other_storey_bodies)
 	var hidden_walls: Dictionary={}
-	if is_instance_valid(room) and not show_roof:
+	if is_instance_valid(room) and not show_roof and not roof_view:
 		for section in room.sections:
 			if not section.roof and not section.get("editor_hidden",false):continue
 			for body in section.node.find_children("*","StaticBody3D",true,false):excluded.append(body.get_rid())
@@ -424,7 +430,7 @@ func update_ghost(point_: Vector2) -> void:
 	var row:=row_at(point_);ghost.visible=not row.is_empty()
 	if not ghost.visible:
 		clear_preview();return
-	var result:=Stairs.preview(layout,row,moving_id) if row.type=="stairs" else Layout.validate(candidate_layout(row))
+	var result:=Layout.preview_opening(layout,row,moving_id) if row.type in ["door","window"] else (Stairs.preview(layout,row,moving_id) if row.type=="stairs" else Layout.validate(candidate_layout(row)))
 	if row.type=="template":
 		update_template_preview(Vector2(row.position[0],row.position[1]),result.ok)
 		if not result.ok:ui.message(result.message,true)
@@ -498,7 +504,11 @@ func update_template_preview(p: Vector2,valid: bool) -> void:
 	if not valid:overlay=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.95,.22,.15,.48)
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay
 func update_structure_preview(row: Dictionary,valid: bool) -> void:
-	var key:=JSON.stringify(row)+str(valid)+str(show_roof)
+	var opening_preview: bool=row.type in ["door","window"]
+	var geometry:=row.duplicate(true)
+	if opening_preview:
+		for field in ["offset","wall","anchor","axis","id","storey"]:geometry.erase(field)
+	var key:=JSON.stringify(geometry)+(str(valid) if not opening_preview else "")+str(show_roof)
 	if key!=preview_key:
 		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildStructurePreview";city.add_child(preview)
 		var b:=Factory.builder(preview);var area:=Rect2();var mid:=Vector2.ZERO
@@ -527,34 +537,18 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 					if row.get("form","classic")=="classic" or row.get("painted",false):Factory.paint(leaf,row,true)
 				if moving_id!="" and room.render_cache.has(moving_id):
 					var original: Node3D=room.render_cache[moving_id].node;preview_walls.append([original,original.visible]);original.hide()
-				if show_roof and valid:preview_opening_wall(b,row,p)
+
 		for body in preview.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
 		for mesh in preview.find_children("*","MeshInstance3D",true,false):
 			mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			for wall in preview.get_children():
-				if wall.has_meta("preview_wall") and wall.is_ancestor_of(mesh):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON;break
+	if opening_preview:
+		var support_wall:=Layout.find(layout,row.wall);var start:=Vector2(support_wall.a[0],support_wall.a[1]);var direction: Vector2=(Vector2(support_wall.b[0],support_wall.b[1])-start).normalized();var point:=start+direction*float(row.offset)
+		preview.position=Vector3(point.x,Storeys.elevation(row),point.y);preview.get_child(0).rotation.y=-atan2(direction.y,direction.x)
 	preview.show();ghost.hide()
 	var overlay:=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.2,.75,.48,.08) if valid else Color(.95,.22,.15,.48)
 	overlay.no_depth_test=row.type in ["door","window"]
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):
-		var wall_mesh:=false
-		for wall in preview.get_children():
-			if wall.has_meta("preview_wall") and wall.is_ancestor_of(mesh):wall_mesh=true;break
-		mesh.material_overlay=null if wall_mesh else overlay
-func preview_opening_wall(builder: RefCounted,row: Dictionary,point_: Vector2) -> void:
-	var candidate:=layout.duplicate(true)
-	if moving_id!="":candidate.elements=candidate.elements.filter(func(item):return item.id!=moving_id)
-	var pending:=row.duplicate(true);pending.id="__placement_opening";pending.anchor=[point_.x,point_.y]
-	var supporting:=Layout.find(layout,row.wall);pending.axis=0 if is_equal_approx(supporting.a[1],supporting.b[1]) else 1;candidate.elements.append(pending)
-	for wall in layout.elements:
-		if wall.type!="wall" or Storeys.of(wall)!=editing_storey:continue
-		var data:=Factory.wall_data(candidate,wall,point_)
-		if not data.openings.any(func(opening):return opening.id==pending.id):continue
-		var original: Node3D=room.render_cache[wall.id].node;preview_walls.append([original,original.visible]);original.hide()
-		builder.build_wall(preview,data)
-		var temporary: Node3D=preview.get_node(NodePath(wall.id));temporary.set_meta("preview_wall",true);builder.bake_section(temporary)
-		for mesh in temporary.find_children("*","MeshInstance3D",true,false):
-			if mesh.material_override is ShaderMaterial:mesh.material_override.set_shader_parameter("building_world_pattern",true)
+		mesh.material_overlay=overlay
 func clear_highlight() -> void:
 	part_hint_left=0.
 	for entry in highlighted:
@@ -635,8 +629,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			if event.shift_pressed:redo()
 			else:undo()
 		elif event.is_command_or_control_pressed() and event.keycode==KEY_Y:redo()
-		elif event.keycode==KEY_PAGEUP:set_storey(editing_storey+1)
-		elif event.keycode==KEY_PAGEDOWN:set_storey(editing_storey-1)
+		elif event.keycode==KEY_PAGEUP:set_storey(view_level()+1)
+		elif event.keycode==KEY_PAGEDOWN:set_storey(view_level()-1)
 		elif event.keycode==KEY_R:rotate_selected()
 		elif event.keycode==KEY_B:choose_tool("delete")
 		elif event.keycode==KEY_H:choose_tool("select")
@@ -725,17 +719,20 @@ func _input(event: InputEvent) -> void:
 	if active and demolition_start!=null and event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT and not event.pressed:
 		finish_demolition(event.position);get_viewport().set_input_as_handled()
 
+func view_level() -> int:return editing_storey+1 if roof_view else editing_storey
 func set_storey(level: int) -> void:
-	if show_entire:set_entire(false)
-	choose_tool("select");selected_id="";selected_unit.clear();editing_storey=clampi(level,0,Storeys.MAX-1);show_entire=false
-	focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+focus.y;ghost_key="";set_roof_visible(false);apply_editor_cutaway();refresh_ui()
-	ui.message("正在编辑 %d 楼 · 上方隐藏，下方仅作参照 · PageUp / PageDown 切层"%(editing_storey+1))
+	choose_tool("select");selected_id="";selected_unit.clear();show_entire=false
+	var highest:=Storeys.highest(layout)
+	var target:=clampi(level,0,highest+1);roof_view=target>highest;editing_storey=mini(target,highest)
+	focus.y=target*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=not roof_view;ghost_key=""
+	apply_editor_cutaway();refresh_ui();update_camera()
+	ui.message("屋顶 · 向下返回室内；选择地板可加建上一层" if roof_view else "正在编辑 %d 楼 · PageUp / PageDown 切层"%(editing_storey+1))
 func set_entire(value: bool) -> void:
 	if value and not show_entire:entire_previous_roof=show_roof
 	show_entire=value;clear_preview();ghost_key="";set_roof_visible(true if value else entire_previous_roof);apply_editor_cutaway();refresh_ui()
-	ui.message("整栋外观 · 仍只选取和修改 %d 楼；关闭后恢复逐层编辑"%(editing_storey+1) if value else "正在编辑 %d 楼"%(editing_storey+1))
+	ui.message("整栋墙壁 · 仍只选取和修改 %d 楼；关闭后恢复逐层编辑"%(editing_storey+1) if value else "正在编辑 %d 楼"%(editing_storey+1))
 func template_source() -> Dictionary:
-	return preload("res://scripts/building/templates.gd").two_storey() if template_kind=="two_storey" else preload("res://scripts/building/templates.gd").cottage()
+	return preload("res://scripts/building/templates.gd").player_sample(template_kind)
 func update_stair_preview(row: Dictionary,valid: bool) -> void:
 	var key: String=JSON.stringify(row)+str(valid)
 	if key!=preview_key:

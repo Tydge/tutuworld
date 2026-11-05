@@ -93,7 +93,7 @@ func run() -> void:
 	await button("BuildUndo");check(not kind("desk").is_empty() and not kind("table_lamp").is_empty() and not kind("letter").is_empty(),"One undo restores the complete surface group")
 	var roof:=L.add(editor.layout,{"type":"roof","a":[69.,1.],"b":[90.,22.]});editor.commit(roof)
 	await button("Category_照明");await button("Tool_object_pendant");await world(Vector3(81,4.58,12))
-	var pendant:=kind("pendant");check(not pendant.is_empty() and pendant.support==roof.elements[-1].id,"Mouse places a pendant at the real ceiling height")
+	var pendant:=kind("pendant");check(not pendant.is_empty() and pendant.support=="ceiling:0","Mouse places a pendant at the real ceiling height")
 	await button("Tool_select");await button("NightPreview");editor.choose_tool("select");await mouse_at(Vector2(30,30))
 	await photo("fixture-lighting-night")
 	# Pixel evidence that fixtures contribute to the room, beyond their own bulb geometry.
@@ -108,10 +108,10 @@ func run() -> void:
 	for light in lights:light.show()
 	# Templates follow the mouse and can be placed beside existing construction.
 	editor.commit(L.empty());editor.distance_=38.;editor.focus=Vector3(79,0,10);editor.update_camera()
-	await button("PlaceSampleRoom");check(editor.tool=="template" and editor.layout.elements.is_empty(),"Sample button enters placement mode without immediately changing the layout")
+	await button("PlaceSampleRoom");check(editor.ui.form_family=="template" and editor.layout.elements.is_empty(),"Sample button opens the bottom catalog without changing the layout");await button("Tool_template_single_one");check(editor.tool=="template","House card enters placement mode")
 	await mouse_at(root.get_final_transform()*city.camera.unproject_position(Vector3(69,.18,1)));await frames(3)
 	check(is_instance_valid(editor.preview) and editor.preview.has_node("Structure/Roof"),"Whole-house preview follows the pointer with actual roof and walls")
-	await photo("template-placement-preview");await world(Vector3(69,.18,1));var count: int=editor.layout.elements.size();check(count==42,"Mouse chooses the first whole-house position")
+	await photo("template-placement-preview");await world(Vector3(69,.18,1));var count: int=editor.layout.elements.size();check(count==preload("res://scripts/building/templates.gd").player_sample("single_one").elements.size(),"Mouse chooses the first whole-house position")
 	editor.focus=Vector3(88,0,19);editor.update_camera();await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"A second house can be mouse-placed beside the existing house")
 	await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"Overlapping whole-house placement is rejected")
 	await key(KEY_ESCAPE);editor.focus=Vector3(79,0,10);editor.update_camera();editor.set_night_preview(false);await photo("two-houses-bottom-catalog")

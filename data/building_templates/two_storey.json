@@ -1,0 +1,1474 @@
+{
+  "schema": 4,
+  "next_id": 243,
+  "lighting_version": 1,
+  "grandfathered": {},
+  "elements": [
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        147.0,
+        14.5
+      ],
+      "color": "cda56e",
+      "id": "build_175",
+      "painted": false,
+      "storey": 1,
+      "style": "herringbone",
+      "type": "floor"
+    },
+    {
+      "a": [
+        131.0,
+        14.5
+      ],
+      "b": [
+        140.5,
+        17.5
+      ],
+      "color": "cda56e",
+      "id": "build_176",
+      "painted": false,
+      "storey": 1,
+      "style": "herringbone",
+      "type": "floor"
+    },
+    {
+      "a": [
+        140.5,
+        14.5
+      ],
+      "b": [
+        147.0,
+        17.5
+      ],
+      "color": "d9cfb5",
+      "id": "build_177",
+      "painted": true,
+      "storey": 1,
+      "style": "terrazzo",
+      "type": "floor"
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        147.0,
+        2.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_178",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        140.5,
+        14.5
+      ],
+      "b": [
+        147.0,
+        14.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_180",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        131.0,
+        17.5
+      ],
+      "b": [
+        140.5,
+        17.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_181",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        131.0,
+        17.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_182",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        140.5,
+        2.5
+      ],
+      "b": [
+        140.5,
+        14.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_183",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        147.0,
+        2.5
+      ],
+      "b": [
+        147.0,
+        14.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_184",
+      "painted": false,
+      "storey": 1,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        140.5,
+        14.5
+      ],
+      "b": [
+        140.5,
+        17.5
+      ],
+      "color": "eadcc5",
+      "id": "build_218",
+      "painted": false,
+      "storey": 1,
+      "style": "original",
+      "type": "wall"
+    },
+    {
+      "a": [
+        140.5,
+        14.5
+      ],
+      "b": [
+        140.5,
+        17.5
+      ],
+      "color": "a78358",
+      "id": "build_193",
+      "painted": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "railing"
+    },
+    {
+      "a": [
+        140.5,
+        17.5
+      ],
+      "b": [
+        147.0,
+        17.5
+      ],
+      "color": "a78358",
+      "id": "build_194",
+      "painted": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "railing"
+    },
+    {
+      "a": [
+        147.0,
+        17.5
+      ],
+      "b": [
+        147.0,
+        14.5
+      ],
+      "color": "a78358",
+      "id": "build_195",
+      "painted": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "railing"
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        147.0,
+        14.5
+      ],
+      "color": "688d81",
+      "form": "hip",
+      "id": "build_196",
+      "painted": false,
+      "storey": 1,
+      "style": "original",
+      "type": "roof"
+    },
+    {
+      "a": [
+        131.0,
+        14.5
+      ],
+      "b": [
+        140.5,
+        17.5
+      ],
+      "color": "688d81",
+      "form": "shed",
+      "id": "build_197",
+      "painted": false,
+      "storey": 1,
+      "style": "original",
+      "type": "roof"
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_198",
+      "kind": "canopy_bed",
+      "painted": false,
+      "position": [
+        144.0,
+        5.0
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_199",
+      "kind": "bedside",
+      "painted": false,
+      "position": [
+        146.4,
+        3.1
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_203",
+      "kind": "petal_armchair",
+      "painted": false,
+      "position": [
+        146.0,
+        15.8
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_204",
+      "kind": "forest_planter",
+      "painted": false,
+      "position": [
+        143.0,
+        16.9
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_205",
+      "kind": "forest_settee",
+      "painted": false,
+      "position": [
+        132.0,
+        14.5
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_206",
+      "kind": "floor_lamp",
+      "painted": false,
+      "position": [
+        131.675,
+        16.825
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_207",
+      "kind": "lotus_pendant",
+      "painted": false,
+      "position": [
+        143.9,
+        9.3
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "ceiling:1",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_208",
+      "kind": "pendant",
+      "painted": false,
+      "position": [
+        136.8,
+        13.4
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "ceiling:1",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_210",
+      "kind": "table_lamp",
+      "painted": false,
+      "position": [
+        146.4,
+        3.1
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_199",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_220",
+      "kind": "forest_cabinet",
+      "painted": false,
+      "position": [
+        146.425,
+        9.5
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_221",
+      "kind": "bookshelf",
+      "painted": false,
+      "position": [
+        138.5,
+        3.05
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_222",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        138.8,
+        3.12
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_221",
+      "support_level": 1,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_223",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        138.2,
+        3.1
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_221",
+      "support_level": 2,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_224",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        138.6,
+        3.12
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_221",
+      "support_level": 2,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_227",
+      "kind": "desk",
+      "painted": false,
+      "position": [
+        134.0,
+        14.5
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_228",
+      "kind": "cup",
+      "painted": false,
+      "position": [
+        133.9,
+        13.7
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_227",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_229",
+      "kind": "field_journal",
+      "painted": false,
+      "position": [
+        133.9,
+        14.95
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_227",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        138.5,
+        17.5
+      ],
+      "color": "cda56e",
+      "id": "build_146",
+      "painted": false,
+      "style": "herringbone",
+      "type": "floor"
+    },
+    {
+      "a": [
+        138.5,
+        2.5
+      ],
+      "b": [
+        147.0,
+        9.0
+      ],
+      "color": "f4e8cf",
+      "id": "build_147",
+      "painted": true,
+      "style": "cottage_tile",
+      "type": "floor"
+    },
+    {
+      "a": [
+        138.5,
+        9.0
+      ],
+      "b": [
+        147.0,
+        17.5
+      ],
+      "color": "cda56e",
+      "id": "build_148",
+      "painted": false,
+      "style": "herringbone",
+      "type": "floor"
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        138.5,
+        2.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_149",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        138.5,
+        2.5
+      ],
+      "b": [
+        147.0,
+        2.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "f2e8d4",
+          "painted": true,
+          "style": "glazed_tile"
+        }
+      },
+      "id": "build_150",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        138.5,
+        9.0
+      ],
+      "b": [
+        147.0,
+        9.0
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "f2e8d4",
+          "painted": true,
+          "style": "glazed_tile"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_151",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        131.0,
+        17.5
+      ],
+      "b": [
+        147.0,
+        17.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_152",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        131.0,
+        2.5
+      ],
+      "b": [
+        131.0,
+        17.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_153",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        138.5,
+        2.5
+      ],
+      "b": [
+        138.5,
+        9.0
+      ],
+      "color": "eadcc5",
+      "id": "build_217",
+      "painted": false,
+      "style": "original",
+      "type": "wall"
+    },
+    {
+      "a": [
+        147.0,
+        2.5
+      ],
+      "b": [
+        147.0,
+        9.0
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "f2e8d4",
+          "painted": true,
+          "style": "glazed_tile"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_154",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "a": [
+        147.0,
+        9.0
+      ],
+      "b": [
+        147.0,
+        17.5
+      ],
+      "color": "eadcc5",
+      "faces": {
+        "negative": {
+          "color": "d5dfcf",
+          "painted": true,
+          "style": "plaster"
+        },
+        "positive": {
+          "color": "e9e1c9",
+          "painted": true,
+          "style": "plaster"
+        }
+      },
+      "id": "build_155",
+      "painted": false,
+      "style": "plaster",
+      "type": "wall"
+    },
+    {
+      "color": "c6a373",
+      "form": "u",
+      "id": "build_163",
+      "painted": false,
+      "position": [
+        134.0,
+        7.5
+      ],
+      "style": "wood",
+      "type": "stairs",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_164",
+      "kind": "cooking_counter",
+      "painted": false,
+      "position": [
+        143.5,
+        3.6
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_165",
+      "kind": "forest_cabinet",
+      "painted": false,
+      "position": [
+        146.425,
+        6.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_166",
+      "kind": "sofa",
+      "painted": false,
+      "position": [
+        143.7,
+        13.1
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_167",
+      "kind": "tea_table",
+      "painted": false,
+      "position": [
+        143.7,
+        15.3
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_168",
+      "kind": "forest_rug",
+      "painted": false,
+      "position": [
+        143.7,
+        14.2
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_169",
+      "kind": "hearth",
+      "painted": false,
+      "position": [
+        140.2,
+        9.925
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "b8c4a3",
+      "id": "build_170",
+      "kind": "forest_planter",
+      "painted": false,
+      "position": [
+        146.0,
+        16.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_171",
+      "kind": "lotus_pendant",
+      "painted": false,
+      "position": [
+        143.5,
+        12.0
+      ],
+      "style": "original",
+      "support": "ceiling:0",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_172",
+      "kind": "pendant",
+      "painted": false,
+      "position": [
+        143.5,
+        6.0
+      ],
+      "style": "original",
+      "support": "ceiling:0",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_173",
+      "kind": "tea_service",
+      "painted": false,
+      "position": [
+        143.8,
+        15.3
+      ],
+      "style": "original",
+      "support": "build_167",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "eadcc5",
+      "id": "build_174",
+      "kind": "ceramic_vases",
+      "painted": false,
+      "position": [
+        146.425,
+        6.5
+      ],
+      "style": "original",
+      "support": "build_165",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_230",
+      "kind": "bookshelf",
+      "painted": false,
+      "position": [
+        137.95,
+        8.0
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "appearance": {
+        "cover": {
+          "color": "9b7878",
+          "material": "original"
+        }
+      },
+      "color": "ffffff",
+      "id": "build_231",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.8,
+        7.65
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 1,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_232",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.88,
+        8.525
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 1,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_233",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.95,
+        8.35
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 1,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_234",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.88,
+        8.525
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 2,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_235",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.9,
+        8.1
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 2,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_236",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.88,
+        7.55
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 2,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_237",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.9,
+        7.65
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 3,
+      "type": "object",
+      "yaw": 180.0
+    },
+    {
+      "appearance": {
+        "cover": {
+          "color": "789b8d",
+          "material": "original"
+        }
+      },
+      "color": "ffffff",
+      "id": "build_238",
+      "kind": "standing_book",
+      "painted": false,
+      "position": [
+        137.88,
+        8.4
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 3,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_239",
+      "kind": "small_plant",
+      "painted": false,
+      "position": [
+        137.93,
+        8.35
+      ],
+      "style": "original",
+      "support": "build_230",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_240",
+      "kind": "forest_planter",
+      "painted": false,
+      "position": [
+        139.5,
+        3.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "anchor": [
+        131.0,
+        15.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "round",
+      "id": "build_186",
+      "offset": 12.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_182"
+    },
+    {
+      "anchor": [
+        147.0,
+        5.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_187",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_184"
+    },
+    {
+      "anchor": [
+        147.0,
+        11.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_188",
+      "offset": 9.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_184"
+    },
+    {
+      "anchor": [
+        135.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_189",
+      "offset": 4.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_181"
+    },
+    {
+      "anchor": [
+        140.5,
+        11.5
+      ],
+      "axis": 1,
+      "color": "739b8d",
+      "default_open": false,
+      "id": "build_191",
+      "offset": 9.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_183"
+    },
+    {
+      "anchor": [
+        143.5,
+        14.5
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "form": "glass",
+      "id": "build_192",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_180"
+    },
+    {
+      "anchor": [
+        133.5,
+        2.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_225",
+      "offset": 2.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "original",
+      "type": "window",
+      "wall": "build_178"
+    },
+    {
+      "anchor": [
+        131.0,
+        5.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_226",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "original",
+      "type": "window",
+      "wall": "build_182"
+    },
+    {
+      "anchor": [
+        134.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "form": "arch",
+      "id": "build_156",
+      "offset": 3.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_152"
+    },
+    {
+      "anchor": [
+        143.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_157",
+      "offset": 12.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_152"
+    },
+    {
+      "anchor": [
+        142.5,
+        2.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_158",
+      "offset": 4.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_150"
+    },
+    {
+      "anchor": [
+        131.0,
+        14.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "round",
+      "id": "build_159",
+      "offset": 12.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_153"
+    },
+    {
+      "anchor": [
+        147.0,
+        6.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_160",
+      "offset": 3.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_154"
+    },
+    {
+      "anchor": [
+        147.0,
+        13.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_161",
+      "offset": 4.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_155"
+    },
+    {
+      "anchor": [
+        143.0,
+        9.0
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "default_open": false,
+      "form": "glass",
+      "id": "build_162",
+      "offset": 4.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_151"
+    },
+    {
+      "anchor": [
+        131.0,
+        10.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "round",
+      "id": "build_241",
+      "offset": 7.5,
+      "painted": false,
+      "reverse": false,
+      "style": "original",
+      "type": "window",
+      "wall": "build_153"
+    },
+    {
+      "anchor": [
+        139.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_242",
+      "offset": 8.5,
+      "painted": false,
+      "reverse": false,
+      "style": "original",
+      "type": "window",
+      "wall": "build_152"
+    }
+  ]
+}

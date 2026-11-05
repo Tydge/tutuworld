@@ -32,8 +32,8 @@ func run() -> void:
 		data=L.add(data,{"type":"object","kind":"chair","position":[70.,0.],"yaw":0.,"storey":level})
 	check(editor.commit(data),"Stacked floors, walls and chairs validate independently");await process_frame;await process_frame
 	await button("FloorUp");check(editor.editing_storey==1 and city.bunny.position==original,"Floor button edits 2F without moving player")
-	await key(KEY_PAGEUP);await key(KEY_PAGEUP);await key(KEY_PAGEUP);check(editor.editing_storey==3,"PageUp clamps to 4F")
-	await key(KEY_PAGEDOWN);await key(KEY_PAGEDOWN);check(editor.editing_storey==1,"PageDown selects the exact editing floor")
+	await key(KEY_PAGEUP);await key(KEY_PAGEUP);await key(KEY_PAGEUP);check(editor.editing_storey==1 and editor.roof_view,"PageUp stops at roof above existing 2F")
+	await key(KEY_PAGEDOWN);check(editor.editing_storey==1,"PageDown selects the exact editing floor")
 	editor.focus=Vector3(77,4.7,8);editor.pitch=.95;editor.distance_=37.;editor.update_camera();await process_frame
 	var hit: String=editor.pick_at(city.camera.unproject_position(Vector3(70,5.6,0)));check(L.find(editor.layout,hit).get("kind","")=="chair" and S.of(L.find(editor.layout,hit))==1,"Picker selects only the upper of two stacked chairs")
 	var floor_id: String=L.compiled(editor.layout,1).floors.values()[0].id;var unit:=L.unit_at(editor.layout,floor_id,Vector2(76.25,8.25));editor.selected_id=unit.id;editor.selected_unit=unit;var lower_before:=JSON.stringify(L.compiled(editor.layout,0).floors)
@@ -42,7 +42,7 @@ func run() -> void:
 	editor.choose_tool("object:chair");check(editor.place_at(Vector2(74,0)) and S.of(editor.selected_row())==1 and editor.selected_row().get("kind","")=="chair","New upper-floor placement selects that actual new object")
 	editor.set_roof_visible(true);editor.choose_tool("window:arch");var point: Variant=editor.point_at(city.camera.unproject_position(Vector3(80,7.,20)));check(point!=null and S.of(L.find(editor.layout,editor.row_at(point).wall))==1,"Wall placement ray selects 2F wall at its real height")
 	if point!=null:
-		editor.update_ghost(point);check(is_instance_valid(editor.preview) and is_equal_approx(editor.preview.position.y,4.7) and not editor.preview_walls.is_empty(),"Upper window preview cuts and restores the actual upper wall")
+		editor.update_ghost(point);check(is_instance_valid(editor.preview) and is_equal_approx(editor.preview.position.y,4.7) and editor.preview_walls.is_empty(),"Upper window preview keeps wall geometry and lighting stable")
 	editor.choose_tool("select");editor.set_storey(0);editor.focus=Vector3(79,0,8);editor.pitch=.9;editor.distance_=35.;editor.update_camera()
 	await button("Category_结构");await button("Tool_stairs");check(editor.ui.form_family=="stairs","Stair catalog opens its shape subcategory")
 	for form in Stairs.FORMS:

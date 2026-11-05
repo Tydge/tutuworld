@@ -37,7 +37,7 @@ func run() -> void:
 	check(editor.active and not city.bunny.can_move and city.paused and not session.active,"Build mode pauses gameplay and controls its own camera")
 	var resident_position: Vector3=city.npcs[0].position;await create_timer(.2).timeout
 	check(city.npcs[0].position.distance_to(resident_position)<.001,"Residents also pause while the construction camera is active")
-	var sample: Button=editor.ui.root_ui.find_child("PlaceSampleRoom",true,false);sample.pressed.emit();editor.place_at(Vector2(79,10));await physics_frame
+	var sample: Button=editor.ui.root_ui.find_child("PlaceSampleRoom",true,false);sample.pressed.emit();check(editor.ui.form_family=="template","Sample command opens the bottom catalog");editor.place_template();editor.place_at(Vector2(79,10));await physics_frame
 	check(editor.layout.elements.size()==42 and is_instance_valid(editor.room),"In-game sample command builds editable structure and independently editable furnishings")
 	await photo("editor-room")
 	check(editor.room.get_node("Doors/build_6").door_open,"Player-built doorway starts open with a real independent door leaf")

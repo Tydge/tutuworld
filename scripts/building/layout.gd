@@ -5,7 +5,7 @@ const Site=preload("res://scripts/building/site.gd")
 const Catalog=preload("res://scripts/building/catalog.gd")
 const Grid=preload("res://scripts/building/grid_layout.gd")
 const MAX_ELEMENTS:=256 # compatibility name; only objects consume this budget
-const MAX_LIGHTS:=16
+const MAX_LIGHTS:=48
 const MAX_WALL_EDGES:=2048
 const MAX_WALL_RUNS:=256
 const MAX_ROOFS:=128
@@ -461,3 +461,18 @@ static func template_origin(source: Dictionary) -> Vector2:
 	var area:=rect(floors[0])
 	for row in floors:area=area.merge(rect(row))
 	return area.get_center()
+
+## Preview changes only one opening; committed geometry is already validated.
+## Keep the authoritative full validation on placement, not on mouse motion.
+static func preview_opening(layout: Dictionary,row: Dictionary,moving_id: String="") -> Dictionary:
+	var wall:=find(layout,str(row.get("wall","")))
+	if wall.get("type","")!="wall" or Storeys.of(wall)!=Storeys.of(row):return fail("门窗必须安装在墙上。")
+	var hole:=row.duplicate(true);var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var p:=a+(b-a).normalized()*float(hole.offset)
+	hole.anchor=[p.x,p.y];hole.axis=0 if is_equal_approx(a.y,b.y) else 1
+	if not opening_supported(hole,compiled(layout,Storeys.of(row)).walls):return fail("墙段太短，或门窗离断口/墙角太近。")
+	for other in layout.elements:
+		if other.type not in ["door","window"] or other.id==moving_id or Storeys.of(other)!=Storeys.of(hole) or not other.has("anchor") or other.axis!=hole.axis:continue
+		if absf(hole.anchor[1-hole.axis]-other.anchor[1-hole.axis])>.001:continue
+		var width:=2.86 if hole.type=="door" else 2.2;var other_width:=2.86 if other.type=="door" else 2.2
+		if absf(hole.anchor[hole.axis]-other.anchor[hole.axis])<(width+other_width)*.5+.15:return fail("门窗之间需要留出墙柱。")
+	return {"ok":true}

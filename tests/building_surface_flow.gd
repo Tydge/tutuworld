@@ -39,7 +39,7 @@ func run() -> void:
 	editor.ui.batch_paint.button_pressed=false;editor.ui.wall_face.select(1);editor.ui.wall_face.item_selected.emit(1);apply("c8a892","brick")
 	row=L.compiled(editor.layout).walls[Vector3i(136,0,0)];check(C.surface(row,"positive").style=="botanical" and C.surface(row,"negative").style=="brick","The exterior selector changes the opposite face independently")
 	var checkbox: CheckButton=editor.ui.root_ui.find_child("ShowRoof",true,false);checkbox.button_pressed=true
-	check(editor.show_roof and editor.room.sections.all(func(section):return not section.get("editor_hidden",false)),"Complete roof/wall switch exposes all walls through its real control")
+	check(editor.show_roof and editor.room.sections.all(func(section):return not section.get("editor_hidden",false)),"Complete-wall switch exposes walls through its real control")
 	await photo("wall-face-controls-720")
 	# Show each new floor finish at a useful size, using the same model/material path.
 	for index in range(3):

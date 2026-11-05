@@ -66,7 +66,7 @@ func run() -> void:
 	editor.set_storey(0);editor.set_roof_visible(false);editor.focus=Vector3(139,0,10);editor.pitch=.95;editor.distance_=33.;editor.update_camera();await capture("two-storey-edit-1f")
 	editor.ui.hide();editor.set_roof_visible(true);city.camera.position=Vector3(143.4,2.75,8.3);city.camera.look_at(Vector3(143.5,1.5,3.65));await capture("kitchen-tiles-and-counter")
 	editor.set_storey(1);editor.ui.show()
-	editor.set_entire(true);editor.set_roof_visible(true);editor.distance_=46.;editor.pitch=.65;editor.update_camera();await capture("two-storey-exterior")
+	editor.set_storey(preload("res://scripts/building/storeys.gd").highest(editor.layout)+1);editor.distance_=46.;editor.pitch=.65;editor.update_camera();await capture("two-storey-exterior")
 	check(editor.room.render_cache.values().all(func(entry):return entry.node.visible),"Whole-building exterior shows both storeys")
 	editor.ui.hide();editor.close_editor();city.bunny.set_physics_process(false);city.set_process(false)
 	for i in range(4):await physics_frame

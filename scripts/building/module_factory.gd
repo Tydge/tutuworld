@@ -55,11 +55,11 @@ static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dict
 		chunks[key][c]=grid.floors[c]
 	for key in chunks:
 		var id:=prefix+"floor_%d_%d"%[key.x,key.y];var ordered: Array=chunks[key].keys();ordered.sort();var fingerprint: Array=[]
-		for c in ordered:fingerprint.append([c,Grid.style_key(chunks[key][c])])
+		for c in ordered:fingerprint.append([c,Grid.style_key(chunks[key][c]),[grid.floors.has(c+Vector2i.LEFT),grid.floors.has(c+Vector2i.RIGHT),grid.floors.has(c+Vector2i.UP),grid.floors.has(c+Vector2i.DOWN)]])
 		var signature:=JSON.stringify(fingerprint).sha256_text()
 		if previous.has(id) and previous[id].signature==signature:result[id]=previous[id];continue
 		var rows:=Grid.rectangles(chunks[key])
-		result[id]={"path":"Structure/Floor","row":{"id":id,"type":"floor_chunk","storey":level,"rects":rows,"cells":chunks[key],"origin":Vector2(key)*Grid.CHUNK*.5},"signature":signature}
+		result[id]={"path":"Structure/Floor","row":{"id":id,"type":"floor_chunk","storey":level,"rects":rows,"cells":chunks[key],"neighbors":grid.floors,"origin":Vector2(key)*Grid.CHUNK*.5},"signature":signature}
 	for row in layout.elements:
 		if row.type=="floor":continue
 		if row.type=="object":continue
@@ -225,16 +225,20 @@ static func pose_wall(module: Node3D,row: Dictionary) -> void:
 	var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var direction: Vector2=(b-a).normalized()
 	module.position=Vector3((a.x+b.x)*.5-Site.CENTER.x,Storeys.elevation(row),(a.y+b.y)*.5-Site.CENTER.z);module.rotation.y=-atan2(direction.y,direction.x);module.set_meta("outward",Vector3(-direction.y,0,direction.x))
 static func build_floor_mesh(module: Node3D,row: Dictionary) -> void:
-	# Emit boxes directly into one mesh per material, without temporary nodes or surfaces per cell.
+	# Batch by material, omitting internal slab sides even across material/chunk boundaries.
 	var groups: Dictionary={}
 	var unit:=BoxMesh.new();unit.size=Vector3.ONE;var base:=unit.surface_get_arrays(0)
-	for part in row.rects:
-		var key:=Grid.style_key(part)
+	var neighbors: Dictionary=row.get("neighbors",row.cells)
+	for cell in row.cells:
+		var part: Dictionary=row.cells[cell];var key:=Grid.style_key(part)
 		if not groups.has(key):groups[key]={"vertices":PackedVector3Array(),"normals":PackedVector3Array(),"uv":PackedVector2Array(),"indices":PackedInt32Array(),"material":floor_material(part)}
-		var entry: Dictionary=groups[key];var r:=Layout.rect(part);var mid: Vector2=r.get_center()-row.origin;var size_:=Vector3(r.size.x,.30,r.size.y);var offset: int=entry.vertices.size()
-		for vertex in base[Mesh.ARRAY_VERTEX]:entry.vertices.append(vertex*size_+Vector3(mid.x,.03,mid.y))
-		entry.normals.append_array(base[Mesh.ARRAY_NORMAL]);entry.uv.append_array(base[Mesh.ARRAY_TEX_UV])
-		for index_ in base[Mesh.ARRAY_INDEX]:entry.indices.append(index_+offset)
+		var entry: Dictionary=groups[key];var mid: Vector2=Grid.point(cell)+Vector2.ONE*.25-row.origin
+		for triangle in range(0,base[Mesh.ARRAY_INDEX].size(),3):
+			var normal: Vector3=base[Mesh.ARRAY_NORMAL][base[Mesh.ARRAY_INDEX][triangle]]
+			if absf(normal.y)<.5 and neighbors.has(cell+Vector2i(roundi(normal.x),roundi(normal.z))):continue
+			for j in range(3):
+				var idx: int=base[Mesh.ARRAY_INDEX][triangle+j]
+				entry.indices.append(entry.vertices.size());entry.vertices.append(base[Mesh.ARRAY_VERTEX][idx]*Vector3(.5,.30,.5)+Vector3(mid.x,.03,mid.y));entry.normals.append(normal);entry.uv.append(base[Mesh.ARRAY_TEX_UV][idx])
 	for entry in groups.values():
 		var arrays: Array=[];arrays.resize(Mesh.ARRAY_MAX);arrays[Mesh.ARRAY_VERTEX]=entry.vertices;arrays[Mesh.ARRAY_NORMAL]=entry.normals;arrays[Mesh.ARRAY_TEX_UV]=entry.uv;arrays[Mesh.ARRAY_INDEX]=entry.indices
 		var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays);G.mesh(module,mesh,Vector3.ZERO,entry.material,"FloorBatch")

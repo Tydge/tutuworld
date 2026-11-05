@@ -27,7 +27,10 @@
       "building_surface_flow",
       "thumbnail_lifecycle",
       "furniture_access_flow",
-      "fixture_lighting_flow"
+      "fixture_lighting_flow",
+      "building_feedback_rules",
+      "building_feedback_flow",
+      "building_feedback_visual"
     ],
     "smoke": [
       "project_integrity",
@@ -102,6 +105,17 @@
       "multistorey_editor_flow",
       "multistorey_visual",
       "multistorey_repairs"
+    ],
+    "building_feedback": [
+      "project_integrity",
+      "building_feedback_rules",
+      "building_feedback_flow",
+      "building_feedback_visual",
+      "opening_placement_flow",
+      "multistorey_editor_flow",
+      "firelight_rules",
+      "building_grid_rules",
+      "thumbnail_lifecycle"
     ]
   },
   "tests": {
@@ -280,6 +294,9 @@
       "headless": true
     },
     "multistorey_showcase_walk": {
+      "headless": true
+    },
+    "building_feedback_rules": {
       "headless": true
     }
   }

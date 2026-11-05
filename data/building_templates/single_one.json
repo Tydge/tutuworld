@@ -1,0 +1,428 @@
+{
+  "schema": 4,
+  "next_id": 243,
+  "lighting_version": 1,
+  "grandfathered": {},
+  "elements": [
+    {
+      "a": [
+        71.0,
+        3.0
+      ],
+      "b": [
+        84.0,
+        10.0
+      ],
+      "color": "cda56e",
+      "id": "build_9",
+      "painted": false,
+      "style": "wood",
+      "type": "floor"
+    },
+    {
+      "a": [
+        71.0,
+        3.0
+      ],
+      "b": [
+        84.0,
+        3.0
+      ],
+      "color": "e3d1a1",
+      "id": "build_2",
+      "painted": false,
+      "style": "stone",
+      "type": "wall"
+    },
+    {
+      "a": [
+        71.0,
+        10.0
+      ],
+      "b": [
+        84.0,
+        10.0
+      ],
+      "color": "e3d1a1",
+      "id": "build_4",
+      "painted": false,
+      "style": "stone",
+      "type": "wall"
+    },
+    {
+      "a": [
+        71.0,
+        10.0
+      ],
+      "b": [
+        71.0,
+        3.0
+      ],
+      "color": "e3d1a1",
+      "id": "build_1",
+      "painted": false,
+      "style": "stone",
+      "type": "wall"
+    },
+    {
+      "a": [
+        76.0,
+        3.0
+      ],
+      "b": [
+        76.0,
+        7.5
+      ],
+      "color": "eadcc5",
+      "id": "build_14",
+      "painted": false,
+      "style": "original",
+      "type": "wall"
+    },
+    {
+      "a": [
+        84.0,
+        3.0
+      ],
+      "b": [
+        84.0,
+        10.0
+      ],
+      "color": "f9d9a4",
+      "id": "build_25",
+      "painted": true,
+      "style": "brick",
+      "type": "wall"
+    },
+    {
+      "a": [
+        71.0,
+        3.0
+      ],
+      "b": [
+        84.0,
+        10.0
+      ],
+      "color": "688d81",
+      "id": "build_10",
+      "painted": false,
+      "style": "original",
+      "type": "roof"
+    },
+    {
+      "color": "ffffff",
+      "id": "build_11",
+      "kind": "bed",
+      "painted": false,
+      "position": [
+        73.5,
+        5.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_15",
+      "kind": "sofa",
+      "painted": false,
+      "position": [
+        78.5,
+        4.0
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_16",
+      "kind": "tea_table",
+      "painted": false,
+      "position": [
+        78.5,
+        6.0
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_17",
+      "kind": "forest_rug",
+      "painted": false,
+      "position": [
+        78.5,
+        5.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_19",
+      "kind": "forest_cabinet",
+      "painted": false,
+      "position": [
+        83.5,
+        4.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_20",
+      "kind": "desk",
+      "painted": false,
+      "position": [
+        81.5,
+        8.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_21",
+      "kind": "forest_planter",
+      "painted": false,
+      "position": [
+        72.0,
+        9.0
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_26",
+      "kind": "bedside",
+      "painted": false,
+      "position": [
+        71.6,
+        4.5
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_27",
+      "kind": "table_lamp",
+      "painted": false,
+      "position": [
+        71.54,
+        4.5
+      ],
+      "style": "original",
+      "support": "build_26",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_28",
+      "kind": "cup",
+      "painted": false,
+      "position": [
+        78.98,
+        6.0
+      ],
+      "style": "original",
+      "support": "build_16",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_29",
+      "kind": "book",
+      "painted": false,
+      "position": [
+        78.0,
+        6.08
+      ],
+      "style": "original",
+      "support": "build_16",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_30",
+      "kind": "small_plant",
+      "painted": false,
+      "position": [
+        83.5,
+        4.9
+      ],
+      "style": "original",
+      "support": "build_19",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_31",
+      "kind": "chair",
+      "painted": false,
+      "position": [
+        81.5,
+        7.4
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_32",
+      "kind": "letter",
+      "painted": false,
+      "position": [
+        81.6,
+        8.44
+      ],
+      "style": "original",
+      "support": "build_20",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_33",
+      "kind": "small_plant",
+      "painted": false,
+      "position": [
+        82.36,
+        8.66
+      ],
+      "style": "original",
+      "support": "build_20",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_34",
+      "kind": "pendant",
+      "painted": false,
+      "position": [
+        78.3,
+        7.2
+      ],
+      "style": "original",
+      "support": "ceiling:0",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "anchor": [
+        77.5,
+        10.0
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "id": "build_5",
+      "offset": 6.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_4"
+    },
+    {
+      "anchor": [
+        73.5,
+        10.0
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_6",
+      "offset": 2.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_4"
+    },
+    {
+      "anchor": [
+        81.5,
+        10.0
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_7",
+      "offset": 10.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_4"
+    },
+    {
+      "anchor": [
+        73.5,
+        3.0
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_12",
+      "offset": 2.5,
+      "painted": false,
+      "reverse": false,
+      "style": "original",
+      "type": "window",
+      "wall": "build_2"
+    },
+    {
+      "anchor": [
+        82.0,
+        3.0
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_13",
+      "offset": 11.0,
+      "painted": false,
+      "reverse": false,
+      "style": "original",
+      "type": "window",
+      "wall": "build_2"
+    }
+  ]
+}
