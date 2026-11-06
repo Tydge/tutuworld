@@ -2,6 +2,8 @@ extends RefCounted
 ## X/Z offsets follow Godot's positive Y rotation (opposite Vector2 rotation).
 const CATEGORIES:=["结构","床","座椅","桌柜","厨房","照明","装饰","庭院"]
 const OBJECTS:={
+	"dining_table":{"name":"橡木餐桌","size":Vector2(3.2,1.8),"height":1.14,"surface":Vector2(3.05,1.65),"surface_height":1.14,"category":"桌柜"},
+	"dining_chair":{"name":"软垫餐椅","size":Vector2(1.02,1.02),"height":1.5,"category":"座椅","seats":1},
 	"cooking_counter":{"name":"青瓷料理台","size":Vector2(3.9,1.3),"height":1.85,"category":"厨房","facility":"kitchen"},
 	"bed":{"name":"木床","size":Vector2(2.7,4.5),"height":1.8,"category":"床","bed":true},
 	"bedside":{"name":"床头柜","size":Vector2(.8,.8),"height":.8,"surface":Vector2(.74,.70),"surface_height":.8,"category":"桌柜"},
@@ -10,7 +12,7 @@ const OBJECTS:={
 	"tea_table":{"name":"木茶几","size":Vector2(2.45,1.35),"height":.74,"surface":Vector2(2.35,1.22),"surface_height":.735,"category":"桌柜"},
 	"desk":{"name":"木书桌","size":Vector2(2.85,1.18),"height":1.14,"surface":Vector2(2.65,1.10),"surface_height":1.14,"category":"桌柜"},
 	"bookshelf":{"name":"书架","size":Vector2(1.7,.8),"wall_size":Vector2(1.6,.7),"height":2.34,"surface":Vector2(1.22,.53),"surface_offset":Vector2(0,.015),"surface_height":2.32,"surface_levels":[2.32,1.58,.88,.18],"category":"桌柜"},
-	"hearth":{"name":"壁炉","size":Vector2(3.,1.45),"height":1.82,"surface":Vector2(2.85,.88),"surface_offset":Vector2(0,.04),"surface_height":1.82,"category":"桌柜","light":true},
+	"hearth":{"name":"壁炉","size":Vector2(2.90,1.22),"wall_size":Vector2(2.85,1.20),"offset":Vector2(0,.15),"wall_gap":.13,"height":1.82,"surface":Vector2(2.85,.88),"surface_offset":Vector2(0,.04),"surface_height":1.82,"category":"桌柜","light":true},
 	"forest_cabinet":{"name":"木质收纳柜","size":Vector2(1.75,.9),"wall_size":Vector2(1.6,.75),"height":1.84,"surface":Vector2(1.55,.67),"surface_height":1.84,"category":"桌柜"},
 	"table_lamp":{"name":"暖光台灯","size":Vector2(.62,.62),"height":.72,"mount":"surface","light":true,"category":"照明"},
 	"pendant":{"name":"暖光吊灯","size":Vector2(1.,1.),"height":.85,"mount":"ceiling","light":true,"category":"照明"},
@@ -37,7 +39,13 @@ const OBJECTS:={
 	"canopy_bed":{"name":"林间帷幔床","size":Vector2(2.85, 4.6),"height":3.4,"category":"床","bed":true},
 	"cloud_bed":{"name":"云朵软包床","size":Vector2(2.8, 4.6),"height":1.95,"category":"床","bed":true},
 	"rose_arch":{"name":"蔷薇花拱门","size":Vector2(3.8, 1.2),"height":3.5,"category":"庭院","outdoor":true},
-	"lily_pond":{"name":"睡莲小水庭","size":Vector2(4.2, 3.9),"height":0.48,"category":"庭院","outdoor":true}}
+	"lily_pond":{"name":"睡莲小水庭","size":Vector2(4.2, 3.9),"height":0.48,"category":"庭院","outdoor":true},
+	"wall_botanical":{"name":"林叶植物挂画","size":Vector2(1.2,.14),"offset":Vector2(0,.07),"height":1.05,"mount":"wall","mount_height":1.7,"category":"装饰"},
+	"wall_mirror":{"name":"黄铜椭圆壁镜","size":Vector2(1.2,.16),"offset":Vector2(0,.08),"height":1.8,"mount":"wall","mount_height":1.35,"category":"装饰"},
+	"wall_clock":{"name":"橡木挂钟","size":Vector2(.85,.22),"offset":Vector2(0,.11),"height":.85,"mount":"wall","mount_height":2.2,"category":"装饰"},
+	"wall_sconce":{"name":"暖光黄铜壁灯","size":Vector2(.56,.45),"offset":Vector2(0,.225),"height":.85,"mount":"wall","mount_height":2.05,"category":"照明","light":true},
+	"kitchen_cart":{"name":"橡木厨房收纳推车","size":Vector2(1.65,.95),"height":1.2,"surface":Vector2(1.48,.82),"surface_height":1.2,"category":"厨房"},
+	"spice_jars":{"name":"陶瓷调味罐托盘","size":Vector2(.9,.48),"height":.5,"mount":"surface","category":"装饰"}}
 static func rotate_xz(point: Vector2,yaw: float) -> Vector2:return point.rotated(-deg_to_rad(yaw))
 static func bounds(item: Dictionary,size_: Vector2,offset:=Vector2.ZERO) -> Rect2:
 	var p:=Vector2(item.position[0],item.position[1]);var rect:=Rect2(p+rotate_xz(offset,float(item.get("yaw",0))),Vector2.ZERO)
@@ -56,4 +64,4 @@ static func name_for(row: Dictionary) -> String:
 	if row.get("type","")=="stairs":return preload("res://scripts/building/storeys.gd").STAIR_FORMS.get(row.get("form","straight"),"楼梯")
 	if row.get("type","")=="railing":return "木质阳台护栏"
 	if row.get("type","") in ["door","window","roof"]:return preload("res://scripts/building/structure_catalog.gd").label(row)
-	return {"template":"整栋样板房","floor":"地板","wall":"墙壁","window":"窗户","door":"门","roof":"屋顶"}.get(row.get("type",""),"物件")
+	return {"template":"整栋样板房","room":"房间","floor":"地板","wall":"墙壁","window":"窗户","door":"门","roof":"屋顶"}.get(row.get("type",""),"物件")

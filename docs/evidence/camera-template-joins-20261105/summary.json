@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-05",
+  "engine": "Godot 4.6.3",
+  "platform": "macOS Metal Forward+ / Apple M1 Pro",
+  "isolated_progress": true,
+  "deployed": false,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 406,
+      "result_line": "PROJECT_INTEGRITY_RESULT PASS checks=406 failures=[]",
+      "local_log": ".qa-artifacts/20261105-231655-528763/project_integrity/run.log",
+      "sha256": "99db0e0650903cee991dd217b5a0e136c0ee139cd3880277ea8f5b979969d902",
+      "archived_log": "project_integrity.log"
+    },
+    {
+      "name": "building_feedback_rules",
+      "result": "PASS",
+      "checks": 146,
+      "result_line": "BUILDING_FEEDBACK_RULES_RESULT PASS checks=146 failures=[]",
+      "local_log": ".qa-artifacts/20261105-231655-528763/building_feedback_rules/run.log",
+      "sha256": "43c30d7c5e5bc22174e98ba0263321c7f6e5fbecd723dbd4ca8ab96fd642b005",
+      "archived_log": "building_feedback_rules.log"
+    },
+    {
+      "name": "building_feedback_flow",
+      "result": "PASS",
+      "checks": 95,
+      "result_line": "BUILDING_FEEDBACK_FLOW_RESULT PASS checks=95 failures=[]",
+      "local_log": ".qa-artifacts/20261105-231936-478215/building_feedback_flow/run.log",
+      "sha256": "85309d7673fe6768c1309b615e0c9f39d6b86fe8d16cd2d1d95e32223661f0ec",
+      "archived_log": "building_feedback_flow.log"
+    },
+    {
+      "name": "building_feedback_visual",
+      "result": "PASS",
+      "checks": 4,
+      "result_line": "BUILDING_FEEDBACK_VISUAL_RESULT PASS checks=4 failures=[]",
+      "local_log": ".qa-artifacts/20261105-231936-478215/building_feedback_visual/run.log",
+      "sha256": "aea45c9b7aa6652e7825fe06cb6db5f9cf0c2ca7d8d69672adc431507f90668d",
+      "archived_log": "building_feedback_visual.log"
+    },
+    {
+      "name": "multistorey_editor_flow",
+      "result": "PASS",
+      "checks": 31,
+      "result_line": "MULTISTOREY_EDITOR_FLOW_RESULT PASS checks=31 failures=[]",
+      "local_log": ".qa-artifacts/20261105-231936-478215/multistorey_editor_flow/run.log",
+      "sha256": "5585ed845dda5f0dc132d9ac4eaf41b44d1bcfcb38e74e7d9398d545b004124b",
+      "archived_log": "multistorey_editor_flow.log"
+    },
+    {
+      "name": "building_camera_template_flow",
+      "result": "PASS",
+      "checks": 57,
+      "result_line": "BUILDING_CAMERA_TEMPLATE_FLOW_RESULT PASS checks=57 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232458-875649/building_camera_template_flow/run.log",
+      "sha256": "40f91c0c86e7e8770fda587bac22b74ff69fa2991e9acbe606be1120bee3ae7e",
+      "archived_log": "building_camera_template_flow.log"
+    },
+    {
+      "name": "multistorey_repairs",
+      "result": "PASS",
+      "checks": 651,
+      "result_line": "MULTISTOREY_REPAIRS_RESULT PASS checks=651 failures=0",
+      "local_log": ".qa-artifacts/20261105-232458-875649/multistorey_repairs/run.log",
+      "sha256": "9876e824e7e22323402acc4cfe761e732ddd026f687cdda61018606794f4e1cf",
+      "archived_log": "multistorey_repairs.log"
+    },
+    {
+      "name": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "result_line": "BUILDING_CONTROLS_RESULT PASS checks=34 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232458-875649/building_controls/run.log",
+      "sha256": "a208180381a011d5c15386b9203963896ccb587d61698698e76b289946a91f08",
+      "archived_log": "building_controls.log"
+    },
+    {
+      "name": "building_revision_rules",
+      "result": "PASS",
+      "checks": 53,
+      "result_line": "BUILDING_REVISION_RULES_RESULT PASS checks=53 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232458-875649/building_revision_rules/run.log",
+      "sha256": "b7983898aad4a680d9e5a90468601f2e75400ec3e10e8901ac545022f166412a",
+      "archived_log": "building_revision_rules.log"
+    },
+    {
+      "name": "multistorey_persistence_rules",
+      "result": "PASS",
+      "checks": 10,
+      "result_line": "MULTISTOREY_PERSISTENCE_RULES_RESULT PASS checks=10 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232458-875649/multistorey_persistence_rules/run.log",
+      "sha256": "ca177317810d1b29fb099c49067fbb80f916386abaf92d9933dabde50576f4b2",
+      "archived_log": "multistorey_persistence_rules.log"
+    },
+    {
+      "name": "appearance_rules",
+      "result": "PASS",
+      "checks": 168,
+      "result_line": "APPEARANCE_RULES_RESULT PASS checks=168 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232458-875649/appearance_rules/run.log",
+      "sha256": "a72af46a200d42a80e88a3b7984990bdc915c79c1c605de99440d65eb614d559",
+      "archived_log": "appearance_rules.log"
+    },
+    {
+      "name": "building_camera_template_rules",
+      "result": "PASS",
+      "checks": 1268,
+      "result_line": "BUILDING_CAMERA_TEMPLATE_RULES_RESULT PASS checks=1268 failures=[]",
+      "local_log": ".qa-artifacts/20261105-232805-445906/building_camera_template_rules/run.log",
+      "sha256": "90c4e7ea9eeacb368e99e0c4c3e089056a7673f99814228e5e7736883beea8ea",
+      "archived_log": "building_camera_template_rules.log"
+    }
+  ],
+  "motion_comparison": {
+    "poses_per_region": 8,
+    "stable_draws": 5,
+    "sample_region_pixels": [
+      260,
+      180
+    ],
+    "sample_stride": 3,
+    "journal_max_mean_error": 0.0,
+    "journal_max_changed_fraction": 0.0,
+    "wall_floor_max_mean_error": 0.0,
+    "wall_floor_max_changed_fraction": 0.0
+  },
+  "limitations": [
+    "Synthetic Godot input dispatch, not a native physical touchpad recording",
+    "Not a full regression or performance benchmark",
+    "No Windows hardware validation"
+  ]
+}

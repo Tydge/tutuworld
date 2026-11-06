@@ -1,0 +1,409 @@
+{
+  "date": "2026-11-06",
+  "removed": [
+    {
+      "path": ".qa-artifacts/20261105-223508-607769",
+      "files": 27,
+      "bytes": 23658193
+    },
+    {
+      "path": ".qa-artifacts/20261105-231655-528763",
+      "files": 2,
+      "bytes": 258
+    },
+    {
+      "path": ".qa-artifacts/20261105-231855-355092",
+      "files": 1,
+      "bytes": 140
+    },
+    {
+      "path": ".qa-artifacts/20261105-231936-478215",
+      "files": 10,
+      "bytes": 34825242
+    },
+    {
+      "path": ".qa-artifacts/20261105-232139-290051",
+      "files": 1,
+      "bytes": 685
+    },
+    {
+      "path": ".qa-artifacts/20261105-232147-370258",
+      "files": 1,
+      "bytes": 1093
+    },
+    {
+      "path": ".qa-artifacts/20261105-232342-296860",
+      "files": 18,
+      "bytes": 90235283
+    },
+    {
+      "path": ".qa-artifacts/20261105-232458-875649",
+      "files": 56,
+      "bytes": 223857243
+    },
+    {
+      "path": ".qa-artifacts/20261105-232805-445906",
+      "files": 1,
+      "bytes": 140
+    },
+    {
+      "path": ".qa-artifacts/20261105-234256-293899",
+      "files": 1,
+      "bytes": 890
+    },
+    {
+      "path": ".qa-artifacts/20261105-234426-072120",
+      "files": 1,
+      "bytes": 890
+    },
+    {
+      "path": ".qa-artifacts/20261105-234440-732924",
+      "files": 2,
+      "bytes": 5015
+    },
+    {
+      "path": ".qa-artifacts/20261105-234552-095910",
+      "files": 1,
+      "bytes": 132
+    },
+    {
+      "path": ".qa-artifacts/20261105-234823-893240",
+      "files": 1,
+      "bytes": 831
+    },
+    {
+      "path": ".qa-artifacts/20261105-234916-752203",
+      "files": 4,
+      "bytes": 16481391
+    },
+    {
+      "path": ".qa-artifacts/20261105-235125-814504",
+      "files": 38,
+      "bytes": 151425731
+    },
+    {
+      "path": ".qa-artifacts/20261105-235320-289812",
+      "files": 1,
+      "bytes": 132
+    },
+    {
+      "path": ".qa-artifacts/20261105-235448-844264",
+      "files": 65,
+      "bytes": 177089680
+    },
+    {
+      "path": ".qa-artifacts/20261106-002105-853252",
+      "files": 1,
+      "bytes": 963
+    },
+    {
+      "path": ".qa-artifacts/20261106-003017-820841",
+      "files": 1,
+      "bytes": 3052
+    },
+    {
+      "path": ".qa-artifacts/20261106-003155-609938",
+      "files": 1,
+      "bytes": 371
+    },
+    {
+      "path": ".qa-artifacts/20261106-003213-142473",
+      "files": 1,
+      "bytes": 2082
+    },
+    {
+      "path": ".qa-artifacts/20261106-003230-151539",
+      "files": 1,
+      "bytes": 952
+    },
+    {
+      "path": ".qa-artifacts/20261106-003246-311568",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-003425-450039",
+      "files": 1,
+      "bytes": 234
+    },
+    {
+      "path": ".qa-artifacts/20261106-003601-055601",
+      "files": 1,
+      "bytes": 232
+    },
+    {
+      "path": ".qa-artifacts/20261106-003649-634623",
+      "files": 3,
+      "bytes": 13454396
+    },
+    {
+      "path": ".qa-artifacts/20261106-003744-778395",
+      "files": 3,
+      "bytes": 13453471
+    },
+    {
+      "path": ".qa-artifacts/20261106-004349-025302",
+      "files": 1,
+      "bytes": 1173
+    },
+    {
+      "path": ".qa-artifacts/20261106-004419-150865",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-004559-529755",
+      "files": 3,
+      "bytes": 21174
+    },
+    {
+      "path": ".qa-artifacts/20261106-004731-762891",
+      "files": 5,
+      "bytes": 13411598
+    },
+    {
+      "path": ".qa-artifacts/20261106-004815-215894",
+      "files": 2,
+      "bytes": 6497861
+    },
+    {
+      "path": ".qa-artifacts/20261106-004934-467631",
+      "files": 3,
+      "bytes": 6135527
+    },
+    {
+      "path": ".qa-artifacts/20261106-005136-331405",
+      "files": 1,
+      "bytes": 514
+    },
+    {
+      "path": ".qa-artifacts/20261106-005150-222251",
+      "files": 1,
+      "bytes": 449
+    },
+    {
+      "path": ".qa-artifacts/20261106-005211-738793",
+      "files": 1,
+      "bytes": 242
+    },
+    {
+      "path": ".qa-artifacts/20261106-005310-182325",
+      "files": 43,
+      "bytes": 167103049
+    },
+    {
+      "path": ".qa-artifacts/20261106-005635-252883",
+      "files": 6,
+      "bytes": 20349858
+    },
+    {
+      "path": ".qa-artifacts/20261106-005806-790909",
+      "files": 4,
+      "bytes": 15135399
+    },
+    {
+      "path": ".qa-artifacts/20261106-013604-162780",
+      "files": 1,
+      "bytes": 1849
+    },
+    {
+      "path": ".qa-artifacts/20261106-013956-994036",
+      "files": 1,
+      "bytes": 993
+    },
+    {
+      "path": ".qa-artifacts/20261106-014527-575667",
+      "files": 1,
+      "bytes": 376
+    },
+    {
+      "path": ".qa-artifacts/20261106-014540-735957",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-014659-860409",
+      "files": 3,
+      "bytes": 13332
+    },
+    {
+      "path": ".qa-artifacts/20261106-014829-118940",
+      "files": 2,
+      "bytes": 13201
+    },
+    {
+      "path": ".qa-artifacts/20261106-015124-706974",
+      "files": 1,
+      "bytes": 5388
+    },
+    {
+      "path": ".qa-artifacts/20261106-015157-440616",
+      "files": 2,
+      "bytes": 5321
+    },
+    {
+      "path": ".qa-artifacts/20261106-015240-668170",
+      "files": 5,
+      "bytes": 10011969
+    },
+    {
+      "path": ".qa-artifacts/20261106-015515-686183",
+      "files": 1,
+      "bytes": 1133
+    },
+    {
+      "path": ".qa-artifacts/20261106-015626-857911",
+      "files": 1,
+      "bytes": 658
+    },
+    {
+      "path": ".qa-artifacts/20261106-015747-244637",
+      "files": 8,
+      "bytes": 11641014
+    },
+    {
+      "path": ".qa-artifacts/20261106-015838-568624",
+      "files": 1,
+      "bytes": 1849
+    },
+    {
+      "path": ".qa-artifacts/20261106-015923-095488",
+      "files": 10,
+      "bytes": 17771701
+    },
+    {
+      "path": ".qa-artifacts/20261106-020154-114165",
+      "files": 71,
+      "bytes": 213359135
+    },
+    {
+      "path": ".qa-artifacts/20261106-020832-057537",
+      "files": 14,
+      "bytes": 21271933
+    },
+    {
+      "path": ".qa-artifacts/20261106-021158-071182",
+      "files": 1,
+      "bytes": 846
+    },
+    {
+      "path": ".qa-artifacts/20261106-021337-471308",
+      "files": 5,
+      "bytes": 5055918
+    },
+    {
+      "path": ".qa-artifacts/20261106-091912-788506",
+      "files": 1,
+      "bytes": 504
+    },
+    {
+      "path": ".qa-artifacts/20261106-092004-287192",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-101940-058789",
+      "files": 7,
+      "bytes": 5016821
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-846055",
+      "files": 1,
+      "bytes": 15650
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-878979",
+      "files": 1,
+      "bytes": 15683
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-898228",
+      "files": 1,
+      "bytes": 15682
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-913646",
+      "files": 1,
+      "bytes": 15683
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-915259",
+      "files": 1,
+      "bytes": 15683
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-950763",
+      "files": 1,
+      "bytes": 15682
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-953287",
+      "files": 1,
+      "bytes": 15683
+    },
+    {
+      "path": ".qa-artifacts/building-store-391466",
+      "files": 2,
+      "bytes": 17353
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7663828",
+      "files": 1,
+      "bytes": 9500
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7842550",
+      "files": 1,
+      "bytes": 9508
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7849660",
+      "files": 1,
+      "bytes": 9508
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7881983",
+      "files": 1,
+      "bytes": 9507
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7956582",
+      "files": 1,
+      "bytes": 9493
+    },
+    {
+      "path": ".qa-artifacts/join-probe",
+      "files": 3,
+      "bytes": 7054052
+    },
+    {
+      "path": ".qa-artifacts/join-probe.log",
+      "files": 1,
+      "bytes": 13731
+    },
+    {
+      "path": ".qa-artifacts/join_probe.gd",
+      "files": 1,
+      "bytes": 3610
+    },
+    {
+      "path": ".qa-artifacts/stair-preview-leaks.log",
+      "files": 1,
+      "bytes": 8749
+    }
+  ],
+  "removed_top_level_entries": 78,
+  "removed_files": 474,
+  "removed_bytes": 1264584768,
+  "preserved_qa_entries": [
+    "audio-sources-20261104",
+    "audio-tools",
+    "building-local",
+    "eastern-house-20261106",
+    "indoor-repro-layout.json",
+    "multistorey-private-source.json"
+  ],
+  "evidence": "All four recent feature records plus cleanup checks have fixed summaries/screenshots/logs in docs/evidence; 21 previously summary-only logs copied and hash-verified before deletion",
+  "real_save_written_during_cleanup": false,
+  "production_assets_or_maps_regenerated": false
+}

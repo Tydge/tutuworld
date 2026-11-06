@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Trackpad pan over catalog scrolls next row without camera zoom
+PASS Reverse trackpad motion scrolls upward without camera zoom
+PASS Subpixel trackpad deltas accumulate for smooth slow scrolling
+PASS Continuous wheel factors scroll catalog without zoom
+PASS Pinch inside catalog leaves camera distance unchanged
+PASS Scrolling a non-scrollable part of the dock never reaches the camera
+PASS At the end of the catalog, extra scroll does not leak to camera zoom
+PASS Trackpad pan over the scene still zooms the camera
+PASS Mouse wheel over scene keeps camera zoom
+PASS Pinch over scene still zooms
+BUILDING_UI_SCROLL_FLOW_RESULT PASS checks=10 failures=[]

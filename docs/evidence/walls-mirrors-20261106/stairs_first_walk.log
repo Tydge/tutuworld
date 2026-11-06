@@ -1,0 +1,41 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+PASS Stairs-only-upper fixture straight0.0
+WANDER_GRID_READY cells=19995 components=6
+PASS Enter landing through stair mouth straight0.0
+PASS Leave landing through stair mouth straight0.0
+PASS Stairs-only-upper fixture straight90.0
+PASS Enter landing through stair mouth straight90.0
+PASS Leave landing through stair mouth straight90.0
+PASS Stairs-only-upper fixture straight180.0
+PASS Enter landing through stair mouth straight180.0
+PASS Leave landing through stair mouth straight180.0
+PASS Stairs-only-upper fixture straight270.0
+PASS Enter landing through stair mouth straight270.0
+PASS Leave landing through stair mouth straight270.0
+PASS Stairs-only-upper fixture l0.0
+PASS Enter landing through stair mouth l0.0
+PASS Leave landing through stair mouth l0.0
+PASS Stairs-only-upper fixture l90.0
+PASS Enter landing through stair mouth l90.0
+PASS Leave landing through stair mouth l90.0
+PASS Stairs-only-upper fixture l180.0
+PASS Enter landing through stair mouth l180.0
+PASS Leave landing through stair mouth l180.0
+PASS Stairs-only-upper fixture l270.0
+PASS Enter landing through stair mouth l270.0
+PASS Leave landing through stair mouth l270.0
+PASS Stairs-only-upper fixture u0.0
+PASS Enter landing through stair mouth u0.0
+PASS Leave landing through stair mouth u0.0
+PASS Stairs-only-upper fixture u90.0
+PASS Enter landing through stair mouth u90.0
+PASS Leave landing through stair mouth u90.0
+PASS Stairs-only-upper fixture u180.0
+PASS Enter landing through stair mouth u180.0
+PASS Leave landing through stair mouth u180.0
+PASS Stairs-only-upper fixture u270.0
+PASS Enter landing through stair mouth u270.0
+PASS Leave landing through stair mouth u270.0
+STAIRS_FIRST_WALK_RESULT PASS checks=36 failures=[]

@@ -1,0 +1,104 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Player's edited two-storey template commits in isolated world
+PASS Complete walls on 1F keep roof hidden
+PASS Up from 1F enters existing 2F
+PASS Complete-wall preference persists on 2F without roof
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Up from highest storey shows roof
+PASS No phantom third or fourth floor in navigation
+PASS Down from roof returns to 2F interior
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Template choice exists: single_one
+PASS Template choice exists: two_storey
+PASS Template card selects placement tool
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+PASS Window move retains cached instance
+WINDOW_PREVIEW_MS median=0.094 p95=0.1 max=0.123
+PASS Single-storey fixture
+PASS Floor tool in roof view targets the new upper level
+PASS New floor replaces fully covered lower roof
+PASS Successful extension enters the newly built floor
+PASS Newly built upper floor remains editable before stairs are installed
+BUILDING_FEEDBACK_FLOW_RESULT PASS checks=95 failures=[]

@@ -35,6 +35,8 @@ var current_room:=""
 var last_sync: Dictionary={}
 var pending_navigation:=Rect2()
 var material_updates:=0
+var furniture_house: Dictionary={}
+var furniture_house_key:=""
 const MASK_ORIGIN:=Vector2i(120,-16)
 const MASK_SIZE:=Vector2i(200,72)
 func _ready() -> void:pass
@@ -83,18 +85,24 @@ func apply_storey_visibility(actor: Vector3) -> void:
 		while visible_storey<Storeys.MAX-1 and actor.y>=(visible_storey+1)*Storeys.HEIGHT+Storeys.FLOOR-.16:visible_storey+=1
 		while visible_storey>0 and actor.y<visible_storey*Storeys.HEIGHT+Storeys.FLOOR-.55:visible_storey-=1
 	var mode_: int=View.mode(city)
-	var key:=str([visible_storey,editor_active,editor_roof,editor_roof_view,entire_building,in_house,mode_])
+	var show_objects: bool=city.session.settings.get("show_other_storey_objects",true) and mode_!=View.AUTO
+	var actor_room:=Rooms.room_at(plans.get(visible_storey,plans[0]),Vector2(actor.x,actor.z))
+	var house_key:=str([visible_storey,plan_input_signature,actor_room,Grid.cell(Vector2(actor.x,actor.z)) if actor_room=="" else Vector2i.ZERO])
+	if not show_objects and not editor_active and in_house and house_key!=furniture_house_key:
+		furniture_house=preload("res://scripts/building/storey_extension.gd").footprint(Layout.walkable_grid(layout_data,visible_storey),Vector2(actor.x,actor.z));furniture_house_key=house_key
+	var key:=str([visible_storey,editor_active,editor_roof,editor_roof_view,entire_building,in_house,mode_,show_objects,house_key])
 	if key==storey_view_key:return
 	storey_view_key=key;view_dirty=true;hidden_camera_bodies.clear();other_storey_bodies.clear();occlusion_cache.clear()
 	for entry in render_cache.values():
 		var row: Dictionary=entry.row;var level:=Storeys.of(row);var visible_:=true
 		if editor_active and not entire_building and not editor_roof_view:
-			visible_=level==visible_storey or (row.type=="floor_chunk" and level<visible_storey) or (row.type=="stairs" and level+1==visible_storey)
+			visible_=level==visible_storey or (row.type=="floor_chunk" and level<visible_storey) or (row.type=="stairs" and level+1==visible_storey) or (editor_roof and level<visible_storey and row.type in ["wall","joint","door","window","railing","stairs"])
 		elif not editor_active and in_house:
 			visible_=level<=visible_storey or (mode_!=View.AUTO and row.type!="object")
 			# A solid upper slab hides the indoor furnishings and lamps below it.
 			# Keep objects visible through a stair opening or outside on the grounds.
 			if visible_ and level<visible_storey and row.type=="object" and plans.has(level) and Rooms.room_at(plans[level],Vector2(row.position[0],row.position[1]))!="" and Grid.covered(Catalog.footprint(row),plans[visible_storey].floors):visible_=false
+			if row.type=="object" and (show_objects or not furniture_house.has(Grid.cell(Vector2(row.position[0],row.position[1])))):visible_=true
 		# Hidden structural shells still cast shadows. Free modes keep the actual shell.
 		var shadow_only: bool=not visible_ and row.type in ["floor_chunk","wall","roof","joint","door","window"] and not editor_active
 		var ceiling_shadow: bool=not visible_ and row.type=="floor_chunk" and level==visible_storey+1 and editor_active

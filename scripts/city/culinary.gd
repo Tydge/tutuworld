@@ -26,11 +26,11 @@ func _ready() -> void:
 	steam.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(steam)
 	steam.position=city.scenery.get_node("Kitchen/PotSteam").global_position
-func serve(item: String) -> void:
+func serve(item: String,at: Vector3=Vector3.INF) -> void:
 	clear_meal()
 	meal=Food.make(item)
 	add_child(meal)
-	meal.position=city.scenery.get_node("DiningTable/MealAnchor").global_position
+	meal.position=at if at.is_finite() else city.scenery.get_node("DiningTable/MealAnchor").global_position
 func clear_meal() -> void:
 	if is_instance_valid(meal):
 		remove_child(meal)

@@ -1,0 +1,139 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS New and existing preferences default to showing other storeys
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+RENDER_BUDGET output=(1600, 1000) scale=1.0 mode=0 quality=balanced
+PASS Ground-only fixture straight/0.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture straight/90.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture straight/180.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture straight/270.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture l/0.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture l/90.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture l/180.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture l/270.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture u/0.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS Physically walk onto an automatically generated platform
+PASS Physically walk back down from the minimal platform
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture u/90.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture u/180.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Ground-only fixture u/270.0
+PASS Stair preview includes the actual upper landing
+PASS Preview never adds real collision
+PASS Preview does not save a floor or stair
+PASS Stairs first commits atomically
+PASS Commit selects stair and builds the connected upstairs floor
+PASS Landing rails have real floor support in this rotation
+PASS One undo removes the stair, platform and guard together
+PASS Redo restores stair and upstairs floor together
+PASS Roofed house fixture
+PASS Visible button opens an actual upstairs floor preview
+PASS Preview requires explicit range selection before confirmation
+PASS Roofs to replace are visually hidden so the new slab preview is visible
+PASS Roof replacement is shown before saving anything
+PASS Confirm builds upstairs and enters the new floor
+PASS Roof is replaced in the same committed operation
+PASS Undo restores the roof and removes the new floor
+PASS Cancel discards the upstairs plan without saving
+PASS Cancelling restores the original roof visuals
+PASS Two detached furnished houses coexist
+PASS Default setting shows upstairs and downstairs furnishings
+PASS Settings exposes the default-on furniture switch
+PASS Switch off restores current-house floor culling immediately
+PASS Another house's upstairs remains furnished when switch is off
+PASS Upstairs culling affects only the occupied house's covered lower floor
+PASS Write actual settings to an isolated save path
+PASS Furniture switch survives a real isolated save reload
+PASS Switch on restores all storey furnishings without rebuilding
+PASS Outdoor observation does not hide either house's furniture
+PASS Existing packed houses also keep interiors visible from outside
+STOREY_EXTENSION_FLOW_RESULT PASS checks=132 failures=[]

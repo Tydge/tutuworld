@@ -44,9 +44,9 @@ static func descriptor(path: String,row: Dictionary,geometry: Variant) -> Dictio
 	return {"path":path,"row":row,"signature":JSON.stringify(geometry).sha256_text()}
 static func structure_descriptors(layout: Dictionary,_grid: Dictionary,previous: Dictionary={}) -> Dictionary:
 	var result: Dictionary={}
-	for level in range(Storeys.MAX):result.merge(story_descriptors(Storeys.subset(layout,level),Layout.walkable_grid(layout,level),previous,level))
+	for level in range(Storeys.MAX):result.merge(story_descriptors(Storeys.subset(layout,level),Layout.walkable_grid(layout,level),previous,level,Layout.walkable_grid(layout,level+1).floors,Stairs.explicit_guard_edges(layout,level+1)))
 	return result
-static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dictionary,level: int) -> Dictionary:
+static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dictionary,level: int,upper_floors: Variant=null,guard_edges: Dictionary={}) -> Dictionary:
 	var prefix: String="" if level==0 else "s%d_"%level
 	var result: Dictionary={};var chunks: Dictionary={}
 	for c in grid.floors:
@@ -66,7 +66,7 @@ static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dict
 		elif row.type=="wall":result[row.id]=descriptor("Structure/Walls",row,[row,wall_data(layout,row,Vector2.ZERO)])
 		elif row.type=="roof":result[row.id]=descriptor("Structure/Roof",row,row)
 		elif row.type in ["door","window"]:result[row.id]=descriptor("Doors",row,[row.type,row.color,row.style,row.painted,row.get("form","classic"),row.get("default_open",true)])
-		elif row.type=="stairs":result[row.id]=descriptor("Structure/Stairs",row,[row.form,row.color,row.style])
+		elif row.type=="stairs":result[row.id]=descriptor("Structure/Stairs",row,[row.form,row.color,row.style,Stairs.upper_guard_edges(row,upper_floors,guard_edges)])
 		elif row.type=="railing":result[row.id]=descriptor("Structure/Walls",row,row)
 	var vertices:=Grid.vertex_degrees(grid.walls)
 	for p in vertices:
@@ -150,13 +150,16 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 			# Close the slab band at wall boundaries, including walls beside stair holes.
 			if Storeys.of(row)>0:
 				var length_: float=Vector2(row.a[0],row.a[1]).distance_to(Vector2(row.b[0],row.b[1]))
-				b.block(module,Vector3(0,.03,0),Vector3(length_,.302,.24),b.material("eee2c6"),"StoreyFascia",true)
+				# A deliberate 1 cm trim lip keeps end caps off slab boundary planes.
+				# Height overlap alone leaves the end exactly coplanar with the floor edge.
+				b.block(module,Vector3(0,.03,0),Vector3(length_+.02,.32,.26),b.material("eee2c6"),"StoreyFascia",true)
 			b.bake_section(module);module.position.y=Storeys.elevation(row)
 		"roof":
 			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
-			b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
+			var turn: float=row.get("yaw",0.);module.rotation.y=deg_to_rad(turn)
+			b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.y,r.size.x] if roundi(turn/90.)%2!=0 else [r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
 		"stairs":
-			module=group(parent,row.id);Stairs.build(b,module,row)
+			module=group(parent,row.id);Stairs.build(b,module,row,Layout.walkable_grid(layout,Storeys.of(row)+1).floors,Stairs.explicit_guard_edges(layout,Storeys.of(row)+1))
 		"railing":
 			module=group(parent,row.id);var a:=Vector3(row.a[0]-Site.CENTER.x,.18,row.a[1]-Site.CENTER.z);var end:=Vector3(row.b[0]-Site.CENTER.x,.18,row.b[1]-Site.CENTER.z);Stairs.rail(b,module,a,end);module.position.y=Storeys.elevation(row)
 		"object":
@@ -209,9 +212,10 @@ static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
 			if mesh.material_override is ShaderMaterial:mesh.material_override.set_shader_parameter("building_world_pattern",true)
 	if row.type in ["wall","roof","joint","door","window"]:root.register_cutaway(module,row.type=="roof")
 	preload("res://scripts/city/environment_materials.gd").apply(module)
+	if row.get("kind","")=="wall_mirror" and is_instance_valid(root.city):preload("res://scripts/city/mirror_reflections.gd").attach(root.city,module,root)
 static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 	match row.type:
-		"stairs":return "stairs:"+JSON.stringify([row.form,row.color,row.style])
+		"stairs":return "stairs:"+JSON.stringify([row.form,row.color,row.style,Stairs.upper_guard_edges(row,Layout.walkable_grid(layout,Storeys.of(row)+1).floors,Stairs.explicit_guard_edges(layout,Storeys.of(row)+1))])
 		"object":
 			if row.kind in ["flowerbed","fountain"]:return ""
 			return "object:"+JSON.stringify([row.kind,row.color,row.style,row.painted,row.get("appearance",{})])

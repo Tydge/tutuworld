@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-05",
+  "platform": "Godot 4.6.3 / macOS Apple M1 Pro / Metal Forward+",
+  "isolated_progress": true,
+  "deployed": false,
+  "tests": [
+    {
+      "name": "storey_extension_rules",
+      "result": "PASS",
+      "checks": 1826,
+      "result_line": "STOREY_EXTENSION_RULES_RESULT PASS checks=1826 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235320-289812/storey_extension_rules/run.log",
+      "sha256": "4584b499da644527a72de313c815a7e802b5084fe688be10b7f1e6e1e3140be8",
+      "archived_log": "storey_extension_rules.log"
+    },
+    {
+      "name": "storey_extension_flow",
+      "result": "PASS",
+      "checks": 132,
+      "result_line": "STOREY_EXTENSION_FLOW_RESULT PASS checks=132 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/storey_extension_flow/run.log",
+      "sha256": "78718414de71f21af709fc6777bb77c026124cb3b473d6822ce8570aef9edfde",
+      "archived_log": "storey_extension_flow.log"
+    },
+    {
+      "name": "building_camera_template_flow",
+      "result": "PASS",
+      "checks": 57,
+      "result_line": "BUILDING_CAMERA_TEMPLATE_FLOW_RESULT PASS checks=57 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/building_camera_template_flow/run.log",
+      "sha256": "ddd4ae68ede3fc3260d8903a8cc423e23e1c9eb0712050ae7b80fceb73e1b281",
+      "archived_log": "building_camera_template_flow.log"
+    },
+    {
+      "name": "multistorey_editor_flow",
+      "result": "PASS",
+      "checks": 31,
+      "result_line": "MULTISTOREY_EDITOR_FLOW_RESULT PASS checks=31 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/multistorey_editor_flow/run.log",
+      "sha256": "5585ed845dda5f0dc132d9ac4eaf41b44d1bcfcb38e74e7d9398d545b004124b",
+      "archived_log": "multistorey_editor_flow.log"
+    },
+    {
+      "name": "multistorey_repairs",
+      "result": "PASS",
+      "checks": 651,
+      "result_line": "MULTISTOREY_REPAIRS_RESULT PASS checks=651 failures=0",
+      "local_log": ".qa-artifacts/20261105-235448-844264/multistorey_repairs/run.log",
+      "sha256": "676c6dbfe5806b5de7dd89f287d394afe14055d9e79b41cf9d4cfcbb30d58a83",
+      "archived_log": "multistorey_repairs.log"
+    },
+    {
+      "name": "multistorey_persistence_rules",
+      "result": "PASS",
+      "checks": 10,
+      "result_line": "MULTISTOREY_PERSISTENCE_RULES_RESULT PASS checks=10 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/multistorey_persistence_rules/run.log",
+      "sha256": "ca177317810d1b29fb099c49067fbb80f916386abaf92d9933dabde50576f4b2",
+      "archived_log": "multistorey_persistence_rules.log"
+    },
+    {
+      "name": "appearance_rules",
+      "result": "PASS",
+      "checks": 168,
+      "result_line": "APPEARANCE_RULES_RESULT PASS checks=168 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/appearance_rules/run.log",
+      "sha256": "a72af46a200d42a80e88a3b7984990bdc915c79c1c605de99440d65eb614d559",
+      "archived_log": "appearance_rules.log"
+    },
+    {
+      "name": "building_feedback_flow",
+      "result": "PASS",
+      "checks": 95,
+      "result_line": "BUILDING_FEEDBACK_FLOW_RESULT PASS checks=95 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/building_feedback_flow/run.log",
+      "sha256": "929780b6989f7cf5bafededea99e6f62e98c4757fef6af54424ece8e9f45d8e7",
+      "archived_log": "building_feedback_flow.log"
+    },
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 411,
+      "result_line": "PROJECT_INTEGRITY_RESULT PASS checks=411 failures=[]",
+      "local_log": ".qa-artifacts/20261105-235448-844264/project_integrity/run.log",
+      "sha256": "b9ec07cbd2e893f735657b809a2b4d905ae5c26e113c2c41c3a7ba4077c3a481",
+      "archived_log": "project_integrity.log"
+    }
+  ],
+  "limits": [
+    "No full regression or capacity/performance acceptance",
+    "No Windows hardware validation",
+    "Minimal-platform physical walk covers bunny / U stairs; all three forms and four rotations have actual rail/floor physics support probes",
+    "Furniture setting applies to free camera modes; automatic top-down and building remain storey cutaways"
+  ],
+  "finished_local_date": "2026-11-06"
+}

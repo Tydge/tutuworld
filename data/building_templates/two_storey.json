@@ -1,6 +1,6 @@
 {
   "schema": 4,
-  "next_id": 243,
+  "next_id": 275,
   "lighting_version": 1,
   "grandfathered": {},
   "elements": [
@@ -235,6 +235,107 @@
       "storey": 1,
       "style": "original",
       "type": "wall"
+    },
+    {
+      "anchor": [
+        131.0,
+        15.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "round",
+      "id": "build_186",
+      "offset": 12.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_182"
+    },
+    {
+      "anchor": [
+        147.0,
+        5.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_187",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_184"
+    },
+    {
+      "anchor": [
+        147.0,
+        11.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_188",
+      "offset": 9.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_184"
+    },
+    {
+      "anchor": [
+        135.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_189",
+      "offset": 4.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_181"
+    },
+    {
+      "anchor": [
+        140.5,
+        11.5
+      ],
+      "axis": 1,
+      "color": "739b8d",
+      "default_open": false,
+      "id": "build_191",
+      "offset": 9.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_183"
+    },
+    {
+      "anchor": [
+        143.5,
+        14.5
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "form": "glass",
+      "id": "build_192",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_180"
     },
     {
       "a": [
@@ -543,6 +644,38 @@
       "yaw": 0.0
     },
     {
+      "anchor": [
+        133.5,
+        2.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_225",
+      "offset": 2.5,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "original",
+      "type": "window",
+      "wall": "build_178"
+    },
+    {
+      "anchor": [
+        131.0,
+        5.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_226",
+      "offset": 3.0,
+      "painted": false,
+      "reverse": false,
+      "storey": 1,
+      "style": "original",
+      "type": "window",
+      "wall": "build_182"
+    },
+    {
       "color": "ffffff",
       "id": "build_227",
       "kind": "desk",
@@ -840,6 +973,117 @@
       "type": "wall"
     },
     {
+      "anchor": [
+        134.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "form": "arch",
+      "id": "build_156",
+      "offset": 3.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_152"
+    },
+    {
+      "anchor": [
+        143.5,
+        17.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_157",
+      "offset": 12.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_152"
+    },
+    {
+      "anchor": [
+        142.5,
+        2.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_158",
+      "offset": 4.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_150"
+    },
+    {
+      "anchor": [
+        131.0,
+        14.5
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "round",
+      "id": "build_159",
+      "offset": 12.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_153"
+    },
+    {
+      "anchor": [
+        147.0,
+        6.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "id": "build_160",
+      "offset": 3.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_154"
+    },
+    {
+      "anchor": [
+        147.0,
+        13.0
+      ],
+      "axis": 1,
+      "color": "eee2c6",
+      "form": "arch",
+      "id": "build_161",
+      "offset": 4.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_155"
+    },
+    {
+      "anchor": [
+        143.0,
+        9.0
+      ],
+      "axis": 0,
+      "color": "739b8d",
+      "default_open": false,
+      "form": "glass",
+      "id": "build_162",
+      "offset": 4.5,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "door",
+      "wall": "build_151"
+    },
+    {
       "color": "c6a373",
       "form": "u",
       "id": "build_163",
@@ -888,14 +1132,14 @@
       "kind": "sofa",
       "painted": false,
       "position": [
-        143.7,
-        13.1
+        146.0,
+        13.182
       ],
       "style": "original",
       "support": "",
       "support_level": 0,
       "type": "object",
-      "yaw": 0.0
+      "yaw": 270.0
     },
     {
       "color": "b8c4a3",
@@ -903,14 +1147,14 @@
       "kind": "tea_table",
       "painted": false,
       "position": [
-        143.7,
-        15.3
+        143.892,
+        13.15
       ],
       "style": "original",
       "support": "",
       "support_level": 0,
       "type": "object",
-      "yaw": 0.0
+      "yaw": 90.0
     },
     {
       "color": "b8c4a3",
@@ -918,8 +1162,8 @@
       "kind": "forest_rug",
       "painted": false,
       "position": [
-        143.7,
-        14.2
+        144.567,
+        13.135
       ],
       "style": "original",
       "support": "",
@@ -934,7 +1178,7 @@
       "painted": false,
       "position": [
         140.2,
-        9.925
+        9.58
       ],
       "style": "original",
       "support": "",
@@ -993,14 +1237,14 @@
       "kind": "tea_service",
       "painted": false,
       "position": [
-        143.8,
-        15.3
+        143.892,
+        13.05
       ],
       "style": "original",
       "support": "build_167",
       "support_level": 0,
       "type": "object",
-      "yaw": 0.0
+      "yaw": 90.0
     },
     {
       "color": "eadcc5",
@@ -1197,250 +1441,6 @@
     {
       "anchor": [
         131.0,
-        15.0
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "form": "round",
-      "id": "build_186",
-      "offset": 12.5,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_182"
-    },
-    {
-      "anchor": [
-        147.0,
-        5.5
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "id": "build_187",
-      "offset": 3.0,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_184"
-    },
-    {
-      "anchor": [
-        147.0,
-        11.5
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "form": "arch",
-      "id": "build_188",
-      "offset": 9.0,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_184"
-    },
-    {
-      "anchor": [
-        135.5,
-        17.5
-      ],
-      "axis": 0,
-      "color": "eee2c6",
-      "form": "arch",
-      "id": "build_189",
-      "offset": 4.5,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_181"
-    },
-    {
-      "anchor": [
-        140.5,
-        11.5
-      ],
-      "axis": 1,
-      "color": "739b8d",
-      "default_open": false,
-      "id": "build_191",
-      "offset": 9.0,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "door",
-      "wall": "build_183"
-    },
-    {
-      "anchor": [
-        143.5,
-        14.5
-      ],
-      "axis": 0,
-      "color": "739b8d",
-      "form": "glass",
-      "id": "build_192",
-      "offset": 3.0,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "wood",
-      "type": "door",
-      "wall": "build_180"
-    },
-    {
-      "anchor": [
-        133.5,
-        2.5
-      ],
-      "axis": 0,
-      "color": "eee2c6",
-      "id": "build_225",
-      "offset": 2.5,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "original",
-      "type": "window",
-      "wall": "build_178"
-    },
-    {
-      "anchor": [
-        131.0,
-        5.5
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "id": "build_226",
-      "offset": 3.0,
-      "painted": false,
-      "reverse": false,
-      "storey": 1,
-      "style": "original",
-      "type": "window",
-      "wall": "build_182"
-    },
-    {
-      "anchor": [
-        134.5,
-        17.5
-      ],
-      "axis": 0,
-      "color": "739b8d",
-      "form": "arch",
-      "id": "build_156",
-      "offset": 3.5,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "door",
-      "wall": "build_152"
-    },
-    {
-      "anchor": [
-        143.5,
-        17.5
-      ],
-      "axis": 0,
-      "color": "eee2c6",
-      "form": "arch",
-      "id": "build_157",
-      "offset": 12.5,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_152"
-    },
-    {
-      "anchor": [
-        142.5,
-        2.5
-      ],
-      "axis": 0,
-      "color": "eee2c6",
-      "id": "build_158",
-      "offset": 4.0,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_150"
-    },
-    {
-      "anchor": [
-        131.0,
-        14.5
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "form": "round",
-      "id": "build_159",
-      "offset": 12.0,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_153"
-    },
-    {
-      "anchor": [
-        147.0,
-        6.0
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "id": "build_160",
-      "offset": 3.5,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_154"
-    },
-    {
-      "anchor": [
-        147.0,
-        13.0
-      ],
-      "axis": 1,
-      "color": "eee2c6",
-      "form": "arch",
-      "id": "build_161",
-      "offset": 4.0,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "window",
-      "wall": "build_155"
-    },
-    {
-      "anchor": [
-        143.0,
-        9.0
-      ],
-      "axis": 0,
-      "color": "739b8d",
-      "default_open": false,
-      "form": "glass",
-      "id": "build_162",
-      "offset": 4.5,
-      "painted": false,
-      "reverse": false,
-      "style": "wood",
-      "type": "door",
-      "wall": "build_151"
-    },
-    {
-      "anchor": [
-        131.0,
         10.0
       ],
       "axis": 1,
@@ -1469,6 +1469,66 @@
       "style": "original",
       "type": "window",
       "wall": "build_152"
+    },
+    {
+      "color": "ffffff",
+      "id": "build_271",
+      "kind": "dining_table",
+      "painted": false,
+      "position": [
+        139.5,
+        16.4
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_272",
+      "kind": "dining_chair",
+      "painted": false,
+      "position": [
+        140.4,
+        14.85
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_273",
+      "kind": "dining_chair",
+      "painted": false,
+      "position": [
+        138.6,
+        14.85
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_274",
+      "kind": "cup",
+      "painted": false,
+      "position": [
+        139.392,
+        16.518
+      ],
+      "style": "original",
+      "support": "build_271",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
     }
   ]
 }

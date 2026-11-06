@@ -1,0 +1,31 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-06 00:58:13.508 Godot[22201:100707434] not in fullscreen state
+RENDER_BUDGET output=(1600, 1000) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS T selects true orthographic top view
+PASS Top view looks vertically down without perspective distortion
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actual mouse drag creates a complete 4x4 room
+PASS Dragging a room wall expands 4x4 to 5x4
+PASS One undo restores entire room adjustment
+PASS Dragging shared wall grows one room and shrinks its neighbor
+PASS Place actual movable object
+PASS Click selects actual object
+PASS Selected object has an actual edge halo
+PASS Direct object drag moves and returns to selection
+PASS G starts moving selected object
+PASS Escape cancels a move and restores the original
+PASS Eyedropper switches to the actual sampled object
+PASS Sampled object can be placed independently
+PASS Eyedropper preserves per-part materials and both fabric colors
+PASS Eyedropper adds a new object instead of moving the source
+PASS Surface eyedropper fixture
+PASS Eyedropper samples actual floor material
+PASS Sampled floor style paints another room through the existing room scope
+PASS Escape cancels an uncommitted room drag
+PASS Room tool in roof view builds a supported upstairs room on the correct level
+PASS T restores perspective
+DRAFTING_FLOW_RESULT PASS checks=22 failures=[]

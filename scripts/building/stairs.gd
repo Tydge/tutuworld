@@ -106,7 +106,48 @@ static func rail(builder: RefCounted,parent: Node3D,a: Vector3,b: Vector3,shared
 			for y in [0.,1.15]:points.append(point+offset+Vector3.UP*y)
 	var shape:=ConvexPolygonShape3D.new();shape.points=points;var collision:=CollisionShape3D.new();collision.shape=shape;body.add_child(collision);parent.add_child(body)
 	if shared==null:batch.finish(parent)
-static func build(builder: RefCounted,parent: Node3D,row: Dictionary) -> void:
+static func guard_edge(edges: Dictionary,cell: Vector2i,direction: Vector2i) -> void:
+	var e:=Vector3i(cell.x+(1 if direction==Vector2i.RIGHT else 0),cell.y+(1 if direction==Vector2i.DOWN else 0),1 if direction.x!=0 else 0);var ends:=Grid.ends(e)
+	edges[e]={"id":"guard","type":"wall","a":[ends[0].x*.5,ends[0].y*.5],"b":[ends[1].x*.5,ends[1].y*.5]}
+static func explicit_guard_edges(layout: Dictionary,level: int) -> Dictionary:
+	var edges: Dictionary={}
+	for row in layout.elements:
+		if row.type in ["wall","railing"] and Storeys.of(row)==level:
+			for edge in Grid.edges(row):edges[edge]=true
+	return edges
+static func upper_guard_edges(row: Dictionary,upper_floors: Variant=null,explicit_edges: Dictionary={}) -> Array:
+	var holes: Dictionary={};var edges: Dictionary={};var data:=definition(row.form)
+	var position_: Array=row.get("position",[0.,0.]);var origin:=Vector2(position_[0],position_[1]);var yaw: float=row.get("yaw",0.)
+	for area: Rect2 in local_parts(row,false):
+		for cell in Grid.coordinates({"a":[area.position.x,area.position.y],"b":[area.end.x,area.end.y]}):holes[cell]=true
+	var top: Vector3=data.flights[-1][1];var end_dir: Vector3=top-data.flights[-1][0];end_dir.y=0;end_dir=end_dir.normalized()
+	for cell in holes:
+		for direction in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
+			if holes.has(cell+direction):continue
+			var middle:=Grid.point(cell)+Vector2.ONE*.25+Vector2(direction)*.25;var diff:=Vector3(middle.x-top.x,0,middle.y-top.z)
+			if absf(diff.dot(end_dir))<.05 and Vector2(diff.x,diff.z).length()<WIDTH*.5+.05:continue
+			var neighbor:=Grid.point(cell+direction)+Vector2.ONE*.25
+			var world:=origin+Catalog.rotate_xz(neighbor,yaw)
+			if upper_floors!=null and not upper_floors.has(Grid.cell(world)):continue
+			guard_edge(edges,cell,direction)
+	if upper_floors!=null:
+		# Protect exposed landing sides, leaving the stair mouth and floor connections open.
+		var area: Rect2=data.top
+		for cell in Grid.coordinates({"a":[area.position.x,area.position.y],"b":[area.end.x,area.end.y]}):
+			var world:=origin+Catalog.rotate_xz(Grid.point(cell)+Vector2.ONE*.25,yaw)
+			if not upper_floors.has(Grid.cell(world)):continue
+			for direction in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
+				var neighbor: Vector2i=cell+direction
+				if holes.has(neighbor):continue
+				var other:=origin+Catalog.rotate_xz(Grid.point(neighbor)+Vector2.ONE*.25,yaw)
+				if not upper_floors.has(Grid.cell(other)):guard_edge(edges,cell,direction)
+	if not explicit_edges.is_empty():
+		for edge in edges.keys():
+			var ends:=Grid.ends(edge);var a:=origin+Catalog.rotate_xz(Grid.point(ends[0]),yaw);var b:=origin+Catalog.rotate_xz(Grid.point(ends[1]),yaw)
+			var world_edges:=Grid.edges({"a":[a.x,a.y],"b":[b.x,b.y]})
+			if not world_edges.is_empty() and explicit_edges.has(world_edges[0]):edges.erase(edge)
+	return Grid.runs(edges)
+static func build(builder: RefCounted,parent: Node3D,row: Dictionary,upper_floors: Variant=null,explicit_edges: Dictionary={}) -> void:
 	var batch:=preload("res://scripts/building/stair_mesh.gd").new(builder)
 	var data:=definition(row.form);var oak: Material=builder.material(row.get("color","c6a373"),1);var cream: Material=builder.material("eee2c6")
 	for flight: Array in data.flights:
@@ -137,24 +178,11 @@ static func build(builder: RefCounted,parent: Node3D,row: Dictionary) -> void:
 			rail(builder,parent,Vector3(-3,platform[1],-2),Vector3(-3,platform[1],-5),batch);rail(builder,parent,Vector3(-3,platform[1],-5),Vector3(3,platform[1],-5),batch);rail(builder,parent,Vector3(3,platform[1],-5),Vector3(3,platform[1],-2),batch)
 		else:
 			rail(builder,parent,Vector3(-5,platform[1],-2),Vector3(-5,platform[1],-5),batch);rail(builder,parent,Vector3(-5,platform[1],-5),Vector3(-2,platform[1],-5),batch)
-	# Guard the upper stairwell, excluding its actual exit mouth.
-	var holes: Dictionary={}
-	for area: Rect2 in local_parts(row,false):
-		var temp:={"a":[area.position.x,area.position.y],"b":[area.end.x,area.end.y]}
-		for c in Grid.coordinates(temp):holes[c]=true
-	var top: Vector3=data.flights[-1][1];var end_dir: Vector3=(top-data.flights[-1][0]);end_dir.y=0;end_dir=end_dir.normalized()
-	var edges: Dictionary={}
-	for cell in holes:
-		for direction in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
-			if holes.has(cell+direction):continue
-			var e:=Vector3i(cell.x+(1 if direction==Vector2i.RIGHT else 0),cell.y+(1 if direction==Vector2i.DOWN else 0),1 if direction.x!=0 else 0);var ends:=Grid.ends(e);var middle: Vector2=(Grid.point(ends[0])+Grid.point(ends[1]))*.5;var diff:=Vector3(middle.x-top.x,0,middle.y-top.z)
-			if absf(diff.dot(end_dir))<.05 and Vector2(diff.x,diff.z).length()<WIDTH*.5+.05:continue
-			edges[e]={"id":"guard","type":"wall","a":[ends[0].x*.5,ends[0].y*.5],"b":[ends[1].x*.5,ends[1].y*.5]}
+	# Guard supported well edges and the exposed upper landing.
 	var guard:=Node3D.new();guard.name="UpperGuard";parent.add_child(guard)
 	var guard_batch:=preload("res://scripts/building/stair_mesh.gd").new(builder)
-	for edge in Grid.runs(edges):
-		var a:=Vector3(edge.a[0],Storeys.HEIGHT,edge.a[1]);var b:=Vector3(edge.b[0],Storeys.HEIGHT,edge.b[1]);var mid: Vector3=(a+b)*.5;var diff: Vector3=mid-top
-		if absf(diff.dot(end_dir))<.05 and Vector2(diff.x,diff.z).length()<WIDTH*.5+.05:continue
+	for edge in upper_guard_edges(row,upper_floors,explicit_edges):
+		var a:=Vector3(edge.a[0],Storeys.HEIGHT,edge.a[1]);var b:=Vector3(edge.b[0],Storeys.HEIGHT,edge.b[1])
 		rail(builder,guard,a,b,guard_batch)
 	guard_batch.finish(guard)
 	batch.finish(parent)

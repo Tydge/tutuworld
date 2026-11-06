@@ -38,6 +38,8 @@ var resources: Dictionary={}
 var navigation: Node
 var npcs: Array[CharacterBody3D]=[]
 var dining_active:=false
+var dining_target:="dining"
+var dining_chair: Node3D
 var culinary: Node3D
 var tools: Node3D
 var marker: MeshInstance3D
@@ -403,6 +405,8 @@ func update_target() -> void:
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
 		var distance: float=Vector2(bunny.position.x-t.position.x,bunny.position.z-t.position.z).length()
 		if t.kind not in ["bed","bench","npc","shop"] and absf(bunny.position.y-t.position.y)>1.7:continue
+		if t.kind=="dining" and t.has("node"):
+			distance=preload("res://scripts/city/dining_service.gd").proximity(self,id)
 		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue
 		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
 		if t.kind in ["bed","bench"] and t.has("node"):
@@ -468,6 +472,9 @@ func quick_interact() -> Dictionary:
 	return begin_action(quick_action.verb,quick_action.target)
 func target_position(id: String) -> Vector3:
 	var target: Dictionary=targets.get(id,{})
+	if target.get("kind","")=="dining" and target.has("node"):
+		var seats:=preload("res://scripts/city/dining_service.gd").candidates(self,id)
+		if not seats.is_empty():return FurnitureAccess.closest(seats[0],bunny.global_position)
 	if target.get("kind","") in ["bed","bench"] and target.has("node"):return FurnitureAccess.closest(target.node,bunny.global_position)
 	return target.get("position",bunny.position)
 func is_text_entry_active() -> bool:
@@ -501,9 +508,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		yaw-=event.relative.x*.006*float(session.settings.camera_speed)
 		pitch=clampf(pitch+event.relative.y*.004,.12,1.1)
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index==MOUSE_BUTTON_WHEEL_UP: distance_=maxf(4.5,distance_-.75)
-		if event.button_index==MOUSE_BUTTON_WHEEL_DOWN: distance_=minf(22,distance_+.75)
+	if preload("res://scripts/services/camera_zoom.gd").accepts(event):
+		distance_=preload("res://scripts/services/camera_zoom.gd").distance_for(event,distance_,.75,4.5,22.)
+		get_viewport().set_input_as_handled()
 	if event.is_action_pressed("quick_interact") and not event.is_echo():
 		quick_interact()
 		get_viewport().set_input_as_handled()
@@ -545,7 +552,8 @@ func interact() -> void:
 			kitchen_target=current_target;hud.open_panel("kitchen")
 		"workshop": hud.open_panel("workshop")
 		"well": begin_action("refill",current_target)
-		"dining": hud.open_panel("dining")
+		"dining":
+			dining_target=current_target;hud.open_panel("dining")
 		"bed": enter_sleep()
 		"boat": preload("res://scripts/valley/boat_travel.gd").go(self)
 		"resource": begin_action("gather",current_target)
@@ -608,7 +616,10 @@ func wake_from_bed() -> void:
 
 func begin_cooking(recipe: String) -> Dictionary: return begin_action("craft",kitchen_target,recipe)
 func begin_manufacturing(recipe: String) -> Dictionary: return begin_action("craft",current_target,recipe)
-func begin_dining(item: String) -> Dictionary: return begin_action("eat","dining",item)
+func begin_dining(item: String) -> Dictionary:
+	var result:=begin_action("eat",dining_target,item)
+	if not result.get("ok",false):hud.notify(result.get("message","暂时无法入座。"))
+	return result
 func begin_snack(item: String) -> Dictionary: return begin_action("snack","",item)
 func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 	if session.is_online() and not network_action_approved:
@@ -621,13 +632,19 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 	if verb=="gather" and targets[target].item!="orange" and bunny.position.distance_to(target_position(target))>2.0: return {"ok":false,"message":"再靠近一点，让工具够得着吧。"}
 	if targets.get(target,{}).get("kind","")=="kitchen" and targets[target].has("node") and not facility_access(target):return {"ok":false,"message":"料理台前需要留出安全的操作空间。"}
 	if targets.get(target,{}).get("kind","")=="workshop" and not targets[target].building.contains_position(bunny.global_position): return {"ok":false,"message":"先走进工坊，再使用工作台吧。"}
-	var result: Dictionary={"ok":true} if network_action_approved else session.dispatch(verb,{"target":target,"item":item,"recipe":item})
+	var dining_seat: Dictionary={}
+	if verb=="eat" and target!="dining":
+		dining_seat=preload("res://scripts/city/dining_service.gd").choose(self,target)
+		if dining_seat.is_empty():return {"ok":false,"message":"餐桌旁需要一张朝向餐桌、未被占用且通道畅通的餐椅。"}
+	var result: Dictionary={"ok":true} if network_action_approved else session.dispatch(verb,{"target":target,"item":item,"recipe":item,"seat":dining_seat.get("seat","")})
 	if result.ok:
 		if verb=="eat":
-			var seat: Transform3D=scenery.get_node("DiningTable/SeatAnchor").global_transform
+			dining_chair=dining_seat.get("node")
+			var seat: Transform3D=preload("res://scripts/city/seating.gd").seat(dining_chair) if is_instance_valid(dining_chair) else scenery.get_node("DiningTable/SeatAnchor").global_transform
+			if is_instance_valid(dining_chair):nap_exit=dining_seat.exit
 			bunny.sit_on_surface(seat)
 			dining_active=true
-			culinary.serve(item)
+			culinary.serve(item,preload("res://scripts/city/dining_service.gd").meal_position(self,target,dining_chair) if is_instance_valid(dining_chair) else Vector3.INF)
 		elif verb=="refill":
 			bunny.position=targets[target].work_anchor.global_position;bunny.velocity=Vector3.ZERO;bunny.reset_physics_interpolation()
 		elif verb=="craft":
@@ -640,7 +657,8 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		var animation: String=("gather_stone" if DB.recipe(item).get("station","")=="workshop" else "cook") if verb=="craft" else verb
 		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
 		if verb=="craft" and targets[target].has("work_anchor"): bunny.visual.rotation.y=targets[target].work_anchor.global_rotation.y+PI
-		elif verb in ["craft","eat"]: bunny.visual.rotation.y=PI
+		elif verb=="eat":bunny.visual.rotation.y=preload("res://scripts/city/seating.gd").seat(dining_chair).basis.get_euler().y if is_instance_valid(dining_chair) else PI
+		elif verb=="craft":bunny.visual.rotation.y=PI
 		elif verb!="snack": bunny.visual.rotation.y=atan2(target_position(target).x-bunny.position.x,target_position(target).z-bunny.position.z)
 		bunny.play_action(animation,float(session.job().duration)+.25,"")
 		if verb in ["water","weed","gather"] and animation!="harvest_tree":
@@ -663,6 +681,12 @@ func finish_action() -> void:
 		dining_active=false;nap_active=true;bunny.seated=true;bunny.can_move=false;bunny.play_action("nap",INF);tools.hide_tool()
 		if is_instance_valid(culinary):culinary.clear_meal()
 		return
+	if dining_active and is_instance_valid(dining_chair):
+		var landing:=FurnitureAccess.landing(self,dining_chair,bunny,nap_exit)
+		dining_active=false;culinary.clear_meal()
+		if landing.is_empty():
+			set_meta("resting_furniture",dining_chair);dining_chair=null;nap_active=true;bunny.play_action("nap",INF);tools.hide_tool();return
+		bunny.stand_up(landing.position);session.set_player_position(landing.position);dining_chair=null
 	if dining_active:
 		var p: Array=session.state().player_position
 		bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])) if session.is_online() else scenery.get_node("DiningTable/ExitAnchor").global_position)
@@ -682,7 +706,7 @@ func on_event(event: Dictionary) -> void:
 		sparkle.position=target_position(str(event.get("target","")))+Vector3(0,.75,0)
 	if event.type in ["completed","rejected"]: finish_action(); refresh_world(); play_tone(620,.12,.10)
 func refresh_world() -> void:
-	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access");session.authority.facility_access=Callable(self,"facility_access")
+	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access");session.authority.facility_access=Callable(self,"facility_access");session.authority.dining_access=Callable(self,"dining_access")
 	for id in crops:
 		var p: Dictionary=session.state().plots[id]
 		crops[id].refresh(p,session.authority.needs(p))
@@ -890,3 +914,6 @@ func facility_access(id: String) -> bool:
 	if absf(bunny.position.y-node.global_position.y)>1.25:return false
 	if not FurnitureAccess.clear_segment(self,node,bunny,bunny.global_position+Vector3.UP,target.position+Vector3.UP):return false
 	return not preload("res://scripts/city/local_landing.gd").find(self,node.get_node("WorkAnchor").global_position,bunny,false).is_empty()
+
+func dining_access(id: String,chair: String) -> bool:
+	return preload("res://scripts/city/dining_service.gd").accessible(self,id,chair)

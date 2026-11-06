@@ -10,7 +10,11 @@ static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 			G.capsule(n,Vector3(.17,.20,0),Vector3(.34,.29,0),.06,b.material("5b9388"))
 			for x in [-.34,.34]:G.cylinder(n,Vector3(x,.035,.25),.17,.035,cream);G.cylinder(n,Vector3(x,.12,.25),.105,.12,b.material("e6bd7d"));G.cylinder(n,Vector3(x,.185,.25),.088,.009,b.material("84623e"))
 		"field_journal":
-			b.rounded(n,Vector3(0,.055,0),Vector3(.58,.09,.42),.02,b.material("719376"),"FieldJournal");b.block(n,Vector3(0,.057,.02),Vector3(.52,.05,.38),cream,"Pages")
+			# Separate covers and spine: a solid cover box used to enclose the pages,
+			# with both front faces exactly at z=.21, causing moving-camera z-fighting.
+			for y in [.018,.092]:b.rounded(n,Vector3(0,y,0),Vector3(.58,.016,.42),.006,b.material("719376"),"FieldJournal")
+			b.rounded(n,Vector3(-.278,.055,0),Vector3(.024,.074,.42),.006,b.material("719376"),"JournalSpine")
+			b.block(n,Vector3(.006,.055,.006),Vector3(.52,.058,.38),cream,"Pages")
 			b.block(n,Vector3(.16,.105,.02),Vector3(.025,.007,.40),brass,"Ribbon");G.capsule(n,Vector3(-.24,.115,-.13),Vector3(.15,.115,.18),.014,oak,"Pencil")
 		"pressed_leaves":
 			b.rounded(n,Vector3(0,.58,0),Vector3(.80,.98,.08),.035,b.material("b8925c"));b.block(n,Vector3(0,.58,.051),Vector3(.66,.84,.02),b.material("f0dfb4"))

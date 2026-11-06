@@ -23,7 +23,7 @@ var sequence:=0
 var save_timer:=0.0
 var building_generation:=""
 var ui_timer:=0.0
-var settings:={"sound":true,"volume":.55,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true,"interior_view_mode":2,"interior_view_hint_seen":false}
+var settings:={"sound":true,"volume":.55,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true,"interior_view_mode":2,"interior_view_hint_seen":false,"show_other_storey_objects":true}
 var characters: Dictionary={}
 var active_character_id:=""
 var world: Dictionary={}
@@ -402,6 +402,7 @@ func normalize_view_settings() -> void:
 	if not settings.get("interior_view_mode") is int and not settings.get("interior_view_mode") is float:settings.interior_view_mode=2
 	settings.interior_view_mode=clampi(int(settings.interior_view_mode),0,2)
 	settings.interior_view_hint_seen=bool(settings.get("interior_view_hint_seen",false))
+	settings.show_other_storey_objects=bool(settings.get("show_other_storey_objects",true))
 func set_setting(key: String,value: Variant) -> void:
 	if not settings.has(key): return
 	if key=="interior_view_mode" and (not value is int or value<0 or value>2):return

@@ -1,0 +1,71 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+2026-11-06 02:03:42.813 Godot[24550:100759339] not in fullscreen state
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+ZOOM_TEST play=12.7874999642372 transform=[X: (2.1, 0.0), Y: (0.0, 2.1), O: (0.0, 0.0)]
+PASS Actual dispatched trackpad gesture zooms play camera
+PASS Paused game ignores camera gestures
+ZOOM_TEST build=40.0999999046326
+PASS Actual dispatched trackpad gesture zooms build camera
+PASS Typing in an editor field blocks camera gestures
+2026-11-06 02:03:43.535 Godot[24550:100759339] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+PASS Build camera also supports pinch zoom
+PASS Reset isolated layout for single_one
+PASS Template exposes rotation button
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Four turns return to original orientation
+PASS Rotated whole house places: single_one/0
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: single_one/90
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: single_one/180
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: single_one/270
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Reset isolated layout for two_storey
+PASS Template exposes rotation button
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Rotation reuses complete template preview
+PASS Four turns return to original orientation
+PASS Rotated whole house places: two_storey/0
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: two_storey/90
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: two_storey/180
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Rotated whole house places: two_storey/270
+PASS Rendered placement matches rotated preview including roof and attachments
+PASS Undo removes the complete rotated sample
+PASS Redo restores the rotated sample
+PASS Actual player sample for material joins
+PASS Real slab side faces never share a facing plane with wall fascia
+PASS Actual journal found
+PASS Real book cover and pages have no coincident visible faces
+JOIN_MOTION journal max_mean_error=0.0 max_changed_fraction=0.0
+PASS Moving-to-rest material region has no settling flash: journal
+JOIN_MOTION wall-floor-seam max_mean_error=0.0 max_changed_fraction=0.0
+PASS Moving-to-rest material region has no settling flash: wall-floor-seam
+BUILDING_CAMERA_TEMPLATE_FLOW_RESULT PASS checks=57 failures=[]

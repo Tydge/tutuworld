@@ -1022,6 +1022,169 @@
           "8caa69"
         ]
       }
+    ],
+    "dining_table": [
+      {
+        "id": "frame",
+        "name": "桌架",
+        "family": "wood",
+        "colors": [
+          "b58c60"
+        ]
+      },
+      {
+        "id": "top",
+        "name": "桌面",
+        "family": "wood",
+        "colors": [
+          "d0ad7e"
+        ]
+      }
+    ],
+    "dining_chair": [
+      {
+        "id": "frame",
+        "name": "椅架",
+        "family": "wood",
+        "colors": [
+          "b58c60"
+        ]
+      },
+      {
+        "id": "cushion",
+        "name": "软垫",
+        "family": "fabric",
+        "colors": [
+          "91aa94"
+        ]
+      }
+    ],
+    "wall_botanical": [
+      {
+        "id": "frame",
+        "name": "画框",
+        "family": "wood",
+        "colors": [
+          "b58b62"
+        ]
+      },
+      {
+        "id": "picture",
+        "name": "画芯",
+        "family": "ceramic",
+        "colors": [
+          "efe5cf",
+          "739574"
+        ]
+      }
+    ],
+    "wall_mirror": [
+      {
+        "id": "frame",
+        "name": "镜框",
+        "family": "metal",
+        "colors": [
+          "c5a66a",
+          "695b46"
+        ]
+      }
+    ],
+    "wall_clock": [
+      {
+        "id": "frame",
+        "name": "钟框",
+        "family": "wood",
+        "colors": [
+          "b58b62"
+        ]
+      },
+      {
+        "id": "dial",
+        "name": "钟面",
+        "family": "ceramic",
+        "colors": [
+          "efe5cf"
+        ]
+      },
+      {
+        "id": "hands",
+        "name": "指针与刻度",
+        "family": "metal",
+        "colors": [
+          "526958"
+        ]
+      }
+    ],
+    "wall_sconce": [
+      {
+        "id": "frame",
+        "name": "灯架",
+        "family": "metal",
+        "colors": [
+          "c5a66a"
+        ]
+      },
+      {
+        "id": "shade",
+        "name": "灯罩",
+        "family": "ceramic",
+        "colors": [
+          "efe5cf"
+        ]
+      }
+    ],
+    "kitchen_cart": [
+      {
+        "id": "frame",
+        "name": "车架与层板",
+        "family": "wood",
+        "colors": [
+          "b58b62"
+        ]
+      },
+      {
+        "id": "top",
+        "name": "台面",
+        "family": "wood",
+        "colors": [
+          "d4b587"
+        ]
+      },
+      {
+        "id": "hardware",
+        "name": "轮子与把手",
+        "family": "metal",
+        "colors": [
+          "667469"
+        ]
+      }
+    ],
+    "spice_jars": [
+      {
+        "id": "tray",
+        "name": "托盘",
+        "family": "wood",
+        "colors": [
+          "b58b62"
+        ]
+      },
+      {
+        "id": "jars",
+        "name": "陶瓷罐",
+        "family": "ceramic",
+        "colors": [
+          "efe5cf",
+          "d3dfcd"
+        ]
+      },
+      {
+        "id": "lids",
+        "name": "罐盖",
+        "family": "wood",
+        "colors": [
+          "99794e"
+        ]
+      }
     ]
   },
   "presets": {

@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-06",
+  "scope": "Cleanup and handoff; source/documents/evidence only, no deployment or release",
+  "tests": [
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 429,
+      "archived_log": "project_integrity.log",
+      "sha256": "5bdb44d774db59ddad9e5263a47d272cc346e07fa0401a34165d86a42f6bd925"
+    },
+    {
+      "test": "building_rules",
+      "result": "PASS",
+      "checks": 41,
+      "archived_log": "building_rules.log",
+      "sha256": "655d29524763fa546d9122b36988930bff4292d78b82c39026dd0563043b3223"
+    },
+    {
+      "test": "drafting_rules",
+      "result": "PASS",
+      "checks": 51,
+      "archived_log": "drafting_rules.log",
+      "sha256": "32b324354be3342b75b33d6aef1fd09b9173f02434ed1cee6be24253fe280356"
+    },
+    {
+      "test": "drafting_flow",
+      "result": "PASS",
+      "checks": 22,
+      "archived_log": "drafting_flow.log",
+      "sha256": "0d5665d2cf238fe414f25008c02a0aab8d39358eb94c7dd7aab663438e29283a"
+    }
+  ],
+  "total_tests": 4,
+  "total_counted_checks": 543,
+  "code_cleanup": [
+    "Removed unreferenced layout.contains_in_floor point-only floor helper; full grid coverage remains authoritative",
+    "Removed unused draft_overlay.note state",
+    "Removed unread drafting.preview_usec buffer and its timing-only capture"
+  ],
+  "source_sha256": {
+    "scripts/building/layout.gd": "985655287d1a0e4cdf12c2249399e1ef10a7232d09b2b1ea8e38dda96695d747",
+    "scripts/building/drafting.gd": "509e067c090a46f959233ee9c109e4b7fa44e5570f98104a9af70e8ac7653cee",
+    "scripts/building/draft_overlay.gd": "ad366c03ef0d8590c38751bf0acec6fd3ec8fa7fdb4b95314fac9c78e51371db"
+  },
+  "previous_functional_verification": "../walls-mirrors-20261106/summary.json",
+  "inventory": {
+    "repository_files": 1459,
+    "markdown_documents": 30,
+    "by_directory": {
+      "[根目录文件]": 8,
+      "assets": 131,
+      "config": 5,
+      "data": 10,
+      "docs": 684,
+      "scenes": 15,
+      "scripts": 279,
+      "server": 12,
+      "tests": 308,
+      "tools": 7
+    },
+    "files": "files.txt",
+    "excluded": [
+      ".git",
+      ".godot",
+      ".qa-artifacts",
+      "ignored build/release/private user data"
+    ]
+  }
+}

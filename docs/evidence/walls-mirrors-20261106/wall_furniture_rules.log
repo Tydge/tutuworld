@@ -1,0 +1,81 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Wall attachment validates on each facing/storey: wall_botanical0(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical0(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical0(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical0(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical1(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical1(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical1(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_botanical1(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror0(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror0(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror0(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror0(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror1(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror1(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror1(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_mirror1(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock0(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock0(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock0(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock0(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock1(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock1(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock1(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_clock1(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce0(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce0(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce0(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce0(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce1(76.0, 1.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce1(76.0, 13.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce1(70.0, 7.0)
+PASS Mount retains real support and height
+PASS Wall attachment validates on each facing/storey: wall_sconce1(82.0, 7.0)
+PASS Mount retains real support and height
+PASS Changing a wall material/splitting runs retains mounted objects
+PASS Wall drag carries mounted decoration and rebinds support
+PASS Removing supporting wall cells removes the mounted item without orphaning it
+PASS Wall art cannot cover a real doorway
+PASS Object must fit within wall height
+PASS Wall object cannot float away from supporting wall
+PASS Fireplace snaps its actual back to one centimetre beyond the wall face
+PASS Floor kitchen cart supports independently placed spice jars
+PASS Moving/rotating kitchen cart carries its supported spice tray
+PASS Catalog contains the updated eastern house with its flush-wall fireplace
+PASS Updated sample rotates and validates: 0.0
+PASS Updated sample rotates and validates: 90.0
+PASS Updated sample rotates and validates: 180.0
+PASS Updated sample rotates and validates: 270.0
+WALL_FURNITURE_RULES_RESULT PASS checks=78 failures=[]

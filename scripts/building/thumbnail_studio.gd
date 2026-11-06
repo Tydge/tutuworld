@@ -51,6 +51,9 @@ func render_next() -> void:
 	elif Catalog.OBJECTS.has(id):builder.build_item(model,id)
 	else:
 		match id:
+			"room":
+				builder.blueprint.size=[4.,4.];builder.build_floor(model)
+				for pair in [[[-2.,-2.],[2.,-2.]],[[2.,-2.],[2.,2.]]]:builder.build_wall(model,{"id":"RoomWall","a":pair[0],"b":pair[1],"openings":[]})
 			"wall","door","window":
 				var openings: Array=[]
 				if id!="wall":openings=[{"id":"preview","type":id,"offset":2.5,"width":2.86 if id=="door" else 2.2,"height":3.5 if id=="door" else 2.,"bottom":0. if id=="door" else 1.1,"form":form}]

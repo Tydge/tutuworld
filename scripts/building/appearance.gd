@@ -73,7 +73,7 @@ static func protected(mesh: MeshInstance3D) -> bool:
 	if str(mesh.name)=="Bulb":return true
 	var material: Material=mesh.material_override
 	if material is ShaderMaterial:
-		return material.shader.resource_path.get_file() in ["contact_shadow.gdshader","fountain_water.gdshader","hearth_fire.gdshader","hearth_embers.gdshader"]
+		return material.shader.resource_path.get_file() in ["contact_shadow.gdshader","fountain_water.gdshader","hearth_fire.gdshader","hearth_embers.gdshader","planar_mirror.gdshader"]
 	return false
 static func apply(module: Node3D,row: Dictionary) -> void:
 	var overrides: Dictionary=row.get("appearance",{})

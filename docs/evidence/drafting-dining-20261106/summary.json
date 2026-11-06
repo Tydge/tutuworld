@@ -1,0 +1,134 @@
+{
+  "date": "2026-11-06",
+  "platform": "macOS / Apple M1 Pro / Godot 4.6.3 / Metal Forward+",
+  "scope": "Isolated tests; source-only, unreleased",
+  "tests": [
+    {
+      "test": "project_integrity",
+      "checks": 421,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005635-252883/project_integrity/run.log"
+    },
+    {
+      "test": "drafting_rules",
+      "checks": 51,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005635-252883/drafting_rules/run.log"
+    },
+    {
+      "test": "drafting_flow",
+      "checks": 22,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005806-790909/drafting_flow/run.log"
+    },
+    {
+      "test": "dining_rules",
+      "checks": 50,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/dining_rules/run.log"
+    },
+    {
+      "test": "dining_flow",
+      "checks": 26,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/dining_flow/run.log"
+    },
+    {
+      "test": "building_controls",
+      "checks": 34,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/building_controls/run.log"
+    },
+    {
+      "test": "building_mouse_flow",
+      "checks": 36,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/building_mouse_flow/run.log"
+    },
+    {
+      "test": "building_revision_flow",
+      "checks": 57,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/building_revision_flow/run.log"
+    },
+    {
+      "test": "building_surface_flow",
+      "checks": 9,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/building_surface_flow/run.log"
+    },
+    {
+      "test": "furniture_access_flow",
+      "checks": 51,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/furniture_access_flow/run.log"
+    },
+    {
+      "test": "appearance_rules",
+      "checks": 176,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/appearance_rules/run.log"
+    },
+    {
+      "test": "kitchen_rules",
+      "checks": 128,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/kitchen_rules/run.log"
+    },
+    {
+      "test": "storey_extension_rules",
+      "checks": 1826,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/storey_extension_rules/run.log"
+    },
+    {
+      "test": "storey_extension_flow",
+      "checks": 132,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/storey_extension_flow/run.log"
+    },
+    {
+      "test": "multistorey_editor_flow",
+      "checks": 31,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/multistorey_editor_flow/run.log"
+    },
+    {
+      "test": "save_transactions",
+      "checks": 10,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-005310-182325/save_transactions/run.log"
+    }
+  ],
+  "total_tests": 16,
+  "total_counted_checks": 3060,
+  "preview_rule_ms": {
+    "fixture": "40 x 32 m closed room, 5120 floor cells, 12 resize previews",
+    "median": 3.6,
+    "maximum_of_12": 3.76,
+    "meaning": "CPU rule calculation only; excludes drawing, commit, disk and frame time"
+  },
+  "screenshots": [
+    "drag-room-preview",
+    "shared-wall-and-dimensions",
+    "selected-object-edge",
+    "dining-nearest-chair"
+  ],
+  "limitations": [
+    "No Windows hardware run",
+    "No full-capacity combined or long-session frame-rate claim",
+    "Existing whole-layout validation/checkpoint work remains on final commit"
+  ],
+  "source_sha256": {
+    "scripts/building/drafting.gd": "b48fe6e96e66d4b1c989c5833923a74f5ee0eb419a56bc987386ae893678d963",
+    "scripts/building/room_edit.gd": "7456a73f56418923219a4aa3d98910ca72646bb58d30734622338762e263d678",
+    "scripts/building/draft_overlay.gd": "e0de0e1706f815e035902917627884309cfda0f0fc6db9f79d1398c02436d378",
+    "scripts/building/dining.gd": "7c31e31af316e9fdd8acaa250f2c29c5b1e1940f695a967c4b1cb636e47330d1",
+    "scripts/building/dining_models.gd": "05a512b8903de875cb2db419b5aac9714b877c45970c1991734e0e53e4a01e3d",
+    "scripts/city/dining_service.gd": "29608530e22364581d8e7b8a0c657a319190c7acb3da8a785b38714d7fc658e1",
+    "scripts/city/city_world.gd": "4fdf808b754d20551aef23b09dda913b4aa2063eb8e270f170ac649e96a88874",
+    "scripts/building/editor.gd": "48610f2ff841127cdf55c92910a8fa5d92061b3e93ea2d406b04c42bfaedb476",
+    "scripts/building/layout.gd": "96145287b73162255d15c6ff767ba256af878a4d60e02f2109f5fb0145956ff7",
+    "scripts/services/local_authority.gd": "32af71556aed8339c4b7fc8e44b6a982bb8409858b1e516d86d4051a191a6496"
+  }
+}

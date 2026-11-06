@@ -1,0 +1,289 @@
+{
+  "date": "2026-11-06",
+  "platform": "macOS / Apple M1 Pro / Godot 4.6.3 / Metal Forward+ (graphical tests)",
+  "scope": "Unreleased source; isolated tests. One explicitly requested real-save fireplace position edit, backed up and structurally verified.",
+  "tests": [
+    {
+      "test": "project_integrity",
+      "checks": 429,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-092004-287192/project_integrity/run.log",
+      "log": "project_integrity.log",
+      "log_sha256": "5bdb44d774db59ddad9e5263a47d272cc346e07fa0401a34165d86a42f6bd925"
+    },
+    {
+      "test": "wall_furniture_rules",
+      "checks": 78,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/wall_furniture_rules/run.log",
+      "log": "wall_furniture_rules.log",
+      "log_sha256": "48ea27709e36c8be9f31c8941039069fa830083112022aa3857d6619e48feb3a"
+    },
+    {
+      "test": "wall_furniture_flow",
+      "checks": 26,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020832-057537/wall_furniture_flow/run.log",
+      "log": "wall_furniture_flow.log",
+      "log_sha256": "58deccab727db91de6ab23e2137d6adc7eb2a41f373e802e0d521c89faf27b10"
+    },
+    {
+      "test": "storey_extension_rules",
+      "checks": 242,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/storey_extension_rules/run.log",
+      "log": "storey_extension_rules.log",
+      "log_sha256": "18d94b7b3758ebdd0dc4d84b4262b212bfbbca18e03621448cffadc5fcfcb858"
+    },
+    {
+      "test": "storey_extension_flow",
+      "checks": 132,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020832-057537/storey_extension_flow/run.log",
+      "log": "storey_extension_flow.log",
+      "log_sha256": "21a51daa003cf86cebe116cc9cbe263537c78abe62be3490f9804ec7062aea39"
+    },
+    {
+      "test": "building_controls",
+      "checks": 34,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-021337-471308/building_controls/run.log",
+      "log": "building_controls.log",
+      "log_sha256": "af047df99b0b8b2c29076dafda42c10f7922d652f520e99957dfc54c988202c7"
+    },
+    {
+      "test": "building_camera_template_rules",
+      "checks": 1313,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/building_camera_template_rules/run.log",
+      "log": "building_camera_template_rules.log",
+      "log_sha256": "f537d555f6d2901ccd712d654df01cf09fa22494987d97b19f15f94cbacd21d7"
+    },
+    {
+      "test": "building_camera_template_flow",
+      "checks": 57,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/building_camera_template_flow/run.log",
+      "log": "building_camera_template_flow.log",
+      "log_sha256": "1c50eed33b34e580d4ff37542c82ca6c127fe47b2a035466eb605e8943ca92e7"
+    },
+    {
+      "test": "building_surface_flow",
+      "checks": 9,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/building_surface_flow/run.log",
+      "log": "building_surface_flow.log",
+      "log_sha256": "cdda83a0e8025486c55df3a11fe7f66a406dc0a80da62dc4390214ec6530fb95"
+    },
+    {
+      "test": "drafting_flow",
+      "checks": 22,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/drafting_flow/run.log",
+      "log": "drafting_flow.log",
+      "log_sha256": "d5c906ccf8aaa0cb64d4ca7a4782997a5ab4714fa9f1130242eeb04af5fc9482"
+    },
+    {
+      "test": "appearance_rules",
+      "checks": 200,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/appearance_rules/run.log",
+      "log": "appearance_rules.log",
+      "log_sha256": "f2088cb0875ff6e11ce9131dd977540524360612d5d9bb4ae4cf3bbd25c8b356"
+    },
+    {
+      "test": "fixture_lighting_flow",
+      "checks": 8,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/fixture_lighting_flow/run.log",
+      "log": "fixture_lighting_flow.log",
+      "log_sha256": "998c4a27f0668031ada075068a7864b4fcb9e4aa3c3f70b74cf7e095a7801f06"
+    },
+    {
+      "test": "firebox_edge_flow",
+      "checks": 4,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/firebox_edge_flow/run.log",
+      "log": "firebox_edge_flow.log",
+      "log_sha256": "7dc287f20f007a00c5b763ad424aafc2a6cba78486c0e9436e8dac7bd7cf3f9b"
+    },
+    {
+      "test": "building_store_rules",
+      "checks": 14,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/building_store_rules/run.log",
+      "log": "building_store_rules.log",
+      "log_sha256": "785c62f41344ad32ef03791115cc40d43a788c17bad6847ba1953032bd48c261"
+    },
+    {
+      "test": "multistorey_editor_flow",
+      "checks": 31,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/multistorey_editor_flow/run.log",
+      "log": "multistorey_editor_flow.log",
+      "log_sha256": "5585ed845dda5f0dc132d9ac4eaf41b44d1bcfcb38e74e7d9398d545b004124b"
+    },
+    {
+      "test": "multistorey_persistence_rules",
+      "checks": 10,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/multistorey_persistence_rules/run.log",
+      "log": "multistorey_persistence_rules.log",
+      "log_sha256": "ca177317810d1b29fb099c49067fbb80f916386abaf92d9933dabde50576f4b2"
+    },
+    {
+      "test": "dining_flow",
+      "checks": 26,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/dining_flow/run.log",
+      "log": "dining_flow.log",
+      "log_sha256": "087a3eacf929a94ec1edbac9d0a150785e6e3cfd2ad203ecf64e27344ae99053"
+    },
+    {
+      "test": "dining_rules",
+      "checks": 51,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/dining_rules/run.log",
+      "log": "dining_rules.log",
+      "log_sha256": "849a9379208090a5945a3787e0ff72aa9aeea5443e641a0a5e94aecf2be87278"
+    },
+    {
+      "test": "thumbnail_preview_flow",
+      "checks": 70,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-020154-114165/thumbnail_preview_flow/run.log",
+      "log": "thumbnail_preview_flow.log",
+      "log_sha256": "ed887b4570c08d12a7435682c82aa97bc205ee8929c5e05e50774a642080fd85"
+    },
+    {
+      "test": "building_ui_scroll_flow",
+      "checks": 10,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-021337-471308/building_ui_scroll_flow/run.log",
+      "log": "building_ui_scroll_flow.log",
+      "log_sha256": "cae779189b098c40295522b09c3ad3052118d9ecfa95a76a9104fe1ce14f5c1e"
+    },
+    {
+      "test": "stairs_first_walk",
+      "checks": 36,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-015838-568624/stairs_first_walk/run.log",
+      "log": "stairs_first_walk.log",
+      "log_sha256": "9e26321980257343fb89fc0261c1a89db11829e81275791bf2c2b7bb72a20921"
+    },
+    {
+      "test": "stair_preview_performance",
+      "checks": 3,
+      "result": "PASS",
+      "source": ".qa-artifacts/20261106-091912-788506/stair_preview_performance/run.log",
+      "log": "stair_preview_performance.log",
+      "log_sha256": "ea562e5174ba9bcda7b8d1e7767619816e6c49b71c6dc9fc20da16ed5cdb24ae"
+    }
+  ],
+  "total_tests": 22,
+  "total_counted_checks": 2805,
+  "save_change": {
+    "after": [
+      140.2,
+      9.58
+    ],
+    "before": [
+      140.2,
+      9.925
+    ],
+    "id": "build_169",
+    "original_elements": 196,
+    "template_bounds": [
+      131,
+      2.5,
+      147,
+      17.5
+    ],
+    "template_elements": 87,
+    "changed_rows": [
+      {
+        "id": "build_169",
+        "kind": "hearth",
+        "fields": [
+          "position"
+        ]
+      }
+    ],
+    "save_backup": "user://island_city_v2.json.pre-hearth-20261106.bak",
+    "before_sha256": "94e5ae65197f29c1e1abd51d418e37ff790a70a90b2d2b24f2b015f47e00541c",
+    "after_sha256": "b7be34f0174e3b87c2e14cd7dcdcf9c77d6cd10a6ff508a01c759d5d48a417fc",
+    "unchanged_top_level_and_world_fields": true,
+    "verified_again": "2026-11-06; structural comparison confirms only build_169.position differs from backup"
+  },
+  "catalog": {
+    "objects": 44,
+    "appearance_parts": 129,
+    "new_objects": [
+      "wall_botanical",
+      "wall_mirror",
+      "wall_clock",
+      "wall_sconce",
+      "kitchen_cart",
+      "spice_jars"
+    ]
+  },
+  "mirror_budget": {
+    "max_active_views": 2,
+    "texture_heights": [
+      192,
+      384,
+      640
+    ],
+    "max_distance_m": 18,
+    "total_updates_per_second_stationary": 30,
+    "total_updates_per_second_camera_moving": 60,
+    "recursion": false,
+    "inactive": "metallic highlights; no live local reflection"
+  },
+  "stair_slab_preview_cpu_ms": {
+    "room_area_sqm": 240,
+    "warm_moves": 12,
+    "cold": 26.269,
+    "warm_median": 8.101,
+    "warm_max": 11.828,
+    "cached_chunks": 40,
+    "meaning": "Headless CPU geometry/rules only; not frame time or FPS. Audio stopped in harness before sampling; final teardown clean."
+  },
+  "screenshots": [
+    "complete-lower-walls.jpg",
+    "wall-decor-and-kitchen-cart.jpg",
+    "bunny-in-real-mirror.jpg",
+    "updated-template-fireplace-against-wall.jpg",
+    "stairs-first-floor.jpg"
+  ],
+  "limitations": [
+    "No Windows hardware run",
+    "No full-capacity combined or long-session frame-rate claim",
+    "No deployment, release, or full multiplayer regression"
+  ],
+  "source_sha256": {
+    "scripts/building/building_world.gd": "e03d0161cd5f898e5eb7ee9fbb1178861a9239af048534d6cfa585e7fb303af0",
+    "scripts/building/storey_extension.gd": "a56db4bc16d1cd037ee299e8d32f4b278a7b8f21b2d0c1b143211b8b5d65db58",
+    "scripts/building/editor.gd": "506789f7dd824d7405a097686eca498bd8f4c4c65c152213e46aba1631302272",
+    "scripts/building/editor_ui.gd": "7dcb8e54390f0e9161f6e38292755433e9d75f75ef990879d33b95990cfeffd0",
+    "scripts/building/layout.gd": "6e2c1d1693aeee0da1bea652441afb1cd284e445a4c6c159a3e4c9999a966869",
+    "scripts/building/catalog.gd": "6a177b636d8b160628a2a61097549f190760eb4a5c6b46a42fe00321e8fb1600",
+    "scripts/building/wall_mount.gd": "429f19cd7f568028825bf91cb16f7c4f2f2f9fd7982b0ffd9e27e07789341215",
+    "scripts/building/wall_furniture.gd": "33346975234b1f948e6ed7be7390c79ce099cff1136b6ac5e2a9087f8c46cc06",
+    "scripts/building/furniture_builder.gd": "d43efee50f556a4d0cc927899b8ea3997b122e879d8f85798b46efba4faf1529",
+    "scripts/building/module_factory.gd": "6d024a20aa64b7a2d53ae687f38292d54dda8e27cf6608348c7c09fd28f22db8",
+    "scripts/building/appearance.gd": "a846314334dbaea91c7f953c73e919b20a4d0844b70710afb953ef43539b7ece",
+    "scripts/building/room_edit.gd": "d45fb84109e454402a11dc72c8c2d9265045a5040d167cb41ac7b345e781e6c2",
+    "scripts/building/dining.gd": "23798ba299925f33c5001e65c30302dfde2d5fd83b01222a62824b509adad0bd",
+    "scripts/city/mirror_reflections.gd": "96edba4c17786f37a7e22b31e430cd3bf2e71e731df38d473fe4d01e300ecd65",
+    "assets/shaders/planar_mirror.gdshader": "feb20ed1c58f8a74fb1551bd7f5a85097c9ccaedf14c1ed1e9c7bc5a8add3225",
+    "data/furniture_appearance.json": "2ef12323145c6ddf74947d5ba3c630245848e31968ec02ec3980ac547b443127",
+    "data/building_templates/two_storey.json": "d7783e982267b4535138f280fedb2fb5be2ebcb3d1c8ac9e35bb00848dcd0473",
+    "tests/stair_preview_performance.gd": "cca16ab72874e01fb576406aeeb7b49df3d8ae01c86c1a2ea0f7e9ccbc59aa4a",
+    "tests/building_ui_scroll_flow.gd": "4c838c278dc044c61002bb16672fc8968aee30f9d64260b09d7551174c564b3f",
+    "tests/wall_furniture_rules.gd": "7c48b03daa8a900495d3e16c37706a70fdf28de69c26423e0c120059e797471d",
+    "tests/wall_furniture_flow.gd": "dbe86c0f33b7588260ebf082e9991cfca137935aa7069d7b0e5729080b2d9523",
+    "tests/stairs_first_walk.gd": "6a343ff1a3f8240f662ca5ce5aeffe672e4d1dac6612e7539fc30149b654952a",
+    "tools/test_suites.json": "50ec54fc2e05a00f84412c8dc6058ffc2d819a7a99b4c8691135405144b1cca4"
+  }
+}

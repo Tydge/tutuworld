@@ -30,7 +30,19 @@
       "fixture_lighting_flow",
       "building_feedback_rules",
       "building_feedback_flow",
-      "building_feedback_visual"
+      "building_feedback_visual",
+      "storey_extension_rules",
+      "storey_extension_flow",
+      "building_camera_template_rules",
+      "building_camera_template_flow",
+      "drafting_rules",
+      "drafting_flow",
+      "dining_rules",
+      "dining_flow",
+      "wall_furniture_rules",
+      "wall_furniture_flow",
+      "stairs_first_walk",
+      "building_ui_scroll_flow"
     ],
     "smoke": [
       "project_integrity",
@@ -108,6 +120,10 @@
     ],
     "building_feedback": [
       "project_integrity",
+      "storey_extension_rules",
+      "storey_extension_flow",
+      "building_camera_template_rules",
+      "building_camera_template_flow",
       "building_feedback_rules",
       "building_feedback_flow",
       "building_feedback_visual",
@@ -116,6 +132,46 @@
       "firelight_rules",
       "building_grid_rules",
       "thumbnail_lifecycle"
+    ],
+    "building_drafting": [
+      "project_integrity",
+      "drafting_rules",
+      "drafting_flow",
+      "dining_rules",
+      "dining_flow",
+      "building_controls",
+      "building_mouse_flow",
+      "building_revision_flow",
+      "building_surface_flow",
+      "furniture_access_flow",
+      "appearance_rules",
+      "kitchen_rules",
+      "storey_extension_rules",
+      "storey_extension_flow",
+      "multistorey_editor_flow",
+      "save_transactions"
+    ],
+    "building_walls": [
+      "project_integrity",
+      "wall_furniture_rules",
+      "wall_furniture_flow",
+      "storey_extension_rules",
+      "storey_extension_flow",
+      "building_controls",
+      "building_camera_template_rules",
+      "building_camera_template_flow",
+      "building_surface_flow",
+      "drafting_flow",
+      "appearance_rules",
+      "fixture_lighting_flow",
+      "firebox_edge_flow",
+      "building_store_rules",
+      "multistorey_editor_flow",
+      "multistorey_persistence_rules",
+      "dining_flow",
+      "dining_rules",
+      "thumbnail_preview_flow",
+      "building_ui_scroll_flow"
     ]
   },
   "tests": {
@@ -297,6 +353,27 @@
       "headless": true
     },
     "building_feedback_rules": {
+      "headless": true
+    },
+    "building_camera_template_rules": {
+      "headless": true
+    },
+    "storey_extension_rules": {
+      "headless": true
+    },
+    "drafting_rules": {
+      "headless": true
+    },
+    "dining_rules": {
+      "headless": true
+    },
+    "stairs_first_walk": {
+      "headless": true
+    },
+    "wall_furniture_rules": {
+      "headless": true
+    },
+    "stair_preview_performance": {
       "headless": true
     }
   }

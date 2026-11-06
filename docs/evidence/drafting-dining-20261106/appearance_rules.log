@@ -1,0 +1,179 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Every declared part maps to actual geometry with no unassigned surfaces: dining_table
+PASS Material-family preset validates: dining_table / warm
+PASS Material-family preset validates: dining_table / sea
+PASS Material-family preset validates: dining_table / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: dining_chair
+PASS Material-family preset validates: dining_chair / warm
+PASS Material-family preset validates: dining_chair / sea
+PASS Material-family preset validates: dining_chair / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: cooking_counter
+PASS Material-family preset validates: cooking_counter / warm
+PASS Material-family preset validates: cooking_counter / sea
+PASS Material-family preset validates: cooking_counter / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: bed
+PASS Material-family preset validates: bed / warm
+PASS Material-family preset validates: bed / sea
+PASS Material-family preset validates: bed / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: bedside
+PASS Material-family preset validates: bedside / warm
+PASS Material-family preset validates: bedside / sea
+PASS Material-family preset validates: bedside / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: sofa
+PASS Material-family preset validates: sofa / warm
+PASS Material-family preset validates: sofa / sea
+PASS Material-family preset validates: sofa / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: chair
+PASS Material-family preset validates: chair / warm
+PASS Material-family preset validates: chair / sea
+PASS Material-family preset validates: chair / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: tea_table
+PASS Material-family preset validates: tea_table / warm
+PASS Material-family preset validates: tea_table / sea
+PASS Material-family preset validates: tea_table / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: desk
+PASS Material-family preset validates: desk / warm
+PASS Material-family preset validates: desk / sea
+PASS Material-family preset validates: desk / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: bookshelf
+PASS Material-family preset validates: bookshelf / warm
+PASS Material-family preset validates: bookshelf / sea
+PASS Material-family preset validates: bookshelf / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: hearth
+PASS Material-family preset validates: hearth / warm
+PASS Material-family preset validates: hearth / sea
+PASS Material-family preset validates: hearth / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: forest_cabinet
+PASS Material-family preset validates: forest_cabinet / warm
+PASS Material-family preset validates: forest_cabinet / sea
+PASS Material-family preset validates: forest_cabinet / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: table_lamp
+PASS Material-family preset validates: table_lamp / warm
+PASS Material-family preset validates: table_lamp / sea
+PASS Material-family preset validates: table_lamp / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: pendant
+PASS Material-family preset validates: pendant / warm
+PASS Material-family preset validates: pendant / sea
+PASS Material-family preset validates: pendant / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: book
+PASS Material-family preset validates: book / warm
+PASS Material-family preset validates: book / sea
+PASS Material-family preset validates: book / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: standing_book
+PASS Material-family preset validates: standing_book / warm
+PASS Material-family preset validates: standing_book / sea
+PASS Material-family preset validates: standing_book / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: cup
+PASS Material-family preset validates: cup / warm
+PASS Material-family preset validates: cup / sea
+PASS Material-family preset validates: cup / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: letter
+PASS Material-family preset validates: letter / warm
+PASS Material-family preset validates: letter / sea
+PASS Material-family preset validates: letter / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: small_plant
+PASS Material-family preset validates: small_plant / warm
+PASS Material-family preset validates: small_plant / sea
+PASS Material-family preset validates: small_plant / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: clock
+PASS Material-family preset validates: clock / warm
+PASS Material-family preset validates: clock / sea
+PASS Material-family preset validates: clock / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: forest_settee
+PASS Material-family preset validates: forest_settee / warm
+PASS Material-family preset validates: forest_settee / sea
+PASS Material-family preset validates: forest_settee / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: forest_rug
+PASS Material-family preset validates: forest_rug / warm
+PASS Material-family preset validates: forest_rug / sea
+PASS Material-family preset validates: forest_rug / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: forest_planter
+PASS Material-family preset validates: forest_planter / warm
+PASS Material-family preset validates: forest_planter / sea
+PASS Material-family preset validates: forest_planter / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: flowerbed
+PASS Material-family preset validates: flowerbed / warm
+PASS Material-family preset validates: flowerbed / sea
+PASS Material-family preset validates: flowerbed / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: fountain
+PASS Material-family preset validates: fountain / warm
+PASS Material-family preset validates: fountain / sea
+PASS Material-family preset validates: fountain / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: tea_service
+PASS Material-family preset validates: tea_service / warm
+PASS Material-family preset validates: tea_service / sea
+PASS Material-family preset validates: tea_service / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: field_journal
+PASS Material-family preset validates: field_journal / warm
+PASS Material-family preset validates: field_journal / sea
+PASS Material-family preset validates: field_journal / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: pressed_leaves
+PASS Material-family preset validates: pressed_leaves / warm
+PASS Material-family preset validates: pressed_leaves / sea
+PASS Material-family preset validates: pressed_leaves / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: ceramic_vases
+PASS Material-family preset validates: ceramic_vases / warm
+PASS Material-family preset validates: ceramic_vases / sea
+PASS Material-family preset validates: ceramic_vases / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: woven_basket
+PASS Material-family preset validates: woven_basket / warm
+PASS Material-family preset validates: woven_basket / sea
+PASS Material-family preset validates: woven_basket / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: moon_mobile
+PASS Material-family preset validates: moon_mobile / warm
+PASS Material-family preset validates: moon_mobile / sea
+PASS Material-family preset validates: moon_mobile / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: petal_armchair
+PASS Material-family preset validates: petal_armchair / warm
+PASS Material-family preset validates: petal_armchair / sea
+PASS Material-family preset validates: petal_armchair / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: floor_lamp
+PASS Material-family preset validates: floor_lamp / warm
+PASS Material-family preset validates: floor_lamp / sea
+PASS Material-family preset validates: floor_lamp / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: lotus_pendant
+PASS Material-family preset validates: lotus_pendant / warm
+PASS Material-family preset validates: lotus_pendant / sea
+PASS Material-family preset validates: lotus_pendant / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: canopy_bed
+PASS Material-family preset validates: canopy_bed / warm
+PASS Material-family preset validates: canopy_bed / sea
+PASS Material-family preset validates: canopy_bed / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: cloud_bed
+PASS Material-family preset validates: cloud_bed / warm
+PASS Material-family preset validates: cloud_bed / sea
+PASS Material-family preset validates: cloud_bed / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: rose_arch
+PASS Material-family preset validates: rose_arch / warm
+PASS Material-family preset validates: rose_arch / sea
+PASS Material-family preset validates: rose_arch / rose
+PASS Every declared part maps to actual geometry with no unassigned surfaces: lily_pond
+PASS Material-family preset validates: lily_pond / warm
+PASS Material-family preset validates: lily_pond / sea
+PASS Material-family preset validates: lily_pond / rose
+PASS Changing the frame preserves bedding materials and patterns
+PASS Recoloring a frame retains its wood grain
+PASS A material change cannot leak to another object
+PASS Changing a quilt pattern retains its drape shader and uses the selected mask
+PASS A solid quilt material explicitly disables the pattern
+PASS Restoring a part recovers the original material rather than the last tint
+PASS Unknown material slots are rejected
+PASS A fabric part rejects unrelated structural materials
+PASS Invalid part colors are rejected
+PASS Part appearance survives compact layout validation and JSON round-trip
+PASS Legacy all-object colors retain their original compatibility representation
+PASS Appearance thumbnails reuse a key across object positions and IDs
+PASS Different part appearances have distinct thumbnail keys
+PASS First-time preferences default to free occlusion view with an unseen hint
+PASS Camera settings accept valid modes and reject invalid modes
+PASS A wall between camera and actor is classified as an entire occluding face
+PASS The rear wall remains visible because it is beyond the actor
+PASS A side wall outside the sightline remains visible
+PASS An unobstructed doorway is excluded from wall occlusion
+PASS Connected differently decorated runs share a wall face; separated houses do not
+PASS A short release hold prevents wall visibility flicker
+PASS The complete wall restores after the sightline clears and hold expires
+PASS Camera choice and the one-time hint flag survive a real full-save reload
+PASS Per-part appearances reload through Session without changing character assets
+APPEARANCE_RULES_RESULT PASS checks=176 failures=[]

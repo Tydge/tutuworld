@@ -18,4 +18,4 @@ static func normal(row: Dictionary) -> Vector2:return Vector2.DOWN if is_equal_a
 
 static func default_color(type: String,form_: String="classic") -> String:
 	if type=="door" and form_=="arch":return "b58b62"
-	return {"floor":"cda56e","roof":"688d81","wall":"eadcc5","door":"739b8d","window":"eee2c6","stairs":"c6a373","railing":"a78358"}.get(type,"ffffff")
+	return {"room":"eadcc5","floor":"cda56e","roof":"688d81","wall":"eadcc5","door":"739b8d","window":"eee2c6","stairs":"c6a373","railing":"a78358"}.get(type,"ffffff")

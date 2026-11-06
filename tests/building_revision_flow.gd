@@ -45,9 +45,9 @@ func run() -> void:
 	var data:=L.add(L.empty(),{"type":"floor","a":[69.,1.],"b":[90.,22.]});check(editor.commit(data),"Create a clean supported construction area")
 	for category in C.CATEGORIES:editor.ui.show_category(category)
 	for i in range(180):
-		if editor.ui.studio.cache.size()>=C.OBJECTS.size()+5:break
+		if editor.ui.studio.cache.size()>=C.OBJECTS.size()+6:break
 		await frames(1)
-	check(editor.ui.studio.cache.size()==C.OBJECTS.size()+5,"All catalog cards have rendered real-model thumbnails")
+	check(editor.ui.studio.cache.size()==C.OBJECTS.size()+6,"All catalog cards have rendered real-model thumbnails")
 	var dock: Control=editor.ui.root_ui.get_node("BuildDock");check(dock.position.y>root.get_visible_rect().size.y*.6,"Construction controls occupy only the bottom of the scene")
 	await button("Category_桌柜");await button("Tool_object_desk");await world(Vector3(77,.18,10))
 	check(not kind("desk").is_empty(),"Desk is placed independently from its chair and decorations")

@@ -673,7 +673,7 @@ func build_workshop() -> void:
 		b.disabled=owned or not enough or locked!="" or online_target_busy(city.current_target)
 		b.set_meta("recipe",id);c.add_child(b)
 func build_dining() -> void:
-	content.add_child(UI.label("坐下，慢慢享用。",15,UI.MUTED))
+	content.add_child(UI.label("自动入座最近的可用餐椅，慢慢享用。" if city.dining_target!="dining" else "坐下，慢慢享用。",15,UI.MUTED))
 	var category:=build_filters("dining",[["all","全部"],["soup","暖汤"],["salad","沙拉"],["stew","炖菜"],["baked","烘焙"],["meal","简餐"]])
 	var grid:=scroll_grid(2)
 	var found:=false
@@ -709,6 +709,9 @@ func build_settings() -> void:
 	var view:=OptionButton.new();view.name="IndoorViewSetting"
 	for label_ in preload("res://scripts/city/interior_view.gd").NAMES:view.add_item(label_)
 	view.selected=int(session.settings.interior_view_mode);view.item_selected.connect(func(index):session.set_setting("interior_view_mode",index));options.add_child(view)
+	var other_storeys:=CheckButton.new();other_storeys.name="ShowOtherStoreyObjects";other_storeys.text="显示其他楼层家具";other_storeys.button_pressed=session.settings.get("show_other_storey_objects",true)
+	other_storeys.tooltip_text="自由视角中显示各层家具和灯具；关闭后只裁剪当前房屋。自动俯视与建造仍按楼层剖切。"
+	other_storeys.toggled.connect(func(value):session.set_setting("show_other_storey_objects",value));options.add_child(other_storeys)
 	var sound:=CheckButton.new()
 	sound.text="环境声音"
 	sound.button_pressed=session.settings.sound

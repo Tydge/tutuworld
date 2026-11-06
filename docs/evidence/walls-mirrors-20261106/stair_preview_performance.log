@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS 240 sqm closed-room preview fixture
+PASS Whole-slab previews retain shared chunk mesh resources with bounded cache
+PASS Reused preview never introduces physical collision
+STAIR_SLAB_PREVIEW_CPU_MS cold=26.269 warm_median=8.101 warm_max=11.828 cached_chunks=40
+STAIR_PREVIEW_PERFORMANCE_RESULT PASS checks=3 failures=[]

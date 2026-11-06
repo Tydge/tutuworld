@@ -13,6 +13,7 @@ var facility_positions: Dictionary={}
 var facility_kinds: Dictionary={}
 var trade_access: Callable
 var facility_access: Callable
+var dining_access: Callable
 var seen_commands: Dictionary = {}
 var revision := 0
 var running:=false
@@ -46,6 +47,14 @@ func facility_position(id: String) -> Vector2:
 func facility_kind(id: String) -> String:
 	if not built_kitchen(id).is_empty():return "kitchen"
 	return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
+func near_dining(target: String,chair_id: String="") -> bool:
+	if target=="dining":return near_position(DB.facilities().dining,3.8)
+	if not target.begins_with("build:") or state.get("map_id","city")!="city":return false
+	var layout: Dictionary=state.build_layout;var dining=preload("res://scripts/building/dining.gd");var table_id:=target.trim_prefix("build:")
+	if chair_id=="" or dining.links(layout).get(chair_id,"")!=table_id:return false
+	var chair:=preload("res://scripts/building/layout.gd").find(layout,chair_id);var p: Array=state.player_position
+	if preload("res://scripts/building/storeys.gd").at_height(float(p[1]))!=int(chair.get("storey",0)) or absf(float(p[1])-(.18+preload("res://scripts/building/storeys.gd").elevation(chair)))>1.7:return false
+	return near_position(dining.position(chair),3.8) and (not dining_access.is_valid() or dining_access.call(target,chair_id))
 func watering_can_id() -> String:
 	for id in ["copper_watering_can","watering_can"]:
 		if count(id)>0: return id
@@ -254,10 +263,11 @@ func _apply(c: Dictionary) -> Dictionary:
 		job={"verb":verb,"target":"","item":item,"elapsed":0.0,"duration":float(definition.edible.seconds)}
 		return {"ok":true,"message":""}
 	if verb=="eat":
-		if target!="dining" or not near_position(DB.facilities().dining,3.8): return fail("请先来到厨房旁的餐桌。")
+		if not near_dining(target,str(c.get("seat",""))): return fail("请来到有可用餐椅的餐桌旁。")
 		if definition.get("kind","")!="food" or count(item)<1: return fail("背包里没有这份料理。")
 		if definition.get("effect",{}).is_empty() and int(definition.get("stamina_restore",0))>0 and state.stamina>=stamina_max(): return fail("耐力已满，留着一会儿吃吧。")
 		job={"verb":verb,"target":target,"item":item,"elapsed":0.0,"duration":6.0}
+		if target!="dining":job.seat=str(c.get("seat",""))
 		return {"ok":true,"message":"坐下来，慢慢享用%s。"%definition.name}
 	if verb=="gather":
 		var source: Dictionary = {}
@@ -371,7 +381,7 @@ func complete(j: Dictionary) -> Dictionary:
 		state.stamina=minf(stamina_max(),before+int(edible.stamina))
 		message="吃了一颗橘子，耐力 +%d"%int(state.stamina-before)
 	elif j.verb=="eat":
-		if not near_position(DB.facilities().dining,3.8) or count(j.item)<1: return rejected_work(j,"用餐已取消，食物没有消耗。")
+		if not near_dining(target,str(j.get("seat",""))) or count(j.item)<1: return rejected_work(j,"用餐已取消，食物没有消耗。")
 		add(j.item,-1)
 		var food:=DB.item(j.item)
 		if not food.get("effect",{}).is_empty(): state.food_effect={"item":j.item,"expires_at":float(state.time)+DAY_SECONDS}

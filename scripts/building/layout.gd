@@ -1,4 +1,5 @@
 extends RefCounted
+const WallMount=preload("res://scripts/building/wall_mount.gd")
 const Storeys=preload("res://scripts/building/storeys.gd")
 const Stairs=preload("res://scripts/building/stairs.gd")
 const Site=preload("res://scripts/building/site.gd")
@@ -28,10 +29,6 @@ static func find(layout: Dictionary,id: String) -> Dictionary:
 	for row in layout.elements:
 		if row.id==id:return row
 	return {}
-static func contains_in_floor(p: Vector2,floors: Array) -> bool:
-	for floor_ in floors:
-		if rect(floor_).grow(.002).has_point(p):return true
-	return false
 static func supported(footprint: Rect2,floors: Array) -> bool:
 	return Grid.covered(footprint,Grid.index(floors).floors)
 static func compiled(layout: Dictionary,level: int=0) -> Dictionary:
@@ -60,8 +57,11 @@ static func usage(layout: Dictionary) -> Dictionary:
 			if Catalog.OBJECTS[row.kind].get("light",false):lights+=1
 		elif row.type=="roof":roofs+=1
 	return {"floor_cells":cells,"floor_area":cells*.25,"wall_edges":edges,"wall_length":edges*.5,"objects":objects,"lights":lights,"roofs":roofs}
-static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
+static func snap_object(layout: Dictionary,item: Dictionary,dining_snap: bool=true) -> Dictionary:
 	var row:=item.duplicate(true)
+	if dining_snap and row.get("kind","")=="dining_chair":
+		var aligned:=preload("res://scripts/building/dining.gd").snap(layout,row)
+		if aligned.position!=row.position or aligned.yaw!=row.yaw:return aligned
 	if row.get("type","")!="object" or Catalog.mount(row)!="floor" or Catalog.OBJECTS[row.kind].get("outdoor",false) or Catalog.OBJECTS[row.kind].get("overlay",false):return row
 	# Keep the usual half-metre grid in open space. Near a wall, align the body
 	# to its face/skirting instead; the resulting precise position is persisted.
@@ -74,7 +74,7 @@ static func snap_object(layout: Dictionary,item: Dictionary) -> Dictionary:
 			var plane_: float=wall.a[axis];var side: float=signf(bounds.get_center()[axis]-plane_)
 			if is_zero_approx(side):continue
 			var edge: float=bounds.position[axis] if side>0 else bounds.end[axis]
-			var delta: float=plane_+side*.20-edge
+			var delta: float=plane_+side*float(Catalog.OBJECTS[row.kind].get("wall_gap",.20))-edge
 			if absf(delta)<best:best=absf(delta);shift=delta
 		row.position[axis]=snappedf(float(row.position[axis])+shift,.001)
 	return row
@@ -99,6 +99,10 @@ static func validate(raw: Variant) -> Dictionary:
 			if not Structures.FORMS[type].has(form):return fail("请选择已有的门窗或屋顶造型。")
 			if form!="classic":row.form=form
 			if type=="door" and not bool(value.get("default_open",true)):row.default_open=false
+			if type=="roof":
+				var turn: float=float(value.get("yaw",0))
+				if not is_finite(turn) or absf(turn/90.-roundf(turn/90.))>.001:return fail("屋顶旋转须对齐90度。")
+				if not is_zero_approx(fposmod(turn,360.)):row.yaw=fposmod(turn,360.)
 		if type=="wall" and value.has("faces"):
 			if not value.faces is Dictionary:return fail("墙面装修格式不正确。")
 			var faces: Dictionary={}
@@ -142,6 +146,10 @@ static func validate(raw: Variant) -> Dictionary:
 					var appearance:=preload("res://scripts/building/appearance.gd").validate(value.kind,value.appearance)
 					if not appearance.ok:return fail(appearance.message)
 					if not appearance.appearance.is_empty():row.appearance=appearance.appearance
+				if Catalog.OBJECTS[value.kind].get("mount","")=="wall":
+					var h: Variant=value.get("mount_height",Catalog.OBJECTS[value.kind].mount_height)
+					if not (h is float or h is int) or not is_finite(float(h)):return fail("挂墙高度无效。")
+					row.mount_height=snappedf(float(h),.001)
 				row.kind=value.kind;row.position=[float(String.num(float(value.position[0]),3)),float(String.num(float(value.position[1]),3))];row.yaw=fposmod(yaw,360);row.support=str(value.get("support",""));row.support_level=int(value.get("support_level",0));objects.append(row)
 			_:return fail("暂不支持这种结构。")
 		ids[id]=row;clean.elements.append(row)
@@ -196,6 +204,10 @@ static func validate(raw: Variant) -> Dictionary:
 		if mount=="floor":
 			if item.support!="":return fail("落地家具不能依附在其他物件上。")
 		else:
+			if mount=="wall":
+				var parent:=WallMount.support(clean,item,compiled(clean,Storeys.of(item)).walls)
+				if parent.is_empty():return fail("挂墙物件需要完整墙面，并避开门窗和墙角。")
+				item.support=parent.id;continue
 			if mount=="ceiling" and ceiling_covered(clean,Catalog.footprint(item),Storeys.of(item)):
 				item.support="ceiling:%d"%Storeys.of(item);continue
 			var parent: Dictionary=ids.get(item.support,{})
@@ -218,6 +230,8 @@ static func validate(raw: Variant) -> Dictionary:
 	if not stairs_result.ok:return stairs_result
 	if raw.has("multistorey_showcase"):clean.multistorey_showcase=int(raw.multistorey_showcase)
 	for story in Storeys.levels(clean):clean=Grid.compress(clean,compiled(clean,story),story)
+	for item in clean.elements:
+		if item.type=="object" and Catalog.mount(item)=="wall":item.support=WallMount.support(clean,item,compiled(clean,Storeys.of(item)).walls).id
 	last_validation_usec=Time.get_ticks_usec()-started
 	return {"ok":true,"layout":clean,"message":"已保存建造布局。"}
 static func normalize(raw: Variant) -> Dictionary:
@@ -244,6 +258,7 @@ static func remove(layout: Dictionary,id: String) -> Dictionary:
 	return next
 
 static func base_height(layout: Dictionary,item: Dictionary) -> float:
+	if Catalog.mount(item)=="wall":return Storeys.elevation(item)+WallMount.height(item)
 	if Catalog.mount(item)=="ceiling":return Storeys.elevation(item)+4.4-float(Catalog.OBJECTS[item.kind].height)
 	if Catalog.mount(item)=="surface":
 		var parent:=find(layout,str(item.get("support","")))
@@ -256,6 +271,7 @@ static func surface_height(parent: Dictionary,level: int=0) -> float:
 static func attach_at(layout: Dictionary,item: Dictionary,p: Vector2,support_id: String="",level: int=0) -> Dictionary:
 	var row:=item.duplicate(true);row.position=[p.x,p.y];row.support="";row.support_level=0
 	var mount:=Catalog.mount(row)
+	if mount=="wall":return WallMount.attach(layout,item,p)
 	if mount=="ceiling" and ceiling_covered(layout,Catalog.footprint(row),Storeys.of(row)):
 		row.support="ceiling:%d"%Storeys.of(row);return row
 	for parent in layout.elements:
@@ -273,6 +289,8 @@ static func attach_at(layout: Dictionary,item: Dictionary,p: Vector2,support_id:
 					var placed:=Vector2(parent.position[0],parent.position[1])+Catalog.rotate_xz(local,float(parent.yaw));row.position=[float(String.num(placed.x,3)),float(String.num(placed.y,3))]
 				row.support=parent.id;row.support_level=level;break
 	return row
+static func movement_group(layout: Dictionary,id: String) -> Dictionary:
+	return preload("res://scripts/building/dining.gd").group(layout,id)
 static func replace(layout: Dictionary,row: Dictionary) -> Dictionary:
 	var next:=layout.duplicate(true);var old:=find(next,row.id).duplicate(true)
 	if old.is_empty():return next
@@ -280,10 +298,11 @@ static func replace(layout: Dictionary,row: Dictionary) -> Dictionary:
 	if old.type in ["object","stairs"]:
 		origin=Vector2(old.position[0],old.position[1]);target=Vector2(row.position[0],row.position[1]);turn=float(row.yaw)-float(old.yaw)
 	elif old.type in ["floor","wall","roof"]:origin=rect(old).get_center();target=rect(row).get_center()
+	var group:=movement_group(layout,row.id)
 	for i in range(next.elements.size()):
 		var child: Dictionary=next.elements[i]
 		if child.id==row.id:next.elements[i]=row.duplicate(true)
-		elif child.get("support","")==row.id:
+		elif group.has(child.id):
 			var p:=target+Catalog.rotate_xz(Vector2(child.position[0],child.position[1])-origin,turn)
 			child.position=[snappedf(p.x,.001),snappedf(p.y,.001)];child.yaw=fposmod(float(child.yaw)+turn,360.)
 	return next
@@ -302,7 +321,7 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 		if not Site.within(footprint.position) or not Site.within(footprint.end):add_issue(issues,"plot",[item],"物件边缘超出了建造地块。")
 		if mount=="floor":
 			if (Storeys.of(item)>0 or not Catalog.OBJECTS[item.kind].get("outdoor",false)) and not Grid.covered(footprint,grid.floors):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
-		else:
+		elif mount!="wall":
 			var parent:=find(layout,str(item.get("support","")))
 			if parent.is_empty() and mount!="ceiling":continue
 			var inside:=true
@@ -343,7 +362,7 @@ static func add_issue(issues: Dictionary,type: String,rows: Array,message: Strin
 	for row in rows:
 		ids.append(row.id)
 		var data:={}
-		for key in ["id","type","storey","kind","position","yaw","support","support_level","a","b"]:
+		for key in ["id","type","storey","kind","position","yaw","support","support_level","mount_height","a","b"]:
 			if row.has(key):data[key]=row[key]
 		geometry.append(data)
 	issues[type+":"+":".join(ids)]={"signature":JSON.stringify(geometry).sha256_text(),"message":message}
@@ -371,17 +390,32 @@ static func split_legacy(raw: Dictionary) -> Dictionary:
 			var p:=Vector2(row.position[0],row.position[1])+Catalog.rotate_xz(part[1],float(row.get("yaw",0)))
 			additions.append({"id":id,"type":"object","kind":part[0],"position":[snappedf(p.x,.001),snappedf(p.y,.001)],"yaw":row.get("yaw",0),"support":local_ids.get(part[2],""),"support_level":part[3] if part.size()>3 else 0,"color":row.get("color","eadcc5"),"style":row.get("style","original"),"painted":row.get("painted",false)})
 	next.elements.append_array(additions);next.next_id=serial;return next
-static func merge_template(layout: Dictionary,source: Dictionary,p: Vector2) -> Dictionary:
+static func merge_template(layout: Dictionary,source: Dictionary,p: Vector2,yaw: float=0.) -> Dictionary:
 	var next:=layout.duplicate(true);var ids: Dictionary={}
 	for row in source.elements:
 		ids[row.id]="build_%d"%next.next_id;next.next_id+=1
-	var shift:=p-template_origin(source)
+	var origin:=template_origin(source)
 	for row in source.elements:
 		var item: Dictionary=row.duplicate(true);item.id=ids[row.id]
-		if item.type in ["floor","roof","wall","railing"]:
-			item.a=[float(item.a[0])+shift.x,float(item.a[1])+shift.y];item.b=[float(item.b[0])+shift.x,float(item.b[1])+shift.y]
-		elif item.type in ["object","stairs"]:item.position=[float(String.num(float(item.position[0])+shift.x,3)),float(String.num(float(item.position[1])+shift.y,3))]
-		if item.has("anchor"):item.anchor=[float(item.anchor[0])+shift.x,float(item.anchor[1])+shift.y]
+		for field in ["a","b","position","anchor"]:
+			if not item.has(field):continue
+			var transformed:=p+Catalog.rotate_xz(Vector2(item[field][0],item[field][1])-origin,yaw)
+			item[field]=[snappedf(transformed.x,.001),snappedf(transformed.y,.001)]
+		if item.type in ["object","stairs","roof"]:
+			var turn:=fposmod(float(item.get("yaw",0))+yaw,360.)
+			if item.type!="roof" or not is_zero_approx(turn):item.yaw=turn
+			else:item.erase("yaw")
+		if item.type=="wall" and item.has("faces"):
+			# Finishes use world-canonical sides, rather than the wall's drawing order.
+			var normal:=Catalog.rotate_xz(Vector2.DOWN if is_equal_approx(row.a[1],row.b[1]) else Vector2.RIGHT,yaw)
+			var positive:=Vector2.DOWN if is_equal_approx(item.a[1],item.b[1]) else Vector2.RIGHT
+			if normal.dot(positive)<0.:
+				var faces: Dictionary={}
+				for side in item.faces:faces["negative" if side=="positive" else "positive"]=item.faces[side]
+				item.faces=faces
+		if item.type in ["door","window"] and item.has("anchor"):
+			var tangent:=Catalog.rotate_xz((Vector2.RIGHT if row.axis==0 else Vector2.DOWN)*(-1. if row.get("reverse",false) else 1.),yaw)
+			item.axis=0 if absf(tangent.x)>.5 else 1;item.reverse=tangent[item.axis]<0.
 		if item.get("wall","")!="":item.wall=ids[item.wall]
 		if ids.has(item.get("support","")):item.support=ids[item.support]
 		next.elements.append(item)
@@ -399,7 +433,11 @@ static func cleanup_dependents(layout: Dictionary) -> Dictionary:
 			if not opening_supported(row,layers[Storeys.of(row)].walls):removed[row.id]=true
 		elif row.type=="object" and Catalog.mount(row)=="floor" and (Storeys.of(row)>0 or not Catalog.OBJECTS[row.kind].get("outdoor",false)) and not Grid.covered(Catalog.footprint(row),floors):removed[row.id]=true
 	for row in next.elements:
-		if row.type=="object" and Catalog.mount(row)=="ceiling":
+		if row.type=="object" and Catalog.mount(row)=="wall":
+			var parent:=WallMount.support(next,row,layers[Storeys.of(row)].walls)
+			if parent.is_empty():removed[row.id]=true
+			else:row.support=parent.id
+		elif row.type=="object" and Catalog.mount(row)=="ceiling":
 			if not ceiling_covered(next,Catalog.footprint(row),Storeys.of(row)):removed[row.id]=true
 		elif row.get("support","")!="" and (not ids.has(row.support) or removed.has(row.support)):removed[row.id]=true
 	next.elements=next.elements.filter(func(row):return not removed.has(row.id))
@@ -460,7 +498,8 @@ static func template_origin(source: Dictionary) -> Vector2:
 	if floors.is_empty():return Vector2.ZERO
 	var area:=rect(floors[0])
 	for row in floors:area=area.merge(rect(row))
-	return area.get_center()
+	var center:=area.get_center()
+	return Vector2(snappedf(center.x,.5),snappedf(center.y,.5))
 
 ## Preview changes only one opening; committed geometry is already validated.
 ## Keep the authoritative full validation on placement, not on mouse motion.
