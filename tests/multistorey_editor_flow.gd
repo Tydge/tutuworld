@@ -48,7 +48,9 @@ func run() -> void:
 	for form in Stairs.FORMS:
 		await button("Tool_stairs_"+form);check(editor.tool=="stairs" and editor.structure_form==form,"Select stair shape "+form)
 		editor.update_ghost(Vector2(79,8));check(is_instance_valid(editor.preview) and editor.preview.find_children("*","CollisionObject3D",true,false).all(func(body):return body.collision_layer==0),"Real stair preview never changes world collision: "+form)
-	editor.set_entire(true);editor.set_roof_visible(false);editor.choose_tool("stairs:u");var snapshot:=JSON.stringify(editor.layout);editor.update_ghost(Vector2(79,8));check(not editor.preview_walls.is_empty() and JSON.stringify(editor.layout)==snapshot,"Full-building stair preview shows a temporary upper-floor opening without saving")
+	editor.set_roof_visible(false);editor.choose_tool("stairs:u");var snapshot:=JSON.stringify(editor.layout);editor.update_ghost(Vector2(79,8));check(not editor.preview_walls.is_empty() and JSON.stringify(editor.layout)==snapshot,"Stair preview updates the upper ceiling shadow opening without saving")
+	var openings: Array=editor.preview.find_children("StairOpeningPreview*","Node3D",true,false)
+	check(not openings.is_empty() and openings.all(func(node):return node.find_children("*","MeshInstance3D",true,false).all(func(mesh):return mesh.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY)),"Preview keeps the upper ceiling hidden while cutting its shadow")
 	editor.choose_tool("select");check(editor.preview_walls.is_empty(),"Cancelling stair preview restores all original floor chunks")
 	editor.choose_tool("stairs:u");check(editor.place_at(Vector2(79,8)),"Commit the selected U stair from build mode")
 	var stair: Dictionary=editor.layout.elements.filter(func(row):return row.type=="stairs")[0];var opening_count: int=L.compiled(editor.layout,1).floors.size()-L.walkable_grid(editor.layout,1).floors.size();check(opening_count>0,"Placement creates only a derived, owned opening")

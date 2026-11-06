@@ -1,0 +1,11 @@
+{
+  "board_mean_error": 0.000555551098199376,
+  "board_p99_error": 0.0000727176666259766,
+  "board_samples": 2327,
+  "mean_channel_error": 0.0266930810213089,
+  "mirrors": 20,
+  "occlusion_p99_error": 0.0,
+  "p99_channel_error": 0.32622754573822,
+  "projection_error_pixels": 0.000672079913783818,
+  "samples": 4500
+}

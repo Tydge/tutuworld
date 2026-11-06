@@ -102,6 +102,6 @@ func run() -> void:
 						if not hit.is_empty():found=true
 					if not found:supported=false;print("UNSUPPORTED ",form,"/",yaw," ",body.get_path()," ",body.global_transform*points[start])
 			check(supported,"M04 rail ends meet physical slab/platform/flight %s/%d"%[form,yaw])
-			city.build_mode.set_entire(true);city.build_mode.set_roof_visible(true)
+			city.build_mode.set_storey(2);city.build_mode.set_roof_visible(true)
 			await capture("rails-%s-%d"%[form,yaw],Vector3(133,15,26),Vector3(120,3,10))
 	city.free();session.free();print("MULTISTOREY_REPAIRS_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures.size());quit(0 if failures.is_empty() else 1)

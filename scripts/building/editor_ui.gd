@@ -4,7 +4,6 @@ const Catalog=preload("res://scripts/building/catalog.gd")
 const Structures=preload("res://scripts/building/structure_catalog.gd")
 const STYLES=Structures.STYLES
 var floor_choice: Label
-var entire_choice: CheckButton
 var batch_paint: CheckButton
 var wall_face: OptionButton
 var form_family:=""
@@ -59,12 +58,11 @@ func _ready() -> void:
 	floor_choice=UI.label("1楼",14);floor_choice.name="EditingStorey";header.add_child(floor_choice)
 	header.add_child(compact("▲",func():editor.set_storey(editor.view_level()+1),"FloorUp"))
 	var plan_view:=compact("俯视 T",func():editor.toggle_top_down(),"TopDownView");plan_view.toggle_mode=true;plan_view.tooltip_text="正俯视平面图 / 透视 · T切换";header.add_child(plan_view)
-	entire_choice=CheckButton.new();entire_choice.name="EntireBuilding";entire_choice.text="整栋墙壁";entire_choice.add_theme_font_size_override("font_size",13);entire_choice.toggled.connect(func(value):editor.set_entire(value));header.add_child(entire_choice)
 	title=UI.label("",12,UI.MUTED);header.add_child(title)
 
 	var spacer:=Control.new();spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(spacer)
 	var night:=CheckButton.new();night.name="NightPreview";night.text="夜景预览";night.add_theme_font_size_override("font_size",14);night.toggled.connect(func(value):editor.set_night_preview(value));header.add_child(night)
-	var roofs:=CheckButton.new();roofs.name="ShowRoof";roofs.text="查看完整墙壁";roofs.tooltip_text="显示本层完整墙壁；屋顶请在最高层点击向上查看";roofs.add_theme_font_size_override("font_size",14);roofs.toggled.connect(func(value):editor.set_roof_visible(value));header.add_child(roofs)
+	var roofs:=CheckButton.new();roofs.name="ShowRoof";roofs.text="完整墙壁";roofs.tooltip_text="开启：显示本层及下层完整墙壁；关闭：剖切本层墙壁方便选取。始终只编辑当前层；最高层向上查看整栋和屋顶。";roofs.add_theme_font_size_override("font_size",14);roofs.toggled.connect(func(value):editor.set_roof_visible(value));header.add_child(roofs)
 	header.add_child(compact("完成 · 步行查看",func():editor.close_editor(),"FinishBuilding",true))
 	var body:=UI.row(12);body.size_flags_vertical=Control.SIZE_EXPAND_FILL;column.add_child(body)
 	var commands:=UI.column(6);commands.custom_minimum_size.x=154;body.add_child(commands)
@@ -151,7 +149,7 @@ func refresh(row: Dictionary) -> void:
 	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.layout)
 	title.text="%.0f㎡ · %d/%d物件 · %d/%d灯"%[counts.floor_area,counts.objects,preload("res://scripts/building/layout.gd").MAX_ELEMENTS,counts.lights,preload("res://scripts/building/layout.gd").MAX_LIGHTS]
 	root_ui.find_child("FloorDown",true,false).disabled=editor.view_level()==0;root_ui.find_child("FloorUp",true,false).disabled=editor.roof_view
-	floor_choice.text="屋顶" if editor.roof_view else "%d楼"%(editor.editing_storey+1);entire_choice.set_pressed_no_signal(editor.show_entire)
+	floor_choice.text="屋顶" if editor.roof_view else "%d楼"%(editor.editing_storey+1)
 	root_ui.find_child("TopDownView",true,false).set_pressed_no_signal(editor.top_down)
 	root_ui.find_child("GenerateUpperFloor",true,false).disabled=editor.editing_storey>=preload("res://scripts/building/storeys.gd").MAX-1
 	var upper: bool=editor.tool=="upper_floor"
@@ -216,17 +214,19 @@ func pointer_over_ui(point_: Vector2) -> bool:
 	for panel in [root_ui.get_node("BuildDock"),appearance_panel]:
 		if panel.is_visible_in_tree() and panel.get_global_rect().has_point(point_):return true
 	var hovered:=get_viewport().gui_get_hovered_control()
-	return hovered!=null and root_ui.is_ancestor_of(hovered)
+	return hovered!=null and root_ui.is_ancestor_of(hovered) and hovered.get_global_rect().has_point(point_)
 func scroll_at(point_: Vector2) -> ScrollContainer:
 	var control: Node=get_viewport().gui_get_hovered_control()
 	while control!=null and control!=root_ui:
-		if control is ScrollContainer and control.is_visible_in_tree():return control
+		if control is ScrollContainer and control.is_visible_in_tree() and control.get_global_rect().has_point(point_):return control
 		control=control.get_parent()
 	if catalog_area.is_visible_in_tree() and catalog_area.get_global_rect().has_point(point_):return catalog_area
 	return null
 func route_scroll(event: InputEvent) -> bool:
 	if not preload("res://scripts/services/camera_zoom.gd").accepts(event):return false
-	var point_: Vector2=event.position if event is InputEventMouseButton else get_viewport().get_mouse_position()
+	# Gestures carry their own viewport-local position. The live mouse position or
+	# previous GUI hover can differ after Retina resizing or focus changes.
+	var point_: Vector2=event.position
 	if not pointer_over_ui(point_):return false
 	var scroll:=scroll_at(point_)
 	if scroll!=null and not event is InputEventMagnifyGesture:

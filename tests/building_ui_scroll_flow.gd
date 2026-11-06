@@ -36,5 +36,13 @@ func run() -> void:
 	var scene:=Vector2(200,180);await pan(scene,1.);check(editor.distance_>before,"Trackpad pan over the scene still zooms the camera")
 	var scene_distance: float=editor.distance_;await wheel(scene,false);check(editor.distance_<scene_distance,"Mouse wheel over scene keeps camera zoom")
 	before=editor.distance_;await magnify(scene);check(editor.distance_<before,"Pinch over scene still zooms")
+	# Gesture coordinates are authoritative even if native GUI hover still points
+	# at the previous panel after a focus/Retina transition.
+	await motion(point_);before=editor.distance_
+	var event:=InputEventPanGesture.new();event.position=root.get_final_transform()*scene;event.delta=Vector2(0,.5);Input.parse_input_event(event);await process_frame
+	check(editor.distance_>before,"Scene gesture uses its own position despite a previous UI pointer")
+	await motion(scene);before=editor.distance_;scroll.scroll_vertical=0
+	event=InputEventPanGesture.new();event.position=root.get_final_transform()*point_;event.delta=Vector2(0,.5);Input.parse_input_event(event);await process_frame
+	check(scroll.scroll_vertical>0 and editor.distance_==before,"Catalog gesture stays in the UI despite a previous scene pointer")
 	city.queue_free();await create_timer(.15).timeout
 	print("BUILDING_UI_SCROLL_FLOW_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)

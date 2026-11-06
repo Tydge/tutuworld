@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-06",
+  "overall_goal_complete": false,
+  "status": "Partial implementation; independent 20-plane 60 FPS and lossless shadows remain unmet.",
+  "functional": [
+    {
+      "name": "project_integrity",
+      "status": "PASS",
+      "checks": 434,
+      "run": "20261106-170933-195863"
+    },
+    {
+      "name": "wall_furniture_rules",
+      "status": "PASS",
+      "checks": 78,
+      "run": "20261106-170311-210568"
+    },
+    {
+      "name": "wall_furniture_flow",
+      "status": "PASS",
+      "checks": 38,
+      "run": "20261106-170933-195863"
+    },
+    {
+      "name": "building_selection_flow",
+      "status": "PASS",
+      "checks": 47,
+      "run": "20261106-170311-210568"
+    },
+    {
+      "name": "fixture_lighting_flow",
+      "status": "PASS",
+      "checks": 8,
+      "run": "20261106-170311-210568"
+    },
+    {
+      "name": "multistorey_editor_flow",
+      "status": "PASS",
+      "checks": 32,
+      "run": "20261106-170311-210568"
+    },
+    {
+      "name": "mirror_many_flow",
+      "status": "PASS",
+      "checks": 31,
+      "run": "20261106-171223-254147"
+    }
+  ],
+  "functional_checks": 668,
+  "strict_performance_result": "FAIL: independent/day and independent/night P99 exceed 16.7ms. All six cadence checks and the other four P99 scenarios passed.",
+  "performance_run": "20261106-170610-942782",
+  "image_comparison": "Colour-board/detail and wall occlusion pass; full image shadow differences remain.",
+  "watts_or_joules_measured": false,
+  "published": false,
+  "source_after_performance": "Only viewport-setting restoration at city exit and additional pixel-readback/metadata tests were added after the strict timed run; final functional test validates them.",
+  "baseline_scope": "Only coplanar rows are valid for comparison from the exploratory old unlimited renderer run."
+}

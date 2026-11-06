@@ -1,0 +1,10 @@
+{
+  "scripts/city/mirror_reflections.gd": "f5262b51b124c39daef612baaadebf7e27f8dc44cfc938b10a4074f06795ccbb",
+  "scripts/city/mirror_plane.gd": "666b11f53d8040d45daa2832646f724bdb62517413b70670fe1970c399d89eaf",
+  "scripts/city/mirror_occluders.gd": "05802c0c9be6f8a9ba415c85bcdc9e1f6cfadb697b216db43324a500c08f196e",
+  "assets/shaders/planar_mirror.gdshader": "daad99213e965b7c3d173ed412e610da79fa929b416e5c4af829ff30073c1d5d",
+  "tests/mirror_many_flow.gd": "ca0eaee8642244edb3c418264a426b635fef24d5735de3172c4db8f692342c78",
+  "tests/wall_furniture_flow.gd": "62216e35d1f6822c2f8275f3e279e7dbfdff9ae6aa7c8e3af2e6a7e71fc50a76",
+  "tools/test_suites.json": "dffdf0cf9f4e782a51a0afef8d05344d0bb287ec654cc459f7d437a1c0da8f3a",
+  "docs/多镜面反射优化与验收_2026-11-06.md": "2d451f69249e5189234a78bf9888c18667de5b5f26102675341136f270544fdb"
+}

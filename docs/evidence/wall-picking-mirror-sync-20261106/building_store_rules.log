@@ -1,0 +1,17 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Establish a real full-save checkpoint
+PASS Building edits atomically persist a building-only checkpoint
+PASS A build edit does not rewrite the full character and world save
+PASS An unchanged layout does not advance revision or write another checkpoint
+PASS Restart replays the latest layout before periodic full-save consolidation
+PASS Journal recovery preserves character assets
+PASS Second edit atomically replaces the previous layout journal
+PASS Interrupted/corrupt newest journal falls back to its valid backup
+PASS Successful full save consolidates and removes the incremental checkpoint
+PASS Consolidated full save restores the complete latest layout
+PASS A journal from a different full-save generation cannot overwrite the layout
+PASS A foreign world's checkpoint cannot overwrite the player's layout
+PASS A pre-lighting schema1 checkpoint still verifies and recovers its complete layout
+PASS A journal write failure rolls back layout and revision
+BUILDING_STORE_RULES_RESULT PASS checks=14 failures=[]

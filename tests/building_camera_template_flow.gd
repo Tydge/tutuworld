@@ -79,6 +79,9 @@ func run() -> void:
 	var play_distance: float=city.distance_
 	city.paused=true;city._unhandled_input(pan);check(is_equal_approx(city.distance_,play_distance),"Paused game ignores camera gestures");city.paused=false
 	var editor=city.build_mode;editor.open_editor();editor.set_process(false);editor.distance_=38.
+	# Showing the dock recalculates GUI hover; establish the scene pointer again
+	# before dispatching the gesture (also robust to macOS Retina window resize).
+	await process_frame;motion.position=root.get_final_transform()*Vector2(200,180);Input.parse_input_event(motion);await process_frame;pan.position=motion.position
 	Input.parse_input_event(pan);await process_frame
 	print("ZOOM_TEST build=",editor.distance_)
 	check(editor.distance_>38. and editor.distance_<42.,"Actual dispatched trackpad gesture zooms build camera")
@@ -113,7 +116,7 @@ func run() -> void:
 			editor.undo();check(editor.layout.elements.is_empty(),"Undo removes the complete rotated sample")
 			editor.redo();check(not editor.layout.elements.is_empty(),"Redo restores the rotated sample")
 			if kind=="two_storey" and turn==90.:
-				editor.show_entire=true;editor.focus=Vector3(100,3,10);editor.update_camera();editor.ui.hide();editor.grid.hide();await capture("rotated-two-storey");editor.ui.show()
+				editor.set_storey(2);editor.focus=Vector3(100,3,10);editor.update_camera();editor.ui.hide();editor.grid.hide();await capture("rotated-two-storey");editor.ui.show()
 			editor.undo()
 	check(editor.commit(T.player_sample("two_storey")),"Actual player sample for material joins")
 	editor.set_storey(1);editor.set_roof_visible(true);editor.ui.hide();editor.grid.hide();city.set_process(false);city.bunny.set_physics_process(false);city.bunny.hide();editor.room.set_process(false)

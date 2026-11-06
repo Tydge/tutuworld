@@ -131,7 +131,8 @@
       "multistorey_editor_flow",
       "firelight_rules",
       "building_grid_rules",
-      "thumbnail_lifecycle"
+      "thumbnail_lifecycle",
+      "building_selection_flow"
     ],
     "building_drafting": [
       "project_integrity",
@@ -171,7 +172,14 @@
       "dining_flow",
       "dining_rules",
       "thumbnail_preview_flow",
-      "building_ui_scroll_flow"
+      "building_ui_scroll_flow",
+      "building_selection_flow"
+    ],
+    "mirrors": [
+      "project_integrity",
+      "wall_furniture_rules",
+      "wall_furniture_flow",
+      "mirror_many_flow"
     ]
   },
   "tests": {
@@ -375,6 +383,18 @@
     },
     "stair_preview_performance": {
       "headless": true
+    },
+    "mirror_performance": {
+      "args": [
+        "--benchmark"
+      ]
+    },
+    "mirror_many_flow": {},
+    "mirror_many_performance": {
+      "script": "mirror_many_flow",
+      "args": [
+        "--benchmark"
+      ]
     }
   }
 }

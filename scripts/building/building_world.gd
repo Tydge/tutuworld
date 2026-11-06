@@ -9,7 +9,6 @@ var layout_data: Dictionary={}
 var stair_rows: Array=[]
 var visible_storey:=0
 var editing_storey:=0
-var entire_building:=false
 var storey_view_key:=""
 var hidden_camera_bodies: Array[RID]=[]
 var other_storey_bodies: Array[RID]=[]
@@ -71,9 +70,9 @@ func stair_at(point_: Vector3) -> bool:
 	for row in stair_rows:
 		if point_.y>=Storeys.elevation(row)-.1 and point_.y<=Storeys.elevation(row)+Storeys.HEIGHT+.4 and Stairs.bounds(row).has_point(Vector2(point_.x,point_.z)):return true
 	return false
-func set_editor_view(enabled: bool,roof: bool,level: int=0,entire: bool=false,roof_view: bool=false) -> void:
-	if editor_active!=enabled or editor_roof!=roof or editing_storey!=level or entire_building!=entire or editor_roof_view!=roof_view:mask_key="";view_dirty=true;storey_view_key=""
-	editor_roof_view=roof_view;editor_active=enabled;editor_roof=roof;editing_storey=level;entire_building=entire
+func set_editor_view(enabled: bool,roof: bool,level: int=0,roof_view: bool=false) -> void:
+	if editor_active!=enabled or editor_roof!=roof or editing_storey!=level or editor_roof_view!=roof_view:mask_key="";view_dirty=true;storey_view_key=""
+	editor_roof_view=roof_view;editor_active=enabled;editor_roof=roof;editing_storey=level
 	get_node("Structure/Roof").visible=not enabled or roof_view
 	if is_instance_valid(city) and is_instance_valid(city.camera):refresh_view(city.camera.global_position,city.bunny.global_position)
 func apply_storey_visibility(actor: Vector3) -> void:
@@ -90,12 +89,12 @@ func apply_storey_visibility(actor: Vector3) -> void:
 	var house_key:=str([visible_storey,plan_input_signature,actor_room,Grid.cell(Vector2(actor.x,actor.z)) if actor_room=="" else Vector2i.ZERO])
 	if not show_objects and not editor_active and in_house and house_key!=furniture_house_key:
 		furniture_house=preload("res://scripts/building/storey_extension.gd").footprint(Layout.walkable_grid(layout_data,visible_storey),Vector2(actor.x,actor.z));furniture_house_key=house_key
-	var key:=str([visible_storey,editor_active,editor_roof,editor_roof_view,entire_building,in_house,mode_,show_objects,house_key])
+	var key:=str([visible_storey,editor_active,editor_roof,editor_roof_view,in_house,mode_,show_objects,house_key])
 	if key==storey_view_key:return
 	storey_view_key=key;view_dirty=true;hidden_camera_bodies.clear();other_storey_bodies.clear();occlusion_cache.clear()
 	for entry in render_cache.values():
 		var row: Dictionary=entry.row;var level:=Storeys.of(row);var visible_:=true
-		if editor_active and not entire_building and not editor_roof_view:
+		if editor_active and not editor_roof_view:
 			visible_=level==visible_storey or (row.type=="floor_chunk" and level<visible_storey) or (row.type=="stairs" and level+1==visible_storey) or (editor_roof and level<visible_storey and row.type in ["wall","joint","door","window","railing","stairs"])
 		elif not editor_active and in_house:
 			visible_=level<=visible_storey or (mode_!=View.AUTO and row.type!="object")
@@ -116,7 +115,7 @@ func apply_storey_visibility(actor: Vector3) -> void:
 		if row.type=="stairs":
 			var guard: Node3D=entry.node.get_node_or_null("UpperGuard")
 			if guard!=null:
-				var isolate: bool=(editor_active and not entire_building) or (not editor_active and mode_==View.AUTO and in_house)
+				var isolate: bool=(editor_active and not editor_roof_view) or (not editor_active and mode_==View.AUTO and in_house)
 				guard.visible=not isolate or level+1<=visible_storey
 		if level!=visible_storey:other_storey_bodies.append_array(entry.get("bodies",[]))
 		if not visible_:hidden_camera_bodies.append_array(entry.get("bodies",[]))

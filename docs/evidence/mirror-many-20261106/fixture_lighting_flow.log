@@ -1,0 +1,19 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-06 17:03:56.708 Godot[41383:101237568] not in fullscreen state
+PASS The shade and ribs cast no striped shadows while the fixture retains normal object shadows
+PASS Native fixture shadow fading removes distant shadow work before the light itself fades
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Crossed flame vertices stay in front of the opaque firebox back with a depth margin
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+FIRE_REAR_LEAK sum=0.0 minimum_flame_z=-0.09323501586914
+PASS The actual rear view has no animated flame leaking or flashing through its black panel
+FIRELIGHT_SURFACE_LUMA dim=1.31915246577537 bright=1.5966288212775 ratio=1.21034441635906
+PASS Brightness variations visibly affect real floor pixels even with the flame geometry hidden
+PASS Visibility profiling fixture commits
+PASS Camera movement in complete view sends no repeated unchanged wall material updates
+PASS Small repeated camera changes share bounded occlusion scans while fading still updates
+FIXTURE_LIGHTING_FLOW_RESULT PASS checks=8 failures=[]

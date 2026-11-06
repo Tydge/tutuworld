@@ -7,8 +7,6 @@ var upper_floor_locked:=false
 var upper_floor_key:=""
 var editing_storey:=0
 var roof_view:=false
-var show_entire:=false
-var entire_previous_roof:=false
 var template_kind:="cottage"
 const Grid=preload("res://scripts/building/grid_layout.gd")
 const Layout=preload("res://scripts/building/layout.gd")
@@ -89,7 +87,7 @@ func _ready() -> void:
 func open_editor() -> Dictionary:
 	if city.session.is_online() or city.map_id!="city":return {"ok":false,"message":"建造园目前只在单人城镇开放。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
-	roof_view=false;show_entire=false
+	roof_view=false
 	active=true;previous_active=city.session.active;city.session.active=false;city.paused=true;city.bunny.can_move=false;city.bunny.velocity=Vector3.ZERO;city.hud.hide();InputGuard.release_controls()
 	for npc in city.npcs:npc_modes[npc]=npc.process_mode;npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.velocity=Vector3.ZERO
 	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if Site.PLOT.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Site.CENTER;focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
@@ -172,7 +170,7 @@ func set_roof_visible(value: bool) -> void:
 	room.set_process(false);room.get_node("Structure/Roof").visible=roof_view
 	apply_editor_cutaway()
 func apply_editor_cutaway() -> void:
-	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,show_entire,roof_view)
+	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,roof_view)
 func commit(candidate: Dictionary,history: bool=true) -> bool:
 	# Editing cannot remove the support beneath the paused player or strand them upstairs.
 	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
@@ -424,11 +422,15 @@ func pick_at(mouse: Vector2) -> String:
 	if is_instance_valid(room):
 		excluded.assign(room.other_storey_bodies)
 	var hidden_walls: Dictionary={}
-	if is_instance_valid(room) and not show_roof and not roof_view:
+	if is_instance_valid(room):
 		for section in room.sections:
-			if not section.roof and not section.get("editor_hidden",false):continue
+			# A hidden roof still has real collision on the current storey.
+			# Complete walls must not make that invisible roof selectable.
+			var hidden_roof: bool=section.roof and not roof_view
+			var cut_wall: bool=not section.roof and not show_roof and not roof_view and section.get("editor_hidden",false)
+			if not hidden_roof and not cut_wall:continue
 			for body in section.node.find_children("*","StaticBody3D",true,false):excluded.append(body.get_rid())
-			if not section.roof:hidden_walls[element_id(section.node)]=true
+			if cut_wall:hidden_walls[element_id(section.node)]=true
 	if is_instance_valid(room):
 		for body in room.get_node("Furnishing").find_children("*","StaticBody3D",true,false):
 			if body.collision_layer!=16:excluded.append(body.get_rid())
@@ -800,16 +802,12 @@ func _input(event: InputEvent) -> void:
 
 func view_level() -> int:return editing_storey+1 if roof_view else editing_storey
 func set_storey(level: int) -> void:
-	choose_tool("select");selected_id="";selected_unit.clear();show_entire=false
+	choose_tool("select");selected_id="";selected_unit.clear()
 	var highest:=Storeys.highest(layout)
 	var target:=clampi(level,0,highest+1);roof_view=target>highest;editing_storey=mini(target,highest)
 	focus.y=target*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=not roof_view;ghost_key=""
 	apply_editor_cutaway();refresh_ui();update_camera()
 	ui.message("屋顶 · 向下返回室内；选择地板可加建上一层" if roof_view else "正在编辑 %d 楼 · PageUp / PageDown 切层"%(editing_storey+1))
-func set_entire(value: bool) -> void:
-	if value and not show_entire:entire_previous_roof=show_roof
-	show_entire=value;clear_preview();ghost_key="";set_roof_visible(true if value else entire_previous_roof);apply_editor_cutaway();refresh_ui()
-	ui.message("整栋墙壁 · 仍只选取和修改 %d 楼；关闭后恢复逐层编辑"%(editing_storey+1) if value else "正在编辑 %d 楼"%(editing_storey+1))
 func template_source() -> Dictionary:
 	return preload("res://scripts/building/templates.gd").player_sample(template_kind)
 func choose_upper_floor() -> void:
@@ -854,7 +852,7 @@ func update_stair_preview(row: Dictionary,valid: bool,plan: Dictionary={}) -> vo
 		for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay;mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		for info in [["入口 · %dF"%(editing_storey+1),Stairs.definition(row.form).bottom.get_center(),.5],["出口 · %dF"%(editing_storey+2),Stairs.definition(row.form).top.get_center(),Storeys.HEIGHT+.5]]:
 			var label:=Label3D.new();label.text=info[0];label.font_size=48;label.pixel_size=.01;label.position=Vector3(info[1].x,info[2],info[1].y);label.no_depth_test=true;preview.add_child(label)
-		if valid and show_entire:preview_stair_opening(row)
+		if valid:preview_stair_opening(row)
 	preview.position=Vector3(row.position[0],.18+Storeys.elevation(row),row.position[1]);preview.rotation.y=deg_to_rad(row.yaw);preview.show();ghost.hide()
 
 func preview_stair_opening(row: Dictionary) -> void:
@@ -868,6 +866,10 @@ func preview_stair_opening(row: Dictionary) -> void:
 		preview_walls.append([entry.node,entry.node.visible]);entry.node.hide()
 		var holder:=Node3D.new();holder.name="StairOpeningPreview";preview.add_child(holder);holder.global_transform=entry.node.global_transform
 		var description: Dictionary=entry.row.duplicate();description.cells=cells;description.neighbors=Layout.walkable_grid(Extension.place_stair(layout,row,moving_id),Storeys.of(row)+1).floors;Factory.build_floor_mesh(holder,description)
+		# Upper slabs are shadow-only during floor editing. Preview the cut in their
+		# shadow without bringing the hidden ceiling back into the main view.
+		if entry.get("visuals",[]).any(func(mesh):return mesh.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY):
+			for mesh in holder.find_children("*","MeshInstance3D",true,false):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 
 func build_cached_floor_preview(parent: Node3D,cells: Dictionary,neighbors: Dictionary) -> void:
 	var chunks: Dictionary={}

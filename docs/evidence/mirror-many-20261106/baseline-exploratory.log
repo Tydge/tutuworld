@@ -1,0 +1,36 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Actual catalog fixture with twenty mirrors validates: coplanar
+MIRROR_MANY_COLD coplanar frames=30 max_ms=30.722 p95_ms=22.103
+PASS Exactly twenty actual mirror faces are installed: coplanar
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"disabled","frame_max_ms":21.132,"frame_median_ms":8.022,"frame_p95_ms":8.458,"frame_p99_ms":8.831,"frames":247,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":1,"process_median_ms":21.369,"ready_faces":20,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":20.0}
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"day","frame_max_ms":46.917,"frame_median_ms":21.515,"frame_p95_ms":25.932,"frame_p99_ms":44.219,"frames":182,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":173,"process_median_ms":25.465,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":97728,"views_median":20.0}
+PASS Twenty installed mirrors have no two-face limit: coplanar/day
+FAIL 99% of complete frames stay within the 60 FPS budget: coplanar/day
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"night","frame_max_ms":26.988,"frame_median_ms":21.071,"frame_p95_ms":21.627,"frame_p99_ms":26.013,"frames":189,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":189,"process_median_ms":25.84,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":97728,"views_median":20.0}
+PASS Twenty installed mirrors have no two-face limit: coplanar/night
+FAIL 99% of complete frames stay within the 60 FPS budget: coplanar/night
+FAIL Actual catalog fixture with twenty mirrors validates: independent
+MIRROR_MANY_COLD independent frames=30 max_ms=42.143 p95_ms=20.891
+PASS Exactly twenty actual mirror faces are installed: independent
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"disabled","frame_max_ms":20.77,"frame_median_ms":7.097,"frame_p95_ms":7.215,"frame_p99_ms":7.273,"frames":280,"installed_mirrors":20,"layout":"independent","over_16_7_ms":1,"process_median_ms":20.381,"ready_faces":20,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":20.0}
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"day","frame_max_ms":21.874,"frame_median_ms":18.96,"frame_p95_ms":19.869,"frame_p99_ms":20.636,"frames":211,"installed_mirrors":20,"layout":"independent","over_16_7_ms":211,"process_median_ms":20.026,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":97728,"views_median":20.0}
+PASS Twenty installed mirrors have no two-face limit: independent/day
+FAIL 99% of complete frames stay within the 60 FPS budget: independent/day
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"night","frame_max_ms":21.93,"frame_median_ms":19.239,"frame_p95_ms":20.278,"frame_p99_ms":20.526,"frames":208,"installed_mirrors":20,"layout":"independent","over_16_7_ms":208,"process_median_ms":21.531,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":97728,"views_median":20.0}
+PASS Twenty installed mirrors have no two-face limit: independent/night
+FAIL 99% of complete frames stay within the 60 FPS budget: independent/night
+PASS Actual catalog fixture with twenty mirrors validates: room
+MIRROR_MANY_COLD room frames=30 max_ms=37.589 p95_ms=13.96
+PASS Exactly twenty actual mirror faces are installed: room
+MIRROR_MANY_PERFORMANCE {"active_max":7,"active_min":7,"condition":"disabled","frame_max_ms":13.785,"frame_median_ms":8.14,"frame_p95_ms":8.387,"frame_p99_ms":9.558,"frames":245,"installed_mirrors":20,"layout":"room","over_16_7_ms":0,"process_median_ms":13.885,"ready_faces":7,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":7.0}
+MIRROR_MANY_PERFORMANCE {"active_max":7,"active_min":3,"condition":"day","frame_max_ms":29.85,"frame_median_ms":11.163,"frame_p95_ms":23.692,"frame_p99_ms":27.779,"frames":326,"installed_mirrors":20,"layout":"room","over_16_7_ms":32,"process_median_ms":26.123,"ready_faces":4,"reflection_draws_per_frame":4.45705521472393,"target_pixels":670720,"views_median":4.0}
+PASS Twenty installed mirrors have no two-face limit: room/day
+FAIL 99% of complete frames stay within the 60 FPS budget: room/day
+MIRROR_MANY_PERFORMANCE {"active_max":7,"active_min":3,"condition":"night","frame_max_ms":28.505,"frame_median_ms":11.351,"frame_p95_ms":23.815,"frame_p99_ms":27.663,"frames":323,"installed_mirrors":20,"layout":"room","over_16_7_ms":32,"process_median_ms":24.954,"ready_faces":4,"reflection_draws_per_frame":4.45820433436533,"target_pixels":670720,"views_median":4.0}
+PASS Twenty installed mirrors have no two-face limit: room/night
+FAIL 99% of complete frames stay within the 60 FPS budget: room/night
+MIRROR_MANY_FLOW_RESULT FAIL checks=18 failures=["99% of complete frames stay within the 60 FPS budget: coplanar/day", "99% of complete frames stay within the 60 FPS budget: coplanar/night", "Actual catalog fixture with twenty mirrors validates: independent", "99% of complete frames stay within the 60 FPS budget: independent/day", "99% of complete frames stay within the 60 FPS budget: independent/night", "99% of complete frames stay within the 60 FPS budget: room/day", "99% of complete frames stay within the 60 FPS budget: room/night"]

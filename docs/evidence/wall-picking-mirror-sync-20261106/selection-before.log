@@ -1,0 +1,53 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Stacked pick fixture: 2 floors
+PASS Pick object on 1F/2F, complete=false (got object)
+PASS Pick floor on 1F/2F, complete=false (got floor)
+PASS Pick wall on 1F/2F, complete=false (got wall)
+PASS Pick object on 1F/2F, complete=true (got object)
+PASS Pick floor on 1F/2F, complete=true (got floor)
+PASS Pick wall on 1F/2F, complete=true (got wall)
+PASS Changing floor retains the complete-wall preference
+PASS Pick object on 2F/2F, complete=false (got object)
+PASS Pick floor on 2F/2F, complete=false (got floor)
+PASS Pick wall on 2F/2F, complete=false (got wall)
+FAIL Pick object on 2F/2F, complete=true (got roof)
+FAIL Pick floor on 2F/2F, complete=true (got roof)
+FAIL Pick wall on 2F/2F, complete=true (got roof)
+PASS Changing floor retains the complete-wall preference
+PASS Roof remains selectable in the explicit roof view
+PASS Stacked pick fixture: 4 floors
+PASS Pick object on 1F/4F, complete=false (got object)
+PASS Pick floor on 1F/4F, complete=false (got floor)
+PASS Pick wall on 1F/4F, complete=false (got wall)
+PASS Pick object on 1F/4F, complete=true (got object)
+PASS Pick floor on 1F/4F, complete=true (got floor)
+PASS Pick wall on 1F/4F, complete=true (got wall)
+PASS Changing floor retains the complete-wall preference
+PASS Pick object on 2F/4F, complete=false (got object)
+PASS Pick floor on 2F/4F, complete=false (got floor)
+PASS Pick wall on 2F/4F, complete=false (got wall)
+PASS Pick object on 2F/4F, complete=true (got object)
+PASS Pick floor on 2F/4F, complete=true (got floor)
+PASS Pick wall on 2F/4F, complete=true (got wall)
+PASS Changing floor retains the complete-wall preference
+PASS Pick object on 3F/4F, complete=false (got object)
+PASS Pick floor on 3F/4F, complete=false (got floor)
+PASS Pick wall on 3F/4F, complete=false (got wall)
+PASS Pick object on 3F/4F, complete=true (got object)
+PASS Pick floor on 3F/4F, complete=true (got floor)
+PASS Pick wall on 3F/4F, complete=true (got wall)
+PASS Changing floor retains the complete-wall preference
+PASS Pick object on 4F/4F, complete=false (got object)
+PASS Pick floor on 4F/4F, complete=false (got floor)
+PASS Pick wall on 4F/4F, complete=false (got wall)
+FAIL Pick object on 4F/4F, complete=true (got roof)
+FAIL Pick floor on 4F/4F, complete=true (got roof)
+FAIL Pick wall on 4F/4F, complete=true (got roof)
+PASS Changing floor retains the complete-wall preference
+PASS Roof remains selectable in the explicit roof view
+BUILDING_SELECTION_FLOW_RESULT FAIL checks=46 failures=["Pick object on 2F/2F, complete=true (got roof)", "Pick floor on 2F/2F, complete=true (got roof)", "Pick wall on 2F/2F, complete=true (got roof)", "Pick object on 4F/4F, complete=true (got roof)", "Pick floor on 4F/4F, complete=true (got roof)", "Pick wall on 4F/4F, complete=true (got roof)"]
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2663)

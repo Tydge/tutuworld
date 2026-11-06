@@ -1,0 +1,14 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-06 14:34:28.910 Godot[36490:101121736] not in fullscreen state
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+MIRROR_PERFORMANCE {"active_mirrors":0,"condition":"disabled","draws_per_main_frame":0.0,"frame_median_ms":6.548,"frame_p95_ms":6.676,"frames":336,"main_render_cpu_median_ms":0.386999994516373,"main_render_gpu_median_ms":0.0,"reflection_draws":0,"target_pixels":0}
+MIRROR_PERFORMANCE {"active_mirrors":2,"condition":"near_static_camera","draws_per_main_frame":0.195121951219512,"frame_median_ms":6.557,"frame_p95_ms":7.46,"frames":328,"main_render_cpu_median_ms":0.356000006198883,"main_render_gpu_median_ms":0.0,"reflection_draws":64,"target_pixels":188928}
+MIRROR_PERFORMANCE {"active_mirrors":2,"condition":"near_moving_camera","draws_per_main_frame":0.321875,"frame_median_ms":6.626,"frame_p95_ms":7.585,"frames":320,"main_render_cpu_median_ms":0.358000010251999,"main_render_gpu_median_ms":0.0,"reflection_draws":103,"target_pixels":188928}
+MIRROR_PERFORMANCE {"active_mirrors":0,"condition":"far_moving_camera","draws_per_main_frame":0.0,"frame_median_ms":6.446,"frame_p95_ms":6.573,"frames":341,"main_render_cpu_median_ms":0.426999986171722,"main_render_gpu_median_ms":0.0,"reflection_draws":0,"target_pixels":188928}
+MIRROR_PERFORMANCE {"active_mirrors":0,"condition":"disabled_repeat","draws_per_main_frame":0.0,"frame_median_ms":6.548,"frame_p95_ms":6.68,"frames":335,"main_render_cpu_median_ms":0.393999993801117,"main_render_gpu_median_ms":0.0,"reflection_draws":0,"target_pixels":188928}
+MIRROR_PERFORMANCE_RESULT PASS conditions=5

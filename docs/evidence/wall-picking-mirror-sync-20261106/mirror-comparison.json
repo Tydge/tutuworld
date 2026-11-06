@@ -1,0 +1,62 @@
+{
+  "rows": [
+    {
+      "condition": "disabled",
+      "before_frame_median_ms": 6.548,
+      "after_frame_median_ms": 6.547,
+      "before_frame_p95_ms": 6.676,
+      "after_frame_p95_ms": 6.677,
+      "before_pixels": 0,
+      "after_pixels": 5248,
+      "before_draws_per_main_frame": 0.0,
+      "after_draws_per_main_frame": 0.0
+    },
+    {
+      "condition": "near_static_camera",
+      "before_frame_median_ms": 6.557,
+      "after_frame_median_ms": 7.926,
+      "before_frame_p95_ms": 7.46,
+      "after_frame_p95_ms": 8.149,
+      "before_pixels": 188928,
+      "after_pixels": 47232,
+      "before_draws_per_main_frame": 0.195121951219512,
+      "after_draws_per_main_frame": 1.99280575539568
+    },
+    {
+      "condition": "near_moving_camera",
+      "before_frame_median_ms": 6.626,
+      "after_frame_median_ms": 7.957,
+      "before_frame_p95_ms": 7.585,
+      "after_frame_p95_ms": 8.149,
+      "before_pixels": 188928,
+      "after_pixels": 47232,
+      "before_draws_per_main_frame": 0.321875,
+      "after_draws_per_main_frame": 1.9927797833935
+    },
+    {
+      "condition": "far_moving_camera",
+      "before_frame_median_ms": 6.446,
+      "after_frame_median_ms": 7.307,
+      "before_frame_p95_ms": 6.573,
+      "after_frame_p95_ms": 7.468,
+      "before_pixels": 188928,
+      "after_pixels": 5248,
+      "before_draws_per_main_frame": 0.0,
+      "after_draws_per_main_frame": 1.99337748344371
+    },
+    {
+      "condition": "disabled_repeat",
+      "before_frame_median_ms": 6.548,
+      "after_frame_median_ms": 6.538,
+      "before_frame_p95_ms": 6.68,
+      "after_frame_p95_ms": 6.703,
+      "before_pixels": 188928,
+      "after_pixels": 5248,
+      "before_draws_per_main_frame": 0.0,
+      "after_draws_per_main_frame": 0.0
+    }
+  ],
+  "same_probe": true,
+  "baseline_commit": "c6b9ac2",
+  "note": "Uncapped vsync-off, one explicit draw per process iteration with automatic render loop disabled for macOS background reliability. Complete frame wall-clock; main viewport GPU timing excludes separate reflection targets, zero means unavailable. Two visible mirrors, moving subject in every condition."
+}

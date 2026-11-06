@@ -1,0 +1,69 @@
+{
+  "driver": "metal",
+  "metric": "Uncapped vsync-off, one explicit draw per process iteration with automatic render loop disabled for macOS background reliability. Complete frame wall-clock; main viewport GPU timing excludes separate reflection targets, zero means unavailable. Two visible mirrors, moving subject in every condition.",
+  "renderer": "forward_plus",
+  "rows": [
+    {
+      "active_mirrors": 0,
+      "condition": "disabled",
+      "draws_per_main_frame": 0.0,
+      "frame_median_ms": 6.548,
+      "frame_p95_ms": 6.676,
+      "frames": 336,
+      "main_render_cpu_median_ms": 0.386999994516373,
+      "main_render_gpu_median_ms": 0.0,
+      "reflection_draws": 0,
+      "target_pixels": 0
+    },
+    {
+      "active_mirrors": 2,
+      "condition": "near_static_camera",
+      "draws_per_main_frame": 0.195121951219512,
+      "frame_median_ms": 6.557,
+      "frame_p95_ms": 7.46,
+      "frames": 328,
+      "main_render_cpu_median_ms": 0.356000006198883,
+      "main_render_gpu_median_ms": 0.0,
+      "reflection_draws": 64,
+      "target_pixels": 188928
+    },
+    {
+      "active_mirrors": 2,
+      "condition": "near_moving_camera",
+      "draws_per_main_frame": 0.321875,
+      "frame_median_ms": 6.626,
+      "frame_p95_ms": 7.585,
+      "frames": 320,
+      "main_render_cpu_median_ms": 0.358000010251999,
+      "main_render_gpu_median_ms": 0.0,
+      "reflection_draws": 103,
+      "target_pixels": 188928
+    },
+    {
+      "active_mirrors": 0,
+      "condition": "far_moving_camera",
+      "draws_per_main_frame": 0.0,
+      "frame_median_ms": 6.446,
+      "frame_p95_ms": 6.573,
+      "frames": 341,
+      "main_render_cpu_median_ms": 0.426999986171722,
+      "main_render_gpu_median_ms": 0.0,
+      "reflection_draws": 0,
+      "target_pixels": 188928
+    },
+    {
+      "active_mirrors": 0,
+      "condition": "disabled_repeat",
+      "draws_per_main_frame": 0.0,
+      "frame_median_ms": 6.548,
+      "frame_p95_ms": 6.68,
+      "frames": 335,
+      "main_render_cpu_median_ms": 0.393999993801117,
+      "main_render_gpu_median_ms": 0.0,
+      "reflection_draws": 0,
+      "target_pixels": 188928
+    }
+  ],
+  "scale": 0.591552376747131,
+  "window": "(3024, 1890)"
+}

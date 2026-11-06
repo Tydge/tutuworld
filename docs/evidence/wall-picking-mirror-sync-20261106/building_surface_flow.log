@@ -1,0 +1,18 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-06 14:43:19.448 Godot[36903:101131411] not in fullscreen state
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Two neighboring rooms are editable through the ordinary session boundary
+PASS A selected tile exposes the default room-wide choice
+PASS The visible Apply button paints matching tiles in only this room
+PASS Adjacent room stays unchanged through the actual UI action
+PASS One undo restores the entire room paint transaction
+PASS Turning off the choice limits the UI action to exactly one cell
+PASS Inside paint preserves the exterior finish
+PASS The exterior selector changes the opposite face independently
+PASS Complete-wall switch exposes walls through its real control
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+BUILDING_SURFACE_FLOW_RESULT PASS checks=9 failures=[]

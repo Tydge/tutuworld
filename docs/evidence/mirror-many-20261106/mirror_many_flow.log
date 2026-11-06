@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Actual catalog fixture with twenty mirrors validates: coplanar 已保存建造布局。
+PASS Commit twenty mirrors: coplanar
+MIRROR_MANY_COLD coplanar frames=30 max_ms=21.772 p95_ms=18.266
+PASS Exactly twenty actual mirror faces are installed: coplanar
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"disabled","every_visible_face_updated_each_frame":true,"frame_max_ms":9.842,"frame_median_ms":8.033,"frame_p95_ms":8.504,"frame_p99_ms":8.662,"frames":496,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":0,"ready_faces":20,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":1.0}
+MIRROR_MANY_DRAWS coplanar disabled visible=0 shadow=0 primitives=0
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"day","every_visible_face_updated_each_frame":true,"frame_max_ms":10.912,"frame_median_ms":10.132,"frame_p95_ms":10.408,"frame_p99_ms":10.549,"frames":395,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":0,"ready_faces":20,"reflection_draws_per_frame":1.0,"target_pixels":262144,"views_median":1.0}
+MIRROR_MANY_DRAWS coplanar day visible=115 shadow=173 primitives=155118
+PASS Twenty installed mirrors have no two-face limit: coplanar/day
+PASS Every visible mirror updates on every frame: coplanar/day
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"night","every_visible_face_updated_each_frame":true,"frame_max_ms":10.676,"frame_median_ms":10.227,"frame_p95_ms":10.419,"frame_p99_ms":10.619,"frames":392,"installed_mirrors":20,"layout":"coplanar","over_16_7_ms":0,"ready_faces":20,"reflection_draws_per_frame":1.0,"target_pixels":262144,"views_median":1.0}
+MIRROR_MANY_DRAWS coplanar night visible=115 shadow=209 primitives=155118
+PASS Twenty installed mirrors have no two-face limit: coplanar/night
+PASS Every visible mirror updates on every frame: coplanar/night
+PASS All twenty mirrors provide actual rendered pixels for quality comparison
+PASS Opaque wall/slab culling preserves reflected pixels against uncullled reference
+PASS Shared capture maps every mirror corner within 0.01 texture pixel
+MIRROR_MANY_QUALITY {"mean_channel_error":0.0266930810213089,"mirrors":20,"occlusion_p99_error":0.0,"p99_channel_error":0.32622754573822,"projection_error_pixels":0.000672079913783818,"samples":4500}
+MIRROR_MANY_BOARD {"board_mean_error":0.000555551098199376,"board_p99_error":0.0000727176666259766,"board_samples":2327,"mean_channel_error":0.0266930810213089,"mirrors":20,"occlusion_p99_error":0.0,"p99_channel_error":0.32622754573822,"projection_error_pixels":0.000672079913783818,"samples":4500}
+PASS Shared image preserves the independent capture's colour board at matched sampling density
+PASS All twenty actual mirror images show the current animated colour on frame 0
+PASS All twenty actual mirror images show the current animated colour on frame 1
+PASS All twenty actual mirror images show the current animated colour on frame 2
+PASS All twenty actual mirror images show the current animated colour on frame 3
+PASS All twenty actual mirror images show the current animated colour on frame 4
+PASS All twenty actual mirror images show the current animated colour on frame 5
+PASS Actual catalog fixture with twenty mirrors validates: independent 已保存建造布局。
+PASS Commit twenty mirrors: independent
+MIRROR_MANY_COLD independent frames=30 max_ms=32.918 p95_ms=20.812
+PASS Exactly twenty actual mirror faces are installed: independent
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"disabled","every_visible_face_updated_each_frame":true,"frame_max_ms":20.385,"frame_median_ms":7.54,"frame_p95_ms":7.684,"frame_p99_ms":7.782,"frames":529,"installed_mirrors":20,"layout":"independent","over_16_7_ms":1,"ready_faces":20,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":20.0}
+MIRROR_MANY_DRAWS independent disabled visible=0 shadow=0 primitives=0
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"day","every_visible_face_updated_each_frame":true,"frame_max_ms":28.776,"frame_median_ms":19.849,"frame_p95_ms":20.307,"frame_p99_ms":20.758,"frames":202,"installed_mirrors":20,"layout":"independent","over_16_7_ms":202,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":176128,"views_median":20.0}
+MIRROR_MANY_DRAWS independent day visible=265 shadow=242 primitives=155980
+PASS Twenty installed mirrors have no two-face limit: independent/day
+PASS Every visible mirror updates on every frame: independent/day
+MIRROR_MANY_PERFORMANCE {"active_max":20,"active_min":20,"condition":"night","every_visible_face_updated_each_frame":true,"frame_max_ms":22.346,"frame_median_ms":20.021,"frame_p95_ms":20.475,"frame_p99_ms":21.432,"frames":200,"installed_mirrors":20,"layout":"independent","over_16_7_ms":200,"ready_faces":20,"reflection_draws_per_frame":20.0,"target_pixels":176128,"views_median":20.0}
+MIRROR_MANY_DRAWS independent night visible=270 shadow=245 primitives=163372
+PASS Twenty installed mirrors have no two-face limit: independent/night
+PASS Every visible mirror updates on every frame: independent/night
+PASS Actual catalog fixture with twenty mirrors validates: room 已保存建造布局。
+PASS Commit twenty mirrors: room
+MIRROR_MANY_COLD room frames=30 max_ms=30.14 p95_ms=12.986
+PASS Exactly twenty actual mirror faces are installed: room
+MIRROR_MANY_PERFORMANCE {"active_max":7,"active_min":7,"condition":"disabled","every_visible_face_updated_each_frame":true,"frame_max_ms":12.359,"frame_median_ms":8.126,"frame_p95_ms":8.415,"frame_p99_ms":9.595,"frames":491,"installed_mirrors":20,"layout":"room","over_16_7_ms":0,"ready_faces":15,"reflection_draws_per_frame":0.0,"target_pixels":0,"views_median":3.0}
+MIRROR_MANY_DRAWS room disabled visible=0 shadow=0 primitives=0
+MIRROR_MANY_PERFORMANCE {"active_max":5,"active_min":3,"condition":"day","every_visible_face_updated_each_frame":true,"frame_max_ms":25.234,"frame_median_ms":12.706,"frame_p95_ms":13.221,"frame_p99_ms":13.656,"frames":336,"installed_mirrors":20,"layout":"room","over_16_7_ms":3,"ready_faces":20,"reflection_draws_per_frame":1.58928571428571,"target_pixels":1048576,"views_median":2.0}
+MIRROR_MANY_DRAWS room day visible=255 shadow=354 primitives=445572
+PASS Twenty installed mirrors have no two-face limit: room/day
+PASS Every visible mirror updates on every frame: room/day
+MIRROR_MANY_PERFORMANCE {"active_max":5,"active_min":3,"condition":"night","every_visible_face_updated_each_frame":true,"frame_max_ms":13.845,"frame_median_ms":13.023,"frame_p95_ms":13.475,"frame_p99_ms":13.78,"frames":327,"installed_mirrors":20,"layout":"room","over_16_7_ms":0,"ready_faces":20,"reflection_draws_per_frame":1.59327217125382,"target_pixels":1048576,"views_median":2.0}
+MIRROR_MANY_DRAWS room night visible=255 shadow=467 primitives=445572
+PASS Twenty installed mirrors have no two-face limit: room/night
+PASS Every visible mirror updates on every frame: room/night
+MIRROR_MANY_FLOW_RESULT PASS checks=31 failures=[]
