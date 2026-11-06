@@ -4,6 +4,8 @@ uniform vec4 tint : source_color=vec4(1.0);
 uniform int pattern=0;
 uniform bool vertex_tint=false;
 uniform float opacity=1.0;
+// Only free-occlusion fades are camera-local; editor/automatic cutaways stay intact.
+uniform bool camera_occlusion=false;
 uniform float cut_base_height=-100.0;
 
 uniform bool building_roof_cut=false;
@@ -34,7 +36,8 @@ void fragment(){
   float side=dot(building_view_position.xz-p.xz,building_wall_normal);
   if((side>0. && building_hidden(p.xz-building_wall_normal*.28)>.5)||(side<=0. && building_hidden(p.xz+building_wall_normal*.28)>.5))discard;
  }
- float visibility=(p.y<cut_base_height)?1.0:opacity;
+ bool reflected=camera_occlusion && (CAMERA_VISIBLE_LAYERS & (1u<<18u))!=0u;
+ float visibility=(reflected || p.y<cut_base_height)?1.0:opacity;
  if(visibility<.001 || (visibility<.999 && bayer(FRAGCOORD.xy)>=visibility)) discard;
  vec3 vertex_color=OUTPUT_IS_SRGB?display_color(COLOR.rgb):COLOR.rgb;
  vec3 base=tint.rgb*(vertex_tint?vertex_color:vec3(1.0));

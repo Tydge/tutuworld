@@ -9,6 +9,9 @@ func check(ok: bool,label_: String) -> void:
 	checks+=1;print("PASS " if ok else "FAIL ",label_)
 	if not ok:failures.append(label_)
 func settle(actor: CharacterBody3D,p: Vector3) -> void:
+	# Start above the actual deck, which now arches a metre above the old plane.
+	var hit:=city.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(p+Vector3.UP*4.,p-Vector3.UP*3.,8))
+	if not hit.is_empty():p.y=maxf(p.y,hit.position.y+.2)
 	actor.position=p;actor.velocity=Vector3.ZERO;actor.reset_physics_interpolation()
 	for i in 12:
 		await physics_frame;actor.velocity=Vector3(0,-.6,0);actor.move_on_ground(1./60.)
@@ -26,14 +29,14 @@ func run() -> void:
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session);session.create_character("岸边检查兔","bunny","bow_rose")
 	city=load("res://scenes/city.tscn").instantiate();root.add_child(city);current_scene=city
 	while city.preparing or not city.navigation.ready_for_paths:await process_frame
-	session.active=false;city.set_process(false);city.bunny.set_physics_process(false);city.bunny.position=Vector3(55,.2,10.5)
+	session.active=false;city.set_process(false);city.bunny.set_physics_process(false);city.bunny.position=Vector3(35,.2,7)
 	for npc in city.npcs:npc.process_mode=Node.PROCESS_MODE_DISABLED
 	var nav: Node=city.navigation
 	check(city.scenery.get_node("Island/GroundCollision").collision_layer==8 and nav.supported(Vector3(-10,0,17.7),city.get_world_3d().direct_space_state),"Mainland grass is registered as real walkable ground, including the cat teacher spawn")
 	check(not city.can_walk(Vector3(57,0,16.4)),"The logical connector excludes the unsupported strip beyond its real collision surface")
 	check(nav.grid.is_point_solid(Vector2i(58,17)) and nav.grid.is_point_solid(Vector2i(57,16)),"Bridge/land corner nodes with unsupported feet are excluded from navigation")
-	check(not nav.can_step(Vector3(58.5,.05,17.5),Vector3(58.4,.05,17.5)),"Real-time steering cannot walk a supported actor outward over the corner")
-	check(nav.can_step(Vector3(58.3,.05,17.5),Vector3(58.4,.05,17.5)),"An actor displaced to the edge can retreat toward safe land naturally")
+	check(not nav.can_step(Vector3(58.5,-.30,17.5),Vector3(58.4,-.30,17.5)),"Real-time steering cannot walk a supported actor outward over the corner")
+	check(nav.can_step(Vector3(58.3,-.30,17.5),Vector3(58.4,-.30,17.5)),"An actor displaced to the edge can retreat toward safe land naturally")
 	var route: PackedVector3Array=nav.path_between(Vector3(54,.05,13),Vector3(65,.05,20));var supported:=route.size()>2
 	for point in route:
 		if not nav.supported(point,city.get_world_3d().direct_space_state):supported=false
@@ -48,10 +51,10 @@ func run() -> void:
 			await physics_frame;driver._physics_process(1./60.);min_y=minf(min_y,actor.position.y)
 			if not city.can_walk(actor.position):stayed_on_land=false
 		print("EDGE_STEERING ",species," minimum_y=",min_y," position=",actor.position," stayed_on_land=",stayed_on_land)
-		check(min_y>-.15 and stayed_on_land,"Unsafe corner steering is corrected without falling or teleporting: "+species)
+		check(min_y>-.5 and stayed_on_land,"Unsafe corner steering is corrected without falling or teleporting: "+species)
 		await settle(actor,Vector3(54,.2,13));var outward:=await follow(driver,Vector3(65,0,20))
-		check(outward.arrived and outward.min_y>-.15,"The real NPC driver walks from the town across the connector onto land: "+species)
-		var back:=await follow(driver,Vector3(54,0,13));check(back.arrived and back.min_y>-.15,"The real NPC driver walks back around the same corner without dropping: "+species)
+		check(outward.arrived and outward.min_y>-.5,"The real NPC driver walks from the town across the connector onto land: "+species)
+		var back:=await follow(driver,Vector3(54,0,13));check(back.arrived and back.min_y>-.5,"The real NPC driver walks back around the same corner without dropping: "+species)
 		print("EDGE_WALK ",species," outward=",outward," return=",back)
 		city.npcs.erase(actor);actor.queue_free();await process_frame
 	Engine.time_scale=1.

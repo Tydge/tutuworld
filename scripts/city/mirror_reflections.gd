@@ -1,6 +1,7 @@
 extends Node
 ## One current-frame render per distinct visible plane/compact cluster, shared by
 ## all its mirrors. No face-count cap, temporal throttling or quality budget cuts.
+const View=preload("res://scripts/city/interior_view.gd")
 const PlaneView=preload("res://scripts/city/mirror_plane.gd")
 const FACE_LAYER:=1<<19
 const MIN_HEIGHT:=64
@@ -117,7 +118,11 @@ func _process(delta: float) -> void:
 	if occluders==null:occluders=preload("res://scripts/city/mirror_occluders.gd").new();occluders.name="MirrorOccluders";occluders.city=city;add_child(occluders)
 	var has_occluders: bool=occluders.sync() and use_wall_occlusion
 	if not _main_occlusion_saved:_main_occlusion=city.get_viewport().use_occlusion_culling;_main_viewport=weakref(city.get_viewport());_main_occlusion_saved=true
-	city.get_viewport().use_occlusion_culling=_main_occlusion or has_occluders
+	# Native occluders are shared by the World3D. In free occlusion they keep
+	# solid reflection walls, so the main camera must not cull through those walls.
+	var room: Node3D=city.build_mode.room
+	var free_occlusion: bool=is_instance_valid(room) and not room.editor_active and View.mode(city)==View.OCCLUSION
+	city.get_viewport().use_occlusion_culling=(_main_occlusion or has_occluders) and not free_occlusion
 	var plane_bounds: Dictionary={}
 	var candidates: Array=[];var retained: Array=[];var frustum: Array[Plane]=city.camera.get_frustum()
 	for entry in mirrors:
@@ -182,7 +187,7 @@ func _process(delta: float) -> void:
 				slot.confirmed=true;slot.blend=blend
 				for face in slot.bound_faces:
 					if is_instance_valid(face):face.material_override.set_shader_parameter("reflection_ready",true);face.material_override.set_shader_parameter("reflection_mix",blend)
-		slot.camera.cull_mask=city.camera.cull_mask & ~FACE_LAYER
+		slot.camera.cull_mask=(city.camera.cull_mask & ~FACE_LAYER) | View.REFLECTION_LAYER
 		if slot.camera.environment!=null and is_instance_valid(city.atmosphere):
 			for property in ["ambient_light_energy","ambient_light_color","tonemap_exposure","tonemap_mode"]:
 				var value: Variant=city.atmosphere.get(property)

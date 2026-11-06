@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-06",
+  "status": "Local source only; no commit/push/deployment/release; no real player save writes",
+  "root_cause": "City legacy radius-52 walk boundary stops all three player species at z=44.27 on pier despite visible supported beach beyond it",
+  "baseline": {
+    "log": "pier-before-fix.log",
+    "checks": 14,
+    "failed": 7,
+    "species": [
+      "bunny",
+      "cat_teacher",
+      "panda"
+    ]
+  },
+  "fix": "Single-player dry shoreline radius minus 0.55m foot margin; same predicate for save-position validation; sea remains excluded",
+  "mountain": {
+    "source": "../../../assets/terrain/mountain_asset_v1.json",
+    "geometries": 33,
+    "shared_materials": 2,
+    "albedo_only": true,
+    "no_mesh_or_collision_changes": true,
+    "mapping": "world-space triplanar; soft grass caps; reduced distant contrast",
+    "asset_original_size": [
+      1254,
+      1254
+    ],
+    "import_max_size": 1024
+  },
+  "tests": [
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 443,
+      "qa_run": "20261106-213740-442072",
+      "log": "project_integrity.log"
+    },
+    {
+      "test": "pier_shore_flow",
+      "result": "PASS",
+      "checks": 16,
+      "qa_run": "20261106-213740-442072",
+      "log": "pier_shore_flow.log"
+    },
+    {
+      "test": "mountain_surface_flow",
+      "result": "PASS",
+      "checks": 5,
+      "qa_run": "20261106-213740-442072",
+      "log": "mountain_surface_flow.log"
+    },
+    {
+      "test": "valley_rules",
+      "result": "PASS",
+      "checks": 215,
+      "qa_run": "20261106-213740-442072",
+      "log": "valley_rules.log"
+    },
+    {
+      "test": "collision_surfaces",
+      "result": "PASS",
+      "checks": 12,
+      "qa_run": "20261106-213740-442072",
+      "log": "collision_surfaces.log"
+    },
+    {
+      "test": "npc_edge_flow",
+      "result": "PASS",
+      "checks": 15,
+      "qa_run": "20261106-213740-442072",
+      "log": "npc_edge_flow.log"
+    },
+    {
+      "test": "valley_traversal_regression",
+      "result": "PASS",
+      "checks": 73,
+      "qa_run": "20261106-214106-076611",
+      "log": "valley_traversal_regression.log"
+    }
+  ],
+  "total_functional_checks": 779,
+  "performance": {
+    "result": "PASS",
+    "log": "valley_performance.log",
+    "views": [
+      {
+        "view": "bridge-day",
+        "average_fps": 60.5,
+        "p95_ms": 19.359,
+        "max_ms": 20.833,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "terraces-day",
+        "average_fps": 60.5,
+        "p95_ms": 17.721,
+        "max_ms": 21.262,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "cottage-night",
+        "average_fps": 60.5,
+        "p95_ms": 20.773,
+        "max_ms": 24.915,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "interior-night",
+        "average_fps": 60.5,
+        "p95_ms": 19.786,
+        "max_ms": 22.028,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "cascade-day",
+        "average_fps": 60.5,
+        "p95_ms": 19.187,
+        "max_ms": 20.718,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "harbor-day",
+        "average_fps": 60.5,
+        "p95_ms": 18.538,
+        "max_ms": 20.56,
+        "frames_over_50ms": 0
+      },
+      {
+        "view": "harbor-night",
+        "average_fps": 60.5,
+        "p95_ms": 20.011,
+        "max_ms": 21.806,
+        "frames_over_50ms": 0
+      }
+    ],
+    "scope": "Seven warmed rotating views, 2 seconds per view, Mac M1 Pro Godot4.6.3 Metal Forward+ balanced render scale .592; short-run evidence, not arbitrary layouts or strict 16.7ms frame compliance"
+  },
+  "test_harness_fix": "valley_traversal_regression now restores its original bunny reference before freeing temporary species actors; avoids HUD dereferencing a freed test actor. All 73 movement assertions retained.",
+  "source_sha256": {
+    "scripts/city/town_shore.gd": "b36a81d24e5781df8c75f641ddd0c7ce6d7101d2f4d1943e521720169aa577b0",
+    "scripts/city/city_world.gd": "a7295bc0804a332295f134f4fd67fb98607c80d12863e2cd969a8456bd0ab252",
+    "scripts/valley/valley_layout.gd": "89bd2418fbf4bfa3a498613f41e6ab84ee1451132202a58f1bb7b92059319375",
+    "scripts/city/environment_materials.gd": "465742a42f204345b55ebdc36f96a7d64f18f1c0a70becedf7dbac2a5e5f6dff",
+    "assets/shaders/forest_ridge.gdshader": "b77ff9c5cc9e3aae6dbfb205b594f623104a68607f44e320e3b0fc27fdf3b930",
+    "assets/terrain/soft_moss_rock_v1.png": "45c07f95f5a3ae07aaca7dfb9a9676d3da2cb114541f7a919cfd174bd927b3dd",
+    "assets/terrain/soft_moss_rock_v1.png.import": "1822ccf1d65ddf3df3a26395314e0ac2e73bcabb7728d79a1af05b0f18b7a29a",
+    "assets/terrain/mountain_asset_v1.json": "9a8294baa6c85038a77b1e5f37735b7c0b30213a77409452c3e698421009928c",
+    "tests/pier_shore_flow.gd": "0645e7bf4e8d0a105c3f60439d72f78ca55a4cfbb03b4feac4fa6132a1febdf3",
+    "tests/mountain_surface_flow.gd": "9fd200bd360cfc0cd07a4b5a2406a18270ea96da497ffc8eae8989455feb8459",
+    "tests/valley_traversal_regression.gd": "6e74bb85be1e3c10df8dfedf1b52b8ebdd6c5ba0c88346206879ac8e9279864a",
+    "tools/test_suites.json": "721a1d583afe26314b4cf7a59d06d69ba90537b199f5ca5e44f3dc7f3c20f54e"
+  },
+  "screenshots": [
+    "mountain-after.png",
+    "mountain-before.png",
+    "mountain-night-after.png",
+    "mountain-trail-after.png",
+    "pier-dry-sand-walkway.png"
+  ],
+  "limits": [
+    "No Windows or multiplayer validation",
+    "City online walking boundary unchanged",
+    "Mountain silhouette remains the accepted baked mesh; albedo texture adds surface detail only",
+    "No live user save writes or resets in this follow-up"
+  ]
+}

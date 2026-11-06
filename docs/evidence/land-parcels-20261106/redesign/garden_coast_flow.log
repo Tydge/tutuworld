@@ -1,0 +1,17 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS Only the old lawn, sand rim and cliff terrain cylinders are replaced
+PASS Reloading shore upgrade is idempotent
+PASS Town core remains at its original ground elevation: 48.0
+PASS Town core remains at its original ground elevation: 51.0
+PASS Town core remains at its original ground elevation: 52.0
+PASS Town edge has a continuous physical slope instead of the old flat hidden collider
+PASS All yellow parcel-boundary strips are removed
+PASS Public groves have four distinct species and visibly varied heights
+PASS Garden has planted perennial borders and a curved arrival walk
+PASS Four garden seats use the normal sit interaction
+PASS Each sign has fixed front and back text, never camera-facing floating glyphs
+GARDEN_COAST_FLOW_RESULT PASS checks=11 failures=[]

@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-06",
+  "status": "Local source and explicitly authorized local save update; not committed, pushed, deployed or released.",
+  "parcels": {
+    "count": 4,
+    "arrangement": "2x2",
+    "metres": [
+      24,
+      20
+    ],
+    "price": 100,
+    "column_gap_m": 18,
+    "row_gap_m": 8,
+    "ownership": "per character; stored as land_parcels in shared world",
+    "gameplay_entry": "open_nearby_parcel; only owned nearby parcel may be edited"
+  },
+  "template": {
+    "source": "User latest eastern two-storey house, extracted before clearing",
+    "records": 98,
+    "four_rotations_and_four_placements_validate": true,
+    "file": "data/building_templates/two_storey.json"
+  },
+  "landscape": {
+    "base_m": [
+      104,
+      60
+    ],
+    "trees": 24,
+    "flowerbeds": 6,
+    "benches": 4,
+    "wide_sand_and_sloping_shore": true,
+    "bridge": {
+      "span_m": 22,
+      "width_m": 6.33,
+      "rise_m": 1.05,
+      "stone_arch": true,
+      "timber_deck": true,
+      "continuous_physical_rails": true,
+      "warm_lanterns": 4,
+      "actual_character_crossing_passed": true
+    }
+  },
+  "authorized_local_save": {
+    "backup": "/Users/wangtaizhi/Documents/ChatGPT/兔兔世界/archives/land-parcels-20261106-201810",
+    "removed_building_records": 207,
+    "template_records": 98,
+    "unowned_parcels": 4,
+    "coins_before": 156,
+    "coins_after": 156,
+    "player_relocated_to": [
+      76.0,
+      0.1,
+      9.0
+    ],
+    "other_character_and_world_fields_unchanged": true,
+    "before_sha256": "c9b8815598899d5d7a4e3a577eecb199588ad1013b044c3933f7b3dbdf10f6b4",
+    "after_sha256": "49e72d7265b9e9a69d6c57a89ae7deed23dfe4a697f437c6f343c26e130cdd55"
+  },
+  "engine_readback_of_private_copy": "LOCAL_LAND_SAVE_READBACK PASS coins=156 buildings=0 owned=0 characters=2 bridge=true",
+  "tests": [
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 438,
+      "log": "project_integrity.log"
+    },
+    {
+      "test": "land_parcels_rules",
+      "result": "PASS",
+      "checks": 36,
+      "log": "land_parcels_rules.log"
+    },
+    {
+      "test": "save_transactions",
+      "result": "PASS",
+      "checks": 10,
+      "log": "save_transactions.log"
+    },
+    {
+      "test": "land_parcels_flow",
+      "result": "PASS",
+      "checks": 33,
+      "log": "land_parcels_flow.log"
+    },
+    {
+      "test": "building_controls",
+      "result": "PASS",
+      "checks": 34,
+      "log": "building_controls.log"
+    },
+    {
+      "test": "building_selection_flow",
+      "result": "PASS",
+      "checks": 47,
+      "log": "building_selection_flow.log"
+    },
+    {
+      "test": "building_camera_template_rules",
+      "result": "PASS",
+      "checks": 1463,
+      "log": "building_camera_template_rules.log"
+    },
+    {
+      "test": "wall_occlusion_flow",
+      "result": "PASS",
+      "checks": 27,
+      "log": "wall_occlusion_flow.log"
+    },
+    {
+      "test": "building_camera_template_flow",
+      "result": "PASS",
+      "checks": 57,
+      "log": "building_camera_template_flow.log"
+    },
+    {
+      "test": "building_exit_flow",
+      "result": "PASS",
+      "checks": 15,
+      "log": "building_exit_flow.log"
+    },
+    {
+      "test": "wall_furniture_flow",
+      "result": "PASS",
+      "checks": 38,
+      "log": "wall_furniture_flow.log"
+    }
+  ],
+  "total_latest_selected_checks": 2198,
+  "source_sha256": {
+    "assets/shaders/home_surface.gdshader": "b4959ef34f1f011c05009ef190bc61f85dcbb1b1456a96de484b6aeede56c5ce",
+    "data/building_templates/two_storey.json": "87e788be092e96107a78548c67b15c93e8b53db10bb047e9157b4e853c688279",
+    "scripts/building/building_world.gd": "a505bdf7b62e41eca0accfa9cfb2ad15fe285a1936c05c9466b81eaf0ca9863c",
+    "scripts/building/editor.gd": "85cf3c20b486b66d3e3f2a228fb6e4d24a679fc2ba9a2ea5d795d519660f72c7",
+    "scripts/building/editor_ui.gd": "5149fb724b86567be354a10277873c0b819322bb3c90fc676509e2533498b10f",
+    "scripts/building/garden_bridge.gd": "855ed3f52a4052e2f6a0ad6b50c2cf5444a4959e5e4c9798d380104ffd50c467",
+    "scripts/building/parcels.gd": "6d0be5b7ad200b1af1c092ecf1eba24e9d2ae77d59e4919a0ed9f9f63ad62d08",
+    "scripts/building/site.gd": "69a7642d220323c76f8174c274048e8b255c7ca2026b2b367e50a1641eb7cef0",
+    "scripts/city/city_world.gd": "adb03f841889148e5c1da82ba6cbe823086b73f64c0836bd27ce4dd4788ad889",
+    "scripts/city/interior_view.gd": "61c2395aff845f77e1ca9b12041acaf72bacd9579d278c9679713adc4b20d331",
+    "scripts/city/mirror_occluders.gd": "f695ee194da110dad66f951b7ad85ea53a34fbe4ff9a7542192879fc6fbedf4b",
+    "scripts/city/mirror_reflections.gd": "b32999535b5084e474d23d60fca6b8fb420db0927b74e592266317e2e0ab9eb3",
+    "scripts/city/seabreeze_home.gd": "fe3d1eb43af2690b9fe3fcc3d894c0b0b99cc2561033aa7ac6b7ec93cba3bc80",
+    "scripts/services/local_authority.gd": "302d0839e20a4d7b203e50c47d6af41dc4495aa28606e552052039b1b9090cf2",
+    "scripts/services/session.gd": "ec2881b4c65f6fa0fd7a5842f3121935d572dc831d06257986619e925519898e",
+    "scripts/ui/city_hud.gd": "1187609d18b106c230e18fdf92c0b12508749fc5f4f427685c44041a8c75f6ce",
+    "tests/appearance_rules.gd": "c02cf4c439adfdbb9109f3c7e5fc78dfb75f0d204752b7dba3d79c7b707d3a2f",
+    "tests/land_parcels_flow.gd": "79783892303d9e5fd24343dbfdc58c28e4de81e5e90d1f76926e9f7201f1de9a",
+    "tests/land_parcels_rules.gd": "36e6c529f85c603653881f72f3317dc6499ecbc946517e3ab350e2bcefb2aacb",
+    "tests/multistorey_flow.gd": "ab05772e7d7b66df7ecf5a1af6f3476f61868aa0d40a51109262a416335860a7",
+    "tools/test_suites.json": "eee2b7bdb3f73ddb396370594547bb083b7abe4795cb185f42da789bfa27d063"
+  },
+  "limits": [
+    "Single player only; server command whitelist still rejects buy_land. No land transfer or shared editing.",
+    "Current island-wide build budgets remain 256 objects and 48 lights; not per-parcel quotas.",
+    "Graphical flow passes but prints a native PagedAllocator Variant BucketSmall diagnostic at shutdown; its release cause was not diagnosed in this change.",
+    "Short Mac validation, not Windows or all capacity combinations."
+  ],
+  "historical_snapshot": "Initial implementation and one-time save reset only; later UI, terrain and landscape changes supersede these source hashes/visuals and do not reset current player progress.",
+  "latest_followup": "redesign/summary.json"
+}

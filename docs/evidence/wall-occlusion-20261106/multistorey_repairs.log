@@ -1,0 +1,660 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=10
+2026-11-06 18:25:09.608 Godot[44697:101297091] not in fullscreen state
+PASS M01 ocean has unlimited range
+PASS M01 actual packed ocean found
+PASS M02/M03 shell present ground mode1 floor_32_0
+PASS M02/M03 shell present ground mode1 floor_33_0
+PASS M02/M03 shell present ground mode1 floor_34_0
+PASS M02/M03 shell present ground mode1 floor_32_1
+PASS M02/M03 shell present ground mode1 floor_33_1
+PASS M02/M03 shell present ground mode1 floor_34_1
+PASS M02/M03 shell present ground mode1 floor_32_2
+PASS M02/M03 shell present ground mode1 floor_33_2
+PASS M02/M03 shell present ground mode1 floor_34_2
+PASS M02/M03 shell present ground mode1 floor_32_3
+PASS M02/M03 shell present ground mode1 floor_33_3
+PASS M02/M03 shell present ground mode1 floor_34_3
+PASS M02/M03 shell present ground mode1 floor_32_4
+PASS M02/M03 shell present ground mode1 floor_33_4
+PASS M02/M03 shell present ground mode1 floor_34_4
+PASS M02/M03 shell present ground mode1 floor_35_0
+PASS M02/M03 shell present ground mode1 floor_36_0
+PASS M02/M03 shell present ground mode1 floor_35_1
+PASS M02/M03 shell present ground mode1 floor_36_1
+PASS M02/M03 shell present ground mode1 floor_35_2
+PASS M02/M03 shell present ground mode1 floor_36_2
+PASS M02/M03 shell present ground mode1 floor_35_3
+PASS M02/M03 shell present ground mode1 floor_36_3
+PASS M02/M03 shell present ground mode1 floor_35_4
+PASS M02/M03 shell present ground mode1 floor_36_4
+PASS M02/M03 shell present ground mode1 build_6
+PASS M02/M03 shell present ground mode1 build_70
+PASS M02/M03 shell present ground mode1 build_13
+PASS M02/M03 shell present ground mode1 build_3
+PASS M02/M03 shell present ground mode1 build_8
+PASS M02/M03 shell present ground mode1 build_10
+PASS M02/M03 shell present ground mode1 build_71
+PASS M02/M03 shell present ground mode1 s1_floor_32_0
+PASS M02/M03 shell present ground mode1 s1_floor_33_0
+PASS M02/M03 shell present ground mode1 s1_floor_34_0
+PASS M02/M03 shell present ground mode1 s1_floor_35_0
+PASS M02/M03 shell present ground mode1 s1_floor_36_0
+PASS M02/M03 shell present ground mode1 s1_floor_32_1
+PASS M02/M03 shell present ground mode1 s1_floor_34_1
+PASS M02/M03 shell present ground mode1 s1_floor_35_1
+PASS M02/M03 shell present ground mode1 s1_floor_36_1
+PASS M02/M03 shell present ground mode1 s1_floor_32_2
+PASS M02/M03 shell present ground mode1 s1_floor_34_2
+PASS M02/M03 shell present ground mode1 s1_floor_35_2
+PASS M02/M03 shell present ground mode1 s1_floor_36_2
+PASS M02/M03 shell present ground mode1 s1_floor_33_2
+PASS M02/M03 shell present ground mode1 s1_floor_32_3
+PASS M02/M03 shell present ground mode1 s1_floor_33_3
+PASS M02/M03 shell present ground mode1 s1_floor_34_3
+PASS M02/M03 shell present ground mode1 s1_floor_35_3
+PASS M02/M03 shell present ground mode1 s1_floor_36_3
+PASS M02/M03 shell present ground mode1 s1_floor_32_4
+PASS M02/M03 shell present ground mode1 s1_floor_33_4
+PASS M02/M03 shell present ground mode1 s1_floor_34_4
+PASS M02/M03 shell present ground mode1 s1_floor_35_4
+PASS M02/M03 shell present ground mode1 s1_floor_36_4
+PASS M02/M03 shell present ground mode1 build_16
+PASS M02/M03 shell present ground mode1 build_28
+PASS M02/M03 shell present ground mode1 build_29
+PASS M02/M03 shell present ground mode1 build_23
+PASS M02/M03 shell present ground mode1 build_18
+PASS M02/M03 shell present ground mode1 build_25
+PASS M02/M03 shell present ground mode1 build_20
+PASS M02/M03 shell present ground mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present ground mode1 build_35
+PASS M02 persistent roof shadow retained
+RENDER_BUDGET output=(1280, 800) scale=1.0 mode=0 quality=balanced
+PASS M02/M03 rendered ceiling has no sky: ground-mode1
+PASS M02/M03 shell present stairs mode1 floor_32_0
+PASS M02/M03 shell present stairs mode1 floor_33_0
+PASS M02/M03 shell present stairs mode1 floor_34_0
+PASS M02/M03 shell present stairs mode1 floor_32_1
+PASS M02/M03 shell present stairs mode1 floor_33_1
+PASS M02/M03 shell present stairs mode1 floor_34_1
+PASS M02/M03 shell present stairs mode1 floor_32_2
+PASS M02/M03 shell present stairs mode1 floor_33_2
+PASS M02/M03 shell present stairs mode1 floor_34_2
+PASS M02/M03 shell present stairs mode1 floor_32_3
+PASS M02/M03 shell present stairs mode1 floor_33_3
+PASS M02/M03 shell present stairs mode1 floor_34_3
+PASS M02/M03 shell present stairs mode1 floor_32_4
+PASS M02/M03 shell present stairs mode1 floor_33_4
+PASS M02/M03 shell present stairs mode1 floor_34_4
+PASS M02/M03 shell present stairs mode1 floor_35_0
+PASS M02/M03 shell present stairs mode1 floor_36_0
+PASS M02/M03 shell present stairs mode1 floor_35_1
+PASS M02/M03 shell present stairs mode1 floor_36_1
+PASS M02/M03 shell present stairs mode1 floor_35_2
+PASS M02/M03 shell present stairs mode1 floor_36_2
+PASS M02/M03 shell present stairs mode1 floor_35_3
+PASS M02/M03 shell present stairs mode1 floor_36_3
+PASS M02/M03 shell present stairs mode1 floor_35_4
+PASS M02/M03 shell present stairs mode1 floor_36_4
+PASS M02/M03 shell present stairs mode1 build_6
+PASS M02/M03 shell present stairs mode1 build_70
+PASS M02/M03 shell present stairs mode1 build_13
+PASS M02/M03 shell present stairs mode1 build_3
+PASS M02/M03 shell present stairs mode1 build_8
+PASS M02/M03 shell present stairs mode1 build_10
+PASS M02/M03 shell present stairs mode1 build_71
+PASS M02/M03 shell present stairs mode1 s1_floor_32_0
+PASS M02/M03 shell present stairs mode1 s1_floor_33_0
+PASS M02/M03 shell present stairs mode1 s1_floor_34_0
+PASS M02/M03 shell present stairs mode1 s1_floor_35_0
+PASS M02/M03 shell present stairs mode1 s1_floor_36_0
+PASS M02/M03 shell present stairs mode1 s1_floor_32_1
+PASS M02/M03 shell present stairs mode1 s1_floor_34_1
+PASS M02/M03 shell present stairs mode1 s1_floor_35_1
+PASS M02/M03 shell present stairs mode1 s1_floor_36_1
+PASS M02/M03 shell present stairs mode1 s1_floor_32_2
+PASS M02/M03 shell present stairs mode1 s1_floor_34_2
+PASS M02/M03 shell present stairs mode1 s1_floor_35_2
+PASS M02/M03 shell present stairs mode1 s1_floor_36_2
+PASS M02/M03 shell present stairs mode1 s1_floor_33_2
+PASS M02/M03 shell present stairs mode1 s1_floor_32_3
+PASS M02/M03 shell present stairs mode1 s1_floor_33_3
+PASS M02/M03 shell present stairs mode1 s1_floor_34_3
+PASS M02/M03 shell present stairs mode1 s1_floor_35_3
+PASS M02/M03 shell present stairs mode1 s1_floor_36_3
+PASS M02/M03 shell present stairs mode1 s1_floor_32_4
+PASS M02/M03 shell present stairs mode1 s1_floor_33_4
+PASS M02/M03 shell present stairs mode1 s1_floor_34_4
+PASS M02/M03 shell present stairs mode1 s1_floor_35_4
+PASS M02/M03 shell present stairs mode1 s1_floor_36_4
+PASS M02/M03 shell present stairs mode1 build_16
+PASS M02/M03 shell present stairs mode1 build_28
+PASS M02/M03 shell present stairs mode1 build_29
+PASS M02/M03 shell present stairs mode1 build_23
+PASS M02/M03 shell present stairs mode1 build_18
+PASS M02/M03 shell present stairs mode1 build_25
+PASS M02/M03 shell present stairs mode1 build_20
+PASS M02/M03 shell present stairs mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present stairs mode1 build_35
+PASS M02 persistent roof shadow retained
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS M02/M03 rendered ceiling has no sky: stairs-mode1
+PASS M02/M03 shell present upper mode1 floor_32_0
+PASS M02/M03 shell present upper mode1 floor_33_0
+PASS M02/M03 shell present upper mode1 floor_34_0
+PASS M02/M03 shell present upper mode1 floor_32_1
+PASS M02/M03 shell present upper mode1 floor_33_1
+PASS M02/M03 shell present upper mode1 floor_34_1
+PASS M02/M03 shell present upper mode1 floor_32_2
+PASS M02/M03 shell present upper mode1 floor_33_2
+PASS M02/M03 shell present upper mode1 floor_34_2
+PASS M02/M03 shell present upper mode1 floor_32_3
+PASS M02/M03 shell present upper mode1 floor_33_3
+PASS M02/M03 shell present upper mode1 floor_34_3
+PASS M02/M03 shell present upper mode1 floor_32_4
+PASS M02/M03 shell present upper mode1 floor_33_4
+PASS M02/M03 shell present upper mode1 floor_34_4
+PASS M02/M03 shell present upper mode1 floor_35_0
+PASS M02/M03 shell present upper mode1 floor_36_0
+PASS M02/M03 shell present upper mode1 floor_35_1
+PASS M02/M03 shell present upper mode1 floor_36_1
+PASS M02/M03 shell present upper mode1 floor_35_2
+PASS M02/M03 shell present upper mode1 floor_36_2
+PASS M02/M03 shell present upper mode1 floor_35_3
+PASS M02/M03 shell present upper mode1 floor_36_3
+PASS M02/M03 shell present upper mode1 floor_35_4
+PASS M02/M03 shell present upper mode1 floor_36_4
+PASS M02/M03 shell present upper mode1 build_6
+PASS M02/M03 shell present upper mode1 build_70
+PASS M02/M03 shell present upper mode1 build_13
+PASS M02/M03 shell present upper mode1 build_3
+PASS M02/M03 shell present upper mode1 build_8
+PASS M02/M03 shell present upper mode1 build_10
+PASS M02/M03 shell present upper mode1 build_71
+PASS M02/M03 shell present upper mode1 s1_floor_32_0
+PASS M02/M03 shell present upper mode1 s1_floor_33_0
+PASS M02/M03 shell present upper mode1 s1_floor_34_0
+PASS M02/M03 shell present upper mode1 s1_floor_35_0
+PASS M02/M03 shell present upper mode1 s1_floor_36_0
+PASS M02/M03 shell present upper mode1 s1_floor_32_1
+PASS M02/M03 shell present upper mode1 s1_floor_34_1
+PASS M02/M03 shell present upper mode1 s1_floor_35_1
+PASS M02/M03 shell present upper mode1 s1_floor_36_1
+PASS M02/M03 shell present upper mode1 s1_floor_32_2
+PASS M02/M03 shell present upper mode1 s1_floor_34_2
+PASS M02/M03 shell present upper mode1 s1_floor_35_2
+PASS M02/M03 shell present upper mode1 s1_floor_36_2
+PASS M02/M03 shell present upper mode1 s1_floor_33_2
+PASS M02/M03 shell present upper mode1 s1_floor_32_3
+PASS M02/M03 shell present upper mode1 s1_floor_33_3
+PASS M02/M03 shell present upper mode1 s1_floor_34_3
+PASS M02/M03 shell present upper mode1 s1_floor_35_3
+PASS M02/M03 shell present upper mode1 s1_floor_36_3
+PASS M02/M03 shell present upper mode1 s1_floor_32_4
+PASS M02/M03 shell present upper mode1 s1_floor_33_4
+PASS M02/M03 shell present upper mode1 s1_floor_34_4
+PASS M02/M03 shell present upper mode1 s1_floor_35_4
+PASS M02/M03 shell present upper mode1 s1_floor_36_4
+PASS M02/M03 shell present upper mode1 build_16
+PASS M02/M03 shell present upper mode1 build_28
+PASS M02/M03 shell present upper mode1 build_29
+PASS M02/M03 shell present upper mode1 build_23
+PASS M02/M03 shell present upper mode1 build_18
+PASS M02/M03 shell present upper mode1 build_25
+PASS M02/M03 shell present upper mode1 build_20
+PASS M02/M03 shell present upper mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present upper mode1 build_35
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present ground mode2 floor_32_0
+PASS M02/M03 shell present ground mode2 floor_33_0
+PASS M02/M03 shell present ground mode2 floor_34_0
+PASS M02/M03 shell present ground mode2 floor_32_1
+PASS M02/M03 shell present ground mode2 floor_33_1
+PASS M02/M03 shell present ground mode2 floor_34_1
+PASS M02/M03 shell present ground mode2 floor_32_2
+PASS M02/M03 shell present ground mode2 floor_33_2
+PASS M02/M03 shell present ground mode2 floor_34_2
+PASS M02/M03 shell present ground mode2 floor_32_3
+PASS M02/M03 shell present ground mode2 floor_33_3
+PASS M02/M03 shell present ground mode2 floor_34_3
+PASS M02/M03 shell present ground mode2 floor_32_4
+PASS M02/M03 shell present ground mode2 floor_33_4
+PASS M02/M03 shell present ground mode2 floor_34_4
+PASS M02/M03 shell present ground mode2 floor_35_0
+PASS M02/M03 shell present ground mode2 floor_36_0
+PASS M02/M03 shell present ground mode2 floor_35_1
+PASS M02/M03 shell present ground mode2 floor_36_1
+PASS M02/M03 shell present ground mode2 floor_35_2
+PASS M02/M03 shell present ground mode2 floor_36_2
+PASS M02/M03 shell present ground mode2 floor_35_3
+PASS M02/M03 shell present ground mode2 floor_36_3
+PASS M02/M03 shell present ground mode2 floor_35_4
+PASS M02/M03 shell present ground mode2 floor_36_4
+PASS M02/M03 shell present ground mode2 build_6
+PASS M02/M03 shell present ground mode2 build_70
+PASS M02/M03 shell present ground mode2 build_13
+PASS M02/M03 shell present ground mode2 build_3
+PASS M02/M03 shell present ground mode2 build_8
+PASS M02/M03 shell present ground mode2 build_10
+PASS M02/M03 shell present ground mode2 build_71
+PASS M02/M03 shell present ground mode2 s1_floor_32_0
+PASS M02/M03 shell present ground mode2 s1_floor_33_0
+PASS M02/M03 shell present ground mode2 s1_floor_34_0
+PASS M02/M03 shell present ground mode2 s1_floor_35_0
+PASS M02/M03 shell present ground mode2 s1_floor_36_0
+PASS M02/M03 shell present ground mode2 s1_floor_32_1
+PASS M02/M03 shell present ground mode2 s1_floor_34_1
+PASS M02/M03 shell present ground mode2 s1_floor_35_1
+PASS M02/M03 shell present ground mode2 s1_floor_36_1
+PASS M02/M03 shell present ground mode2 s1_floor_32_2
+PASS M02/M03 shell present ground mode2 s1_floor_34_2
+PASS M02/M03 shell present ground mode2 s1_floor_35_2
+PASS M02/M03 shell present ground mode2 s1_floor_36_2
+PASS M02/M03 shell present ground mode2 s1_floor_33_2
+PASS M02/M03 shell present ground mode2 s1_floor_32_3
+PASS M02/M03 shell present ground mode2 s1_floor_33_3
+PASS M02/M03 shell present ground mode2 s1_floor_34_3
+PASS M02/M03 shell present ground mode2 s1_floor_35_3
+PASS M02/M03 shell present ground mode2 s1_floor_36_3
+PASS M02/M03 shell present ground mode2 s1_floor_32_4
+PASS M02/M03 shell present ground mode2 s1_floor_33_4
+PASS M02/M03 shell present ground mode2 s1_floor_34_4
+PASS M02/M03 shell present ground mode2 s1_floor_35_4
+PASS M02/M03 shell present ground mode2 s1_floor_36_4
+PASS M02/M03 shell present ground mode2 build_16
+PASS M02/M03 shell present ground mode2 build_28
+PASS M02/M03 shell present ground mode2 build_29
+PASS M02/M03 shell present ground mode2 build_23
+PASS M02/M03 shell present ground mode2 build_18
+PASS M02/M03 shell present ground mode2 build_25
+PASS M02/M03 shell present ground mode2 build_20
+PASS M02/M03 shell present ground mode2 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present ground mode2 build_35
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present stairs mode2 floor_32_0
+PASS M02/M03 shell present stairs mode2 floor_33_0
+PASS M02/M03 shell present stairs mode2 floor_34_0
+PASS M02/M03 shell present stairs mode2 floor_32_1
+PASS M02/M03 shell present stairs mode2 floor_33_1
+PASS M02/M03 shell present stairs mode2 floor_34_1
+PASS M02/M03 shell present stairs mode2 floor_32_2
+PASS M02/M03 shell present stairs mode2 floor_33_2
+PASS M02/M03 shell present stairs mode2 floor_34_2
+PASS M02/M03 shell present stairs mode2 floor_32_3
+PASS M02/M03 shell present stairs mode2 floor_33_3
+PASS M02/M03 shell present stairs mode2 floor_34_3
+PASS M02/M03 shell present stairs mode2 floor_32_4
+PASS M02/M03 shell present stairs mode2 floor_33_4
+PASS M02/M03 shell present stairs mode2 floor_34_4
+PASS M02/M03 shell present stairs mode2 floor_35_0
+PASS M02/M03 shell present stairs mode2 floor_36_0
+PASS M02/M03 shell present stairs mode2 floor_35_1
+PASS M02/M03 shell present stairs mode2 floor_36_1
+PASS M02/M03 shell present stairs mode2 floor_35_2
+PASS M02/M03 shell present stairs mode2 floor_36_2
+PASS M02/M03 shell present stairs mode2 floor_35_3
+PASS M02/M03 shell present stairs mode2 floor_36_3
+PASS M02/M03 shell present stairs mode2 floor_35_4
+PASS M02/M03 shell present stairs mode2 floor_36_4
+PASS M02/M03 shell present stairs mode2 build_6
+PASS M02/M03 shell present stairs mode2 build_70
+PASS M02/M03 shell present stairs mode2 build_13
+PASS M02/M03 shell present stairs mode2 build_3
+PASS M02/M03 shell present stairs mode2 build_8
+PASS M02/M03 shell present stairs mode2 build_10
+PASS M02/M03 shell present stairs mode2 build_71
+PASS M02/M03 shell present stairs mode2 s1_floor_32_0
+PASS M02/M03 shell present stairs mode2 s1_floor_33_0
+PASS M02/M03 shell present stairs mode2 s1_floor_34_0
+PASS M02/M03 shell present stairs mode2 s1_floor_35_0
+PASS M02/M03 shell present stairs mode2 s1_floor_36_0
+PASS M02/M03 shell present stairs mode2 s1_floor_32_1
+PASS M02/M03 shell present stairs mode2 s1_floor_34_1
+PASS M02/M03 shell present stairs mode2 s1_floor_35_1
+PASS M02/M03 shell present stairs mode2 s1_floor_36_1
+PASS M02/M03 shell present stairs mode2 s1_floor_32_2
+PASS M02/M03 shell present stairs mode2 s1_floor_34_2
+PASS M02/M03 shell present stairs mode2 s1_floor_35_2
+PASS M02/M03 shell present stairs mode2 s1_floor_36_2
+PASS M02/M03 shell present stairs mode2 s1_floor_33_2
+PASS M02/M03 shell present stairs mode2 s1_floor_32_3
+PASS M02/M03 shell present stairs mode2 s1_floor_33_3
+PASS M02/M03 shell present stairs mode2 s1_floor_34_3
+PASS M02/M03 shell present stairs mode2 s1_floor_35_3
+PASS M02/M03 shell present stairs mode2 s1_floor_36_3
+PASS M02/M03 shell present stairs mode2 s1_floor_32_4
+PASS M02/M03 shell present stairs mode2 s1_floor_33_4
+PASS M02/M03 shell present stairs mode2 s1_floor_34_4
+PASS M02/M03 shell present stairs mode2 s1_floor_35_4
+PASS M02/M03 shell present stairs mode2 s1_floor_36_4
+PASS M02/M03 shell present stairs mode2 build_16
+PASS M02/M03 shell present stairs mode2 build_28
+PASS M02/M03 shell present stairs mode2 build_29
+PASS M02/M03 shell present stairs mode2 build_23
+PASS M02/M03 shell present stairs mode2 build_18
+PASS M02/M03 shell present stairs mode2 build_25
+PASS M02/M03 shell present stairs mode2 build_20
+PASS M02/M03 shell present stairs mode2 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present stairs mode2 build_35
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present upper mode2 floor_32_0
+PASS M02/M03 shell present upper mode2 floor_33_0
+PASS M02/M03 shell present upper mode2 floor_34_0
+PASS M02/M03 shell present upper mode2 floor_32_1
+PASS M02/M03 shell present upper mode2 floor_33_1
+PASS M02/M03 shell present upper mode2 floor_34_1
+PASS M02/M03 shell present upper mode2 floor_32_2
+PASS M02/M03 shell present upper mode2 floor_33_2
+PASS M02/M03 shell present upper mode2 floor_34_2
+PASS M02/M03 shell present upper mode2 floor_32_3
+PASS M02/M03 shell present upper mode2 floor_33_3
+PASS M02/M03 shell present upper mode2 floor_34_3
+PASS M02/M03 shell present upper mode2 floor_32_4
+PASS M02/M03 shell present upper mode2 floor_33_4
+PASS M02/M03 shell present upper mode2 floor_34_4
+PASS M02/M03 shell present upper mode2 floor_35_0
+PASS M02/M03 shell present upper mode2 floor_36_0
+PASS M02/M03 shell present upper mode2 floor_35_1
+PASS M02/M03 shell present upper mode2 floor_36_1
+PASS M02/M03 shell present upper mode2 floor_35_2
+PASS M02/M03 shell present upper mode2 floor_36_2
+PASS M02/M03 shell present upper mode2 floor_35_3
+PASS M02/M03 shell present upper mode2 floor_36_3
+PASS M02/M03 shell present upper mode2 floor_35_4
+PASS M02/M03 shell present upper mode2 floor_36_4
+PASS M02/M03 shell present upper mode2 build_6
+PASS M02/M03 shell present upper mode2 build_70
+PASS M02/M03 shell present upper mode2 build_13
+PASS M02/M03 shell present upper mode2 build_3
+PASS M02/M03 shell present upper mode2 build_8
+PASS M02/M03 shell present upper mode2 build_10
+PASS M02/M03 shell present upper mode2 build_71
+PASS M02/M03 shell present upper mode2 s1_floor_32_0
+PASS M02/M03 shell present upper mode2 s1_floor_33_0
+PASS M02/M03 shell present upper mode2 s1_floor_34_0
+PASS M02/M03 shell present upper mode2 s1_floor_35_0
+PASS M02/M03 shell present upper mode2 s1_floor_36_0
+PASS M02/M03 shell present upper mode2 s1_floor_32_1
+PASS M02/M03 shell present upper mode2 s1_floor_34_1
+PASS M02/M03 shell present upper mode2 s1_floor_35_1
+PASS M02/M03 shell present upper mode2 s1_floor_36_1
+PASS M02/M03 shell present upper mode2 s1_floor_32_2
+PASS M02/M03 shell present upper mode2 s1_floor_34_2
+PASS M02/M03 shell present upper mode2 s1_floor_35_2
+PASS M02/M03 shell present upper mode2 s1_floor_36_2
+PASS M02/M03 shell present upper mode2 s1_floor_33_2
+PASS M02/M03 shell present upper mode2 s1_floor_32_3
+PASS M02/M03 shell present upper mode2 s1_floor_33_3
+PASS M02/M03 shell present upper mode2 s1_floor_34_3
+PASS M02/M03 shell present upper mode2 s1_floor_35_3
+PASS M02/M03 shell present upper mode2 s1_floor_36_3
+PASS M02/M03 shell present upper mode2 s1_floor_32_4
+PASS M02/M03 shell present upper mode2 s1_floor_33_4
+PASS M02/M03 shell present upper mode2 s1_floor_34_4
+PASS M02/M03 shell present upper mode2 s1_floor_35_4
+PASS M02/M03 shell present upper mode2 s1_floor_36_4
+PASS M02/M03 shell present upper mode2 build_16
+PASS M02/M03 shell present upper mode2 build_28
+PASS M02/M03 shell present upper mode2 build_29
+PASS M02/M03 shell present upper mode2 build_23
+PASS M02/M03 shell present upper mode2 build_18
+PASS M02/M03 shell present upper mode2 build_25
+PASS M02/M03 shell present upper mode2 build_20
+PASS M02/M03 shell present upper mode2 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present upper mode2 build_35
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present ground mode1 floor_32_0
+PASS M02/M03 shell present ground mode1 floor_33_0
+PASS M02/M03 shell present ground mode1 floor_34_0
+PASS M02/M03 shell present ground mode1 floor_32_1
+PASS M02/M03 shell present ground mode1 floor_33_1
+PASS M02/M03 shell present ground mode1 floor_34_1
+PASS M02/M03 shell present ground mode1 floor_32_2
+PASS M02/M03 shell present ground mode1 floor_33_2
+PASS M02/M03 shell present ground mode1 floor_34_2
+PASS M02/M03 shell present ground mode1 floor_32_3
+PASS M02/M03 shell present ground mode1 floor_33_3
+PASS M02/M03 shell present ground mode1 floor_34_3
+PASS M02/M03 shell present ground mode1 floor_32_4
+PASS M02/M03 shell present ground mode1 floor_33_4
+PASS M02/M03 shell present ground mode1 floor_34_4
+PASS M02/M03 shell present ground mode1 floor_35_0
+PASS M02/M03 shell present ground mode1 floor_36_0
+PASS M02/M03 shell present ground mode1 floor_35_1
+PASS M02/M03 shell present ground mode1 floor_36_1
+PASS M02/M03 shell present ground mode1 floor_35_2
+PASS M02/M03 shell present ground mode1 floor_36_2
+PASS M02/M03 shell present ground mode1 floor_35_3
+PASS M02/M03 shell present ground mode1 floor_36_3
+PASS M02/M03 shell present ground mode1 floor_35_4
+PASS M02/M03 shell present ground mode1 floor_36_4
+PASS M02/M03 shell present ground mode1 build_6
+PASS M02/M03 shell present ground mode1 build_70
+PASS M02/M03 shell present ground mode1 build_13
+PASS M02/M03 shell present ground mode1 build_3
+PASS M02/M03 shell present ground mode1 build_8
+PASS M02/M03 shell present ground mode1 build_10
+PASS M02/M03 shell present ground mode1 build_71
+PASS M02/M03 shell present ground mode1 s1_floor_32_0
+PASS M02/M03 shell present ground mode1 s1_floor_33_0
+PASS M02/M03 shell present ground mode1 s1_floor_34_0
+PASS M02/M03 shell present ground mode1 s1_floor_35_0
+PASS M02/M03 shell present ground mode1 s1_floor_36_0
+PASS M02/M03 shell present ground mode1 s1_floor_32_1
+PASS M02/M03 shell present ground mode1 s1_floor_34_1
+PASS M02/M03 shell present ground mode1 s1_floor_35_1
+PASS M02/M03 shell present ground mode1 s1_floor_36_1
+PASS M02/M03 shell present ground mode1 s1_floor_32_2
+PASS M02/M03 shell present ground mode1 s1_floor_34_2
+PASS M02/M03 shell present ground mode1 s1_floor_35_2
+PASS M02/M03 shell present ground mode1 s1_floor_36_2
+PASS M02/M03 shell present ground mode1 s1_floor_33_2
+PASS M02/M03 shell present ground mode1 s1_floor_32_3
+PASS M02/M03 shell present ground mode1 s1_floor_33_3
+PASS M02/M03 shell present ground mode1 s1_floor_34_3
+PASS M02/M03 shell present ground mode1 s1_floor_35_3
+PASS M02/M03 shell present ground mode1 s1_floor_36_3
+PASS M02/M03 shell present ground mode1 s1_floor_32_4
+PASS M02/M03 shell present ground mode1 s1_floor_33_4
+PASS M02/M03 shell present ground mode1 s1_floor_34_4
+PASS M02/M03 shell present ground mode1 s1_floor_35_4
+PASS M02/M03 shell present ground mode1 s1_floor_36_4
+PASS M02/M03 shell present ground mode1 build_16
+PASS M02/M03 shell present ground mode1 build_28
+PASS M02/M03 shell present ground mode1 build_29
+PASS M02/M03 shell present ground mode1 build_23
+PASS M02/M03 shell present ground mode1 build_18
+PASS M02/M03 shell present ground mode1 build_25
+PASS M02/M03 shell present ground mode1 build_20
+PASS M02/M03 shell present ground mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present ground mode1 build_35
+PASS M02 persistent roof shadow retained
+PASS M02/M03 rendered ceiling has no sky: ground-mode1
+PASS M02/M03 shell present stairs mode1 floor_32_0
+PASS M02/M03 shell present stairs mode1 floor_33_0
+PASS M02/M03 shell present stairs mode1 floor_34_0
+PASS M02/M03 shell present stairs mode1 floor_32_1
+PASS M02/M03 shell present stairs mode1 floor_33_1
+PASS M02/M03 shell present stairs mode1 floor_34_1
+PASS M02/M03 shell present stairs mode1 floor_32_2
+PASS M02/M03 shell present stairs mode1 floor_33_2
+PASS M02/M03 shell present stairs mode1 floor_34_2
+PASS M02/M03 shell present stairs mode1 floor_32_3
+PASS M02/M03 shell present stairs mode1 floor_33_3
+PASS M02/M03 shell present stairs mode1 floor_34_3
+PASS M02/M03 shell present stairs mode1 floor_32_4
+PASS M02/M03 shell present stairs mode1 floor_33_4
+PASS M02/M03 shell present stairs mode1 floor_34_4
+PASS M02/M03 shell present stairs mode1 floor_35_0
+PASS M02/M03 shell present stairs mode1 floor_36_0
+PASS M02/M03 shell present stairs mode1 floor_35_1
+PASS M02/M03 shell present stairs mode1 floor_36_1
+PASS M02/M03 shell present stairs mode1 floor_35_2
+PASS M02/M03 shell present stairs mode1 floor_36_2
+PASS M02/M03 shell present stairs mode1 floor_35_3
+PASS M02/M03 shell present stairs mode1 floor_36_3
+PASS M02/M03 shell present stairs mode1 floor_35_4
+PASS M02/M03 shell present stairs mode1 floor_36_4
+PASS M02/M03 shell present stairs mode1 build_6
+PASS M02/M03 shell present stairs mode1 build_70
+PASS M02/M03 shell present stairs mode1 build_13
+PASS M02/M03 shell present stairs mode1 build_3
+PASS M02/M03 shell present stairs mode1 build_8
+PASS M02/M03 shell present stairs mode1 build_10
+PASS M02/M03 shell present stairs mode1 build_71
+PASS M02/M03 shell present stairs mode1 s1_floor_32_0
+PASS M02/M03 shell present stairs mode1 s1_floor_33_0
+PASS M02/M03 shell present stairs mode1 s1_floor_34_0
+PASS M02/M03 shell present stairs mode1 s1_floor_35_0
+PASS M02/M03 shell present stairs mode1 s1_floor_36_0
+PASS M02/M03 shell present stairs mode1 s1_floor_32_1
+PASS M02/M03 shell present stairs mode1 s1_floor_34_1
+PASS M02/M03 shell present stairs mode1 s1_floor_35_1
+PASS M02/M03 shell present stairs mode1 s1_floor_36_1
+PASS M02/M03 shell present stairs mode1 s1_floor_32_2
+PASS M02/M03 shell present stairs mode1 s1_floor_34_2
+PASS M02/M03 shell present stairs mode1 s1_floor_35_2
+PASS M02/M03 shell present stairs mode1 s1_floor_36_2
+PASS M02/M03 shell present stairs mode1 s1_floor_33_2
+PASS M02/M03 shell present stairs mode1 s1_floor_32_3
+PASS M02/M03 shell present stairs mode1 s1_floor_33_3
+PASS M02/M03 shell present stairs mode1 s1_floor_34_3
+PASS M02/M03 shell present stairs mode1 s1_floor_35_3
+PASS M02/M03 shell present stairs mode1 s1_floor_36_3
+PASS M02/M03 shell present stairs mode1 s1_floor_32_4
+PASS M02/M03 shell present stairs mode1 s1_floor_33_4
+PASS M02/M03 shell present stairs mode1 s1_floor_34_4
+PASS M02/M03 shell present stairs mode1 s1_floor_35_4
+PASS M02/M03 shell present stairs mode1 s1_floor_36_4
+PASS M02/M03 shell present stairs mode1 build_16
+PASS M02/M03 shell present stairs mode1 build_28
+PASS M02/M03 shell present stairs mode1 build_29
+PASS M02/M03 shell present stairs mode1 build_23
+PASS M02/M03 shell present stairs mode1 build_18
+PASS M02/M03 shell present stairs mode1 build_25
+PASS M02/M03 shell present stairs mode1 build_20
+PASS M02/M03 shell present stairs mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present stairs mode1 build_35
+PASS M02 persistent roof shadow retained
+PASS M02/M03 rendered ceiling has no sky: stairs-mode1
+PASS M02/M03 shell present upper mode1 floor_32_0
+PASS M02/M03 shell present upper mode1 floor_33_0
+PASS M02/M03 shell present upper mode1 floor_34_0
+PASS M02/M03 shell present upper mode1 floor_32_1
+PASS M02/M03 shell present upper mode1 floor_33_1
+PASS M02/M03 shell present upper mode1 floor_34_1
+PASS M02/M03 shell present upper mode1 floor_32_2
+PASS M02/M03 shell present upper mode1 floor_33_2
+PASS M02/M03 shell present upper mode1 floor_34_2
+PASS M02/M03 shell present upper mode1 floor_32_3
+PASS M02/M03 shell present upper mode1 floor_33_3
+PASS M02/M03 shell present upper mode1 floor_34_3
+PASS M02/M03 shell present upper mode1 floor_32_4
+PASS M02/M03 shell present upper mode1 floor_33_4
+PASS M02/M03 shell present upper mode1 floor_34_4
+PASS M02/M03 shell present upper mode1 floor_35_0
+PASS M02/M03 shell present upper mode1 floor_36_0
+PASS M02/M03 shell present upper mode1 floor_35_1
+PASS M02/M03 shell present upper mode1 floor_36_1
+PASS M02/M03 shell present upper mode1 floor_35_2
+PASS M02/M03 shell present upper mode1 floor_36_2
+PASS M02/M03 shell present upper mode1 floor_35_3
+PASS M02/M03 shell present upper mode1 floor_36_3
+PASS M02/M03 shell present upper mode1 floor_35_4
+PASS M02/M03 shell present upper mode1 floor_36_4
+PASS M02/M03 shell present upper mode1 build_6
+PASS M02/M03 shell present upper mode1 build_70
+PASS M02/M03 shell present upper mode1 build_13
+PASS M02/M03 shell present upper mode1 build_3
+PASS M02/M03 shell present upper mode1 build_8
+PASS M02/M03 shell present upper mode1 build_10
+PASS M02/M03 shell present upper mode1 build_71
+PASS M02/M03 shell present upper mode1 s1_floor_32_0
+PASS M02/M03 shell present upper mode1 s1_floor_33_0
+PASS M02/M03 shell present upper mode1 s1_floor_34_0
+PASS M02/M03 shell present upper mode1 s1_floor_35_0
+PASS M02/M03 shell present upper mode1 s1_floor_36_0
+PASS M02/M03 shell present upper mode1 s1_floor_32_1
+PASS M02/M03 shell present upper mode1 s1_floor_34_1
+PASS M02/M03 shell present upper mode1 s1_floor_35_1
+PASS M02/M03 shell present upper mode1 s1_floor_36_1
+PASS M02/M03 shell present upper mode1 s1_floor_32_2
+PASS M02/M03 shell present upper mode1 s1_floor_34_2
+PASS M02/M03 shell present upper mode1 s1_floor_35_2
+PASS M02/M03 shell present upper mode1 s1_floor_36_2
+PASS M02/M03 shell present upper mode1 s1_floor_33_2
+PASS M02/M03 shell present upper mode1 s1_floor_32_3
+PASS M02/M03 shell present upper mode1 s1_floor_33_3
+PASS M02/M03 shell present upper mode1 s1_floor_34_3
+PASS M02/M03 shell present upper mode1 s1_floor_35_3
+PASS M02/M03 shell present upper mode1 s1_floor_36_3
+PASS M02/M03 shell present upper mode1 s1_floor_32_4
+PASS M02/M03 shell present upper mode1 s1_floor_33_4
+PASS M02/M03 shell present upper mode1 s1_floor_34_4
+PASS M02/M03 shell present upper mode1 s1_floor_35_4
+PASS M02/M03 shell present upper mode1 s1_floor_36_4
+PASS M02/M03 shell present upper mode1 build_16
+PASS M02/M03 shell present upper mode1 build_28
+PASS M02/M03 shell present upper mode1 build_29
+PASS M02/M03 shell present upper mode1 build_23
+PASS M02/M03 shell present upper mode1 build_18
+PASS M02/M03 shell present upper mode1 build_25
+PASS M02/M03 shell present upper mode1 build_20
+PASS M02/M03 shell present upper mode1 build_34
+PASS M02 persistent roof shadow retained
+PASS M02/M03 shell present upper mode1 build_35
+PASS M02 persistent roof shadow retained
+PASS M03 camera cannot cross upper floor
+PASS M03 stair opening allows upper space but stops camera below real roof
+PASS M05 solid inter-storey perimeter z=3.0
+PASS M05 solid inter-storey perimeter z=5.0
+PASS M05 solid inter-storey perimeter z=8.0
+PASS M05 solid inter-storey perimeter z=11.0
+PASS M05 solid inter-storey perimeter z=15.0
+PASS M05 solid inter-storey perimeter z=17.0
+PASS M01 rendered ocean rather than blue sky: ocean-140
+PASS M01 rendered ocean rather than blue sky: ocean-146
+PASS M01 rendered ocean rather than blue sky: ocean-154
+PASS M01 rendered ocean rather than blue sky: ocean-165
+PASS M04 fixture straight/0
+PASS M04 rail ends meet physical slab/platform/flight straight/0
+PASS M04 fixture straight/90
+PASS M04 rail ends meet physical slab/platform/flight straight/90
+PASS M04 fixture straight/180
+PASS M04 rail ends meet physical slab/platform/flight straight/180
+PASS M04 fixture straight/270
+PASS M04 rail ends meet physical slab/platform/flight straight/270
+PASS M04 fixture l/0
+PASS M04 rail ends meet physical slab/platform/flight l/0
+PASS M04 fixture l/90
+PASS M04 rail ends meet physical slab/platform/flight l/90
+PASS M04 fixture l/180
+PASS M04 rail ends meet physical slab/platform/flight l/180
+PASS M04 fixture l/270
+PASS M04 rail ends meet physical slab/platform/flight l/270
+PASS M04 fixture u/0
+PASS M04 rail ends meet physical slab/platform/flight u/0
+PASS M04 fixture u/90
+PASS M04 rail ends meet physical slab/platform/flight u/90
+PASS M04 fixture u/180
+PASS M04 rail ends meet physical slab/platform/flight u/180
+PASS M04 fixture u/270
+PASS M04 rail ends meet physical slab/platform/flight u/270
+MULTISTOREY_REPAIRS_RESULT PASS checks=651 failures=0

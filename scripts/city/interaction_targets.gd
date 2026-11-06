@@ -1,7 +1,7 @@
 extends RefCounted
 ## Container and seat order distinguish even anonymous/repeated prop names.
 static func add_benches(host: Node3D) -> void:
-	for container_name in ["CentralPark","SouthBeach"]:
+	for container_name in ["CentralPark","SouthBeach","EastBuildingSite/GardenCommons"]:
 		var container: Node3D=host.scenery.get_node_or_null(container_name)
 		if container==null:continue
 		var index:=0

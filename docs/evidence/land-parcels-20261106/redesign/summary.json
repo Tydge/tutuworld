@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-06",
+  "status": "Local source follow-up only; not committed, pushed, deployed or released. Real single-player save not modified in this follow-up.",
+  "scope": [
+    "Fixed front/back sign text attached to board, screenshots from three angles",
+    "No yellow parcel boundary geometry",
+    "E interaction within 2.6m of an unowned parcel sign; a single parcel confirmation; cancel does not charge",
+    "Four tree families, 24 varied trees, six perennial borders, three circular flowerbeds, layered shrubs, sandstone groups, eight lanterns, four usable benches",
+    "Town cylinder terraces replaced with 256-segment continuous physical shore; core elevation preserved; old beach fan/slope removed and foam follows shore",
+    "Bridge-height-aware navigation and logical foot-boundary protection; three species cross both ways"
+  ],
+  "tests": [
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 441,
+      "log": "project_integrity.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "land_parcels_rules",
+      "result": "PASS",
+      "checks": 37,
+      "log": "land_parcels_rules.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "garden_coast_flow",
+      "result": "PASS",
+      "checks": 11,
+      "log": "garden_coast_flow.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "land_parcels_flow",
+      "result": "PASS",
+      "checks": 36,
+      "log": "land_parcels_flow.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "city_rules",
+      "result": "PASS",
+      "checks": 56,
+      "log": "city_rules.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "save_transactions",
+      "result": "PASS",
+      "checks": 10,
+      "log": "save_transactions.log",
+      "qa_run": "20261106-210842-138506"
+    },
+    {
+      "test": "npc_edge_flow",
+      "result": "PASS",
+      "checks": 15,
+      "log": "npc_edge_flow.log",
+      "qa_run": "20261106-210647-156825"
+    },
+    {
+      "test": "terrain_surface",
+      "result": "PASS",
+      "checks": 25,
+      "log": "terrain_surface.log",
+      "qa_run": "20261106-210647-156825"
+    }
+  ],
+  "total_checks": 631,
+  "source_sha256": {
+    "assets/shaders/town_shore.gdshader": "d3b3814e163f0631fbd756256bec64fe18d82e108db7678278b55c737b96e5e5",
+    "assets/shaders/shore_foam.gdshader": "021c5e3c9246d395944f561ae4bc0e53130e92bcae8cfed9dbd13abb8a6c0e9d",
+    "scripts/city/town_shore.gd": "03195917f93256ed2386a9e348f8bde70a9820ddd973c91bb4a2c9750003152d",
+    "scripts/building/garden_landscape.gd": "60b732cb4c236c5b95b853bd17ee9b6447fc02bcd873fcd522136c129fd53cfc",
+    "scripts/building/site.gd": "debbb795298416dc9e0779dcbb13a6a52f971fdfab9ad8ef08660b587350c12e",
+    "scripts/building/parcels.gd": "aa8d262cf759e6cdbfa1725581c7159620bf21f2c67f85fb51c8a85d1afc25bf",
+    "scripts/city/city_world.gd": "798fad952be789e36fa400275fae38faa8ec52f73f950cbbe194d51a6081a46d",
+    "scripts/city/interaction_targets.gd": "289c9f1162e2c53a551cdbb994ff3c43886fd9f8bae9222998a3c3e931a3db56",
+    "scripts/city/wander_navigation.gd": "10c988219cb6cf9623568f26da26c1d6655b9cc48f1c24883b792943868de07a",
+    "scripts/services/local_authority.gd": "4330d193c619c3f03c94983da545adf8659e74a993d867ca2fb17514b2ca34a5",
+    "scripts/ui/city_hud.gd": "f8f777c4ff03d56bc704584b629ca6b900e21cbafccb37170ea5c593df2a5b4d",
+    "tests/garden_coast_flow.gd": "7830cf04dd5493142adffbda1e192232b5998b1cc8b742c91b8c2eef0370ae70",
+    "tests/land_parcels_flow.gd": "10e37d82fde9e8c1eb928ff861fa84eaf5172ef44d0c639a4eb02e461cd723db",
+    "tests/land_parcels_rules.gd": "3558fd3bcd7ea033c6dd5b6e47c0c38f60cb513550b77474b31d70b31abe003b",
+    "tests/npc_edge_flow.gd": "080ceb9e138b8978942e4532201a91fc8cb32e3a3be0725f804500634023d755",
+    "tests/terrain_surface.gd": "2aed334daa349dc115d5c6d02cf5801072f68096fc2396c194ed5ba3ec3580ba",
+    "tools/test_suites.json": "b6bb2587acd3b8dea2c418bfc03b413d2c8ff3b41e9030707b67f9e1c8a785af"
+  },
+  "screenshots": [
+    "fixed-sign-angle-0.png",
+    "fixed-sign-angle-1.png",
+    "fixed-sign-angle-2.png",
+    "garden-central-plaza.png",
+    "garden-public-redesign.png",
+    "purchase-parcel-panel.png",
+    "town-natural-shore-and-bridge.png"
+  ],
+  "limits": [
+    "Mac Godot 4.6.3 Metal Forward+ only; no multiplayer or Windows validation",
+    "land_parcels_flow has an existing native PagedAllocator Variant BucketSmall shutdown diagnostic despite passing all assertions and exit status 0; release cause remains uninvestigated",
+    "Original parent summary describes the earlier implementation and historical one-time save clear; its wallet/ownership values are not the current player state"
+  ]
+}

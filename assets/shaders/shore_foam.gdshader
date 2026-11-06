@@ -8,5 +8,5 @@ void fragment(){
  float edge=smoothstep(.0,.12,UV.y)*(1.0-smoothstep(.80,1.0,UV.y));
  ALBEDO=vec3(.84,.94,.94);
  float second=1.-smoothstep(.025,.07,abs(fract(UV.y-TIME*.041+.32)-.48));
- ALPHA=(line*(.55+lace*.45)+second*.13)*edge;
+ ALPHA=(line*(.55+lace*.45)+second*.13)*edge*smoothstep(.0,.06,UV.x)*(1.-smoothstep(.94,1.,UV.x));
 }

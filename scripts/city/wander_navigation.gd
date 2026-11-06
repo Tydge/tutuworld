@@ -29,7 +29,11 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 		if area.has_point(Vector2(x,z)):return true
 	# The outdoor grid samples ground near its own height. Upper storeys must
 	# never replace a street cell with the roof / highest floor above it.
-	var top:=.75 if preload("res://scripts/building/site.gd").contains(Vector3(x,0,z)) and get_parent().get("map_id")=="city" else 18.
+	var top:=18.
+	if get_parent().get("map_id")=="city" and preload("res://scripts/building/site.gd").contains(Vector3(x,0,z)):
+		top=.75
+		var span: Rect2=preload("res://scripts/building/site.gd").CONNECTOR
+		if span.has_point(Vector2(x,z)):top=maxf(top,preload("res://scripts/building/garden_bridge.gd").height_at(x,span)+.4)
 	floor_query.from=Vector3(x,top,z);floor_query.to=Vector3(x,-1.5,z)
 	var floor_hit:=space.intersect_ray(floor_query)
 	if floor_hit.is_empty():
@@ -43,6 +47,7 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 func supported(point: Vector3,space: PhysicsDirectSpaceState3D,margin: float=GROUND_MARGIN) -> bool:
 	for sample: Vector2 in SUPPORT_OFFSETS:
 		var offset:=Vector3(sample.x*margin,0,sample.y*margin)
+		if not get_parent().can_navigate(point+offset):return false
 		floor_query.from=point+offset+Vector3.UP*.4;floor_query.to=point+offset-Vector3.UP*.45
 		var hit:=space.intersect_ray(floor_query)
 		if hit.is_empty() or hit.normal.y<.7:return false

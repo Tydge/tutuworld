@@ -91,7 +91,10 @@ func _ready() -> void:
 		var interior:=scenery.get_node_or_null("Workshop" if id=="workshop" else "Shop_"+id)
 		if is_instance_valid(interior) and interior.get_script()==load("res://scripts/city/seabreeze_home.gd"): interiors.append(interior)
 	prepare_scenery()
-	if map_id=="city" and not session.is_online():preload("res://scripts/building/site.gd").ensure(scenery)
+	if map_id=="city" and not session.is_online():
+		preload("res://scripts/city/town_shore.gd").ensure(scenery)
+		preload("res://scripts/building/site.gd").ensure(scenery)
+		refresh_land_parcels();session.changed.connect(refresh_land_parcels)
 	sun=scenery.get_node("Sun")
 	fountain_glow=scenery.get_node_or_null("CentralPark/Fountain/FountainGlow")
 	if fountain_glow==null:fountain_glow=scenery.get_node_or_null("CentralPark/FountainGlow")
@@ -150,6 +153,7 @@ func _ready() -> void:
 	Outfit.apply(bunny,session.state().equipment)
 	camera=Camera3D.new()
 	camera.name="FollowCamera"
+	camera.cull_mask &= ~preload("res://scripts/city/interior_view.gd").REFLECTION_LAYER
 	camera.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.current=true
 	camera.fov=48
@@ -382,7 +386,9 @@ func can_navigate(p: Vector3) -> bool: return can_walk(p)
 func can_walk(p: Vector3) -> bool:
 	for building_ in interiors:
 		if building_.contains_position(p): return true
-	return Vector2(p.x,p.z/.88).length()<52 or (session.has_method("is_online") and not session.is_online() and preload("res://scripts/building/site.gd").contains(p))
+	if session.has_method("is_online") and not session.is_online():
+		return preload("res://scripts/city/town_shore.gd").can_walk(p) or preload("res://scripts/building/site.gd").contains(p)
+	return Vector2(p.x,p.z/.88).length()<52
 func update_target() -> void:
 	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active:
@@ -400,6 +406,7 @@ func update_target() -> void:
 	current_target=""
 	for id in targets:
 		var t: Dictionary=targets[id]
+		if t.kind=="land" and preload("res://scripts/building/parcels.gd").owner(session.state(),t.parcel_id)!="":continue
 		if t.kind=="resource" and not session.state().resources[id].available: continue
 		if t.kind=="npc" and not t.node.get_meta("interaction_available",true): continue
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
@@ -422,6 +429,7 @@ func update_target() -> void:
 			"plot":
 				var p: Dictionary=session.state().plots[current_target]
 				text="E   选择种子，播种" if p.crop=="" else "E   照料 %s · %d%%"%[DB.crop(p.crop).name,int(float(p.growth)/(float(DB.crop(p.crop).days)*3600)*100)]
+			"land": text="E   查看"+preload("res://scripts/building/parcels.gd").title(t.parcel_id)+" · 100贝壳币"
 			"home_door": text="E   "+("轻轻关上门" if t.get("node",home).door_open else "推开门，走进"+t.get("name","海风小屋"))
 			"well": text="E   打水 · 2 秒 · 水量 %d/%d"%[session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())]
 			"workshop": text="E   制造工作台 · 制造道具"
@@ -519,9 +527,16 @@ func _unhandled_input(event: InputEvent) -> void:
 func toggle_panel(kind: String) -> void:
 	if hud.overlay.visible and hud.mode==kind: hud.close_panel()
 	else: hud.open_panel(kind)
+func refresh_land_parcels() -> void:
+	if not is_instance_valid(scenery):return
+	preload("res://scripts/building/site.gd").update_ownership(scenery,session.state())
+	var land=preload("res://scripts/building/parcels.gd")
+	for id in land.IDS:
+		targets["land:"+id]={"kind":"land","parcel_id":id,"position":land.sign_position(id),"radius":land.SIGN_REACH}
+
 func open_build_mode() -> void:
 	if not is_instance_valid(build_mode):hud.notify("建造园目前只在单人城镇开放。");return
-	var result: Dictionary=build_mode.open_editor()
+	var result: Dictionary=build_mode.open_nearby_parcel()
 	if not result.ok:hud.notify(result.message)
 func interact() -> void:
 	if sleep_active: wake_from_bed();return
@@ -546,6 +561,9 @@ func interact() -> void:
 			var result: Dictionary=t.get("node",home).toggle_door(bunny)
 			if result.message!="": hud.notify(result.message)
 			update_target()
+		"land":
+			if not preload("res://scripts/building/parcels.gd").at_sign(bunny.global_position,t.parcel_id):update_target();return
+			hud.land_parcel_id=t.parcel_id;hud.open_panel("land")
 		"plot": hud.open_panel("plot")
 		"kitchen":
 			if t.has("node") and not facility_access(current_target):update_target();return
@@ -856,8 +874,9 @@ func optimize_npc(n: CharacterBody3D) -> void:
 	brows.add_child(combined)
 func setup_occluders() -> void:
 	var fade_shader: Shader=load("res://assets/shaders/occlusion_fade.gdshader")
-	for tree_ in scenery.get_children():
-		if not str(tree_.name).begins_with("Tree"): continue
+	var trees: Array=scenery.get_children()+scenery.find_children("PublicTree*","Node3D",true,false)
+	for tree_ in trees:
+		if not str(tree_.name).begins_with("Tree") and not str(tree_.name).begins_with("PublicTree"):continue
 		var materials: Array[ShaderMaterial]=[]
 		var copies: Dictionary={}
 		for mesh_ in tree_.find_children("*","GeometryInstance3D",true,false):

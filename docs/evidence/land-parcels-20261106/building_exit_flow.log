@@ -1,0 +1,21 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Build mode opens at an arbitrary player location: 0
+PASS Finish button / Esc / F6 restores normal controls: 0
+PASS Finishing preserves the exact player location: 0
+PASS The saved player position uses the current location: 0
+PASS The gameplay camera returns to the player at their actual location: 0
+PASS Build mode opens at an arbitrary player location: 1
+PASS Finish button / Esc / F6 restores normal controls: 1
+PASS Finishing preserves the exact player location: 1
+PASS The saved player position uses the current location: 1
+PASS The gameplay camera returns to the player at their actual location: 1
+PASS Build mode opens at an arbitrary player location: 2
+PASS Finish button / Esc / F6 restores normal controls: 2
+PASS Finishing preserves the exact player location: 2
+PASS The saved player position uses the current location: 2
+PASS The gameplay camera returns to the player at their actual location: 2
+BUILDING_EXIT_FLOW_RESULT PASS checks=15 failures=[]

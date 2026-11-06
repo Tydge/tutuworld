@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-06",
+  "tool": "built-in image_gen__imagegen",
+  "mode": "generate",
+  "file": "soft_moss_rock_v1.png",
+  "original_output": "/Users/wangtaizhi/.codex/generated_images/01a1b057-cbce-7c52-b386-270394e24311/exec-219c08f8-c659-4727-a903-8312eef768cb.png",
+  "prompt": "Use case: stylized-concept\nAsset type: a single seamless square tileable game terrain ALBEDO texture, intended to be wrapped with world-space triplanar mapping on rounded mountain cliffs in a cozy stylized 3D rabbit village.\nPrimary request: soft mossy weathered stone surface, painterly moss-green and warm muted grey sandstone with gentle natural layered weathering. Fine rounded mineral grains and a few shallow broad irregular seams, organically scattered soft moss patches covering about a quarter of the stone. Low to moderate contrast, calm olive and sage greens, muted warm grey with subtle tan, harmonious with bright grass and soft cartoon trees. Details at multiple small scales; homogeneous distribution across whole tile, no single central feature.\nComposition: perfectly flat straight-on orthographic scan of surface filling entire square, no perspective, no scenery.\nLighting: neutral evenly lit intrinsic base-color only, no baked shadows, no directional sunlight, no vignette or ambient occlusion.\nConstraints: seamless edges on all four sides. No mountains, horizon, trees, plants, grass blades, flowers, sky, objects, text, border or watermark. Avoid photoreal gritty rocks, sharp deep black cracks, large polygon plates, repeated brickwork, high contrast, saturated neon green. Deliver only one square texture image, no presentation sheet.",
+  "pixel_size": [
+    1254,
+    1254
+  ],
+  "pixel_edits": "None; original generated PNG copied byte-for-byte",
+  "runtime": {
+    "max_size": 1024,
+    "compression": "VRAM compressed; high_quality=false",
+    "mipmaps": true,
+    "sampling": "world-space triplanar albedo, grass cap and distance softening; no normal mapping or displacement"
+  },
+  "sha256": "45c07f95f5a3ae07aaca7dfb9a9676d3da2cb114541f7a919cfd174bd927b3dd"
+}

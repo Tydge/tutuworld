@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Runtime rounded ridges and mountain backdrop share the generated rock texture
+PASS Baked mountain silhouettes and collision stay in sync
+PASS Mountain texture uses capped VRAM compression and mipmaps
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=11554 components=29
+PASS Actual rendered mountain pixels change when texture is enabled
+PASS Material upgrade does not rebuild or move mountain meshes
+MOUNTAIN_TEXTURE render_geometries=33 shared_materials=2 image_difference=0.0225320166876
+MOUNTAIN_SURFACE_FLOW_RESULT PASS checks=5 failures=[]

@@ -1,0 +1,44 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS Fresh parcel world never auto-installs the old showcase house
+PASS Build entry refuses a remote player
+PASS Island has actual wide beach and sloping shore meshes
+PASS Public areas contain authored trees
+PASS Public gardens contain the plaza and two planted axial accents
+PASS Every parcel has real upward-facing walkable ground across its corners and centre
+PASS Beach-to-sea slope has matching walkable collision
+PASS Entrance is a real arched bridge with timber deck and physical railings
+PASS Bridge deck supports the full crossing without holes or abrupt steps
+PASS Actual character crosses from town to the parcel island along the curved bridge
+PASS Unpurchased nearby parcel cannot open build mode
+PASS Bottom menu has no purchase button and unowned land cannot be built
+PASS Approaching the actual unowned board offers E interaction
+PASS E at the board opens its purchase confirmation
+PASS Confirmation contains only the exact interacted parcel
+PASS Cancelling the single-parcel offer spends nothing and returns to walking
+PASS Actual purchase card deducts 100 coins and records the owner
+PASS Purchase returns to walking with construction now available
+PASS Build button opens only the nearby owned 24 by 20 parcel
+PASS Owned northern parcel saves in-bounds floor construction
+PASS Commit rejects public-land spill with no partial changes
+PASS Placement tools cannot target another parcel
+PASS Editor camera focus stays inside the active parcel
+PASS Undo affects current parcel construction
+PASS Redo restores current parcel construction
+PASS A second independent parcel can be purchased
+PASS Entering a second parcel resets editing context and undo history
+PASS Second parcel saves its own floor
+PASS Editing second parcel preserves first parcel exactly
+PASS Clear plot removes only the active parcel's buildings
+PASS Actual catalog places the updated two-storey house on the active parcel
+PASS Template preserves all 98 house records without altering the first parcel
+PASS Parcel state writes a complete isolated save
+PASS Full reload preserves ownership, wallet and each parcel's buildings
+PASS Failed purchase save rolls back both coins and ownership
+PASS Failed building save restores the full world and parcel revision
+LAND_PARCELS_FLOW_RESULT PASS checks=36 failures=[]
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketSmallE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)

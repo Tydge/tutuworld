@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Failed save rejects and restores all assets/pose: buy
+PASS Failed save restores revision, command cache and random state: buy
+PASS Failed save rejects and restores all assets/pose: sell
+PASS Failed save restores revision, command cache and random state: sell
+PASS Failed save rejects and restores all assets/pose: equip
+PASS Failed save restores revision, command cache and random state: equip
+PASS Failed save rejects and restores all assets/pose: rest
+PASS Failed save restores revision, command cache and random state: rest
+PASS Failed save rejects and restores all assets/pose: wake
+PASS Failed save restores revision, command cache and random state: wake
+SAVE_TRANSACTIONS_RESULT PASS checks=10 failures=[]

@@ -1,0 +1,22 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Visible dry sand beyond the pier is logically walkable
+PASS Open sea remains outside the walking region
+PASS Reload preserves a position on the newly walkable beach
+PASS Save validation also rejects open-water positions
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Real player input leaves the pier end onto sand without sticking: bunny
+WANDER_GRID_READY cells=19995 components=7
+PASS Return from sand onto the pier without jumping: bunny
+PASS Boat prompt remains reachable: bunny
+PASS Walk across the beach beyond both end posts: bunny
+PASS Real player input leaves the pier end onto sand without sticking: cat_teacher
+PASS Return from sand onto the pier without jumping: cat_teacher
+PASS Boat prompt remains reachable: cat_teacher
+PASS Walk across the beach beyond both end posts: cat_teacher
+PASS Real player input leaves the pier end onto sand without sticking: panda
+PASS Return from sand onto the pier without jumping: panda
+PASS Boat prompt remains reachable: panda
+PASS Walk across the beach beyond both end posts: panda
+PIER_SHORE_FLOW_RESULT PASS checks=16 failures=[]

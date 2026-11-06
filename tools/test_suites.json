@@ -173,13 +173,31 @@
       "dining_rules",
       "thumbnail_preview_flow",
       "building_ui_scroll_flow",
-      "building_selection_flow"
+      "building_selection_flow",
+      "wall_occlusion_flow"
     ],
     "mirrors": [
       "project_integrity",
       "wall_furniture_rules",
       "wall_furniture_flow",
-      "mirror_many_flow"
+      "mirror_many_flow",
+      "wall_occlusion_flow"
+    ],
+    "land_parcels": [
+      "project_integrity",
+      "land_parcels_rules",
+      "land_parcels_flow",
+      "garden_coast_flow",
+      "save_transactions"
+    ],
+    "shore_mountains": [
+      "project_integrity",
+      "pier_shore_flow",
+      "mountain_surface_flow",
+      "valley_rules",
+      "collision_surfaces",
+      "npc_edge_flow",
+      "valley_traversal_regression"
     ]
   },
   "tests": {
@@ -390,6 +408,16 @@
       "args": [
         "--benchmark"
       ]
+    },
+    "wall_occlusion_flow": {},
+    "wall_occlusion_performance": {
+      "script": "wall_occlusion_flow",
+      "args": [
+        "--benchmark"
+      ]
+    },
+    "land_parcels_rules": {
+      "headless": true
     }
   }
 }

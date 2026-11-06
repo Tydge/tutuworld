@@ -1,8 +1,7 @@
 {
-  "schema": 4,
-  "next_id": 275,
   "lighting_version": 1,
-  "grandfathered": {},
+  "next_id": 287,
+  "schema": 4,
   "elements": [
     {
       "a": [
@@ -521,8 +520,8 @@
       "kind": "lotus_pendant",
       "painted": false,
       "position": [
-        143.9,
-        9.3
+        143.902,
+        9.425
       ],
       "storey": 1,
       "style": "original",
@@ -719,6 +718,122 @@
       "storey": 1,
       "style": "original",
       "support": "build_227",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_279",
+      "kind": "wall_sconce",
+      "mount_height": 2.5,
+      "painted": false,
+      "position": [
+        140.36,
+        4.7
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_183",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_281",
+      "kind": "wall_botanical",
+      "mount_height": 2.35,
+      "painted": false,
+      "position": [
+        140.36,
+        6.3
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_183",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_282",
+      "kind": "wall_clock",
+      "mount_height": 3.1,
+      "painted": false,
+      "position": [
+        140.36,
+        8.5
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_183",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_283",
+      "kind": "moon_mobile",
+      "painted": false,
+      "position": [
+        135.4,
+        16.9
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "ceiling:1",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_284",
+      "kind": "wall_mirror",
+      "mount_height": 1.15,
+      "painted": false,
+      "position": [
+        140.36,
+        15.5
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_218",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_285",
+      "kind": "bedside",
+      "painted": false,
+      "position": [
+        141.1,
+        3.1
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_286",
+      "kind": "small_plant",
+      "painted": false,
+      "position": [
+        141.1,
+        3.19
+      ],
+      "storey": 1,
+      "style": "original",
+      "support": "build_285",
       "support_level": 0,
       "type": "object",
       "yaw": 0.0
@@ -1006,13 +1121,13 @@
     },
     {
       "anchor": [
-        142.5,
+        142.0,
         2.5
       ],
       "axis": 0,
       "color": "eee2c6",
       "id": "build_158",
-      "offset": 4.0,
+      "offset": 3.5,
       "painted": false,
       "reverse": false,
       "style": "wood",
@@ -1529,6 +1644,67 @@
       "support_level": 0,
       "type": "object",
       "yaw": 0.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_275",
+      "kind": "kitchen_cart",
+      "painted": false,
+      "position": [
+        139.175,
+        5.687
+      ],
+      "style": "original",
+      "support": "",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_276",
+      "kind": "spice_jars",
+      "painted": false,
+      "position": [
+        139.345,
+        5.687
+      ],
+      "style": "original",
+      "support": "build_275",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 270.0
+    },
+    {
+      "color": "ffffff",
+      "id": "build_277",
+      "kind": "wall_botanical",
+      "mount_height": 2.3,
+      "painted": false,
+      "position": [
+        138.64,
+        5.7
+      ],
+      "style": "original",
+      "support": "build_217",
+      "support_level": 0,
+      "type": "object",
+      "yaw": 90.0
+    },
+    {
+      "anchor": [
+        144.5,
+        2.5
+      ],
+      "axis": 0,
+      "color": "eee2c6",
+      "id": "build_278",
+      "offset": 6.0,
+      "painted": false,
+      "reverse": false,
+      "style": "wood",
+      "type": "window",
+      "wall": "build_150"
     }
   ]
 }

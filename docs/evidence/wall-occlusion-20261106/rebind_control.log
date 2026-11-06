@@ -1,0 +1,28 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=6
+PASS Wall fade fixture with an actual mirror commits
+PASS Probe includes a partially faded wall
+PASS Reflected wall also stays opaque throughout the dither transition
+WALL_OCCLUSION_IMAGE {"mean":0.0,"p99":0.0}
+PASS Blocking wall fully fades in the main view
+PASS Reflected wall retains full-view pixels when the main view hides it
+PASS Main camera excludes the reflection-only layer
+PASS Main view cannot be incorrectly culled by intact reflection walls
+PASS Faded window glass remains visible only to reflections
+PASS Real walls keep stable native reflection occluders while fading
+PASS Repeated free-camera fades never rebuild native wall occluders
+WALL_OCCLUSION_PERFORMANCE [{"frames":828,"kind":"stable","max_ms":8.565,"median_ms":7.281,"over_16_7_ms":0,"p95_ms":7.402,"p99_ms":7.628},{"frames":121,"kind":"fade","max_ms":13.603,"median_ms":12.801,"over_16_7_ms":0,"p95_ms":13.316,"p99_ms":13.594},{"frames":11,"kind":"toggle","max_ms":12.958,"median_ms":7.29,"over_16_7_ms":0,"p95_ms":12.958,"p99_ms":12.958}] view_us_p99=456.0 mirror_us_p99=390.0 pipeline_delta=[0.0, 0.0, 0.0, 0.0, 0.0]
+PASS Main camera sees through the wall while reflection geometry stays intact
+PASS Switching mode restores original geometry layers: 自由完整
+PASS Switching mode restores original geometry layers: 自动俯视
+PASS Building cutaway does not inherit the free-camera shader override
+PASS Complete-wall editor view restores all original wall instances
+PASS Actual prebuilt home also preserves faded walls and roof for reflection cameras
+PASS Prebuilt home restores full geometry when leaving free occlusion
+PASS Prebuilt automatic view still hides its roof
+PASS Removing the entire mirror building commits
+PASS Removing the last mirror building clears reflection occluders and handles the missing room
+WALL_OCCLUSION_FLOW_RESULT PASS checks=20 failures=[]

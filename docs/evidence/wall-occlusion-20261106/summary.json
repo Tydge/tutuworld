@@ -1,0 +1,304 @@
+{
+  "date": "2026-11-06",
+  "status": "Local worktree repair; not committed, pushed, deployed or released. Isolated --test data only.",
+  "base_commit": "17e75ea618cda70a0fc449656bd70ea05843ade5",
+  "findings": [
+    "Main-camera fade affected the shared wall shader and global mesh visibility in reflection views.",
+    "Repeatedly assigning an unchanged building_cut_mask sampler dirtied and rebuilt native material uniform sets during fades.",
+    "Reflection wall occluders now stay solid; free-occlusion main viewport does not use these shared occluders."
+  ],
+  "original_fixture_note": "Original and opacity-only runs used four walls plus one real mirror without the later added window; use fixed/rebind_control as the identical-fixture single-factor performance comparison.",
+  "metric": "Uncapped vsync-off fixed camera; automatic render loop disabled; one force_draw per process_frame. Warmed complete wall-clock frames, 960 frames, alternating fade target every 80 frames. view/mirror CPU work reported separately.",
+  "results": {
+    "original": {
+      "args": [
+        "--test"
+      ],
+      "driver": "metal",
+      "image_difference": {
+        "mean": 0.503125953971903,
+        "p99": 0.827450975775719
+      },
+      "mirror_us_p99": 343.0,
+      "pipeline_compilation_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "renderer": "forward_plus",
+      "rows": [
+        {
+          "frames": 828,
+          "kind": "stable",
+          "max_ms": 16.631,
+          "median_ms": 7.29,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.467,
+          "p99_ms": 12.873
+        },
+        {
+          "frames": 121,
+          "kind": "fade",
+          "max_ms": 13.605,
+          "median_ms": 12.868,
+          "over_16_7_ms": 0,
+          "p95_ms": 13.231,
+          "p99_ms": 13.548
+        },
+        {
+          "frames": 11,
+          "kind": "toggle",
+          "max_ms": 13.163,
+          "median_ms": 7.355,
+          "over_16_7_ms": 0,
+          "p95_ms": 13.163,
+          "p99_ms": 13.163
+        }
+      ],
+      "scale": 0.591552376747131,
+      "view_us_p99": 282.0,
+      "window": "(3024, 1890)"
+    },
+    "opacity_only": {
+      "args": [
+        "--test"
+      ],
+      "driver": "metal",
+      "image_difference": {
+        "mean": 0.503116858537396,
+        "p99": 0.827450975775719
+      },
+      "mirror_us_p99": 259.0,
+      "pipeline_compilation_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "renderer": "forward_plus",
+      "rows": [
+        {
+          "frames": 745,
+          "kind": "stable",
+          "max_ms": 13.288,
+          "median_ms": 7.294,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.406,
+          "p99_ms": 8.261
+        },
+        {
+          "frames": 204,
+          "kind": "fade",
+          "max_ms": 13.256,
+          "median_ms": 7.349,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.531,
+          "p99_ms": 13.203
+        },
+        {
+          "frames": 11,
+          "kind": "toggle",
+          "max_ms": 7.368,
+          "median_ms": 7.292,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.368,
+          "p99_ms": 7.368
+        }
+      ],
+      "scale": 0.591552376747131,
+      "view_us_p99": 283.0,
+      "window": "(3024, 1890)"
+    },
+    "fixed": {
+      "args": [
+        "--test",
+        "--benchmark"
+      ],
+      "driver": "metal",
+      "image_difference": {
+        "mean": 0.0,
+        "p99": 0.0
+      },
+      "mirror_us_p99": 803.0,
+      "occluder_toggles": 0,
+      "pipeline_compilation_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "renderer": "forward_plus",
+      "rows": [
+        {
+          "frames": 740,
+          "kind": "stable",
+          "max_ms": 27.437,
+          "median_ms": 7.262,
+          "over_16_7_ms": 2,
+          "p95_ms": 7.462,
+          "p99_ms": 7.693
+        },
+        {
+          "frames": 209,
+          "kind": "fade",
+          "max_ms": 7.505,
+          "median_ms": 7.26,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.42,
+          "p99_ms": 7.475
+        },
+        {
+          "frames": 11,
+          "kind": "toggle",
+          "max_ms": 7.333,
+          "median_ms": 7.279,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.333,
+          "p99_ms": 7.333
+        }
+      ],
+      "scale": 0.591552376747131,
+      "view_us_p99": 497.0,
+      "window": "(3024, 1890)"
+    },
+    "rebind_control": {
+      "args": [
+        "--test",
+        "--rebind-mask"
+      ],
+      "driver": "metal",
+      "image_difference": {
+        "mean": 0.0,
+        "p99": 0.0
+      },
+      "mirror_us_p99": 390.0,
+      "occluder_toggles": 0,
+      "pipeline_compilation_delta": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "renderer": "forward_plus",
+      "rows": [
+        {
+          "frames": 828,
+          "kind": "stable",
+          "max_ms": 8.565,
+          "median_ms": 7.281,
+          "over_16_7_ms": 0,
+          "p95_ms": 7.402,
+          "p99_ms": 7.628
+        },
+        {
+          "frames": 121,
+          "kind": "fade",
+          "max_ms": 13.603,
+          "median_ms": 12.801,
+          "over_16_7_ms": 0,
+          "p95_ms": 13.316,
+          "p99_ms": 13.594
+        },
+        {
+          "frames": 11,
+          "kind": "toggle",
+          "max_ms": 12.958,
+          "median_ms": 7.29,
+          "over_16_7_ms": 0,
+          "p95_ms": 12.958,
+          "p99_ms": 12.958
+        }
+      ],
+      "scale": 0.591552376747131,
+      "view_us_p99": 456.0,
+      "window": "(3024, 1890)"
+    }
+  },
+  "regressions": [
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 434,
+      "log": "project_integrity.log"
+    },
+    {
+      "test": "wall_furniture_rules",
+      "result": "PASS",
+      "checks": 78,
+      "log": "wall_furniture_rules.log"
+    },
+    {
+      "test": "wall_furniture_flow",
+      "result": "PASS",
+      "checks": 38,
+      "log": "wall_furniture_flow.log"
+    },
+    {
+      "test": "mirror_many_flow",
+      "result": "PASS",
+      "checks": 31,
+      "log": "mirror_many_flow.log"
+    },
+    {
+      "test": "appearance_camera_flow",
+      "result": "PASS",
+      "checks": 33,
+      "log": "appearance_camera_flow.log"
+    },
+    {
+      "test": "fixture_lighting_flow",
+      "result": "PASS",
+      "checks": 8,
+      "log": "fixture_lighting_flow.log"
+    },
+    {
+      "test": "building_selection_flow",
+      "result": "PASS",
+      "checks": 47,
+      "log": "building_selection_flow.log"
+    },
+    {
+      "test": "multistorey_editor_flow",
+      "result": "PASS",
+      "checks": 32,
+      "log": "multistorey_editor_flow.log"
+    },
+    {
+      "test": "multistorey_repairs",
+      "result": "PASS",
+      "checks": 651,
+      "log": "multistorey_repairs.log"
+    },
+    {
+      "test": "wall_occlusion_performance",
+      "result": "PASS",
+      "checks": 23,
+      "log": "fixed.log"
+    }
+  ],
+  "selected_latest_checks": 1375,
+  "source_sha256": {
+    "assets/shaders/home_surface.gdshader": "b4959ef34f1f011c05009ef190bc61f85dcbb1b1456a96de484b6aeede56c5ce",
+    "scripts/building/building_world.gd": "5a87bbd535160929916f51ffc60274bc4a26ba362d74f4ed07bb3faf80ce3c4c",
+    "scripts/city/city_world.gd": "1a0ef61204829a75094fa6f6328413c79cb59cfcd6842433345007b70e8a2df9",
+    "scripts/city/interior_view.gd": "5c6d72bac827fda9bf65e4364d4f80c46bc0380817c9f6feb9af2741315aff51",
+    "scripts/city/mirror_occluders.gd": "f695ee194da110dad66f951b7ad85ea53a34fbe4ff9a7542192879fc6fbedf4b",
+    "scripts/city/mirror_reflections.gd": "b32999535b5084e474d23d60fca6b8fb420db0927b74e592266317e2e0ab9eb3",
+    "scripts/city/seabreeze_home.gd": "fe3d1eb43af2690b9fe3fcc3d894c0b0b99cc2561033aa7ac6b7ec93cba3bc80",
+    "tests/wall_occlusion_flow.gd": "4db215613515d009e98eae6eca9e623adb83b06cafd59ae5559d913db5295995",
+    "tools/test_suites.json": "dd9b8b1f1c8ccb0cea9dc11eebf3b9d0cdfb9025bc34481f25d4ac6a8960d7e9"
+  },
+  "limits": [
+    "Final fixed run includes two >16.7ms stable frames (max 27.437ms); fade and toggle frames have none. No guarantee of zero long frames.",
+    "Original and opacity-only use the earlier no-window fixture; not the same-fixture A/B.",
+    "Does not resolve existing 20-independent-plane mirror budget, first allocation stalls or shared directional-shadow differences.",
+    "Mac-only short controlled paths, not Windows or all maximum-capacity house combinations."
+  ],
+  "followup_opening_rule": "openings/summary.json",
+  "source_sha256_note": "This report and its source hashes are the earlier mirror/fade repair snapshot. Opening-rule follow-up hashes and validation are in followup_opening_rule."
+}

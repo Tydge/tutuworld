@@ -39,6 +39,7 @@ func run() -> void:
 	for npc in game.npcs:
 		npc.set_physics_process(false);npc.collision_layer=0
 		for child in npc.get_children(): child.set_physics_process(false);child.set_process(false)
+	var original: CharacterBody3D=game.bunny
 	game.bunny.set_physics_process(false);game.bunny.hide();game.bunny.collision_layer=0
 	var stuck:=Vector3(3.404481,.000228,-8.789341)
 	check(Layout.can_walk(stuck) and not Layout.can_navigate(stuck),"Exact saved stuck coordinate now walkable; NPC cliff avoidance retained")
@@ -72,7 +73,7 @@ func run() -> void:
 		var approach: Dictionary=await drive(actor,Vector3(-13,.18,47.2))
 		var pier: Dictionary=await drive(actor,Vector3(-5.8,.18,47.2))
 		check(approach.arrived and pier.arrived,"Walk from valley trail onto return pier "+species)
-		actor.queue_free();await process_frame
+		game.bunny=original;actor.queue_free();await process_frame
 	Engine.time_scale=1;release()
 	print("VALLEY_TRAVERSAL_REGRESSION_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

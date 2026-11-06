@@ -53,7 +53,7 @@ func _ready() -> void:
 	studio=preload("res://scripts/building/thumbnail_studio.gd").new();add_child(studio);studio.thumbnail_ready.connect(set_thumbnail)
 	var dock:=UI.panel(Color("fff9e9",.98),20,14);dock.name="BuildDock";root_ui.add_child(dock);dock.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE);dock.offset_left=12;dock.offset_right=-12;dock.offset_top=-326;dock.offset_bottom=-12
 	var column:=UI.column(9);dock.add_child(column)
-	var header:=UI.row(8);column.add_child(header);header.add_child(UI.label("东岸 · 建造",18))
+	var header:=UI.row(8);column.add_child(header);var parcel_title:=UI.label("东岸 · 建造",18);parcel_title.name="ParcelTitle";header.add_child(parcel_title)
 	header.add_child(compact("▼",func():editor.set_storey(editor.view_level()-1),"FloorDown"))
 	floor_choice=UI.label("1楼",14);floor_choice.name="EditingStorey";header.add_child(floor_choice)
 	header.add_child(compact("▲",func():editor.set_storey(editor.view_level()+1),"FloorUp"))
@@ -145,9 +145,13 @@ func set_thumbnail(id: String,texture: Texture2D) -> void:
 	if card_images.has(tool_id):card_images[tool_id].texture=texture
 	if selected_thumb_key==id:selected_preview.texture=texture
 func refresh(row: Dictionary) -> void:
+	root_ui.find_child("ParcelTitle",true,false).text="东岸 · 建造" if editor.parcel_id=="" else preload("res://scripts/building/parcels.gd").title(editor.parcel_id)
 	updating=true
-	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.layout)
+	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.editing_layout())
 	title.text="%.0f㎡ · %d/%d物件 · %d/%d灯"%[counts.floor_area,counts.objects,preload("res://scripts/building/layout.gd").MAX_ELEMENTS,counts.lights,preload("res://scripts/building/layout.gd").MAX_LIGHTS]
+	if editor.parcel_id!="":
+		var total: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.layout)
+		title.text="本地块 %.0f㎡ · %d物件 · 全岛余量 %d物件 / %d灯"%[counts.floor_area,counts.objects,preload("res://scripts/building/layout.gd").MAX_ELEMENTS-total.objects,preload("res://scripts/building/layout.gd").MAX_LIGHTS-total.lights]
 	root_ui.find_child("FloorDown",true,false).disabled=editor.view_level()==0;root_ui.find_child("FloorUp",true,false).disabled=editor.roof_view
 	floor_choice.text="屋顶" if editor.roof_view else "%d楼"%(editor.editing_storey+1)
 	root_ui.find_child("TopDownView",true,false).set_pressed_no_signal(editor.top_down)

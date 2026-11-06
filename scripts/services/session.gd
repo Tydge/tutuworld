@@ -13,7 +13,7 @@ const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["world_id","time","plots","resources","build_layout"]
+const WORLD_KEYS=["world_id","time","plots","resources","build_layout","land_parcels"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water"]
 var authority=Authority.new()
 var active:=false
@@ -272,6 +272,29 @@ func save_game() -> bool:
 	if saved:
 		legacy_source="";building_generation=next_generation;preload("res://scripts/building/layout_store.gd").consolidate(save_path)
 	return saved
+func buy_land(parcel_id: String) -> Dictionary:
+	if is_online():return {"ok":false,"message":"地皮购买目前只在单人模式开放。"}
+	return dispatch("buy_land",{"parcel_id":parcel_id})
+func set_parcel_layout(parcel_id: String,candidate: Dictionary,expected_revision: int=-1) -> Dictionary:
+	if is_online():return {"ok":false,"message":"地皮建造目前只在单人模式开放。"}
+	var land=preload("res://scripts/building/parcels.gd")
+	if not job().is_empty():return {"ok":false,"message":"请先结束当前互动。"}
+	var p: Array=state().player_position
+	if land.distance_to(parcel_id,Vector3(p[0],p[1],p[2]))>land.REACH:return {"ok":false,"message":"请靠近当前地皮后再建造。"}
+	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate)
+	if not checked.ok:return checked
+	var access: Dictionary=land.validate_edit(state(),parcel_id,checked.layout,expected_revision)
+	if not access.ok:return access
+	if checked.layout==state().build_layout:return checked
+	var before:=snapshot();var old_revision: int=authority.revision
+	var old_world:=world.duplicate(true);var old_characters:=characters.duplicate(true)
+	state().build_layout=checked.layout;state().land_parcels.plots[parcel_id].revision+=1
+	authority.revision+=1;state().revision=authority.revision
+	# Layout, parcel revision and ownership are one full-save transaction.
+	if not save_game():
+		authority.state=before;authority.revision=old_revision;world=old_world;characters=old_characters
+		return {"ok":false,"message":"地皮建造保存失败，已恢复修改前的房屋。"}
+	changed.emit();return checked
 func set_build_layout(candidate: Dictionary) -> Dictionary:
 	if is_online():return {"ok":false,"message":"建造园目前只在单人模式开放。"}
 	if not job().is_empty():return {"ok":false,"message":"请先完成手上的工作。"}
@@ -341,6 +364,7 @@ func load_save() -> void:
 func restore_state(raw: Dictionary):
 	var restored:=Authority.new()
 	var s: Dictionary=restored.state
+	s["land_parcels"]=preload("res://scripts/building/parcels.gd").normalize(raw.get("land_parcels",{}))
 	s["build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("build_layout",{}))
 	s.player_id=str(raw.get("player_id","local_bunny")).left(80)
 	s.character_name=str(raw.get("character_name","")).strip_edges().left(12)

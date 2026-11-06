@@ -3,6 +3,9 @@ extends RefCounted
 const BARK=preload("res://assets/terrain/warm_tree_bark_v1.png")
 const PLASTER=preload("res://assets/terrain/soft_lime_plaster_v1.png")
 const SAND=preload("res://assets/terrain/fine_beach_sand_v1.png")
+const MOUNTAIN=preload("res://assets/terrain/soft_moss_rock_v1.png")
+const LAWN=preload("res://assets/terrain/spring_lawn_v1.png")
+const RIDGE=preload("res://assets/shaders/forest_ridge.gdshader")
 const HOME=preload("res://assets/shaders/home_surface.gdshader")
 static var cache: Dictionary={}
 static func plaster(color: Color) -> ShaderMaterial:
@@ -26,6 +29,8 @@ static func apply(world: Node3D) -> void:
 				# Update in place: cutaway sections retain references to these materials.
 				m.set_shader_parameter("plaster_texture",PLASTER);m.set_shader_parameter("plaster_strength",.65)
 			elif m.shader==preload("res://assets/shaders/beach_sand.gdshader"):m.set_shader_parameter("sand_texture",SAND)
+			elif m.shader==RIDGE:
+				m.set_shader_parameter("rock_texture",MOUNTAIN);m.set_shader_parameter("turf_texture",LAWN)
 			continue
 		if done or not m is StandardMaterial3D:continue
 		var hex: String=m.albedo_color.to_html(false)

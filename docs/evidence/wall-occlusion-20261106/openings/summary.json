@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-06",
+  "change": "Free-occlusion sightlines passing through windows or open doorways now hide the entire connected wall face, attached frames and door leaves. Unrelated walls stay visible; the wall restores after the sightline clears.",
+  "baseline": "Before changing the code, updated doorway and window rule checks both failed; see before-rules.log.",
+  "tests": [
+    {
+      "test": "appearance_rules",
+      "result": "PASS",
+      "checks": 203,
+      "log": "appearance_rules.log"
+    },
+    {
+      "test": "wall_occlusion_performance",
+      "result": "PASS",
+      "checks": 30,
+      "log": "wall_occlusion_performance.log"
+    },
+    {
+      "test": "appearance_camera_flow",
+      "result": "PASS",
+      "checks": 33,
+      "log": "appearance_camera_flow.log"
+    },
+    {
+      "test": "project_integrity",
+      "result": "PASS",
+      "checks": 434,
+      "log": "project_integrity.log"
+    }
+  ],
+  "checks": 700,
+  "image": "window-wall-faded.png",
+  "source_sha256": {
+    "scripts/city/interior_view.gd": "61c2395aff845f77e1ca9b12041acaf72bacd9579d278c9679713adc4b20d331",
+    "tests/appearance_rules.gd": "c02cf4c439adfdbb9109f3c7e5fc78dfb75f0d204752b7dba3d79c7b707d3a2f",
+    "tests/wall_occlusion_flow.gd": "86a2b0ca879749ab3c83350f6003a901643d1441f9836fc3832c726f4a140d89"
+  },
+  "scope": "Local source only, isolated --test progress. Previous mirror image, stable wall occluder and strict P99 checks passed again. No commit, push, deployment or release."
+}

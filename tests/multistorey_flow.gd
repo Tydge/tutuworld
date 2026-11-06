@@ -31,7 +31,7 @@ func run() -> void:
 	await create_timer(.5).timeout
 	if DisplayServer.get_name()!="headless":root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1600,1000);await create_timer(.3).timeout
 	editor=city.build_mode;editor.open_editor();editor.set_process(false);city.set_process(false);city.bunny.set_physics_process(false);city.bunny.hide();editor.ui.hide();editor.grid.hide()
-	check(city.scenery.get_meta("building_site_revision",0)==2 and city.can_walk(Vector3(158,0,10)),"Old packed map expands east at runtime")
+	check(city.scenery.get_meta("building_site_revision",0)==preload("res://scripts/building/site.gd").REVISION and city.can_walk(Vector3(158,0,10)),"Old packed map expands east at runtime")
 	for form in ([] if OS.get_cmdline_user_args().has("--skip-walk") or OS.get_cmdline_user_args().has("--four-only") else Stairs.FORMS.keys()):
 		var data:=L.empty()
 		for level in [0,1]:data=L.add(data,{"type":"floor","a":[110.,-5.],"b":[128.,25.],"storey":level})

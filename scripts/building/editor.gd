@@ -67,16 +67,14 @@ var wall_hint: Dictionary={}
 var preview_walls: Array=[]
 var drafting: Node
 var layout_revision:=0
+var parcel_id:=""
+var parcel_revision:=-1
 var top_down:=false
 var preview_overlays: Dictionary={}
 var floor_preview_cache: Dictionary={}
 func _ready() -> void:
 	layout=Layout.normalize(city.session.state().get("build_layout",{}))
-	if not city.session.test_mode:
-		var added:=preload("res://scripts/building/showcase.gd").ensure(layout)
-		if added!=layout:
-			var result: Dictionary=city.session.set_build_layout(added)
-			if result.ok:layout=result.layout
+	# Purchased parcels start empty; catalogue houses are placed explicitly.
 	ui=preload("res://scripts/building/editor_ui.gd").new();ui.editor=self;add_child(ui)
 	var shape:=PlaneMesh.new();shape.size=Site.PLOT.size;grid=MeshInstance3D.new();grid.mesh=shape;grid.position=Vector3(Site.PLOT.get_center().x,.205,Site.PLOT.get_center().y)
 	var material:=ShaderMaterial.new();material.shader=preload("res://assets/shaders/build_grid.gdshader");grid.material_override=material;grid.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(grid);grid.hide()
@@ -84,13 +82,34 @@ func _ready() -> void:
 	selection_outline=MeshInstance3D.new();selection_outline.name="BuildSelectionOutline";selection_outline.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(selection_outline)
 	drafting=preload("res://scripts/building/drafting.gd").new();drafting.editor=self;add_child(drafting)
 	rebuild();set_process(false)
-func open_editor() -> Dictionary:
+func editing_layout() -> Dictionary:
+	if parcel_id=="":return layout
+	var data:=layout.duplicate();var land=preload("res://scripts/building/parcels.gd")
+	data.elements=layout.elements.filter(func(row):return land.contains_row(parcel_id,row,layout))
+	return data
+func parcel_bounds() -> Rect2:
+	return preload("res://scripts/building/parcels.gd").bounds(parcel_id) if parcel_id!="" else Site.PLOT
+func open_nearby_parcel() -> Dictionary:
+	var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position)
+	if id=="":return {"ok":false,"message":"请先靠近想建造的已购地皮。"}
+	if not land.owns(city.session.state(),id):return {"ok":false,"message":"请先购买身旁这块地皮，再进入建造。"}
+	return open_editor(id)
+# Low-level unscoped entry remains for legacy fixture/import tools; gameplay uses
+# open_nearby_parcel and always supplies a checked parcel ID.
+func open_editor(id: String="") -> Dictionary:
 	if city.session.is_online() or city.map_id!="city":return {"ok":false,"message":"建造园目前只在单人城镇开放。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
+	if id!="":
+		var land=preload("res://scripts/building/parcels.gd")
+		if not land.owns(city.session.state(),id) or land.distance_to(id,city.bunny.global_position)>land.REACH:return {"ok":false,"message":"请走到自己购买的地皮旁边再建造。"}
+	city.session.set_player_position(city.bunny.global_position)
+	parcel_id=id;parcel_revision=int(city.session.state().land_parcels.plots[id].revision) if id!="" else -1
+	undo_stack.clear();redo_stack.clear();selected_id="";selected_unit.clear()
+	var bounds:=parcel_bounds();grid.mesh.size=bounds.size;grid.position.x=bounds.get_center().x;grid.position.z=bounds.get_center().y
 	roof_view=false
 	active=true;previous_active=city.session.active;city.session.active=false;city.paused=true;city.bunny.can_move=false;city.bunny.velocity=Vector3.ZERO;city.hud.hide();InputGuard.release_controls()
 	for npc in city.npcs:npc_modes[npc]=npc.process_mode;npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.velocity=Vector3.ZERO
-	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if Site.PLOT.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Site.CENTER;focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
+	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if bounds.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Vector3(bounds.get_center().x,0,bounds.get_center().y);focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
 	if layout.has("recovery_message"):ui.message("旧布局需要恢复，原记录已保留，请先勿清空地块。",true)
 	return {"ok":true}
 func close_editor() -> void:
@@ -175,14 +194,15 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	# Editing cannot remove the support beneath the paused player or strand them upstairs.
 	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
 		ui.message("角色正在使用这层地板或楼梯，请先步行离开再修改。",true);return false
-	var result: Dictionary=city.session.set_build_layout(candidate)
+	var result: Dictionary=city.session.set_parcel_layout(parcel_id,candidate,parcel_revision) if parcel_id!="" else city.session.set_build_layout(candidate)
 	if not result.ok:ui.message(result.message,true);return false
 	if result.layout==layout:return true
+	if parcel_id!="":parcel_revision=int(city.session.state().land_parcels.plots[parcel_id].revision)
 	if history:undo_stack.append(layout.duplicate(true));redo_stack.clear();if_history_limit()
-	var old_highest:=Storeys.highest(layout)
+	var old_highest:=Storeys.highest(editing_layout())
 	layout=result.layout
-	if roof_view and Storeys.highest(layout)>old_highest:roof_view=false;editing_storey=Storeys.highest(layout)
-	editing_storey=mini(editing_storey,Storeys.highest(layout))
+	if roof_view and Storeys.highest(editing_layout())>old_highest:roof_view=false;editing_storey=Storeys.highest(editing_layout())
+	editing_storey=mini(editing_storey,Storeys.highest(editing_layout()))
 	focus.y=(editing_storey+1 if roof_view else editing_storey)*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=active and not roof_view
 	if not selected_unit.is_empty():reselect_unit(selected_unit)
 	elif selected_id!="" and Layout.find(layout,selected_id).is_empty():selected_id=""
@@ -205,7 +225,8 @@ func place_template(kind: String="cottage") -> bool:
 	choose_tool("template");ui.message(preload("res://scripts/building/templates.gd").SAMPLE_NAMES.get(kind,"整栋样板房")+"跟随鼠标 · 点击空地放置 · Esc 取消")
 	return true
 func clear_plot() -> void:
-	var empty:=Layout.empty()
+	var empty:=layout.duplicate(true) if parcel_id!="" else Layout.empty()
+	if parcel_id!="":empty.elements=preload("res://scripts/building/parcels.gd").outside(layout,parcel_id)
 	if layout.has("multistorey_showcase"):empty.multistorey_showcase=layout.multistorey_showcase
 	if commit(empty):selected_id="";choose_tool("select")
 func paint_selected(color: Color,style: String) -> void:
@@ -362,6 +383,7 @@ func closest_wall(point_: Vector2) -> Dictionary:
 		if distance_to<gap:gap=distance_to;best={"wall":row.id,"offset":snappedf(offset,.5)}
 	return best
 func row_at(point_: Vector2) -> Dictionary:
+	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):return {}
 	var row:={"type":tool,"storey":editing_storey+(1 if roof_view and tool=="floor" else 0),"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
 	if tool in ["door","window","roof","stairs"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y],"yaw":rotation}
@@ -397,6 +419,7 @@ func candidate_layout(row: Dictionary) -> Dictionary:
 	if moving_id=="":return Layout.add(layout,row)
 	return Layout.replace_unit(layout,moving_unit,row) if not moving_unit.is_empty() else Layout.replace(layout,row)
 func place_at(point_: Vector2) -> bool:
+	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):ui.message("请在当前地皮边界内建造。",true);return false
 	if tool in ["floor","wall","roof","railing"] and start_point==null:start_point=point_;return true
 	var row:=row_at(point_)
 	if row.is_empty():ui.message("请把门窗放到足够长的墙面上。",true);return false
@@ -474,6 +497,7 @@ func pick_at(mouse: Vector2) -> String:
 				var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var candidate:=Geometry2D.get_closest_point_to_segment(point,a,b);var distance: float=point.distance_to(candidate)
 				if distance<gap:gap=distance;picked_id=row.id;picked_world=candidate
 	if picked_id!="" and Storeys.of(Layout.find(layout,picked_id))!=editing_storey:return ""
+	if parcel_id!="" and picked_id!="" and not preload("res://scripts/building/parcels.gd").contains_row(parcel_id,Layout.find(layout,picked_id),layout):return ""
 	return picked_id
 func select_at(mouse: Vector2) -> void:
 	selected_id=pick_at(mouse);selected_unit.clear()
@@ -485,6 +509,9 @@ func update_ghost(point_: Vector2) -> void:
 	if not ghost.visible:
 		clear_preview();return
 	var result:=Layout.preview_opening(layout,row,moving_id) if row.type in ["door","window"] else (Extension.preview_stair(layout,row,moving_id) if row.type=="stairs" else Layout.validate(candidate_layout(row)))
+	if result.ok and parcel_id!="":
+		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(city.session.state(),parcel_id,candidate_layout(row),parcel_revision)
+		if not access.ok:result=access
 	if row.type=="template":
 		update_template_preview(Vector2(row.position[0],row.position[1]),result.ok)
 		if not result.ok:ui.message(result.message,true)
@@ -521,7 +548,8 @@ func update_camera() -> void:
 	if active:apply_editor_cutaway()
 func pan_camera(local_offset: Vector2) -> void:
 	focus+=Vector3(local_offset.x,0,local_offset.y).rotated(Vector3.UP,0. if top_down else yaw)
-	focus.x=clampf(focus.x,Site.PLOT.position.x,Site.PLOT.end.x);focus.z=clampf(focus.z,Site.PLOT.position.y,Site.PLOT.end.y)
+	var bounds:=parcel_bounds()
+	focus.x=clampf(focus.x,bounds.position.x,bounds.end.x);focus.z=clampf(focus.z,bounds.position.y,bounds.end.y)
 func toggle_top_down() -> void:
 	if drafting.mode!="":restore_moving();choose_tool("select")
 	top_down=not top_down;drafting.pointer_key="";update_camera();refresh_ui()
@@ -803,7 +831,7 @@ func _input(event: InputEvent) -> void:
 func view_level() -> int:return editing_storey+1 if roof_view else editing_storey
 func set_storey(level: int) -> void:
 	choose_tool("select");selected_id="";selected_unit.clear()
-	var highest:=Storeys.highest(layout)
+	var highest:=Storeys.highest(editing_layout())
 	var target:=clampi(level,0,highest+1);roof_view=target>highest;editing_storey=mini(target,highest)
 	focus.y=target*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=not roof_view;ghost_key=""
 	apply_editor_cutaway();refresh_ui();update_camera()

@@ -52,6 +52,8 @@ var bubble_text: Label
 var bubble_hint: Label
 var bubble_target: Node3D
 var speech_tail: Polygon2D
+var land_parcel_id:=""
+var build_button: Button
 var plot_history_open:=false
 var plot_history_target:=""
 func _ready() -> void:
@@ -111,7 +113,7 @@ func _ready() -> void:
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
 	if city.map_id=="city" and not session.is_online():
-		var build_button:=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
+		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
 	prompt_card.custom_minimum_size=Vector2(470,57)
@@ -217,6 +219,10 @@ func _process(delta: float) -> void:
 	camera_control.position=Vector2(clock_card.position.x,clock_card.position.y+clock_card.size.y+10)
 	var inside: bool=preload("res://scripts/city/interior_view.gd").indoors(city,city.bunny.get_global_transform_interpolated().origin)
 	camera_control.update_context(inside and not photo_mode and not overlay.visible and not city.paused and not city.preparing,delta)
+	if is_instance_valid(build_button):
+		var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position)
+		build_button.disabled=id=="" or not land.owns(session.state(),id)
+		build_button.tooltip_text="靠近已购买的地皮后，只建造该地皮" if id=="" else land.title(id)+" · 24×20米"
 	player_status.visible=not photo_mode
 	prompt_card.position=Vector2((root_ui.size.x-prompt_card.size.x)*.5,root_ui.size.y-190)
 	prompt_card.visible=prompt.text!="" and not photo_mode and not overlay.visible
@@ -307,7 +313,7 @@ func rebuild() -> void:
 	modal.position=Vector2(-width_*.5,-height*.5)
 	var head:=UI.row()
 	content.add_child(head)
-	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活"}
+	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活","land":"海风花庭 · 地皮认购"}
 	var title:=UI.label(titles.get(mode,""),28)
 	title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	head.add_child(title)
@@ -323,6 +329,7 @@ func rebuild() -> void:
 		"workshop": build_workshop()
 		"dining": build_dining()
 		"map": build_map()
+		"land": build_land()
 		"dialogue":
 			var speech:=UI.label(city.dialogue_text,24)
 			speech.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -748,10 +755,28 @@ func build_settings() -> void:
 	options.add_child(UI.label("C 角色 · I 背包 · Tab 换装 · M 地图\nE 互动  ·  F 快捷互动  ·  Esc 返回 / 取消动作  ·  F2 取景  ·  F12 拍照",15,UI.MUTED))
 	options.add_child(UI.button("保存并回到标题界面",func(): session.save_game(); city.return_to_title()))
 	options.add_child(UI.button("保存并退出游戏",func(): session.save_game(); get_tree().quit()))
+func build_land() -> void:
+	var land=preload("res://scripts/building/parcels.gd");var id:=land_parcel_id
+	if id not in land.IDS or not land.at_sign(city.bunny.global_position,id) or land.owner(session.state(),id)!="":
+		content.add_child(UI.label("请走到尚未购买的地皮立板旁，按E查看。",20));return
+	modal.custom_minimum_size=Vector2(610,430);modal.size=Vector2(610,430)
+	content.add_child(UI.label(land.title(id),29))
+	content.add_child(UI.label("24 × 20 米 · 480平方米",20,UI.MUTED))
+	content.add_child(UI.label("购买这块地皮需要 100 贝壳币。",23))
+	content.add_child(UI.label("当前余额：%d 贝壳币"%session.state().coins,19,UI.MUTED))
+	content.add_child(UI.label("购入后，靠近这块地皮点击「建造」或按F6。",17,UI.MUTED))
+	var purchase:=UI.button("确认购买 · 100贝壳币",func():
+		session.set_player_position(city.bunny.global_position)
+		var result: Dictionary=session.buy_land(id)
+		notify(result.message)
+		if result.ok:close_panel()
+		else:rebuild(),true)
+	purchase.name="Purchase_"+id;purchase.disabled=int(session.state().coins)<land.PRICE;content.add_child(purchase)
+	var cancel:=UI.button("再想一想",close_panel);cancel.name="CancelLandPurchase";content.add_child(cancel)
 func build_map() -> void:
 	if city.map_id=="valley": build_valley_map();return
 	var east_building: bool=not session.is_online()
-	content.add_child(UI.label("北 · 商业街     东 · 菜园"+("与建造园 · 东庭两层样板房" if east_building else "")+"     南 · 沙滩     西 · 住宅
+	content.add_child(UI.label("北 · 商业街     东 · 菜园"+("与海风花庭 · 四块可购买地皮" if east_building else "")+"     南 · 沙滩     西 · 住宅
 散步寻找石灰石、铜矿与树枝 · 公园有四棵橘子树",17,UI.MUTED))
 	map_draw=Control.new()
 	map_draw.custom_minimum_size=Vector2(890,480)
@@ -761,8 +786,8 @@ func build_map() -> void:
 		map_draw.draw_set_transform(center-Vector2(53.5*3.65,0) if east_building else center,0,Vector2(3.65,3.25) if east_building else Vector2(4.6,4.1))
 		if east_building:
 			map_draw.draw_rect(preload("res://scripts/building/site.gd").PAD,Color("a8c68c"));map_draw.draw_rect(preload("res://scripts/building/site.gd").CONNECTOR,Color("eee4c8"))
-			map_draw.draw_line(Vector2(97,29),Vector2(159,29),Color("eee4c8"),1.2)
-			map_draw.draw_rect(Rect2(131,2.5,16,15),Color("eadcc5"));map_draw.draw_rect(Rect2(131,2.5,16,12),Color("688d81"))
+			var land=preload("res://scripts/building/parcels.gd")
+			for id in land.IDS:map_draw.draw_rect(land.bounds(id),Color("739c7a") if land.owns(session.state(),id) else Color("d8c49a"))
 		map_draw.draw_circle(Vector2.ZERO,55,Color("a8c68c"))
 		map_draw.draw_rect(Rect2(-36,28,72,13),Color("e4cc94"))
 		map_draw.draw_rect(Rect2(-39,-31,70,12),Color("d7b99c"))

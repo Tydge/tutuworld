@@ -1,0 +1,39 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Four fixed parcels cost 100 coins each
+PASS Exact 24 by 20 dimensions: east_nw
+PASS Public space separates east_nw and east_ne
+PASS Public space separates east_nw and east_sw
+PASS Public space separates east_nw and east_se
+PASS Exact 24 by 20 dimensions: east_ne
+PASS Public space separates east_ne and east_nw
+PASS Public space separates east_ne and east_sw
+PASS Public space separates east_ne and east_se
+PASS Exact 24 by 20 dimensions: east_sw
+PASS Public space separates east_sw and east_nw
+PASS Public space separates east_sw and east_ne
+PASS Public space separates east_sw and east_se
+PASS Exact 24 by 20 dimensions: east_se
+PASS Public space separates east_se and east_nw
+PASS Public space separates east_se and east_ne
+PASS Public space separates east_se and east_sw
+PASS Remote purchase is rejected without charging
+PASS Insufficient funds cannot acquire a parcel
+PASS Authority buys nearby land, charges exactly 100 and records owner
+PASS Duplicate command token never charges twice
+PASS Already-owned parcel cannot be purchased again
+PASS Northern parcel accepts structures beyond the old area's northern edge
+PASS Owned parcel accepts in-bounds construction
+PASS Unowned parcel cannot be edited
+PASS Stale parcel revision is rejected
+PASS Building footprints cannot spill into public land
+PASS Editing one parcel cannot add buildings to a second parcel
+PASS Ownership is attached to stable player identity
+PASS Land commands are unavailable outside the city
+PASS Catalog two-storey template contains all 98 records extracted before clearing the real save
+PASS Updated two-storey house fits a parcel at rotation 0.0
+PASS Updated two-storey house fits a parcel at rotation 90.0
+PASS Updated two-storey house fits a parcel at rotation 180.0
+PASS Updated two-storey house fits a parcel at rotation 270.0
+PASS All four parcels can hold the updated sample simultaneously within current world capacity
+LAND_PARCELS_RULES_RESULT PASS checks=36 failures=[]

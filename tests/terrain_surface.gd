@@ -33,7 +33,7 @@ func run() -> void:
 				actor.move_on_ground(1./Engine.physics_ticks_per_second)
 			check(reached,"Walk across former road divider without jumping: "+species+" "+str(route[1]))
 		actor.queue_free();await process_frame
-	var beds:=scenery.find_children("PlazaFlowerbed*","Node3D",true,false)
+	var beds:=scenery.get_node("CentralPark").find_children("PlazaFlowerbed*","Node3D",true,false)
 	check(beds.size()==4,"Four plaza flowerbeds replace the former flat disks")
 	if beds.size()==4:
 		check(beds[0].get_node("MixedFlowersAndLeaves").mesh==beds[3].get_node("MixedFlowersAndLeaves").mesh,"Flowerbeds share geometry instead of duplicating meshes")

@@ -1,0 +1,44 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Four-storey wall display fixture
+PASS Complete walls includes every lower floor: 2
+PASS Higher floor walls remain hidden: 2
+PASS Returning to cutaway restores floor isolation
+PASS Complete walls includes every lower floor: 3
+PASS Higher floor walls remain hidden: 3
+PASS Returning to cutaway restores floor isolation
+PASS Complete walls includes every lower floor: 4
+PASS Higher floor walls remain hidden: 4
+PASS Returning to cutaway restores floor isolation
+WANDER_GRID_READY cells=19995 components=6
+PASS Six new objects validate and build together
+PASS Actual camera ray places a wall object at mouse height
+PASS Actual direct drag moves wall decoration horizontally and vertically
+PASS Only visible nearby mirror allocates a reflection view
+PASS Visible mirror receives an actual rendered planar texture
+PASS Mirror reflects a real red object behind the main camera, beyond screen-space reflection
+PASS Off-axis projection maps mirror corners to the rendered texture without stretching
+PASS Reflection excludes recursive mirror faces and clips the wall behind its plane
+PASS Stationary main camera keeps the moving reflection at the main frame rate
+PASS Back-facing mirror stops reflection rendering
+PASS Multiple-mirror fixture validates
+PASS Three coplanar mirrors all reflect using one shared view
+PASS Shared texture has a distinct correct window for every mirror
+PASS Close mirrors can exceed the old total pixel budget while keeping all three reflections
+PASS All three mirrors refresh every main frame without alternating
+PASS Visible mirrors keep their real reflection past the old distance limit: 17.0
+PASS Visible mirrors keep their real reflection past the old distance limit: 19.0
+PASS Visible mirrors keep their real reflection past the old distance limit: 26.0
+PASS Visible mirrors keep their real reflection past the old distance limit: 35.0
+PASS Far mirrors reduce rendered pixels instead of dropping animation frames
+PASS A blocked centre does not disable the visible edges of a mirror
+PASS Fully occluded mirrors do no additional scene renders
+PASS Off-screen mirrors do no additional scene renders
+PASS Mirror fixture includes a real collidable roof
+PASS Invisible editor roof does not block reflection visibility
+PASS Updated player house builds as actual catalog template
+PASS Actual fireplace collision has one centimetre clearance from the wall face
+PASS Leaving the city restores the root viewport occlusion setting
+WALL_FURNITURE_FLOW_RESULT PASS checks=38 failures=[]

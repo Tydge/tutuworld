@@ -181,9 +181,10 @@ func _process(delta: float) -> void:
 			section.target=0.0 if hide_section else 1.0;alpha=move_toward(section.alpha,section.target,delta*5.0);section.alpha=alpha
 		if not view_changed and is_equal_approx(alpha,previous_alpha):continue
 		for material in section.materials:
-			material.set_shader_parameter("opacity",alpha);material.set_shader_parameter("cut_base_height",-100. if section.roof or view_mode==View.OCCLUSION else global_position.y+floor_level+.62)
-		for visual in section.visuals:visual.visible=alpha>.002 or (not section.roof and view_mode==View.AUTO)
-		for pane in section.glass:pane.visible=alpha>.40
+			material.set_shader_parameter("camera_occlusion",view_mode==View.OCCLUSION);material.set_shader_parameter("opacity",alpha);material.set_shader_parameter("cut_base_height",-100. if section.roof or view_mode==View.OCCLUSION else global_position.y+floor_level+.62)
+		for visual in section.visuals:
+			if not section.glass.has(visual):View.set_visual_visible(visual,alpha>.002 or (not section.roof and view_mode==View.AUTO),view_mode==View.OCCLUSION)
+		for pane in section.glass:View.set_visual_visible(pane,alpha>.40,view_mode==View.OCCLUSION)
 		for label in section.labels:label.visible=alpha>.70
 
 	if is_instance_valid(quilt):

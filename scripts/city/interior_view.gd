@@ -2,6 +2,9 @@ extends RefCounted
 const AUTO:=0
 const FULL:=1
 const OCCLUSION:=2
+# Reserved camera marker / layer for geometry hidden only from the main view.
+# Keep in sync with home_surface.gdshader (bit 18).
+const REFLECTION_LAYER:=1<<18
 const NAMES:=["自动俯视","自由完整","自由避挡"]
 static func mode(city: Node) -> int:
 	if not is_instance_valid(city):return AUTO
@@ -21,6 +24,7 @@ static func probes(camera: Vector3,actor: Vector3) -> PackedVector3Array:
 	return result
 static func obstructs(section: Dictionary,camera: Vector3,actor: Vector3,ends: PackedVector3Array=PackedVector3Array()) -> bool:
 	var node: Node3D=section.node
+	# Attached windows follow the continuous parent-wall decision via view_face.
 	if node.get_meta("module_type","")=="window":return false
 	var leaf: Node3D=node.get_node_or_null("Hinge/LeafCollision")
 	if leaf==null:leaf=node.get_node_or_null("LeafCollision")
@@ -36,11 +40,9 @@ static func obstructs(section: Dictionary,camera: Vector3,actor: Vector3,ends: P
 		if node.has_meta("length"):
 			var hit: Variant=Plane(Vector3.BACK,0.).intersects_segment(start,end)
 			if hit==null or not bounds.has_point(hit):continue
-			var in_opening:=false
-			for opening in node.get_meta("view_openings",[]):
-				var along: float=hit.x+float(node.get_meta("length"))*.5;var bottom: float=float(node.get_meta("view_floor",.18))+float(opening.bottom)
-				if absf(along-float(opening.offset))<float(opening.width)*.5-.04 and hit.y>bottom+.04 and hit.y<bottom+float(opening.height)-.04:in_opening=true;break
-			if not in_opening:return true
+			# Free occlusion is a whole-wall cutaway even when this sightline goes
+			# through a window or an open doorway in the wall's continuous plane.
+			return true
 		elif bounds.intersects_segment(start,end)!=null:return true
 	return false
 static func targets(sections: Array,camera: Vector3,actor: Vector3) -> Dictionary:
@@ -56,6 +58,14 @@ static func sample_targets(sections: Array,camera: Vector3,actor: Vector3,cache:
 	if not force and cache.has("at") and now-int(cache.at)<33333 and camera.distance_squared_to(cache.camera)<.16 and actor.distance_squared_to(cache.actor)<.04:return cache.targets
 	cache.at=now;cache.camera=camera;cache.actor=actor;cache.targets=targets(sections,camera,actor);cache.scans=int(cache.get("scans",0))+1
 	return cache.targets
+static func set_visual_visible(visual: GeometryInstance3D,shown: bool,camera_only: bool) -> void:
+	if not visual.has_meta("view_layers"):visual.set_meta("view_layers",visual.layers)
+	var original: int=visual.get_meta("view_layers")
+	# Never hide the shared instance from the reflection camera. Transparent panes
+	# also use this path because their StandardMaterial cannot ignore wall opacity.
+	var layers: int=original if shown or not camera_only else REFLECTION_LAYER
+	if visual.layers!=layers:visual.layers=layers
+	if visual.visible!=(shown or camera_only):visual.visible=shown or camera_only
 static func fade(section: Dictionary,blocked: bool,delta: float) -> float:
 	section["occlusion_hold"]=.18 if blocked else maxf(0.,float(section.get("occlusion_hold",0.))-delta)
 	section.target=0. if blocked or section.occlusion_hold>0 else 1.
