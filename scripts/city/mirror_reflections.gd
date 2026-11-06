@@ -32,10 +32,7 @@ static func attach(host: Node3D,module: Node3D,building: Node3D) -> void:
 	if manager==null:manager=load("res://scripts/city/mirror_reflections.gd").new();manager.name="MirrorReflections";manager.city=host;host.add_child(manager)
 	var bodies: Array[RID]=[]
 	for body in module.find_children("*","CollisionObject3D",true,false):bodies.append(body.get_rid())
-	manager.mirrors.append({"face":weakref(face),"module":weakref(module),"building":weakref(building),"bodies":bodies,"transform":Transform3D(),"geometry":{}})
-static func pose(camera_: Camera3D,eye: Vector3,face: MeshInstance3D) -> bool:
-	var geometry:=PlaneView.describe(face)
-	return PlaneView.pose(camera_,eye,geometry,geometry.rect)
+	manager.mirrors.append({"face":weakref(face),"building":weakref(building),"bodies":bodies,"transform":Transform3D(),"geometry":{}})
 func actual_building(building: Node3D) -> bool:
 	return is_instance_valid(city.build_mode) and building==city.build_mode.room
 func hidden_bodies(building: Node3D) -> Array[RID]:
@@ -68,7 +65,7 @@ func projection(face: MeshInstance3D,geometry: Dictionary,frustum: Array[Plane])
 	var pixels:=clampi(ceili(height_/32.)*32,MIN_HEIGHT,MAX_HEIGHT)
 	var rect: Rect2=geometry.rect if screen.encloses(area) else PlaneView.clipped_rect(geometry,frustum)
 	if rect.size.x<.0001 or rect.size.y<.0001:return {}
-	return {"rect":rect,"density":float(pixels)/geometry.dy.length(),"pixels":pixels}
+	return {"rect":rect,"density":float(pixels)/geometry.dy.length()}
 func cluster(candidates: Array) -> Array:
 	var planes: Dictionary={};var result: Array=[]
 	for candidate in candidates:
@@ -92,7 +89,7 @@ func make_slot(key: String) -> Dictionary:
 	var source: Environment=city.camera.environment if city.camera.environment!=null else city.get_world_3d().environment
 	if source!=null:
 		camera_.environment=source.duplicate();camera_.environment.ssao_enabled=false;camera_.environment.ssil_enabled=false;camera_.environment.ssr_enabled=false;camera_.environment.glow_enabled=false
-	return {"key":key,"viewport":viewport,"camera":camera_,"faces":[],"face":null,"ready_frame":-1,"confirmed":false,"updates":0,"blend":0.,"binding":"","density":0.,"idle":0.,"bound_faces":[],"shrink_size":Vector2i.ZERO,"shrink_time":0. }
+	return {"key":key,"viewport":viewport,"camera":camera_,"faces":[],"ready_frame":-1,"confirmed":false,"updates":0,"blend":0.,"binding":"","density":0.,"idle":0.,"bound_faces":[],"shrink_size":Vector2i.ZERO,"shrink_time":0. }
 func slot_for(face: MeshInstance3D) -> Dictionary:
 	for slot in slots:
 		if slot.faces.has(face):return slot
@@ -112,7 +109,7 @@ func bind_group(slot: Dictionary,group: Dictionary,rect: Rect2) -> void:
 				material.set_shader_parameter("reflection_texture",slot.viewport.get_texture());material.set_shader_parameter("reflection_ready",slot.confirmed);material.set_shader_parameter("reflection_mix",slot.blend)
 			material.set_shader_parameter("reflection_uv_x",mapping[0]);material.set_shader_parameter("reflection_uv_y",mapping[1])
 		slot.binding=binding
-	slot.faces=faces;slot.bound_faces=all_faces;slot.face=faces[0];slot.idle=0.
+	slot.faces=faces;slot.bound_faces=all_faces;slot.idle=0.
 
 func _process(delta: float) -> void:
 	if DisplayServer.get_name()=="headless" or not is_instance_valid(city) or not is_instance_valid(city.camera):return
@@ -150,7 +147,7 @@ func _process(delta: float) -> void:
 	for slot in slots.duplicate():
 		if active_keys.has(slot.key):continue
 		slot.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-		slot.faces=[];slot.face=null;slot.binding="";slot.idle+=delta
+		slot.faces=[];slot.binding="";slot.idle+=delta
 		if slot.idle>30.:
 			for entry in mirrors:
 				var face: MeshInstance3D=entry.face.get_ref()

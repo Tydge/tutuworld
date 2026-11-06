@@ -1,0 +1,14 @@
+{
+  "scripts/city/mirror_reflections.gd": {
+    "snapshot": "source-snapshots/mirror_reflections.gd.txt",
+    "sha256": "87c5426e10a5b4335a96f3738ee06587d2badc83460805906724b4c8ec078e6b"
+  },
+  "assets/shaders/planar_mirror.gdshader": {
+    "snapshot": "source-snapshots/planar_mirror.gdshader.txt",
+    "sha256": "0711bee77368b536ccb6d394a65fc48a23ea6717c3589d9d7487a412789ff90f"
+  },
+  "tests/wall_furniture_flow.gd": {
+    "snapshot": "source-snapshots/wall_furniture_flow.gd.txt",
+    "sha256": "d9452a44c1f43221c1a1aa3107b281712a9d005480a840f0c2a1538f08a6430e"
+  }
+}

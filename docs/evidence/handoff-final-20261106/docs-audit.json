@@ -1,0 +1,22 @@
+{
+  "markdown_documents": 32,
+  "local_links_checked": 326,
+  "missing_local_targets": [],
+  "unindexed_markdown": [],
+  "invalid_test_entries": [],
+  "historical_snapshot_hashes_match": true,
+  "current_source_hashes_match": true,
+  "repository_file_count": 1544,
+  "directory_counts": {
+    "[根目录文件]": 8,
+    "assets": 131,
+    "config": 5,
+    "data": 10,
+    "docs": 765,
+    "scenes": 15,
+    "scripts": 281,
+    "server": 12,
+    "tests": 310,
+    "tools": 7
+  }
+}

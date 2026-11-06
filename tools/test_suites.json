@@ -384,11 +384,6 @@
     "stair_preview_performance": {
       "headless": true
     },
-    "mirror_performance": {
-      "args": [
-        "--benchmark"
-      ]
-    },
     "mirror_many_flow": {},
     "mirror_many_performance": {
       "script": "mirror_many_flow",

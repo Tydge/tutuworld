@@ -1,0 +1,285 @@
+{
+  "date": "2026-11-06",
+  "deleted": [
+    {
+      "path": ".qa-artifacts/20261106-142617-502441",
+      "files": 1,
+      "bytes": 3093
+    },
+    {
+      "path": ".qa-artifacts/20261106-142704-239411",
+      "files": 1,
+      "bytes": 328
+    },
+    {
+      "path": ".qa-artifacts/20261106-142711-711951",
+      "files": 6,
+      "bytes": 8829580
+    },
+    {
+      "path": ".qa-artifacts/20261106-142925-672632",
+      "files": 1,
+      "bytes": 464
+    },
+    {
+      "path": ".qa-artifacts/20261106-143147-574091",
+      "files": 12,
+      "bytes": 25840447
+    },
+    {
+      "path": ".qa-artifacts/20261106-143312-675604",
+      "files": 5,
+      "bytes": 8834664
+    },
+    {
+      "path": ".qa-artifacts/20261106-143422-395585",
+      "files": 5,
+      "bytes": 8665718
+    },
+    {
+      "path": ".qa-artifacts/20261106-143543-735853",
+      "files": 36,
+      "bytes": 109706934
+    },
+    {
+      "path": ".qa-artifacts/20261106-143927-047080",
+      "files": 21,
+      "bytes": 77797757
+    },
+    {
+      "path": ".qa-artifacts/20261106-144207-745203",
+      "files": 66,
+      "bytes": 124422867
+    },
+    {
+      "path": ".qa-artifacts/20261106-144551-755369",
+      "files": 1,
+      "bytes": 1055
+    },
+    {
+      "path": ".qa-artifacts/20261106-150931-770225",
+      "files": 8,
+      "bytes": 21135395
+    },
+    {
+      "path": ".qa-artifacts/20261106-151554-572992",
+      "files": 3,
+      "bytes": 6961447
+    },
+    {
+      "path": ".qa-artifacts/20261106-151806-253348",
+      "files": 8,
+      "bytes": 21125592
+    },
+    {
+      "path": ".qa-artifacts/20261106-152309-255080",
+      "files": 4,
+      "bytes": 7288265
+    },
+    {
+      "path": ".qa-artifacts/20261106-153247-769796",
+      "files": 5,
+      "bytes": 6953887
+    },
+    {
+      "path": ".qa-artifacts/20261106-153649-301177",
+      "files": 1,
+      "bytes": 962
+    },
+    {
+      "path": ".qa-artifacts/20261106-153908-390593",
+      "files": 4,
+      "bytes": 7698985
+    },
+    {
+      "path": ".qa-artifacts/20261106-154006-841016",
+      "files": 11,
+      "bytes": 27342139
+    },
+    {
+      "path": ".qa-artifacts/20261106-154330-770437",
+      "files": 11,
+      "bytes": 27314554
+    },
+    {
+      "path": ".qa-artifacts/20261106-155200-590348",
+      "files": 4,
+      "bytes": 7700374
+    },
+    {
+      "path": ".qa-artifacts/20261106-155844-124950",
+      "files": 4,
+      "bytes": 7699909
+    },
+    {
+      "path": ".qa-artifacts/20261106-160039-077224",
+      "files": 11,
+      "bytes": 27328364
+    },
+    {
+      "path": ".qa-artifacts/20261106-161011-656262",
+      "files": 4,
+      "bytes": 7697641
+    },
+    {
+      "path": ".qa-artifacts/20261106-161131-122888",
+      "files": 4,
+      "bytes": 10036243
+    },
+    {
+      "path": ".qa-artifacts/20261106-161819-352163",
+      "files": 11,
+      "bytes": 27346171
+    },
+    {
+      "path": ".qa-artifacts/20261106-162231-362256",
+      "files": 11,
+      "bytes": 27330955
+    },
+    {
+      "path": ".qa-artifacts/20261106-162440-040528",
+      "files": 4,
+      "bytes": 6458178
+    },
+    {
+      "path": ".qa-artifacts/20261106-162657-409813",
+      "files": 11,
+      "bytes": 27335591
+    },
+    {
+      "path": ".qa-artifacts/20261106-163442-487059",
+      "files": 1,
+      "bytes": 421
+    },
+    {
+      "path": ".qa-artifacts/20261106-163453-751451",
+      "files": 7,
+      "bytes": 6652267
+    },
+    {
+      "path": ".qa-artifacts/20261106-163704-600819",
+      "files": 7,
+      "bytes": 6635300
+    },
+    {
+      "path": ".qa-artifacts/20261106-163755-488648",
+      "files": 4,
+      "bytes": 7701869
+    },
+    {
+      "path": ".qa-artifacts/20261106-163920-529713",
+      "files": 7,
+      "bytes": 6629825
+    },
+    {
+      "path": ".qa-artifacts/20261106-164136-921938",
+      "files": 1,
+      "bytes": 1457
+    },
+    {
+      "path": ".qa-artifacts/20261106-164234-294533",
+      "files": 7,
+      "bytes": 6636904
+    },
+    {
+      "path": ".qa-artifacts/20261106-164444-898261",
+      "files": 7,
+      "bytes": 6626359
+    },
+    {
+      "path": ".qa-artifacts/20261106-164640-899579",
+      "files": 7,
+      "bytes": 6663484
+    },
+    {
+      "path": ".qa-artifacts/20261106-164837-576457",
+      "files": 7,
+      "bytes": 6637975
+    },
+    {
+      "path": ".qa-artifacts/20261106-165012-229841",
+      "files": 20,
+      "bytes": 28652190
+    },
+    {
+      "path": ".qa-artifacts/20261106-165202-290844",
+      "files": 4,
+      "bytes": 7706504
+    },
+    {
+      "path": ".qa-artifacts/20261106-165419-660853",
+      "files": 7,
+      "bytes": 17013399
+    },
+    {
+      "path": ".qa-artifacts/20261106-165559-787596",
+      "files": 20,
+      "bytes": 28622174
+    },
+    {
+      "path": ".qa-artifacts/20261106-165949-280019",
+      "files": 4,
+      "bytes": 7703359
+    },
+    {
+      "path": ".qa-artifacts/20261106-170311-210568",
+      "files": 32,
+      "bytes": 78017381
+    },
+    {
+      "path": ".qa-artifacts/20261106-170610-942782",
+      "files": 11,
+      "bytes": 27341362
+    },
+    {
+      "path": ".qa-artifacts/20261106-170933-195863",
+      "files": 8,
+      "bytes": 17001785
+    },
+    {
+      "path": ".qa-artifacts/20261106-171223-254147",
+      "files": 11,
+      "bytes": 27298736
+    },
+    {
+      "path": ".qa-artifacts/20261106-180150-877495",
+      "files": 26,
+      "bytes": 62281423
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-914990",
+      "files": 1,
+      "bytes": 15683
+    },
+    {
+      "path": ".qa-artifacts/building-store-428465",
+      "files": 2,
+      "bytes": 17353
+    },
+    {
+      "path": ".qa-artifacts/dining-save-7650836",
+      "files": 1,
+      "bytes": 9508
+    },
+    {
+      "path": ".qa-artifacts/mirror-many-baseline",
+      "files": 13,
+      "bytes": 118518
+    },
+    {
+      "path": ".qa-artifacts/screenshots",
+      "files": 0,
+      "bytes": 0
+    },
+    {
+      "path": ".qa-artifacts/zoom-probe.gd",
+      "files": 1,
+      "bytes": 6709
+    }
+  ],
+  "entries_removed": 55,
+  "files_removed": 490,
+  "bytes_removed": 994849504,
+  "protected_files_verified_unchanged": 285,
+  "private_data_in_evidence": false
+}

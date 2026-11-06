@@ -11,7 +11,6 @@ var editor: Node
 var manager: Node
 var rows: Array=[]
 var output: String
-var renderer_path:=""
 var benchmark:=false
 var only_layout:=""
 func _initialize() -> void:call_deferred("run")
@@ -74,7 +73,6 @@ func reflected_samples() -> Dictionary:
 		result[face.get_instance_id()]=colors
 	return result
 func compare_quality() -> void:
-	if renderer_path!="":return
 	# A static, high-contrast board behind the main camera isolates mapping and
 	# detail from animation/time. Each mirror must see its own correct subregion.
 	var board:=Node3D.new();city.add_child(board)
@@ -141,7 +139,7 @@ func measure(kind: String,condition: String,seconds: float=4.) -> void:
 	if not enabled:
 		for slot in manager.slots:slot.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 	var trace: Array=[];var synchronous:=true
-	var frames: Array=[];var updates: Array=[];var active: Array=[];var views: Array=[];var before: int=manager.render_count;var last:=Time.get_ticks_usec();var start:=last
+	var frames: Array=[];var active: Array=[];var views: Array=[];var before: int=manager.render_count;var last:=Time.get_ticks_usec();var start:=last
 	while Time.get_ticks_usec()-start<int(seconds*1000000.):
 		var t: float=(Time.get_ticks_usec()-start)/1000000.;city.bunny.position=Vector3(85+sin(t*3.)*2.,.2,15.);city.bunny.reset_physics_interpolation();city.bunny.walking=true;city.bunny.step_phase=t*7.;city.bunny.animate_pose(0.)
 		if kind=="room":
@@ -150,11 +148,10 @@ func measure(kind: String,condition: String,seconds: float=4.) -> void:
 			var center:=Vector3(91.8,2.6,7) if kind=="independent" else Vector3(85,2.4,4.245)
 			city.camera.position=Vector3(91.8+sin(t*1.2)*.8,6,45) if kind=="independent" else Vector3(85+sin(t*1.2)*.6,3.,20)
 			city.camera.look_at(center)
-		var face_before: int=manager.get("face_update_count") if manager.get("face_update_count")!=null else 0
-		var previous: int=manager.render_count
+		var face_before: int=manager.face_update_count
 		await draw()
-		var now:=Time.get_ticks_usec();frames.append((now-last)/1000.);last=now;updates.append(manager.render_count-previous);active.append(manager.active_count);views.append(int(manager.get("active_view_count")) if manager.get("active_view_count")!=null else manager.active_count)
-		if enabled and manager.get("face_update_count")!=null:synchronous=synchronous and manager.face_update_count-face_before==manager.active_count
+		var now:=Time.get_ticks_usec();frames.append((now-last)/1000.);last=now;active.append(manager.active_count);views.append(manager.active_view_count)
+		if enabled:synchronous=synchronous and manager.face_update_count-face_before==manager.active_count
 		if OS.get_cmdline_user_args().has("--trace"):
 			var targets: Array=[]
 			for slot in manager.slots:
@@ -164,7 +161,7 @@ func measure(kind: String,condition: String,seconds: float=4.) -> void:
 	var pixels:=0
 	var visible_draws:=0;var shadow_draws:=0;var primitives:=0
 	for slot in manager.slots:
-		if not enabled or (slot.has("faces") and slot.faces.is_empty()):continue
+		if not enabled or slot.faces.is_empty():continue
 		pixels+=slot.viewport.size.x*slot.viewport.size.y
 		var rid: RID=slot.viewport.get_viewport_rid()
 		visible_draws+=RenderingServer.viewport_get_render_info(rid,RenderingServer.VIEWPORT_RENDER_INFO_TYPE_VISIBLE,RenderingServer.VIEWPORT_RENDER_INFO_DRAW_CALLS_IN_FRAME)
@@ -181,7 +178,6 @@ func run() -> void:
 	output=preload("res://tests/test_support.gd").output_dir()
 	benchmark=OS.get_cmdline_user_args().has("--benchmark")
 	for arg in OS.get_cmdline_user_args():
-		if arg.begins_with("--renderer="):renderer_path=arg.trim_prefix("--renderer=")
 		if arg.begins_with("--layout="):only_layout=arg.trim_prefix("--layout=")
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session);session.create_character("二十镜验收兔","bunny","bow_rose")
 	city=load("res://scenes/city.tscn").instantiate();root.add_child(city);current_scene=city
@@ -189,7 +185,6 @@ func run() -> void:
 	await create_timer(.7).timeout;city.set_process(false);city.bunny.set_physics_process(false);session.active=false
 	if OS.get_cmdline_user_args().has("--no-sun-shadows"):city.sun.shadow_enabled=false
 	editor=city.build_mode;editor.open_editor();editor.set_process(false);editor.ui.hide();editor.grid.hide()
-	if renderer_path!="":manager=load(renderer_path).new();manager.name="MirrorReflections";manager.city=city;city.add_child(manager)
 	Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED);OS.low_processor_usage_mode=false
 	while editor.ui.studio.busy or not editor.ui.studio.pending.is_empty():await draw()
 	RenderingServer.render_loop_enabled=false
@@ -219,6 +214,6 @@ func run() -> void:
 		await measure(kind,"night")
 		if kind=="coplanar":await compare_quality()
 	RenderingServer.render_loop_enabled=true
-	var report:={"renderer_override":renderer_path,"diagnostic_args":OS.get_cmdline_user_args(),"sun_shadows":city.sun.shadow_enabled,"main_msaa":root.msaa_3d,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"window":str(root.size),"scale":root.scaling_3d_scale,"metric":"Uncapped vsync-off complete frames: one explicit draw per process frame, automatic render loop disabled; full town plus 20 real catalog mirrors, furniture, lamps, moving camera and animated character. P99 threshold 16.7ms. GPU timings are not used as total frame time.","rows":rows}
+	var report:={"diagnostic_args":OS.get_cmdline_user_args(),"sun_shadows":city.sun.shadow_enabled,"main_msaa":root.msaa_3d,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"window":str(root.size),"scale":root.scaling_3d_scale,"metric":"Uncapped vsync-off complete frames: one explicit draw per process frame, automatic render loop disabled; full town plus 20 real catalog mirrors, furniture, lamps, moving camera and animated character. P99 threshold 16.7ms. GPU timings are not used as total frame time.","rows":rows}
 	FileAccess.open(output.get_base_dir()+"/mirror-many-performance.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "));city.free();session.free();await process_frame
 	print("MIRROR_MANY_FLOW_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)

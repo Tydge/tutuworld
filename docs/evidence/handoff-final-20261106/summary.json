@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-06",
+  "feature_commit": "ce15a7b6dee1f3c951fb392e785b21f710ac2042",
+  "status": "Cleanup and handoff validated; mirror performance/quality goal remains partial.",
+  "functional_groups": 7,
+  "counted_checks": 671,
+  "checks": [
+    {
+      "test": "project_integrity",
+      "status": "PASS",
+      "checks": 433,
+      "log": "project_integrity.log"
+    },
+    {
+      "test": "wall_furniture_rules",
+      "status": "PASS",
+      "checks": 78,
+      "log": "wall_furniture_rules.log"
+    },
+    {
+      "test": "wall_furniture_flow",
+      "status": "PASS",
+      "checks": 38,
+      "log": "wall_furniture_flow.log"
+    },
+    {
+      "test": "mirror_many_flow",
+      "status": "PASS",
+      "checks": 31,
+      "log": "mirror_many_flow.log"
+    },
+    {
+      "test": "building_selection_flow",
+      "status": "PASS",
+      "checks": 47,
+      "log": "building_selection_flow.log"
+    },
+    {
+      "test": "building_ui_scroll_flow",
+      "status": "PASS",
+      "checks": 12,
+      "log": "building_ui_scroll_flow.log"
+    },
+    {
+      "test": "multistorey_editor_flow",
+      "status": "PASS",
+      "checks": 32,
+      "log": "multistorey_editor_flow.log"
+    }
+  ],
+  "source_sha256": {
+    "scripts/building/building_world.gd": "62f3558f4310db765f27e572d0955d241bee890f7421c0b14dc56da495b76c2a",
+    "scripts/building/editor.gd": "da923225b2f000618c3725991d43cfcad836609e345944f2f79880bee669faa0",
+    "scripts/building/editor_ui.gd": "8ba07fdd9c5efcb3781f52361e0ae067219a1b5b9c884666f798472e270cd620",
+    "scripts/city/mirror_reflections.gd": "323f3ee216b219c9e27fc217fc95e6581353d2b367b7486692d6d2232e851aba",
+    "scripts/city/mirror_plane.gd": "666b11f53d8040d45daa2832646f724bdb62517413b70670fe1970c399d89eaf",
+    "scripts/city/mirror_occluders.gd": "05802c0c9be6f8a9ba415c85bcdc9e1f6cfadb697b216db43324a500c08f196e",
+    "assets/shaders/planar_mirror.gdshader": "daad99213e965b7c3d173ed412e610da79fa929b416e5c4af829ff30073c1d5d",
+    "tests/mirror_many_flow.gd": "eb7dcdadefc9e3d6a6c9b140c0d09f2d518a37c361d444b392a508c476c67a36",
+    "tests/wall_furniture_flow.gd": "62216e35d1f6822c2f8275f3e279e7dbfdff9ae6aa7c8e3af2e6a7e71fc50a76",
+    "tests/building_selection_flow.gd": "267e713899a4712e3068787cb35eab3592dce9cdfce0fe107cee52c2a9bceefd",
+    "tests/building_ui_scroll_flow.gd": "e1bf4e462a6393e862490023ab799f34ef6312addbfcf243b1a9770d88a68ca8",
+    "tests/multistorey_editor_flow.gd": "0e978404102511d4b1317f1b49e3b1fdd82ad49aa80ddf94457a02203344e7d3",
+    "tools/test_suites.json": "6753f0c76d9224918c6f8d61c7dff1e7296d21191bbf3687b9b4b64c42bb211a"
+  },
+  "known_remaining": [
+    "20 independent visible planes still fail the 16.7 ms P99 acceptance budget.",
+    "Shared versus independent capture shadows differ.",
+    "Initial render-target allocation may produce long frames."
+  ],
+  "strict_performance_rerun_in_cleanup": false,
+  "performance_scope": "mirror_many_flow records timings but does not assert P99; strict prior failures remain preserved in mirror-many-20261106.",
+  "cleanup": {
+    "date": "2026-11-06",
+    "entries_removed": 55,
+    "files_removed": 490,
+    "bytes_removed": 994849504,
+    "protected_files_verified_unchanged": 285,
+    "private_data_in_evidence": false
+  },
+  "published_or_deployed": false
+}

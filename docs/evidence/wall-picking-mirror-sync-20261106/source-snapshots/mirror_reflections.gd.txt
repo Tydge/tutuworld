@@ -1,0 +1,132 @@
+extends Node
+## Screen-sized planar views: keep motion at the main frame rate, budget pixels instead.
+const MAX_ACTIVE:=2
+const MAX_PIXELS:=327680
+const MIN_HEIGHT:=64
+const MAX_HEIGHT:=640
+const FACE_LAYER:=1<<19
+var city: Node3D
+var mirrors: Array=[]
+var slots: Array=[]
+var render_count:=0
+var active_count:=0
+static func attach(host: Node3D,module: Node3D,building: Node3D) -> void:
+	var face: MeshInstance3D=module.find_child("MirrorFace",true,false)
+	if face==null:return
+	face.material_override=face.material_override.duplicate()
+	var manager=host.get_node_or_null("MirrorReflections")
+	if manager==null:manager=load("res://scripts/city/mirror_reflections.gd").new();manager.name="MirrorReflections";manager.city=host;host.add_child(manager)
+	var bodies: Array[RID]=[]
+	for body in module.find_children("*","CollisionObject3D",true,false):bodies.append(body.get_rid())
+	manager.mirrors.append({"face":weakref(face),"building":weakref(building),"bodies":bodies})
+static func pose(camera_: Camera3D,eye: Vector3,face: MeshInstance3D) -> bool:
+	var center:=face.global_position;var normal:=face.global_basis.z.normalized();var up:=face.global_basis.y.normalized();var distance: float=(eye-center).dot(normal)
+	if distance<.025:return false
+	var reflected:=eye-normal*(2.*distance)
+	camera_.global_transform=Transform3D(Basis(-face.global_basis.x.normalized(),up,-normal),reflected)
+	var point:=camera_.to_local(center);var near_:=distance+.012;var factor:=near_/distance;var extent: Vector2=face.mesh.size
+	camera_.keep_aspect=Camera3D.KEEP_HEIGHT
+	camera_.set_frustum(extent.y*factor,Vector2(point.x,point.y)*factor,near_,distance+55.)
+	return true
+func actual_building(building: Node3D) -> bool:
+	return is_instance_valid(city.build_mode) and building==city.build_mode.room
+func score(face: MeshInstance3D,camera_: Camera3D) -> float:
+	if not face.is_visible_in_tree():return 0.
+	var difference:=camera_.global_position-face.global_position
+	if difference.dot(face.global_basis.z.normalized())<.025 or camera_.is_position_behind(face.global_position):return 0.
+	var extent: Vector2=face.mesh.size;var area:=Rect2(camera_.unproject_position(face.global_position),Vector2.ZERO)
+	for x in [-.5,.5]:
+		for y in [-.5,.5]:area=area.expand(camera_.unproject_position(face.to_global(Vector3(x*extent.x,y*extent.y,0))))
+	area=area.intersection(get_viewport().get_visible_rect())
+	if area.get_area()<4.:return 0.
+	return area.get_area()
+func visible_from(face: MeshInstance3D,camera_: Camera3D,excluded: Array[RID]) -> bool:
+	# The physics world keeps hidden roofs and cutaway walls for walking.
+	# Test several points inside the ellipse so a chair across its centre cannot
+	# turn off a mirror which remains partly visible.
+	var extent: Vector2=face.mesh.size
+	for point in [Vector2.ZERO,Vector2(-.35,0),Vector2(.35,0),Vector2(0,-.35),Vector2(0,.35)]:
+		var target:=face.to_global(Vector3(point.x*extent.x,point.y*extent.y,0))
+		var ray:=PhysicsRayQueryParameters3D.create(camera_.global_position,target,13,excluded)
+		if city.get_world_3d().direct_space_state.intersect_ray(ray).is_empty():return true
+	return false
+func hidden_bodies(building: Node3D) -> Array[RID]:
+	var result: Array[RID]=[];result.assign(building.hidden_camera_bodies)
+	for section in building.sections:
+		if section.node.is_visible_in_tree() and not section.get("editor_hidden",false) and section.get("alpha",1.)>.002:continue
+		for body in section.node.find_children("*","StaticBody3D",true,false):result.append(body.get_rid())
+	return result
+func desired_height(face: MeshInstance3D,camera_: Camera3D) -> int:
+	var extent: Vector2=face.mesh.size
+	var bottom:=camera_.unproject_position(face.to_global(Vector3(0,-extent.y*.5,0)))
+	var top:=camera_.unproject_position(face.to_global(Vector3(0,extent.y*.5,0)))
+	var left:=camera_.unproject_position(face.to_global(Vector3(-extent.x*.5,0,0)))
+	var right:=camera_.unproject_position(face.to_global(Vector3(extent.x*.5,0,0)))
+	# Match the actual 3D buffer, not Retina UI pixels; quantise to avoid reallocating
+	# targets during every tiny camera movement.
+	var height_: float=maxf(top.distance_to(bottom),left.distance_to(right)*extent.y/extent.x)*get_viewport().scaling_3d_scale
+	return clampi(ceili(height_/32.)*32,MIN_HEIGHT,MAX_HEIGHT)
+func make_slot() -> Dictionary:
+	var viewport:=SubViewport.new();viewport.name="MirrorView";viewport.size=Vector2i(246,384);viewport.world_3d=city.get_world_3d();viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED;viewport.msaa_3d=Viewport.MSAA_2X;viewport.positional_shadow_atlas_size=0;viewport.gui_disable_input=true;add_child(viewport)
+	var camera_:=Camera3D.new();camera_.name="ReflectionCamera";camera_.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;camera_.cull_mask=city.camera.cull_mask & ~FACE_LAYER;viewport.add_child(camera_);camera_.current=true
+	var source: Environment=city.camera.environment if city.camera.environment!=null else city.get_world_3d().environment
+	if source!=null:
+		camera_.environment=source.duplicate();camera_.environment.ssao_enabled=false;camera_.environment.ssil_enabled=false;camera_.environment.ssr_enabled=false;camera_.environment.glow_enabled=false
+	return {"viewport":viewport,"camera":camera_,"face":null,"ready_frame":-1,"updates":0,"height":0,"blend":0.}
+func bind(slot: Dictionary,face: MeshInstance3D) -> void:
+	if slot.face==face:return
+	if is_instance_valid(slot.face):
+		slot.face.material_override.set_shader_parameter("reflection_ready",false);slot.face.material_override.set_shader_parameter("reflection_mix",0.)
+	slot.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
+	slot.face=face;slot.ready_frame=-1;slot.blend=0.;slot.height=0
+	if is_instance_valid(face):
+		face.material_override.set_shader_parameter("reflection_texture",slot.viewport.get_texture());face.material_override.set_shader_parameter("reflection_ready",false);face.material_override.set_shader_parameter("reflection_mix",0.)
+func _process(delta: float) -> void:
+	if DisplayServer.get_name()=="headless" or not is_instance_valid(city) or not is_instance_valid(city.camera):return
+	for slot in slots:
+		if slot.ready_frame>=0 and Engine.get_frames_drawn()>slot.ready_frame and is_instance_valid(slot.face):
+			slot.face.material_override.set_shader_parameter("reflection_ready",true)
+			slot.blend=minf(1.,slot.blend+delta*8.);slot.face.material_override.set_shader_parameter("reflection_mix",slot.blend)
+	var candidates: Array=[];var retained: Array=[]
+	var exclusions: Dictionary={}
+	for entry in mirrors:
+		var face: MeshInstance3D=entry.face.get_ref();var building: Node3D=entry.building.get_ref()
+		if not is_instance_valid(face) or not is_instance_valid(building):continue
+		retained.append(entry)
+		if not actual_building(building):continue
+		var value:=score(face,city.camera)
+		if value<=0.:continue
+		if not exclusions.has(building):exclusions[building]=hidden_bodies(building)
+		var excluded: Array[RID]=exclusions[building].duplicate();excluded.append_array(entry.bodies)
+		if not visible_from(face,city.camera,excluded):continue
+		# Small ranking changes should not swap textures between two visible mirrors.
+		if slots.any(func(slot):return slot.face==face):value*=1.15
+		candidates.append({"face":face,"score":value})
+	mirrors=retained;candidates.sort_custom(func(a,b):return a.score>b.score);active_count=mini(MAX_ACTIVE,candidates.size())
+	while slots.size()<active_count:slots.append(make_slot())
+	var chosen: Array=[]
+	for i in range(active_count):chosen.append(candidates[i].face)
+	for slot in slots:
+		if not chosen.has(slot.face):bind(slot,null)
+	for face in chosen:
+		if not slots.any(func(slot):return slot.face==face):bind(slots.filter(func(slot):return not is_instance_valid(slot.face))[0],face)
+	if active_count==0:return
+	var total_pixels:=0.
+	for slot in slots:
+		if not is_instance_valid(slot.face):continue
+		var desired:=desired_height(slot.face,city.camera)
+		if slot.height==0 or desired>slot.height or desired<slot.height*.65:slot.height=desired
+		var extent: Vector2=slot.face.mesh.size;total_pixels+=slot.height*slot.height*extent.x/extent.y
+	var scale_:=minf(1.,sqrt(MAX_PIXELS/total_pixels))
+	for slot in slots:
+		if not is_instance_valid(slot.face):continue
+		var face: MeshInstance3D=slot.face;var extent: Vector2=face.mesh.size;var height_:=maxi(2,floori(slot.height*scale_));var size_:=Vector2i(maxi(2,floori(height_*extent.x/extent.y)),height_)
+		if slot.viewport.size!=size_:slot.viewport.size=size_
+		slot.camera.cull_mask=city.camera.cull_mask & ~FACE_LAYER
+		if slot.camera.environment!=null and is_instance_valid(city.atmosphere):
+			for property in ["ambient_light_energy","ambient_light_color","tonemap_exposure","tonemap_mode"]:
+				var value: Variant=city.atmosphere.get(property)
+				if slot.camera.environment.get(property)!=value:slot.camera.environment.set(property,value)
+		if pose(slot.camera,city.camera.global_position,face):
+			slot.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE;render_count+=1;slot.updates+=1
+			if slot.ready_frame<0:slot.ready_frame=Engine.get_frames_drawn()
