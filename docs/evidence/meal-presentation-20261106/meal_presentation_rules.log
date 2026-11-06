@@ -1,0 +1,85 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Soup, fork food and handheld food have distinct eating modes
+PASS Swallow advances exactly one visual portion: 0
+PASS Swallow advances exactly one visual portion: 1
+PASS Swallow advances exactly one visual portion: 2
+PASS Swallow advances exactly one visual portion: 3
+PASS Bite remains on the utensil until it reaches the mouth
+PASS Empty dish and resting hand finish before job settlement
+PASS Complete model and truly empty final dish: food_carrot_soup
+PASS Soup liquid and garnish physically lower each bite: food_carrot_soup
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_carrot_soup 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_carrot_soup 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_carrot_soup 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_carrot_soup 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_carrot_soup
+PASS Existing six-second authority starts this dish: food_carrot_soup
+PASS Cancelling after visual bites preserves food: food_carrot_soup
+PASS Existing completion consumes once and applies the original effect: food_carrot_soup
+PASS Complete model and truly empty final dish: food_garden_salad
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_garden_salad 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_garden_salad 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_garden_salad 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_garden_salad 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_garden_salad
+PASS Existing six-second authority starts this dish: food_garden_salad
+PASS Cancelling after visual bites preserves food: food_garden_salad
+PASS Existing completion consumes once and applies the original effect: food_garden_salad
+PASS Complete model and truly empty final dish: food_tomato_stew
+PASS Soup liquid and garnish physically lower each bite: food_tomato_stew
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_tomato_stew 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_tomato_stew 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_tomato_stew 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_tomato_stew 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_tomato_stew
+PASS Existing six-second authority starts this dish: food_tomato_stew
+PASS Cancelling after visual bites preserves food: food_tomato_stew
+PASS Existing completion consumes once and applies the original effect: food_tomato_stew
+PASS Complete model and truly empty final dish: food_pumpkin_soup
+PASS Soup liquid and garnish physically lower each bite: food_pumpkin_soup
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_pumpkin_soup 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_pumpkin_soup 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_pumpkin_soup 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_pumpkin_soup 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_pumpkin_soup
+PASS Existing six-second authority starts this dish: food_pumpkin_soup
+PASS Cancelling after visual bites preserves food: food_pumpkin_soup
+PASS Existing completion consumes once and applies the original effect: food_pumpkin_soup
+PASS Complete model and truly empty final dish: food_honey_wheat_cake
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_honey_wheat_cake 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_honey_wheat_cake 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_honey_wheat_cake 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_honey_wheat_cake 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_honey_wheat_cake
+PASS Existing six-second authority starts this dish: food_honey_wheat_cake
+PASS Cancelling after visual bites preserves food: food_honey_wheat_cake
+PASS Existing completion consumes once and applies the original effect: food_honey_wheat_cake
+PASS Complete model and truly empty final dish: food_rustic_wheat_bread
+PASS Bread portions expose actual cut geometry
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_rustic_wheat_bread 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_rustic_wheat_bread 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_rustic_wheat_bread 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_rustic_wheat_bread 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_rustic_wheat_bread
+PASS Existing six-second authority starts this dish: food_rustic_wheat_bread
+PASS Cancelling after visual bites preserves food: food_rustic_wheat_bread
+PASS Existing completion consumes once and applies the original effect: food_rustic_wheat_bread
+PASS Complete model and truly empty final dish: food_vegetable_omelette
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_vegetable_omelette 0
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_vegetable_omelette 1
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_vegetable_omelette 2
+PASS Only the appropriate prebuilt portion is visible; no whole-food scaling: food_vegetable_omelette 3
+PASS Plate remains unchanged and cached mesh resources are shared: food_vegetable_omelette
+PASS Existing six-second authority starts this dish: food_vegetable_omelette
+PASS Cancelling after visual bites preserves food: food_vegetable_omelette
+PASS Existing completion consumes once and applies the original effect: food_vegetable_omelette
+PASS Baked menu thumbnails were generated from the current meal models and shader
+PASS Menu thumbnail exists with matching provenance: food_carrot_soup
+PASS Menu thumbnail exists with matching provenance: food_garden_salad
+PASS Menu thumbnail exists with matching provenance: food_tomato_stew
+PASS Menu thumbnail exists with matching provenance: food_pumpkin_soup
+PASS Menu thumbnail exists with matching provenance: food_honey_wheat_cake
+PASS Menu thumbnail exists with matching provenance: food_rustic_wheat_bread
+PASS Menu thumbnail exists with matching provenance: food_vegetable_omelette
+MEAL_PRESENTATION_RULES_RESULT PASS checks=82 failures=[]

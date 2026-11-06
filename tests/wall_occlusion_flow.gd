@@ -170,9 +170,14 @@ func verify_modes() -> void:
 		manager._process(.016);RenderingServer.force_draw()
 		check(manager.active_count==0 and manager.occluders.boxes.is_empty(),"Removing the last mirror building clears reflection occluders and handles the missing room")
 
-func opening_frames(eye: Vector3,actor: Vector3,count: int=45) -> void:
+func opening_frames(eye: Vector3,actor: Vector3,count: int=45,min_seconds: float=.40) -> void:
 	city.camera.position=eye;city.camera.look_at(actor+Vector3.UP*1.35)
-	for i in range(count):
+	# Recovery uses a real .18s hold plus a 1/7s fade. At uncapped FPS,
+	# 45 rendered frames alone can finish before that time has elapsed.
+	var until:=Time.get_ticks_usec()+int(min_seconds*1000000.)
+	var frames:=0
+	while frames<count or Time.get_ticks_usec()<until:
+		frames+=1
 		await process_frame
 		room.refresh_view(eye,actor)
 		if is_instance_valid(manager):manager._process(.016)
@@ -185,7 +190,7 @@ func verify_openings() -> void:
 	var front: Array=room.sections.filter(func(section):return View.face(section)==face)
 	var eye:=Vector3(79,4,16);var actor:=Vector3(79,.2,10)
 	session.settings.interior_view_mode=View.FULL
-	await opening_frames(eye,actor,4);await physics_frame;await physics_frame
+	await opening_frames(eye,actor,4,0.);await physics_frame;await physics_frame
 	var clear:=true
 	for point in View.probes(eye,actor):
 		var ray:=PhysicsRayQueryParameters3D.create(eye,point,4)
@@ -196,7 +201,7 @@ func verify_openings() -> void:
 	check(front.size()>=2 and front.all(func(section):return section.target==0. and section.alpha<.002),"Seeing the actor through a real window hides the entire wall and window frame")
 	check(room.sections.any(func(section):return section.node!=wall.node and section.node.get_meta("module_type","")=="wall" and section.alpha>.99),"Window sightlines retain unrelated walls")
 	city.bunny.position=actor;city.bunny.reset_physics_interpolation();city.bunny.show()
-	await opening_frames(eye,actor,1);root.get_texture().get_image().save_png(output+"/window-wall-faded.png");city.bunny.hide()
+	await opening_frames(eye,actor,1,0.);root.get_texture().get_image().save_png(output+"/window-wall-faded.png");city.bunny.hide()
 	await opening_frames(Vector3(79,3,8),actor)
 	check(front.all(func(section):return section.alpha>.99),"The window wall restores when camera and actor are on the same side")
 	# Use an actual open door, including its rotated collision leaf.

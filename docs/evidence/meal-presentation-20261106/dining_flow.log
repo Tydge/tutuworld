@@ -1,0 +1,33 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+PASS Place independent dining table and three chairs
+PASS New model supports every appearance part: build_2
+PASS New model supports every appearance part: build_3
+PASS New model supports every appearance part: build_4
+PASS New model supports every appearance part: build_5
+PASS Moving table hides original chairs and previews entire group
+PASS Table group move commits as one operation
+PASS Chair follows actual editor move
+PASS One undo restores table and all chairs
+PASS R rotates table with chairs and preserves pairings
+PASS Real nearby E prompt uses placed dining table
+WANDER_GRID_READY cells=19995 components=7
+PASS E opens existing food panel bound to this table
+PASS Meal automatically chooses nearest accessible chair
+PASS Seated actor faces the table
+PASS Existing food visual appears on this table in front of chosen seat
+PASS Dining does not consume food before six seconds
+PASS Existing completion consumes one meal and applies its effect
+PASS Meal finishes with safe standing beside chosen chair
+PASS Occupied nearest chair automatically falls back to next nearest free chair
+PASS Actual meal also uses the next available chair without seat selection
+PASS Cancelling placed-table meal returns safely and preserves food
+PASS Blocked closest chair automatically chooses clear next chair
+PASS Another floor cannot select these chairs
+PASS No safe exit keeps diner seated instead of teleporting through obstacles
+PASS Clearing an exit allows normal E standing
+PASS Real isolated save/reload derives same dining pairs without new save fields
+DINING_FLOW_RESULT PASS checks=26 failures=[]

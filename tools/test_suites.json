@@ -198,6 +198,16 @@
       "collision_surfaces",
       "npc_edge_flow",
       "valley_traversal_regression"
+    ],
+    "meal_presentation": [
+      "project_integrity",
+      "meal_presentation_rules",
+      "meal_presentation_flow",
+      "kitchen_rules",
+      "dining_rules",
+      "dining_flow",
+      "food_save_migration",
+      "kitchen_art_preview"
     ]
   },
   "tests": {
@@ -418,6 +428,15 @@
     },
     "land_parcels_rules": {
       "headless": true
+    },
+    "meal_presentation_rules": {
+      "headless": true
+    },
+    "kitchen_performance": {
+      "args": [
+        "--benchmark",
+        "--warmup-test"
+      ]
     }
   }
 }

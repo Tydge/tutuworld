@@ -1,5 +1,7 @@
 extends Node3D
 const G=preload("res://scripts/geometry.gd")
+const Meal=preload("res://scripts/city/meal_timeline.gd")
+const Food=preload("res://scripts/city/food_visual.gd")
 const Models=preload("res://scripts/city/tool_models.gd")
 var bunny: CharacterBody3D
 var verb:=""
@@ -34,6 +36,7 @@ func show_tool(kind: String,water_id: String="") -> void:
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
 	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id)
 	elif kind=="refill": prop=Models.make("water",water_id)
+	elif kind=="eat":prop=eating_prop()
 	else:
 		prop=Node3D.new()
 		var wood:=G.mat("bb905c")
@@ -85,14 +88,7 @@ func _physics_process(delta: float) -> void:
 		var portion:=lerpf(1.0,.78,clampf(bunny.action_time/3.0,0,1))
 		prop.scale=Vector3.ONE*portion
 	elif verb=="eat":
-		var mouth: Vector3=bunny.mouth.global_position+bunny.visual.global_basis*Vector3(0,0,.02)
-		var bite:=smoothstep(.25,.8,.5+.5*sin(bunny.action_time*3.8))
-		var plate: Vector3=mouth
-		if bunny.world!=null: plate=bunny.world.target_position("dining")+Vector3(0,.20,0)
-		var target: Vector3=plate.lerp(mouth,bite)
-		var forward: Vector3=(target-hand).normalized();var right:=Vector3.UP.cross(forward).normalized();var up:=forward.cross(right)
-		prop.global_transform=Transform3D(Basis(right,up,forward),hand)
-		prop.scale=Vector3(1,1,clampf(hand.distance_to(target)/spoon_length,.85,1.05))
+		pose_meal()
 	elif verb=="refill":
 		var basis: Basis=bunny.visual.global_basis
 		prop.global_transform=Transform3D(basis,hand-basis*prop.get_node("GripR").position)
@@ -103,6 +99,38 @@ func _physics_process(delta: float) -> void:
 		var grip: Vector3=prop.get_node("GripR").position
 		prop.global_transform=Transform3D(basis,hand-basis*grip)
 	else: prop.global_transform=Transform3D(bunny.visual.global_basis,hand+bunny.visual.global_basis*Vector3(.10,0,.10))
+func eating_prop() -> Node3D:
+	var root:=Node3D.new();root.name="EatingProp";var kind:=Meal.utensil(bunny.meal_item);root.set_meta("utensil",kind);root.set_meta("item",bunny.meal_item)
+	var tip:=Vector3(-.19,.07,-.02) if kind=="hand" else Vector3.ZERO
+	if kind!="hand":
+		tip=Vector3(0,0,.30)
+		G.capsule(root,Vector3.ZERO,tip-Vector3(0,0,.035),.010,G.mat("9f7e55"),"Handle")
+		if kind=="spoon":G.ball(root,tip,Vector3(.052,.013,.069),G.mat("bdc3b5",.35),"SpoonBowl")
+		else:
+			G.box(root,tip-Vector3(0,0,.035),Vector3(.065,.014,.035),G.mat("bdc3b5",.35),"ForkHead")
+			for i in range(3):G.capsule(root,tip+Vector3((i-1)*.025,0,-.025),tip+Vector3((i-1)*.025,0,.045),.005,G.mat("bdc3b5",.35),"ForkTine")
+	var contact:=Marker3D.new();contact.name="FoodContact";contact.position=tip;root.add_child(contact)
+	var mouthful:=Food.bite_model(bunny.meal_item);root.add_child(mouthful);mouthful.position=tip+Vector3(0,.013,0);mouthful.hide()
+	return root
+func pose_meal() -> void:
+	var phase:=Meal.sample(bunny.meal_elapsed if bunny.meal_elapsed>=0 else bunny.action_time,bunny.meal_duration)
+	var kind: String=prop.get_meta("utensil")
+	var basis: Basis=bunny.visual.global_basis
+	var mouth: Vector3=bunny.mouth.global_position+basis*Vector3(0,-.012,.045)
+	var plate: Vector3=bunny.meal_origin+Vector3(0,.17,0) if bunny.meal_origin.is_finite() else target_point
+	var rest: Vector3=plate+basis*Vector3(.22,.065,-.045)
+	var near_mouth: Vector3=mouth+basis*Vector3(.23,-.15,.03) if kind!="hand" else mouth-basis*Vector3(-.19,.07,-.02)
+	var goal: Vector3=rest.lerp(near_mouth,phase.lift)+Vector3.UP*sin(phase.lift*PI)*.09+basis*Vector3(.04*sin(phase.lift*PI),0,0)
+	bunny.aim_hand(bunny.right_arm,goal)
+	var hand: Vector3=bunny.right_arm.to_global(bunny.rig_profile.grip_offset)
+	if kind=="hand":prop.global_transform=Transform3D(basis,hand)
+	else:
+		var target: Vector3=plate.lerp(mouth,phase.lift)
+		var forward: Vector3=(target-hand).normalized();var right:=Vector3.UP.cross(forward).normalized()
+		if right.length_squared()<.01:right=basis.x
+		prop.global_transform=Transform3D(Basis(right,forward.cross(right),forward),hand)
+		prop.scale=Vector3(1,1,clampf(hand.distance_to(target)/.30,.55,1.65))
+	prop.get_node("Mouthful").visible=phase.loaded
 func _process(_delta: float) -> void:
 	if verb=="" or not is_instance_valid(prop): return
 	var time: float=clock if warming else bunny.action_time

@@ -64,18 +64,18 @@ func run() -> void:
 			await travel(Vector3(28.2,.15,-17.5),PI-.65,.47,6.8)
 			session.active=true
 			game.begin_dining(food)
-			await create_timer(2.05).timeout
+			await create_timer(1.10).timeout
 			var mouth_mesh: MeshInstance3D=game.bunny.mouth.get_child(0)
 			var mouth_center: Vector3=game.bunny.head.to_local(mouth_mesh.to_global(mouth_mesh.get_aabb().get_center()))
 			check(absf(mouth_center.y-game.bunny.mouth.position.y)<.035,"Chewing remains anchored on face: "+species)
-			var bowl: MeshInstance3D=game.tools.prop.get_node("SpoonBowl")
+			var bowl: Node3D=game.tools.prop.get_node("FoodContact")
 			var distance_: float=bowl.global_position.distance_to(game.bunny.mouth.global_position)
 			check(distance_<.14,"Spoon reaches mouth during bite: "+species+" distance="+str(distance_))
 			await capture("厨房更新-"+species+"-餐桌-"+food)
 			game.hud.visible=false
 			await capture("厨房更新-"+species+"-用餐特写-"+food)
 			game.hud.visible=true
-			await create_timer(4.3).timeout
+			await create_timer(5.25).timeout
 			check(session.job().is_empty() and not game.bunny.seated and session.state().food_effect.get("item","")==food,"Full seated meal completes after final alignment: "+species)
 			if not session.job().is_empty(): game.cancel_action()
 			session.active=false

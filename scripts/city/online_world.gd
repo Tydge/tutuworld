@@ -129,7 +129,8 @@ func _process(delta: float) -> void:
 			elif replicas.has(id):
 				var replica: Dictionary=replicas[id];apply_actor(replica.actor,row,delta)
 				if replica.equipment!=row.equipment:replica.equipment=row.equipment.duplicate();Outfit.apply(replica.actor,row.equipment)
-				if replica.action!=str(row.get("action","")):
+				var meal_changed: bool=str(row.get("action",""))=="eat" and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
+				if replica.action!=str(row.get("action","")) or meal_changed:
 					replica.action=str(row.get("action",""));replica.props.hide_tool()
 					if replica.action!="":replica.props.show_tool(replica.action,str(row.get("watering_can","")))
 				var target: String=row.get("job",{}).get("target","")
@@ -178,6 +179,10 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	var seated: bool=row.get("pose",{}).get("kind","") in ["sit","eat","waiting_exit"]
 	actor.seated=seated or sleeping
 	var action: String=row.get("action","")
+	var meal_job: Dictionary=row.get("job",{})
+	if action=="eat":
+		actor.meal_item=str(meal_job.get("item",""));actor.meal_elapsed=float(meal_job.get("elapsed",0.));actor.meal_duration=float(meal_job.get("duration",6.));actor.meal_origin=city.scenery.get_node("DiningTable/MealAnchor").global_position
+	else:actor.meal_item="";actor.meal_elapsed=-1.;actor.meal_origin=Vector3.INF
 	if actor.action!=action:
 		if action!="":actor.play_action(action,INF)
 		else:actor.action="";actor.action_time=0

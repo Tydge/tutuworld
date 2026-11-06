@@ -1,4 +1,5 @@
 extends CharacterBody3D
+const Meal=preload("res://scripts/city/meal_timeline.gd")
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
 ## Shared semantic rig: four limb pivots, head, eyes, mouth and wearable slots.
 @export var rig_profile: Resource = preload("res://config/animals/bunny.tres")
@@ -25,6 +26,10 @@ var action := ""
 var action_time := 0.0
 var action_length := 0.0
 var walking := false
+var meal_item:=""
+var meal_origin:=Vector3.INF
+var meal_elapsed:=-1.0
+var meal_duration:=6.0
 var seated := false
 var was_on_floor := true
 var facing := 0.0
@@ -293,16 +298,14 @@ func animate_pose(delta: float) -> void:
 			"refill":
 				arm_r.x=-.65+sin(t*3)*.08;arm_l.x=-.25;lean=.08
 			"eat":
-				var bite:=.5+.5*sin(t*3.8)
-				arm_r.x=lerpf(-.75,-1.95,smoothstep(.1,.9,bite))
-				var inward: float=clampf(right_arm.position.x/rig_profile.grip_offset.length(),.65,1.0)
-				arm_r.y=-inward*smoothstep(.20,.85,bite)
-				arm_l.x=-.45
-				leg_l.x=-1.10
-				leg_r.x=-1.10
-				lean=-.015
-				roll=sin(t*2)*.008
-				mouth.scale=Vector3(.68,1.0+smoothstep(.6,.95,bite)*1.1,1)
+				var phase:=Meal.sample(meal_elapsed if meal_elapsed>=0 else t,meal_duration)
+				arm_r.x=lerpf(-.65,-1.8,phase.lift)
+				arm_r.y=-.5*phase.lift
+				arm_l.x=-.48
+				leg_l.x=-1.10;leg_r.x=-1.10
+				lean=-.015;roll=sin(t*2)*.006
+				mouth.scale=Vector3(.72,1.+phase.chew*(.35+absf(sin(t*13))*.40),1.)
+				right_arm.position=arm_rest_right+Vector3(-.045,-.075,.12)*smoothstep(0,.3,t)
 				bob=0
 			"tea":
 				arm_r.x = -1.52

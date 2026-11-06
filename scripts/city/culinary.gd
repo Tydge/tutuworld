@@ -26,6 +26,17 @@ func _ready() -> void:
 	steam.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(steam)
 	steam.position=city.scenery.get_node("Kitchen/PotSteam").global_position
+func warm_models() -> void:
+	# Build meshes and prime every portion behind the existing loading cover.
+	# Starting a meal then only instantiates cached resources and toggles nodes.
+	for id in Food.IDS:
+		var preview:=Food.make(id);preview.name="MealWarmup";add_child(preview)
+		preview.global_position=city.camera.global_position-city.camera.global_basis.z*1.7
+		for portion in range(4):
+			Food.set_portion(preview,portion)
+			await get_tree().process_frame
+			await RenderingServer.frame_post_draw
+		preview.free()
 func serve(item: String,at: Vector3=Vector3.INF) -> void:
 	clear_meal()
 	meal=Food.make(item)
@@ -59,5 +70,6 @@ func _process(delta: float) -> void:
 			var size_:=sin(age*PI)*.075
 			steam.multimesh.set_instance_transform(i,Transform3D(Basis.IDENTITY.scaled(Vector3(size_,size_*.7,size_)),p))
 	if is_instance_valid(meal) and job.get("verb","")=="eat":
-		var portion:=lerpf(1,.30,float(job.elapsed)/float(job.duration))
-		meal.get_node("Food").scale=Vector3(portion,1,portion)
+		Food.animate(meal,float(job.elapsed),float(job.duration))
+		if city.dining_active:
+			city.bunny.meal_elapsed=float(job.elapsed);city.bunny.meal_duration=float(job.duration)

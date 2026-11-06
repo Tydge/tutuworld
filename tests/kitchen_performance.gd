@@ -15,13 +15,14 @@ func sample(label_: String,seconds: float) -> void:
 	times.sort()
 	print("KITCHEN_BENCH ",label_," frames=",times.size()," median=",times[times.size()/2]," p95=",times[int(times.size()*.95)]," max=",times[-1]," over50=",times.filter(func(t): return t>50).size())
 func run() -> void:
-	root.size=Vector2i(1440,900)
+	root.size=Vector2i(1440,900);Engine.max_fps=60
 	session=load("res://scripts/services/session.gd").new()
 	session.name="Session"
 	root.add_child(session)
-	for species in ["bunny","cat_teacher"]:
+	for species in ["bunny","cat_teacher","panda"]:
 		session.authority=A.new()
 		session.settings.player_species=species
+		session.state().species=species;session.state().skills.cooking=5;session.state().skill_experience.cooking=preload("res://scripts/services/character_stats.gd").skill_start(5)
 		session.state().time=3300
 		game=load("res://scenes/city.tscn").instantiate()
 		root.add_child(game)
@@ -35,7 +36,8 @@ func run() -> void:
 		for id in ["pumpkin","sea_salt","cream"]: session.authority.add(id,3)
 		await create_timer(.5).timeout
 		var start:=Time.get_ticks_usec()
-		game.begin_cooking("pumpkin_soup")
+		var cooking: Dictionary=game.begin_cooking("pumpkin_soup")
+		if not cooking.ok:push_error("Performance fixture could not start cooking: "+str(cooking));quit(1);return
 		print("KITCHEN_START ",species," cook_ms=",(Time.get_ticks_usec()-start)/1000.0)
 		await sample(species+"_cooking",5)
 		game.cancel_action()
@@ -48,7 +50,8 @@ func run() -> void:
 		game.distance_=8
 		await create_timer(.5).timeout
 		start=Time.get_ticks_usec()
-		game.begin_dining("food_pumpkin_soup")
+		var eating: Dictionary=game.begin_dining("food_pumpkin_soup")
+		if not eating.ok:push_error("Performance fixture could not start eating: "+str(eating));quit(1);return
 		print("KITCHEN_START ",species," eat_ms=",(Time.get_ticks_usec()-start)/1000.0)
 		await sample(species+"_eating",5)
 		game.cancel_action()

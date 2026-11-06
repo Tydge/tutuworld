@@ -1,4 +1,5 @@
 extends Control
+const FoodIcons=preload("res://scripts/ui/food_icons.gd")
 const Swatch=preload("res://scripts/ui/fabric_swatch.gd")
 var definition: Dictionary={}
 var item_id := ""
@@ -14,6 +15,9 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO,25,Color("eff0dc"))
 	var kind: String=definition.get("kind","")
 	var shape: String=definition.get("style",definition.get("icon",item_id))
+	if kind=="food" and FoodIcons.texture(item_id)!=null:
+		draw_texture_rect(FoodIcons.texture(item_id),Rect2(-27,-27,54,54),false)
+		return
 	if kind=="food" and shape in ["honey_wheat_cake","rustic_wheat_bread","vegetable_omelette"]:
 		draw_set_transform(c,0,Vector2(scale_,scale_*.72))
 		draw_circle(Vector2(0,5),22,Color("f7ebce"))

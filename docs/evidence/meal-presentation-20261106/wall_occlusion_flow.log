@@ -1,0 +1,36 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS Wall fade fixture with an actual mirror commits
+PASS Probe includes a partially faded wall
+PASS Reflected wall also stays opaque throughout the dither transition
+WALL_OCCLUSION_IMAGE {"mean":0.0,"p99":0.0}
+PASS Blocking wall fully fades in the main view
+PASS Reflected wall retains full-view pixels when the main view hides it
+PASS Main camera excludes the reflection-only layer
+PASS Main view cannot be incorrectly culled by intact reflection walls
+PASS Faded window glass remains visible only to reflections
+PASS Real walls keep stable native reflection occluders while fading
+PASS Repeated free-camera fades never rebuild native wall occluders
+WALL_OCCLUSION_PERFORMANCE [{"frames":588,"kind":"stable","max_ms":7.259,"median_ms":4.26,"over_16_7_ms":0,"p95_ms":4.694,"p99_ms":4.932},{"frames":361,"kind":"fade","max_ms":4.981,"median_ms":4.253,"over_16_7_ms":0,"p95_ms":4.677,"p99_ms":4.825},{"frames":11,"kind":"toggle","max_ms":4.557,"median_ms":4.204,"over_16_7_ms":0,"p95_ms":4.557,"p99_ms":4.557}] view_us_p99=307.0 mirror_us_p99=246.0 pipeline_delta=[0.0, 0.0, 0.0, 0.0, 0.0]
+PASS All nine actual sightlines pass through the real window opening without hitting wall collision
+PASS Seeing the actor through a real window hides the entire wall and window frame
+PASS Window sightlines retain unrelated walls
+PASS The window wall restores when camera and actor are on the same side
+PASS Open-door sightline fixture commits
+PASS Door fixture is physically open
+PASS Seeing the actor through an open doorway hides its wall, frame and door leaf together
+PASS Main camera sees through the wall while reflection geometry stays intact
+PASS Switching mode restores original geometry layers: 自由完整
+PASS Switching mode restores original geometry layers: 自动俯视
+PASS Building cutaway does not inherit the free-camera shader override
+PASS Complete-wall editor view restores all original wall instances
+PASS Actual prebuilt home also preserves faded walls and roof for reflection cameras
+PASS Prebuilt home restores full geometry when leaving free occlusion
+PASS Prebuilt automatic view still hides its roof
+PASS Removing the entire mirror building commits
+PASS Removing the last mirror building clears reflection occluders and handles the missing room
+WALL_OCCLUSION_FLOW_RESULT PASS checks=27 failures=[]

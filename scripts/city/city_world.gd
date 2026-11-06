@@ -663,6 +663,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 			bunny.sit_on_surface(seat)
 			dining_active=true
 			culinary.serve(item,preload("res://scripts/city/dining_service.gd").meal_position(self,target,dining_chair) if is_instance_valid(dining_chair) else Vector3.INF)
+			bunny.meal_item=item;bunny.meal_origin=culinary.meal.global_position;bunny.meal_elapsed=0.;bunny.meal_duration=float(session.job().duration)
 		elif verb=="refill":
 			bunny.position=targets[target].work_anchor.global_position;bunny.velocity=Vector3.ZERO;bunny.reset_physics_interpolation()
 		elif verb=="craft":
@@ -694,6 +695,7 @@ func cancel_action() -> void:
 	session.dispatch("cancel")
 	finish_action()
 func finish_action() -> void:
+	bunny.meal_item="";bunny.meal_origin=Vector3.INF;bunny.meal_elapsed=-1.
 	bunny.work_align_active=false
 	if session.is_online() and session.state().get("net_pose",{}).get("kind","")=="waiting_exit":
 		dining_active=false;nap_active=true;bunny.seated=true;bunny.can_move=false;bunny.play_action("nap",INF);tools.hide_tool()

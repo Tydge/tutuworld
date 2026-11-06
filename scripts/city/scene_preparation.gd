@@ -87,6 +87,7 @@ static func run(city: Node3D) -> void:
 	city.camera_focus=city.bunny.get_global_transform_interpolated().origin+Vector3(0,1.35,0)
 	city.camera.position=city.camera_focus+Vector3(sin(city.yaw)*cos(city.pitch),sin(city.pitch),cos(city.yaw)*cos(city.pitch))*city.distance_
 	city.camera.look_at(city.camera_focus)
+	if is_instance_valid(city.culinary):await city.culinary.warm_models()
 	await city.tools.warm_variants()
 	await city.get_tree().process_frame
 	await RenderingServer.frame_post_draw

@@ -1,0 +1,248 @@
+{
+  "date": "2026-11-06T23:51:44+08:00",
+  "baseline_commit": "60b7638",
+  "delivery": {
+    "branch": "main",
+    "source_only": true,
+    "deployed": false,
+    "exported_installers": false,
+    "production_version_unchanged": "0.3.3 / build6",
+    "real_player_save_written": false
+  },
+  "features": [
+    "Three eating styles: spoon / fork / handheld, synchronized to the existing six-second job",
+    "Three swallow points at 1.20, 2.85, 4.50 seconds; visible mouthful removed on swallow",
+    "Four prebuilt portion states per dish, fixed dish size, real liquid/solid volume changes",
+    "Seven improved dish models and same-model static 192px menu thumbnails",
+    "All models/portions warmed in the existing loading cover; mesh/material caching",
+    "Actual meal instance is the utensil target for rotated player-built dining tables"
+  ],
+  "rules_preserved": [
+    "One inventory deduction and original food effect on six-second completion only",
+    "No consumption on cancel",
+    "Original recipe, price, quality, skill XP and buff values preserved"
+  ],
+  "functional": {
+    "groups": 10,
+    "checks": 1004,
+    "meal_suite_checks": 940,
+    "tests": [
+      {
+        "test": "project_integrity",
+        "checks": 447,
+        "result": "PASS",
+        "log": "project_integrity.log",
+        "sha256": "69ab209055b4d4151834b63a2b932b6da8098f7b6a4663838cb83b29cc8b8ffd"
+      },
+      {
+        "test": "meal_presentation_rules",
+        "checks": 82,
+        "result": "PASS",
+        "log": "meal_presentation_rules.log",
+        "sha256": "9bf9972cc8d3a599dc3841acf9e9819bf10716df1bc7e0245d907dc3c20ed0fb"
+      },
+      {
+        "test": "meal_presentation_flow",
+        "checks": 188,
+        "result": "PASS",
+        "log": "meal_presentation_flow.log",
+        "sha256": "2a721479d11bf7a95eb7ba5171cf8bffdf7f287cf6efc90096112bbd321d36ec"
+      },
+      {
+        "test": "kitchen_rules",
+        "checks": 128,
+        "result": "PASS",
+        "log": "kitchen_rules.log",
+        "sha256": "9640f9fc0bfcdf9bf969d295552cec6d11f46c2c965ba373ce6b2413ec202506"
+      },
+      {
+        "test": "dining_rules",
+        "checks": 51,
+        "result": "PASS",
+        "log": "dining_rules.log",
+        "sha256": "849a9379208090a5945a3787e0ff72aa9aeea5443e641a0a5e94aecf2be87278"
+      },
+      {
+        "test": "dining_flow",
+        "checks": 26,
+        "result": "PASS",
+        "log": "dining_flow.log",
+        "sha256": "7945fe5f9e3d8860a10ee7c56037b4cdecf71bc7567618744b12e5697a030971"
+      },
+      {
+        "test": "food_save_migration",
+        "checks": 6,
+        "result": "PASS",
+        "log": "food_save_migration.log",
+        "sha256": "d0a4fe3ffdccb575dad1f477388a0e7ae751bd854fcced5458feb8955a1ca792"
+      },
+      {
+        "test": "kitchen_art_preview",
+        "checks": 12,
+        "result": "PASS",
+        "log": "kitchen_art_preview.log",
+        "sha256": "d450a7a9bb807ca36dbda3df93368f85d06aff82db0f6d10250268683928b691"
+      },
+      {
+        "test": "land_parcels_rules",
+        "checks": 37,
+        "result": "PASS",
+        "log": "land_parcels_rules.log",
+        "sha256": "cf928d606218db5e780eea844ead0edbb3223ee25a7338d260db2eb1b80fb7e7"
+      },
+      {
+        "test": "wall_occlusion_flow",
+        "checks": 27,
+        "result": "PASS",
+        "log": "wall_occlusion_flow.log",
+        "sha256": "605c8064b1d93341581f8e6c3727d88c6b3206a9b748a1229b578b36b69ea8d0"
+      }
+    ]
+  },
+  "coverage": {
+    "species": [
+      "bunny",
+      "cat_teacher",
+      "panda"
+    ],
+    "food_count": 7,
+    "real_custom_table_rotation_degrees": 90,
+    "contact_checks": "Utensil reaches actual meal location; mouthful reaches each species mouth; per-swallow portions, cancellation and completion exercised",
+    "town_dining_regression": true,
+    "all_tests_use_isolated_progress": true
+  },
+  "performance": {
+    "environment": "macOS / Apple M1 Pro / Godot 4.6.3 / Metal Forward+ / 1440x900 / balanced / frame cap 60 / warmed behind loading cover",
+    "log": "kitchen_performance.log",
+    "sha256": "36a482506338da7e0fd9aa1d16432a756c583c1ba5b097f72ce268d3b00f65f3",
+    "starts": [
+      {
+        "species": "bunny",
+        "action": "cook",
+        "cpu_ms": 1.941
+      },
+      {
+        "species": "bunny",
+        "action": "eat",
+        "cpu_ms": 2.355
+      },
+      {
+        "species": "cat_teacher",
+        "action": "cook",
+        "cpu_ms": 1.516
+      },
+      {
+        "species": "cat_teacher",
+        "action": "eat",
+        "cpu_ms": 8.976
+      },
+      {
+        "species": "panda",
+        "action": "cook",
+        "cpu_ms": 1.344
+      },
+      {
+        "species": "panda",
+        "action": "eat",
+        "cpu_ms": 3.652
+      }
+    ],
+    "samples": [
+      {
+        "label": "bunny_cooking",
+        "frames": 301,
+        "median_ms": 16.67,
+        "p95_ms": 17.621,
+        "max_ms": 18.003,
+        "over50": 0
+      },
+      {
+        "label": "bunny_eating",
+        "frames": 301,
+        "median_ms": 16.688,
+        "p95_ms": 17.43,
+        "max_ms": 18.385,
+        "over50": 0
+      },
+      {
+        "label": "cat_teacher_cooking",
+        "frames": 301,
+        "median_ms": 16.671,
+        "p95_ms": 19.085,
+        "max_ms": 20.215,
+        "over50": 0
+      },
+      {
+        "label": "cat_teacher_eating",
+        "frames": 301,
+        "median_ms": 16.673,
+        "p95_ms": 16.994,
+        "max_ms": 17.345,
+        "over50": 0
+      },
+      {
+        "label": "panda_cooking",
+        "frames": 301,
+        "median_ms": 16.658,
+        "p95_ms": 17.472,
+        "max_ms": 18.003,
+        "over50": 0
+      },
+      {
+        "label": "panda_eating",
+        "frames": 301,
+        "median_ms": 16.657,
+        "p95_ms": 16.857,
+        "max_ms": 17.434,
+        "over50": 0
+      }
+    ]
+  },
+  "meal_flow_begin_cpu_ms": {
+    "minimum": 3.315,
+    "maximum": 5.788,
+    "starts": 21
+  },
+  "test_fixture_corrections": [
+    "Performance fixture now matches authoritative species to settings and unlocks pumpkin soup through cooking XP; checks that cook/eat actually starts. Old fixture could rebuild a portrait on first save and benchmark a rejected cooking action.",
+    "Uncapped wall test waits at least 0.40 seconds (existing 0.18-second hold + 1/7-second recovery). Original 45-frame wait failed when 45 fast frames were shorter than the animation. Production occlusion code unchanged. Original failure archived in wall_occlusion_before_wait_fix.log; final 27 checks pass."
+  ],
+  "screenshots": {
+    "bunny-food_pumpkin_soup-bite.png": "cd91070ee979d9c285ce816feb047c72b7c912d871d9145d0c5a291e264c63c4",
+    "cat_teacher-food_garden_salad-bite.png": "d11ebd87500abd3bea13aba5b216369c9429db502667ae638878a83b7f66be34",
+    "panda-food_rustic_wheat_bread-bite.png": "165e50304fa5c05c191b7a711d7fe78b585d74c6376c12689faf94f8bef6aaf5",
+    "food_rustic_wheat_bread-portion-1.png": "dc0501c745dc35a33d08cc46963bd9e804126c1bc05a25697d279384bcebe277",
+    "food_rustic_wheat_bread-portion-2.png": "4304e0ffc8074ef40f2de989f483d2e07c071e5991027371e4541dfa71db07f8",
+    "food_pumpkin_soup-portion-2.png": "0b5b7ebecb1989795e2f16af784e701229216b3674e4981ac846732b68feaba9",
+    "menu-model-thumbnails.png": "e5fa86b2676e9ec5cc65392e236aaa029aa40b630b80e518aafd3943770d0c92",
+    "updated-seven-foods.png": "b12cdbc1a97694ffffe700ad42c3d66a8257a74b09a6d2915bbf873df550011e"
+  },
+  "source_sha256": {
+    "scripts/city/meal_timeline.gd": "1e210dcddf22aa7f4ae7f3156f5e262217f4f83a20339e8c29e71f8bb7d18db2",
+    "scripts/city/food_visual.gd": "0bccd2b45eeeeb68866864a01477fd8756bf33781844961b22bf28ff83846a56",
+    "scripts/city/culinary.gd": "3dd9028178e936f8f03afca66744709db58799389776a347c5ecaef75ce6ebbd",
+    "scripts/city/work_props.gd": "85723dce805ebf83c9cf90c519bb8fd5c8c30eaea7df51c556486ea4feaca895",
+    "scripts/city/scene_preparation.gd": "96bcc6244776711ab26c85db762ef352d16aca2f225d3fab20808884904b400e",
+    "scripts/city/city_world.gd": "fa5645dd77bfa1625fcc822fba9ba2d03044b20672af6b762ee74816f31b7afc",
+    "scripts/city/online_world.gd": "962b2e301f642852fe32b4a0aabf5d43b0da59228f3a133cce0d9a8b2d54ecaa",
+    "scripts/characters/animal_actor.gd": "0038ac9c1b460943962b2fa77bf0b188c1a91375ecfbe029cda3a8439b102433",
+    "scripts/ui/food_icons.gd": "34202eb5d6254a61cfc7bbfb10f54a20302c3c4e274c1f15cecf30ef30ce9f22",
+    "scripts/ui/item_icon.gd": "b1cf8138b0f3ac4f95bd2f3b9647b780f980b161086e1d19b0e48ebb78f96735",
+    "assets/shaders/food_surface.gdshader": "54bb9afe528cc8186814c1d754aedcb8aff6d06600a5fb1290af825752476326",
+    "assets/ui/food/manifest.json": "aa9cee4c1b573fa970555f32c16901fae89ce79a330610c59e206b3a38688abe",
+    "tools/render_food_icons.gd": "d29916693940ae69ab74fc13c44f65e87c9e3957c2721ab60935a5ec960a4a55",
+    "tools/test_suites.json": "504e70e2781b7dc7ac86078b8eb9ffbda1dd4282ff725dac6e4e38d9cf954171",
+    "tests/meal_presentation_rules.gd": "5d8a1777902b4607f7b8767a3d01622850c99eab1b8b7fd077c374e97936ecc6",
+    "tests/meal_presentation_flow.gd": "18186dd0d78cdb05a2fe02e529a8f49563b9b5d0b0aa448076bdfcfbe6338abf",
+    "tests/kitchen_art_preview.gd": "e0e518edc579c66121ce6dbd2296739236cd2881b6b21e37c73cbdb5455ee762",
+    "tests/kitchen_performance.gd": "da9233f512fbf29a500988152ecb534d2955b6b3366d70ac83d6aedd8c14c507",
+    "tests/wall_occlusion_flow.gd": "0d4e69e1b1042be1a1dadf5bcc691fc7b6b5600a1d86929ba41f1ee9311d9c93"
+  },
+  "limitations": [
+    "Selected regression only; not the full test catalog",
+    "Performance samples are short local Mac runs after normal loading warm-up; no Windows performance claim or unconditional 60 FPS guarantee",
+    "Client replicas reuse existing job fields; real multiplayer server integration not deployed or tested",
+    "No new audio, satisfaction expressions, camera mode or buff-replacement UI in this scope",
+    "Portion screenshots hide the actor to expose geometry; an independent held utensil can still appear in those diagnostic shots"
+  ]
+}
