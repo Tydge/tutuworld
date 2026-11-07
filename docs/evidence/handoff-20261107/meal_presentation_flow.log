@@ -1,0 +1,195 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Rotated player-built dining table and chair are placed
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS Loading preparation caches all dishes and portions without mutating progress
+PASS Start actual built-table meal: bunny food_carrot_soup
+PASS Correct spoon, fork or handheld prop: bunny food_carrot_soup
+PASS Utensil reaches this rotated table, not the distant town table: bunny food_carrot_soup error=0.0
+PASS Food reaches species mouth while still visible: bunny food_carrot_soup error=0.0465743727982
+PASS Swallow updates the matching visible portion: bunny food_carrot_soup 1
+PASS Swallow updates the matching visible portion: bunny food_carrot_soup 2
+PASS Swallow updates the matching visible portion: bunny food_carrot_soup 3
+PASS Visual eating never deducts inventory early: bunny food_carrot_soup
+PASS Six-second completion consumes once and exits safely: bunny food_carrot_soup
+PASS Start actual built-table meal: bunny food_garden_salad
+PASS Correct spoon, fork or handheld prop: bunny food_garden_salad
+PASS Utensil reaches this rotated table, not the distant town table: bunny food_garden_salad error=0.0
+PASS Food reaches species mouth while still visible: bunny food_garden_salad error=0.0465743727982
+PASS Swallow updates the matching visible portion: bunny food_garden_salad 1
+PASS Swallow updates the matching visible portion: bunny food_garden_salad 2
+PASS Swallow updates the matching visible portion: bunny food_garden_salad 3
+PASS Visual eating never deducts inventory early: bunny food_garden_salad
+PASS Six-second completion consumes once and exits safely: bunny food_garden_salad
+PASS Start actual built-table meal: bunny food_tomato_stew
+PASS Correct spoon, fork or handheld prop: bunny food_tomato_stew
+PASS Utensil reaches this rotated table, not the distant town table: bunny food_tomato_stew error=0.0
+PASS Food reaches species mouth while still visible: bunny food_tomato_stew error=0.0465743727982
+PASS Swallow updates the matching visible portion: bunny food_tomato_stew 1
+PASS Swallow updates the matching visible portion: bunny food_tomato_stew 2
+PASS Swallow updates the matching visible portion: bunny food_tomato_stew 3
+PASS Visual eating never deducts inventory early: bunny food_tomato_stew
+PASS Six-second completion consumes once and exits safely: bunny food_tomato_stew
+PASS Start actual built-table meal: bunny food_pumpkin_soup
+PASS Correct spoon, fork or handheld prop: bunny food_pumpkin_soup
+PASS Utensil reaches this rotated table, not the distant town table: bunny food_pumpkin_soup error=0.0
+PASS Food reaches species mouth while still visible: bunny food_pumpkin_soup error=0.0465743727982
+PASS Swallow updates the matching visible portion: bunny food_pumpkin_soup 1
+PASS Swallow updates the matching visible portion: bunny food_pumpkin_soup 2
+PASS Swallow updates the matching visible portion: bunny food_pumpkin_soup 3
+PASS Visual eating never deducts inventory early: bunny food_pumpkin_soup
+PASS Six-second completion consumes once and exits safely: bunny food_pumpkin_soup
+PASS Start actual built-table meal: bunny food_honey_wheat_cake
+PASS Correct spoon, fork or handheld prop: bunny food_honey_wheat_cake
+PASS Food reaches species mouth while still visible: bunny food_honey_wheat_cake error=0.04658169671893
+PASS Swallow updates the matching visible portion: bunny food_honey_wheat_cake 1
+PASS Swallow updates the matching visible portion: bunny food_honey_wheat_cake 2
+PASS Swallow updates the matching visible portion: bunny food_honey_wheat_cake 3
+PASS Visual eating never deducts inventory early: bunny food_honey_wheat_cake
+PASS Six-second completion consumes once and exits safely: bunny food_honey_wheat_cake
+PASS Start actual built-table meal: bunny food_rustic_wheat_bread
+PASS Correct spoon, fork or handheld prop: bunny food_rustic_wheat_bread
+PASS Food reaches species mouth while still visible: bunny food_rustic_wheat_bread error=0.04658169671893
+PASS Swallow updates the matching visible portion: bunny food_rustic_wheat_bread 1
+PASS Swallow updates the matching visible portion: bunny food_rustic_wheat_bread 2
+PASS Swallow updates the matching visible portion: bunny food_rustic_wheat_bread 3
+PASS Visual eating never deducts inventory early: bunny food_rustic_wheat_bread
+PASS Six-second completion consumes once and exits safely: bunny food_rustic_wheat_bread
+PASS Start actual built-table meal: bunny food_vegetable_omelette
+PASS Correct spoon, fork or handheld prop: bunny food_vegetable_omelette
+PASS Utensil reaches this rotated table, not the distant town table: bunny food_vegetable_omelette error=0.0
+PASS Food reaches species mouth while still visible: bunny food_vegetable_omelette error=0.0465743727982
+PASS Swallow updates the matching visible portion: bunny food_vegetable_omelette 1
+PASS Swallow updates the matching visible portion: bunny food_vegetable_omelette 2
+PASS Swallow updates the matching visible portion: bunny food_vegetable_omelette 3
+PASS Visual eating never deducts inventory early: bunny food_vegetable_omelette
+PASS Six-second completion consumes once and exits safely: bunny food_vegetable_omelette
+PASS Cancel halfway through a handheld meal cleans up without consuming food: bunny
+PASS Start actual built-table meal: cat_teacher food_carrot_soup
+PASS Correct spoon, fork or handheld prop: cat_teacher food_carrot_soup
+PASS Utensil reaches this rotated table, not the distant town table: cat_teacher food_carrot_soup error=0.0
+PASS Food reaches species mouth while still visible: cat_teacher food_carrot_soup error=0.04657496884465
+PASS Swallow updates the matching visible portion: cat_teacher food_carrot_soup 1
+PASS Swallow updates the matching visible portion: cat_teacher food_carrot_soup 2
+PASS Swallow updates the matching visible portion: cat_teacher food_carrot_soup 3
+PASS Visual eating never deducts inventory early: cat_teacher food_carrot_soup
+PASS Six-second completion consumes once and exits safely: cat_teacher food_carrot_soup
+PASS Start actual built-table meal: cat_teacher food_garden_salad
+PASS Correct spoon, fork or handheld prop: cat_teacher food_garden_salad
+PASS Utensil reaches this rotated table, not the distant town table: cat_teacher food_garden_salad error=0.0
+PASS Food reaches species mouth while still visible: cat_teacher food_garden_salad error=0.04657496884465
+PASS Swallow updates the matching visible portion: cat_teacher food_garden_salad 1
+PASS Swallow updates the matching visible portion: cat_teacher food_garden_salad 2
+PASS Swallow updates the matching visible portion: cat_teacher food_garden_salad 3
+PASS Visual eating never deducts inventory early: cat_teacher food_garden_salad
+PASS Six-second completion consumes once and exits safely: cat_teacher food_garden_salad
+PASS Start actual built-table meal: cat_teacher food_tomato_stew
+PASS Correct spoon, fork or handheld prop: cat_teacher food_tomato_stew
+PASS Utensil reaches this rotated table, not the distant town table: cat_teacher food_tomato_stew error=0.0
+PASS Food reaches species mouth while still visible: cat_teacher food_tomato_stew error=0.04657496884465
+PASS Swallow updates the matching visible portion: cat_teacher food_tomato_stew 1
+PASS Swallow updates the matching visible portion: cat_teacher food_tomato_stew 2
+PASS Swallow updates the matching visible portion: cat_teacher food_tomato_stew 3
+PASS Visual eating never deducts inventory early: cat_teacher food_tomato_stew
+PASS Six-second completion consumes once and exits safely: cat_teacher food_tomato_stew
+PASS Start actual built-table meal: cat_teacher food_pumpkin_soup
+PASS Correct spoon, fork or handheld prop: cat_teacher food_pumpkin_soup
+PASS Utensil reaches this rotated table, not the distant town table: cat_teacher food_pumpkin_soup error=0.0
+PASS Food reaches species mouth while still visible: cat_teacher food_pumpkin_soup error=0.04657496884465
+PASS Swallow updates the matching visible portion: cat_teacher food_pumpkin_soup 1
+PASS Swallow updates the matching visible portion: cat_teacher food_pumpkin_soup 2
+PASS Swallow updates the matching visible portion: cat_teacher food_pumpkin_soup 3
+PASS Visual eating never deducts inventory early: cat_teacher food_pumpkin_soup
+PASS Six-second completion consumes once and exits safely: cat_teacher food_pumpkin_soup
+PASS Start actual built-table meal: cat_teacher food_honey_wheat_cake
+PASS Correct spoon, fork or handheld prop: cat_teacher food_honey_wheat_cake
+PASS Food reaches species mouth while still visible: cat_teacher food_honey_wheat_cake error=0.04658235237002
+PASS Swallow updates the matching visible portion: cat_teacher food_honey_wheat_cake 1
+PASS Swallow updates the matching visible portion: cat_teacher food_honey_wheat_cake 2
+PASS Swallow updates the matching visible portion: cat_teacher food_honey_wheat_cake 3
+PASS Visual eating never deducts inventory early: cat_teacher food_honey_wheat_cake
+PASS Six-second completion consumes once and exits safely: cat_teacher food_honey_wheat_cake
+PASS Start actual built-table meal: cat_teacher food_rustic_wheat_bread
+PASS Correct spoon, fork or handheld prop: cat_teacher food_rustic_wheat_bread
+PASS Food reaches species mouth while still visible: cat_teacher food_rustic_wheat_bread error=0.04658235237002
+PASS Swallow updates the matching visible portion: cat_teacher food_rustic_wheat_bread 1
+PASS Swallow updates the matching visible portion: cat_teacher food_rustic_wheat_bread 2
+PASS Swallow updates the matching visible portion: cat_teacher food_rustic_wheat_bread 3
+PASS Visual eating never deducts inventory early: cat_teacher food_rustic_wheat_bread
+PASS Six-second completion consumes once and exits safely: cat_teacher food_rustic_wheat_bread
+PASS Start actual built-table meal: cat_teacher food_vegetable_omelette
+PASS Correct spoon, fork or handheld prop: cat_teacher food_vegetable_omelette
+PASS Utensil reaches this rotated table, not the distant town table: cat_teacher food_vegetable_omelette error=0.0
+PASS Food reaches species mouth while still visible: cat_teacher food_vegetable_omelette error=0.04657496884465
+PASS Swallow updates the matching visible portion: cat_teacher food_vegetable_omelette 1
+PASS Swallow updates the matching visible portion: cat_teacher food_vegetable_omelette 2
+PASS Swallow updates the matching visible portion: cat_teacher food_vegetable_omelette 3
+PASS Visual eating never deducts inventory early: cat_teacher food_vegetable_omelette
+PASS Six-second completion consumes once and exits safely: cat_teacher food_vegetable_omelette
+PASS Cancel halfway through a handheld meal cleans up without consuming food: cat_teacher
+PASS Start actual built-table meal: panda food_carrot_soup
+PASS Correct spoon, fork or handheld prop: panda food_carrot_soup
+PASS Utensil reaches this rotated table, not the distant town table: panda food_carrot_soup error=0.0
+PASS Food reaches species mouth while still visible: panda food_carrot_soup error=0.04657112061977
+PASS Swallow updates the matching visible portion: panda food_carrot_soup 1
+PASS Swallow updates the matching visible portion: panda food_carrot_soup 2
+PASS Swallow updates the matching visible portion: panda food_carrot_soup 3
+PASS Visual eating never deducts inventory early: panda food_carrot_soup
+PASS Six-second completion consumes once and exits safely: panda food_carrot_soup
+PASS Start actual built-table meal: panda food_garden_salad
+PASS Correct spoon, fork or handheld prop: panda food_garden_salad
+PASS Utensil reaches this rotated table, not the distant town table: panda food_garden_salad error=0.0
+PASS Food reaches species mouth while still visible: panda food_garden_salad error=0.04657112061977
+PASS Swallow updates the matching visible portion: panda food_garden_salad 1
+PASS Swallow updates the matching visible portion: panda food_garden_salad 2
+PASS Swallow updates the matching visible portion: panda food_garden_salad 3
+PASS Visual eating never deducts inventory early: panda food_garden_salad
+PASS Six-second completion consumes once and exits safely: panda food_garden_salad
+PASS Start actual built-table meal: panda food_tomato_stew
+PASS Correct spoon, fork or handheld prop: panda food_tomato_stew
+PASS Utensil reaches this rotated table, not the distant town table: panda food_tomato_stew error=0.0
+PASS Food reaches species mouth while still visible: panda food_tomato_stew error=0.04657112061977
+PASS Swallow updates the matching visible portion: panda food_tomato_stew 1
+PASS Swallow updates the matching visible portion: panda food_tomato_stew 2
+PASS Swallow updates the matching visible portion: panda food_tomato_stew 3
+PASS Visual eating never deducts inventory early: panda food_tomato_stew
+PASS Six-second completion consumes once and exits safely: panda food_tomato_stew
+PASS Start actual built-table meal: panda food_pumpkin_soup
+PASS Correct spoon, fork or handheld prop: panda food_pumpkin_soup
+PASS Utensil reaches this rotated table, not the distant town table: panda food_pumpkin_soup error=0.0
+PASS Food reaches species mouth while still visible: panda food_pumpkin_soup error=0.04657112061977
+PASS Swallow updates the matching visible portion: panda food_pumpkin_soup 1
+PASS Swallow updates the matching visible portion: panda food_pumpkin_soup 2
+PASS Swallow updates the matching visible portion: panda food_pumpkin_soup 3
+PASS Visual eating never deducts inventory early: panda food_pumpkin_soup
+PASS Six-second completion consumes once and exits safely: panda food_pumpkin_soup
+PASS Start actual built-table meal: panda food_honey_wheat_cake
+PASS Correct spoon, fork or handheld prop: panda food_honey_wheat_cake
+PASS Food reaches species mouth while still visible: panda food_honey_wheat_cake error=0.04657850414515
+PASS Swallow updates the matching visible portion: panda food_honey_wheat_cake 1
+PASS Swallow updates the matching visible portion: panda food_honey_wheat_cake 2
+PASS Swallow updates the matching visible portion: panda food_honey_wheat_cake 3
+PASS Visual eating never deducts inventory early: panda food_honey_wheat_cake
+PASS Six-second completion consumes once and exits safely: panda food_honey_wheat_cake
+PASS Start actual built-table meal: panda food_rustic_wheat_bread
+PASS Correct spoon, fork or handheld prop: panda food_rustic_wheat_bread
+PASS Food reaches species mouth while still visible: panda food_rustic_wheat_bread error=0.04657850414515
+PASS Swallow updates the matching visible portion: panda food_rustic_wheat_bread 1
+PASS Swallow updates the matching visible portion: panda food_rustic_wheat_bread 2
+PASS Swallow updates the matching visible portion: panda food_rustic_wheat_bread 3
+PASS Visual eating never deducts inventory early: panda food_rustic_wheat_bread
+PASS Six-second completion consumes once and exits safely: panda food_rustic_wheat_bread
+PASS Start actual built-table meal: panda food_vegetable_omelette
+PASS Correct spoon, fork or handheld prop: panda food_vegetable_omelette
+PASS Utensil reaches this rotated table, not the distant town table: panda food_vegetable_omelette error=0.0
+PASS Food reaches species mouth while still visible: panda food_vegetable_omelette error=0.04657112061977
+PASS Swallow updates the matching visible portion: panda food_vegetable_omelette 1
+PASS Swallow updates the matching visible portion: panda food_vegetable_omelette 2
+PASS Swallow updates the matching visible portion: panda food_vegetable_omelette 3
+PASS Visual eating never deducts inventory early: panda food_vegetable_omelette
+PASS Six-second completion consumes once and exits safely: panda food_vegetable_omelette
+PASS Cancel halfway through a handheld meal cleans up without consuming food: panda
+MEAL_BEGIN_TIMES max_ms=5.529 samples=[5.512, 5.208, 4.43, 3.394, 4.616, 4.092, 5.206, 5.529, 4.933, 3.975, 3.183, 4.497, 3.911, 4.94, 4.908, 4.887, 4.441, 3.281, 4.81, 4.045, 4.201]
+MEAL_PRESENTATION_FLOW_RESULT PASS checks=188 failures=[]

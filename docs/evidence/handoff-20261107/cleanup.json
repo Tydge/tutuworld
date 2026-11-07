@@ -1,0 +1,356 @@
+{
+  "date": "2026-11-07",
+  "baseline": "30217d0",
+  "deleted": [
+    {
+      "path": ".qa-artifacts/20261106-181630-688327",
+      "files": 4,
+      "bytes": 85044
+    },
+    {
+      "path": ".qa-artifacts/20261106-181709-956531",
+      "files": 4,
+      "bytes": 83102
+    },
+    {
+      "path": ".qa-artifacts/20261106-181720-568883",
+      "files": 4,
+      "bytes": 85011
+    },
+    {
+      "path": ".qa-artifacts/20261106-181805-676268",
+      "files": 4,
+      "bytes": 84637
+    },
+    {
+      "path": ".qa-artifacts/20261106-181904-534234",
+      "files": 4,
+      "bytes": 78066
+    },
+    {
+      "path": ".qa-artifacts/20261106-181955-731487",
+      "files": 4,
+      "bytes": 78250
+    },
+    {
+      "path": ".qa-artifacts/20261106-182022-264879",
+      "files": 4,
+      "bytes": 78666
+    },
+    {
+      "path": ".qa-artifacts/20261106-182137-833321",
+      "files": 6,
+      "bytes": 4004920
+    },
+    {
+      "path": ".qa-artifacts/20261106-182211-432529",
+      "files": 26,
+      "bytes": 48344114
+    },
+    {
+      "path": ".qa-artifacts/20261106-182401-282540",
+      "files": 51,
+      "bytes": 204125232
+    },
+    {
+      "path": ".qa-artifacts/20261106-182622-923675",
+      "files": 6,
+      "bytes": 4003214
+    },
+    {
+      "path": ".qa-artifacts/20261106-182639-614809",
+      "files": 6,
+      "bytes": 4008633
+    },
+    {
+      "path": ".qa-artifacts/20261106-182813-874315",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-183925-880887",
+      "files": 1,
+      "bytes": 13371
+    },
+    {
+      "path": ".qa-artifacts/20261106-183944-636601",
+      "files": 8,
+      "bytes": 9673080
+    },
+    {
+      "path": ".qa-artifacts/20261106-184029-659227",
+      "files": 16,
+      "bytes": 53235007
+    },
+    {
+      "path": ".qa-artifacts/20261106-202309-989490",
+      "files": 1,
+      "bytes": 1379
+    },
+    {
+      "path": ".qa-artifacts/20261106-202321-105132",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-202437-231730",
+      "files": 1,
+      "bytes": 1943
+    },
+    {
+      "path": ".qa-artifacts/20261106-202614-760442",
+      "files": 1,
+      "bytes": 643
+    },
+    {
+      "path": ".qa-artifacts/20261106-202623-428062",
+      "files": 5,
+      "bytes": 9504545
+    },
+    {
+      "path": ".qa-artifacts/20261106-202702-359541",
+      "files": 5,
+      "bytes": 9508033
+    },
+    {
+      "path": ".qa-artifacts/20261106-202809-908296",
+      "files": 5,
+      "bytes": 14405539
+    },
+    {
+      "path": ".qa-artifacts/20261106-202849-109008",
+      "files": 14,
+      "bytes": 25618596
+    },
+    {
+      "path": ".qa-artifacts/20261106-203043-932435",
+      "files": 9,
+      "bytes": 21933819
+    },
+    {
+      "path": ".qa-artifacts/20261106-203239-182296",
+      "files": 9,
+      "bytes": 23639528
+    },
+    {
+      "path": ".qa-artifacts/20261106-203303-918127",
+      "files": 26,
+      "bytes": 30851057
+    },
+    {
+      "path": ".qa-artifacts/20261106-203537-380144",
+      "files": 8,
+      "bytes": 28240040
+    },
+    {
+      "path": ".qa-artifacts/20261106-203703-204036",
+      "files": 7,
+      "bytes": 28241840
+    },
+    {
+      "path": ".qa-artifacts/20261106-205301-825024",
+      "files": 1,
+      "bytes": 624
+    },
+    {
+      "path": ".qa-artifacts/20261106-205327-340928",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-205410-485857",
+      "files": 5,
+      "bytes": 17576381
+    },
+    {
+      "path": ".qa-artifacts/20261106-205457-116430",
+      "files": 1,
+      "bytes": 463
+    },
+    {
+      "path": ".qa-artifacts/20261106-205519-555105",
+      "files": 6,
+      "bytes": 31871189
+    },
+    {
+      "path": ".qa-artifacts/20261106-205614-138008",
+      "files": 13,
+      "bytes": 63504753
+    },
+    {
+      "path": ".qa-artifacts/20261106-205835-557370",
+      "files": 17,
+      "bytes": 63648245
+    },
+    {
+      "path": ".qa-artifacts/20261106-210014-638226",
+      "files": 2,
+      "bytes": 6817929
+    },
+    {
+      "path": ".qa-artifacts/20261106-210406-789325",
+      "files": 8,
+      "bytes": 38921177
+    },
+    {
+      "path": ".qa-artifacts/20261106-210636-292999",
+      "files": 1,
+      "bytes": 1246
+    },
+    {
+      "path": ".qa-artifacts/20261106-210647-156825",
+      "files": 11,
+      "bytes": 44794249
+    },
+    {
+      "path": ".qa-artifacts/20261106-210842-138506",
+      "files": 18,
+      "bytes": 70899297
+    },
+    {
+      "path": ".qa-artifacts/20261106-213104-309444",
+      "files": 1,
+      "bytes": 1901
+    },
+    {
+      "path": ".qa-artifacts/20261106-213159-195530",
+      "files": 2,
+      "bytes": 5363458
+    },
+    {
+      "path": ".qa-artifacts/20261106-213549-492317",
+      "files": 7,
+      "bytes": 25034618
+    },
+    {
+      "path": ".qa-artifacts/20261106-213740-442072",
+      "files": 13,
+      "bytes": 32277246
+    },
+    {
+      "path": ".qa-artifacts/20261106-214106-076611",
+      "files": 2,
+      "bytes": 6784
+    },
+    {
+      "path": ".qa-artifacts/20261106-223139-108055",
+      "files": 19,
+      "bytes": 116430099
+    },
+    {
+      "path": ".qa-artifacts/20261106-225916-530232",
+      "files": 1,
+      "bytes": 1152
+    },
+    {
+      "path": ".qa-artifacts/20261106-230208-752703",
+      "files": 1,
+      "bytes": 126
+    },
+    {
+      "path": ".qa-artifacts/20261106-230856-930620",
+      "files": 11,
+      "bytes": 41726538
+    },
+    {
+      "path": ".qa-artifacts/20261106-231128-620718",
+      "files": 14,
+      "bytes": 47987504
+    },
+    {
+      "path": ".qa-artifacts/20261106-231350-702824",
+      "files": 41,
+      "bytes": 185490206
+    },
+    {
+      "path": ".qa-artifacts/20261106-231823-087492",
+      "files": 21,
+      "bytes": 86302991
+    },
+    {
+      "path": ".qa-artifacts/20261106-232252-281716",
+      "files": 1,
+      "bytes": 1058
+    },
+    {
+      "path": ".qa-artifacts/20261106-232529-826742",
+      "files": 1,
+      "bytes": 1160
+    },
+    {
+      "path": ".qa-artifacts/20261106-232806-714598",
+      "files": 1,
+      "bytes": 1546
+    },
+    {
+      "path": ".qa-artifacts/20261106-233105-248790",
+      "files": 1,
+      "bytes": 1617
+    },
+    {
+      "path": ".qa-artifacts/20261106-233600-747354",
+      "files": 46,
+      "bytes": 41198936
+    },
+    {
+      "path": ".qa-artifacts/20261106-233923-820451",
+      "files": 1,
+      "bytes": 552
+    },
+    {
+      "path": ".qa-artifacts/20261106-234325-477131",
+      "files": 9,
+      "bytes": 1449997
+    },
+    {
+      "path": ".qa-artifacts/20261106-234959-739018",
+      "files": 7,
+      "bytes": 1446567
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-953097",
+      "files": 1,
+      "bytes": 15682
+    },
+    {
+      "path": ".qa-artifacts/appearance-settings-986506",
+      "files": 1,
+      "bytes": 15682
+    },
+    {
+      "path": ".qa-artifacts/dining-save-8043487",
+      "files": 1,
+      "bytes": 9547
+    },
+    {
+      "path": ".qa-artifacts/dining-save-8886353",
+      "files": 1,
+      "bytes": 9533
+    },
+    {
+      "path": ".qa-artifacts/food-review-20261106",
+      "files": 14,
+      "bytes": 551190
+    },
+    {
+      "path": ".qa-artifacts/mountain-texture-import.log",
+      "files": 1,
+      "bytes": 46553
+    },
+    {
+      "path": ".qa-artifacts/wall-occlusion-before",
+      "files": 5,
+      "bytes": 48832
+    }
+  ],
+  "total_files": 549,
+  "total_bytes": 1443384315,
+  "protected_files": 329,
+  "policy": "Only explicitly enumerated re-runnable QA runs, isolated test saves and temporary diagnostic copies. Fixed evidence, runtime assets, import cache, real saves, private source layouts/audio/tools/archives, build and release artifacts are retained.",
+  "executed": true,
+  "protected_content_unchanged": true,
+  "volatile_files_excluded": 9,
+  "volatile_exclusion_reason": "Engine log rotation and the independently running network-monitor database are live outputs. They were not cleaned, and are excluded from immutable-content claims.",
+  "fixed_evidence_files_checked": 1026,
+  "fixed_evidence_unchanged": true
+}

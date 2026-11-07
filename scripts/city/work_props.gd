@@ -7,7 +7,6 @@ var bunny: CharacterBody3D
 var verb:=""
 var prop: Node3D
 var clock:=0.0
-var spoon_length:=.35
 var target_point:=Vector3.ZERO
 var effects: Node3D
 var spray: MultiMeshInstance3D
@@ -40,9 +39,8 @@ func show_tool(kind: String,water_id: String="") -> void:
 	else:
 		prop=Node3D.new()
 		var wood:=G.mat("bb905c")
-		if kind in ["cook","eat"]:
-			spoon_length=maxf(.32,(bunny.head.position+bunny.mouth.position-bunny.right_arm.position).length()-bunny.rig_profile.grip_offset.length()+.02)
-			var end:=Vector3(0,.23,.63) if kind=="cook" else Vector3(0,0,spoon_length)
+		if kind=="cook":
+			var end:=Vector3(0,.23,.63)
 			G.capsule(prop,Vector3.ZERO,end,.018,wood,"SpoonHandle");G.ball(prop,end,Vector3(.060,.018,.085),wood,"SpoonBowl")
 		elif kind=="plant": G.box(prop,Vector3.ZERO,Vector3(.18,.23,.045),G.mat("e3b773"))
 		elif kind=="snack":

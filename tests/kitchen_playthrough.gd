@@ -118,7 +118,7 @@ func run() -> void:
 			check(game.begin_dining(recipe.output).ok,"Begin seated meal: "+species+" "+id)
 			await create_timer(1.1).timeout
 			check(game.bunny.seated and game.dining_active and is_instance_valid(game.culinary.meal),"Food served and actor sits on the chair: "+species)
-			check(game.bunny.left_leg.rotation.x<-.8 and game.tools.verb=="eat","Shared sitting legs and eating spoon: "+species)
+			check(game.bunny.left_leg.rotation.x<-.8 and game.tools.verb=="eat","Shared seated eating action: "+species)
 			var start: Vector3=game.bunny.position
 			await capture("厨房更新-"+species+"-用餐-"+id)
 			var eating:=await watch_job()

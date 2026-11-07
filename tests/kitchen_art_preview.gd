@@ -30,6 +30,7 @@ func run() -> void:
 	for species in ["bunny","cat_teacher"]:
 		session.authority=Authority.new()
 		session.settings.player_species=species
+		session.state().species=species;session.state().skill_experience.cooking=preload("res://scripts/services/character_stats.gd").skill_start(5)
 		session.state().time=1650
 		game=load("res://scenes/city.tscn").instantiate()
 		root.add_child(game)
@@ -48,7 +49,7 @@ func run() -> void:
 		await capture("厨房更新-"+species+"-菜谱")
 		game.hud.close_panel()
 		session.active=true
-		game.begin_cooking("pumpkin_soup" if species=="bunny" else "garden_salad")
+		check(game.begin_cooking("pumpkin_soup" if species=="bunny" else "garden_salad").ok,"Art preview starts actual cooking: "+species)
 		await create_timer(1.2).timeout
 		await capture("厨房更新-"+species+"-料理台动作")
 		game.cancel_action()
@@ -63,14 +64,14 @@ func run() -> void:
 		for food in (["food_carrot_soup","food_pumpkin_soup"] if species=="bunny" else ["food_garden_salad","food_tomato_stew"]):
 			await travel(Vector3(28.2,.15,-17.5),PI-.65,.47,6.8)
 			session.active=true
-			game.begin_dining(food)
+			check(game.begin_dining(food).ok,"Art preview starts actual meal: "+species+" "+food)
 			await create_timer(1.10).timeout
 			var mouth_mesh: MeshInstance3D=game.bunny.mouth.get_child(0)
 			var mouth_center: Vector3=game.bunny.head.to_local(mouth_mesh.to_global(mouth_mesh.get_aabb().get_center()))
 			check(absf(mouth_center.y-game.bunny.mouth.position.y)<.035,"Chewing remains anchored on face: "+species)
 			var bowl: Node3D=game.tools.prop.get_node("FoodContact")
 			var distance_: float=bowl.global_position.distance_to(game.bunny.mouth.global_position)
-			check(distance_<.14,"Spoon reaches mouth during bite: "+species+" distance="+str(distance_))
+			check(distance_<.14,"Utensil reaches mouth during bite: "+species+" distance="+str(distance_))
 			await capture("厨房更新-"+species+"-餐桌-"+food)
 			game.hud.visible=false
 			await capture("厨房更新-"+species+"-用餐特写-"+food)

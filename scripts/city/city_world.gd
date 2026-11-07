@@ -45,7 +45,6 @@ var tools: Node3D
 var marker: MeshInstance3D
 var clock := 0.0
 var update_timer := 0.0
-var return_from_nap: Marker3D
 var nap_exit := Vector3.ZERO
 var nap_active := false
 var ambience: AudioStreamPlayer
@@ -53,7 +52,6 @@ var sun: DirectionalLight3D
 var atmosphere: Environment
 var screenshot_busy := false
 var job_start := Vector3.ZERO
-var last_outfit: Dictionary={}
 var occluders: Array=[]
 var lamps: Array[Node]=[]
 var night_windows: Array[StandardMaterial3D]=[]
@@ -61,7 +59,6 @@ var cloud_meshes: Array[GeometryInstance3D]=[]
 var lamp_visuals: Array=[]
 var lighting_timer := 1.0
 var occlusion_timer := 0.0
-var sky_drift_timer := 0.0
 var cached_warmth := -1.0
 var camera_query: PhysicsShapeQueryParameters3D
 var life: Node3D

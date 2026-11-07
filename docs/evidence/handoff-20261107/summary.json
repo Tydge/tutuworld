@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-07",
+  "baseline_commit": "30217d04e5752ee6b6348bc21851e247f49716d8",
+  "delivery": {
+    "branch": "main",
+    "source_only": true,
+    "deployed": false,
+    "exported": false,
+    "real_player_save_written": false,
+    "production_version": "0.3.3 / build6 / launcher2 / protocol3"
+  },
+  "code_cleanup": {
+    "obsolete_meal_branch": "Old generic eat-spoon branch and its spoon_length field removed; cooking retains its fixed stirring spoon",
+    "unused_fields": [
+      "city_world.return_from_nap",
+      "city_world.last_outfit",
+      "city_world.sky_drift_timer",
+      "city_hud.time_tip",
+      "city_hud.detail_label",
+      "city_hud.menu_button"
+    ],
+    "unused_shader_varying": "food_surface.local_normal",
+    "kept": "Live meal modes, snack animation, future-food icon fallback, legacy save migrations, generator CLI entry points and historical two_storey/showcase fixtures"
+  },
+  "preview_fixture": "Match authoritative species to settings and unlock cooking via XP; assert actual cooking and meal start; generic utensil labels reflect fork as well as spoon",
+  "thumbnails": {
+    "regenerated": true,
+    "all_seven_png_bytes_identical_to_baseline": true,
+    "model_source_unchanged": true,
+    "shader_provenance_updated": true
+  },
+  "functional": {
+    "groups": 11,
+    "checks": 1066,
+    "meal_suite_checks": 946,
+    "tests": [
+      {
+        "name": "project_integrity",
+        "result": "PASS",
+        "checks": 447,
+        "log": "project_integrity.log",
+        "sha256": "69ab209055b4d4151834b63a2b932b6da8098f7b6a4663838cb83b29cc8b8ffd"
+      },
+      {
+        "name": "meal_presentation_rules",
+        "result": "PASS",
+        "checks": 82,
+        "log": "meal_presentation_rules.log",
+        "sha256": "9bf9972cc8d3a599dc3841acf9e9819bf10716df1bc7e0245d907dc3c20ed0fb"
+      },
+      {
+        "name": "meal_presentation_flow",
+        "result": "PASS",
+        "checks": 188,
+        "log": "meal_presentation_flow.log",
+        "sha256": "3070d20c785dd3f16e768039ff426515553d19a3af60b564a6d92f18de81f075"
+      },
+      {
+        "name": "kitchen_rules",
+        "result": "PASS",
+        "checks": 128,
+        "log": "kitchen_rules.log",
+        "sha256": "9640f9fc0bfcdf9bf969d295552cec6d11f46c2c965ba373ce6b2413ec202506"
+      },
+      {
+        "name": "dining_rules",
+        "result": "PASS",
+        "checks": 51,
+        "log": "dining_rules.log",
+        "sha256": "849a9379208090a5945a3787e0ff72aa9aeea5443e641a0a5e94aecf2be87278"
+      },
+      {
+        "name": "dining_flow",
+        "result": "PASS",
+        "checks": 26,
+        "log": "dining_flow.log",
+        "sha256": "624bf695bb641befce18746202cca642e501ad646080d1fb6ab0245ebd532d16"
+      },
+      {
+        "name": "food_save_migration",
+        "result": "PASS",
+        "checks": 6,
+        "log": "food_save_migration.log",
+        "sha256": "d0a4fe3ffdccb575dad1f477388a0e7ae751bd854fcced5458feb8955a1ca792"
+      },
+      {
+        "name": "kitchen_art_preview",
+        "result": "PASS",
+        "checks": 18,
+        "log": "kitchen_art_preview.log",
+        "sha256": "3e5ec686e88206f77ab8749fa7d1e4fdd79913c17210b0461aff04bceb7144f8"
+      },
+      {
+        "name": "city_rules",
+        "result": "PASS",
+        "checks": 56,
+        "log": "city_rules.log",
+        "sha256": "ecb94350d8fef6688c432b91a25ae4ff5f6f0321588d7addff010851fd3968b3"
+      },
+      {
+        "name": "land_parcels_rules",
+        "result": "PASS",
+        "checks": 37,
+        "log": "land_parcels_rules.log",
+        "sha256": "cf928d606218db5e780eea844ead0edbb3223ee25a7338d260db2eb1b80fb7e7"
+      },
+      {
+        "name": "wall_occlusion_flow",
+        "result": "PASS",
+        "checks": 27,
+        "log": "wall_occlusion_flow.log",
+        "sha256": "30c2ea9aa19bb2ac3f920759b4af50d90fdf07d169d5f6679d51039f8e13e3c4"
+      }
+    ]
+  },
+  "cleanup": "cleanup.json",
+  "protection": {
+    "immutable_local_files_checked": 329,
+    "all_unchanged": true,
+    "prior_fixed_evidence_files_checked": 1026,
+    "all_prior_evidence_unchanged": true,
+    "excluded_live_outputs": "Engine log rotation and running network-monitor data, neither cleaned",
+    "private_content_and_hashes_not_published": true
+  },
+  "source_sha256": {
+    "scripts/city/work_props.gd": "26dcbad3e56a508e09a7aea069cc759c5f52b19e71098297d63f6a4b7234748e",
+    "scripts/city/city_world.gd": "456e74903e497619ef08eb6bfceb5e09be2b175c10a9db0f320cd651d75ba08d",
+    "scripts/ui/city_hud.gd": "2a36234c359583ee8a79663e6077140d3b712a1ddc3b042112d274ccab8a68c2",
+    "assets/shaders/food_surface.gdshader": "4a6b94b60d76d5f8e99c29ad1a835f28e340e2a5051465ffbc300ad59c2593a2",
+    "assets/ui/food/manifest.json": "b86ae63016da9d54866a1197d38096ae0cf6e5cd9fd98ff2df9901a3158a2f21",
+    "tests/kitchen_art_preview.gd": "63475f01197e4fdd483387f808f5994dd033550b693d85c8f91071c41967df5b",
+    "tests/kitchen_playthrough.gd": "d350e04bcf7060337adbcb968432921637693d1d88905789687faf557155ee3b"
+  },
+  "document_audit": "docs-audit.json",
+  "limitations": [
+    "Selected functional regression, not the full test catalog",
+    "Strict mirror performance not rerun; known independent-plane, allocation-stall and shadow issues remain unchanged",
+    "No Windows run, production server test, deployment or installation export",
+    "No real multiplayer integration test; single-player land ownership is not a delivered multiplayer-building feature"
+  ]
+}

@@ -3,10 +3,9 @@ render_mode diffuse_burley, cull_disabled;
 uniform vec4 tint:source_color=vec4(1.);
 uniform int kind=0;
 varying vec3 p;
-varying vec3 local_normal;
 float hash(vec3 v){return fract(sin(dot(v,vec3(127.1,311.7,74.7)))*43758.5453);}
 float soft_noise(vec2 v){vec2 cell=floor(v),f=fract(v);f=f*f*(3.-2.*f);return mix(mix(hash(vec3(cell,0)),hash(vec3(cell+vec2(1,0),0)),f.x),mix(hash(vec3(cell+vec2(0,1),0)),hash(vec3(cell+vec2(1,1),0)),f.x),f.y);}
-void vertex(){p=VERTEX;local_normal=NORMAL;}
+void vertex(){p=VERTEX;}
 void fragment(){
  vec3 color=tint.rgb*COLOR.rgb;
  float fleck=hash(floor(p*260.));

@@ -33,10 +33,7 @@ var toast_label: Label
 var toast_timer := 0.0
 var ring: Control
 var target_point := Vector3.ZERO
-var time_tip: Label
-var detail_label: Label
 var photo_mode := false
-var menu_button: Button
 var shop_tab := "buy"
 var shop_preview_overrides: Dictionary={}
 var shop_preview_reset: Button

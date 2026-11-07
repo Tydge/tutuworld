@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-07",
+  "markdown_files": 36,
+  "local_links_checked": 389,
+  "broken_links": [],
+  "all_local_link_targets_exist": true,
+  "directory_counts": {
+    "[根目录文件]": 8,
+    "assets": 151,
+    "config": 5,
+    "data": 10,
+    "docs": 886,
+    "scenes": 15,
+    "scripts": 287,
+    "server": 12,
+    "tests": 318,
+    "tools": 8
+  },
+  "manifest_files": 1700,
+  "scope": "Local file targets checked; remote URLs and anchor slugs not revalidated. Historical evidence is preserved unchanged."
+}
