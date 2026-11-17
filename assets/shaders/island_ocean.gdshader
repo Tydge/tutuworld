@@ -1,19 +1,17 @@
 shader_type spatial;
-render_mode unshaded, fog_disabled, cull_disabled;
-uniform vec4 sea_color : source_color = vec4(.12,.48,.70,1);
-uniform vec4 horizon_color : source_color = vec4(.63,.82,.94,1);
-uniform float daylight=1.0;
-varying vec3 world_pos;
-#include "res://assets/shaders/ocean_surface.gdshaderinc"
-void vertex(){world_pos=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
+render_mode diffuse_burley,cull_back,depth_draw_never;
+#include "res://assets/shaders/painted_water.gdshaderinc"
+uniform bool valley_estuary=false;
+void vertex(){water_world=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;water_base_normal=normalize(MODEL_NORMAL_MATRIX*NORMAL);}
 void fragment(){
- vec2 p=world_pos.xz;
- float range_=length(VERTEX);
- float shore_radius=length(vec2(p.x,p.y/.88));
- vec3 water=ocean_albedo(p,sea_color.rgb,daylight);
- vec3 wave_normal=normalize(vec3(.035*cos(p.x*.53+p.y*.28-TIME*.7),1.,.045*cos(p.y*.61-p.x*.2+TIME*.5)));
- vec3 view_normal=normalize((VIEW_MATRIX*vec4(wave_normal,0.)).xyz);
- float fresnel=pow(1.-clamp(dot(view_normal,VIEW),0.,1.),4.);
- water=mix(water,horizon_color.rgb,fresnel*.23);
- ALBEDO=mix(water,horizon_color.rgb,smoothstep(95.,330.,range_));
+ vec2 current=mix(flow,vec2(.006,-.04),valley_estuary?(1.-smoothstep(82.,117.,water_world.z)):0.);
+ vec3 n=ripple_flow(water_world.xz,current);NORMAL=normalize((VIEW_MATRIX*vec4(n,0.)).xyz);
+ float fresnel=pow(1.-clamp(dot(NORMAL,VIEW),0.,1.),4.);
+ float thickness=water_thickness(SCREEN_UV,INV_PROJECTION_MATRIX,VERTEX.z);
+ float rip=clamp(.65+(n.x+n.z)*1.5,0.,1.);
+ float foam=(1.-smoothstep(.08,.55,thickness))*smoothstep(.52,.79,rip);
+ ALBEDO=water_tint(thickness,fresnel)+vec3(.42,.52,.48)*foam*.35;
+ float distance_=length(VERTEX);
+ ROUGHNESS=mix(.17,.36,smoothstep(35.,180.,distance_));SPECULAR=.68;
+ ALPHA=clamp(mix(.36,.96,1.-exp(-thickness*.29))+fresnel*.32+foam*.28,.25,.995);
 }

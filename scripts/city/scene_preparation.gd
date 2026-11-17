@@ -38,7 +38,10 @@ static func run(city: Node3D) -> void:
 	tip.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(tip)
 	var focuses: Array[Vector3]=[Vector3(0,1.4,7),Vector3(-5,1.4,-18),Vector3(29,1.4,4),Vector3(-33,1.4,12),Vector3(8,1.4,36),Vector3(15,1.4,33),Vector3(-34,1.5,-1.4)]
-	if city.map_id=="valley": focuses=[Vector3(-7,1.4,47),Vector3(3.4,1.4,-8.7),Vector3(-8,1.4,32),Vector3(0,1.4,5),Vector3(-18,3,-16),Vector3(22,5,-28),Vector3(-30,5,-35)]
+	if city.map_id=="valley":
+		focuses=[]
+		for point in [Vector2(-20,88),Vector2(-24,55),Vector2(0,10),Vector2(-42,-24),Vector2(44,-50),Vector2(24,-68),Vector2(-65,-61)]:
+			focuses.append(Vector3(point.x,preload("res://scripts/valley/valley_layout.gd").walk_height(point.x,point.y)+1.4,point.y))
 	var view_steps:=0
 	for focus in focuses: view_steps+=8 if focus.z>=30 else 4
 	var step:=0

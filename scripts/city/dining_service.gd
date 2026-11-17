@@ -3,16 +3,18 @@ const D=preload("res://scripts/building/dining.gd")
 const Access=preload("res://scripts/city/furniture_access.gd")
 const Seats=preload("res://scripts/city/seating.gd")
 static func register(editor: Node) -> void:
-	var pairs:=D.links(editor.layout);var tables: Dictionary={}
-	for row in editor.layout.elements:
-		if row.get("kind","")!="dining_table" or not editor.room.render_cache.has(row.id):continue
-		var node: Node3D=editor.room.render_cache[row.id].node;tables[row.id]=node
+	register_world(editor.city,editor.layout,editor.room)
+static func register_world(host: Node3D,layout: Dictionary,room: Node3D) -> void:
+	var pairs:=D.links(layout);var tables: Dictionary={}
+	for row in layout.elements:
+		if row.get("kind","")!="dining_table" or not room.render_cache.has(row.id):continue
+		var node: Node3D=room.render_cache[row.id].node;tables[row.id]=node
 		node.set_meta("dining_chairs",[])
-		editor.city.targets["build:"+row.id]={"kind":"dining","node":node,"position":node.global_position,"radius":3.3}
+		host.targets["build:"+row.id]={"kind":"dining","node":node,"position":node.global_position,"radius":3.3}
 	for chair in pairs:
-		if not tables.has(pairs[chair]) or not editor.room.render_cache.has(chair):continue
-		var node: Node3D=editor.room.render_cache[chair].node;var chairs: Array=tables[pairs[chair]].get_meta("dining_chairs");chairs.append(node)
-		editor.city.targets.erase("build:"+chair)
+		if not tables.has(pairs[chair]) or not room.render_cache.has(chair):continue
+		var node: Node3D=room.render_cache[chair].node;var chairs: Array=tables[pairs[chair]].get_meta("dining_chairs");chairs.append(node)
+		host.targets.erase("build:"+chair)
 static func chairs(host: Node3D,id: String) -> Array:
 	var node: Node3D=host.targets.get(id,{}).get("node")
 	return node.get_meta("dining_chairs",[]) if is_instance_valid(node) else []

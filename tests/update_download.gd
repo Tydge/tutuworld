@@ -5,7 +5,8 @@ func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	updater=load("res://scripts/services/update_client.gd").new()
 	updater.current_build=1
-	updater.storage="user://qa-updates"
+	updater.storage=OS.get_environment("TUTU_QA_UPDATE_STORAGE")
+	if updater.storage=="":updater.storage="user://qa-updates-"+str(OS.get_process_id())
 	root.add_child(updater)
 	updater.check_updates()
 	deadline=Time.get_ticks_msec()+90000
@@ -17,10 +18,10 @@ func run() -> void:
 	print("PASS HTTPS signed manifest downloaded")
 	updater.download_update()
 	while updater.state=="downloading" and Time.get_ticks_msec()<deadline: await process_frame
-	var pass_: bool=updater.state=="ready" and FileAccess.file_exists("user://qa-updates/pending.json")
+	var pass_: bool=updater.state=="ready" and FileAccess.file_exists(updater.storage+"/pending.json")
 	if pass_:
 		print("PASS HTTPS pack staged and SHA256 verified")
-		var path: String="user://qa-updates/build-%d.pck"%int(updater.manifest.build)
+		var path: String=updater.storage+"/build-%d.pck"%int(updater.manifest.build)
 		print("PASS Verified pack size=",FileAccess.get_file_as_bytes(path).size())
 	else: print("UPDATE_ERROR ",updater.state," ",updater.message)
 	print("UPDATE_DOWNLOAD_RESULT ","PASS" if pass_ else "FAIL")

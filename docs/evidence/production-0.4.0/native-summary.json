@@ -1,0 +1,188 @@
+{
+  "checks": [
+    {
+      "ok": true,
+      "label": "Original exported macOS bundle signature verifies"
+    },
+    {
+      "ok": true,
+      "label": "macOS native version is 0.4.0 / build 7"
+    },
+    {
+      "ok": true,
+      "label": "fresh-isolation launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "fresh uses an isolated data directory"
+    },
+    {
+      "ok": true,
+      "label": "fresh-boot launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "fresh boots signed 0.4.0 content with native launcher"
+    },
+    {
+      "ok": true,
+      "label": "fresh keeps the original character save intact"
+    },
+    {
+      "ok": true,
+      "label": "fresh preserves saved cat identity"
+    },
+    {
+      "ok": true,
+      "label": "old-030-isolation launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-030 uses an isolated data directory"
+    },
+    {
+      "ok": true,
+      "label": "old-030-boot launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-030 boots signed 0.4.0 content with native launcher"
+    },
+    {
+      "ok": true,
+      "label": "old-030 promotes the verified pending update"
+    },
+    {
+      "ok": true,
+      "label": "old-030 keeps the original character save intact"
+    },
+    {
+      "ok": true,
+      "label": "old-030 preserves saved cat identity"
+    },
+    {
+      "ok": true,
+      "label": "old-031-isolation launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-031 uses an isolated data directory"
+    },
+    {
+      "ok": true,
+      "label": "old-031-boot launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-031 boots signed 0.4.0 content with native launcher"
+    },
+    {
+      "ok": true,
+      "label": "old-031 promotes the verified pending update"
+    },
+    {
+      "ok": true,
+      "label": "old-031 keeps the original character save intact"
+    },
+    {
+      "ok": true,
+      "label": "old-031 preserves saved cat identity"
+    },
+    {
+      "ok": true,
+      "label": "old-032-isolation launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-032 uses an isolated data directory"
+    },
+    {
+      "ok": true,
+      "label": "old-032-boot launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-032 boots signed 0.4.0 content with native launcher"
+    },
+    {
+      "ok": true,
+      "label": "old-032 promotes the verified pending update"
+    },
+    {
+      "ok": true,
+      "label": "old-032 keeps the original character save intact"
+    },
+    {
+      "ok": true,
+      "label": "old-032 preserves saved cat identity"
+    },
+    {
+      "ok": true,
+      "label": "old-033-isolation launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-033 uses an isolated data directory"
+    },
+    {
+      "ok": true,
+      "label": "old-033-boot launches without script errors"
+    },
+    {
+      "ok": true,
+      "label": "old-033 boots signed 0.4.0 content with native launcher"
+    },
+    {
+      "ok": true,
+      "label": "old-033 promotes the verified pending update"
+    },
+    {
+      "ok": true,
+      "label": "old-033 keeps the original character save intact"
+    },
+    {
+      "ok": true,
+      "label": "old-033 preserves saved cat identity"
+    },
+    {
+      "ok": true,
+      "label": "Real player save remains unchanged"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive CRC verifies"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive includes /TutuWorld.exe"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive includes /TutuWorld.pck"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive includes /x86_64/D3D12Core.dll"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive includes /x86_64/LICENSE.txt"
+    },
+    {
+      "ok": true,
+      "label": "Windows archive includes /x86_64/LICENSE-CODE.txt"
+    },
+    {
+      "ok": true,
+      "label": "Windows SDK runtime matches official dependency bytes"
+    }
+  ],
+  "isolated_userdata": [
+    "/Users/wangtaizhi/Library/Application Support/TutuWorldRelease04QA-43156-fresh",
+    "/Users/wangtaizhi/Library/Application Support/TutuWorldRelease04QA-43156-old-030",
+    "/Users/wangtaizhi/Library/Application Support/TutuWorldRelease04QA-43156-old-031",
+    "/Users/wangtaizhi/Library/Application Support/TutuWorldRelease04QA-43156-old-032",
+    "/Users/wangtaizhi/Library/Application Support/TutuWorldRelease04QA-43156-old-033"
+  ],
+  "passed": true
+}

@@ -6,7 +6,7 @@ static func attach(city: Node3D) -> void:
 	var dock:=Layout.dock(city.map_id)
 	city.targets["boat"]={"kind":"boat","position":Vector3(dock.x,.1,dock.y),"radius":3.1}
 	var boat:=Node3D.new();boat.name="TravelBoat";city.scenery.add_child(boat)
-	boat.position=Vector3(16.3,-1.25,50) if city.map_id=="city" else Vector3(-1.5,Layout.water_level(48.2)-.12,48.2)
+	boat.position=Vector3(16.3,-1.25,50) if city.map_id=="city" else Vector3(dock.x+4.3,Layout.water_level(dock.y+1.)-.12,dock.y+1.)
 	if city.map_id=="valley": boat.rotation.y=.08
 	var wood:=G.mat("c29b65");var trim:=G.mat("eee0ba")
 	var hull:=G.ball(boat,Vector3(0,.15,0),Vector3(1.05,.38,2.1),G.mat("598e88"),"Hull")

@@ -1,0 +1,334 @@
+{
+  "date": "2026-11-12",
+  "timezone": "Asia/Shanghai",
+  "branch": "codex/multiplayer-building",
+  "base_commit": "8d3dd826eed920c90d08caa9956dee23569ae35b",
+  "state": "local source development; no deployment, release export or push",
+  "test_groups": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 454,
+      "log": "logs/project_integrity.log",
+      "source_run": "20261112-154149-305365"
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "result": "PASS",
+      "checks": 59,
+      "log": "logs/building_multiplayer_rules.log",
+      "source_run": "20261112-154149-305365"
+    },
+    {
+      "name": "building_multiplayer_flow",
+      "result": "PASS",
+      "checks": 35,
+      "log": "logs/building_multiplayer_flow.log",
+      "source_run": "20261112-154149-305365"
+    },
+    {
+      "name": "building_update_lifecycle",
+      "result": "PASS",
+      "checks": 1,
+      "log": "logs/building_update_lifecycle.log",
+      "source_run": "20261112-154149-305365"
+    },
+    {
+      "name": "land_parcels_rules",
+      "result": "PASS",
+      "checks": 47,
+      "log": "logs/land_parcels_rules.log",
+      "source_run": "20261112-152941-384050"
+    },
+    {
+      "name": "building_camera_template_rules",
+      "result": "PASS",
+      "checks": 1493,
+      "log": "logs/building_camera_template_rules.log",
+      "source_run": "20261112-152941-384050"
+    },
+    {
+      "name": "building_camera_template_flow",
+      "result": "PASS",
+      "checks": 57,
+      "log": "logs/building_camera_template_flow.log",
+      "source_run": "20261112-153316-578899"
+    },
+    {
+      "name": "land_parcels_flow",
+      "result": "PASS",
+      "checks": 36,
+      "log": "logs/land_parcels_flow.log",
+      "source_run": "20261112-153316-578899"
+    },
+    {
+      "name": "building_exit_flow",
+      "result": "PASS",
+      "checks": 15,
+      "log": "logs/building_exit_flow.log",
+      "source_run": "20261112-151441-764159"
+    },
+    {
+      "name": "building_grid_rules",
+      "result": "PASS",
+      "checks": 29,
+      "log": "logs/building_grid_rules.log",
+      "source_run": "20261112-151246-823091"
+    },
+    {
+      "name": "drafting_rules",
+      "result": "PASS",
+      "checks": 51,
+      "log": "logs/drafting_rules.log",
+      "source_run": "20261112-151246-823091"
+    },
+    {
+      "name": "dining_rules",
+      "result": "PASS",
+      "checks": 51,
+      "log": "logs/dining_rules.log",
+      "source_run": "20261112-151246-823091"
+    },
+    {
+      "name": "drafting_flow",
+      "result": "PASS",
+      "checks": 22,
+      "log": "logs/drafting_flow.log",
+      "source_run": "20261112-151709-237810"
+    },
+    {
+      "name": "dining_flow",
+      "result": "PASS",
+      "checks": 26,
+      "log": "logs/dining_flow.log",
+      "source_run": "20261112-151709-237810"
+    },
+    {
+      "name": "stairs_first_walk",
+      "result": "PASS",
+      "checks": 36,
+      "log": "logs/stairs_first_walk.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "wall_furniture_flow",
+      "result": "PASS",
+      "checks": 38,
+      "log": "logs/wall_furniture_flow.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "save_transactions",
+      "result": "PASS",
+      "checks": 10,
+      "log": "logs/save_transactions.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "double_seat_rules",
+      "result": "PASS",
+      "checks": 90,
+      "log": "logs/double_seat_rules.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "conversation_walls",
+      "result": "PASS",
+      "checks": 28,
+      "log": "logs/conversation_walls.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "navigation_roam",
+      "result": "PASS",
+      "checks": null,
+      "log": "logs/navigation_roam.log",
+      "source_run": "20261112-152321-088259"
+    },
+    {
+      "name": "meal_presentation_rules",
+      "result": "PASS",
+      "checks": 82,
+      "log": "logs/meal_presentation_rules.log",
+      "source_run": "20261112-152321-088259"
+    }
+  ],
+  "test_group_count": 21,
+  "counted_checks": 2660,
+  "run_strategy": "Checks were selected and run in batches according to changed scope. Final multiplayer suite and mirrored catalog rotation/parcel flows ran after the final functionality changes. Hashes below describe the final working source, not a claim that every earlier group used the exact same source snapshot.",
+  "client_bulk_update": {
+    "configure_usec": 1136,
+    "created": 141,
+    "elapsed_usec": 4325936,
+    "entries_usec": 1506,
+    "max_slice_usec": 18018,
+    "modules": 283,
+    "moved": 0,
+    "phases": {
+      "descriptors": 15285,
+      "models": 156793,
+      "retire": 0,
+      "rooms": 0,
+      "slowest_model": "roof:build_21",
+      "swap": 7142
+    },
+    "prepare_usec": 1277,
+    "removed": 0,
+    "reused": 142,
+    "usec": 4606,
+    "yields": 100
+  },
+  "server_updates": [
+    {
+      "configure_usec": 612,
+      "created": 142,
+      "elapsed_usec": 3604442,
+      "entries_usec": 713,
+      "max_slice_usec": 31292,
+      "modules": 142,
+      "moved": 0,
+      "phases": {
+        "descriptors": 7580,
+        "models": 31284,
+        "retire": 0,
+        "rooms": 0,
+        "slowest_model": "wall:build_919991216",
+        "swap": 7728
+      },
+      "prepare_usec": 897,
+      "removed": 0,
+      "reused": 0,
+      "usec": 2604,
+      "yields": 73
+    },
+    {
+      "configure_usec": 892,
+      "created": 141,
+      "elapsed_usec": 1371303,
+      "entries_usec": 1160,
+      "max_slice_usec": 18763,
+      "modules": 283,
+      "moved": 0,
+      "phases": {
+        "descriptors": 14313,
+        "models": 18747,
+        "retire": 0,
+        "rooms": 3289,
+        "slowest_model": "wall:build_55",
+        "swap": 8499
+      },
+      "prepare_usec": 1952,
+      "removed": 0,
+      "reused": 142,
+      "usec": 4568,
+      "yields": 56
+    },
+    {
+      "configure_usec": 221,
+      "created": 1,
+      "elapsed_usec": 31157,
+      "entries_usec": 1180,
+      "max_slice_usec": 4002,
+      "modules": 283,
+      "moved": 0,
+      "phases": {
+        "descriptors": 0,
+        "models": 2012,
+        "retire": 0,
+        "rooms": 0,
+        "slowest_model": "object:sofa",
+        "swap": 3305
+      },
+      "prepare_usec": 1005,
+      "removed": 1,
+      "reused": 282,
+      "usec": 2915,
+      "yields": 2
+    }
+  ],
+  "performance_limits": "CPU script slices and final swap only; not end-to-end frame or GPU time, not proof of stable 60 FPS across all layouts/devices. Two clients, two 99-record houses; unchanged 142 first-house modules retained. One-object publication also replaces and retires only that object.",
+  "template_changes": {
+    "single_one": {
+      "records": 29,
+      "mirrors": 1,
+      "added_id": "build_243"
+    },
+    "two_storey": {
+      "records": 99,
+      "mirrors": 2,
+      "added_id": "build_287",
+      "existing_mirror": "build_284"
+    },
+    "existing_rows_preserved": true,
+    "existing_player_buildings_modified": false
+  },
+  "visual_review": {
+    "images": [
+      {
+        "path": "screenshots/single_one-wall-mirror.png",
+        "sha256": "deb408b302eed00372b6de635068cccaa2e90e14b13c818993fc006951fcfc33"
+      },
+      {
+        "path": "screenshots/two_storey-wall-mirror.png",
+        "sha256": "a838a186dc64f0ee1d53b0d915141cf92d268da5c9f6f49406ae2ff422e5f6c2"
+      },
+      {
+        "path": "screenshots/two-online-houses.png",
+        "sha256": "6460d09741949c36630e87f282f10167d3fe86efa695a7d825686ba3779e9c6f"
+      }
+    ],
+    "result": "Both added mirrors are on supported interior walls and show real character reflections. Mirror preview captures render the local avatar on the reflection-only layer to keep the foreground clear; gameplay visibility is unchanged."
+  },
+  "regression_fixture_adjustment": "stairs_first_walk kept all 36 assertions, moving its isolated fixture from the public crossing at (120,10), where the existing east_se parcel board blocked it, into empty east_nw land at (89,-4).",
+  "observed_shutdown_diagnostics": {
+    "groups": [
+      "building_multiplayer_flow",
+      "land_parcels_flow",
+      "conversation_walls"
+    ],
+    "note": "Some Godot fixture exits report ObjectDB/PagedAllocator cleanup diagnostics. No script/shader failures occur in the selected passing logs; long-session memory behavior is not certified by this run."
+  },
+  "not_verified": [
+    "Windows physical device",
+    "geographically distributed weak network",
+    "all storeys and capacity limits simultaneously",
+    "production release migration and installer compatibility"
+  ],
+  "real_progress_modified": false,
+  "real_progress_basis": "All game executions used --test and isolated server/account directories. No commands targeted live player save paths.",
+  "source_sha256": {
+    "data/building_templates/single_one.json": "f655ea32be6e2d9ccebc7d0cf8fc38956ec408128f180eb30d962e0a8231576e",
+    "data/building_templates/two_storey.json": "b86ceb2b465b8bf8c131ad5cf01e67d0c073a6f98f9cb95ae4b2a1ea12cb904d",
+    "scripts/building/bed_comfort.gd": "0a16f931c5c4c523c7b2a2066667540c2c729e76c954a30b15b667c2e8cf3532",
+    "scripts/building/building_world.gd": "6ff72f30301a7c87c933e318e05fce823913357a3a8e64ecf5a6381a279204d5",
+    "scripts/building/construction_sites.gd": "6bf17e0d5ceb7e205e07731583357a82ef8341035eff56e85f98de0424058b16",
+    "scripts/building/editor.gd": "2cc3d2d1c52b827111855de696329e10e0db8800738fe6e55420f9fcf1e68e9f",
+    "scripts/building/editor_ui.gd": "076aaa4a3ffc6a240eefdf35b0ba9c32ee2dd774e180ba8af5ff7c34a206c438",
+    "scripts/building/mesh_batch_job.gd": "9b5a1625f7f8e69f22a2f1e3ccb6a359ebff428763728666613de59b3e4b1a46",
+    "scripts/building/module_factory.gd": "d6537ccba3169f76ad343d8e58553bc2723da33029c6e25ffaaaf76e11f26111",
+    "scripts/building/room_plan.gd": "88462e729f7016fff90e3ccafa4d45d80737cf1c8fbdbd025cab47ffa41b5450",
+    "scripts/building/room_plan_job.gd": "c1773190db0787cb58d4edbf700cb346a3a89a2ee97d9e808611fd5493585989",
+    "scripts/building/stair_mesh.gd": "5e73a4082714867d6850526f5a8f011656d858ddcd2d2c434656c3dac5c47898",
+    "scripts/building/world_sync.gd": "0d2165673e9baf6753fa671cd602c7033ff0c94027487185897b02b101bdf858",
+    "scripts/city/city_world.gd": "f3231c93e4deeed50f3948e604d3d67b5859a9318b7d1e6c03a1de265756a6ef",
+    "scripts/city/culinary.gd": "42d18fb3b5f6dcb7de4dac95f62ec1e86a87fbd86cb14619dfd3e761fdea7cfe",
+    "scripts/city/dining_service.gd": "da08d9195e1533bd33068faff7037d001d60835ebfc84fe65e7777beb9b6803e",
+    "scripts/city/home_builder.gd": "e16560917400b3a8e8bb88b86836b2d48969c7279a43e1f3bbc88feac72a6466",
+    "scripts/city/local_landing.gd": "32795403f0bc439e081600b788087f039fc9cfc43f34bf9ba2295c141c5b5de7",
+    "scripts/city/online_world.gd": "ae462e7aae8088647a9d8fb6eb14eca7e9d350ebc8c654ad93737277b89cf470",
+    "scripts/city/wander_navigation.gd": "ef979cde6ce09ed8ac8398cc3fed5444fe0a2209f4d543e25b9309e316227923",
+    "scripts/services/remote_transport.gd": "5aeb2ccdeeb0672ba67e139ab35600c3fd869539ce8bd66d835552ae97d8ef20",
+    "scripts/services/session.gd": "237ac8f2fa94422954571e12632344da18e67bbfd50a7d51e551a426759fbd8d",
+    "scripts/ui/city_hud.gd": "cd44e9f02debce83ba9f20f9b2d71fef10f1b8076824e862dd8977cf6de900ac",
+    "server/building_service.gd": "bc920058b9d5f09022fbba3c4b16097e409d6756577713be5b2a973a9acd2e6a",
+    "server/host_setup.gd": "4035c6636a5d5b8eb3cc1da44e2243d47bf9606bbb602eb8c2bfc2640cfba9f8",
+    "server/world_server.gd": "9e5e6b56286e033715959f7161fa7a5190a3f2be82f321ced641c0383d4505a5",
+    "tests/building_multiplayer_flow.gd": "9558ea3ba6be64186bdb867cb7131a3e588b3d81a692bd786d66aef822698749",
+    "tests/building_multiplayer_rules.gd": "ab70883de6dc0e87db21bb006400c213c069fa4216ae7fad73fb39c56b4e5b65",
+    "tests/building_update_lifecycle.gd": "6feb12153bd35a0577d3c162d3569949efad61ce527f41f53d4355cdd69530f5",
+    "tests/land_parcels_flow.gd": "32aa9b14f43e180a2db0e4e95749bd6b047cf1c20c5882b4a6bd952597bf41d8",
+    "tests/land_parcels_rules.gd": "82df86421fb9c1985f59496e617db0b02838c4bad340ebbb7df242c9cb25ef86",
+    "tests/stairs_first_walk.gd": "f04426f0671e11315a6d7c5c3f24f5090e1e37a8f3eb909b9699eaa915a70143",
+    "tools/test_suites.json": "6850f6d214ef51893145ca6594035379a7f2fd2e0bea6ffb4762d8c27cddb74f"
+  }
+}

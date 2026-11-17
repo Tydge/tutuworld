@@ -40,6 +40,6 @@ func run() -> void:
 	var old:=L.find(cart,cart_id).duplicate(true);old.position=[78.,8.];old.yaw=90.;var group:=L.replace(cart,old)
 	check(L.validate(group).ok and group.elements[-1].support==cart_id,"Moving/rotating kitchen cart carries its supported spice tray")
 	var template:=preload("res://scripts/building/templates.gd").player_sample("two_storey")
-	check(template.elements.size()==87 and template.elements.any(func(row):return row.get("kind","")=="hearth" and row.position==[140.2,9.58]),"Catalog contains the updated eastern house with its flush-wall fireplace")
+	check(template.elements.size()==99 and template.elements.any(func(row):return row.get("kind","")=="hearth" and row.position==[140.2,9.58]),"Catalog contains the updated eastern house with its flush-wall fireplace")
 	for turn in [0.,90.,180.,270.]:check(L.validate(L.merge_template(L.empty(),template,Vector2(120,10),turn)).ok,"Updated sample rotates and validates: "+str(turn))
 	print("WALL_FURNITURE_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)

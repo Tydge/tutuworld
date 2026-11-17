@@ -1,0 +1,14 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+DECK_CLEARANCE harbor boards=28 samples=420 minimum_m=0.00000065565109
+PASS All saved boards located: harbor
+PASS Ground measured beneath every board: harbor
+FAIL Terrain stays visibly below the complete board tops: harbor
+DECK_CLEARANCE creek boards=61 samples=915 minimum_m=-0.00593356788158
+PASS All saved boards located: creek
+PASS Ground measured beneath every board: creek
+FAIL Terrain stays visibly below the complete board tops: creek
+VALLEY_DECK_CLEARANCE_RESULT FAIL checks=6 failures=["Terrain stays visibly below the complete board tops: harbor", "Terrain stays visibly below the complete board tops: creek"]

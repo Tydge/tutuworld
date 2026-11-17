@@ -38,7 +38,7 @@ func _ready() -> void:
 		if str(node.name).begins_with("Tree") and node.position.z>8: node.hide()
 	for lamp_ in map.get_node("Streetlights").get_children():
 		if lamp_.position.distance_to(Vector3(10,0,20))<8: lamp_.hide()
-	actor=preload("res://scripts/characters/animal_factory.gd").create(session.settings.get("player_species","bunny"))
+	actor=preload("res://scripts/characters/animal_factory.gd").create(session.state().get("species","bunny"))
 	add_child(actor)
 	actor.position=Vector3(7.5,.1,15.5)
 	actor.scale=Vector3.ONE*1.22

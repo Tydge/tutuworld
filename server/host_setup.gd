@@ -4,6 +4,9 @@ const Animals=preload("res://scripts/characters/animal_factory.gd")
 static func setup(host: Node3D) -> void:
 	host.scenery=load("res://scenes/valley_map.scn" if host.map_id=="valley" else "res://scenes/city_map.tscn").instantiate()
 	host.add_child(host.scenery)
+	if host.map_id=="city":
+		preload("res://scripts/city/town_shore.gd").ensure(host.scenery)
+		preload("res://scripts/building/site.gd").ensure(host.scenery)
 	for node in host.scenery.find_children("*","Node3D",true,false):
 		if node.get_script()==load("res://scripts/city/seabreeze_home.gd"):node.set_process(false);node.city=host;host.interiors.append(node)
 	host.home=host.scenery.get_node_or_null("ValleyHome" if host.map_id=="valley" else "SeabreezeHome")

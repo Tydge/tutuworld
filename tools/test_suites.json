@@ -208,6 +208,45 @@
       "dining_flow",
       "food_save_migration",
       "kitchen_art_preview"
+    ],
+    "building_multiplayer": [
+      "project_integrity",
+      "building_multiplayer_rules",
+      "building_multiplayer_flow",
+      "building_update_lifecycle"
+    ],
+    "release04": [
+      "project_integrity",
+      "character_roster_rules",
+      "character_restart_flow",
+      "release04_building_rules",
+      "drafting_rules",
+      "building_surface_flow",
+      "drafting_flow",
+      "wall_furniture_rules",
+      "wall_furniture_flow",
+      "building_multiplayer_rules",
+      "building_multiplayer_flow",
+      "building_update_lifecycle",
+      "update_rules"
+    ],
+    "valley_landscape": [
+      "project_integrity",
+      "valley_landscape_rules",
+      "valley_rules",
+      "valley_movement",
+      "valley_traversal_regression",
+      "valley_deck_clearance",
+      "valley_camera_regression",
+      "valley_spawn_regression",
+      "valley_journey",
+      "panda_valley_routine",
+      "valley_shared_work",
+      "valley_visitors_night",
+      "forest_art_structure",
+      "valley_performance",
+      "woodland_sweep_performance",
+      "valley_landscape_preview"
     ]
   },
   "tests": {
@@ -433,6 +472,25 @@
       "headless": true
     },
     "kitchen_performance": {
+      "args": [
+        "--benchmark",
+        "--warmup-test"
+      ]
+    },
+    "building_multiplayer_rules": {
+      "headless": true
+    },
+    "building_update_lifecycle": {
+      "headless": true
+    },
+    "release04_building_rules": {
+      "headless": true
+    },
+    "character_restart_flow": {},
+    "valley_landscape_rules": {
+      "headless": true
+    },
+    "woodland_sweep_performance": {
       "args": [
         "--benchmark",
         "--warmup-test"

@@ -26,7 +26,9 @@ func run() -> void:
 	var editor=city.build_mode;editor.open_editor();editor.set_process(false);city.set_process(false);city.bunny.set_physics_process(false);city.bunny.hide();city.bunny.collision_layer=0;editor.ui.hide()
 	for form in Stairs.FORMS:
 		for turn in [0.,90.,180.,270.]:
-			var ground:=L.add(L.empty(),{"type":"floor","a":[108.,-6.],"b":[138.,26.]});var row:={"type":"stairs","position":[120.,10.],"form":form,"yaw":turn}
+			# Keep the complete walking fixture inside an empty parcel. The old public
+			# crossing at (120,10) now contains real parcel boards and garden furniture.
+			var ground:=L.add(L.empty(),{"type":"floor","a":[77.,-14.],"b":[101.,6.]});var row:={"type":"stairs","position":[89.,-4.],"form":form,"yaw":turn}
 			check(editor.commit(E.place_stair(ground,row)),"Stairs-only-upper fixture "+form+str(turn));await physics_frame;await physics_frame
 			var path:=Stairs.route(row);var heading:=path[-1]-path[-2];heading.y=0;path.append(path[-1]+heading.normalized()*3.);var actor:=Animals.create("bunny");city.add_child(actor);actor.world=city;actor.set_physics_process(false);actor.position=path[0]+Vector3.UP*.1;city.paused=false
 			for i in range(15):actor.simulate_movement(1./60.,Vector3.ZERO,false,false);await physics_frame

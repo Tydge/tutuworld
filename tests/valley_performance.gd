@@ -2,18 +2,19 @@ extends SceneTree
 var session: Node
 var game: Node3D
 var town:=false
+const L=preload("res://scripts/valley/valley_layout.gd")
+func point(x: float,z: float) -> Vector3:return Vector3(x,L.walk_height(x,z)+.035,z)
 func _initialize() -> void: call_deferred("run")
 func run() -> void:
 	root.size=Vector2i(2400,1440);Engine.max_fps=60
 	town=OS.get_cmdline_user_args().has("--city")
 	session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
-	session.create_character("林间慢慢","panda","scarf_green");session.state().map_id="city" if town else "valley";session.state().player_position=[0,.1,9] if town else [-8,.1,32];session.state().time=1800
+	session.create_character("林间慢慢","panda","scarf_green");session.state().map_id="city" if town else "valley";session.state().player_position=[0,.1,9] if town else L.arrival("valley");session.state().time=1800
 	game=load("res://scenes/city.tscn" if town else "res://scenes/valley.tscn").instantiate();root.add_child(game)
 	while game.preparing or game.camera==null: await process_frame
 	await create_timer(.8).timeout;session.active=false;game.bunny.can_move=false
 	var failures: Array=[]
-	var views: Array=[[Vector3(-7,.1,5),.5,"bridge-day"],[Vector3(22,2.1,-16),.5,"terraces-day"],[Vector3(12,4.2,-30),.92,"cottage-night"],[game.home.to_global(Vector3(-1,.3,1)),.92,"interior-night"]]
-	if not town: views.append_array([[Vector3(3.4,.1,-8.4),.5,"cascade-day"],[Vector3(-7,.2,47.2),.5,"harbor-day"],[Vector3(-7,.2,47.2),.92,"harbor-night"]])
+	var views: Array=[[point(-13,10),.5,"bridge-day"],[point(44,-35),.5,"hillside-day"],[point(24,-61),.92,"cottage-night"],[game.home.to_global(Vector3(-1,.3,1)),.92,"interior-night"],[point(-78,L.ascent_path_z(-78)),.5,"summit-day"],[point(-16.8,94.4),.5,"harbor-day"],[point(-16.8,94.4),.92,"harbor-night"]]
 	if town: views=[[Vector3(0,.1,9),.5,"park-day"],[Vector3(0,.1,9),.92,"park-night"],[Vector3(15,.1,33),.5,"coast-day"]]
 	for view in views:
 		game.bunny.position=view[0];game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation();session.state().time=view[1]*3600;game.update_lighting()

@@ -10,9 +10,11 @@ func check(ok: bool,label_: String) -> void:
 func run() -> void:
 	root.size=Vector2i(1440,900)
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
-	session.state().map_id="valley";session.state().player_position=[-8,.1,32]
+	session.state().map_id="valley";session.state().player_position=preload("res://scripts/valley/valley_layout.gd").arrival("valley")
 	var game=load("res://scenes/valley.tscn").instantiate();root.add_child(game);await create_timer(.7).timeout
 	session.active=false
+	for skill in session.state().skills:
+		session.state().skills[skill]=3;session.state().skill_experience[skill]=preload("res://scripts/services/character_stats.gd").skill_start(3)
 	for species in ["bunny","cat_teacher","panda"]:
 		var old: CharacterBody3D=game.bunny;game.remove_child(old);old.queue_free()
 		var actor: CharacterBody3D=Factory.create(species);actor.name="Player";game.add_child(actor);game.bunny=actor;actor.world=game;actor.can_move=false;game.tools.bunny=actor
@@ -25,7 +27,8 @@ func run() -> void:
 			actor.position=Vector3(r.x,r.y+.08,r.z+1.3);actor.velocity=Vector3.ZERO;actor.reset_physics_interpolation();session.set_player_position(actor.position)
 			var before: int=session.authority.count(type_)
 			var result: Dictionary=game.begin_action("gather",id)
-			check(result.ok and is_equal_approx(session.job().duration,5.0),"New five-second action "+species+" "+type_)
+			check(result.ok and is_equal_approx(session.job().get("duration",0),5.0/1.03),"Tier-two action with level-three speed "+species+" "+type_+" response="+str(result))
+			if not result.ok:continue
 			await create_timer(.2).timeout
 			var grip_error:=0.0;var hit_error:=999.0
 			for i in range(9):
@@ -42,7 +45,7 @@ func run() -> void:
 				game.camera.position=actor.position+Vector3(3,3,4);game.camera.look_at(actor.position+Vector3(0,1.1,0));game.hud.visible=false
 				await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/山谷-伐木-"+species+".png");game.hud.visible=true
 			for event in session.authority.tick(5.0): game.on_event(event)
-			check(session.authority.count(type_)==before+1 and not game.resources[id].visible,"Harvested T2 item and hidden model "+species+" "+type_)
+			check(session.authority.count(type_)-before in [1,2] and not game.resources[id].visible,"Harvested T2 item and hidden model "+species+" "+type_)
 			check(session.authority.count(DB.item(type_).tool)>0,"Permanent tool retained "+species+" "+type_)
 	print("VALLEY_SHARED_WORK_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

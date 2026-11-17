@@ -69,9 +69,47 @@ var drafting: Node
 var layout_revision:=0
 var parcel_id:=""
 var parcel_revision:=-1
+var online_lease:=""
+var online_pending:=false
+var heartbeat_left:=10.0
+var online_updating:=false
+var pending_layout: Dictionary={}
+var applying_layout: Dictionary={}
+var visible_sites: Dictionary={}
+var close_confirmation: ConfirmationDialog
 var top_down:=false
 var preview_overlays: Dictionary={}
 var floor_preview_cache: Dictionary={}
+var surface_preview=preload("res://scripts/building/surface_preview.gd").new()
+var surface_preview_pending:=false
+var surface_preview_finish: Dictionary={}
+func restore_surface_preview() -> void:
+	surface_preview_finish.clear();surface_preview.clear()
+func preview_surface(color: Color,style: String) -> void:
+	if selected_row().get("type","")!="wall":return
+	surface_preview_finish={"color":color,"style":style,"id":selected_id}
+	if not surface_preview_pending:
+		surface_preview_pending=true;call_deferred("update_surface_preview")
+func update_surface_preview() -> void:
+	surface_preview_pending=false
+	if surface_preview_finish.is_empty() or surface_preview_finish.id!=selected_id or not active:return
+	var row:=selected_row()
+	if row.get("type","")!="wall":return
+	if selected_unit.is_empty():row=Layout.unit_at(layout,selected_id,Layout.rect(row).get_center())
+	var camera:=Vector2(city.camera.global_position.x,city.camera.global_position.z)
+	var signature:=str([layout_revision,row,ui.batch_paint.button_pressed,ui.wall_face.selected])
+	if surface_preview.key!=signature:
+		# A reserved style makes the target scope independent of its old finishes.
+		var used: Dictionary={}
+		for item in layout.elements:
+			used[item.get("color","")]=true
+			for face in item.get("faces",{}).values():used[face.color]=true
+		var marker_value:=0x010203
+		while used.has("%06x"%marker_value):marker_value+=1
+		var marker:=Color("%06x"%marker_value)
+		var candidate:=preload("res://scripts/building/surface_edit.gd").paint(layout,row,marker,"__preview",ui.batch_paint.button_pressed,ui.wall_face.selected,camera)
+		surface_preview.show_layout(self,candidate,signature);surface_preview.bind_marker(marker)
+	surface_preview.paint(surface_preview_finish.color,surface_preview_finish.style)
 func _ready() -> void:
 	layout=Layout.normalize(city.session.state().get("build_layout",{}))
 	# Purchased parcels start empty; catalogue houses are placed explicitly.
@@ -82,6 +120,9 @@ func _ready() -> void:
 	selection_outline=MeshInstance3D.new();selection_outline.name="BuildSelectionOutline";selection_outline.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(selection_outline)
 	drafting=preload("res://scripts/building/drafting.gd").new();drafting.editor=self;add_child(drafting)
 	rebuild();set_process(false)
+	if city.session.is_online():
+		city.session.changed.connect(sync_online_layout)
+		city.session.online_connection_changed.connect(on_online_connection)
 func editing_layout() -> Dictionary:
 	if parcel_id=="":return layout
 	var data:=layout.duplicate();var land=preload("res://scripts/building/parcels.gd")
@@ -93,11 +134,23 @@ func open_nearby_parcel() -> Dictionary:
 	var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position)
 	if id=="":return {"ok":false,"message":"请先靠近想建造的已购地皮。"}
 	if not land.owns(city.session.state(),id):return {"ok":false,"message":"请先购买身旁这块地皮，再进入建造。"}
-	return open_editor(id)
+	if city.session.is_online():
+		if online_pending or online_updating:return {"ok":false,"message":"正在准备施工区域，请稍等。"}
+		online_pending=true
+		var result: Dictionary=await city.session.request_online("build_begin",{"parcel_id":id})
+		online_pending=false
+		if not result.get("ok",false):return result
+		online_lease=result.lease;heartbeat_left=10.;layout=Layout.normalize(city.session.state().build_layout)
+		# Separate draft serials avoid collisions while another parcel is being edited.
+		layout.next_id=maxi(int(layout.next_id),randi_range(1000000,1000000000))
+	var result:=open_editor(id)
+	if not result.ok and city.session.is_online():
+		await city.session.request_online("build_cancel",{"parcel_id":id,"lease":online_lease});online_lease=""
+	return result
 # Low-level unscoped entry remains for legacy fixture/import tools; gameplay uses
 # open_nearby_parcel and always supplies a checked parcel ID.
 func open_editor(id: String="") -> Dictionary:
-	if city.session.is_online() or city.map_id!="city":return {"ok":false,"message":"建造园目前只在单人城镇开放。"}
+	if city.map_id!="city" or (city.session.is_online() and (id=="" or online_lease=="")):return {"ok":false,"message":"请先在自己的地皮开启施工。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
 	if id!="":
 		var land=preload("res://scripts/building/parcels.gd")
@@ -113,6 +166,35 @@ func open_editor(id: String="") -> Dictionary:
 	if layout.has("recovery_message"):ui.message("旧布局需要恢复，原记录已保留，请先勿清空地块。",true)
 	return {"ok":true}
 func close_editor() -> void:
+	if not active or online_pending:return
+	if city.session.is_online():
+		online_pending=true;ui.message("正在确认保存并更新地图…")
+		var elements: Array=editing_layout().elements.duplicate(true)
+		var result: Dictionary=await city.session.request_online("build_finish",{"parcel_id":parcel_id,"lease":online_lease,"expected_revision":parcel_revision,"elements":elements})
+		online_pending=false
+		if not active:return
+		if not result.get("ok",false):ui.message(str(result.get("message","保存失败，请重试。")),true);return
+		online_lease="";online_pending=true;await apply_online_layout(city.session.state().build_layout);online_pending=false
+	finish_close()
+func request_close() -> void:
+	if not city.session.is_online():close_editor();return
+	if online_pending:return
+	if not is_instance_valid(close_confirmation):
+		close_confirmation=ConfirmationDialog.new();close_confirmation.title="结束本次施工";close_confirmation.dialog_text="确认完成后，修改才会保存到公共地图并重新开放地皮。";close_confirmation.ok_button_text="确认完成并开放";close_confirmation.cancel_button_text="继续建造"
+		close_confirmation.add_button("放弃本次修改",false,"discard");close_confirmation.confirmed.connect(close_editor);close_confirmation.custom_action.connect(func(action):
+			if action=="discard":close_confirmation.hide();discard_online())
+		add_child(close_confirmation)
+	close_confirmation.popup_centered(Vector2i(520,160))
+func discard_online() -> void:
+	if not active or online_pending:return
+	online_pending=true
+	var result: Dictionary=await city.session.request_online("build_cancel",{"parcel_id":parcel_id,"lease":online_lease})
+	online_pending=false
+	if not active:return
+	if not result.get("ok",false):ui.message(str(result.get("message","暂时无法结束施工。")),true);return
+	online_lease="";online_pending=true;await apply_online_layout(city.session.state().build_layout);online_pending=false;finish_close()
+func finish_close() -> void:
+	restore_surface_preview()
 	if not active:return
 	drafting.cancel();drafting.halo.hide();city.camera.projection=Camera3D.PROJECTION_PERSPECTIVE
 	ui.appearance_panel.close()
@@ -136,33 +218,18 @@ func close_editor() -> void:
 		var bounds: Rect2=room.pending_navigation.grow(.6);city.navigation.refresh_region(AABB(Vector3(bounds.position.x,-1,bounds.position.y),Vector3(bounds.size.x,Storeys.MAX*Storeys.HEIGHT+4,bounds.size.y)));room.pending_navigation=Rect2()
 	if not city.session.save_game():city.hud.notify("进度合并保存失败；建造检查点仍保留，请稍后重试。")
 func rebuild() -> void:
+	restore_surface_preview()
 	layout_revision+=1;floor_preview_cache.clear()
 	ghost_key="";highlighted_key="";clear_highlight();clear_preview()
-	if is_instance_valid(room):Factory.sync(room,layout,city)
-	else:room=Factory.make(layout,city)
-	for id in city.targets.keys():
-		if str(id).begins_with("build:"):city.targets.erase(id)
-	if is_instance_valid(room):
-		if not city.interiors.has(room):city.interiors.append(room)
-		room.update_lighting(city.ambient_day)
-		for door in room.get_node("Doors").get_children():
-			if not door.has_method("door_action_position"):continue
-			city.targets["build:"+str(door.name)]={"kind":"home_door","name":"我的小屋","node":door,"anchor":door.get_node("ActionAnchor"),"position":door.door_action_position(),"radius":3.8}
-		for module in room.get_node("Furnishing").get_children():
-			if module.has_node("WorkAnchor"):
-				city.targets["build:"+str(module.name)]={"kind":"kitchen","node":module,"name":"青瓷料理台","anchor":module.get_node("ActionAnchor"),"work_anchor":module.get_node("WorkAnchor"),"effect_anchor":module.get_node("EffectAnchor"),"position":module.get_node("ActionAnchor").global_position,"radius":2.6}
-			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.global_position,"radius":1.65,"label":"坐下来休息一会"}
-			if module.has_node("SleepExit"):
-				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.global_position,"radius":1.65}
-				if not module.has_node("BedComfort"):
-					var comfort:=preload("res://scripts/building/bed_comfort.gd").new();comfort.name="BedComfort";comfort.bed=module;comfort.city=city;module.add_child(comfort)
-		preload("res://scripts/city/dining_service.gd").register(self)
-		if active:set_roof_visible(show_roof)
+	room=preload("res://scripts/building/world_sync.gd").apply(city,layout,room)
+	if active:set_roof_visible(show_roof)
 	refresh_ui()
 func selected_row() -> Dictionary:
 	return selected_unit if not selected_unit.is_empty() else Layout.find(layout,selected_id)
 func refresh_ui() -> void:ui.refresh(selected_row())
 func choose_tool(id: String) -> void:
+	restore_surface_preview()
+	if online_pending:return
 	if is_instance_valid(drafting):drafting.tool_changed()
 	ui.appearance_panel.close()
 	upper_floor_plan.clear();upper_floor_locked=false;upper_floor_key=""
@@ -182,6 +249,7 @@ func set_night_preview(value: bool) -> void:
 	night_preview=value;city.update_lighting(.92 if value else -1)
 	ui.root_ui.find_child("NightPreview",true,false).set_pressed_no_signal(value)
 func set_roof_visible(value: bool) -> void:
+	restore_surface_preview()
 	clear_preview();ghost_key=""
 	show_roof=value
 	ui.root_ui.find_child("ShowRoof",true,false).set_pressed_no_signal(value)
@@ -191,13 +259,23 @@ func set_roof_visible(value: bool) -> void:
 func apply_editor_cutaway() -> void:
 	if is_instance_valid(room):room.set_editor_view(true,show_roof,editing_storey,roof_view)
 func commit(candidate: Dictionary,history: bool=true) -> bool:
+	restore_surface_preview()
+	if online_pending:return false
 	# Editing cannot remove the support beneath the paused player or strand them upstairs.
 	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
 		ui.message("角色正在使用这层地板或楼梯，请先步行离开再修改。",true);return false
-	var result: Dictionary=city.session.set_parcel_layout(parcel_id,candidate,parcel_revision) if parcel_id!="" else city.session.set_build_layout(candidate)
+	var result: Dictionary
+	if city.session.is_online():
+		var land=preload("res://scripts/building/parcels.gd")
+		if history and land.outside(candidate,parcel_id)!=land.outside(layout,parcel_id):ui.message("本次只能修改当前地皮，不能越界建造。",true);return false
+		result=Layout.validate(candidate)
+		if result.ok:
+			var draft_state: Dictionary=city.session.state().duplicate();draft_state.build_layout=layout
+			result=land.validate_edit(draft_state,parcel_id,result.layout,parcel_revision).merged({"layout":result.layout})
+	else:result=city.session.set_parcel_layout(parcel_id,candidate,parcel_revision) if parcel_id!="" else city.session.set_build_layout(candidate)
 	if not result.ok:ui.message(result.message,true);return false
 	if result.layout==layout:return true
-	if parcel_id!="":parcel_revision=int(city.session.state().land_parcels.plots[parcel_id].revision)
+	if parcel_id!="" and not city.session.is_online():parcel_revision=int(city.session.state().land_parcels.plots[parcel_id].revision)
 	if history:undo_stack.append(layout.duplicate(true));redo_stack.clear();if_history_limit()
 	var old_highest:=Storeys.highest(editing_layout())
 	layout=result.layout
@@ -206,7 +284,7 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	focus.y=(editing_storey+1 if roof_view else editing_storey)*Storeys.HEIGHT;grid.position.y=.205+focus.y;grid.visible=active and not roof_view
 	if not selected_unit.is_empty():reselect_unit(selected_unit)
 	elif selected_id!="" and Layout.find(layout,selected_id).is_empty():selected_id=""
-	rebuild();ui.message("已保存 · "+str(Layout.usage(layout).objects)+" 件家具与摆件")
+	rebuild();ui.message(("本次施工草稿 · 确认完成后公开 · " if city.session.is_online() else "已保存 · ")+str(Layout.usage(layout).objects)+" 件家具与摆件")
 	return true
 func if_history_limit() -> void:
 	if undo_stack.size()>50:undo_stack.pop_front()
@@ -230,6 +308,7 @@ func clear_plot() -> void:
 	if layout.has("multistorey_showcase"):empty.multistorey_showcase=layout.multistorey_showcase
 	if commit(empty):selected_id="";choose_tool("select")
 func paint_selected(color: Color,style: String) -> void:
+	restore_surface_preview()
 	if selected_id=="":return
 	if selected_row().get("type","")=="object":
 		var A=preload("res://scripts/building/appearance.gd");var definition: Dictionary=A.parts(selected_row().kind)[0]
@@ -500,6 +579,7 @@ func pick_at(mouse: Vector2) -> String:
 	if parcel_id!="" and picked_id!="" and not preload("res://scripts/building/parcels.gd").contains_row(parcel_id,Layout.find(layout,picked_id),layout):return ""
 	return picked_id
 func select_at(mouse: Vector2) -> void:
+	restore_surface_preview()
 	selected_id=pick_at(mouse);selected_unit.clear()
 	if picked_world!=null and Layout.find(layout,selected_id).get("type","") in ["floor","wall"]:selected_unit=Layout.unit_at(layout,selected_id,picked_world)
 	refresh_ui();update_highlight(selected_id)
@@ -683,6 +763,10 @@ func update_highlight(id: String) -> void:
 
 func _process(delta: float) -> void:
 	if not active:return
+	if city.session.is_online():
+		heartbeat_left-=delta
+		if heartbeat_left<=0. and not online_pending:heartbeat_left=10.;keep_online_lease()
+	if online_pending:return
 	if part_hint_left>0.:
 		part_hint_left-=delta
 		if part_hint_left<=0.:clear_highlight()
@@ -718,6 +802,7 @@ func _process(delta: float) -> void:
 		hide_preview()
 func _unhandled_input(event: InputEvent) -> void:
 	if not active:return
+	if online_pending:get_viewport().set_input_as_handled();return
 	var input_focus:=get_viewport().gui_get_focus_owner()
 	if input_focus is LineEdit or input_focus is TextEdit:return
 	if ui.appearance_panel.visible:
@@ -725,10 +810,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if drafting.input(event):get_viewport().set_input_as_handled();return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode==KEY_F6:close_editor()
+		if event.keycode==KEY_F6:request_close()
 		elif event.keycode==KEY_ESCAPE:
 			if tool!="select" or start_point!=null:choose_tool("select")
-			else:close_editor()
+			else:request_close()
 		elif event.is_command_or_control_pressed() and event.keycode==KEY_Z:
 			if event.shift_pressed:redo()
 			else:undo()
@@ -917,3 +1002,45 @@ func build_cached_floor_preview(parent: Node3D,cells: Dictionary,neighbors: Dict
 			for mesh in holder.get_children():cached.append({"mesh":mesh.mesh,"material":mesh.material_override})
 			if floor_preview_cache.size()>=384:floor_preview_cache.erase(floor_preview_cache.keys()[0])
 			floor_preview_cache[signature]={"source":fingerprint,"meshes":cached}
+
+func sync_online_layout() -> void:
+	if not city.session.is_online():return
+	var sites: Dictionary=city.session.state().get("building_sites",{})
+	if active:
+		preload("res://scripts/building/construction_sites.gd").sync(city,sites);visible_sites=sites.duplicate(true)
+		var site: Dictionary=sites.get(parcel_id,{})
+		if site.get("owner_id","")!=city.session.state().player_id and not online_pending:
+			online_lease="";layout=Layout.normalize(city.session.state().build_layout);rebuild();finish_close();city.hud.notify("施工状态已结束，未确认的修改没有发布。")
+		return
+	var next: Dictionary=city.session.state().get("build_layout",Layout.empty())
+	if next!=layout and next!=applying_layout:
+		pending_layout=next.duplicate(true)
+		var closed:=visible_sites.merged(sites);city.set_meta("pending_construction_sites",closed);preload("res://scripts/building/construction_sites.gd").sync(city,closed)
+		if not online_updating:drain_online_updates()
+	elif not online_updating:
+		visible_sites=sites.duplicate(true);preload("res://scripts/building/construction_sites.gd").sync(city,sites)
+func drain_online_updates() -> void:
+	online_updating=true
+	while not pending_layout.is_empty():
+		var next:=pending_layout;pending_layout={}
+		if next!=layout:
+			applying_layout=next;await apply_online_layout(next);applying_layout={}
+	online_updating=false;city.set_meta("pending_construction_sites",{})
+	visible_sites=city.session.state().get("building_sites",{}).duplicate(true);preload("res://scripts/building/construction_sites.gd").sync(city,visible_sites)
+func apply_online_layout(next: Dictionary) -> void:
+	if not is_instance_valid(room):room=Factory.shell(city)
+	var result: Dictionary=await Factory.sync_incremental(room,next,city)
+	if result.get("cancelled",false) or not is_instance_valid(city) or not city.is_inside_tree():return
+	layout=next.duplicate(true);layout_revision+=1;floor_preview_cache.clear();preload("res://scripts/building/world_sync.gd").register(city,layout,room)
+	if active:set_roof_visible(show_roof)
+	refresh_ui()
+	if is_instance_valid(city.online_view):city.online_view.apply_shared_state()
+
+func on_online_connection(connected: bool) -> void:
+	if connected:return
+	if active:
+		online_lease="";online_pending=false;layout=Layout.normalize(city.session.state().get("build_layout",{}));rebuild();finish_close()
+		city.paused=true;city.bunny.can_move=false;city.hud.notify("连接已中断，本次未完成的修改没有发布。")
+func keep_online_lease() -> void:
+	var result: Dictionary=await city.session.request_online("build_ping",{"parcel_id":parcel_id,"lease":online_lease})
+	if active and not result.get("ok",false):ui.message(str(result.get("message","施工连接暂未恢复。")),true)

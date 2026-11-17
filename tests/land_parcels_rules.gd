@@ -39,7 +39,15 @@ func run() -> void:
 	a.state.player_id=original_id;a.state.map_id="valley"
 	check(not command(a,Land.IDS[2]).ok,"Land commands are unavailable outside the city")
 	var sample:=preload("res://scripts/building/templates.gd").player_sample("two_storey")
-	check(sample.elements.size()==98,"Catalog two-storey template contains all 98 records extracted before clearing the real save")
+	check(sample.elements.size()==99,"Catalog two-storey template retains the extracted 98 records plus the requested new wall mirror")
+	for kind in ["single_one","two_storey"]:
+		var source:=preload("res://scripts/building/templates.gd").player_sample(kind)
+		var mirrors: Array=source.elements.filter(func(row):return row.get("kind","")=="wall_mirror")
+		check(mirrors.size()==(1 if kind=="single_one" else 2),"Each catalog house gains one wall mirror while preserving existing mirrors: "+kind)
+		for turn in [0.,90.,180.,270.]:
+			var placed:=L.merge_template(L.empty(),source,Land.bounds(id).get_center(),turn)
+			var result:=L.validate(placed)
+			check(result.ok and result.layout.elements.filter(func(row):return row.get("kind","")=="wall_mirror").all(func(row):return not preload("res://scripts/building/wall_mount.gd").support(result.layout,row).is_empty()),"Mirrors keep valid inward wall support after rotation: "+kind+"/"+str(turn))
 	for turn in [0.,90.,180.,270.]:
 		var placed:=L.merge_template(L.empty(),sample,Land.bounds(id).get_center(),turn)
 		var result:=L.validate(placed)

@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--ssh-key',type=Path,required=True)
     mode=parser.add_mutually_exclusive_group()
     mode.add_argument('--stage-only',action='store_true')
+    mode.add_argument('--sign-only',action='store_true',help='Write the signed local manifest without uploading or promoting')
     mode.add_argument('--promote',action='store_true')
     source=(ROOT/'scripts/services/release.gd').read_text()
     parser.add_argument('--build',type=int,default=int(re.search(r'const BUILD := (\d+)',source).group(1)))
@@ -28,13 +29,15 @@ def main():
     for name in names.values():
         if not (args.artifacts/name).is_file():raise SystemExit('Missing artifact: '+name)
     pack=args.artifacts/'city.pck'
-    payload={'schema':1,'build':args.build,'version':args.version,'min_launcher':2,'protocol':int(re.search(r'const PROTOCOL := (\d+)',source).group(1)),'notes':'菜园水井与有限水量上线，铜叶工坊可制造铜水壶和铜斧，新增制造技能，并修正耳根立体蝴蝶结。','pack':{'url':base+f'releases/{args.version}/city.pck','sha256':hashlib.sha256(pack.read_bytes()).hexdigest(),'bytes':pack.stat().st_size},'installers':{platform:base+f'releases/{args.version}/{names[platform]}' for platform in ['macos','windows']}}
+    payload={'schema':1,'build':args.build,'version':args.version,'min_launcher':2,'protocol':int(re.search(r'const PROTOCOL := (\d+)',source).group(1)),'notes':re.search(r'const NOTES := "([^"]+)"',source).group(1),'pack':{'url':base+f'releases/{args.version}/city.pck','sha256':hashlib.sha256(pack.read_bytes()).hexdigest(),'bytes':pack.stat().st_size},'installers':{platform:base+f'releases/{args.version}/{names[platform]}' for platform in ['macos','windows']}}
     data=json.dumps(payload,ensure_ascii=False,separators=(',',':')).encode()
     with tempfile.TemporaryDirectory() as folder:
         temporary=Path(folder);(temporary/'payload').write_bytes(data)
         subprocess.run(['openssl','dgst','-sha256','-sign',str(args.signing_key),'-out',str(temporary/'signature'),str(temporary/'payload')],check=True)
         manifest=args.artifacts/'manifest.json'
         manifest.write_text(json.dumps({'payload':data.decode(),'signature':base64.b64encode((temporary/'signature').read_bytes()).decode()},ensure_ascii=False,indent=2))
+    if args.sign_only:
+        print('Signed local release',args.version,manifest);return
     root='/srv/illuminati/www/tutuworld'
     release=root+'/releases/'+args.version
     staging=root+f'/releases/.staging-{args.version}-{args.build}'

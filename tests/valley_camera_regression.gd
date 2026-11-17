@@ -13,7 +13,8 @@ func run() -> void:
 	var g=load("res://scenes/valley.tscn").instantiate();root.add_child(g);await create_timer(.8).timeout
 	g.set_process(false);s.active=false;g.bunny.can_move=false
 	var query:=PhysicsShapeQueryParameters3D.new();var sphere:=SphereShape3D.new();sphere.radius=.20;query.shape=sphere;query.collision_mask=9;query.margin=.001
-	for p in [Vector3(3.4,0,-8.78),Vector3(-40,0,22),Vector3(40,0,22),Vector3(-32,4,-33),Vector3(32,4,-33),Vector3(-13,0,47),Vector3(12,4,-36)]:
+	for location: Vector2 in [Vector2(-11,-23),Vector2(-78,Layout.ascent_path_z(-78)),Vector2(78,Layout.ascent_path_z(78)),Vector2(-40,20),Vector2(44,-35),Vector2(-16.8,94.4),Vector2(24,-72)]:
+		var p:=Vector3(location.x,Layout.walk_height(location.x,location.y)+.035,location.y)
 		g.bunny.position=p;g.bunny.velocity=Vector3.ZERO;g.bunny.reset_physics_interpolation();await physics_frame
 		var pivot: Vector3=p+Vector3(0,1.35,0)
 		for i in range(24):
@@ -27,8 +28,8 @@ func run() -> void:
 	var space: PhysicsDirectSpaceState3D=g.get_world_3d().direct_space_state
 	for i in range(64):
 		var angle: float=i*TAU/64
-		if sin(angle)>.70 and absf(cos(angle)*54)<36: continue
-		var origin:=Vector3(0,5,0);var ray:=PhysicsRayQueryParameters3D.create(origin,origin+Vector3(cos(angle)*110,0,sin(angle)*110*.88),1)
+		if sin(angle)>.70 and absf(cos(angle)*106)<65: continue
+		var origin:=Vector3(0,12,10);var ray:=PhysicsRayQueryParameters3D.create(origin,origin+Vector3(cos(angle)*210,0,sin(angle)*210*.88),8)
 		ray.hit_back_faces=true
 		check(not space.intersect_ray(ray).is_empty(),"Continuous visible boundary angle "+str(i))
 	print("VALLEY_CAMERA_REGRESSION_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)

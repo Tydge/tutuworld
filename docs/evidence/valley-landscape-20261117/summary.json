@@ -1,0 +1,159 @@
+{
+  "date": "2026-11-17",
+  "scope": "local only, no release/export/deployment",
+  "engine": "Godot 4.6.3 / Metal / Forward+",
+  "device": "Apple M1 Pro",
+  "output": [
+    3024,
+    1890
+  ],
+  "quality": "balanced, unchanged 2,000,000 3D pixel budget, 60 FPS cap",
+  "map_size": [
+    216,
+    212
+  ],
+  "legacy_size": [
+    108,
+    106
+  ],
+  "area_multiplier": 4,
+  "trees": 271,
+  "ridge_trees": 220,
+  "grass_clumps": 36728,
+  "flowers": 500,
+  "woodland_details": 436,
+  "riverbank_plants": 107,
+  "performance_fixed_views_p95_ms": [
+    19.547,
+    19.567,
+    18.308,
+    19.411,
+    19.215,
+    19.612,
+    19.981
+  ],
+  "performance_sweep": {
+    "seconds": 12,
+    "fps": 60.08333,
+    "p95_ms": 20.571,
+    "max_ms": 29.202,
+    "frames_over_50ms": 0,
+    "peak_draws": 1135,
+    "peak_primitives": 1272880,
+    "reported_total_vram_mib": 569.515625
+  },
+  "tests": {
+    "valley_landscape_rules": {
+      "result": "VALLEY_LANDSCAPE_RULES_RESULT PASS checks=14 failures=[]",
+      "log": "valley_landscape_rules.log",
+      "source_run": ".qa-artifacts/20261117-024154-486532/valley_landscape_rules/run.log"
+    },
+    "valley_rules": {
+      "result": "VALLEY_RULES_RESULT PASS checks=215 failures=[]",
+      "log": "valley_rules.log",
+      "source_run": ".qa-artifacts/20261117-024154-486532/valley_rules/run.log"
+    },
+    "valley_movement": {
+      "result": "VALLEY_MOVEMENT_RESULT PASS checks=196 failures=[]",
+      "log": "valley_movement.log",
+      "source_run": ".qa-artifacts/20261117-030300-431225/valley_movement/run.log"
+    },
+    "valley_traversal_regression": {
+      "result": "VALLEY_TRAVERSAL_REGRESSION_RESULT PASS checks=33 failures=[]",
+      "log": "valley_traversal_regression.log",
+      "source_run": ".qa-artifacts/20261117-030300-431225/valley_traversal_regression/run.log"
+    },
+    "valley_camera_regression": {
+      "result": "VALLEY_CAMERA_REGRESSION_RESULT PASS checks=219 failures=[]",
+      "log": "valley_camera_regression.log",
+      "source_run": ".qa-artifacts/20261117-024004-988725/valley_camera_regression/run.log"
+    },
+    "valley_spawn_regression": {
+      "result": "VALLEY_SPAWN_REGRESSION_RESULT PASS checks=15 failures=[]",
+      "log": "valley_spawn_regression.log",
+      "source_run": ".qa-artifacts/20261117-025430-101285/valley_spawn_regression/run.log"
+    },
+    "valley_journey": {
+      "result": "VALLEY_JOURNEY_RESULT PASS checks=18 failures=[]",
+      "log": "valley_journey.log",
+      "source_run": ".qa-artifacts/20261117-024526-383614/valley_journey/run.log"
+    },
+    "panda_valley_routine": {
+      "result": "PANDA_VALLEY_ROUTINE_RESULT PASS checks=9 failures=[]",
+      "log": "panda_valley_routine.log",
+      "source_run": ".qa-artifacts/20261117-024004-988725/panda_valley_routine/run.log"
+    },
+    "forest_art_structure": {
+      "result": "FOREST_ART_STRUCTURE_RESULT PASS checks=645 failures=[]",
+      "log": "forest_art_structure.log",
+      "source_run": ".qa-artifacts/20261117-025136-238748/forest_art_structure/run.log"
+    },
+    "valley_shared_work": {
+      "result": "VALLEY_SHARED_WORK_RESULT PASS checks=45 failures=[]",
+      "log": "valley_shared_work.log",
+      "source_run": ".qa-artifacts/20261117-025833-393720/valley_shared_work/run.log"
+    },
+    "valley_visitors_night": {
+      "result": "VALLEY_VISITORS_NIGHT_RESULT PASS checks=25 failures=[]",
+      "log": "valley_visitors_night.log",
+      "source_run": ".qa-artifacts/20261117-025833-393720/valley_visitors_night/run.log"
+    },
+    "valley_performance": {
+      "result": "VALLEY_PERFORMANCE_RESULT PASS failures=[]",
+      "log": "valley_performance.log",
+      "source_run": ".qa-artifacts/20261117-025136-238748/valley_performance/run.log"
+    },
+    "woodland_sweep_performance": {
+      "result": "WOODLAND_SWEEP_PERFORMANCE_RESULT PASS",
+      "log": "woodland_sweep_performance.log",
+      "source_run": ".qa-artifacts/20261117-025136-238748/woodland_sweep_performance/run.log"
+    },
+    "city_rules": {
+      "result": "CITY_RULES_RESULT PASS checks=56 failures=[]",
+      "log": "city_rules.log",
+      "source_run": ".qa-artifacts/20261117-024154-486532/city_rules/run.log"
+    },
+    "character_roster_rules": {
+      "result": "CHARACTER_ROSTER_RULES_RESULT PASS checks=44 failures=[]",
+      "log": "character_roster_rules.log",
+      "source_run": ".qa-artifacts/20261117-024154-486532/character_roster_rules/run.log"
+    },
+    "stairs_first_walk": {
+      "result": "STAIRS_FIRST_WALK_RESULT PASS checks=36 failures=[]",
+      "log": "stairs_first_walk.log",
+      "source_run": ".qa-artifacts/20261117-024154-486532/stairs_first_walk/run.log"
+    },
+    "character_restart_flow": {
+      "result": "CHARACTER_RESTART_FLOW_RESULT PASS checks=3 failures=[]",
+      "log": "character_restart_flow.log",
+      "source_run": ".qa-artifacts/20261117-024526-383614/character_restart_flow/run.log"
+    },
+    "project_integrity": {
+      "result": "PROJECT_INTEGRITY_RESULT PASS checks=468 failures=[]",
+      "log": "project_integrity.log",
+      "source_run": ".qa-artifacts/20261117-024526-383614/project_integrity/run.log"
+    },
+    "valley_landscape_preview": {
+      "result": "VALLEY_LANDSCAPE_PREVIEW_RESULT PASS",
+      "log": "valley_landscape_preview.log",
+      "source_run": ".qa-artifacts/20261117-025136-238748/valley_landscape_preview/run.log"
+    }
+  },
+  "sources": "source-sha256.json",
+  "asset_provenance": "../../../assets/terrain/woodland/ASSET_NOTES.md",
+  "limitations": [
+    "No Windows or other GPU hardware test in this local task.",
+    "No production server or installer changes.",
+    "Client/server landscape changes must ship together in a future authorized release.",
+    "Graphical GL map builder still emits two 21,844 byte texture-cleanup warnings at process exit."
+  ],
+  "interactive_preview": {
+    "isolated": true,
+    "log": "local-preview.log",
+    "start_position": [
+      -40,
+      15.30586,
+      33.55935
+    ]
+  }
+}

@@ -14,7 +14,7 @@ const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
 const WORLD_KEYS=["world_id","time","plots","resources","build_layout","land_parcels"]
-const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water"]
+const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
 var test_mode:=false
@@ -36,6 +36,7 @@ var server_endpoint:=""
 var installed_build:=preload("res://scripts/services/release.gd").BUILD
 var remote: Node
 var online_joined:=false
+var online_building_available:=false
 var online_token:=""
 var online_username:=""
 var online_locks: Dictionary={}
@@ -48,15 +49,19 @@ func _ready() -> void:
 	test_mode=OS.get_cmdline_user_args().has("--test")
 	if test_mode and not OS.get_cmdline_user_args().has("--benchmark"): Engine.max_fps=45
 	if not test_mode: load_save()
-	if not test_mode and FileAccess.file_exists("user://preferences.json"):
-		var preferences=JSON.parse_string(FileAccess.get_file_as_string("user://preferences.json"))
-		if preferences is Dictionary:
-			for key in settings:
-				if preferences.has(key):settings[key]=preferences[key]
+	if not test_mode:load_preferences()
 	normalize_view_settings()
 	if not test_mode:DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 	get_tree().auto_accept_quit=false
 	get_tree().root.close_requested.connect(func(): save_game(); get_tree().quit())
+func load_preferences(path: String="user://preferences.json") -> void:
+	if FileAccess.file_exists(path):
+		var preferences=JSON.parse_string(FileAccess.get_file_as_string(path))
+		if preferences is Dictionary:
+			for key in settings:
+				# Species belongs to the active character, never to machine preferences.
+				if key!="player_species" and preferences.has(key):settings[key]=preferences[key]
+	settings.player_species=state().get("species","bunny")
 func snapshot() -> Dictionary: return authority.state.duplicate(true)
 func state() -> Dictionary: return authority.state
 func job() -> Dictionary: return authority.job
@@ -171,12 +176,13 @@ func extract(source: Dictionary,keys: Array) -> Dictionary:
 	return out.duplicate(true)
 func sync_current() -> void:
 	if is_online():return
+	state()["valley_landscape_revision"]=preload("res://scripts/valley/valley_layout.gd").REVISION
 	world=extract(state(),WORLD_KEYS)
 	if active_character_id=="" and player_started:
 		active_character_id=state().player_id
 	if active_character_id!="":
 		state().player_id=active_character_id
-		state()["species"]=settings.player_species
+		settings.player_species=state().species
 		var record:=extract(state(),CHARACTER_KEYS)
 		# Unfinished jobs are not restored after loading: their reserved point is refunded in the saved snapshot.
 		if job().get("stamina_reserved",false): record.stamina=minf(authority.stamina_max(),float(record.stamina)+authority.reserved_work_stamina(job()))
@@ -419,7 +425,13 @@ func restore_state(raw: Dictionary):
 		var r: Dictionary=raw.get("resources",{}).get(id,{})
 		if not r.is_empty(): s.resources[id]={"available":bool(r.get("available",true)),"respawn_at":maxf(0,float(r.get("respawn_at",0))),"generation":maxi(0,int(r.get("generation",0)))}
 	var pos: Variant=raw.get("player_position",s.player_position)
-	if pos is Array and pos.size()==3 and preload("res://scripts/valley/valley_layout.gd").valid_saved_position(s.map_id,Vector3(float(pos[0]),float(pos[1]),float(pos[2]))): s.player_position=pos.duplicate()
+	var valley=preload("res://scripts/valley/valley_layout.gd")
+	if pos is Array and pos.size()==3:
+		var point:=Vector3(float(pos[0]),float(pos[1]),float(pos[2]))
+		var migrated: bool=s.map_id=="valley" and int(raw.get("valley_landscape_revision",1))<valley.REVISION
+		if migrated:point=valley.legacy_position(point)
+		if valley.valid_saved_position(s.map_id,point):s.player_position=[point.x,point.y,point.z] if migrated else pos.duplicate()
+	s["valley_landscape_revision"]=valley.REVISION
 	restored.normalize_production_state()
 	return restored
 func normalize_view_settings() -> void:
@@ -467,7 +479,7 @@ func login_online(action: String,args: Dictionary,endpoint: String=preload("res:
 	if not result.get("ok",false):return result
 	if not is_online():
 		save_game();offline_backup=checkpoint()
-		authority=Authority.new();characters={};world={};active_character_id="";player_started=false
+		authority=Authority.new();characters={};world={};active_character_id="";player_started=false;online_building_available=false
 		transport_mode="remote_authority";server_endpoint=endpoint
 	if args.has("username"):online_username=str(args.username)
 	online_token=str(result.get("token",online_token))
@@ -491,8 +503,11 @@ func select_online_character(id: String) -> Dictionary:
 	return result
 func receive_online_snapshot(data: Dictionary) -> void:
 	if not is_online():return
+	online_building_available=int(data.get("building_protocol",0))==1
 	var previous: Dictionary=authority.state.get("equipment",{}).duplicate()
+	var layout: Dictionary=authority.state.get("build_layout",preload("res://scripts/building/layout.gd").empty())
 	authority.state=data.state
+	if not authority.state.has("build_layout"):authority.state.build_layout=layout
 	authority.job=data.get("job",{}).duplicate(true)
 	online_locks=data.get("locks",{});online_care=data.get("care_history",{});online_doors=data.get("doors",{})
 	active_character_id=str(state().player_id)
@@ -519,7 +534,7 @@ func leave_online() -> void:
 	online_joined=false;transport_mode="local_authority";server_endpoint=""
 	var preferences:=settings.duplicate()
 	if not offline_backup.is_empty():restore_checkpoint(offline_backup)
-	settings=preferences;offline_backup={};leaving_online=false;active=false
+	settings=preferences;settings.player_species=state().species;offline_backup={};leaving_online=false;active=false
 	save_game()
 func on_connection_lost() -> void:
 	if not is_online() or leaving_online or reconnecting:return

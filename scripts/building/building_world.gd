@@ -39,21 +39,22 @@ var furniture_house_key:=""
 const MASK_ORIGIN:=Vector2i(120,-40)
 const MASK_SIZE:=Vector2i(200,128)
 func _ready() -> void:pass
-func configure(grid: Dictionary) -> void:
+func configure(grid: Dictionary,prepared: Dictionary={}) -> void:
 	if grid.get("signature","")!="" and grid.signature==plan_input_signature:return
 	plan_input_signature=str(grid.get("signature",""));wall_faces=View.wall_faces(grid.walls)
-	var next_plan:=Rooms.make(grid)
+	var next_plan:=Rooms.make(grid) if prepared.is_empty() else prepared
 	if not plan.is_empty() and next_plan.signature==plan.signature:return
 	plan=next_plan;mask_key="";mask_bytes.resize(MASK_SIZE.x*MASK_SIZE.y);mask_bytes.fill(0)
 	if mask_texture==null:mask_texture=ImageTexture.create_from_image(Image.create_from_data(MASK_SIZE.x,MASK_SIZE.y,false,Image.FORMAT_R8,mask_bytes))
 func update_lighting(day: float) -> void:last_day=day
-func configure_layout(data: Dictionary) -> void:
+func configure_layout(data: Dictionary,prepared: Dictionary={}) -> void:
 	layout_data=data;stair_rows=data.elements.filter(func(row):return row.type=="stairs")
 	var signature:=str(hash(data.elements.filter(func(row):return row.type in ["wall","floor","stairs"])))
 	if signature==plan_input_signature:return
-	plans.clear()
-	for level in range(Storeys.MAX):plans[level]=Rooms.make(Layout.walkable_grid(data,level))
-	configure(Layout.walkable_grid(data,0));plan_input_signature=signature
+	plans=prepared.duplicate()
+	if plans.is_empty():
+		for level in range(Storeys.MAX):plans[level]=Rooms.make(Layout.walkable_grid(data,level))
+	configure(Layout.walkable_grid(data,0),plans[0]);plan_input_signature=signature
 	wall_faces.clear()
 	for level in range(Storeys.MAX):wall_faces.merge(View.wall_faces(Layout.compiled(data,level).walls))
 	storey_view_key="";view_dirty=true
@@ -76,6 +77,7 @@ func set_editor_view(enabled: bool,roof: bool,level: int=0,roof_view: bool=false
 	get_node("Structure/Roof").visible=not enabled or roof_view
 	if is_instance_valid(city) and is_instance_valid(city.camera):refresh_view(city.camera.global_position,city.bunny.global_position)
 func apply_storey_visibility(actor: Vector3) -> void:
+	if assembling or plans.is_empty():return
 	var in_house:=surface_at(actor) or stair_at(actor)
 	if editor_active:visible_storey=editing_storey
 	elif not in_house:visible_storey=Storeys.at_height(actor.y)

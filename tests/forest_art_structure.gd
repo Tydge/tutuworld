@@ -9,17 +9,28 @@ func check(ok: bool,label_: String) -> void:
 func run() -> void:
 	root.size=Vector2i(1440,900)
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
-	session.state().map_id="valley";session.state().time=1800;session.state().player_position=[-8,.1,32]
+	session.state().map_id="valley";session.state().time=1800;session.state().player_position=preload("res://scripts/valley/valley_layout.gd").arrival("valley")
 	var game=load("res://scenes/valley.tscn").instantiate();root.add_child(game);await create_timer(1).timeout
 	Engine.max_fps=30;session.active=false;game.bunny.can_move=false
-	check(game.scenery.get_node_or_null("Understory")==null and game.scenery.find_children("GrassTufts","",true,false).is_empty(),"Valley has no seedling or clover groundcover geometry")
-	check(game.scenery.get_meta("meadow_flower_count",0)>=200 and game.scenery.get_meta("shrub_count",0)>=20,"Grouped wildflowers and low shrub groves replace scattered spikes")
+	check(game.scenery.get_meta("continuous_heightfield",false) and game.scenery.get_meta("playable_area_scale",0)==4.,"Fourfold valley uses continuous physical terrain")
+	check(game.scenery.get_meta("meadow_flower_count",0)>=450 and game.scenery.get_meta("woodland_detail_count",0)>=400 and game.scenery.get_meta("riverbank_plant_count",0)>=80,"Grouped wildflowers, fern glades and riverbank plants")
+	check(game.scenery.get_meta("ancient_tree_count",0)>=250 and game.scenery.get_meta("forest_prototypes",0)==4,"Mature and young trees share four prototypes")
+	check(game.scenery.get_meta("grass_clump_count",0)>30000 and game.scenery.get_meta("grass_draw_distance",0)<=45.,"Dense grass has a bounded near-camera draw distance")
+	var forest: Node3D=game.scenery.get_node("AncientForest")
+	var meshes: Dictionary={};var instances:=0;var batches:=0
+	for node in forest.find_children("*","MultiMeshInstance3D",true,false):
+		meshes[node.multimesh.mesh]=true;batches+=1;instances+=node.multimesh.instance_count
+		check(node.position.length()>1. and node.multimesh.instance_count>0,"Spatial forest batch has a local origin and saved instances")
+	check(meshes.size()==16 and instances==game.scenery.get_meta("ancient_tree_count")*4,"All near / far trunk and canopy instances survive map serialization")
+	for asset in ["foliage_atlas_v1","forest_turf_v1"]:
+		var config:=ConfigFile.new();config.load("res://assets/terrain/woodland/"+asset+".png.import")
+		check(config.get_value("params","mipmaps/generate",false) and config.get_value("params","compress/mode",0)==2,"Mipmapped compressed forest asset "+asset)
 	var found:=false
 	for mesh in game.scenery.find_children("TerrainChunk","MeshInstance3D",true,false):
 		var tex: Texture2D=mesh.material_override.get_shader_parameter("lawn_texture")
-		found=is_instance_valid(tex) and tex.resource_path=="res://assets/terrain/spring_lawn_v1.png"
+		found=is_instance_valid(tex) and tex.resource_path=="res://assets/terrain/woodland/forest_turf_v1.png"
 		if found: break
-	check(found,"Forest terrain uses imported lawn texture")
+	check(found,"Forest terrain uses the detailed woodland turf texture")
 	var mip: ConfigFile=ConfigFile.new();mip.load("res://assets/terrain/spring_lawn_v1.png.import")
 	check(mip.get_value("params","mipmaps/generate",false),"Mipmaps enabled for stable distant leaf detail")
 	var original: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/houses/seabreeze_cottage.json"))
@@ -35,10 +46,10 @@ func run() -> void:
 	sofa.position.x-=.5
 	var bed_exit: Vector3=game.home.get_node("Furnishing/bed/SleepExit").global_position
 	while not game.navigation.ready_for_paths: await physics_frame
-	check(game.navigation.path_between(Vector3(-8,0,32),bed_exit).size()>1,"New furniture layout leaves a connected bed route")
+	check(game.navigation.path_between(Vector3(-22,0,86),bed_exit).size()>1,"New furniture layout leaves a connected bed route")
 	game.set_process(false);game.hud.visible=false;game.bunny.hide()
-	game.bunny.position=Vector3(-12,.1,11);game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation();game.update_lighting(.5)
-	game.camera.position=Vector3(-20,5,19);game.camera.look_at(Vector3(-12,.25,12))
+	game.bunny.position=Vector3(-35,preload("res://scripts/valley/valley_layout.gd").height_at(-35,-28)+.035,-28);game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation();game.update_lighting(.5)
+	game.camera.position=game.bunny.position+Vector3(6,5,12);game.camera.look_at(game.bunny.position+Vector3(0,2,-5))
 	await create_timer(.4).timeout;await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(OUT+"山谷-草坪与林下植物.png")
 	game.bunny.show();game.bunny.position=game.home.to_global(Vector3(-.8,.25,2.5));game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation()
 	game.camera.position=game.home.to_global(Vector3(10,12,15));game.camera.look_at(game.home.to_global(Vector3(0,1,0)))

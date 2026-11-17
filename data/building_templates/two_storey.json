@@ -1,6 +1,6 @@
 {
   "lighting_version": 1,
-  "next_id": 287,
+  "next_id": 288,
   "schema": 4,
   "elements": [
     {
@@ -1705,6 +1705,22 @@
       "style": "wood",
       "type": "window",
       "wall": "build_150"
+    },
+    {
+      "id": "build_287",
+      "type": "object",
+      "kind": "wall_mirror",
+      "position": [
+        138.64,
+        3.8
+      ],
+      "yaw": 90.0,
+      "mount_height": 1.15,
+      "support": "build_217",
+      "support_level": 0,
+      "color": "ffffff",
+      "style": "original",
+      "painted": false
     }
   ]
 }

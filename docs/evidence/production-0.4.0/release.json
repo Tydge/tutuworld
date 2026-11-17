@@ -1,0 +1,286 @@
+{
+  "version": "0.4.0",
+  "build": 7,
+  "protocol": 4,
+  "launcher": 2,
+  "tests": [
+    {
+      "name": "project_integrity",
+      "passed": true,
+      "checks": 458,
+      "source": ".qa-artifacts/20261113-003426-893842/project_integrity/run.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "passed": true,
+      "checks": 44,
+      "source": ".qa-artifacts/20261113-000423-121711/character_roster_rules/run.log"
+    },
+    {
+      "name": "character_restart_flow",
+      "passed": true,
+      "checks": 3,
+      "source": ".qa-artifacts/20261113-001951-944781/character_restart_flow/run.log"
+    },
+    {
+      "name": "release04_building_rules",
+      "passed": true,
+      "checks": 369,
+      "source": ".qa-artifacts/20261113-001345-906038/release04_building_rules/run.log"
+    },
+    {
+      "name": "drafting_rules",
+      "passed": true,
+      "checks": 51,
+      "source": ".qa-artifacts/20261113-001345-906038/drafting_rules/run.log"
+    },
+    {
+      "name": "building_surface_flow",
+      "passed": true,
+      "checks": 15,
+      "source": ".qa-artifacts/20261113-001951-944781/building_surface_flow/run.log"
+    },
+    {
+      "name": "drafting_flow",
+      "passed": true,
+      "checks": 22,
+      "source": ".qa-artifacts/20261113-000525-626874/drafting_flow/run.log"
+    },
+    {
+      "name": "wall_furniture_rules",
+      "passed": true,
+      "checks": 78,
+      "source": ".qa-artifacts/20261113-000621-919244/wall_furniture_rules/run.log"
+    },
+    {
+      "name": "wall_furniture_flow",
+      "passed": true,
+      "checks": 38,
+      "source": ".qa-artifacts/20261113-000807-825334/wall_furniture_flow/run.log"
+    },
+    {
+      "name": "storey_extension_rules",
+      "passed": true,
+      "checks": 242,
+      "source": ".qa-artifacts/20261113-001046-544989/storey_extension_rules/run.log"
+    },
+    {
+      "name": "multistorey_persistence_rules",
+      "passed": true,
+      "checks": 10,
+      "source": ".qa-artifacts/20261113-001046-544989/multistorey_persistence_rules/run.log"
+    },
+    {
+      "name": "dining_rules",
+      "passed": true,
+      "checks": 51,
+      "source": ".qa-artifacts/20261113-001046-544989/dining_rules/run.log"
+    },
+    {
+      "name": "land_parcels_rules",
+      "passed": true,
+      "checks": 47,
+      "source": ".qa-artifacts/20261113-001046-544989/land_parcels_rules/run.log"
+    },
+    {
+      "name": "save_transactions",
+      "passed": true,
+      "checks": 10,
+      "source": ".qa-artifacts/20261113-000621-919244/save_transactions/run.log"
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "passed": true,
+      "checks": 59,
+      "source": ".qa-artifacts/20261113-001756-408263/building_multiplayer_rules/run.log"
+    },
+    {
+      "name": "building_multiplayer_flow",
+      "passed": true,
+      "checks": 44,
+      "source": ".qa-artifacts/20261113-001841-003328/building_multiplayer_flow/run.log"
+    },
+    {
+      "name": "building_update_lifecycle",
+      "passed": true,
+      "checks": 1,
+      "source": ".qa-artifacts/20261113-003426-893842/building_update_lifecycle/run.log"
+    },
+    {
+      "name": "multiplayer_rules",
+      "passed": true,
+      "checks": 88,
+      "source": ".qa-artifacts/20261113-001530-536137/multiplayer_rules/run.log"
+    },
+    {
+      "name": "production_multiplayer_rules",
+      "passed": true,
+      "checks": 35,
+      "source": ".qa-artifacts/20261113-001756-408263/production_multiplayer_rules/run.log"
+    },
+    {
+      "name": "furniture_access_flow",
+      "passed": true,
+      "checks": 51,
+      "source": ".qa-artifacts/20261113-001951-944781/furniture_access_flow/run.log"
+    },
+    {
+      "name": "update_rules",
+      "passed": true,
+      "checks": 8,
+      "source": ".qa-artifacts/20261113-002952-488501/update_rules/run.log"
+    },
+    {
+      "name": "multiplayer_live",
+      "passed": true,
+      "checks": 42,
+      "source": ".qa-artifacts/20261113-002659-857072/multiplayer_live/run.log"
+    },
+    {
+      "name": "multiplayer_public",
+      "passed": true,
+      "checks": 4,
+      "source": ".qa-artifacts/20261113-003149-412278/multiplayer_public/run.log"
+    },
+    {
+      "name": "update_download",
+      "passed": true,
+      "checks": null,
+      "source": ".qa-artifacts/20261113-003149-412278/update_download/run.log"
+    }
+  ],
+  "counted_checks": 1770,
+  "native_checks": 44,
+  "building_update_metrics": {
+    "configure_usec": 1119,
+    "created": 141,
+    "elapsed_usec": 4287601,
+    "entries_usec": 1463,
+    "max_slice_usec": 20868,
+    "modules": 283,
+    "moved": 0,
+    "phases": {
+      "descriptors": 16020,
+      "models": 169617,
+      "retire": 0,
+      "rooms": 0,
+      "slowest_model": "railing:build_18",
+      "swap": 7050
+    },
+    "prepare_usec": 1264,
+    "removed": 0,
+    "reused": 142,
+    "usec": 4491,
+    "yields": 99
+  },
+  "artifacts": {
+    "city.pck": {
+      "bytes": 72060360,
+      "sha256": "ef7b51f44d3426f8b8160946d2ca8b8648d96eede5856c6f4fd1c4bab84102f5"
+    },
+    "server.pck": {
+      "bytes": 66572944,
+      "sha256": "37d3981083c12a6c367ad9c336088eb20bde5d9b9e6dadd5facfde85073bb12e"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 114972583,
+      "sha256": "341957de373b63a47bf464262ac3bd8228d2cba4f422c77f0f415c02ee0ee48d"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 94356620,
+      "sha256": "2ef372c99cedf4f690bc4dea7aef51e8b3d61827cddbe8e6fed2bce701c260a2"
+    },
+    "manifest.json": {
+      "bytes": 1152,
+      "sha256": "c06134e51b1f4a51b51f96b6750ca7a7091ee56c8a878405afb76e32363569f5"
+    }
+  },
+  "source_sha256": {
+    "data/building_templates/single_one.json": "f655ea32be6e2d9ccebc7d0cf8fc38956ec408128f180eb30d962e0a8231576e",
+    "data/building_templates/two_storey.json": "b86ceb2b465b8bf8c131ad5cf01e67d0c073a6f98f9cb95ae4b2a1ea12cb904d",
+    "export_presets.cfg": "f5ab49a250625bbf8c76e93612b378c76f194eaef2680bcad813aaa6192e737e",
+    "project.godot": "88be7b9352a8314b6495ff217e2a749143ca460a6ec684297689239c593ed8b3",
+    "scripts/boot.gd": "40517e66bf767c26b16962b4a8f4c05514baf733554a647dd6a9142260d25c52",
+    "scripts/building/bed_comfort.gd": "0a16f931c5c4c523c7b2a2066667540c2c729e76c954a30b15b667c2e8cf3532",
+    "scripts/building/building_world.gd": "6ff72f30301a7c87c933e318e05fce823913357a3a8e64ecf5a6381a279204d5",
+    "scripts/building/construction_sites.gd": "6bf17e0d5ceb7e205e07731583357a82ef8341035eff56e85f98de0424058b16",
+    "scripts/building/editor.gd": "936b29292b6a535994f936d2b62deab79c5db80083ab5cf2f9c3bc55ad0ac520",
+    "scripts/building/editor_ui.gd": "ea2226a9d480e792b0c2f797e3b2fba5ae69a6bb7817cb75a72f61333591bb14",
+    "scripts/building/mesh_batch_job.gd": "9b5a1625f7f8e69f22a2f1e3ccb6a359ebff428763728666613de59b3e4b1a46",
+    "scripts/building/module_factory.gd": "d6537ccba3169f76ad343d8e58553bc2723da33029c6e25ffaaaf76e11f26111",
+    "scripts/building/room_edit.gd": "960dbe1b16bd2c2550b9fe8b3c6080b7e1aa265cc42b05c94bd243c39ebdb4e7",
+    "scripts/building/room_plan.gd": "88462e729f7016fff90e3ccafa4d45d80737cf1c8fbdbd025cab47ffa41b5450",
+    "scripts/building/room_plan_job.gd": "c1773190db0787cb58d4edbf700cb346a3a89a2ee97d9e808611fd5493585989",
+    "scripts/building/stacked_resize.gd": "64527338e31db5f8765a1d7d332885acd9f142606ece2b9c4c3b54b811229fff",
+    "scripts/building/stair_mesh.gd": "5e73a4082714867d6850526f5a8f011656d858ddcd2d2c434656c3dac5c47898",
+    "scripts/building/surface_edit.gd": "05b0422bcf2bed850d4f9dbc9c2f99d33144e446eaab716ff4f5a7603886fe71",
+    "scripts/building/surface_preview.gd": "07d90ab29138159f0ded7efc9aad5477d1e61d073a139cada582514ceda61363",
+    "scripts/building/world_sync.gd": "0d2165673e9baf6753fa671cd602c7033ff0c94027487185897b02b101bdf858",
+    "scripts/city/city_world.gd": "9d64da76882813a3c12092b85cc9efecd75923cdf55b241a3323fc07dfcad68f",
+    "scripts/city/culinary.gd": "42d18fb3b5f6dcb7de4dac95f62ec1e86a87fbd86cb14619dfd3e761fdea7cfe",
+    "scripts/city/dining_service.gd": "da08d9195e1533bd33068faff7037d001d60835ebfc84fe65e7777beb9b6803e",
+    "scripts/city/furniture_access.gd": "a91f306b84800ca15f23d9365b7b481f8b8d816d48399586590e7b9510f510cc",
+    "scripts/city/home_builder.gd": "e16560917400b3a8e8bb88b86836b2d48969c7279a43e1f3bbc88feac72a6466",
+    "scripts/city/local_landing.gd": "32795403f0bc439e081600b788087f039fc9cfc43f34bf9ba2295c141c5b5de7",
+    "scripts/city/online_world.gd": "ae462e7aae8088647a9d8fb6eb14eca7e9d350ebc8c654ad93737277b89cf470",
+    "scripts/city/wander_navigation.gd": "ef979cde6ce09ed8ac8398cc3fed5444fe0a2209f4d543e25b9309e316227923",
+    "scripts/services/release.gd": "14ab7649e212249c0290ad5f835743800e025132f3e7fcc09a1e0a5e92e927e8",
+    "scripts/services/remote_transport.gd": "5aeb2ccdeeb0672ba67e139ab35600c3fd869539ce8bd66d835552ae97d8ef20",
+    "scripts/services/session.gd": "ae111ce88641b629bcd6a2963badb5615d2218e2aeeb3475ff7deeae31aee189",
+    "scripts/ui/character_sheet.gd": "c880a48aa6511783c7dc1f142b163d31d2b57c7f46b67f9894b8f4df0331fb2d",
+    "scripts/ui/city_hud.gd": "cd44e9f02debce83ba9f20f9b2d71fef10f1b8076824e862dd8977cf6de900ac",
+    "scripts/ui/title.gd": "3504d5361e3f90bb4d959931d23f19b33b6a779e023e6762a395dbfc5076a336",
+    "server/building_service.gd": "bc920058b9d5f09022fbba3c4b16097e409d6756577713be5b2a973a9acd2e6a",
+    "server/host_setup.gd": "4035c6636a5d5b8eb3cc1da44e2243d47bf9606bbb602eb8c2bfc2640cfba9f8",
+    "server/world_server.gd": "9e98c963ce925c2d50800a67284209463e6f92225cc943dfbec6be030e523bdc",
+    "tests/building_multiplayer_flow.gd": "a704b89f5f7a400ac6947956c53b230261a6492c09583e1140ea745ff9b40751",
+    "tests/building_multiplayer_rules.gd": "ab70883de6dc0e87db21bb006400c213c069fa4216ae7fad73fb39c56b4e5b65",
+    "tests/building_surface_flow.gd": "4485d0820a510d326259b20f0e09a25735d23101c4cd885a42f94e6918802477",
+    "tests/building_update_lifecycle.gd": "6feb12153bd35a0577d3c162d3569949efad61ce527f41f53d4355cdd69530f5",
+    "tests/character_restart_flow.gd": "928a58b11de398e5949dfe734e4d4575a73aa64f96bdb72829a9a98e6039a099",
+    "tests/character_roster_rules.gd": "147033909c14e736086efb5a59692984936123caf87f149bcd909929dd419948",
+    "tests/drafting_rules.gd": "df39a0b10e961ce02c7da51b3d792e8af3b56c79929751c795a4a12916299655",
+    "tests/furniture_access_flow.gd": "634fd3d0e90572efb2155e6341ed7c6b2e346058ee704b23e755b752c7e6ea53",
+    "tests/land_parcels_flow.gd": "32aa9b14f43e180a2db0e4e95749bd6b047cf1c20c5882b4a6bd952597bf41d8",
+    "tests/land_parcels_rules.gd": "82df86421fb9c1985f59496e617db0b02838c4bad340ebbb7df242c9cb25ef86",
+    "tests/release04_building_rules.gd": "ba8835c338db599740974a6a5b699b4cc97393cf7d8ddff280a8ddf50eacc4f1",
+    "tests/stairs_first_walk.gd": "f04426f0671e11315a6d7c5c3f24f5090e1e37a8f3eb909b9699eaa915a70143",
+    "tests/update_download.gd": "294bff230dfbbb573702f769dd869809a9b0aac8bcd67a38870c32452ed039ef",
+    "tests/wall_furniture_rules.gd": "171e0b545c5703e75afd12ed92d5bb450ec66b6cd055137e764a5b1627a60215",
+    "tools/publish_release.py": "e6e2fd4ea7289022fb6f5f654d2118749ec171d38a082e7f35bd45a68859ca5e",
+    "tools/test_suites.json": "f1b90c8622a0a219f8879a64f36aaa8f86537bb8a74669817430df1af4a5853f"
+  },
+  "limits": [
+    "Windows hardware play not performed; package/SDK bytes verified.",
+    "Script slice/swap timings are not whole-frame GPU or sustained 60 FPS guarantees.",
+    "Strict 20 independent mirror plane performance remains a documented limitation.",
+    "Some isolated engine teardown logs retain native resource diagnostics; no script/shader errors in selected passing runs."
+  ],
+  "published": true,
+  "preservation": "preservation.json",
+  "health": "server-status.json",
+  "released_on": "2026-11-13 Asia/Shanghai",
+  "exported_client_building_rules": {
+    "checks": 369,
+    "passed": true,
+    "log": "native-exported-client-building.log"
+  },
+  "legacy_public_downloads": {
+    "0.3.0": {
+      "passed": true,
+      "bytes": 72060360
+    },
+    "0.3.1": {
+      "passed": true,
+      "bytes": 72060360
+    },
+    "0.3.2": {
+      "passed": true,
+      "bytes": 72060360
+    },
+    "0.3.3": {
+      "passed": true,
+      "bytes": 72060360
+    }
+  }
+}

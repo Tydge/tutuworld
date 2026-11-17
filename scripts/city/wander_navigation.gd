@@ -29,7 +29,7 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 		if area.has_point(Vector2(x,z)):return true
 	# The outdoor grid samples ground near its own height. Upper storeys must
 	# never replace a street cell with the roof / highest floor above it.
-	var top:=18.
+	var top:=90. if get_parent().get("map_id")=="valley" else 18.
 	if get_parent().get("map_id")=="city" and preload("res://scripts/building/site.gd").contains(Vector3(x,0,z)):
 		top=.75
 		var span: Rect2=preload("res://scripts/building/site.gd").CONNECTOR
@@ -143,16 +143,20 @@ func refresh_region(bounds: AABB) -> void:
 	await get_tree().physics_frame;await get_tree().physics_frame
 	reserve_stairs()
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
+	var slice:=Time.get_ticks_usec()
 	for z in range(floori(bounds.position.z)-1,ceili(bounds.end.z)+2):
 		for x in range(floori(bounds.position.x)-1,ceili(bounds.end.x)+2):
 			var cell:=Vector2i(x,z)
-			if grid.is_in_boundsv(cell): grid.set_point_solid(cell,blocked(space,x,z))
+			if grid.is_in_boundsv(cell):grid.set_point_solid(cell,blocked(space,x,z))
+			if Time.get_ticks_usec()-slice>=3000:await get_tree().physics_frame;slice=Time.get_ticks_usec()
 	await rebuild_destinations()
 
 func reserve_stairs() -> void:
 	stair_reservations.clear()
 	var editor: Variant=get_parent().get("build_mode")
-	if not is_instance_valid(editor):return
-	for row in editor.layout.elements:
+	var layout: Dictionary={}
+	if is_instance_valid(editor):layout=editor.layout
+	elif get_parent().has_method("online_players"):layout=get_parent().session.state().get("build_layout",{})
+	for row in layout.get("elements",[]):
 		if row.type=="stairs" and int(row.get("storey",0))==0:
 			for area in preload("res://scripts/building/stairs.gd").parts(row):stair_reservations.append(area.grow(.45))

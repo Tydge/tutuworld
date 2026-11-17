@@ -10,10 +10,20 @@ static func find(host: Node3D,desired: Vector3,actor: CharacterBody3D,search: bo
 		for i in range(count_):
 			var p:=desired+Vector3(cos(i*TAU/count_),0,sin(i*TAU/count_))*ring*.55
 			if not host.can_walk(p):continue
-			floor_query.from=p+Vector3.UP;floor_query.to=p-Vector3.UP*1.5;var hit:=space.intersect_ray(floor_query)
+			floor_query.from=p+Vector3.UP;floor_query.to=p-Vector3.UP*1.5;var hit:=floor_hit(space,floor_query)
 			if hit.is_empty() or hit.normal.y<.7:continue
 			p.y=float(hit.position.y)+.025;query.shape=body;query.transform=Transform3D(Basis.IDENTITY,p+Vector3(0,.65,0))
 			if not space.intersect_shape(query,1).is_empty():continue
 			query.shape=head;query.transform=Transform3D(Basis.IDENTITY,p+actor.rig_profile.head_center)
 			if space.intersect_shape(query,1).is_empty():return {"position":p}
 	return {}
+
+static func floor_hit(space: PhysicsDirectSpaceState3D,query: PhysicsRayQueryParameters3D) -> Dictionary:
+	var hit:=space.intersect_ray(query)
+	if not hit.is_empty() and hit.normal.y>=.7:return hit
+	# Jolt can report a slab's side normal at the exact shared edge of two chunks.
+	# Probe just inside a cell; preserve the requested horizontal landing point.
+	var original_from:=query.from;var original_to:=query.to
+	query.from+=Vector3(.013,0,.017);query.to+=Vector3(.013,0,.017)
+	hit=space.intersect_ray(query);query.from=original_from;query.to=original_to
+	return hit

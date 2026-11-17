@@ -1,0 +1,204 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+VALLEY_COMPONENTS 9
+PASS Reachable resource valley_branch_0
+PASS Height-aware path valley_branch_0
+PASS Resource can be interacted with from its connected approach valley_branch_0
+PASS Reachable resource valley_branch_1
+PASS Height-aware path valley_branch_1
+PASS Resource can be interacted with from its connected approach valley_branch_1
+PASS Reachable resource valley_branch_2
+PASS Height-aware path valley_branch_2
+PASS Resource can be interacted with from its connected approach valley_branch_2
+PASS Reachable resource valley_branch_3
+PASS Height-aware path valley_branch_3
+PASS Resource can be interacted with from its connected approach valley_branch_3
+PASS Reachable resource valley_branch_4
+PASS Height-aware path valley_branch_4
+PASS Resource can be interacted with from its connected approach valley_branch_4
+PASS Reachable resource valley_birch_0
+PASS Height-aware path valley_birch_0
+PASS Resource can be interacted with from its connected approach valley_birch_0
+PASS Reachable resource valley_birch_1
+PASS Height-aware path valley_birch_1
+PASS Resource can be interacted with from its connected approach valley_birch_1
+PASS Reachable resource valley_birch_2
+PASS Height-aware path valley_birch_2
+PASS Resource can be interacted with from its connected approach valley_birch_2
+PASS Reachable resource valley_birch_3
+PASS Height-aware path valley_birch_3
+PASS Resource can be interacted with from its connected approach valley_birch_3
+PASS Reachable resource valley_birch_4
+PASS Height-aware path valley_birch_4
+PASS Resource can be interacted with from its connected approach valley_birch_4
+PASS Reachable resource valley_orange_0
+PASS Height-aware path valley_orange_0
+PASS Resource can be interacted with from its connected approach valley_orange_0
+PASS Reachable resource valley_orange_1
+PASS Height-aware path valley_orange_1
+PASS Resource can be interacted with from its connected approach valley_orange_1
+PASS Reachable resource valley_orange_2
+PASS Height-aware path valley_orange_2
+PASS Resource can be interacted with from its connected approach valley_orange_2
+PASS Reachable resource valley_orange_3
+PASS Height-aware path valley_orange_3
+PASS Resource can be interacted with from its connected approach valley_orange_3
+PASS Reachable resource valley_orange_4
+PASS Height-aware path valley_orange_4
+PASS Resource can be interacted with from its connected approach valley_orange_4
+PASS Reachable resource valley_copper_0
+PASS Height-aware path valley_copper_0
+PASS Resource can be interacted with from its connected approach valley_copper_0
+PASS Reachable resource valley_copper_1
+PASS Height-aware path valley_copper_1
+PASS Resource can be interacted with from its connected approach valley_copper_1
+PASS Reachable resource valley_copper_2
+PASS Height-aware path valley_copper_2
+PASS Resource can be interacted with from its connected approach valley_copper_2
+PASS Reachable resource valley_copper_3
+PASS Height-aware path valley_copper_3
+PASS Resource can be interacted with from its connected approach valley_copper_3
+PASS Reachable resource valley_iron_0
+PASS Height-aware path valley_iron_0
+PASS Resource can be interacted with from its connected approach valley_iron_0
+PASS Reachable resource valley_iron_1
+PASS Height-aware path valley_iron_1
+PASS Resource can be interacted with from its connected approach valley_iron_1
+PASS Reachable resource valley_limestone_0
+PASS Height-aware path valley_limestone_0
+PASS Resource can be interacted with from its connected approach valley_limestone_0
+PASS Reachable resource valley_limestone_1
+PASS Height-aware path valley_limestone_1
+PASS Resource can be interacted with from its connected approach valley_limestone_1
+PASS Reachable resource valley_limestone_2
+PASS Height-aware path valley_limestone_2
+PASS Resource can be interacted with from its connected approach valley_limestone_2
+PASS Reachable resource valley_limestone_3
+PASS Height-aware path valley_limestone_3
+PASS Resource can be interacted with from its connected approach valley_limestone_3
+PASS Reachable resource valley_sandstone_0
+PASS Height-aware path valley_sandstone_0
+PASS Resource can be interacted with from its connected approach valley_sandstone_0
+PASS Reachable resource valley_sandstone_1
+PASS Height-aware path valley_sandstone_1
+PASS Resource can be interacted with from its connected approach valley_sandstone_1
+PASS Connected cottage doorway and bed approach
+PASS Physical traversal bunny river bridge
+PASS Feet on actual slope bunny river bridge y=2.95438885688782
+PASS Physical traversal bunny harbor
+PASS Feet on actual slope bunny harbor y=0.18087835609913
+PASS Physical traversal bunny cottage approach
+PASS Feet on actual slope bunny cottage approach y=8.17087841033936
+PASS Physical traversal bunny mountain ascent -1 34
+PASS Feet on actual slope bunny mountain ascent -1 34 y=15.2660446166992
+PASS Physical traversal bunny mountain ascent -1 40
+PASS Feet on actual slope bunny mountain ascent -1 40 y=17.673828125
+PASS Physical traversal bunny mountain ascent -1 46
+PASS Feet on actual slope bunny mountain ascent -1 46 y=19.47633934021
+PASS Physical traversal bunny mountain ascent -1 52
+PASS Feet on actual slope bunny mountain ascent -1 52 y=21.0567398071289
+PASS Physical traversal bunny mountain ascent -1 58
+PASS Feet on actual slope bunny mountain ascent -1 58 y=23.204906463623
+PASS Physical traversal bunny mountain ascent -1 64
+PASS Feet on actual slope bunny mountain ascent -1 64 y=26.5048503875732
+PASS Physical traversal bunny mountain ascent -1 70
+PASS Feet on actual slope bunny mountain ascent -1 70 y=30.4986801147461
+PASS Physical traversal bunny mountain ascent -1 76
+PASS Feet on actual slope bunny mountain ascent -1 76 y=33.8101806640625
+PASS Physical traversal bunny mountain ascent 1 34
+PASS Feet on actual slope bunny mountain ascent 1 34 y=13.2079019546509
+PASS Physical traversal bunny mountain ascent 1 40
+PASS Feet on actual slope bunny mountain ascent 1 40 y=17.6387596130371
+PASS Physical traversal bunny mountain ascent 1 46
+PASS Feet on actual slope bunny mountain ascent 1 46 y=22.3036022186279
+PASS Physical traversal bunny mountain ascent 1 52
+PASS Feet on actual slope bunny mountain ascent 1 52 y=26.9099292755127
+PASS Physical traversal bunny mountain ascent 1 58
+PASS Feet on actual slope bunny mountain ascent 1 58 y=30.6676368713379
+PASS Physical traversal bunny mountain ascent 1 64
+PASS Feet on actual slope bunny mountain ascent 1 64 y=33.0623397827148
+PASS Physical traversal bunny mountain ascent 1 70
+PASS Feet on actual slope bunny mountain ascent 1 70 y=33.7008781433105
+PASS Physical traversal bunny mountain ascent 1 76
+PASS Feet on actual slope bunny mountain ascent 1 76 y=32.9736671447754
+PASS Physical traversal cat_teacher river bridge
+PASS Feet on actual slope cat_teacher river bridge y=2.95361757278442
+PASS Physical traversal cat_teacher harbor
+PASS Feet on actual slope cat_teacher harbor y=0.180878251791
+PASS Physical traversal cat_teacher cottage approach
+PASS Feet on actual slope cat_teacher cottage approach y=8.17087936401367
+PASS Physical traversal cat_teacher mountain ascent -1 34
+PASS Feet on actual slope cat_teacher mountain ascent -1 34 y=15.2741727828979
+PASS Physical traversal cat_teacher mountain ascent -1 40
+PASS Feet on actual slope cat_teacher mountain ascent -1 40 y=17.6807651519775
+PASS Physical traversal cat_teacher mountain ascent -1 46
+PASS Feet on actual slope cat_teacher mountain ascent -1 46 y=19.4808731079102
+PASS Physical traversal cat_teacher mountain ascent -1 52
+PASS Feet on actual slope cat_teacher mountain ascent -1 52 y=21.059986114502
+PASS Physical traversal cat_teacher mountain ascent -1 58
+PASS Feet on actual slope cat_teacher mountain ascent -1 58 y=23.2083930969238
+PASS Physical traversal cat_teacher mountain ascent -1 64
+PASS Feet on actual slope cat_teacher mountain ascent -1 64 y=26.5144271850586
+PASS Physical traversal cat_teacher mountain ascent -1 70
+PASS Feet on actual slope cat_teacher mountain ascent -1 70 y=30.5094604492188
+PASS Physical traversal cat_teacher mountain ascent -1 76
+PASS Feet on actual slope cat_teacher mountain ascent -1 76 y=33.8194580078125
+PASS Physical traversal cat_teacher mountain ascent 1 34
+PASS Feet on actual slope cat_teacher mountain ascent 1 34 y=13.2234392166138
+PASS Physical traversal cat_teacher mountain ascent 1 40
+PASS Feet on actual slope cat_teacher mountain ascent 1 40 y=17.655216217041
+PASS Physical traversal cat_teacher mountain ascent 1 46
+PASS Feet on actual slope cat_teacher mountain ascent 1 46 y=22.3164443969727
+PASS Physical traversal cat_teacher mountain ascent 1 52
+PASS Feet on actual slope cat_teacher mountain ascent 1 52 y=26.9209785461426
+PASS Physical traversal cat_teacher mountain ascent 1 58
+PASS Feet on actual slope cat_teacher mountain ascent 1 58 y=30.6731986999512
+PASS Physical traversal cat_teacher mountain ascent 1 64
+PASS Feet on actual slope cat_teacher mountain ascent 1 64 y=33.0653610229492
+PASS Physical traversal cat_teacher mountain ascent 1 70
+PASS Feet on actual slope cat_teacher mountain ascent 1 70 y=33.7037582397461
+PASS Physical traversal cat_teacher mountain ascent 1 76
+PASS Feet on actual slope cat_teacher mountain ascent 1 76 y=32.9760780334473
+PASS Physical traversal panda river bridge
+PASS Feet on actual slope panda river bridge y=2.9543821811676
+PASS Physical traversal panda harbor
+PASS Feet on actual slope panda harbor y=0.18087837100029
+PASS Physical traversal panda cottage approach
+PASS Feet on actual slope panda cottage approach y=8.17087841033936
+PASS Physical traversal panda mountain ascent -1 34
+PASS Feet on actual slope panda mountain ascent -1 34 y=15.2631931304932
+PASS Physical traversal panda mountain ascent -1 40
+PASS Feet on actual slope panda mountain ascent -1 40 y=17.6733093261719
+PASS Physical traversal panda mountain ascent -1 46
+PASS Feet on actual slope panda mountain ascent -1 46 y=19.4747314453125
+PASS Physical traversal panda mountain ascent -1 52
+PASS Feet on actual slope panda mountain ascent -1 52 y=21.0554046630859
+PASS Physical traversal panda mountain ascent -1 58
+PASS Feet on actual slope panda mountain ascent -1 58 y=23.2032108306885
+PASS Physical traversal panda mountain ascent -1 64
+PASS Feet on actual slope panda mountain ascent -1 64 y=26.5027370452881
+PASS Physical traversal panda mountain ascent -1 70
+PASS Feet on actual slope panda mountain ascent -1 70 y=30.4969539642334
+PASS Physical traversal panda mountain ascent -1 76
+PASS Feet on actual slope panda mountain ascent -1 76 y=33.8077583312988
+PASS Physical traversal panda mountain ascent 1 34
+PASS Feet on actual slope panda mountain ascent 1 34 y=13.2044048309326
+PASS Physical traversal panda mountain ascent 1 40
+PASS Feet on actual slope panda mountain ascent 1 40 y=17.6352062225342
+PASS Physical traversal panda mountain ascent 1 46
+PASS Feet on actual slope panda mountain ascent 1 46 y=22.3006801605225
+PASS Physical traversal panda mountain ascent 1 52
+PASS Feet on actual slope panda mountain ascent 1 52 y=26.9078884124756
+PASS Physical traversal panda mountain ascent 1 58
+PASS Feet on actual slope panda mountain ascent 1 58 y=30.665584564209
+PASS Physical traversal panda mountain ascent 1 64
+PASS Feet on actual slope panda mountain ascent 1 64 y=33.0624008178711
+PASS Physical traversal panda mountain ascent 1 70
+PASS Feet on actual slope panda mountain ascent 1 70 y=33.7003211975098
+PASS Physical traversal panda mountain ascent 1 76
+PASS Feet on actual slope panda mountain ascent 1 76 y=32.9732780456543
+VALLEY_MOVEMENT_RESULT PASS checks=196 failures=[]

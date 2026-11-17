@@ -54,6 +54,10 @@ func _process(delta: float) -> void:
 	if city.session.is_online():
 		var owner: String=city.session.online_locks.get(city.map_id+":kitchen",{}).get("owner","")
 		cooking=cooking or owner!=""
+		if not cooking and is_instance_valid(city.online_view):
+			for row in city.online_view.motion.values():
+				var work: Dictionary=row.get("job",{})
+				if work.get("verb","")=="craft" and work.get("station","")=="kitchen":job=work;cooking=true;break
 		if job.get("verb","")!="eat" and is_instance_valid(city.online_view):
 			owner=city.session.online_locks.get(city.map_id+":dining",{}).get("owner","")
 			var remote_job: Dictionary=city.online_view.motion.get(owner,{}).get("job",{})

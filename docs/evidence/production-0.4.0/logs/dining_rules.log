@@ -1,0 +1,54 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS One table and six independently placed chairs validate
+PASS Both end chairs and side chairs physically face inward
+PASS Every inward-facing chair pairs with one distinct seat
+PASS Moving and rotating table preserves all six pairings
+PASS Chair follows table transform: build_3
+PASS Chair follows table transform: build_4
+PASS Chair follows table transform: build_5
+PASS Chair follows table transform: build_6
+PASS Chair follows table transform: build_7
+PASS Chair follows table transform: build_8
+PASS Group preview leaves original layout unchanged
+PASS Moving chair leaves table and other chairs in place and unpairs it
+PASS Deleting table keeps independently placed chairs
+PASS Outward-facing chair is not a dining seat
+PASS Chairs on another floor never pair
+PASS Placing near a free seat gently snaps position and orientation
+PASS A wall blocks pairing and dining snap
+PASS A duplicate chair cannot claim an occupied seat slot
+PASS Moving table is refused when any carried chair collides
+PASS Existing six-second meal starts at placed table: food_carrot_soup
+PASS Food waits until completion: food_carrot_soup
+PASS Cancel keeps food: food_carrot_soup
+PASS Existing effect/stamina and exact consumption are reused: food_carrot_soup
+PASS Existing six-second meal starts at placed table: food_garden_salad
+PASS Food waits until completion: food_garden_salad
+PASS Cancel keeps food: food_garden_salad
+PASS Existing effect/stamina and exact consumption are reused: food_garden_salad
+PASS Existing six-second meal starts at placed table: food_tomato_stew
+PASS Food waits until completion: food_tomato_stew
+PASS Cancel keeps food: food_tomato_stew
+PASS Existing effect/stamina and exact consumption are reused: food_tomato_stew
+PASS Existing six-second meal starts at placed table: food_pumpkin_soup
+PASS Food waits until completion: food_pumpkin_soup
+PASS Cancel keeps food: food_pumpkin_soup
+PASS Existing effect/stamina and exact consumption are reused: food_pumpkin_soup
+PASS Existing six-second meal starts at placed table: food_honey_wheat_cake
+PASS Food waits until completion: food_honey_wheat_cake
+PASS Cancel keeps food: food_honey_wheat_cake
+PASS Existing effect/stamina and exact consumption are reused: food_honey_wheat_cake
+PASS Existing six-second meal starts at placed table: food_rustic_wheat_bread
+PASS Food waits until completion: food_rustic_wheat_bread
+PASS Cancel keeps food: food_rustic_wheat_bread
+PASS Existing effect/stamina and exact consumption are reused: food_rustic_wheat_bread
+PASS Existing six-second meal starts at placed table: food_vegetable_omelette
+PASS Food waits until completion: food_vegetable_omelette
+PASS Cancel keeps food: food_vegetable_omelette
+PASS Existing effect/stamina and exact consumption are reused: food_vegetable_omelette
+PASS Authority rejects wrong-floor eating
+PASS Raw food cannot bypass existing cooked-food rules
+PASS A custom table requires a bound paired chair
+PASS Removing bound chair cancels completion without consuming food
+DINING_RULES_RESULT PASS checks=51 failures=[]

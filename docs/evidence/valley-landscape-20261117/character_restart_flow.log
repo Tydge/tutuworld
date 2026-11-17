@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Save active cat after first rabbit
+PASS Restart restores active cat despite stale rabbit preferences
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Actual city creates cat rig from character record
+WANDER_GRID_READY cells=19995 components=7
+CHARACTER_RESTART_FLOW_RESULT PASS checks=3 failures=[]

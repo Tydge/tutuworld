@@ -1,0 +1,25 @@
+{
+  "method": "built-in image_gen",
+  "generated_on": "2026-11-17 Asia/Shanghai",
+  "assets": {
+    "foliage_atlas_v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "color_type": 6,
+      "sha256": "37153cbc11d8377ffc6908df6d3a86bec0c9bb6be6e1c9404997f5d072f26768",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a1ce6d-5f83-7903-b818-7a517270a364/exec-6aa4b5a2-0047-4c14-97d6-58a827d2b4f4.png"
+    },
+    "forest_turf_v1.png": {
+      "size": [
+        1254,
+        1254
+      ],
+      "color_type": 2,
+      "sha256": "f26a52672eccb044f3014de15a289b9d8ece2130aa88dfdaa3eedb5c572b74e4",
+      "original_output": "/Users/wangtaizhi/.codex/generated_images/01a1ce6d-5f83-7903-b818-7a517270a364/exec-6ec6fb4e-1dc9-4073-9a00-f321b5c5f4bb.png"
+    }
+  },
+  "prompts": "prompts.json"
+}

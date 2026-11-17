@@ -1,5 +1,7 @@
 # Spring lawn v1
 
+This is the original spring-lawn provenance. The local valley redesign of 2026-11-17 uses separate woodland turf and bounded near-camera grass geometry; see [woodland notes](woodland/ASSET_NOTES.md). The town still uses this original lawn.
+
 Asset: `spring_lawn_v1.png`. Generated with the built-in image_gen tool, then copied unchanged into this project. Mipmaps and anisotropic filtering are enabled. The shared lawn shader reduces the texture's contrast and controls world scale so that fine leaves read as a soft carpet, rather than large floating grass objects. Forest floor and town meadow use the same asset. No grass seedling geometry remains in either map; intentional beach dune plants are separate.
 
 This file records the original lawn provenance. Current import settings, compression decisions and all ground/environment assets are maintained in [SURFACE_NOTES.md](SURFACE_NOTES.md).

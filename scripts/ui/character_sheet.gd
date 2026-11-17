@@ -23,7 +23,7 @@ func _ready() -> void:
 	portrait.add_child(left)
 	preview=Preview.new()
 	preview.preview_size=Vector2i(300,374)
-	preview.species=session.settings.player_species
+	preview.species=session.state().species
 	preview.equipment=session.state().equipment.duplicate()
 	left.add_child(preview)
 	character_name=UI.label("",22)

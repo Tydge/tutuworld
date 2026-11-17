@@ -5,6 +5,8 @@ const Animals=preload("res://scripts/characters/animal_factory.gd")
 const Catalog=preload("res://scripts/characters/animal_catalog.gd")
 const Release=preload("res://scripts/services/release.gd")
 const Codec=preload("res://scripts/services/packet_codec.gd")
+var building=preload("res://server/building_service.gd").new()
+var built_room: Node3D
 var world=Authority.new()
 var peers: Dictionary={}
 var records: Dictionary={}
@@ -25,6 +27,7 @@ var last_wall:=0.0
 var save_path: String
 var auth_url: String
 var clock_alignment: Dictionary={}
+var building_updating:=false
 var admin_timer:=0.0
 var metrics_timer:=0.0
 var metrics_frames:=0
@@ -37,7 +40,9 @@ func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(directory)
 	save_path=directory.path_join("world.json")
 	auth_url="http://127.0.0.1:"+env("TUTU_AUTH_PORT","18892")+"/"
+	building.manager=self
 	load_world()
+	world.state.building_sites={}
 	for id in ["city","valley"]:
 		var viewport:=SubViewport.new();viewport.own_world_3d=true;viewport.size=Vector2i(16,16)
 		viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED;add_child(viewport)
@@ -45,6 +50,8 @@ func _ready() -> void:
 		host.map_id=id;host.manager=self;viewport.add_child(host);maps[id]=host
 	await get_tree().physics_frame
 	await get_tree().physics_frame
+	built_room=preload("res://scripts/building/module_factory.gd").shell(maps.city);built_room.set_meta("skip_mesh_baking",true)
+	built_room=preload("res://scripts/building/world_sync.gd").apply(maps.city,world.state.build_layout,built_room,false)
 	apply_door_states()
 	if epoch<=0:epoch=Time.get_unix_time_from_system();world.state.time=0
 	var now:=Time.get_unix_time_from_system()
@@ -68,7 +75,12 @@ func load_world() -> void:
 	epoch=float(data.epoch);records=data.get("characters",{});care_history=data.get("care_history",{});doors=data.get("doors",{})
 	clock_alignment=data.get("clock_alignment",{})
 	world.state.merge(data.world,true)
+	world.state.build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("build_layout",{}))
+	world.state.land_parcels=preload("res://scripts/building/parcels.gd").normalize(data.world.get("land_parcels",{}))
 	for record in records.values():
+		for key in ["build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
+		for token in record.get("seen",{}).keys():
+			if record.seen[token].has("lease"):record.seen.erase(token)
 		record.rest_mode="";record.rest_bed="";record.net_pose={}
 func apply_door_states() -> void:
 	for map_id in maps:
@@ -81,16 +93,18 @@ func apply_door_states() -> void:
 func character_record(id: String) -> Dictionary:
 	var a=actors[id]
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","world_id","time","net_pose"]:record.erase(key)
+	for key in ["plots","resources","world_id","time","net_pose","build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
 	record.stamina=minf(a.stamina_max(),float(record.stamina)+a.reserved_work_stamina(a.job))
 	record.rest_mode="";record.rest_bed=""
 	if pawns.has(id):record.player_position=standing_exit(id)
 	record.saved_at=Time.get_unix_time_from_system()
 	record.seen=a.seen_commands.duplicate(true)
+	for token in record.seen.keys():
+		if record.seen[token].has("lease"):record.seen.erase(token)
 	return record
 func save_world() -> bool:
 	for id in actors:records[id]=character_record(id)
-	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources},"characters":records,"care_history":care_history,"doors":doors}
+	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
 	var old: Variant=JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
 	var backup_valid: bool=old is Dictionary and old.get("schema",0)==1 and old.get("world") is Dictionary
 	return preload("res://scripts/services/atomic_file.gd").write(save_path,JSON.stringify(data,"",false,true),backup_valid)
@@ -131,6 +145,7 @@ func _process(delta: float) -> void:
 	world.tick(elapsed)
 	for id in actors.keys():tick_actor(id,elapsed)
 	refresh_occupancy()
+	building.expire()
 	movement_timer+=delta;snapshot_timer+=delta;save_timer+=delta
 	if movement_timer>=.10:movement_timer=0;broadcast_motion()
 	if snapshot_timer>=.75:
@@ -230,6 +245,7 @@ func receive(peer_id: int,data: Dictionary) -> void:
 	if verb=="leave":leave_world(peer_id);answer(peer_id,data,{"ok":true});return
 	if peer.character=="":answer(peer_id,data,fail("请选择角色。"));return
 	if verb=="chat":chat(peer_id,data,str(args.get("text","")));return
+	if verb=="build_finish":finish_building_request(peer_id,data,args);return
 	answer(peer_id,data,execute_player(peer_id,data,verb,args))
 func authenticate(peer_id: int,request: Dictionary,action: String,args: Dictionary) -> void:
 	var http:=HTTPRequest.new();http.timeout=12;http.use_threads=true;add_child(http)
@@ -274,7 +290,7 @@ func create_character(account: String,args: Dictionary) -> Dictionary:
 	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system()},true)
 	a.state.equipment[DB.item(starter).slot]=starter
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","time","world_id"]:record.erase(key)
+	for key in ["plots","resources","time","world_id","build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
 	records[id]=record
 	if not save_world():records.erase(id);return fail("角色还没有保存成功，请稍后再试。")
 	return {"ok":true,"character":id,"characters":roster(account)}
@@ -286,6 +302,8 @@ func join_world(peer_id: int,id: String) -> Dictionary:
 		if other.account==peer.account and other.character!="":return fail("这个账号已经在另一处进入岛上了。")
 	var record: Dictionary=records[id];var a=Authority.new();a.state.merge(record,true);a.normalize_production_state()
 	a.state.plots=world.state.plots;a.state.resources=world.state.resources;a.state.time=world.state.time;a.state.net_pose={}
+	a.state.build_layout=world.state.build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
+	peers[peer_id].building_revision_sent=-1
 	a.seen_commands=record.get("seen",{}).duplicate(true)
 	a.tick_stamina(maxf(0,Time.get_unix_time_from_system()-float(record.get("saved_at",Time.get_unix_time_from_system()))))
 	var map_id: String=str(a.state.get("map_id","city"))
@@ -319,14 +337,51 @@ func standing_exit(id: String) -> Array:
 	var a=actors[id];var pawn=pawns[id];var pose: Dictionary=a.state.get("net_pose",{})
 	if pose.has("exit"):return pose.exit
 	return vector_array(pawn.position)
-func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
+func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary,defer_building: bool=false) -> Dictionary:
 	var id: String=peers[peer_id].character
-	var backup:=runtime_checkpoint(id)
+	var backup:=runtime_checkpoint(id);var old_leases: Dictionary=building.leases.duplicate(true);var others: Dictionary={}
+	if verb=="build_begin":
+		for other in actors:
+			if other!=id:others[other]=runtime_checkpoint(other)
 	var result:=apply_player(peer_id,request,verb,args)
-	if result.get("ok",false) and verb!="history" and not save_world():
+	if result.get("ok",false) and verb not in ["history","build_ping"] and not save_world():
+		building.leases=old_leases;building.notices.clear()
 		restore_runtime(id,backup)
-		return fail("进度暂未保存成功，请稍后再试。")
+		for other in others:restore_runtime(other,others[other])
+		building.sync_state()
+		for other in pawns:pawns[other].can_move=building.owned_site(other)=="" and actors[other].state.get("net_pose",{}).is_empty() and actors[other].job.is_empty()
+		return fail("进度暂未保存成功，本次操作没有生效，请稍后再试。")
+	if result.get("ok",false) and verb in ["buy_land","build_begin","build_finish","build_cancel"]:
+		building.sync_state()
+		if verb=="build_finish" and defer_building:return result
+		if verb=="build_finish":
+			built_room=preload("res://scripts/building/world_sync.gd").apply(maps.city,world.state.build_layout,built_room,false)
+			apply_door_states()
+			if is_instance_valid(built_room) and built_room.pending_navigation.size!=Vector2.ZERO:
+				var region: Rect2=built_room.pending_navigation.grow(.6);maps.city.navigation.refresh_region(AABB(Vector3(region.position.x,-1,region.position.y),Vector3(region.size.x,28,region.size.y)));built_room.pending_navigation=Rect2()
+		if verb=="build_finish":building.release(id,true)
+		building.refresh()
 	return result
+
+func finish_building_request(peer_id: int,request: Dictionary,args: Dictionary) -> void:
+	while building_updating:await get_tree().process_frame
+	if not peers.has(peer_id) or peers[peer_id].character=="":return
+	building_updating=true
+	var id: String=peers[peer_id].character
+	var result:=execute_player(peer_id,request,"build_finish",args,true)
+	if result.get("ok",false):
+		if not is_instance_valid(built_room):built_room=preload("res://scripts/building/module_factory.gd").shell(maps.city)
+		built_room.set_meta("skip_mesh_baking",true)
+		await preload("res://scripts/building/module_factory.gd").sync_incremental(built_room,world.state.build_layout,maps.city)
+		print("BUILDING_SERVER_UPDATE ",JSON.stringify(built_room.last_sync))
+		preload("res://scripts/building/world_sync.gd").register(maps.city,world.state.build_layout,built_room,false)
+		apply_door_states()
+		if built_room.pending_navigation.size!=Vector2.ZERO:
+			var region: Rect2=built_room.pending_navigation.grow(.6);maps.city.navigation.refresh_region(AABB(Vector3(region.position.x,-1,region.position.y),Vector3(region.size.x,28,region.size.y)));built_room.pending_navigation=Rect2()
+		building.release(id,true);building.refresh()
+	building_updating=false
+	answer(peer_id,request,result)
+
 func runtime_checkpoint(id: String) -> Dictionary:
 	return {"world":world.state.duplicate(true),"records":records.duplicate(true),"locks":locks.duplicate(true),"history":care_history.duplicate(true),"doors":doors.duplicate(true),"state":actors[id].state.duplicate(true),"job":actors[id].job.duplicate(true),"seen":actors[id].seen_commands.duplicate(true),"revision":actors[id].revision,"random":actors[id].reward_random.state,"position":pawns[id].position}
 func restore_runtime(id: String,backup: Dictionary) -> void:
@@ -335,13 +390,18 @@ func restore_runtime(id: String,backup: Dictionary) -> void:
 	var a=actors[id];a.state=backup.state;a.job=backup.job;a.seen_commands=backup.seen;a.revision=backup.revision
 	a.reward_random.state=backup.random
 	for other in actors.values():other.state.plots=world.state.plots;other.state.resources=world.state.resources
+	building.sync_state()
 	var pawn=pawns[id];var host=maps[a.state.map_id]
 	if pawn.get_parent()!=host:pawn.reparent(host,false);pawn.world=host
 	pawn.stand_up(backup.position);pawn.work_align_active=false
 	var pose: Dictionary=a.state.get("net_pose",{})
-	if pose.get("kind","")=="sleep":pawn.lie_in_bed(host.home.get_node("Furnishing/bed"));host.home.bed_occupant=pawn
+	if pose.get("kind","")=="sleep":
+		var bed: Node3D=host.targets.get(pose.get("target","home_bed"),{}).get("node",host.home.get_node("Furnishing/bed"));pawn.lie_in_bed(bed)
+		if bed==host.home.get_node("Furnishing/bed"):host.home.bed_occupant=pawn
 	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(host.targets[pose.target].node,int(pose.get("slot",0))));pawn.play_action("nap",INF)
-	elif pose.get("kind","") in ["eat","waiting_exit"]:pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
+	elif pose.get("kind","") in ["eat","waiting_exit"]:
+		var chair: Node3D=built_room.render_cache.get(pose.get("seat",""),{}).get("node") if is_instance_valid(built_room) else null
+		pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair) if chair!=null else host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
 	elif not a.job.is_empty():begin_job_pose(id)
 	pawn.position=backup.position;pawn.reset_network_motion()
 func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
@@ -352,6 +412,18 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 	preload("res://scripts/city/production_facilities.gd").refresh(host,a)
 	a.state.player_position=vector_array(pawn.position);a.state.time=world.state.time
 	var target: String=str(args.get("target",""))
+	building.sync_state()
+	if verb in ["build_begin","build_ping","build_finish","build_cancel"]:
+		var result: Dictionary=building.apply(id,verb,args)
+		if result.ok and verb!="build_ping" and command_id!="":
+			a.seen_commands[command_id]=result.duplicate(true)
+			if a.seen_commands.size()>512:a.seen_commands.erase(a.seen_commands.keys()[0])
+		return result
+	if building.owned_site(id)!="":return fail("请先确认完成或放弃本次施工。")
+	if verb=="buy_land":
+		if not a.state.get("net_pose",{}).is_empty():return fail("请先结束当前互动。")
+		return a.execute(command_for(id,request,verb,args))
+	if map_id=="city" and target.begins_with("build:") and host.targets.has(target) and preload("res://scripts/building/construction_sites.gd").at(world.state.building_sites,host.targets[target].position)!="":return fail(preload("res://scripts/building/construction_sites.gd").MESSAGE)
 	if verb=="history":return {"ok":true,"history":care_history.get(target,{})}
 	if verb=="unstuck":return relocate(id,vector_from(standing_exit(id)),true)
 	if verb in ["stand","wake"]:return relocate(id,vector_from(standing_exit(id)),false)
@@ -407,6 +479,15 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		return result
 	if verb not in ["buy","sell","equip","plant","water","weed","harvest","gather","craft","refill","eat","snack","rest"]:return fail("这项操作暂时不能使用。")
 	if verb in ["buy","sell"] and not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,str(args.get("shop",""))):return fail("请走进店里，来到商人面前再交易。")
+	host.bunny=pawn
+	a.facility_access=func(t):host.bunny=pawn;return host.facility_access(t)
+	if verb=="eat" and target.begins_with("build:"):
+		var dining=preload("res://scripts/city/dining_service.gd");var seats=preload("res://scripts/city/seating.gd");var chosen: Node3D
+		for chair in dining.candidates(host,target):
+			if not dining.accessible(host,target,str(chair.name)) or not seat_clear(map_id,seats.seat(chair).origin,id,target):continue
+			if not preload("res://scripts/city/furniture_access.gd").landing(host,chair,pawn,pawn.position).is_empty():chosen=chair;break
+		if chosen==null:return fail("餐桌旁需要一张未被占用、通道畅通的餐椅。")
+		args=args.duplicate(true);args.seat=str(chosen.name)
 	var needs_lock:=verb in ["plant","water","weed","harvest","gather","craft","refill","eat","rest"]
 	if not a.state.get("net_pose",{}).is_empty():return fail("先起身或结束交谈吧。")
 	if needs_lock:
@@ -420,15 +501,18 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if verb in ["craft","refill","eat","rest"]:
 			var anchor: Vector3
 			if host.targets[target].has("work_anchor"): anchor=host.targets[target].work_anchor.global_position
-			else: anchor=host.scenery.get_node("Kitchen/CookAnchor").global_position if verb=="craft" else (host.scenery.get_node("DiningTable/SeatAnchor").global_position if verb=="eat" else host.home.get_node("Furnishing/bed").global_position)
+			elif verb=="eat" and target.begins_with("build:"):anchor=preload("res://scripts/city/seating.gd").seat(host.targets["build:"+args.seat].node).origin if host.targets.has("build:"+args.seat) else built_room.render_cache[args.seat].node.get_node("SeatAnchor").global_position
+			elif verb=="rest":anchor=host.targets[target].node.global_position
+			else: anchor=host.scenery.get_node("Kitchen/CookAnchor").global_position if verb=="craft" else host.scenery.get_node("DiningTable/SeatAnchor").global_position
 			if not body_clear(map_id,anchor,id):return fail("操作的位置有人，稍等一下吧。")
 	var result: Dictionary=a.execute(command_for(id,request,verb,args))
 	if result.ok:
 		if needs_lock:occupy(map_id,target,id,"sleep" if verb=="rest" else "job")
 		if verb=="rest":
-			var bed: Node3D=host.home.get_node("Furnishing/bed")
+			var bed: Node3D=host.targets[target].node
 			var exit_: Array=vector_array(pawn.position)
-			pawn.lie_in_bed(bed);host.home.bed_occupant=pawn
+			pawn.lie_in_bed(bed)
+			if bed==host.home.get_node("Furnishing/bed"):host.home.bed_occupant=pawn
 			a.state.net_pose={"kind":"sleep","target":target,"exit":exit_};pawn.reset_network_motion()
 		elif not a.job.is_empty():begin_job_pose(id)
 	return result
@@ -446,8 +530,15 @@ func begin_job_pose(id: String) -> void:
 		pawn.visual.rotation.y=host.targets[j.target].work_anchor.global_rotation.y+PI if host.targets[j.target].has("work_anchor") else PI
 	elif j.verb=="refill": pawn.position=host.targets[j.target].work_anchor.global_position
 	elif j.verb=="eat":
-		pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform)
-		a.state.net_pose={"kind":"eat","target":"dining","exit":vector_array(host.scenery.get_node("DiningTable/ExitAnchor").global_position)}
+		var exit_: Array=vector_array(pawn.position)
+		if str(j.target).begins_with("build:"):
+			var chair: Node3D=built_room.render_cache[j.seat].node
+			pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair))
+			a.state.net_pose={"kind":"eat","target":j.target,"seat":j.seat,"exit":exit_,"meal_position":vector_array(preload("res://scripts/city/dining_service.gd").meal_position(host,j.target,chair))}
+		else:
+			pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform)
+			a.state.net_pose={"kind":"eat","target":"dining","exit":exit_}
+
 	elif j.verb=="gather":animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(j.item,"gather_branch")
 	if host.targets.has(j.target):
 		var point: Vector3=host.targets[j.target].position
@@ -463,7 +554,7 @@ func finish_pose(id: String) -> void:
 		occupy(a.state.map_id,str(pose.get("target","dining")),id,"sleep" if pawn.sleeping else "seat")
 		if pawn.seated:pawn.play_action("nap",INF)
 		return
-	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
+	if pawn.sleeping and maps[a.state.map_id].home.bed_occupant==pawn:maps[a.state.map_id].home.bed_occupant=null
 	pawn.stand_up(point.position if not point.is_empty() else pawn.position)
 	pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO;a.state.net_pose={};a.state.rest_mode="";a.sleeping=false;pawn.reset_network_motion()
 	a.state.player_position=vector_array(pawn.position)
@@ -473,21 +564,22 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	if point.is_empty() and unstuck:point=safe_position(a.state.map_id,maps[a.state.map_id].respawn_position(),id,pawn)
 	if point.is_empty():return fail("附近有点挤，稍等一下再试吧。")
 	a.execute({"verb":"cancel"});release_all(id)
-	if pawn.sleeping:maps[a.state.map_id].home.bed_occupant=null
+	if pawn.sleeping and maps[a.state.map_id].home.bed_occupant==pawn:maps[a.state.map_id].home.bed_occupant=null
 	pawn.stand_up(point.position);pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO
 	a.state.net_pose={};a.state.rest_mode="";a.state.rest_bed="";a.sleeping=false;a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 	return {"ok":true,"message":"找到可以落脚的地方啦。" if unstuck else ""}
 func pose_landing(id: String,desired: Vector3) -> Dictionary:
 	var a=actors[id];var host=maps[a.state.map_id];var pose: Dictionary=a.state.get("net_pose",{});var target: Dictionary=host.targets.get(str(pose.get("target","")),{})
-	if pose.get("kind","") in ["sit","sleep","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
-		var result:=preload("res://scripts/city/furniture_access.gd").landing(host,target.node,pawns[id],desired)
-		return result if not result.is_empty() and body_clear(a.state.map_id,result.position,id) else {}
+	if pose.get("seat","")!="" and is_instance_valid(built_room) and built_room.render_cache.has(pose.seat):target={"kind":"bench","node":built_room.render_cache[pose.seat].node}
+	if pose.get("kind","") in ["sit","sleep","eat","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
+		return preload("res://scripts/city/furniture_access.gd").landing(host,target.node,pawns[id],desired,func(point):return body_clear(a.state.map_id,point,id))
 	return safe_position(a.state.map_id,desired,id,pawns[id])
 func tick_actor(id: String,delta: float) -> void:
 	var a=actors[id];var pawn=pawns[id]
 	var peer: Dictionary=peers.get(int(pawn.get_meta("peer_id",0)),{})
 	if Time.get_ticks_msec()-int(peer.get("motion_at",0))>1000:pawn.network_direction=Vector3.ZERO;pawn.network_jump=false
 	a.state.time=world.state.time;a.state.plots=world.state.plots;a.state.resources=world.state.resources
+	a.state.build_layout=world.state.build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
 	preload("res://scripts/city/production_facilities.gd").refresh(maps[a.state.map_id],a)
 	a.state.player_position=vector_array(pawn.position);a.running=pawn.is_running;a.sleeping=pawn.sleeping
 	pawn.speed_multiplier=a.multiplier("move");pawn.run_speed_multiplier=a.multiplier("run_speed");pawn.stamina_fraction=float(a.state.stamina)/a.stamina_max()
@@ -563,7 +655,7 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 			if not host.can_walk(p):continue
 			if component>=0 and host.navigation.component_of.get(host.navigation.closest_free(p),-1)!=component:continue
 			floor_query.from=p+Vector3(0,1.1,0);floor_query.to=p-Vector3(0,1.6,0)
-			var floor_hit:=space.intersect_ray(floor_query)
+			var floor_hit:=preload("res://scripts/city/local_landing.gd").floor_hit(space,floor_query)
 			if floor_hit.is_empty() or floor_hit.normal.y<.7:continue
 			p.y=float(floor_hit.position.y)+.025
 			if absf(p.y-desired.y)>1.2 or not body_clear(map_id,p,ignore):continue
@@ -591,7 +683,12 @@ func send_snapshot(peer_id: int) -> void:
 	if not actors.has(id):return
 	var a=actors[id];var snapshot: Dictionary=a.state.duplicate(true)
 	snapshot.erase("account_id");snapshot.erase("seen");snapshot.time=world.state.time
-	send(peer_id,{"type":"snapshot","state":snapshot,"job":a.job,"locks":locks,"care_history":care_history,"doors":doors,"epoch":epoch,"movement":actor_packet(id)})
+	snapshot.build_layout=world.state.build_layout;snapshot.land_parcels=world.state.land_parcels;snapshot.building_sites=world.state.building_sites
+	var revision: int=world.state.get("building_revision",0)
+	if int(peers[peer_id].get("building_revision_sent",-1))==revision:snapshot.erase("build_layout")
+	else:peers[peer_id].building_revision_sent=revision
+	snapshot.building_revision=revision
+	send(peer_id,{"type":"snapshot","building_protocol":1,"state":snapshot,"job":a.job,"locks":locks,"care_history":care_history,"doors":doors,"epoch":epoch,"movement":actor_packet(id)})
 func chat(peer_id: int,request: Dictionary,text: String) -> void:
 	var peer: Dictionary=peers[peer_id]
 	text=text.strip_edges()
@@ -609,10 +706,11 @@ func leave_world(peer_id: int) -> void:
 	if not peers.has(peer_id):return
 	var id: String=peers[peer_id].character
 	if actors.has(id):
+		building.release(id)
 		actors[id].execute({"verb":"cancel"});release_all(id)
 		records[id]=character_record(id)
-		if pawns[id].sleeping:maps[actors[id].state.map_id].home.bed_occupant=null
-		pawns[id].collision_layer=0;pawns[id].queue_free();pawns.erase(id);actors.erase(id);peers[peer_id].character="";save_world()
+		if pawns[id].sleeping and maps[actors[id].state.map_id].home.bed_occupant==pawns[id]:maps[actors[id].state.map_id].home.bed_occupant=null
+		pawns[id].collision_layer=0;pawns[id].queue_free();pawns.erase(id);actors.erase(id);peers[peer_id].character="";save_world();building.refresh()
 func disconnect_peer(peer_id: int) -> void:leave_world(peer_id);peers.erase(peer_id)
 func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
 func required_release() -> Dictionary:

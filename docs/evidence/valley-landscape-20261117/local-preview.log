@@ -1,0 +1,7 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+SCENE_PREPARED ms=3934
+LOCAL_VALLEY_PREVIEW_READY isolated=true position=(-40.0, 15.30586, 33.55935) trees=271 ridge_trees=220 grass=36728

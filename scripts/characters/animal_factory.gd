@@ -17,7 +17,13 @@ static func create(species_id: String="bunny") -> CharacterBody3D:
 	animal.floor_constant_speed=true
 	# Feet, rather than a raised capsule bottom, meet the walkable surface.
 	for child in animal.get_children():
-		if child is CollisionShape3D and child!=head_collision: child.position.y-=.015
+		if child is CollisionShape3D and child!=head_collision:
+			# Rounded feet follow a continuous slope without the uphill box corner
+			# lifting the whole cat / panda above the ground. Keep height and footprint.
+			if child.shape is BoxShape3D:
+				var box: BoxShape3D=child.shape;var capsule:=CapsuleShape3D.new()
+				capsule.radius=minf(box.size.x,box.size.z)*.5;capsule.height=box.size.y;child.shape=capsule
+			child.position.y-=.015
 	# Outline shells are a screen contour, not a second physical shadow caster.
 	for part in animal.find_children("InkOutline","MeshInstance3D",true,false):
 		part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

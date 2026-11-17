@@ -8,7 +8,7 @@ func check(ok: bool,label_: String) -> void:
 func run() -> void:
 	root.size=Vector2i(1440,900)
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
-	session.state().map_id="valley";session.state().player_position=[-8,.1,32];session.state().time=1800
+	session.state().map_id="valley";session.state().player_position=preload("res://scripts/valley/valley_layout.gd").arrival("valley");session.state().time=1800
 	var game=load("res://scenes/valley.tscn").instantiate();root.add_child(game);await create_timer(2).timeout
 	session.active=false;game.bunny.can_move=false
 	while not game.navigation.ready_for_paths: await physics_frame
@@ -18,7 +18,7 @@ func run() -> void:
 	var original: Vector3=panda.position
 	await create_timer(6).timeout
 	check(panda.position.distance_to(original)>2 and not panda.sleeping,"Daytime outdoor wander")
-	panda.position=Vector3(22,2.1,-17);panda.velocity=Vector3.ZERO;panda.reset_physics_interpolation()
+	panda.position=Vector3(44,preload("res://scripts/valley/valley_layout.gd").height_at(44,-35)+.1,-35);panda.velocity=Vector3.ZERO;panda.reset_physics_interpolation()
 	routine.path.clear();routine.wait=0;routine.returning=false
 	session.state().time=21*3600./24;game.update_lighting()
 	var began:=Time.get_ticks_msec();var sim:=0.0

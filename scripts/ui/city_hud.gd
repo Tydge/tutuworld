@@ -101,7 +101,7 @@ func _ready() -> void:
 	bar.anchor_bottom=1
 	bar.position=Vector2(-400,-88)
 	bar.custom_minimum_size=Vector2(800,62)
-	if city.map_id=="city" and not session.is_online():bar.position.x=-460;bar.custom_minimum_size.x=920
+	if city.map_id=="city" and city.has_building_world():bar.position.x=-460;bar.custom_minimum_size.x=920
 	root_ui.add_child(bar)
 	var buttons:=UI.row(10)
 	bar.add_child(buttons)
@@ -109,7 +109,7 @@ func _ready() -> void:
 		var b:=UI.button(row[0],func(): open_panel(row[1]))
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
-	if city.map_id=="city" and not session.is_online():
+	if city.map_id=="city" and city.has_building_world():
 		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
@@ -764,7 +764,7 @@ func build_land() -> void:
 	content.add_child(UI.label("购入后，靠近这块地皮点击「建造」或按F6。",17,UI.MUTED))
 	var purchase:=UI.button("确认购买 · 100贝壳币",func():
 		session.set_player_position(city.bunny.global_position)
-		var result: Dictionary=session.buy_land(id)
+		var result: Dictionary=await session.request_online("buy_land",{"parcel_id":id}) if session.is_online() else session.buy_land(id)
 		notify(result.message)
 		if result.ok:close_panel()
 		else:rebuild(),true)
@@ -772,7 +772,7 @@ func build_land() -> void:
 	var cancel:=UI.button("再想一想",close_panel);cancel.name="CancelLandPurchase";content.add_child(cancel)
 func build_map() -> void:
 	if city.map_id=="valley": build_valley_map();return
-	var east_building: bool=not session.is_online()
+	var east_building: bool=city.has_building_world()
 	content.add_child(UI.label("北 · 商业街     东 · 菜园"+("与海风花庭 · 四块可购买地皮" if east_building else "")+"     南 · 沙滩     西 · 住宅
 散步寻找石灰石、铜矿与树枝 · 公园有四棵橘子树",17,UI.MUTED))
 	map_draw=Control.new()
@@ -802,24 +802,44 @@ func toggle_photo() -> void:
 	root_ui.visible=not photo_mode
 
 func build_valley_map() -> void:
-	content.add_child(UI.label("沿小溪过桥 · 石阶通往高处林地 · 北边是潘达的小屋\n南岸码头可以免费坐船回城",17,UI.MUTED))
+	content.add_child(UI.label("中央溪流与木桥 · 两岸林间小径可登上山腰观景处\n北边是潘达的小屋，南岸码头可以免费坐船回城",17,UI.MUTED))
+	var layout=preload("res://scripts/valley/valley_layout.gd")
+	var contours: Array=[]
+	for z in range(-92,106,4):
+		for x in range(-104,104,4):
+			if not layout.can_walk(Vector3(x,0,z)):continue
+			var corners: Array[Vector2]=[Vector2(x,z),Vector2(x+4,z),Vector2(x+4,z+4),Vector2(x,z+4)]
+			for level in [8.,16.,24.,32.]:
+				var intersections:=PackedVector2Array()
+				for i in range(4):
+					var a: Vector2=corners[i];var b: Vector2=corners[(i+1)%4]
+					var ha: float=layout.height_at(a.x,a.y);var hb: float=layout.height_at(b.x,b.y)
+					if (ha<level)!=(hb<level):intersections.append(a.lerp(b,(level-ha)/(hb-ha)))
+				if intersections.size()>=2:contours.append(intersections)
 	map_draw=Control.new();map_draw.custom_minimum_size=Vector2(890,480);content.add_child(map_draw)
 	map_draw.draw.connect(func():
-		map_draw.draw_set_transform(Vector2(445,218),0,Vector2(4.6,3.8))
-		map_draw.draw_circle(Vector2.ZERO,50,Color("8fb27c"))
-		map_draw.draw_rect(Rect2(-40,-40,80,31),Color("719963"))
-		map_draw.draw_rect(Rect2(-32,-40,66,13),Color("5c865b"))
-		map_draw.draw_rect(Rect2(-22,33,17,19),Color("9fb77d"))
+		map_draw.draw_set_transform(Vector2(445,214),0,Vector2(2.05,1.85))
+		var outline:=PackedVector2Array();var harbor:=PackedVector2Array()
+		for i in range(96):
+			var angle: float=i*TAU/96
+			outline.append(Vector2(cos(angle)*106,sin(angle)*93.28));harbor.append(Vector2(-26+cos(angle)*28,84+sin(angle)*38))
+		map_draw.draw_colored_polygon(outline,Color("8fb27c"));map_draw.draw_colored_polygon(harbor,Color("8fb27c"))
+		for contour: PackedVector2Array in contours:map_draw.draw_polyline(contour,Color(.30,.43,.28,.38),.5,true)
 		var river:=PackedVector2Array()
-		for z in range(-44,62): river.append(Vector2(sin(z*.07)*2,z))
-		map_draw.draw_polyline(river,Color("76bab4"),5.5,true)
-		map_draw.draw_line(Vector2(-6,5),Vector2(6,5),Color("e4c08b"),3.4,true)
-		for x in [-18,22]:
-			for z in [-9,-27]: map_draw.draw_rect(Rect2(x-2.5,z-3,5,6),Color("d9c49a"))
-		map_draw.draw_rect(Rect2(9.5,-27,5,6),Color("d9c49a"))
-		map_draw.draw_rect(Rect2(6,-41,12,10),Color("e6d7b5"))
-		map_draw.draw_rect(Rect2(-14,45.3,11.2,3.8),Color("d8b987"))
-		map_draw.draw_circle(preload("res://scripts/valley/valley_layout.gd").dock("valley"),1.5,Color("ede0bf"))
+		for z in range(-92,120,2):river.append(Vector2(layout.river_x(z)-layout.river_half_width(z),z))
+		for z in range(118,-94,-2):river.append(Vector2(layout.river_x(z)+layout.river_half_width(z),z))
+		map_draw.draw_colored_polygon(river,Color("76bab4"))
+		var trail:=PackedVector2Array()
+		for z in range(-77,91,2):trail.append(Vector2(layout.west_path(z),z))
+		map_draw.draw_polyline(trail,Color("e2c696"),1.6,true)
+		for side in [-1,1]:
+			var ascent:=PackedVector2Array()
+			for x in range(26,83,2):ascent.append(Vector2(side*x,layout.ascent_path_z(x)))
+			map_draw.draw_polyline(ascent,Color("e2c696"),1.6,true)
+			map_draw.draw_circle(Vector2(side*78,layout.ascent_path_z(78)),2.6,Color("f4e6a5"))
+		map_draw.draw_line(Vector2(-55,layout.BRIDGE_Z),Vector2(55,layout.BRIDGE_Z),Color("e2c696"),1.6,true)
+		map_draw.draw_line(Vector2(-12,layout.BRIDGE_Z),Vector2(12,layout.BRIDGE_Z),Color("ad804a"),2.8,true)
+		map_draw.draw_rect(Rect2(layout.HOUSE.x-6,layout.HOUSE.z-5,12,10),Color("f0d9a8"))
+		map_draw.draw_rect(Rect2(-22.4,layout.DOCK.y-1.9,11.2,3.8),Color("d8b987"))
 		var point: Vector3=city.bunny.position
-		map_draw.draw_circle(Vector2(point.x,point.z),1.7,Color("fff8e0"))
-		map_draw.draw_circle(Vector2(point.x,point.z),1.0,Color("ca7f66")))
+		map_draw.draw_circle(Vector2(point.x,point.z),3.2,Color("fff8e0"));map_draw.draw_circle(Vector2(point.x,point.z),1.9,Color("ca7f66")))

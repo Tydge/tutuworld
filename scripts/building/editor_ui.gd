@@ -63,7 +63,8 @@ func _ready() -> void:
 	var spacer:=Control.new();spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(spacer)
 	var night:=CheckButton.new();night.name="NightPreview";night.text="夜景预览";night.add_theme_font_size_override("font_size",14);night.toggled.connect(func(value):editor.set_night_preview(value));header.add_child(night)
 	var roofs:=CheckButton.new();roofs.name="ShowRoof";roofs.text="完整墙壁";roofs.tooltip_text="开启：显示本层及下层完整墙壁；关闭：剖切本层墙壁方便选取。始终只编辑当前层；最高层向上查看整栋和屋顶。";roofs.add_theme_font_size_override("font_size",14);roofs.toggled.connect(func(value):editor.set_roof_visible(value));header.add_child(roofs)
-	header.add_child(compact("完成 · 步行查看",func():editor.close_editor(),"FinishBuilding",true))
+	header.add_child(compact("确认完成 · 开放地皮" if editor.city.session.is_online() else "完成 · 步行查看",func():editor.close_editor(),"FinishBuilding",true))
+	if editor.city.session.is_online():header.add_child(compact("放弃本次修改",func():editor.request_close(),"DiscardBuilding"))
 	var body:=UI.row(12);body.size_flags_vertical=Control.SIZE_EXPAND_FILL;column.add_child(body)
 	var commands:=UI.column(6);commands.custom_minimum_size.x=154;body.add_child(commands)
 	var tool_row:=UI.row(5);commands.add_child(tool_row)
@@ -109,15 +110,18 @@ func _ready() -> void:
 	paint_row.add_child(style)
 	wall_face=OptionButton.new();wall_face.name="WallFace";wall_face.add_theme_font_size_override("font_size",13)
 	for name_ in ["内侧","外侧","双面"]:wall_face.add_item(name_)
-	wall_face.tooltip_text="内外由闭合房间识别；隔墙两侧都有房间时，朝向镜头的房间为内侧";paint_row.add_child(wall_face);wall_face.item_selected.connect(func(_index):refresh(editor.selected_row()))
+	wall_face.tooltip_text="内外由闭合房间识别；隔墙两侧都有房间时，朝向镜头的房间为内侧";paint_row.add_child(wall_face);wall_face.item_selected.connect(func(_index):editor.restore_surface_preview();refresh(editor.selected_row()))
 	apply_button=compact("应用外观",func():editor.paint_selected(color.color,STYLES[style.selected]),"ApplyBuildAppearance");paint_row.add_child(apply_button)
-	batch_paint=CheckButton.new();batch_paint.name="PaintMatchingRoom";batch_paint.text="同房间同款一起修改";batch_paint.button_pressed=true;batch_paint.add_theme_font_size_override("font_size",13);batch_paint.tooltip_text="仅修改本房间中颜色和纹理相同的地板或所选墙面；关闭后只改当前半米单元。未围成房间时只修改当前单元";details.add_child(batch_paint)
+	batch_paint=CheckButton.new();batch_paint.name="PaintMatchingRoom";batch_paint.text="整间内墙 / 整栋外墙";batch_paint.button_pressed=true;batch_paint.add_theme_font_size_override("font_size",13);batch_paint.tooltip_text="内墙：所选封闭房间全部内壁；外墙：同栋房屋各层外壁。地板：本房间同款。关闭后只改当前半米单元。";batch_paint.toggled.connect(func(_value):preview_surface());details.add_child(batch_paint)
 	appearance_button=compact("外观 · 选择部位",func():appearance_panel.open(editor.selected_row()),"EditFurnitureAppearance");details.add_child(appearance_button)
 	appearance_panel=preload("res://scripts/building/appearance_panel.gd").new();appearance_panel.editor=editor;root_ui.add_child(appearance_panel)
-	color.color_changed.connect(func(_value):if not updating:editor.brush_painted=true)
-	style.item_selected.connect(func(_index):if not updating:editor.brush_painted=true)
+	color.color_changed.connect(func(_value):preview_surface())
+	style.item_selected.connect(func(_index):preview_surface())
 	var footer:=UI.column(2);column.add_child(footer);status=UI.label("",13);footer.add_child(status);help=UI.label("",12,UI.MUTED);footer.add_child(help)
 	catalog_area.resized.connect(resize_grid);show_category("结构");hide()
+func preview_surface() -> void:
+	if updating:return
+	editor.brush_painted=true;editor.preview_surface(color.color,STYLES[style.selected])
 func resize_grid() -> void:item_grid.columns=maxi(3,int(catalog_area.size.x/104.))
 func add_card(id: String,label_: String,group: String) -> void:
 	var button:=compact("",func():choose_card(id),"Tool_"+id.replace(":","_"));button.toggle_mode=true;button.custom_minimum_size=Vector2(96,100);button.tooltip_text=label_;button.set_meta("category",group);item_grid.add_child(button);tools[id]=button;cards[id]=button

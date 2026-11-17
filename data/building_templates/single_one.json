@@ -1,6 +1,6 @@
 {
   "schema": 4,
-  "next_id": 243,
+  "next_id": 244,
   "lighting_version": 1,
   "grandfathered": {},
   "elements": [
@@ -423,6 +423,22 @@
       "style": "original",
       "type": "window",
       "wall": "build_2"
+    },
+    {
+      "id": "build_243",
+      "type": "object",
+      "kind": "wall_mirror",
+      "position": [
+        76.14,
+        6.2
+      ],
+      "yaw": 90.0,
+      "mount_height": 1.15,
+      "support": "build_14",
+      "support_level": 0,
+      "color": "ffffff",
+      "style": "original",
+      "painted": false
     }
   ]
 }

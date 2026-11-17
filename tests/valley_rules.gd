@@ -1,5 +1,6 @@
 extends SceneTree
 const DB=preload("res://scripts/services/game_data.gd")
+const L=preload("res://scripts/valley/valley_layout.gd")
 const A=preload("res://scripts/services/local_authority.gd")
 var checks:=0
 var failures: Array=[]
@@ -41,7 +42,7 @@ func run() -> void:
 		refreshed.append(wait)
 	check(counts=={"branch":5,"birch":5,"orange":5,"copper":4,"iron":2,"limestone":4,"sandstone":2},"Exact valley resource allocation")
 	check(refreshed.max()-refreshed.min()>2000,"Staggered valley regrowth")
-	a.state.player_position=[-5.8,.2,47.2];var before_coins: int=a.state.coins
+	a.state.player_position=[L.DOCK.x,.2,L.DOCK.y];var before_coins: int=a.state.coins
 	check(a.execute({"verb":"travel","destination":"city"}).ok and a.state.coins==before_coins,"Free return")
 	check(a.state.player_position==[13,.2,39.5],"Return arrives on city pier")
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
@@ -54,12 +55,12 @@ func run() -> void:
 	var old: Dictionary=session.snapshot();old.erase("map_id");var restored=session.restore_state(old)
 	check(restored.state.map_id=="city","Legacy save defaults to city")
 	check(restored.state.resources.size()==46,"Both map resources share one saved world")
-	session.state().player_position=[-5.8,.18,47.2]
+	session.state().player_position=[L.DOCK.x,.18,L.DOCK.y]
 	session.save_path="user://valley_progress_qa.json";session.test_mode=false
 	check(session.save_game(),"Write isolated valley save")
 	var loaded=load("res://scripts/services/session.gd").new();loaded.save_path=session.save_path;loaded.load_save()
 	check(loaded.state().map_id=="valley" and loaded.authority.count("copper_axe")==1 and loaded.state().resources.size()==46,"Disk save restores valley and shared world")
-	check(loaded.state().player_position==[-5.8,.18,47.2],"Extended harbor position survives disk restore")
+	check(Vector3(loaded.state().player_position[0],loaded.state().player_position[1],loaded.state().player_position[2]).is_equal_approx(Vector3(L.DOCK.x,.18,L.DOCK.y)),"Extended harbor position survives disk restore")
 	loaded.free()
 	for suffix in ["",".tmp",".bak"]:
 		if FileAccess.file_exists(session.save_path+suffix): DirAccess.remove_absolute(session.save_path+suffix)

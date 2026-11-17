@@ -8,6 +8,9 @@ var root: Node3D
 var materials: Dictionary={}
 var rounded_cache: Dictionary={}
 var batch_materials: Dictionary={}
+var defer_baking:=false
+var deferred_bakes: Array=[]
+var deferred_stair_batches: Array=[]
 var floor_y:=.18
 var height:=4.4
 var thickness:=.24
@@ -424,47 +427,5 @@ func build_lights(n: Node3D) -> void:
 		if n.has_node(NodePath(id)): n.get_node(NodePath(id)).position=Vector3(position_[0],position_[1],position_[2])
 	bake_section(lamp);bake_section(fixture)
 func bake_section(parent: Node3D) -> void:
-	var groups: Dictionary={}
-	for part in parent.find_children("*","MeshInstance3D",true,false):
-		if part.get_meta("dynamic_mesh",false): continue
-		var m: Material=part.material_override
-		if m==null: continue
-		var shape: Mesh=part.mesh
-		var dye:=Color.WHITE
-		var pattern:=-1
-		var rough:=.94
-		if m is ShaderMaterial and m.shader==load("res://assets/shaders/home_surface.gdshader"):
-			dye=m.get_shader_parameter("tint")
-			pattern=int(m.get_shader_parameter("pattern"))
-			rough=float(m.get_shader_parameter("roughness_value"))
-		elif m is StandardMaterial3D and m.transparency==BaseMaterial3D.TRANSPARENCY_DISABLED and not m.emission_enabled and m.roughness>.69:
-			dye=m.albedo_color;pattern=0
-		elif m is ShaderMaterial and m.shader==Fabric.shader_for("") and not m.get_shader_parameter("patterned"):
-			dye=m.get_shader_parameter("dye");pattern=0
-		if pattern>=0:
-			var cache_key:=str(pattern)+str(rough)
-			if not batch_materials.has(cache_key):
-				var shared:=ShaderMaterial.new();shared.shader=load("res://assets/shaders/home_surface.gdshader")
-				shared.set_shader_parameter("tint",Color.WHITE);shared.set_shader_parameter("vertex_tint",true)
-				shared.set_shader_parameter("pattern",pattern);shared.set_shader_parameter("roughness_value",rough)
-				batch_materials[cache_key]=shared
-			m=batch_materials[cache_key]
-			var colored:=ArrayMesh.new()
-			for surface in range(shape.get_surface_count()):
-				var arrays:=shape.surface_get_arrays(surface)
-				var colors:=PackedColorArray();colors.resize(arrays[Mesh.ARRAY_VERTEX].size());colors.fill(dye.srgb_to_linear())
-				arrays[Mesh.ARRAY_COLOR]=colors
-				colored.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
-			shape=colored
-		var key:=str(m.get_instance_id())+str(part.cast_shadow)
-		if not groups.has(key): groups[key]={"material":m,"shadow":part.cast_shadow,"st":SurfaceTool.new()};groups[key].st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var transform_: Transform3D=parent.global_transform.affine_inverse()*part.global_transform
-		# Normalize indexed primitives and unindexed bevel meshes before merging.
-		# Mixing formats leaves only the first primitive referenced by the index buffer.
-		var triangles:=SurfaceTool.new();triangles.create_from(shape,0);triangles.deindex()
-		groups[key].st.append_from(triangles.commit(),0,transform_)
-		part.get_parent().remove_child(part);part.free()
-	for entry in groups.values():
-		var shape: ArrayMesh=entry.st.commit()
-		if shape==null: continue
-		var n:=G.mesh(parent,shape,Vector3.ZERO,entry.material,"ModuleBatch");n.cast_shadow=entry.shadow
+	if defer_baking:deferred_bakes.append(parent);return
+	var job=preload("res://scripts/building/mesh_batch_job.gd").new(self,parent);job.advance(2147483647)

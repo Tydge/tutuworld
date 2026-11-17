@@ -39,7 +39,7 @@ static func same_room(host: Node3D,node: Node3D,point: Vector3) -> bool:
 				return preload("res://scripts/building/storeys.gd").at_height(node.global_position.y)==preload("res://scripts/building/storeys.gd").at_height(point.y) and room.room_at_position(node.global_position)==room.room_at_position(point)
 			return rooms.room_at(room.plan,Vector2(node.global_position.x,node.global_position.z))==rooms.room_at(room.plan,Vector2(point.x,point.z))
 	return true
-static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: Vector3) -> Dictionary:
+static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: Vector3,accept: Callable=Callable()) -> Dictionary:
 	var area:=bounds(node);var center:=area.get_center();var margin: float=maxf(.65,actor.rig_profile.head_radii.x+.13)
 	var edge:=area.grow(margin);var candidates: Array[Vector3]=[]
 	for p in [Vector2(center.x,edge.end.y),Vector2(edge.position.x,center.y),Vector2(edge.end.x,center.y),Vector2(center.x,edge.position.y),edge.position,edge.end,Vector2(edge.position.x,edge.end.y),Vector2(edge.end.x,edge.position.y)]:candidates.append(node.to_global(Vector3(p.x,.02,p.y)))
@@ -49,5 +49,5 @@ static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: 
 	for p in candidates:
 		if not same_room(host,node,p) or not clear_segment(host,node,actor,origin,p+Vector3.UP*1.35):continue
 		var result:=Landing.find(host,p,actor,false)
-		if not result.is_empty():return result
+		if not result.is_empty() and (not accept.is_valid() or accept.call(result.position)):return result
 	return {}

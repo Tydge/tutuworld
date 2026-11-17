@@ -99,7 +99,7 @@ func run() -> void:
 	editor.clear_plot();check(Land.outside(editor.layout,"east_ne")==first_region and editor.layout.elements.size()==first_region.size(),"Clear plot removes only the active parcel's buildings")
 	editor.place_template("two_storey")
 	check(editor.place_at(Land.bounds("east_ne").get_center()),"Actual catalog places the updated two-storey house on the active parcel")
-	check(editor.layout.elements.size()==first_region.size()+98 and Land.outside(editor.layout,"east_ne")==first_region,"Template preserves all 98 house records without altering the first parcel")
+	check(editor.layout.elements.size()==first_region.size()+99 and Land.outside(editor.layout,"east_ne")==first_region,"Template preserves all 99 house records without altering the first parcel")
 	editor.ui.hide();editor.grid.hide();city.camera.position=Vector3(150,22,23);city.camera.look_at(Vector3(131,3,-4));await photo("updated-two-storey-on-parcel")
 	editor.clear_plot()
 	editor.close_editor();city.set_process(false);session.active=false

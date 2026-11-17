@@ -150,24 +150,30 @@ static func wall_context(context: Dictionary,unit: Dictionary,camera: Vector2) -
 	if room=="":room=plan.cell_rooms.get(sides[1 if preferred=="positive" else 0],"")
 	if room=="":return {}
 	var step:=Vector3i(1,0,0) if edge.z==0 else Vector3i(0,1,0);var first:=edge;var last:=edge
+	var exterior: bool=plan.cell_rooms.get(sides[0],"")=="" or plan.cell_rooms.get(sides[1],"")==""
+	var positive_inside: bool=plan.cell_rooms.get(sides[0],"")==room
+	var house:=preload("res://scripts/building/storey_extension.gd").footprint(context.grid,G.point(sides[0] if positive_inside else sides[1])+Vector2.ONE*.25) if exterior else {}
 	for direction in [-1,1]:
 		var current: Vector3i=edge+step*direction
 		while context.grid.walls.has(current):
 			var cells:=adjacent(current)
-			if (plan.cell_rooms.get(cells[0],"")==room)==(plan.cell_rooms.get(cells[1],"")==room):break
+			if exterior:
+				var inside: Vector2i=cells[0] if positive_inside else cells[1];var outside: Vector2i=cells[1] if positive_inside else cells[0]
+				if not house.has(inside) or plan.cell_rooms.has(outside):break
+			elif (plan.cell_rooms.get(cells[0],"")==room)==(plan.cell_rooms.get(cells[1],"")==room):break
 			if direction<0:first=current
 			else:last=current
 			current+=step*direction
 	var axis: int=1 if edge.z==0 else 0;var along: int=1-axis
 	var lo: int=first[along];var hi: int=last[along]+1;var plane: int=first[axis]
-	var old_rooms: Dictionary={room:plan.rooms[room].cells};var outside: Dictionary={};var moving_edges: Dictionary={}
+	var old_rooms: Dictionary={room:plan.rooms[room].cells};var outside: Dictionary={};var moving_edges: Dictionary={};var inside_rooms: Dictionary={}
 	for i in range(lo,hi):
 		var e:=Vector3i(i,plane,0) if axis==1 else Vector3i(plane,i,1);moving_edges[e]=context.grid.walls[e]
-		var cells:=adjacent(e);var other: String=plan.cell_rooms.get(cells[1] if plan.cell_rooms.get(cells[0],"")==room else cells[0],"")
-		outside[i]=other
+		var cells:=adjacent(e);var own: String=plan.cell_rooms.get(cells[0] if positive_inside else cells[1],"") if exterior else room
+		var other: String=plan.cell_rooms.get(cells[1] if plan.cell_rooms.get(cells[0],"")==own else cells[0],"")
+		inside_rooms[i]=own;old_rooms[own]=plan.rooms[own].cells;outside[i]=other
 		if other!="":old_rooms[other]=plan.rooms[other].cells
-	var positive_inside: bool=plan.cell_rooms.get(sides[0],"")==room
-	var out:={"base":context,"room":room,"axis":axis,"along":along,"plane":plane,"lo":lo,"hi":hi,"outward":-1 if positive_inside else 1,"rooms":old_rooms,"outside":outside,"edges":moving_edges,"follow":{},"end_styles":{}}
+	var out:={"base":context,"room":room,"axis":axis,"along":along,"plane":plane,"lo":lo,"hi":hi,"outward":-1 if positive_inside else 1,"rooms":old_rooms,"inside":inside_rooms,"outside":outside,"edges":moving_edges,"follow":{},"end_styles":{},"exterior":exterior}
 	var world_plane: float=plane*.5
 	for info in context.objects:
 		var row: Dictionary=info.row
@@ -184,11 +190,19 @@ static func wall_context(context: Dictionary,unit: Dictionary,camera: Vector2) -
 		if out.follow.has(pairs[chair]):out.follow[chair]=true
 	for info in context.objects:
 		if out.follow.has(info.row.get("support","")):out.follow[info.row.id]=true
-	for endpoint in [lo,hi]:
+	for endpoint in range(lo,hi+1):
 		var n: int=plane-1 if positive_inside else plane;var e:=Vector3i(endpoint,n,1) if axis==1 else Vector3i(n,endpoint,0)
 		out.end_styles[endpoint]=context.grid.walls.get(e,context.grid.walls[edge])
 	return out
+static func retained_partition(base: Dictionary,edge: Vector3i,room: String) -> bool:
+	if not base.grid.walls.has(edge):return false
+	var cells:=adjacent(edge)
+	return base.plan.cell_rooms.get(cells[0],"")==room and base.plan.cell_rooms.get(cells[1],"")==room
 static func resize(context: Dictionary,delta: int) -> Dictionary:
+	if context.is_empty():return L.fail("请从完整房间的墙壁开始拖动。")
+	if not context.get("exterior",false):return resize_layer(context,delta)
+	return load("res://scripts/building/stacked_resize.gd").plan(context,delta)
+static func resize_layer(context: Dictionary,delta: int,deferred: bool=false) -> Dictionary:
 	if context.is_empty():return L.fail("请从完整房间的墙壁开始拖动。")
 	var base: Dictionary=context.base;var grid:={"floors":base.grid.floors.duplicate(),"walls":base.grid.walls.duplicate()}
 	var rooms: Dictionary={}
@@ -200,8 +214,8 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 		for n in range(low,high):
 			var cell:=Vector2i(i,n) if context.axis==1 else Vector2i(n,i)
 			if expanding:
-				if rooms[context.room].has(cell):return L.fail("扩建会与房间的其他部分相交。")
-				rooms[context.room][cell]=true
+				if rooms[context.inside[i]].has(cell):return L.fail("扩建会与房间的其他部分相交。")
+				rooms[context.inside[i]][cell]=true
 				var owner: String=base.plan.cell_rooms.get(cell,"")
 				if owner!="":
 					if not rooms.has(owner):return L.fail("扩建会越过相邻房间的墙壁。")
@@ -212,11 +226,11 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 					var nearest:=Vector2i(i,inside) if context.axis==1 else Vector2i(inside,i)
 					grid.floors[cell]=base.grid.floors.get(nearest,{"id":"__room_floor","type":"floor","color":"cda56e","style":"wood"});added[cell]=true
 			else:
-				if not rooms[context.room].has(cell):return L.fail("缩建不能越过房间的另一面墙。")
-				rooms[context.room].erase(cell)
+				if not rooms[context.inside[i]].has(cell):return L.fail("缩建不能越过房间的另一面墙。")
+				rooms[context.inside[i]].erase(cell)
 				if outside!="":rooms[outside][cell]=true
 				elif grid.floors.has(cell):grid.floors.erase(cell);removed[cell]=true
-	var checked:=support(base,added,removed)
+	var checked:={"ok":true} if deferred else support(base,added,removed)
 	if not checked.ok:return checked
 	for edge in context.edges:grid.walls.erase(edge)
 	for i in range(context.lo,context.hi):
@@ -224,7 +238,8 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 		if grid.walls.has(edge) and delta!=0:return L.fail("移动后与已有墙壁相交。")
 		var old:=Vector3i(i,context.plane,0) if context.axis==1 else Vector3i(context.plane,i,1);grid.walls[edge]=context.edges[old]
 	# Extend/trim perpendicular end walls according to both rooms' new boundaries.
-	for endpoint in [context.lo,context.hi]:
+	for endpoint in range(context.lo,context.hi+1):
+		if endpoint>context.lo and endpoint<context.hi and context.inside[endpoint-1]==context.inside[endpoint] and context.outside[endpoint-1]==context.outside[endpoint]:continue
 		for n in range(low,high):
 			var edge:=Vector3i(endpoint,n,1) if context.axis==1 else Vector3i(n,endpoint,0);var cells:=adjacent(edge);var ids: Array=[]
 			for cell in cells:
@@ -247,7 +262,7 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 				if not grid.walls.has(Vector3i(first.x,z,1)) or not grid.walls.has(Vector3i(last.x,z,1)):return L.fail("移动会破坏房间闭合。")
 			for edge in grid.walls:
 				var ends:=G.ends(edge);var middle: Vector2=(G.point(ends[0])+G.point(ends[1]))*.5
-				if area.grow(-.01).has_point(middle):return L.fail("移动会穿过另一面墙。")
+				if area.grow(-.01).has_point(middle) and not retained_partition(base,edge,id):return L.fail("移动会穿过另一面墙。")
 			continue
 		var start: Vector2i=cells.keys()[0];var queue: Array=[start];var seen: Dictionary={start:true};var cursor:=0
 		while cursor<queue.size():
@@ -255,7 +270,9 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 			for direction in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
 				var next: Vector2i=cell+direction;var wall: bool=grid.walls.has(edge_between(cell,direction))
 				if cells.has(next):
-					if wall:return L.fail("移动会穿过另一面墙，请缩小拖动距离。")
+					if wall:
+						if retained_partition(base,edge_between(cell,direction),id):continue
+						return L.fail("移动会穿过另一面墙，请缩小拖动距离。")
 					if not seen.has(next):seen[next]=true;queue.append(next)
 				elif not wall:return L.fail("这次移动会破坏房间闭合，请调整相邻墙壁。")
 		if seen.size()!=cells.size():return L.fail("缩建会把房间分成互不相连的区域。")
@@ -282,10 +299,12 @@ static func resize(context: Dictionary,delta: int) -> Dictionary:
 	for cell in added:
 		var p:=G.point(cell)
 		if not preload("res://scripts/building/site.gd").within(p) or not preload("res://scripts/building/site.gd").within(p+Vector2.ONE*.5):return L.fail("房间扩建超出了建造地块。")
-	checked=check_geometry(base,result)
-	if not checked.ok:return checked
+	if not deferred:
+		checked=check_geometry(base,result)
+		if not checked.ok:return checked
 	return result
 static func materialize(context: Dictionary,result: Dictionary) -> Dictionary:
+	if result.has("layout"):return result.layout.duplicate(true)
 	var next: Dictionary=context.source.duplicate(true)
 	for i in range(next.elements.size()):
 		var row: Dictionary=next.elements[i]

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "epoch_preserved": true,
+    "clock_alignment_preserved": true,
+    "character_ids_preserved": true,
+    "character_progress_preserved": true,
+    "land_preserved": true,
+    "buildings_preserved": true,
+    "doors_preserved": true,
+    "accounts_preserved_from_backup": true
+  },
+  "characters": 4,
+  "accounts": 3,
+  "epoch": 1793584800.0,
+  "initialized_legacy_empty_building_fields": true,
+  "backup": "tutuworld-20261112T163028Z.tar.gz"
+}

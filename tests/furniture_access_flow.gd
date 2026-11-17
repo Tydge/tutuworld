@@ -44,9 +44,10 @@ func run() -> void:
 		await press_e();check(city.sleep_active and city.bunny.sleeping,"No clear exit keeps the sleeper in bed instead of teleporting outside: "+kind)
 		obstruction.free();await physics_frame;await physics_frame;await press_e();check(not city.sleep_active and Access.same_room(city,bed,city.bunny.position),"Freeing a real exit permits waking in the same room: "+kind)
 		city.camera.position=Vector3(71,5,13);city.camera.look_at(bed.global_position+Vector3.UP);await photo(kind+"-bedside")
+	# Keep seat fixtures clear of the permanent parcel sign at (79, 7.25).
 	# Every buildable seat uses its own object perimeter and the actual keyboard path.
 	for kind in ["sofa","forest_settee","chair","petal_armchair"]:
-		editor.open_editor();var layout:=L.add(data,{"type":"object","kind":kind,"position":[80.,8.],"yaw":90.});check(editor.commit(layout),"Rotated seating fixture: "+kind);editor.close_editor()
+		editor.open_editor();var layout:=L.add(data,{"type":"object","kind":kind,"position":[88.,8.],"yaw":90.});check(editor.commit(layout),"Rotated seating fixture: "+kind);editor.close_editor()
 		var row: Dictionary=editor.layout.elements.filter(func(item):return item.get("kind","")==kind)[0];var seat: Node3D=editor.room.render_cache[row.id].node;var side: float=2.6 if kind in ["sofa","forest_settee"] else 1.6;var point:=seat.to_global(Vector3(side,.02,.1))
 		await approach(point);check(city.current_target=="build:"+str(row.id) and city.hud.prompt.text.contains("坐下来"),"E is offered at the furniture side, away from its authored exit: "+kind)
 		await press_e();check(city.nap_active and city.bunny.seated,"E sits on the actual rotated chair: "+kind);await press_e();check(not city.nap_active and not city.bunny.seated and city.bunny.position.distance_to(point)<.2,"E leaves the chair through the approach side: "+kind)

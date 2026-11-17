@@ -41,37 +41,30 @@ func run() -> void:
 		for child in npc.get_children(): child.set_physics_process(false);child.set_process(false)
 	var original: CharacterBody3D=game.bunny
 	game.bunny.set_physics_process(false);game.bunny.hide();game.bunny.collision_layer=0
-	var stuck:=Vector3(3.404481,.000228,-8.789341)
-	check(Layout.can_walk(stuck) and not Layout.can_navigate(stuck),"Exact saved stuck coordinate now walkable; NPC cliff avoidance retained")
-	check(game.scenery.get_node("WoodlandSteps").find_children("*","StaticBody3D",true,false).filter(func(n):return n.get_child(0) is CollisionShape3D and n.get_child(0).shape is ConvexPolygonShape3D).size()==5,"Five continuous stair ramp colliders")
-	for position_ in [stuck,Vector3(-5.8,.18,47.2)]:
-		var saved: Dictionary=session.snapshot();saved.map_id="valley";saved.player_position=[position_.x,position_.y,position_.z]
+	check(game.scenery.get_node_or_null("WoodlandSteps")==null and game.scenery.get_meta("continuous_heightfield",false),"Continuous terrain replaces all former terrace ramps")
+	for position_ in [Vector3(-78,Layout.height_at(-78,Layout.ascent_path_z(-78)),Layout.ascent_path_z(-78)),Vector3(-16.8,.18,94.4)]:
+		var saved: Dictionary=session.snapshot();saved.map_id="valley";saved.player_position=[position_.x,position_.y,position_.z];saved.valley_landscape_revision=Layout.REVISION
 		var restored=session.restore_state(saved)
-		check(Vector3(restored.state.player_position[0],restored.state.player_position[1],restored.state.player_position[2]).is_equal_approx(position_),"Restore valley position "+str(position_))
+		check(Vector3(restored.state.player_position[0],restored.state.player_position[1],restored.state.player_position[2]).is_equal_approx(position_),"Restore current mountain / pier coordinate without double scaling "+str(position_))
 	Engine.time_scale=3
 	for species in ["bunny","cat_teacher","panda"]:
 		var actor: CharacterBody3D=Factory.create(species);game.add_child(actor);actor.world=game;game.bunny=actor
-		await place(actor,stuck+Vector3(0,.05,0))
-		var escape: Dictionary=await drive(actor,Vector3(3.4,0,-5.3),3.)
-		check(escape.arrived,"Actual player input escapes old save trap "+species)
-		await place(actor,Vector3(3.4,2.1,-11.5))
-		Input.action_press("jump");Input.action_press("move_down")
-		await physics_frame;Input.action_release("jump")
-		var drop: Dictionary=await drive(actor,Vector3(3.4,0,-5.0),5.)
-		check(drop.arrived and actor.position.y<.2,"Jump down terrace and continue moving "+species)
-		for stair in Layout.STAIRS:
-			var lower:=2. if stair.y== -24 else Layout.bank_height(stair.y+4)
+		for side in [-1,1]:
 			for up in [true,false]:
-				var start:=Vector3(stair.x,lower+.05,stair.y+4.3) if up else Vector3(stair.x,lower+2.05,stair.y-4.3)
-				var end:=Vector3(stair.x,lower+2,stair.y-4.3) if up else Vector3(stair.x,lower,stair.y+4.3)
+				var x0:=58. if up else 70.;var x1:=70. if up else 58.
+				var start:=Vector3(side*x0,Layout.height_at(side*x0,Layout.ascent_path_z(x0))+.035,Layout.ascent_path_z(x0))
+				var end:=Vector3(side*x1,Layout.height_at(side*x1,Layout.ascent_path_z(x1)),Layout.ascent_path_z(x1))
 				await place(actor,start)
-				var result: Dictionary=await drive(actor,end)
-				var label_: String=species+" "+str(stair)+(" up" if up else " down")
-				check(result.arrived,"Player controller ramp traversal "+label_)
-				check(result.max_dy<.19 and result.surface_error<.18,"Smooth ramp profile "+label_+" dy="+str(result.max_dy)+" error="+str(result.surface_error))
-		await place(actor,Vector3(-13,.05,41))
-		var approach: Dictionary=await drive(actor,Vector3(-13,.18,47.2))
-		var pier: Dictionary=await drive(actor,Vector3(-5.8,.18,47.2))
+				var result: Dictionary=await drive(actor,end,12.)
+				var label_: String=species+" bank="+str(side)+(" uphill" if up else " downhill")
+				check(result.arrived,"Real player input on mountain trail "+label_)
+				check(result.max_dy<.22 and result.surface_error<.35,"Continuous grounded motion "+label_+" dy="+str(result.max_dy)+" error="+str(result.surface_error))
+		await place(actor,Vector3(-15,Layout.height_at(-15,10)+.05,10))
+		var bridge: Dictionary=await drive(actor,Vector3(15,Layout.height_at(15,10),10),15.)
+		check(bridge.arrived,"Cross both bridge approaches through real input "+species)
+		await place(actor,Vector3(-22,Layout.height_at(-22,88)+.05,88))
+		var approach: Dictionary=await drive(actor,Vector3(-21,.18,94.4))
+		var pier: Dictionary=await drive(actor,Vector3(-14.2,.18,94.4))
 		check(approach.arrived and pier.arrived,"Walk from valley trail onto return pier "+species)
 		game.bunny=original;actor.queue_free();await process_frame
 	Engine.time_scale=1;release()

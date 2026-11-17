@@ -1,0 +1,9 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+2026-11-17 02:51:37.515 Godot[42219:110076519] not in fullscreen state
+RENDER_BUDGET output=(1600, 1000) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+WANDER_GRID_READY cells=19995 components=7
+VALLEY_LANDSCAPE_PREVIEW_RESULT PASS

@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-17",
+  "scope": "Local-only follow-up; no release or deployment",
+  "issue": "Harbor ground and board tops were coplanar; creek approaches also intersected end boards.",
+  "before_min_clearance_m": {
+    "harbor": 6.5565109e-07,
+    "creek": -0.00593356788158
+  },
+  "after_min_clearance_m": {
+    "harbor": 0.12000006437302,
+    "creek": 0.10553808510303
+  },
+  "samples": {
+    "harbor": 420,
+    "creek": 915
+  },
+  "checks": {
+    "deck_clearance_and_four_camera_views": 10,
+    "continuous_landscape_rules": 14,
+    "three_species_actual_input_traversal": 33
+  },
+  "rendered_boards": {
+    "harbor": 28,
+    "creek": 61
+  },
+  "method": "Raycast saved terrain only, compare with saved MultiMesh plank tops; preserve smooth shore transitions.",
+  "sources_sha256": {
+    "scripts/valley/valley_layout.gd": "62ab5be46a4c43101ec5390f4988bfa3f806ec36246560b0e3d2ec6eee1c128f",
+    "scripts/valley/build_valley.gd": "415325b9bfd9b74e4707f9dfc0a4f4790b37993622991311997966a4bd7d6a90",
+    "scenes/valley_map.scn": "e131e079c96223d821f3cf59cfa8dd0929029f9de61da0c7a2ca924225a966e2",
+    "scenes/valley_home.scn": "a43766db69b8870e14caeb20aafa67e1dd75e2bd34b821920d04fbca893f869d",
+    "tests/valley_deck_clearance.gd": "73dace08a76d652cd699653b42d3171390d5cb09f652bd198665f0bca4488ad4",
+    "tools/local_valley_preview.gd": "97bfb14213b97292777b4d3ae7c0792b943cb7572595520ac522520a5b30abc0",
+    "tools/test_suites.json": "01f1818c17f01cc94bb98fe7b1009739d8e7a9f8cca1a3764e4be85208058d79"
+  },
+  "logs": [
+    "before.log",
+    "after.log",
+    "valley_landscape_rules.log",
+    "valley_traversal_regression.log"
+  ]
+}

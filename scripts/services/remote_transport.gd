@@ -42,8 +42,8 @@ func request(verb: String,args: Dictionary={}) -> Dictionary:
 	var id:=Crypto.new().generate_random_bytes(12).hex_encode()+":"+str(sequence)
 	pending[id]={"done":false,"result":{}}
 	if send({"type":"request","id":id,"verb":verb,"args":args})!=OK:pending.erase(id);return {"ok":false,"message":"消息还没送到，请稍后再试。"}
-	var start:=Time.get_ticks_msec()
-	while pending.has(id) and not pending[id].done and connected and Time.get_ticks_msec()-start<18000:await get_tree().process_frame
+	var start:=Time.get_ticks_msec();var timeout_ms:=90000 if verb=="build_finish" else 18000
+	while pending.has(id) and not pending[id].done and connected and Time.get_ticks_msec()-start<timeout_ms:await get_tree().process_frame
 	var result: Dictionary=pending.get(id,{}).get("result",{})
 	pending.erase(id)
 	return result if not result.is_empty() else {"ok":false,"message":"暂时没有收到回复，请稍后再试。"}

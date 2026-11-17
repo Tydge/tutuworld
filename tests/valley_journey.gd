@@ -1,4 +1,5 @@
 extends SceneTree
+const L=preload("res://scripts/valley/valley_layout.gd")
 const Travel=preload("res://scripts/valley/boat_travel.gd")
 var checks:=0
 var failures: Array=[]
@@ -33,14 +34,14 @@ func run() -> void:
 	if current_scene==null or current_scene.name!="MianfengValley": quit(1);return
 	game=current_scene;await create_timer(1).timeout
 	check(session.state().coins==before_coins-10 and session.state().map_id=="valley","Exactly one outward debit")
-	check(game.bunny.position.distance_to(Vector3(-11,.18,43))<.5,"Arrival position survives outgoing world")
+	check(game.bunny.position.distance_to(Vector3(L.arrival("valley")[0],L.arrival("valley")[1],L.arrival("valley")[2]))<.5,"Arrival position survives outgoing world")
 	check(game.resources.size()==27 and game.npcs.size()==3 and game.targets.Panda.name=="潘达","Valley resources and resident")
 	check(not session.state().resources.resource_00.available and session.state().experience==before_xp,"Shared island progress retained")
 	check(session.state().build_layout==saved_layout,"Construction is retained while travelling through the valley")
 	game.hud.open_panel("map");await create_timer(.2).timeout
 	check(game.hud.mode=="map" and game.hud.map_draw!=null,"Valley map interface")
 	await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/山谷-地图.png")
-	game.hud.close_panel();game.bunny.position=Vector3(-5.8,.2,47.2);game.bunny.velocity=Vector3.ZERO;session.set_player_position(game.bunny.position);game.update_target()
+	game.hud.close_panel();game.bunny.position=Vector3(L.DOCK.x,.2,L.DOCK.y);game.bunny.velocity=Vector3.ZERO;session.set_player_position(game.bunny.position);game.update_target()
 	check(game.current_target=="boat" and game.hud.prompt.text.contains("免费"),"Free return hint")
 	await Travel.go(game)
 	deadline=Time.get_ticks_msec()+15000
@@ -54,4 +55,5 @@ func run() -> void:
 		check(session.state().skill_experience.mining==73,"Skill XP survives outbound and return journey")
 		check(game.build_mode.layout==saved_layout and is_instance_valid(game.build_mode.room),"Returning rebuilds the complete house from persistent layout data")
 	print("VALLEY_JOURNEY_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
+	current_scene=null;game.queue_free();await process_frame;await process_frame;await physics_frame
 	quit(0 if failures.is_empty() else 1)

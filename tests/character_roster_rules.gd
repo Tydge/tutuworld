@@ -75,6 +75,20 @@ func _initialize() -> void:
 	restored.test_mode=true
 	restored.select_character(second_id)
 	check(restored.state().character_name=="团子" and restored.state().experience==3 and restored.authority.count("branch")==9 and restored.settings.player_species=="cat_teacher","Cat identity and progress survive restart")
+	var preferences_path:=save_file+".preferences"
+	var preferences:=FileAccess.open(preferences_path,FileAccess.WRITE)
+	preferences.store_string(JSON.stringify({"player_species":"bunny","volume":.23}));preferences.close()
+	restored.load_preferences(preferences_path)
+	check(restored.state().species=="cat_teacher" and restored.settings.player_species=="cat_teacher" and restored.settings.volume==.23,"Stale rabbit preferences cannot override active cat after startup")
+	restored.settings.player_species="bunny";restored.sync_current()
+	check(restored.characters[second_id].species=="cat_teacher" and restored.settings.player_species=="cat_teacher","Saving cannot copy stale machine species into character record")
+	restored.test_mode=false
+	check(restored.save_game(),"Cat after preference overlay saves successfully")
+	var restarted:=S.new();restarted.save_path=save_file;restarted.load_save();restarted.load_preferences(preferences_path)
+	check(restarted.state().species=="cat_teacher" and restarted.active_character_id==second_id and restarted.authority.count("branch")==9,"Second restart retains cat model, active identity and inventory")
+	restarted.test_mode=true;restarted.select_character(first_id)
+	check(restarted.state().species=="bunny" and restarted.settings.player_species=="bunny","Switching back still restores rabbit identity")
+	restarted.free();DirAccess.remove_absolute(preferences_path)
 	restored.free()
 	# Failed creation must leave both current progress and roster intact.
 	session.save_path="user://missing_directory_qa/no_save.json"

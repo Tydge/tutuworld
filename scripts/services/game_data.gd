@@ -97,6 +97,16 @@ static func valley_resources() -> Array:
 	var rng:=RandomNumberGenerator.new();rng.seed=823165
 	for type_ in points:
 		for i in range(points[type_].size()):
-			var point: Vector2=points[type_][i]+Vector2(rng.randf_range(-.25,.25),rng.randf_range(-.25,.25))
+			var point: Vector2=(points[type_][i]+Vector2(rng.randf_range(-.25,.25),rng.randf_range(-.25,.25)))*2.
+			# Stable resource IDs survive the redesign; move their approach onto a gentle slope.
+			if Valley.normal_at(point.x,point.y).y<.88:
+				var origin:=point;var found:=false
+				for ring in range(1,21):
+					for sample in range(24):
+						var candidate:=origin+Vector2(cos(sample*TAU/24),sin(sample*TAU/24))*ring*.75
+						if not Valley.can_walk(Vector3(candidate.x,0,candidate.y)) or Valley.normal_at(candidate.x,candidate.y).y<.88 or Valley.on_path(candidate.x,candidate.y):continue
+						if candidate.distance_to(Vector2(Valley.HOUSE.x,Valley.HOUSE.z))<15:continue
+						point=candidate;found=true;break
+					if found:break
 			_valley_resources.append({"id":"valley_%s_%d"%[type_,i],"item":type_,"x":point.x,"z":point.y,"y":Valley.height_at(point.x,point.y),"map":"valley"})
 	return _valley_resources

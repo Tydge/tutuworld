@@ -30,13 +30,14 @@ static func build(builder) -> void:
 	var material:=ShaderMaterial.new();material.shader=preload("res://assets/shaders/forest_blossoms.gdshader")
 	var count:=0;var river_count:=0
 	var anchors: Array[Vector2]=[Vector2(-12,18),Vector2(-27,26),Vector2(17,20),Vector2(30,15),Vector2(-29,0),Vector2(29,-1),Vector2(-27,-18),Vector2(29,-20),Vector2(-30,-35),Vector2(27,-35),Vector2(-8,-36),Vector2(7,30)]
+	anchors.assign(anchors.map(func(p):return p*2.))
 	for index in range(anchors.size()):
-		var root:=Node3D.new();root.name="WoodlandPatch%02d"%index;root.position=Vector3(anchors[index].x,0,anchors[index].y);builder.world.add_child(root)
+		var root:=Node3D.new();root.name="WoodlandPatch%02d"%index;root.position=Vector3(anchors[index].x,Layout.height_at(anchors[index].x,anchors[index].y),anchors[index].y);builder.world.add_child(root)
 		root.set_meta("buildable_reference",true);root.set_meta("module_id","woodland_patch_%02d"%index);root.set_meta("module_type","landscape_patch")
 		var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
 		for k in range(44):
 			var point:=root.position+Vector3(rng.randfn(0,2.3),0,rng.randfn(0,2.0));point.y=Layout.height_at(point.x,point.z)+.035
-			if not builder.nature_clear(point) or absf(point.z+9)<1.2 or absf(point.z+27)<1.2:continue
+			if not builder.nature_clear(point):continue
 			var p: Vector3=point-root.position
 			if k%4==0:fern(st,p,rng)
 			elif k%4==1:
@@ -53,13 +54,13 @@ static func build(builder) -> void:
 		if mesh.get_surface_count()>0:
 			var node:=G.mesh(root,mesh,Vector3.ZERO,material,"UnderstoryAndMoss");node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;node.visibility_range_end=65;node.visibility_range_end_margin=10
 	# Bank irises, reed fans and stones frame water, leaving bridges and landings clear.
-	for sector in range(6):
-		var root:=Node3D.new();root.name="RiverbankPatch%02d"%sector;builder.world.add_child(root);root.position.z=-39+sector*14
+	for sector in range(14):
+		var root:=Node3D.new();root.name="RiverbankPatch%02d"%sector;builder.world.add_child(root);root.position.z=-85+sector*14
 		root.set_meta("buildable_reference",true);root.set_meta("module_type","riverbank_patch");root.set_meta("module_id","riverbank_%02d"%sector)
 		var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
 		for k in range(9):
 			var z: float=root.position.z+rng.randf_range(-4,4)
-			if absf(z-5)<3.1 or absf(z+9)<1.0 or absf(z+27)<1.0 or z>40:continue
+			if absf(z-10)<3.1 or z>100:continue
 			var side: float=-1. if k%2 else 1.
 			var x: float=Layout.river_x(z)+side*(Layout.river_half_width(z)+rng.randf_range(.30,.7))
 			var point:=Vector3(x,Layout.height_at(x,z)+.03,z)
@@ -74,7 +75,7 @@ static func build(builder) -> void:
 			var node:=G.mesh(root,mesh,Vector3.ZERO,material,"ReedsAndIrises");node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;node.visibility_range_end=70;node.visibility_range_end_margin=8
 	# Independent fallen logs; placement keeps them outside paths and resource access.
 	for index in range(4):
-		var p: Vector3=[Vector3(-30,0,18),Vector3(28,0,25),Vector3(-29,2,-17),Vector3(30,4,-33)][index];p.y=Layout.height_at(p.x,p.z)
+		var p: Vector3=[Vector3(-30,0,18),Vector3(28,0,25),Vector3(-29,2,-17),Vector3(30,4,-33)][index];p.x*=2.;p.z*=2.;p.y=Layout.height_at(p.x,p.z)
 		if not builder.nature_clear(p):continue
 		var root:=Node3D.new();root.name="FallenLog%d"%index;root.position=p;root.rotation.y=index*1.73;builder.world.add_child(root)
 		root.set_meta("buildable_reference",true);root.set_meta("module_id","fallen_log_%d"%index);root.set_meta("module_type","fallen_log")

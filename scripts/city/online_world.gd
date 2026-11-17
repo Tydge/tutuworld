@@ -18,6 +18,7 @@ var connection_card: PanelContainer
 var changing_scene:=false
 var remote_meal:=""
 var metrics_timer:=0.0
+var construction_notice_at:=0
 func _ready() -> void:
 	process_physics_priority=-10
 	session=city.session
@@ -52,7 +53,7 @@ func _input(event: InputEvent) -> void:
 		if event.keycode==KEY_ESCAPE and chat_card.visible:
 			if chat_input.has_ime_text():return
 			close_chat();get_viewport().set_input_as_handled();return
-		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.overlay.visible and not city.preparing:
+		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.overlay.visible and not city.preparing and not (is_instance_valid(city.build_mode) and city.build_mode.active):
 			open_chat();get_viewport().set_input_as_handled()
 func open_chat() -> void:
 	preload("res://scripts/services/gameplay_input.gd").release_controls()
@@ -69,7 +70,7 @@ func _notification(what: int) -> void:
 	if what==NOTIFICATION_APPLICATION_FOCUS_OUT:preload("res://scripts/services/gameplay_input.gd").release_controls()
 func connection_changed(connected: bool) -> void:
 	connection_card.visible=not connected
-	city.bunny.can_move=connected;city.paused=not connected or city.hud.overlay.visible or chat_card.visible
+	city.bunny.can_move=connected and not (is_instance_valid(city.build_mode) and city.build_mode.active);city.paused=not connected or city.hud.overlay.visible or chat_card.visible or (is_instance_valid(city.build_mode) and city.build_mode.active)
 	if connected:
 		prediction=preload("res://scripts/services/movement_prediction.gd").new()
 		var p: Array=session.state().player_position
@@ -95,7 +96,7 @@ func receive(data: Dictionary) -> void:
 			if id==session.active_character_id:continue
 			if not replicas.has(id):make_replica(row)
 		for id in replicas.keys():
-			if not seen.has(id):replicas[id].actor.queue_free();replicas[id].props.queue_free();replicas.erase(id);motion.erase(id);buffers.erase(id)
+			if not seen.has(id):replicas[id].actor.queue_free();replicas[id].props.queue_free();clear_replica_meal(replicas[id]);replicas.erase(id);motion.erase(id);buffers.erase(id)
 	elif data.get("type","")=="chat":show_chat(data)
 func make_replica(row: Dictionary) -> void:
 	var actor=Animals.create(row.species);actor.network_replica=true;actor.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;actor.world=city;actor.name="Online_"+str(row.id);city.add_child(actor)
@@ -105,6 +106,11 @@ func make_replica(row: Dictionary) -> void:
 	label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.outline_size=6;label.outline_modulate=UI.INK
 	replicas[row.id]={"actor":actor,"props":props,"equipment":row.equipment.duplicate(),"action":""}
 func record_input(direction: Vector3,jump: bool,running: bool) -> void:
+	if direction.length_squared()>.01 and Time.get_ticks_msec()-construction_notice_at>3000:
+		var point: Vector3=city.bunny.position+direction*.95
+		if preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}),point,1.)!="":
+			construction_notice_at=Time.get_ticks_msec();city.hud.notify(preload("res://scripts/building/construction_sites.gd").MESSAGE)
+	if preload("res://scripts/building/construction_sites.gd").at(city.get_meta("pending_construction_sites",{}),city.bunny.position+direction*.95)!="":direction=Vector3.ZERO;jump=false
 	if session.online_joined and not city.preparing:prediction.record(city.bunny,direction,jump,running)
 func _physics_process(_delta: float) -> void:
 	if not city.preparing and is_instance_valid(city.bunny):prediction.reconcile(city.bunny)
@@ -127,7 +133,7 @@ func _process(delta: float) -> void:
 			elif row.get("npc",false):
 				if city.targets.has(id):apply_actor(city.targets[id].node,row,delta)
 			elif replicas.has(id):
-				var replica: Dictionary=replicas[id];apply_actor(replica.actor,row,delta)
+				var replica: Dictionary=replicas[id];apply_actor(replica.actor,row,delta);apply_replica_meal(replica,row)
 				if replica.equipment!=row.equipment:replica.equipment=row.equipment.duplicate();Outfit.apply(replica.actor,row.equipment)
 				var meal_changed: bool=str(row.get("action",""))=="eat" and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
 				if replica.action!=str(row.get("action","")) or meal_changed:
@@ -139,7 +145,7 @@ func _process(delta: float) -> void:
 		var meal:=""
 		for id in replicas:
 			var row: Dictionary=motion.get(id,{})
-			if row.get("pose",{}).get("kind","")=="eat":meal=str(row.get("job",{}).get("item",""))
+			if row.get("pose",{}).get("kind","")=="eat" and row.get("pose",{}).get("target","")=="dining":meal=str(row.get("job",{}).get("item",""))
 		if meal!=remote_meal:
 			remote_meal=meal
 			if meal!="":city.culinary.serve(meal)
@@ -173,15 +179,17 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	actor.step_phase+=delta*minf(13,Vector2(actor.velocity.x,actor.velocity.z).length()*3)
 	var sleeping: bool=row.get("sleeping",false) or row.get("pose",{}).get("kind","")=="sleep"
 	if sleeping:
-		if not actor.sleeping:actor.lie_in_bed(city.home.get_node("Furnishing/bed"))
-		city.home.bed_occupant=actor
-	elif actor.sleeping:actor.stand_up(target);city.home.bed_occupant=null
+		if not actor.sleeping:actor.lie_in_bed(city.targets.get(row.get("pose",{}).get("target","home_bed"),{}).get("node",city.home.get_node("Furnishing/bed")))
+		if row.get("pose",{}).get("target","home_bed")=="home_bed":city.home.bed_occupant=actor
+	elif actor.sleeping:
+		actor.stand_up(target)
+		if city.home.bed_occupant==actor:city.home.bed_occupant=null
 	var seated: bool=row.get("pose",{}).get("kind","") in ["sit","eat","waiting_exit"]
 	actor.seated=seated or sleeping
 	var action: String=row.get("action","")
 	var meal_job: Dictionary=row.get("job",{})
 	if action=="eat":
-		actor.meal_item=str(meal_job.get("item",""));actor.meal_elapsed=float(meal_job.get("elapsed",0.));actor.meal_duration=float(meal_job.get("duration",6.));actor.meal_origin=city.scenery.get_node("DiningTable/MealAnchor").global_position
+		actor.meal_item=str(meal_job.get("item",""));actor.meal_elapsed=float(meal_job.get("elapsed",0.));actor.meal_duration=float(meal_job.get("duration",6.));actor.meal_origin=from_array(row.pose.meal_position) if row.get("pose",{}).has("meal_position") else city.scenery.get_node("DiningTable/MealAnchor").global_position
 	else:actor.meal_item="";actor.meal_elapsed=-1.;actor.meal_origin=Vector3.INF
 	if actor.action!=action:
 		if action!="":actor.play_action(action,INF)
@@ -217,3 +225,14 @@ func apply_shared_state() -> void:
 		if value is Dictionary:
 			row.node.door_open=value.get("open",false);row.node.door_target=float(value.get("target",0));row.node.door_tweening=absf(row.node.door_angle-row.node.door_target)>.001
 func from_array(p: Array) -> Vector3:return Vector3(float(p[0]),float(p[1]),float(p[2]))
+
+func clear_replica_meal(replica: Dictionary) -> void:
+	if is_instance_valid(replica.get("meal")):replica.meal.queue_free()
+	replica.meal=null;replica.meal_item=""
+func apply_replica_meal(replica: Dictionary,row: Dictionary) -> void:
+	var pose: Dictionary=row.get("pose",{});var job: Dictionary=row.get("job",{});var item: String=job.get("item","")
+	if row.get("action","")!="eat" or not pose.has("meal_position") or item=="":clear_replica_meal(replica);return
+	var food=preload("res://scripts/city/food_visual.gd")
+	if replica.get("meal_item","")!=item or not is_instance_valid(replica.get("meal")):
+		clear_replica_meal(replica);replica.meal=food.make(item);replica.meal_item=item;city.add_child(replica.meal)
+	replica.meal.position=from_array(pose.meal_position);food.animate(replica.meal,float(job.get("elapsed",0)),float(job.get("duration",6)))

@@ -33,13 +33,16 @@ const Grid=preload("res://scripts/building/grid_layout.gd")
 const Site=preload("res://scripts/building/site.gd")
 static func make(layout: Dictionary,city: Node3D) -> Node3D:
 	if layout.elements.is_empty():return null
+	var root:=shell(city)
+	sync(root,layout,city);root.assembling=false;return root
+static func shell(city: Node3D) -> Node3D:
 	var root:=preload("res://scripts/building/building_world.gd").new();root.name="PlayerBuiltHome";root.city=city;root.assembling=true;root.position=Site.CENTER
 	root.set_meta("buildable_reference",true);root.set_meta("module_type","player_building")
 	city.scenery.add_child(root)
 	var structure:=group(root,"Structure")
 	for id in ["Floor","Walls","Roof","Stairs"]:group(structure,id)
 	for id in ["Furnishing","Doors","Lighting","Joints"]:group(root,id)
-	sync(root,layout,city);root.assembling=false;return root
+	root.set_meta("structure_descriptors",{});return root
 static func descriptor(path: String,row: Dictionary,geometry: Variant) -> Dictionary:
 	return {"path":path,"row":row,"signature":JSON.stringify(geometry).sha256_text()}
 static func structure_descriptors(layout: Dictionary,_grid: Dictionary,previous: Dictionary={}) -> Dictionary:
@@ -76,22 +79,25 @@ static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dict
 		var row: Dictionary=grid.walls[connected[0]];var id:=prefix+"joint_%d_%d"%[p.x,p.y]
 		result[id]=descriptor("Joints",{"id":id,"type":"joint","storey":level,"point":Grid.point(p),"corner":connected.size()==2,"wall":row.id,"color":row.color,"axis":connected[0].z},[p,connected.size(),row.color])
 	return result
-static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
+static func sync(root: Node3D,layout: Dictionary,city: Node3D,prepared_plans: Dictionary={}) -> Dictionary:
 	var started:=Time.get_ticks_usec();var grid:=Layout.compiled(layout);var structure_key: String=JSON.stringify(layout.elements.filter(func(row):return row.type!="object"))
 	if root.get_meta("structure_key","")!=structure_key:root.set_meta("structure_descriptors",structure_descriptors(layout,grid,root.get_meta("structure_descriptors",{})));root.set_meta("structure_key",structure_key)
 	var desired: Dictionary=root.get_meta("structure_descriptors").duplicate()
 	for row in layout.elements:
 		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,[row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
-	var created:=0;var removed:=0;var reused:=0;var moved:=0
+	var prepared_at:=Time.get_ticks_usec();var created:=0;var removed:=0;var reused:=0;var moved:=0
 	for id in root.render_cache.keys():
 		if desired.has(id) and desired[id].signature==root.render_cache[id].signature:continue
 		var module: Node3D=root.render_cache[id].node
 		root.sections=root.sections.filter(func(section):return section.node!=module and section.get("parent_wall")!=module)
 		mark_navigation(root,root.render_cache[id].get("row",{}))
 		module.get_parent().remove_child(module);module.free();root.render_cache.erase(id);removed+=1
+	var entries_at:=Time.get_ticks_usec()
 	for id in desired:
 		var entry: Dictionary=desired[id];var row: Dictionary=entry.row;var module: Node3D
-		if root.render_cache.has(id):module=root.render_cache[id].node;reused+=1
+		if root.render_cache.has(id):
+			module=root.render_cache[id].node;reused+=1
+			if same_pose(module,layout,row):continue
 		else:
 			module=build_module(root,layout,row,root.get_node(entry.path),city);root.render_cache[id]={"signature":entry.signature,"node":module};created+=1;mark_navigation(root,row)
 		if row.type in ["door","window"]:
@@ -111,7 +117,9 @@ static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
 			for body in module.find_children("*","CollisionObject3D",true,false):bodies.append(body.get_rid())
 			root.render_cache[id].bodies=bodies
 			root.render_cache[id].visuals=module.find_children("*","MeshInstance3D",true,false)
-	root.configure_layout(layout);root.blueprint=blueprint()
+	var configured_at:=Time.get_ticks_usec()
+	root.configure_layout(layout,prepared_plans);root.blueprint=blueprint()
+	var finished_at:=Time.get_ticks_usec()
 	for entry in root.render_cache.values():
 		var row: Dictionary=entry.row
 		if row.type in ["wall","door","window"]:entry.node.set_meta("view_face",root.wall_faces.get(row.id if row.type=="wall" else row.wall,row.id))
@@ -119,8 +127,125 @@ static func sync(root: Node3D,layout: Dictionary,city: Node3D) -> Dictionary:
 	root.set_meta("building_definition",root.blueprint);root.floor_size=Site.PLOT.size
 	# Only new surfaces pass through the environment material binder.
 	if created>0 or removed>0 or moved>0:root.view_dirty=true;root.storey_view_key=""
-	root.last_sync={"created":created,"removed":removed,"reused":reused,"moved":moved,"usec":Time.get_ticks_usec()-started,"modules":desired.size()}
+	root.last_sync={"created":created,"removed":removed,"reused":reused,"moved":moved,"usec":Time.get_ticks_usec()-started,"modules":desired.size(),"prepare_usec":prepared_at-started,"entries_usec":configured_at-entries_at,"configure_usec":finished_at-configured_at}
 	return root.last_sync
+static func sync_incremental(root: Node3D,layout: Dictionary,city: Node3D,budget_usec: int=3000) -> Dictionary:
+	# Build only changed modules behind the current scene, with collisions off.
+	# Old modules stay live until the complete replacement is ready.
+	var tree:=city.get_tree();var started:=Time.get_ticks_usec();var slice:=started;var max_slice:=0;var yields:=0
+	var phases: Dictionary={"descriptors":0,"models":0,"rooms":0,"swap":0,"retire":0,"slowest_model":""}
+	var structure_key: String=JSON.stringify(layout.elements.filter(func(row):return row.type!="object"))
+	var desired: Dictionary={}
+	if root.get_meta("structure_key","")!=structure_key:
+		for level in range(Storeys.MAX):
+			desired.merge(story_descriptors(Storeys.subset(layout,level),Layout.walkable_grid(layout,level),root.get_meta("structure_descriptors",{}),level,Layout.walkable_grid(layout,level+1).floors,Stairs.explicit_guard_edges(layout,level+1)))
+			phases.descriptors=maxi(phases.descriptors,Time.get_ticks_usec()-slice);max_slice=maxi(max_slice,Time.get_ticks_usec()-slice)
+			await tree.process_frame;
+			if not is_instance_valid(root):return {"cancelled":true}
+			slice=Time.get_ticks_usec();yields+=1
+		root.set_meta("structure_descriptors",desired.duplicate());root.set_meta("structure_key",structure_key)
+	else:desired=root.get_meta("structure_descriptors").duplicate()
+	for row in layout.elements:
+		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,[row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
+	var staging:=Node3D.new();staging.name="PendingBuildingModules";staging.hide();staging.process_mode=Node.PROCESS_MODE_DISABLED;root.add_child(staging)
+	var prepared: Dictionary={}
+	for id in desired:
+		var entry: Dictionary=desired[id]
+		if root.render_cache.has(id) and root.render_cache[id].signature==entry.signature and same_pose(root.render_cache[id].node,layout,entry.row):continue
+		var model_at:=Time.get_ticks_usec();var holder:=Node3D.new();staging.add_child(holder)
+		var module:=build_module(root,layout,entry.row,holder,city,true)
+		var collision_states: Array=[]
+		for body in module.find_children("*","CollisionObject3D",true,false):
+			collision_states.append([body,body.collision_layer,body.collision_mask]);body.collision_layer=0;body.collision_mask=0
+		if module.has_meta("deferred_mesh_bakes"):
+			var deferred: Dictionary=module.get_meta("deferred_mesh_bakes");var b: RefCounted=deferred.builder
+			for part in b.deferred_bakes:
+				var batch=preload("res://scripts/building/mesh_batch_job.gd").new(b,part)
+				while not batch.done:
+					batch.advance(1)
+					if Time.get_ticks_usec()-slice>=budget_usec:
+						max_slice=maxi(max_slice,Time.get_ticks_usec()-slice);var paused_at:=Time.get_ticks_usec();await tree.process_frame;
+						if not is_instance_valid(root):b.deferred_stair_batches.clear();b.deferred_bakes.clear();return {"cancelled":true}
+						model_at+=Time.get_ticks_usec()-paused_at;slice=Time.get_ticks_usec();yields+=1
+			for batch in b.deferred_stair_batches:
+				while not batch.done:
+					batch.advance(1)
+					if Time.get_ticks_usec()-slice>=budget_usec:
+						max_slice=maxi(max_slice,Time.get_ticks_usec()-slice);var paused_at:=Time.get_ticks_usec();await tree.process_frame;
+						if not is_instance_valid(root):b.deferred_stair_batches.clear();b.deferred_bakes.clear();return {"cancelled":true}
+						model_at+=Time.get_ticks_usec()-paused_at;slice=Time.get_ticks_usec();yields+=1
+			b.deferred_stair_batches.clear();b.deferred_bakes.clear()
+			module.remove_meta("deferred_mesh_bakes")
+			if deferred.key!="" and root.module_prototypes.size()<128:
+				var prototype: Node3D=module.duplicate()
+				var copies: Array=prototype.find_children("*","CollisionObject3D",true,false)
+				if copies.size()==collision_states.size():
+					for index in range(copies.size()):copies[index].collision_layer=collision_states[index][1];copies[index].collision_mask=collision_states[index][2]
+					root.module_prototypes[deferred.key]=prototype
+				else:prototype.free()
+			finish_module(root,module,entry.row)
+		pose_module(layout,entry.row,module)
+		module.hide();module.process_mode=Node.PROCESS_MODE_DISABLED;module.name="__pending_"+id;module.reparent(root.get_node(entry.path),false)
+		# Fences remain closed: prepare physics too before the short visual swap.
+		for state in collision_states:state[0].collision_layer=state[1];state[0].collision_mask=state[2]
+		var bodies: Array[RID]=[]
+		for body in module.find_children("*","CollisionObject3D",true,false):bodies.append(body.get_rid())
+		prepared[id]={"signature":entry.signature,"node":module,"row":entry.row.duplicate(true),"bodies":bodies,"visuals":module.find_children("*","MeshInstance3D",true,false)}
+		if Time.get_ticks_usec()-model_at>int(phases.models):phases.models=Time.get_ticks_usec()-model_at;phases.slowest_model=entry.row.type+":"+str(entry.row.get("kind",id))
+		if Time.get_ticks_usec()-slice>=budget_usec:
+			max_slice=maxi(max_slice,Time.get_ticks_usec()-slice);await tree.process_frame;
+			if not is_instance_valid(root):return {"cancelled":true}
+			slice=Time.get_ticks_usec();yields+=1
+	max_slice=maxi(max_slice,Time.get_ticks_usec()-slice)
+	var plans: Dictionary={}
+	for level in range(Storeys.MAX):
+		var planned: Dictionary=await preload("res://scripts/building/room_plan.gd").make_incremental(Layout.walkable_grid(layout,level),tree,budget_usec)
+		if not is_instance_valid(root):return {"cancelled":true}
+		phases.rooms=maxi(phases.rooms,int(planned.max_slice_usec))
+		plans[level]=planned.plan;max_slice=maxi(max_slice,int(planned.max_slice_usec));yields+=int(planned.yields)
+	slice=Time.get_ticks_usec()
+	var retired: Array=[];var retired_ids: Dictionary={}
+	for id in root.render_cache:
+		if not desired.has(id) or prepared.has(id):retired_ids[root.render_cache[id].node.get_instance_id()]=true
+	root.sections=root.sections.filter(func(section):return not retired_ids.has(section.node.get_instance_id()) and (not section.has("parent_wall") or not retired_ids.has(section.parent_wall.get_instance_id())))
+	# One short swap: unchanged objects keep their identity, animation and lights.
+	for id in root.render_cache.keys():
+		if desired.has(id) and not prepared.has(id):continue
+		var entry: Dictionary=root.render_cache[id];var module: Node3D=entry.node
+		mark_navigation(root,entry.row);module.hide();module.name="__retired_"+id;module.process_mode=Node.PROCESS_MODE_DISABLED
+		for body in module.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
+		retired.append(module);root.render_cache.erase(id)
+	for id in prepared:
+		var entry: Dictionary=prepared[id];entry.node.name=id;entry.node.process_mode=Node.PROCESS_MODE_INHERIT;entry.node.show();root.render_cache[id]=entry;mark_navigation(root,desired[id].row)
+	root.view_dirty=true;root.storey_view_key=""
+	var result:=sync(root,layout,city,plans);root.assembling=false
+	phases.swap=Time.get_ticks_usec()-slice;max_slice=maxi(max_slice,int(phases.swap))
+	# Retired geometry is reclaimed in small batches after the visible swap.
+	await tree.process_frame
+	if not is_instance_valid(root):return {"cancelled":true}
+	slice=Time.get_ticks_usec();yields+=1
+	for module in retired:
+		module.free()
+		if Time.get_ticks_usec()-slice>=budget_usec:
+			max_slice=maxi(max_slice,Time.get_ticks_usec()-slice);await tree.process_frame;
+			if not is_instance_valid(root):return {"cancelled":true}
+			slice=Time.get_ticks_usec();yields+=1
+	staging.queue_free();result.created=prepared.size();result.removed=retired.size();result.reused=desired.size()-prepared.size();result.max_slice_usec=max_slice;result.yields=yields;result.elapsed_usec=Time.get_ticks_usec()-started;result.phases=phases
+	root.last_sync=result;return result
+static func same_pose(module: Node3D,layout: Dictionary,row: Dictionary) -> bool:
+	if row.type not in ["object","stairs","door","window"]:return true
+	if row.type in ["door","window"]:
+		var target:=Vector3(row.anchor[0]-Site.CENTER.x,Storeys.elevation(row)+(.18 if row.type=="door" else 0.),row.anchor[1]-Site.CENTER.z)
+		var turn:=-(PI*.5 if row.axis==1 else 0.)+(PI if row.reverse else 0.)
+		return module.position.is_equal_approx(target) and is_equal_approx(module.rotation.y,turn)
+	var target:=Vector3(row.position[0]-Site.CENTER.x,Storeys.elevation(row)+.18 if row.type=="stairs" else .18+Layout.base_height(layout,row),row.position[1]-Site.CENTER.z)
+	return module.position.is_equal_approx(target) and is_equal_approx(module.rotation.y,deg_to_rad(row.yaw))
+static func pose_module(layout: Dictionary,row: Dictionary,module: Node3D) -> void:
+	module.set_meta("storey",Storeys.of(row))
+	if row.type in ["door","window"]:
+		module.position=Vector3(row.anchor[0]-Site.CENTER.x,Storeys.elevation(row)+(.18 if row.type=="door" else 0.),row.anchor[1]-Site.CENTER.z);module.rotation.y=-(PI*.5 if row.axis==1 else 0.)+(PI if row.reverse else 0.);module.set_meta("outward",Vector3.BACK.rotated(Vector3.UP,module.rotation.y))
+	elif row.type=="stairs":module.position=Vector3(row.position[0]-Site.CENTER.x,Storeys.elevation(row)+.18,row.position[1]-Site.CENTER.z);module.rotation.y=deg_to_rad(row.yaw)
+	elif row.type=="object":module.position=Vector3(row.position[0]-Site.CENTER.x,.18+Layout.base_height(layout,row),row.position[1]-Site.CENTER.z);module.rotation.y=deg_to_rad(row.yaw)
 static func floor_material(row: Dictionary) -> Material:
 	var material:=ShaderMaterial.new()
 	if row.style in ["herringbone","terrazzo","botanical","cottage_tile","glazed_tile"]:
@@ -129,18 +254,24 @@ static func floor_material(row: Dictionary) -> Material:
 	elif row.style in ["brick","plaster"]:material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",2 if row.style=="brick" else 0);material.set_shader_parameter("building_world_pattern",true)
 	else:material.shader=preload("res://assets/shaders/home_floor.gdshader");material.set_shader_parameter("wood_color",Color(row.color));material.set_shader_parameter("world_aligned",true)
 	return material
-static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent: Node3D,city: Node3D) -> Node3D:
-	var b:=builder(root);var module: Node3D
+static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent: Node3D,city: Node3D,defer_bake: bool=false) -> Node3D:
+	var b:=builder(root);b.defer_baking=defer_bake or root.get_meta("skip_mesh_baking",false);var module: Node3D
 	var prototype_key:=geometry_key(layout,row)
 	if prototype_key!="" and root.module_prototypes.has(prototype_key):
 		module=root.module_prototypes[prototype_key].duplicate();module.name=row.id;parent.add_child(module)
 		if row.type=="wall":pose_wall(module,row)
+		if row.type=="door":
+			module.door_open=bool(row.get("default_open",true));module.door_angle=-PI*.55 if module.door_open else 0.;module.door_target=module.door_angle;module.door_tweening=false;module.configure(city)
+			module.leaf.set_deferred("disabled",false);module.portal.set_deferred("disabled",module.door_open)
+		if row.type in ["door","window"]:
+			for child in module.find_children("*","Node",true,false):
+				if child.has_meta("build_element_id"):child.set_meta("build_element_id",row.id)
 		if row.type=="joint":module.position=Vector3(row.point.x-Site.CENTER.x,Storeys.elevation(row),row.point.y-Site.CENTER.z)
 		finish_module(root,module,row);return module
 	match row.type:
 		"floor_chunk":
 			module=group(parent,row.id);module.position=Vector3(row.origin.x-Site.CENTER.x,Storeys.elevation(row),row.origin.y-Site.CENTER.z);module.set_meta("build_grid_type","floor")
-			build_floor_mesh(module,row)
+			if not root.get_meta("skip_mesh_baking",false):build_floor_mesh(module,row)
 			var solid: Dictionary={}
 			for c in row.cells:solid[c]={"id":"floor","type":"floor","color":"ffffff","style":"original"}
 			for part in Grid.rectangles(solid):
@@ -196,6 +327,9 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 		"joint":
 			module=group(parent,row.id);module.position=Vector3(row.point.x-Site.CENTER.x,Storeys.elevation(row),row.point.y-Site.CENTER.z)
 			b.rounded(module,Vector3(0,2.38,0),Vector3(.30,4.4,.30) if row.corner else Vector3(.28,4.4,.28),.015,b.material("eee2c6"),"JunctionTrim");b.bake_section(module);module.set_meta("outward",Vector3.BACK if row.axis==0 else Vector3.RIGHT)
+	if root.get_meta("skip_mesh_baking",false):b.deferred_bakes.clear()
+	if not b.deferred_bakes.is_empty() or not b.deferred_stair_batches.is_empty():
+		module.set_meta("deferred_mesh_bakes",{"builder":b,"key":prototype_key});return module
 	if prototype_key!="" and root.module_prototypes.size()<128:root.module_prototypes[prototype_key]=module.duplicate()
 	finish_module(root,module,row);return module
 static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
@@ -216,6 +350,7 @@ static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
 static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 	match row.type:
 		"stairs":return "stairs:"+JSON.stringify([row.form,row.color,row.style,Stairs.upper_guard_edges(row,Layout.walkable_grid(layout,Storeys.of(row)+1).floors,Stairs.explicit_guard_edges(layout,Storeys.of(row)+1))])
+		"door","window":return row.type+":"+JSON.stringify([row.get("form","classic"),row.color,row.style,row.painted,row.get("default_open",true)])
 		"object":
 			if row.kind in ["flowerbed","fountain"]:return ""
 			return "object:"+JSON.stringify([row.kind,row.color,row.style,row.painted,row.get("appearance",{})])

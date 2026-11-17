@@ -1,0 +1,52 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(1440, 900) scale=1.0 mode=0 quality=balanced
+PASS Tier-two action with level-three speed bunny birch response={ "ok": true, "message": "正在采集…", &"revision": 1 }
+PASS Both hands stay on shared tool bunny birch error=0.00000874056968
+PASS Working edge hits selected source bunny birch
+PASS Harvested T2 item and hidden model bunny birch
+PASS Permanent tool retained bunny birch
+PASS Tier-two action with level-three speed bunny iron response={ "ok": true, "message": "正在采集…", &"revision": 3 }
+PASS Both hands stay on shared tool bunny iron error=0.00000792181345
+PASS Working edge hits selected source bunny iron
+PASS Harvested T2 item and hidden model bunny iron
+PASS Permanent tool retained bunny iron
+PASS Tier-two action with level-three speed bunny sandstone response={ "ok": true, "message": "正在采集…", &"revision": 5 }
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Both hands stay on shared tool bunny sandstone error=0.00000852992252
+PASS Working edge hits selected source bunny sandstone
+PASS Harvested T2 item and hidden model bunny sandstone
+PASS Permanent tool retained bunny sandstone
+PASS Tier-two action with level-three speed cat_teacher birch response={ "ok": true, "message": "正在采集…", &"revision": 7 }
+WANDER_GRID_READY cells=47740 components=9
+PASS Both hands stay on shared tool cat_teacher birch error=0.00000809219455
+PASS Working edge hits selected source cat_teacher birch
+PASS Harvested T2 item and hidden model cat_teacher birch
+PASS Permanent tool retained cat_teacher birch
+PASS Tier-two action with level-three speed cat_teacher iron response={ "ok": true, "message": "正在采集…", &"revision": 9 }
+PASS Both hands stay on shared tool cat_teacher iron error=0.00000792181345
+PASS Working edge hits selected source cat_teacher iron
+PASS Harvested T2 item and hidden model cat_teacher iron
+PASS Permanent tool retained cat_teacher iron
+PASS Tier-two action with level-three speed cat_teacher sandstone response={ "ok": true, "message": "正在采集…", &"revision": 11 }
+PASS Both hands stay on shared tool cat_teacher sandstone error=0.00000852992252
+PASS Working edge hits selected source cat_teacher sandstone
+PASS Harvested T2 item and hidden model cat_teacher sandstone
+PASS Permanent tool retained cat_teacher sandstone
+PASS Tier-two action with level-three speed panda birch response={ "ok": true, "message": "正在采集…", &"revision": 13 }
+PASS Both hands stay on shared tool panda birch error=0.00000786419969
+PASS Working edge hits selected source panda birch
+PASS Harvested T2 item and hidden model panda birch
+PASS Permanent tool retained panda birch
+PASS Tier-two action with level-three speed panda iron response={ "ok": true, "message": "正在采集…", &"revision": 15 }
+PASS Both hands stay on shared tool panda iron error=0.00000269739826
+PASS Working edge hits selected source panda iron
+PASS Harvested T2 item and hidden model panda iron
+PASS Permanent tool retained panda iron
+PASS Tier-two action with level-three speed panda sandstone response={ "ok": true, "message": "正在采集…", &"revision": 17 }
+PASS Both hands stay on shared tool panda sandstone error=0.00000934406216
+PASS Working edge hits selected source panda sandstone
+PASS Harvested T2 item and hidden model panda sandstone
+PASS Permanent tool retained panda sandstone
+VALLEY_SHARED_WORK_RESULT PASS checks=45 failures=[]
