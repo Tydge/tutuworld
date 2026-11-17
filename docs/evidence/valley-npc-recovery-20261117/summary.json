@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-17",
+  "base_commit": "d3cd13790c6f204a6053127a7712a5caefca3b82",
+  "scope": "NPC recovery source fix only; production remains immutable 0.4.1/build8; no deployment or visual parameter change",
+  "engine": "Godot 4.6.3",
+  "local_checks": {
+    "valley_npc_recovery": 7,
+    "valley_multiplayer_flow": 48,
+    "npc_edge_flow": 15,
+    "valley_visitors_night": 25,
+    "motion_buffer_rules": 125,
+    "project_integrity": 471
+  },
+  "local_check_total": 691,
+  "regression_before": {
+    "platforms": [
+      "macOS",
+      "Linux"
+    ],
+    "result": "expected FAIL",
+    "displacement_both_visitors": 0.0
+  },
+  "regression_after": {
+    "platforms": [
+      "macOS",
+      "Linux"
+    ],
+    "result": "PASS",
+    "simulated_seconds_per_visitor": 8,
+    "displacement_meters": 10.4550065994263,
+    "max_single_physics_step_meters": 0.0278322342783213,
+    "checks_per_platform": 7
+  },
+  "linux_validation": "Isolated temporary world, production 0.4.1 pack, patched base driver loaded only in the isolated process. No production service restart or data access. Original driver fails the same fixture.",
+  "limitations": [
+    "Not a claim that every possible long-running NPC obstruction is covered.",
+    "No Windows runtime validation.",
+    "No new performance or rendering visual comparison; all visual settings unchanged."
+  ],
+  "diagnostics": {
+    "selected_passing_tests": "No SCRIPT ERROR or SHADER ERROR.",
+    "linux_before": "Expected failed regression; engine also reported previous working directory warning because the unprivileged test started from /root. After run started from /tmp and has no such warning."
+  },
+  "sha256": {
+    "scripts/city/npc_driver.gd": "446743911bd7005106abca55720fa17a033b0fbb222a6253bfe6695010bfffa1",
+    "tests/valley_npc_recovery.gd": "dd3d17853d239f88bcbf9e6593681a45c0f5220a6dc2cfb8cf88cac1415af965",
+    "tests/valley_multiplayer_flow.gd": "643f7b281cedefbefb536a9e7a7fa15af0cfb6e28fb11f11dd3afab095634bfb",
+    "tools/test_suites.json": "93712bae91483a68e15cb463c979f04d476876d3ffd19dfad2b056d2a54a9eee",
+    "scenes/valley_map.scn": "e131e079c96223d821f3cf59cfa8dd0929029f9de61da0c7a2ca924225a966e2"
+  }
+}

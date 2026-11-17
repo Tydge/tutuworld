@@ -10,6 +10,7 @@ var friend: Node
 var game: Node3D
 var owner_id: String
 var friend_id: String
+var friend_motion: Dictionary={}
 var checks:=0
 var failures: Array=[]
 func _initialize() -> void:call_deferred("run")
@@ -35,6 +36,21 @@ func floor_at(host: Node3D,p: Vector2) -> Vector3:
 	var query:=PhysicsRayQueryParameters3D.create(Vector3(p.x,90,p.y),Vector3(p.x,-10,p.y),8)
 	var hit: Dictionary=host.get_world_3d().direct_space_state.intersect_ray(query)
 	return hit.get("position",Vector3.INF)
+func receive_friend(data: Dictionary) -> void:
+	if data.get("type","")!="motion":return
+	for row in data.get("actors",[]):
+		if row.get("npc",false):friend_motion[str(row.id)]=row
+func visitors_walk(label_: String) -> void:
+	var starts: Dictionary={}
+	for id in ["ValleyVisitor0","ValleyVisitor1"]:starts[id]=server.maps.valley.targets[id].node.position
+	await create_timer(4.).timeout
+	for id in starts:
+		var authority: CharacterBody3D=server.maps.valley.targets[id].node
+		var replica: CharacterBody3D=game.targets[id].node
+		var received: Dictionary=friend_motion.get(id,{})
+		var travelled: float=authority.position.distance_to(starts[id])
+		check(travelled>1. and replica.position.distance_to(authority.position)<.55,"Rabbit walks on authority and rendered online client ("+label_+"): "+id)
+		check(not received.is_empty() and server.vector_from(received.position).distance_to(authority.position)<.3,"Second real client receives the same moving rabbit ("+label_+"): "+id)
 func run() -> void:
 	OS.set_environment("TUTU_GAME_PORT","18932");OS.set_environment("TUTU_AUTH_PORT","18919")
 	OS.set_environment("TUTU_STATE_DIR",ProjectSettings.globalize_path("res://.qa-artifacts/valley-online-"+str(Time.get_ticks_usec())))
@@ -48,7 +64,7 @@ func run() -> void:
 	result=await initial.request("create_character",{"name":"山谷熊"+suffix.left(4),"species":"panda","starter":"bow_rose"})
 	if not result.get("ok",false):print(result);quit(1);return
 	owner_id=result.character
-	friend=Transport.new();root.add_child(friend);check(await friend.ensure_connected("ws://127.0.0.1:18932"),"Second real client connects")
+	friend=Transport.new();root.add_child(friend);friend.message_received.connect(receive_friend);check(await friend.ensure_connected("ws://127.0.0.1:18932"),"Second real client connects")
 	result=await friend.request("register",{"username":"valley_peer_"+suffix,"password":"valley-release-test"})
 	check(result.get("ok",false),"Second isolated account registers")
 	result=await friend.request("create_character",{"name":"山谷猫"+suffix.left(4),"species":"cat_teacher","starter":"bow_rose"})
@@ -101,6 +117,24 @@ func run() -> void:
 	result=await friend.request("travel",{"destination":"valley"});check(result.get("ok",false),"Second live client independently travels to the new valley")
 	await create_timer(.8).timeout
 	check(game.online_view.replicas.has(friend_id) and game.online_view.buffers.has("Panda"),"Online valley renders the other player and buffered NPC movement")
+	server.world.state.time=1800.;await create_timer(1.3).timeout
+	await visitors_walk("daytime")
+	var visitor: CharacterBody3D=server.maps.valley.targets.ValleyVisitor0.node
+	check(place(friend_id,visitor.position+Vector3(2,0,0)),"Second player reaches a real safe position beside the rabbit")
+	result=await friend.request("talk",{"target":"ValleyVisitor0"});check(result.get("ok",false),"Second player starts a real authority conversation")
+	var talking_at: Vector3=visitor.position;await create_timer(.6).timeout
+	check(visitor.position.distance_to(talking_at)<.08 and not visitor.walking,"Rabbit stops naturally while another player talks")
+	result=await friend.request("end_talk");check(result.get("ok",false),"Second player ends the conversation")
+	check(place(friend_id,server.maps.valley.respawn_position()),"Conversation partner leaves room for the rabbit to resume")
+	await create_timer(2.5).timeout
+	check(visitor.position.distance_to(talking_at)>.6,"Rabbit resumes roaming after the conversation")
+	server.world.state.time=3300.;await create_timer(1.4).timeout
+	for id in ["ValleyVisitor0","ValleyVisitor1"]:
+		check(server.maps.valley.targets[id].node.get_meta("presence")==0 and game.targets[id].node.get_meta("presence")==0 and float(friend_motion.get(id,{}).get("presence",-1))==0,"Night absence reaches both real clients: "+id)
+	server.world.state.time=900.;await create_timer(1.4).timeout
+	for id in ["ValleyVisitor0","ValleyVisitor1"]:
+		check(server.maps.valley.targets[id].node.get_meta("interaction_available") and game.targets[id].node.get_meta("interaction_available"),"Dawn restores rabbit interaction on authority and client: "+id)
+	await visitors_walk("after dawn")
 	RenderingServer.force_draw();root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/online-valley.png")
 	await friend.request("leave");friend.close();friend.queue_free();await session.leave_online()
 	current_scene=null;game.queue_free();await process_frame;server.listener.stop();server.queue_free();await process_frame

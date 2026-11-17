@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TUTU_SERVER_READY version=0.4.1 build=8
+WANDER_GRID_READY cells=19995 components=7
+WANDER_GRID_READY cells=47740 components=9
+PASS Captured slope blocks the direct approach to the nearest free cell
+PASS Real server navigation provides a route through the blocked first cell: ValleyVisitor0
+VALLEY_NPC_RECOVERY {"displacement":0.0,"id":"ValleyVisitor0","late_displacement":0.0,"max_step":0.0,"position":"(-12.04554, 3.221917, 13.67664)","recoveries":8,"travelled":0.0}
+FAIL Visitor escapes and continues walking rather than retrying in place: ValleyVisitor0
+PASS Recovery keeps real collision and supported movement without teleporting: ValleyVisitor0
+PASS Real server navigation provides a route through the blocked first cell: ValleyVisitor1
+VALLEY_NPC_RECOVERY {"displacement":0.0,"id":"ValleyVisitor1","late_displacement":0.0,"max_step":0.0,"position":"(-12.04554, 3.221917, 13.67664)","recoveries":8,"travelled":0.0}
+FAIL Visitor escapes and continues walking rather than retrying in place: ValleyVisitor1
+PASS Recovery keeps real collision and supported movement without teleporting: ValleyVisitor1
+VALLEY_NPC_RECOVERY_RESULT FAIL checks=7 failures=["Visitor escapes and continues walking rather than retrying in place: ValleyVisitor0", "Visitor escapes and continues walking rather than retrying in place: ValleyVisitor1"]

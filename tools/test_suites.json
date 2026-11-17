@@ -231,6 +231,7 @@
       "update_rules"
     ],
     "valley_landscape": [
+      "valley_npc_recovery",
       "project_integrity",
       "valley_landscape_rules",
       "valley_rules",
@@ -511,6 +512,9 @@
     "valley_server_migration": {
       "headless": true
     },
-    "valley_multiplayer_flow": {}
+    "valley_multiplayer_flow": {},
+    "valley_npc_recovery": {
+      "headless": true
+    }
   }
 }

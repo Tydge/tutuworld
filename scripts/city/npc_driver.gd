@@ -58,13 +58,31 @@ func recover() -> void:
 		away=Vector3(-bunny.velocity.z,0,bunny.velocity.x).normalized()
 		if away.length_squared()<.1: away=Vector3(cos(rng.randf()*TAU),0,sin(rng.randf()*TAU))
 	var tangent:=Vector3(-away.z,0,away.x)*rng.randf_range(-.7,.7)
-	recovery_motion=(away+tangent).normalized()
+	recovery_motion=walkable_recovery((away+tangent).normalized())
 	recovery_time=rng.randf_range(.38,.65)
 	cooldown=1.0
 	wall_time=0
 	progress_clock=0
 	progress_origin=bunny.position
 	path.clear()
+func walkable_recovery(preferred: Vector3) -> Vector3:
+	# A clear grid cell can sit beyond an unwalkable strip between samples.
+	# Repeatedly steering straight toward it traps the actor in the same place.
+	# Check the intervening floor before choosing a short turn around the strip.
+	var best:=Vector3.ZERO
+	var best_score:=-INF
+	for i in range(16):
+		var angle:=TAU*i/16.
+		var direction:=Vector3(cos(angle),0,sin(angle))
+		var clear:=true
+		for distance in [.01,.04,.10]:
+			var point: Vector3=bunny.position+direction*distance
+			if not city.can_walk(point) or not city.navigation.can_step(bunny.position,point):
+				clear=false;break
+		if not clear:continue
+		var score:=direction.dot(preferred)+rng.randf_range(0,.15)
+		if score>best_score:best=direction;best_score=score
+	return best
 func _physics_process(delta: float) -> void:
 	if bunny==null or city==null or not city.navigation.ready_for_paths: return
 	var chatting: bool=city.talking_npc==bunny.name
@@ -103,8 +121,10 @@ func _physics_process(delta: float) -> void:
 		bunny.velocity.x=0
 		bunny.velocity.z=0
 	else:
-		bunny.velocity.x=move_toward(bunny.velocity.x,target.x,delta*6)
-		bunny.velocity.z=move_toward(bunny.velocity.z,target.z,delta*6)
+		# Preserve the selected turn when accelerating from rest. Independent axes
+		# initially produce a diagonal that may point straight back into the strip.
+		var horizontal:=Vector2(bunny.velocity.x,bunny.velocity.z).move_toward(Vector2(target.x,target.z),delta*6)
+		bunny.velocity.x=horizontal.x;bunny.velocity.z=horizontal.y
 	var next_position:=bunny.position+Vector3(bunny.velocity.x,0,bunny.velocity.z)*delta
 	var moving:=Vector2(bunny.velocity.x,bunny.velocity.z).length_squared()>.0001
 	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position)):
