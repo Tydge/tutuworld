@@ -1,0 +1,198 @@
+{
+	"bias": 0.025000000372529,
+	"normal_bias": 0.349999994039536,
+	"samples": [
+		{
+			"affected": 0.109922182484769,
+			"far": false,
+			"mean": 0.00510986947722797,
+			"pixels": 278215,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.0858580594144816,
+			"far": false,
+			"mean": 0.00366009402330359,
+			"pixels": 278215,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.0789461387775641,
+			"far": false,
+			"mean": 0.00307978818755222,
+			"pixels": 278215,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.122936660268714,
+			"far": true,
+			"mean": 0.00483531427074531,
+			"pixels": 20840,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.106525911708253,
+			"far": true,
+			"mean": 0.00407316676714599,
+			"pixels": 20840,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.097552783109405,
+			"far": true,
+			"mean": 0.00361999074808695,
+			"pixels": 20840,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "sphere"
+		},
+		{
+			"affected": 0.10862442645172,
+			"far": false,
+			"mean": 0.00508323308910974,
+			"pixels": 275914,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.0791587233703255,
+			"far": false,
+			"mean": 0.00346218356056549,
+			"pixels": 275914,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.0653500728487862,
+			"far": false,
+			"mean": 0.00258342269259212,
+			"pixels": 275914,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.123407758996464,
+			"far": true,
+			"mean": 0.00487224761640765,
+			"pixels": 20647,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.0965757737201531,
+			"far": true,
+			"mean": 0.00384388886774262,
+			"pixels": 20647,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.079478858914128,
+			"far": true,
+			"mean": 0.00310378107382794,
+			"pixels": 20647,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "bunny"
+		},
+		{
+			"affected": 0.092717960793548,
+			"far": false,
+			"mean": 0.0041611185221262,
+			"pixels": 186857,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.0558647558090998,
+			"far": false,
+			"mean": 0.00242808684345447,
+			"pixels": 186862,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.0690905008580181,
+			"far": false,
+			"mean": 0.00266272976823803,
+			"pixels": 187059,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.100163619548979,
+			"far": true,
+			"mean": 0.00386846813070424,
+			"pixels": 14057,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.0652916073968706,
+			"far": true,
+			"mean": 0.0025010010087134,
+			"pixels": 14060,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.0772891951410102,
+			"far": true,
+			"mean": 0.00278053955783845,
+			"pixels": 14077,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "cat_teacher"
+		},
+		{
+			"affected": 0.0472184158403992,
+			"far": false,
+			"mean": 0.0019719727261168,
+			"pixels": 167117,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "panda"
+		},
+		{
+			"affected": 0.0420023806533039,
+			"far": false,
+			"mean": 0.00168205507628136,
+			"pixels": 167181,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "panda"
+		},
+		{
+			"affected": 0.0720789755685798,
+			"far": false,
+			"mean": 0.00284130482252328,
+			"pixels": 167039,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "panda"
+		},
+		{
+			"affected": 0.048730645288061,
+			"far": true,
+			"mean": 0.00183872619130969,
+			"pixels": 12723,
+			"rotation": "(-70.0, 0.0, 0.0)",
+			"species": "panda"
+		},
+		{
+			"affected": 0.0451937436139275,
+			"far": true,
+			"mean": 0.00184413268816674,
+			"pixels": 12723,
+			"rotation": "(-50.0, -20.0, 0.0)",
+			"species": "panda"
+		},
+		{
+			"affected": 0.083641513887796,
+			"far": true,
+			"mean": 0.00309514571665705,
+			"pixels": 12709,
+			"rotation": "(-25.0, -40.0, 0.0)",
+			"species": "panda"
+		}
+	]
+}

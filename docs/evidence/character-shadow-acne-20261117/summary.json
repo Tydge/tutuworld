@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-17",
+  "base_commit": "efc8b92",
+  "delivery": "Source only; no release, export, deployment, production access or real-save writes.",
+  "cause": "The enlarged two-cascade valley shadow profile used insufficient depth/normal bias, exposing self-shadowing waves on smooth character surfaces.",
+  "fix": {
+    "shadow_bias": 0.1,
+    "shadow_normal_bias": 0.65,
+    "unchanged": [
+      "160m shadow range",
+      "two shadow cascades",
+      "shadow texture size",
+      "foliage LOD and independent shadows",
+      "model geometry and materials",
+      "saved map and collisions"
+    ]
+  },
+  "engine": "Godot 4.6.3 / Metal / Apple M1 Pro",
+  "passing_groups": 6,
+  "reported_checks": {
+    "curved_shadow_surface": 50,
+    "woodland_lighting_flow": 6,
+    "woodland_shadow_stability": 12,
+    "woodland_lod_flow": 12,
+    "project_integrity": 476
+  },
+  "reported_check_total": 556,
+  "before": "24 of 24 convex-surface checks failed under the original runtime profile. Ground contact controls passed.",
+  "after": "24 of 24 convex-surface checks pass with the corrected runtime profile. Total 50 focused checks, including 4cm and 25cm ground-contact controls.",
+  "measurement": "Actual three-species head meshes and sphere; other components hidden to isolate convex self-shadowing; compare with identical skin not casting its own shadow. Three sun angles and two camera distances. Pixels with luminance deficit >0.015 count as affected.",
+  "worst_by_species": {
+    "bunny": {
+      "before_max_affected": 0.123407758996464,
+      "after_max_affected": 0.00219633653964641,
+      "before_max_mean": 0.00508323308910974,
+      "after_max_mean": 0.000113545288372143
+    },
+    "cat_teacher": {
+      "before_max_affected": 0.100163619548979,
+      "after_max_affected": 0.00476300058333378,
+      "before_max_mean": 0.0041611185221262,
+      "after_max_mean": 0.000166166829170473
+    },
+    "panda": {
+      "before_max_affected": 0.083641513887796,
+      "after_max_affected": 0.0,
+      "before_max_mean": 0.00309514571665705,
+      "after_max_mean": 1.43287190974841e-05
+    },
+    "sphere": {
+      "before_max_affected": 0.122936660268714,
+      "after_max_affected": 0.000726057185989253,
+      "before_max_mean": 0.00510986947722797,
+      "after_max_mean": 7.41069732017333e-05
+    }
+  },
+  "performance": {
+    "seconds": 12,
+    "fps": 60.0833333333333,
+    "p95_ms": 19.921,
+    "max_ms": 23.892,
+    "over_50_ms": 0,
+    "scale": 0.59155237674713,
+    "output": [
+      3024,
+      1890
+    ],
+    "driver": "Metal / Forward+"
+  },
+  "visual_comparison": "Complete actor images use identical fixed camera/light/model with only depth/normal bias changed. An additional full valley image was reviewed. User attachment is not committed.",
+  "limits": [
+    "No claim of zero numerical shadow error on every pixel.",
+    "Short local balanced-resolution run, not all hardware or native-resolution guarantee.",
+    "Windows not tested."
+  ],
+  "source_sha256": {
+    "scripts/valley/valley_world.gd": "507b0843e6d04169bdd308027a15699c0d09eea44a5ee29e39c1fcb7f9d47dab",
+    "tests/curved_shadow_surface.gd": "f1727d37536ff5103d9be92efcfa3be643fa4482e5151e59b38ea15f0ebe8d4c",
+    "tools/test_suites.json": "f7f33bcb7e9662cba75bd6d9e3a3f70a79f607c9fae4d603bf1b3696fa714c2a"
+  },
+  "artifact_sha256": {
+    "after-bunny.png": "ae53e751d94ef039d272b4e2a2489118b36da23b41cffa00a73906f29bcb3890",
+    "project_integrity.log": "cc5f4b21311dffd3641b2e79b940faf5ad31c8a35e98e006ef085bfbbb10aa86",
+    "valley-after.png": "31bd1a4b29ea8fef09cb46f0f993dc527a84886ecd4b63a215d0b727d91d1a7e",
+    "woodland_lod_flow.log": "64317fa4b0f6ed008dfaa48f61d6eb17b0f715de016c0454aafcdef8b7b753be",
+    "curved_shadow_surface.log": "f267faa640fb5bfd9b8b4f7b325199925c8ddf27fb5d56712bb89896ab1489ef",
+    "before-metrics.json": "5bab22e0eaa7017d0d20d624a95facd705f0783ab4365a9f19764a73595410bf",
+    "after-metrics.json": "325b719c31a046411137ce76600d1159f1e2e6d9433c659a2e4ff1c72d13841f",
+    "contact.png": "14147adacdba8cfd29b13df0521624c1aab57d32fb158b3f4e8dcd9530f461e3",
+    "woodland_lighting_flow.log": "29edded527755a73af4efdbef633935af33f2d0826947e8e79c7876c17753e7c",
+    "before-bunny.png": "2771e69278d2a8bb70d79462faaedaa575f4c12650778e0ace58e198aa3eb259",
+    "woodland_sweep_performance.log": "c7f454b537db41982d202583471fbdca5e858cede869224c8bcd5a27672639b5",
+    "before.log": "fcf8c01edd48c1107f0a3800a3819bf914e3567e8e9c0eec7adab7ef0c69dd17",
+    "woodland_shadow_stability.log": "5a53f6dd2654ce84eca27a0f89bbe31d334ac6cd86c9b7bdf0868c99603a5d1a"
+  }
+}

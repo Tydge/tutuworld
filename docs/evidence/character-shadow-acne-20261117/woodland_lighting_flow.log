@@ -1,0 +1,12 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+RENDER_BUDGET output=(64, 64) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+PASS Clock refresh sets a new sunlight target without jumping the current shadow
+PASS Sunlight converges gradually between clock refreshes
+SUNLIGHT_CONTINUITY {"largest_frame_change":0.0009765625,"remaining_error":0.0,"target_change_radians":0.00775124412029982}
+PASS Low sunlight is warmer than midday light
+PASS Clock and per-frame room blending agree on ambient light
+PASS Saved valley uses the measured two-cascade shadow profile and soft split transitions
+PASS Moonlight retains a gentle, readable nighttime floor
+WOODLAND_LIGHTING_FLOW_RESULT PASS checks=6 failures=[]

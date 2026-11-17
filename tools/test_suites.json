@@ -267,6 +267,7 @@
       "save_transactions"
     ],
     "woodland_lighting": [
+      "curved_shadow_surface",
       "woodland_shadow_stability",
       "woodland_lod_flow",
       "woodland_lighting_flow",
@@ -539,6 +540,7 @@
     },
     "woodland_lighting_flow": {
       "headless": true
-    }
+    },
+    "curved_shadow_surface": {}
   }
 }

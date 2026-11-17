@@ -82,7 +82,10 @@ func update_lighting(override_time: float=-1) -> void:
 	sun.light_color=Color("b0c9f2").lerp(Color("fff2db").lerp(Color("ffd0a0"),low_sun*.55),ambient_day)
 	if ambient_day<.01: sun.rotation_degrees=Vector3(-43,-32,0)
 	sun.shadow_opacity=lerpf(.42,.86,ambient_day)
-	sun.light_angular_distance=.53;sun.shadow_blur=1.15;sun.shadow_normal_bias=.35
+	sun.light_angular_distance=.53;sun.shadow_blur=1.15
+	# The longer two-cascade shadow range needs enough depth/normal offset for
+	# smooth character surfaces; smaller values expose rippled self-shadowing.
+	sun.shadow_bias=.10;sun.shadow_normal_bias=.65
 	sun_target=sun.quaternion
 	if sun_initialized and override_time<0:sun.quaternion=previous
 	sun_initialized=true
