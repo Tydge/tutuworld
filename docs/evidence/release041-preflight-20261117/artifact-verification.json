@@ -1,0 +1,44 @@
+{
+  "version": "0.4.1",
+  "build": 8,
+  "protocol": 4,
+  "launcher": 2,
+  "artifacts": {
+    "TutuWorld-macOS.zip": {
+      "bytes": 113996342,
+      "sha256": "2dfe33c08d56bd07eaa50ec6eccaa50e8c3359171a26e94c7c3bedc85dcc2315"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 95600410,
+      "sha256": "19e0cf39804d964dc5b8f2498f670db6369bcd326d10282713803acae6d89e76"
+    },
+    "city.pck": {
+      "bytes": 75271968,
+      "sha256": "8317b1ee6f279d8217e3da0180dbd20401e516e6295773dfafe80e2844fc89a1"
+    },
+    "server.pck": {
+      "bytes": 66616440,
+      "sha256": "061896e80e84dfc716647f42201a9936dc72b6d81005f4949f6dacfa31ab1c79"
+    },
+    "manifest.json": {
+      "bytes": 1182,
+      "sha256": "fd3e0a34d4e7e23048415097709f8ffb13fea1a6dbc8808da281dcb27b1c6451"
+    }
+  },
+  "macos": {
+    "version_metadata": true,
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "ad_hoc_signature_verified": true,
+    "notarized": false
+  },
+  "windows": {
+    "version_resource": "0.4.1.0",
+    "sdk_version": "1.618.5",
+    "sdk_dll_and_licenses_byte_identical": true,
+    "physical_device_tested": false
+  },
+  "prior_0_4_0_artifacts_unchanged": true
+}

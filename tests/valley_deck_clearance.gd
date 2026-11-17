@@ -13,7 +13,7 @@ func capture(label_: String,eye: Vector3,target: Vector3,time_: float) -> void:
 	check(game.get_world_3d().direct_space_state.intersect_shape(query,1).is_empty(),"Screenshot camera clears physical scenery: "+label_)
 	game.camera.position=eye;game.camera.look_at(target);game.update_lighting(time_)
 	for i in range(12):await process_frame
-	await RenderingServer.frame_post_draw
+	RenderingServer.force_draw()
 	root.get_texture().get_image().save_png(output+"/"+label_+".png")
 func run() -> void:
 	output=preload("res://tests/test_support.gd").output_dir()

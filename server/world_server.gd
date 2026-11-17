@@ -82,6 +82,16 @@ func load_world() -> void:
 		for token in record.get("seen",{}).keys():
 			if record.seen[token].has("lease"):record.seen.erase(token)
 		record.rest_mode="";record.rest_bed="";record.net_pose={}
+		migrate_valley_record(record)
+func migrate_valley_record(record: Dictionary) -> void:
+	var valley=preload("res://scripts/valley/valley_layout.gd")
+	if int(record.get("valley_landscape_revision",1))>=valley.REVISION:return
+	if record.get("map_id","city")=="valley":
+		var old: Array=record.get("player_position",valley.arrival("valley"))
+		var point:=valley.legacy_position(vector_from(old))
+		record.player_position=vector_array(point) if valley.valid_saved_position("valley",point) else valley.arrival("valley")
+	# City residents must also be marked, so their next visit is not scaled again.
+	record.valley_landscape_revision=valley.REVISION
 func apply_door_states() -> void:
 	for map_id in maps:
 		var host=maps[map_id]
@@ -291,7 +301,7 @@ func create_character(account: String,args: Dictionary) -> Dictionary:
 	var species: String=str(args.get("species","bunny"));var starter: String=str(args.get("starter",""))
 	if not Catalog.supports(species) or starter not in DB.starter_clothes():return fail("请选择角色和一件初始服饰。")
 	var a=Authority.new();var id:="char_"+Crypto.new().generate_random_bytes(12).hex_encode()
-	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system()},true)
+	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system(),"valley_landscape_revision":preload("res://scripts/valley/valley_layout.gd").REVISION},true)
 	a.state.equipment[DB.item(starter).slot]=starter
 	var record: Dictionary=a.state.duplicate(true)
 	for key in ["plots","resources","time","world_id","build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)

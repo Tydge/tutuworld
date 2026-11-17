@@ -1,0 +1,35 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Legacy fixture saves through the real atomic server writer
+PASS Server migrates old valley position migration_0
+PASS Migration preserves identity, assets, species and progression migration_0
+PASS Server migrates old valley position migration_1
+PASS Migration preserves identity, assets, species and progression migration_1
+PASS Server migrates old valley position migration_2
+PASS Migration preserves identity, assets, species and progression migration_2
+PASS Server migrates old valley position migration_3
+PASS Migration preserves identity, assets, species and progression migration_3
+PASS Server migrates old valley position migration_4
+PASS Migration preserves identity, assets, species and progression migration_4
+PASS Server migrates old valley position migration_5
+PASS Migration preserves identity, assets, species and progression migration_5
+PASS Server migrates old valley position migration_6
+PASS Migration preserves identity, assets, species and progression migration_6
+PASS Server migrates old valley position migration_7
+PASS Migration preserves identity, assets, species and progression migration_7
+PASS Server migrates old valley position migration_8
+PASS Migration preserves identity, assets, species and progression migration_8
+PASS Server migrates old valley position migration_9
+PASS Migration preserves identity, assets, species and progression migration_9
+PASS Server migrates old valley position migration_10
+PASS Migration preserves identity, assets, species and progression migration_10
+PASS Server migrates old valley position migration_11
+PASS Migration preserves identity, assets, species and progression migration_11
+PASS City coordinates stay unchanged but receive the revision marker
+PASS Current high valley save is never scaled again
+PASS Migrated records persist successfully
+PASS Restart is idempotent for every character
+PASS World epoch and existing clock alignment stay unchanged
+PASS New online characters start with the current landscape revision
+PASS A new character's first valley visit survives a restart without legacy scaling
+VALLEY_SERVER_MIGRATION_RESULT PASS checks=32 failures=[]

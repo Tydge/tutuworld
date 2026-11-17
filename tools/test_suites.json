@@ -247,6 +247,23 @@
       "valley_performance",
       "woodland_sweep_performance",
       "valley_landscape_preview"
+    ],
+    "release041": [
+      "project_integrity",
+      "valley_server_migration",
+      "valley_landscape_rules",
+      "valley_rules",
+      "valley_spawn_regression",
+      "valley_traversal_regression",
+      "valley_deck_clearance",
+      "valley_multiplayer_flow",
+      "motion_buffer_rules",
+      "building_multiplayer_rules",
+      "building_multiplayer_flow",
+      "building_update_lifecycle",
+      "release04_building_rules",
+      "character_roster_rules",
+      "save_transactions"
     ]
   },
   "tests": {
@@ -490,6 +507,10 @@
         "--benchmark",
         "--warmup-test"
       ]
-    }
+    },
+    "valley_server_migration": {
+      "headless": true
+    },
+    "valley_multiplayer_flow": {}
   }
 }

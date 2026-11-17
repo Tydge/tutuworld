@@ -1,0 +1,40 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Continuous terrain replaces all former terrace ramps
+PASS Restore current mountain / pier coordinate without double scaling (-78.0, 31.73628, -4.695606)
+PASS Restore current mountain / pier coordinate without double scaling (-16.8, 0.18, 94.4)
+RENDER_BUDGET output=(1200, 750) scale=1.0 mode=0 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+PASS Real player input on mountain trail bunny bank=-1 uphill
+PASS Continuous grounded motion bunny bank=-1 uphill dy=0.05574035644531 error=0.03096459823738
+PASS Real player input on mountain trail bunny bank=-1 downhill
+PASS Continuous grounded motion bunny bank=-1 downhill dy=0.05512237548828 error=0.03092173721015
+PASS Real player input on mountain trail bunny bank=1 uphill
+PASS Continuous grounded motion bunny bank=1 uphill dy=0.0588321685791 error=0.03582858815722
+PASS Real player input on mountain trail bunny bank=1 downhill
+PASS Continuous grounded motion bunny bank=1 downhill dy=0.05930709838867 error=0.0343926127793
+PASS Cross both bridge approaches through real input bunny
+PASS Walk from valley trail onto return pier bunny
+PASS Real player input on mountain trail cat_teacher bank=-1 uphill
+PASS Continuous grounded motion cat_teacher bank=-1 uphill dy=0.05612564086914 error=0.03965855598602
+PASS Real player input on mountain trail cat_teacher bank=-1 downhill
+PASS Continuous grounded motion cat_teacher bank=-1 downhill dy=0.05622673034668 error=0.0397850376069
+PASS Real player input on mountain trail cat_teacher bank=1 uphill
+PASS Continuous grounded motion cat_teacher bank=1 uphill dy=0.05950927734375 error=0.0461337284166
+PASS Real player input on mountain trail cat_teacher bank=1 downhill
+PASS Continuous grounded motion cat_teacher bank=1 downhill dy=0.05930709838867 error=0.04379097754494
+PASS Cross both bridge approaches through real input cat_teacher
+PASS Walk from valley trail onto return pier cat_teacher
+PASS Real player input on mountain trail panda bank=-1 uphill
+PASS Continuous grounded motion panda bank=-1 uphill dy=0.05574035644531 error=0.0289963425536
+PASS Real player input on mountain trail panda bank=-1 downhill
+PASS Continuous grounded motion panda bank=-1 downhill dy=0.05512428283691 error=0.02916141044208
+PASS Real player input on mountain trail panda bank=1 uphill
+PASS Continuous grounded motion panda bank=1 uphill dy=0.05883026123047 error=0.03342151418261
+PASS Real player input on mountain trail panda bank=1 downhill
+PASS Continuous grounded motion panda bank=1 downhill dy=0.05930709838867 error=0.03231071847145
+PASS Cross both bridge approaches through real input panda
+PASS Walk from valley trail onto return pier panda
+VALLEY_TRAVERSAL_REGRESSION_RESULT PASS checks=33 failures=[]

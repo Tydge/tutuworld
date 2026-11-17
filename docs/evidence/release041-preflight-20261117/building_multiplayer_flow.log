@@ -1,0 +1,70 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+TUTU_SERVER_READY version=0.4.1 build=8
+WANDER_GRID_READY cells=19995 components=7
+PASS Real owner connection registers an isolated account
+PASS Owner joins through the real Session transport
+PASS Second real client connects
+PASS Visitor registers an isolated account
+WANDER_GRID_READY cells=47740 components=9
+PASS Visitor joins the shared world
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS Real online purchase updates owner state and HUD
+PASS Multiplayer city exposes the existing building controls
+PASS Online building entry acquires the construction lease
+PASS Evacuated visitor receives the actual network notice
+PASS Client prediction and visitor snapshot both see the closed parcel
+PASS The 99-record two-storey house can be edited locally
+PASS Unfinished construction stays invisible to the server and visitor
+PASS Draft retains ordinary undo history
+PASS Undo changes the private draft only
+PASS Redo restores the private draft
+BUILDING_SERVER_UPDATE {"configure_usec":453,"created":142,"elapsed_usec":3455636,"entries_usec":498,"max_slice_usec":28099,"modules":142,"moved":0,"phases":{"descriptors":7704,"models":28094,"retire":0,"rooms":0,"slowest_model":"wall:build_42839335","swap":6783},"prepare_usec":607,"removed":0,"reused":0,"usec":1875,"yields":70}
+PASS Completion button waits for confirmation, then resumes walking
+PASS Only confirmed completion updates both clients and persisted world
+PASS Publication keeps the same scene, map and player nodes
+PASS Finished parcel reopens for visitors
+PASS Fresh open and closed doors agree in snapshots, client visuals and authority collision
+PASS Real actor enters a freshly built open door without toggling: server visitor
+PASS Real actor enters a freshly built open door without toggling: local owner
+PASS Second owner buys a separate parcel
+PASS Second owner starts independent construction
+BUILDING_SERVER_UPDATE {"configure_usec":851,"created":141,"elapsed_usec":1364641,"entries_usec":1094,"max_slice_usec":24401,"modules":283,"moved":0,"phases":{"descriptors":13867,"models":22552,"retire":0,"rooms":3171,"slowest_model":"wall:build_54","swap":7560},"prepare_usec":1106,"removed":0,"reused":142,"usec":3595,"yields":56}
+PASS Second owner confirms another full two-storey house
+PASS Spectator receives the second house without changing scenes
+PASS Every unchanged first-house module retains its node identity
+PASS Changed geometry is prepared across multiple frames
+PASS Two-house update keeps every measured script slice below 33.3 ms
+PASS Final model and collision swap stays within a 16.7 ms script budget
+BUILDING_UPDATE_METRICS {"configure_usec":1084,"created":141,"elapsed_usec":4078582,"entries_usec":1409,"max_slice_usec":19750,"modules":283,"moved":0,"phases":{"descriptors":16409,"models":153929,"retire":0,"rooms":0,"slowest_model":"roof:build_21","swap":7443},"prepare_usec":1232,"removed":0,"reused":142,"usec":4380,"yields":100}
+PASS Cached doors retain real collision and their own selection IDs
+PASS Second owner reopens a completed parcel
+BUILDING_SERVER_UPDATE {"configure_usec":180,"created":1,"elapsed_usec":31458,"entries_usec":1129,"max_slice_usec":3864,"modules":283,"moved":0,"phases":{"descriptors":0,"models":1959,"retire":0,"rooms":0,"slowest_model":"object:sofa","swap":3362},"prepare_usec":1086,"removed":1,"reused":282,"usec":2929,"yields":2}
+PASS An existing building accepts a second completed edit
+PASS A one-object change replaces only that object and retires its old geometry
+PASS Publishing a later edit still preserves the other owner's complete house
+PASS Owner can reopen a completed house for another editing session
+PASS Other owner can edit concurrently with this private draft
+BUILDING_SERVER_UPDATE {"configure_usec":323,"created":1,"elapsed_usec":29923,"entries_usec":1150,"max_slice_usec":4043,"modules":283,"moved":0,"phases":{"descriptors":0,"models":2056,"retire":0,"rooms":0,"slowest_model":"object:sofa","swap":3365},"prepare_usec":992,"removed":1,"reused":282,"usec":2987,"yields":2}
+PASS Concurrent publication updates the other parcel
+PASS Preview and placement both reject an object crossing the parcel boundary
+PASS Legal new object preview stays green after another parcel publishes
+PASS The green preview and the actual private placement agree
+PASS Owner can revise their private draft before discarding
+PASS Explicit discard reopens the parcel and keeps the published buildings
+PASS Owner starts the 0.4 facade and finish transaction
+PASS A furnished online two-storey facade expands atomically
+PASS Online draft accepts the linked floors, roof, openings and mirrors
+PASS Facade expansion and exterior painting remain private before completion
+BUILDING_SERVER_UPDATE {"configure_usec":1062,"created":33,"elapsed_usec":683316,"entries_usec":1170,"max_slice_usec":26798,"modules":284,"moved":0,"phases":{"descriptors":12591,"models":26766,"retire":0,"rooms":0,"slowest_model":"wall:build_915317836","swap":15358},"prepare_usec":1130,"removed":32,"reused":251,"usec":3953,"yields":27}
+PASS Finishing 0.4 facade changes keeps the running city
+PASS Both published storeys contain the expansion strip
+PASS Published facade still passes full structural validation: 已保存建造布局。
+FACADE_SNAPSHOT_REVISIONS 5.0 5
+PASS Visitor receives the complete validated facade update
+PASS Facade transaction preserves the other owner's published rows
+BUILDING_MULTIPLAYER_FLOW_RESULT PASS checks=52 failures=[]
+ERROR: Pages in use exist at exit in PagedAllocator: N7Variant5Pools11BucketSmallE
+   at: ~PagedAllocator (./core/templates/paged_allocator.h:169)

@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-17",
+  "version": "0.4.1",
+  "build": 8,
+  "protocol": 4,
+  "launcher": 2,
+  "baseline_commit": "af1e3fa38d1c2ad5e80002ba6d5f8b99dcc5b1ca",
+  "status": "prepared_locally_awaiting_server_login",
+  "user_authorized_publish_and_deploy": true,
+  "built": true,
+  "signed": true,
+  "uploaded": false,
+  "published": false,
+  "deployed": false,
+  "production_before": {
+    "version": "0.4.0",
+    "build": 7,
+    "protocol": 4
+  },
+  "blocking_condition": "Existing local SSH keys were rejected by the server (publickey); usable server login details requested from the user.",
+  "groups": 17,
+  "counted_checks": 1526,
+  "tests": [
+    {
+      "name": "valley_landscape_rules",
+      "passed": true,
+      "checks": 14,
+      "log": "valley_landscape_rules.log"
+    },
+    {
+      "name": "valley_rules",
+      "passed": true,
+      "checks": 215,
+      "log": "valley_rules.log"
+    },
+    {
+      "name": "valley_spawn_regression",
+      "passed": true,
+      "checks": 15,
+      "log": "valley_spawn_regression.log"
+    },
+    {
+      "name": "valley_traversal_regression",
+      "passed": true,
+      "checks": 33,
+      "log": "valley_traversal_regression.log"
+    },
+    {
+      "name": "valley_deck_clearance",
+      "passed": true,
+      "checks": 10,
+      "log": "valley_deck_clearance.log"
+    },
+    {
+      "name": "valley_multiplayer_flow",
+      "passed": true,
+      "checks": 30,
+      "log": "valley_multiplayer_flow.log"
+    },
+    {
+      "name": "valley_server_migration",
+      "passed": true,
+      "checks": 32,
+      "log": "valley_server_migration.log"
+    },
+    {
+      "name": "project_integrity",
+      "passed": true,
+      "checks": 470,
+      "log": "project_integrity.log"
+    },
+    {
+      "name": "motion_buffer_rules",
+      "passed": true,
+      "checks": 125,
+      "log": "motion_buffer_rules.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "passed": true,
+      "checks": 44,
+      "log": "character_roster_rules.log"
+    },
+    {
+      "name": "save_transactions",
+      "passed": true,
+      "checks": 10,
+      "log": "save_transactions.log"
+    },
+    {
+      "name": "update_integrity",
+      "passed": true,
+      "checks": 5,
+      "log": "update_integrity.log"
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "passed": true,
+      "checks": 59,
+      "log": "building_multiplayer_rules.log"
+    },
+    {
+      "name": "building_multiplayer_flow",
+      "passed": true,
+      "checks": 52,
+      "log": "building_multiplayer_flow.log"
+    },
+    {
+      "name": "release04_building_rules",
+      "passed": true,
+      "checks": 369,
+      "log": "release04_building_rules.log"
+    },
+    {
+      "name": "building_update_lifecycle",
+      "passed": true,
+      "checks": 1,
+      "log": "building_update_lifecycle.log"
+    },
+    {
+      "name": "multiplayer_live",
+      "passed": true,
+      "checks": 42,
+      "log": "multiplayer_live.log"
+    }
+  ],
+  "native_checks": 18,
+  "native_method": "Unchanged original exported Mac executables with a separate QA bootstrap pack and isolated user directory; mounted original client resources and verified the signed build8 upgrade. QA bootstrap excluded from installers.",
+  "installer_verification": "artifact-verification.json",
+  "source_hashes": "source-sha256.json",
+  "file_inventory": "files.txt",
+  "test_processes_left_running": false,
+  "next_steps": [
+    "Authenticate to server and capture private preservation/backup baseline",
+    "Prepare isolated remote server and verify exported candidate",
+    "Stage immutable client artifacts and signed manifest",
+    "Back up and activate service, verify preserved data",
+    "Promote manifest and verify public TLS/WebSocket and legacy update download"
+  ],
+  "limits": [
+    "No remote staging, production backup/cutover, public build8 manifest or public legacy download verification completed yet",
+    "No Windows physical device or long-running full-capacity soak; Mac package remains ad-hoc signed, not notarized",
+    "Historical multiplayer Variant pool cleanup diagnostic remains; no script or shader errors in selected passing checks"
+  ],
+  "qa_resolution": [
+    "Deck screenshot capture now explicitly draws a frame instead of waiting on an optional native-window post-draw signal; physical board-clearance thresholds unchanged",
+    "Migration assertions compare semantic serialized values rather than JSON numeric representation and ordering"
+  ]
+}

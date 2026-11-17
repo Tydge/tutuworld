@@ -1,0 +1,8 @@
+config_version=5
+[application]
+config/name="TutuWorld Release QA"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="TutuWorld-Release-QA"
+run/main_scene="res://native-probe.tscn"
+run/disable_stdout=false
+run/disable_stderr=false

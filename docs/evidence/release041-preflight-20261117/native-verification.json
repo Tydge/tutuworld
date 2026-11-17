@@ -1,0 +1,16 @@
+[
+  {
+    "base_version": "0.4.1",
+    "checks": 8,
+    "failures": [],
+    "native": true,
+    "executable_unchanged": true
+  },
+  {
+    "base_version": "0.4.0",
+    "checks": 10,
+    "failures": [],
+    "native": true,
+    "executable_unchanged": true
+  }
+]
