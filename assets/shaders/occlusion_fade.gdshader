@@ -3,6 +3,8 @@ render_mode specular_disabled;
 uniform vec4 tint : source_color=vec4(1.0);
 uniform bool vertex_tint=false;
 uniform float opacity=1.0;
+varying flat float camera_cut_pass;
+void vertex(){camera_cut_pass=(PROJECTION_MATRIX[3][3]<.5 && distance(INV_VIEW_MATRIX[3].xyz,MAIN_CAM_INV_VIEW_MATRIX[3].xyz)<.01 && dot(INV_VIEW_MATRIX[2].xyz,MAIN_CAM_INV_VIEW_MATRIX[2].xyz)>.9999)?1.:0.;}
 float leaf_hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}
 // Broad overlapping leaves, with variation kept in the material rather than hundreds of loose meshes.
 vec2 leaf_surface(vec2 uv){
@@ -28,7 +30,9 @@ float screen_pattern(vec2 p){
 }
 vec3 linear_color(vec3 c){return mix(pow((c+vec3(.055))/1.055,vec3(2.4)),c/12.92,lessThan(c,vec3(.04045)));}
 void fragment(){
- if(opacity<.001 || (opacity<.999 && screen_pattern(FRAGCOORD.xy)>opacity)) discard;
+ // Test the actual pass camera as well as perspective, so sun, spot and point
+ // light views retain the tree as the player walks underneath.
+ if(camera_cut_pass>.5 && (opacity<.001 || (opacity<.999 && screen_pattern(FRAGCOORD.xy)>opacity))) discard;
  vec3 foliage_color=OUTPUT_IS_SRGB?COLOR.rgb:linear_color(COLOR.rgb);
  vec2 leaf=leaf_surface(UV);
  vec3 foliage=foliage_color*leaf.x;

@@ -21,13 +21,13 @@ func run() -> void:
 	check(game.scenery.get_meta("continuous_heightfield",false) and game.scenery.get_meta("playable_area_scale",0)==4.,"Fourfold valley uses continuous physical terrain")
 	check(game.scenery.get_meta("meadow_flower_count",0)>=450 and game.scenery.get_meta("woodland_detail_count",0)>=400 and game.scenery.get_meta("riverbank_plant_count",0)>=80,"Grouped wildflowers, fern glades and riverbank plants")
 	check(game.scenery.get_meta("ancient_tree_count",0)>=250 and game.scenery.get_meta("forest_prototypes",0)==4,"Mature and young trees share four prototypes")
-	check(game.scenery.get_meta("grass_clump_count",0)>30000 and game.scenery.get_meta("grass_draw_distance",0)<=45.,"Dense grass has a bounded near-camera draw distance")
+	check(game.scenery.get_meta("grass_clump_count",0)>30000 and game.scenery.get_meta("grass_draw_distance",0)==54.,"Dense grass fades to 54m with a conservative batch culling bound")
 	var forest: Node3D=game.scenery.get_node("AncientForest")
 	var meshes: Dictionary={};var instances:=0;var batches:=0
 	for node in forest.find_children("*","MultiMeshInstance3D",true,false):
 		meshes[node.multimesh.mesh]=true;batches+=1;instances+=node.multimesh.instance_count
 		check(node.position.length()>1. and node.multimesh.instance_count>0,"Spatial forest batch has a local origin and saved instances")
-	check(meshes.size()==16 and instances==game.scenery.get_meta("ancient_tree_count")*4,"All near / far trunk and canopy instances survive map serialization")
+	check(meshes.size()==24 and instances==game.scenery.get_meta("ancient_tree_count")*6,"Near / far and independent trunk / canopy shadow instances survive serialization")
 	for asset in ["foliage_atlas_v1","forest_turf_v1"]:
 		var config:=ConfigFile.new();config.load("res://assets/terrain/woodland/"+asset+".png.import")
 		check(config.get_value("params","mipmaps/generate",false) and config.get_value("params","compress/mode",0)==2,"Mipmapped compressed forest asset "+asset)

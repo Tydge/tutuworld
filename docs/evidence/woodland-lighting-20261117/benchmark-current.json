@@ -1,0 +1,69 @@
+{
+	"driver": "metal",
+	"output": "(3024, 1890)",
+	"renderer": "forward_plus",
+	"scale": 0.591552376747131,
+	"uncapped": true,
+	"views": [
+		{
+			"cpu_median_ms": 13.831,
+			"draw_calls": 414,
+			"frames": 176,
+			"max_ms": 14.105,
+			"median_ms": 11.394,
+			"p95_ms": 11.677,
+			"primitives": 556949,
+			"setup_median_ms": 0.068,
+			"view": "forest-noon",
+			"vram_mb": 514.5
+		},
+		{
+			"cpu_median_ms": 14.816,
+			"draw_calls": 847,
+			"frames": 154,
+			"max_ms": 14.86,
+			"median_ms": 13.052,
+			"p95_ms": 13.409,
+			"primitives": 1268707,
+			"setup_median_ms": 0.062,
+			"view": "forest-morning-safe",
+			"vram_mb": 514.5
+		},
+		{
+			"cpu_median_ms": 29.788,
+			"draw_calls": 955,
+			"frames": 143,
+			"max_ms": 20.801,
+			"median_ms": 14.004,
+			"p95_ms": 14.252,
+			"primitives": 1090844,
+			"setup_median_ms": 0.062,
+			"view": "overlook",
+			"vram_mb": 514.5
+		},
+		{
+			"cpu_median_ms": 13.104,
+			"draw_calls": 821,
+			"frames": 157,
+			"max_ms": 13.851,
+			"median_ms": 12.757,
+			"p95_ms": 12.974,
+			"primitives": 1229096,
+			"setup_median_ms": 0.058,
+			"view": "bridge",
+			"vram_mb": 514.5
+		},
+		{
+			"cpu_median_ms": 24.843,
+			"draw_calls": 516,
+			"frames": 157,
+			"max_ms": 13.704,
+			"median_ms": 12.767,
+			"p95_ms": 13.008,
+			"primitives": 954895,
+			"setup_median_ms": 0.061,
+			"view": "cottage-night",
+			"vram_mb": 514.5
+		}
+	]
+}

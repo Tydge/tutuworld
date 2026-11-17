@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+2026-11-17 23:17:53.538 Godot[68976:111197516] not in fullscreen state
+RENDER_BUDGET output=(1920, 1080) scale=0.982 mode=3 quality=balanced
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+WOODLAND_LIGHTING_BENCH {"cpu_median_ms":13.831,"draw_calls":414,"frames":176,"max_ms":14.105,"median_ms":11.394,"p95_ms":11.677,"primitives":556949,"setup_median_ms":0.068,"view":"forest-noon","vram_mb":514.5}
+WOODLAND_LIGHTING_BENCH {"cpu_median_ms":14.816,"draw_calls":847,"frames":154,"max_ms":14.86,"median_ms":13.052,"p95_ms":13.409,"primitives":1268707,"setup_median_ms":0.062,"view":"forest-morning-safe","vram_mb":514.5}
+WOODLAND_LIGHTING_BENCH {"cpu_median_ms":29.788,"draw_calls":955,"frames":143,"max_ms":20.801,"median_ms":14.004,"p95_ms":14.252,"primitives":1090844,"setup_median_ms":0.062,"view":"overlook","vram_mb":514.5}
+WOODLAND_LIGHTING_BENCH {"cpu_median_ms":13.104,"draw_calls":821,"frames":157,"max_ms":13.851,"median_ms":12.757,"p95_ms":12.974,"primitives":1229096,"setup_median_ms":0.058,"view":"bridge","vram_mb":514.5}
+WOODLAND_LIGHTING_BENCH {"cpu_median_ms":24.843,"draw_calls":516,"frames":157,"max_ms":13.704,"median_ms":12.767,"p95_ms":13.008,"primitives":954895,"setup_median_ms":0.061,"view":"cottage-night","vram_mb":514.5}
+WOODLAND_LIGHTING_BENCHMARK_RESULT PASS

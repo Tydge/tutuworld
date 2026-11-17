@@ -1,0 +1,15 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(2400, 1440) scale=0.761 mode=3 quality=balanced
+WANDER_GRID_READY cells=47740 components=9
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+SCENE_PREPARED ms=4015
+VALLEY_PERF bridge-day fps=60.5 p95_ms=18.669 max_ms=20.52 over50=0 draws=670
+VALLEY_PERF hillside-day fps=60.5 p95_ms=19.67 max_ms=21.872 over50=0 draws=949
+VALLEY_PERF cottage-night fps=60.5 p95_ms=20.176 max_ms=20.627 over50=0 draws=785
+VALLEY_PERF interior-night fps=60.5 p95_ms=19.258 max_ms=21.545 over50=0 draws=822
+VALLEY_PERF summit-day fps=60.5 p95_ms=19.708 max_ms=21.234 over50=0 draws=436
+VALLEY_PERF harbor-day fps=60.5 p95_ms=20.367 max_ms=25.273 over50=0 draws=883
+VALLEY_PERF harbor-night fps=60.5 p95_ms=19.982 max_ms=21.621 over50=0 draws=847
+VALLEY_PERFORMANCE_RESULT PASS failures=[]

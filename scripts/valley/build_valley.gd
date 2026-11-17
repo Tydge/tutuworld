@@ -35,7 +35,10 @@ func build() -> void:
 func build_environment() -> void:
 	var town: Node3D=load("res://scenes/city_map.tscn").instantiate()
 	var environment: WorldEnvironment=town.get_node("Atmosphere").duplicate();environment.environment=environment.environment.duplicate(true);world.add_child(environment)
-	var sun: DirectionalLight3D=town.get_node("Sun").duplicate();sun.directional_shadow_max_distance=100.;world.add_child(sun);town.free()
+	var sun: DirectionalLight3D=town.get_node("Sun").duplicate()
+	sun.directional_shadow_max_distance=160.;sun.directional_shadow_fade_start=.70;sun.directional_shadow_blend_splits=true
+	sun.directional_shadow_mode=DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS;sun.directional_shadow_split_1=.22
+	world.add_child(sun);town.free()
 	var island:=group(world,"Island");var sea:=ShaderMaterial.new();sea.shader=load("res://assets/shaders/island_ocean.gdshader");sea.set_shader_parameter("valley_estuary",true);island.set_meta("sea_material",sea)
 func build_terrain() -> void:
 	var terrain:=group(world,"ForestTerrain")
@@ -158,6 +161,7 @@ func petal(st: SurfaceTool,origin: Vector3,axis: Vector3,side: Vector3,length_: 
 			st.set_color(color);st.set_uv(Vector2(0,1));st.add_vertex(point)
 func build_flower_meadows() -> void:
 	var shader:=ShaderMaterial.new();shader.shader=load("res://assets/shaders/forest_blossoms.gdshader")
+	shader.set_shader_parameter("plant_fade",Vector2(58,86))
 	var count:=0
 	var patches: Array[Vector2]=[Vector2(-12,9),Vector2(-15,12),Vector2(10,12),Vector2(18,8),Vector2(-22,-14),Vector2(26,-20),Vector2(-24,-32),Vector2(22,-34),Vector2(-25,25),Vector2(10,27),Vector2(5,-18),Vector2(-30,2)]
 	patches.assign(patches.map(func(p):return p*2.))
@@ -185,7 +189,7 @@ func build_flower_meadows() -> void:
 			count+=1
 		st.generate_normals();var mesh:=st.commit()
 		if mesh.get_surface_count()>0:
-			var node:=G.mesh(holder,mesh,Vector3.ZERO,shader,"FlowerMeadow%02d"%index);node.visibility_range_end=70.;node.visibility_range_end_margin=6.
+			var node:=G.mesh(holder,mesh,Vector3.ZERO,shader,"FlowerMeadow%02d"%index);node.visibility_range_end=100.;node.visibility_range_end_margin=0.
 			node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	world.set_meta("meadow_flower_count",count)
 	print("VALLEY_FLOWER_MEADOWS blooms=",count)

@@ -1,0 +1,505 @@
+{
+	"after": {
+		"collision_count": 607,
+		"collision_sha256": "4dc00ee8782167e16cdfe7aef8e6855eaff4556dedd94e4745b5c0f077fca2e7",
+		"flowers": 500,
+		"grass": 36728,
+		"home": {
+			"chimney": true,
+			"floor_color": "b79562",
+			"floor_height": 0.18,
+			"furniture": [
+				{
+					"id": "bed",
+					"kind": "bed",
+					"position": [
+						-3.55,
+						0.0,
+						-2.2
+					],
+					"yaw": 90.0
+				},
+				{
+					"id": "sofa",
+					"kind": "forest_settee",
+					"position": [
+						1.55,
+						0.0,
+						-3.9
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "tea_table",
+					"kind": "forest_tea_table",
+					"position": [
+						1.4,
+						0.0,
+						0.1
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "desk",
+					"kind": "forest_workbench",
+					"position": [
+						4.7,
+						0.0,
+						1.8
+					],
+					"yaw": 90.0
+				},
+				{
+					"id": "hearth",
+					"kind": "forest_stove",
+					"position": [
+						4.7,
+						0.0,
+						-3.7
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "bookshelf",
+					"kind": "forest_cabinet",
+					"position": [
+						-1.1,
+						0.0,
+						-4.5
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "rug",
+					"kind": "forest_rug",
+					"position": [
+						0.4,
+						0.0,
+						0.8
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "fern",
+					"kind": "forest_planter",
+					"position": [
+						-4.9,
+						0.0,
+						3.6
+					],
+					"yaw": 0.0
+				}
+			],
+			"garden_fence": false,
+			"garden_flowerbeds": false,
+			"garden_path_stones": 0.0,
+			"grid": 0.5,
+			"id": "mianfeng_cottage",
+			"light_positions": {
+				"BedsideLight": [
+					-4.45,
+					1.53,
+					-0.3
+				],
+				"HearthLight": [
+					4.7,
+					1.0,
+					-3.0
+				],
+				"Pendant": [
+					0.0,
+					4.08,
+					0.5
+				],
+				"RoomFill": [
+					-2.8,
+					2.4,
+					1.4
+				],
+				"RoomKey": [
+					0.0,
+					3.7,
+					0.5
+				]
+			},
+			"materials": {
+				"oak": "ac8053",
+				"panel": "679a80",
+				"plaster": "f4e4c0",
+				"roof": "4e8070",
+				"trim": "ecd5a7"
+			},
+			"name": "潘达的林间居所",
+			"origin": [
+				24.0,
+				8.0,
+				-72.0
+			],
+			"roof_rise": 1.8,
+			"schema": 1.0,
+			"size": [
+				12.0,
+				10.0
+			],
+			"theme": "forest",
+			"wall_height": 4.4,
+			"wall_thickness": 0.24,
+			"walls": [
+				{
+					"a": [
+						-6.0,
+						5.0
+					],
+					"b": [
+						6.0,
+						5.0
+					],
+					"id": "south",
+					"openings": [
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "living_window",
+							"offset": 2.0,
+							"type": "window",
+							"width": 2.2
+						},
+						{
+							"bottom": 0.0,
+							"height": 3.55,
+							"id": "front_door",
+							"offset": 6.0,
+							"type": "door",
+							"width": 3.0
+						},
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "desk_window",
+							"offset": 10.0,
+							"type": "window",
+							"width": 2.2
+						}
+					]
+				},
+				{
+					"a": [
+						6.0,
+						5.0
+					],
+					"b": [
+						6.0,
+						-5.0
+					],
+					"id": "east",
+					"openings": [
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "east_window",
+							"offset": 5.3,
+							"type": "window",
+							"width": 2.8
+						}
+					]
+				},
+				{
+					"a": [
+						6.0,
+						-5.0
+					],
+					"b": [
+						-6.0,
+						-5.0
+					],
+					"id": "north",
+					"openings": [
+						{
+							"bottom": 1.25,
+							"height": 2.1,
+							"id": "bed_window",
+							"offset": 2.7,
+							"type": "window",
+							"width": 2.5
+						}
+					]
+				},
+				{
+					"a": [
+						-6.0,
+						-5.0
+					],
+					"b": [
+						-6.0,
+						5.0
+					],
+					"id": "west",
+					"openings": [
+						{
+							"bottom": 1.15,
+							"height": 2.2,
+							"id": "west_window",
+							"offset": 4.8,
+							"type": "window",
+							"width": 3.0
+						}
+					]
+				}
+			]
+		},
+		"ridge_trees": 220,
+		"trees": 271
+	},
+	"before": {
+		"collision_count": 607,
+		"collision_sha256": "4dc00ee8782167e16cdfe7aef8e6855eaff4556dedd94e4745b5c0f077fca2e7",
+		"flowers": 500,
+		"grass": 36728,
+		"home": {
+			"chimney": true,
+			"floor_color": "b79562",
+			"floor_height": 0.18,
+			"furniture": [
+				{
+					"id": "bed",
+					"kind": "bed",
+					"position": [
+						-3.55,
+						0.0,
+						-2.2
+					],
+					"yaw": 90.0
+				},
+				{
+					"id": "sofa",
+					"kind": "forest_settee",
+					"position": [
+						1.55,
+						0.0,
+						-3.9
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "tea_table",
+					"kind": "forest_tea_table",
+					"position": [
+						1.4,
+						0.0,
+						0.1
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "desk",
+					"kind": "forest_workbench",
+					"position": [
+						4.7,
+						0.0,
+						1.8
+					],
+					"yaw": 90.0
+				},
+				{
+					"id": "hearth",
+					"kind": "forest_stove",
+					"position": [
+						4.7,
+						0.0,
+						-3.7
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "bookshelf",
+					"kind": "forest_cabinet",
+					"position": [
+						-1.1,
+						0.0,
+						-4.5
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "rug",
+					"kind": "forest_rug",
+					"position": [
+						0.4,
+						0.0,
+						0.8
+					],
+					"yaw": 0.0
+				},
+				{
+					"id": "fern",
+					"kind": "forest_planter",
+					"position": [
+						-4.9,
+						0.0,
+						3.6
+					],
+					"yaw": 0.0
+				}
+			],
+			"garden_fence": false,
+			"garden_flowerbeds": false,
+			"garden_path_stones": 0.0,
+			"grid": 0.5,
+			"id": "mianfeng_cottage",
+			"light_positions": {
+				"BedsideLight": [
+					-4.45,
+					1.53,
+					-0.3
+				],
+				"HearthLight": [
+					4.7,
+					1.0,
+					-3.0
+				],
+				"Pendant": [
+					0.0,
+					4.08,
+					0.5
+				],
+				"RoomFill": [
+					-2.8,
+					2.4,
+					1.4
+				],
+				"RoomKey": [
+					0.0,
+					3.7,
+					0.5
+				]
+			},
+			"materials": {
+				"oak": "ac8053",
+				"panel": "679a80",
+				"plaster": "f4e4c0",
+				"roof": "4e8070",
+				"trim": "ecd5a7"
+			},
+			"name": "潘达的林间居所",
+			"origin": [
+				24.0,
+				8.0,
+				-72.0
+			],
+			"roof_rise": 1.8,
+			"schema": 1.0,
+			"size": [
+				12.0,
+				10.0
+			],
+			"theme": "forest",
+			"wall_height": 4.4,
+			"wall_thickness": 0.24,
+			"walls": [
+				{
+					"a": [
+						-6.0,
+						5.0
+					],
+					"b": [
+						6.0,
+						5.0
+					],
+					"id": "south",
+					"openings": [
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "living_window",
+							"offset": 2.0,
+							"type": "window",
+							"width": 2.2
+						},
+						{
+							"bottom": 0.0,
+							"height": 3.55,
+							"id": "front_door",
+							"offset": 6.0,
+							"type": "door",
+							"width": 3.0
+						},
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "desk_window",
+							"offset": 10.0,
+							"type": "window",
+							"width": 2.2
+						}
+					]
+				},
+				{
+					"a": [
+						6.0,
+						5.0
+					],
+					"b": [
+						6.0,
+						-5.0
+					],
+					"id": "east",
+					"openings": [
+						{
+							"bottom": 1.1,
+							"height": 2.25,
+							"id": "east_window",
+							"offset": 5.3,
+							"type": "window",
+							"width": 2.8
+						}
+					]
+				},
+				{
+					"a": [
+						6.0,
+						-5.0
+					],
+					"b": [
+						-6.0,
+						-5.0
+					],
+					"id": "north",
+					"openings": [
+						{
+							"bottom": 1.25,
+							"height": 2.1,
+							"id": "bed_window",
+							"offset": 2.7,
+							"type": "window",
+							"width": 2.5
+						}
+					]
+				},
+				{
+					"a": [
+						-6.0,
+						-5.0
+					],
+					"b": [
+						-6.0,
+						5.0
+					],
+					"id": "west",
+					"openings": [
+						{
+							"bottom": 1.15,
+							"height": 2.2,
+							"id": "west_window",
+							"offset": 4.8,
+							"type": "window",
+							"width": 3.0
+						}
+					]
+				}
+			]
+		},
+		"ridge_trees": 220,
+		"trees": 271
+	},
+	"pass": true
+}

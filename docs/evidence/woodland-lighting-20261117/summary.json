@@ -1,0 +1,630 @@
+{
+  "date": "2026-11-17",
+  "base_commit": "73e1167",
+  "delivery": "Source only. No export, version bump, release, deployment, production login, or production data access.",
+  "engine": "Godot 4.6.3",
+  "hardware": "Apple M1 Pro / Metal / Forward+",
+  "passing_check_groups": 15,
+  "reported_checks": {
+    "woodland_shadow_stability": 12,
+    "woodland_lod_flow": 12,
+    "forest_art_structure": 316,
+    "valley_landscape_rules": 14,
+    "valley_camera_regression": 219,
+    "valley_deck_clearance": 10,
+    "valley_visitors_night": 25,
+    "valley_npc_recovery": 7,
+    "project_integrity": 475,
+    "woodland_lighting_flow": 6,
+    "valley_multiplayer_flow": 48,
+    "home_lighting_stability": 22,
+    "motion_buffer_rules": 125
+  },
+  "reported_check_total": 1291,
+  "performance_groups": [
+    "woodland_sweep_performance",
+    "valley_performance"
+  ],
+  "measurement_only": "woodland_lighting_benchmark; not counted as an assertion test",
+  "shadow_comparison": {
+    "before": "Expected failure in 6 light/material combinations after explicitly refreshing the local light shadow cache",
+    "after": "12 checks passed; 6 combinations have exactly zero ground-shadow pixel delta while main-camera cutaway still works"
+  },
+  "lod_gpu_test": "12 checks; 100% central coverage through 55/64/74/84/94/104/114m, monotonic near/far blend",
+  "settings": {
+    "tree_detail_begin": 64,
+    "tree_detail_end": 104,
+    "grass_fade": [
+      32,
+      54
+    ],
+    "decor_fade": [
+      58,
+      86
+    ],
+    "shadow_distance": 160,
+    "shadow_fade_start": 0.7,
+    "shadow_cascades": 2,
+    "first_cascade_fraction": 0.22,
+    "shadow_blend_splits": true,
+    "main_3d_pixel_budget": 2000000,
+    "version_unchanged": "0.4.1/build8"
+  },
+  "fast_traversal": {
+    "seconds": 12,
+    "fps": 60.0833333333333,
+    "p95_ms": 19.519,
+    "max_ms": 21.285,
+    "over_50_ms": 0,
+    "peak_draw_calls": 1081,
+    "peak_primitives": 1456450,
+    "reported_total_vram_mib": 569.328125
+  },
+  "paired_performance_note": "Four matching fixed views, same 3024x1890 output and ~2M 3D pixels, uncapped after warmup. Draw calls decrease 5-35%, but overlook P95 increases ~19% because of expanded visible detail and shadows. Not an all-scenes speedup. Invalid original morning camera is explicitly excluded.",
+  "preservation": {
+    "after": {
+      "collision_count": 607,
+      "collision_sha256": "4dc00ee8782167e16cdfe7aef8e6855eaff4556dedd94e4745b5c0f077fca2e7",
+      "flowers": 500,
+      "grass": 36728,
+      "home": {
+        "chimney": true,
+        "floor_color": "b79562",
+        "floor_height": 0.18,
+        "furniture": [
+          {
+            "id": "bed",
+            "kind": "bed",
+            "position": [
+              -3.55,
+              0.0,
+              -2.2
+            ],
+            "yaw": 90.0
+          },
+          {
+            "id": "sofa",
+            "kind": "forest_settee",
+            "position": [
+              1.55,
+              0.0,
+              -3.9
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "tea_table",
+            "kind": "forest_tea_table",
+            "position": [
+              1.4,
+              0.0,
+              0.1
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "desk",
+            "kind": "forest_workbench",
+            "position": [
+              4.7,
+              0.0,
+              1.8
+            ],
+            "yaw": 90.0
+          },
+          {
+            "id": "hearth",
+            "kind": "forest_stove",
+            "position": [
+              4.7,
+              0.0,
+              -3.7
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "bookshelf",
+            "kind": "forest_cabinet",
+            "position": [
+              -1.1,
+              0.0,
+              -4.5
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "rug",
+            "kind": "forest_rug",
+            "position": [
+              0.4,
+              0.0,
+              0.8
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "fern",
+            "kind": "forest_planter",
+            "position": [
+              -4.9,
+              0.0,
+              3.6
+            ],
+            "yaw": 0.0
+          }
+        ],
+        "garden_fence": false,
+        "garden_flowerbeds": false,
+        "garden_path_stones": 0.0,
+        "grid": 0.5,
+        "id": "mianfeng_cottage",
+        "light_positions": {
+          "BedsideLight": [
+            -4.45,
+            1.53,
+            -0.3
+          ],
+          "HearthLight": [
+            4.7,
+            1.0,
+            -3.0
+          ],
+          "Pendant": [
+            0.0,
+            4.08,
+            0.5
+          ],
+          "RoomFill": [
+            -2.8,
+            2.4,
+            1.4
+          ],
+          "RoomKey": [
+            0.0,
+            3.7,
+            0.5
+          ]
+        },
+        "materials": {
+          "oak": "ac8053",
+          "panel": "679a80",
+          "plaster": "f4e4c0",
+          "roof": "4e8070",
+          "trim": "ecd5a7"
+        },
+        "name": "潘达的林间居所",
+        "origin": [
+          24.0,
+          8.0,
+          -72.0
+        ],
+        "roof_rise": 1.8,
+        "schema": 1.0,
+        "size": [
+          12.0,
+          10.0
+        ],
+        "theme": "forest",
+        "wall_height": 4.4,
+        "wall_thickness": 0.24,
+        "walls": [
+          {
+            "a": [
+              -6.0,
+              5.0
+            ],
+            "b": [
+              6.0,
+              5.0
+            ],
+            "id": "south",
+            "openings": [
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "living_window",
+                "offset": 2.0,
+                "type": "window",
+                "width": 2.2
+              },
+              {
+                "bottom": 0.0,
+                "height": 3.55,
+                "id": "front_door",
+                "offset": 6.0,
+                "type": "door",
+                "width": 3.0
+              },
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "desk_window",
+                "offset": 10.0,
+                "type": "window",
+                "width": 2.2
+              }
+            ]
+          },
+          {
+            "a": [
+              6.0,
+              5.0
+            ],
+            "b": [
+              6.0,
+              -5.0
+            ],
+            "id": "east",
+            "openings": [
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "east_window",
+                "offset": 5.3,
+                "type": "window",
+                "width": 2.8
+              }
+            ]
+          },
+          {
+            "a": [
+              6.0,
+              -5.0
+            ],
+            "b": [
+              -6.0,
+              -5.0
+            ],
+            "id": "north",
+            "openings": [
+              {
+                "bottom": 1.25,
+                "height": 2.1,
+                "id": "bed_window",
+                "offset": 2.7,
+                "type": "window",
+                "width": 2.5
+              }
+            ]
+          },
+          {
+            "a": [
+              -6.0,
+              -5.0
+            ],
+            "b": [
+              -6.0,
+              5.0
+            ],
+            "id": "west",
+            "openings": [
+              {
+                "bottom": 1.15,
+                "height": 2.2,
+                "id": "west_window",
+                "offset": 4.8,
+                "type": "window",
+                "width": 3.0
+              }
+            ]
+          }
+        ]
+      },
+      "ridge_trees": 220,
+      "trees": 271
+    },
+    "before": {
+      "collision_count": 607,
+      "collision_sha256": "4dc00ee8782167e16cdfe7aef8e6855eaff4556dedd94e4745b5c0f077fca2e7",
+      "flowers": 500,
+      "grass": 36728,
+      "home": {
+        "chimney": true,
+        "floor_color": "b79562",
+        "floor_height": 0.18,
+        "furniture": [
+          {
+            "id": "bed",
+            "kind": "bed",
+            "position": [
+              -3.55,
+              0.0,
+              -2.2
+            ],
+            "yaw": 90.0
+          },
+          {
+            "id": "sofa",
+            "kind": "forest_settee",
+            "position": [
+              1.55,
+              0.0,
+              -3.9
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "tea_table",
+            "kind": "forest_tea_table",
+            "position": [
+              1.4,
+              0.0,
+              0.1
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "desk",
+            "kind": "forest_workbench",
+            "position": [
+              4.7,
+              0.0,
+              1.8
+            ],
+            "yaw": 90.0
+          },
+          {
+            "id": "hearth",
+            "kind": "forest_stove",
+            "position": [
+              4.7,
+              0.0,
+              -3.7
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "bookshelf",
+            "kind": "forest_cabinet",
+            "position": [
+              -1.1,
+              0.0,
+              -4.5
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "rug",
+            "kind": "forest_rug",
+            "position": [
+              0.4,
+              0.0,
+              0.8
+            ],
+            "yaw": 0.0
+          },
+          {
+            "id": "fern",
+            "kind": "forest_planter",
+            "position": [
+              -4.9,
+              0.0,
+              3.6
+            ],
+            "yaw": 0.0
+          }
+        ],
+        "garden_fence": false,
+        "garden_flowerbeds": false,
+        "garden_path_stones": 0.0,
+        "grid": 0.5,
+        "id": "mianfeng_cottage",
+        "light_positions": {
+          "BedsideLight": [
+            -4.45,
+            1.53,
+            -0.3
+          ],
+          "HearthLight": [
+            4.7,
+            1.0,
+            -3.0
+          ],
+          "Pendant": [
+            0.0,
+            4.08,
+            0.5
+          ],
+          "RoomFill": [
+            -2.8,
+            2.4,
+            1.4
+          ],
+          "RoomKey": [
+            0.0,
+            3.7,
+            0.5
+          ]
+        },
+        "materials": {
+          "oak": "ac8053",
+          "panel": "679a80",
+          "plaster": "f4e4c0",
+          "roof": "4e8070",
+          "trim": "ecd5a7"
+        },
+        "name": "潘达的林间居所",
+        "origin": [
+          24.0,
+          8.0,
+          -72.0
+        ],
+        "roof_rise": 1.8,
+        "schema": 1.0,
+        "size": [
+          12.0,
+          10.0
+        ],
+        "theme": "forest",
+        "wall_height": 4.4,
+        "wall_thickness": 0.24,
+        "walls": [
+          {
+            "a": [
+              -6.0,
+              5.0
+            ],
+            "b": [
+              6.0,
+              5.0
+            ],
+            "id": "south",
+            "openings": [
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "living_window",
+                "offset": 2.0,
+                "type": "window",
+                "width": 2.2
+              },
+              {
+                "bottom": 0.0,
+                "height": 3.55,
+                "id": "front_door",
+                "offset": 6.0,
+                "type": "door",
+                "width": 3.0
+              },
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "desk_window",
+                "offset": 10.0,
+                "type": "window",
+                "width": 2.2
+              }
+            ]
+          },
+          {
+            "a": [
+              6.0,
+              5.0
+            ],
+            "b": [
+              6.0,
+              -5.0
+            ],
+            "id": "east",
+            "openings": [
+              {
+                "bottom": 1.1,
+                "height": 2.25,
+                "id": "east_window",
+                "offset": 5.3,
+                "type": "window",
+                "width": 2.8
+              }
+            ]
+          },
+          {
+            "a": [
+              6.0,
+              -5.0
+            ],
+            "b": [
+              -6.0,
+              -5.0
+            ],
+            "id": "north",
+            "openings": [
+              {
+                "bottom": 1.25,
+                "height": 2.1,
+                "id": "bed_window",
+                "offset": 2.7,
+                "type": "window",
+                "width": 2.5
+              }
+            ]
+          },
+          {
+            "a": [
+              -6.0,
+              -5.0
+            ],
+            "b": [
+              -6.0,
+              5.0
+            ],
+            "id": "west",
+            "openings": [
+              {
+                "bottom": 1.15,
+                "height": 2.2,
+                "id": "west_window",
+                "offset": 4.8,
+                "type": "window",
+                "width": 3.0
+              }
+            ]
+          }
+        ]
+      },
+      "ridge_trees": 220,
+      "trees": 271
+    },
+    "pass": true
+  },
+  "limitations": [
+    "Short local benchmark; not a native-resolution or all-hardware performance promise.",
+    "Independent shadows use fixed simplified geometry.",
+    "Windows runtime not tested.",
+    "GL map builder still reports two existing 21844-byte texture cleanup diagnostics."
+  ],
+  "source_sha256": {
+    "assets/shaders/ancient_bark.gdshader": "89efb21cf08444da8d3d2375a2010cecb380e9da32c0731cb697f7b19e6c873a",
+    "assets/shaders/ancient_foliage.gdshader": "d672505b728429f2416194edf612f7fc2b2f21f66af14e859388b927301ff248",
+    "assets/shaders/forest_blossoms.gdshader": "a6a6a92f1a430a1cef3ca29e3f38c4d6ba499ab1cde86863ad4c58ec86d84b43",
+    "assets/shaders/forest_camera_cut.gdshaderinc": "49e0f5e4bf4b17d394f0f64f9ae4c472b4665d7194a967ce79182c337c10ab10",
+    "assets/shaders/occlusion_fade.gdshader": "21ac97cab2a3a95cf549c2482937f83589763f09094d3ef415ced1cf0ef9aa03",
+    "assets/shaders/tree_bark.gdshader": "cfa13a129a97343eed4111391a5beb28f09bfada15f818ba93ce00821149a406",
+    "assets/shaders/vegetation_noise.gdshaderinc": "ec77e6519d872e507d1a09dea6e09ea32eb4ab4ffdb60e26727923f2810a698a",
+    "assets/shaders/woodland_grass.gdshader": "872093856417048e5258b804ce5610733a9617576b8f379b7839f3141116065c",
+    "scenes/valley_map.scn": "877d85ca51702dff70f6ef4b98a270653a22a0d7a65212e2270bc2845f67e42a",
+    "scripts/valley/ancient_forest.gd": "76e081ae69cea517ab3fb973adaf55b6c525eff12b9e9c5cefac07966e5e36c4",
+    "scripts/valley/build_valley.gd": "696e8418032717218ee7dec795189b7b8a7d4e298d7d572efa88cdc08f17600d",
+    "scripts/valley/valley_world.gd": "f6146cbf3af9758739488b3ed2bfd9e4bca0bb3dc08e8ba7bf3c89183de2c5da",
+    "scripts/valley/woodland_dressing.gd": "fd8ebe5cebabb9133db463a710442f46a238bf7473d01e44bdbb44cfbba4375c",
+    "scripts/valley/woodland_groundcover.gd": "bbfd66b12486ac190f434e70a403df8d590b7e743ef564c1db4a7e3e79a14357",
+    "scripts/valley/woodland_view.gd": "c56df9274c3a9e8e6d4ed1d205e931e7ab54eead22987cbcb2767a02fa4e6fd7",
+    "tests/forest_art_structure.gd": "92ead9cf1f02c467a4bbbcc5d1c659b5258f8bc7d370cce8ae8823bcb6386b0f",
+    "tests/woodland_lighting_benchmark.gd": "ae46a4e52c8165503011113b9d1c828559fc67e64d12da8e62e764464ddc3f11",
+    "tests/woodland_lighting_flow.gd": "5d4e275eb9d6c5cb811a198bac8165fd42c7197cabcb863abc482cfd54207830",
+    "tests/woodland_lod_flow.gd": "6ae743938678fe0eb5c2e8073eb3043ef247f46e0736c128586f83ad41da875e",
+    "tests/woodland_shadow_stability.gd": "a8c4c4943ae84cfce6ae48b6769b50205bb31a2b851d65f18269a4f77a2e8171",
+    "tools/test_suites.json": "83659645dcfeded3c31da444059b35044a12c87809794696ada3efa34b4e889c"
+  },
+  "artifact_sha256": {
+    "after-forest.png": "e0e8a5808410a06edb8e5ac36a84075933b3b7d9221a6d6bdb2d96ffbfc70d4a",
+    "after-overlook.png": "b4ae410a2fcab836041187ee661e119f69269b3e80d38bb9c4c64acafe4a5b38",
+    "before-overlook.png": "7d006b8b99cd78331c9e8bd0b498ec5891084a0ecd800074ad46160cf6f70ddf",
+    "benchmark-after.json": "e24e8acf2e87d9c7f458f05e8fbe31068e1ec687bdd36ca96460b96347580df6",
+    "benchmark-after.log": "709f85e387fce814e25c020906483982510298b702f507844195162e41c48852",
+    "benchmark-before.json": "ff035cbb627eb1092ed3931816abef521833582d3a411d22e4331ae7cd77bd15",
+    "benchmark-before.log": "722978f98455fa3194d3035a1b09f17eedae3fed7b855e6b120e7dac0d8b23ea",
+    "benchmark-current.json": "f7f32b06289db0c820f50f8d819679f562b37d4d5b7a85a09bf2163f692ef025",
+    "benchmark-current.log": "136c15bef84d167ba28c9d3f2125ebf08871a7f3d474eebd72bffa641171c054",
+    "build-valley.log": "f8fe564cd56446b61083d89ace403a96a4714b0ed9de96648ed8d7a31fc3c12a",
+    "forest_art_structure.log": "bbfee4bd68ac618d9b4fc1f8fb3834b94ed44ba5039ff0f262b0a214bd2767ff",
+    "home_lighting_stability.log": "cade789196ec0a3eebe9c3d21fe16f29eb41a6a6d213975258e3491e14f7db1f",
+    "map-preservation.json": "e9d49779d4af64dd231b102d561f45468e26e4f20f2b7e32e1c34b18a21463f1",
+    "map-preservation.log": "bcf23c0d389d5d71b34b1c35e9d3151b98fcef62715b4d42be30f83359ad54ae",
+    "motion_buffer_rules.log": "6a9791f0c9a2844a351ea940c746df444776ba0fc53d7bcee9bf6d46baf5641b",
+    "project_integrity.log": "6083df4a9c44646db1e0496f2083785aac0a211ebdc8a440eda42355f3a6b278",
+    "shadow-before.log": "71062d4d50439605b85668795f8ab47b5ea620dce24aba58068ea357646187a8",
+    "shadow-cut.png": "f471c786884d1c9f2e1b11984923db0e26cbafb211887036bd3d1f357af30034",
+    "shadow-full.png": "6ac628756a5d25df19c2953baec4aeecd036efbce20a1c81c7935f96c75279c5",
+    "valley_camera_regression.log": "c61ec98f93a124967643537c7d3d31fb80ecdbb79ad8a3ea7d2c6203970a7633",
+    "valley_deck_clearance.log": "2c81e44b073f376fc32d3a5014753b9be2b50ddfc90352e1706f8c235ba12d00",
+    "valley_landscape_rules.log": "da805f959df05d9b06c9092e7089964c3b7ab351c6df2dbcc171a81b48d21b0c",
+    "valley_multiplayer_flow.log": "53636626f0194889eec663ede927b88dd632c3be43fdbe5c3715edf86110e4aa",
+    "valley_npc_recovery.log": "663034de30b52164e9889399d0104e49c705eb05cc9b5764c173d67c7782ea97",
+    "valley_performance.log": "37af2ecbd55a9ec8d97d8063a183b1907475e24c8b13709fde5faedda8be1f98",
+    "valley_visitors_night.log": "8d5b4fe4f3a0f534b02247b6ae784d201142f4081b90fbc0650ee375b9a0dcc1",
+    "woodland_lighting_flow.log": "29edded527755a73af4efdbef633935af33f2d0826947e8e79c7876c17753e7c",
+    "woodland_lod_flow.log": "64317fa4b0f6ed008dfaa48f61d6eb17b0f715de016c0454aafcdef8b7b753be",
+    "woodland_shadow_stability.log": "e339499028ed15e17e434ad8ac93ba842d56117c450e473c3ff7e7fcf7d4e8e3",
+    "woodland_sweep_performance.log": "b7045c405fd199b7f386697f8da5d3b23c238eee5f521f97a58546c1fcf704a5"
+  }
+}

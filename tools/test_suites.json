@@ -265,6 +265,20 @@
       "release04_building_rules",
       "character_roster_rules",
       "save_transactions"
+    ],
+    "woodland_lighting": [
+      "woodland_shadow_stability",
+      "woodland_lod_flow",
+      "woodland_lighting_flow",
+      "forest_art_structure",
+      "valley_landscape_rules",
+      "valley_camera_regression",
+      "valley_deck_clearance",
+      "valley_visitors_night",
+      "valley_npc_recovery",
+      "woodland_sweep_performance",
+      "valley_performance",
+      "project_integrity"
     ]
   },
   "tests": {
@@ -514,6 +528,16 @@
     },
     "valley_multiplayer_flow": {},
     "valley_npc_recovery": {
+      "headless": true
+    },
+    "woodland_shadow_stability": {},
+    "woodland_lod_flow": {},
+    "woodland_lighting_benchmark": {
+      "args": [
+        "--benchmark"
+      ]
+    },
+    "woodland_lighting_flow": {
       "headless": true
     }
   }

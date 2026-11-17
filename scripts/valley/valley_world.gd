@@ -1,5 +1,10 @@
 extends "res://scripts/city/city_world.gd"
 const Layout=preload("res://scripts/valley/valley_layout.gd")
+var sun_target:=Quaternion.IDENTITY
+var sun_initialized:=false
+func _process(delta: float) -> void:
+	super._process(delta)
+	if sun_initialized:sun.quaternion=sun.quaternion.slerp(sun_target,1.-exp(-delta*8.))
 func can_walk(p: Vector3) -> bool: return Layout.can_walk(p)
 func can_navigate(p: Vector3) -> bool: return Layout.can_navigate(p)
 func navigation_bounds() -> Rect2i: return Rect2i(-108,-96,217,220)
@@ -69,10 +74,21 @@ func prepare_scenery() -> void:
 		if point not in [Vector2(-20,58),Vector2(16,16),Vector2(36,-56)]:
 			lamp.get_parent().remove_child(lamp);lamp.free()
 func update_lighting(override_time: float=-1) -> void:
+	var previous:=sun.quaternion
 	super.update_lighting(override_time)
-	sun.light_energy=lerpf(.30,1.45,ambient_day)
-	sun.light_color=Color("b0c9f2").lerp(Color("fff6e6"),ambient_day)
+	var t:=override_time if override_time>=0 else fposmod(float(session.state().time)/3600.,1.)
+	var low_sun:=1.-smoothstep(.12,.65,sin((t-.25)*TAU))
+	sun.light_energy=lerpf(.30,1.35,ambient_day)
+	sun.light_color=Color("b0c9f2").lerp(Color("fff2db").lerp(Color("ffd0a0"),low_sun*.55),ambient_day)
 	if ambient_day<.01: sun.rotation_degrees=Vector3(-43,-32,0)
-	sun.shadow_opacity=lerpf(.42,.76,ambient_day)
-	atmosphere.fog_density=lerpf(.0011,.0018,ambient_day)
+	sun.shadow_opacity=lerpf(.42,.86,ambient_day)
+	sun.light_angular_distance=.53;sun.shadow_blur=1.15;sun.shadow_normal_bias=.35
+	sun_target=sun.quaternion
+	if sun_initialized and override_time<0:sun.quaternion=previous
+	sun_initialized=true
+	atmosphere.fog_density=lerpf(.0009,.0012,ambient_day)
 	for entry in lamp_visuals: entry.light.light_energy=1.7*cached_warmth
+func update_ambient_lighting() -> void:
+	var indoors:=interior_weight()
+	atmosphere.ambient_light_energy=lerpf(lerpf(.28,.46,ambient_day),lerpf(.26,.34,ambient_day),indoors)
+	atmosphere.ambient_light_color=Color("7894b8").lerp(Color("c6d9eb"),ambient_day).lerp(Color("d9c6a5"),indoors*.60)

@@ -1,0 +1,13 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+OpenGL API 4.1 Metal - 89.4 - Compatibility - Using Device: Apple - Apple M1 Pro
+
+ANCIENT_FOREST trees=271 spatial_groups=64
+VALLEY_FLOWER_MEADOWS blooms=500
+WOODLAND_GRASS clumps=36728
+WOODLAND_DRESSING understory=436 riverbank=107
+CITY_BATCHES 7 DETAILS 24
+VALLEY_BUILT result=0 trees=271 resources=27
+ERROR: Texture with GL ID of 38: leaked 21844 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:77)
+ERROR: Texture with GL ID of 39: leaked 21844 bytes.
+   at: ~Utilities (drivers/gles3/storage/utilities.cpp:77)

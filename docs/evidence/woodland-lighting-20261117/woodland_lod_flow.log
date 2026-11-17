@@ -1,0 +1,23 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":55.0,"near_weight":1.0}
+PASS Complementary LODs leave no transparent hole at 55.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":64.0,"near_weight":1.0}
+PASS Complementary LODs leave no transparent hole at 64.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":74.0,"near_weight":0.844129774305556}
+PASS Complementary LODs leave no transparent hole at 74.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":84.0,"near_weight":0.500298394097222}
+PASS Complementary LODs leave no transparent hole at 84.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":94.0,"near_weight":0.156331380208333}
+PASS Complementary LODs leave no transparent hole at 94.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":104.0,"near_weight":0.0}
+PASS Complementary LODs leave no transparent hole at 104.0m
+TREE_LOD_BLEND {"covered_fraction":1.0,"distance":114.0,"near_weight":0.0}
+PASS Complementary LODs leave no transparent hole at 114.0m
+PASS GPU uses the detailed tree nearby and the distant silhouette far away
+PASS GPU crossfades through intermediate coverage instead of switching the whole batch
+PASS LOD coverage changes monotonically through the transition
+PASS Every tree has a complete shadow silhouette independent of visual LOD and camera cutaway
+PASS Coarse batch culling cannot interrupt an individual tree's fade
+WOODLAND_LOD_FLOW_RESULT PASS checks=12 failures=[]

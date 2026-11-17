@@ -4,11 +4,13 @@ varying vec4 blade_tint;
 varying float blade_height;
 vec3 linear_color(vec3 c){return mix(pow((c+vec3(.055))/1.055,vec3(2.4)),c/12.92,lessThan(c,vec3(.04045)));}
 void vertex(){
- vec3 p=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;
+ // A clump shares one wind phase and fade distance; do not repeat a full
+ // vertex/world transform for every point of every small blade.
+ vec3 p=MODEL_MATRIX[3].xyz;
  float distance_=distance(p,CAMERA_POSITION_WORLD);
- float grow=1.-smoothstep(29.,43.,distance_);
+ float grow=1.-smoothstep(32.,54.,distance_);
  float gust=sin(p.x*.26+p.z*.18+TIME*1.3)+.36*sin(p.z*.6-TIME*.8);
- VERTEX.y*=grow;VERTEX.x+=gust*.065*UV.y*UV.y*grow;
+ VERTEX*=grow;VERTEX.x+=gust*.065*UV.y*UV.y*grow;
  blade_tint=COLOR;blade_height=UV.y;
 }
 void fragment(){

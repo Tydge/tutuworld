@@ -1,0 +1,23 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+2026-11-17 23:14:16.541 Godot[68890:111193941] not in fullscreen state
+PASS Main camera still cuts the obstructing tree: occlusion_fade light=0
+TREE_SHADOW_STABILITY {"light":0,"max_change":0.374513775110245,"mean_change":0.363642466959902,"shader":"occlusion_fade","shadow_pixels":3182}
+FAIL Ground shadow stays whole when the tree fades for the player: occlusion_fade light=0
+PASS Main camera still cuts the obstructing tree: tree_bark light=0
+TREE_SHADOW_STABILITY {"light":0,"max_change":0.374513775110245,"mean_change":0.363642466959902,"shader":"tree_bark","shadow_pixels":3182}
+FAIL Ground shadow stays whole when the tree fades for the player: tree_bark light=0
+PASS Main camera still cuts the obstructing tree: occlusion_fade light=1
+TREE_SHADOW_STABILITY {"light":1,"max_change":0.245097309350967,"mean_change":0.122034907319023,"shader":"occlusion_fade","shadow_pixels":18982}
+FAIL Ground shadow stays whole when the tree fades for the player: occlusion_fade light=1
+PASS Main camera still cuts the obstructing tree: tree_bark light=1
+TREE_SHADOW_STABILITY {"light":1,"max_change":0.245097309350967,"mean_change":0.122034907319023,"shader":"tree_bark","shadow_pixels":18982}
+FAIL Ground shadow stays whole when the tree fades for the player: tree_bark light=1
+PASS Main camera still cuts the obstructing tree: occlusion_fade light=2
+TREE_SHADOW_STABILITY {"light":2,"max_change":0.271431416273117,"mean_change":0.156138541300226,"shader":"occlusion_fade","shadow_pixels":4592}
+FAIL Ground shadow stays whole when the tree fades for the player: occlusion_fade light=2
+PASS Main camera still cuts the obstructing tree: tree_bark light=2
+TREE_SHADOW_STABILITY {"light":2,"max_change":0.271431416273117,"mean_change":0.156138541300226,"shader":"tree_bark","shadow_pixels":4592}
+FAIL Ground shadow stays whole when the tree fades for the player: tree_bark light=2
+WOODLAND_SHADOW_STABILITY_RESULT FAIL checks=12 failures=["Ground shadow stays whole when the tree fades for the player: occlusion_fade light=0", "Ground shadow stays whole when the tree fades for the player: tree_bark light=0", "Ground shadow stays whole when the tree fades for the player: occlusion_fade light=1", "Ground shadow stays whole when the tree fades for the player: tree_bark light=1", "Ground shadow stays whole when the tree fades for the player: occlusion_fade light=2", "Ground shadow stays whole when the tree fades for the player: tree_bark light=2"]
