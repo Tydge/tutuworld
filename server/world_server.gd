@@ -88,7 +88,11 @@ func apply_door_states() -> void:
 		for id in host.targets:
 			var row: Dictionary=host.targets[id]
 			if row.kind not in ["door","home_door"] or not row.has("node"): continue
-			var value: Dictionary=doors.get(map_id if id=="home_door" else map_id+":"+id,{})
+			var key: String=map_id if id=="home_door" else map_id+":"+id
+			# New doors start in the model's declared state on both peers. Missing
+			# history must not silently close an otherwise visibly open doorway.
+			if not doors.has(key):doors[key]={"open":row.node.door_open,"target":row.node.door_target}
+			var value: Dictionary=doors[key]
 			row.node.door_open=value.get("open",false);row.node.door_target=float(value.get("target",0));row.node.door_tweening=true
 func character_record(id: String) -> Dictionary:
 	var a=actors[id]

@@ -26,8 +26,51 @@ func _initialize() -> void:
  check(stalls==0,"Interpolation buffer absorbs normal packet jitter")
  buffer.push({"position":[50,0,0],"velocity":[0,0,0],"generation":2},200,3.4)
  check(absf(buffer.sample(3.4).position[0]-50)<.001,"Teleport generation clears old interpolation")
+ for lost_time in [.08,.4,1.8]:
+  recovery_check(lost_time)
+ client_pause_check()
  print("MOTION_BUFFER_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," max_step=",max_step," stalls=",stalls," failures=",failures)
  quit(0 if failures.is_empty() else 1)
+func recovery_check(lost_time: float) -> void:
+ var buffer=Buffer.new();var previous:=-1.;var stalls:=0;var reversals:=0;var max_step:=0.
+ var tick:=0;var next_delivery:=.13
+ for frame in range(480):
+  var now:=frame/60.
+  if frame==120:next_delivery+=lost_time
+  if now>=next_delivery:
+   var sent:=tick/60.
+   buffer.push({"position":[sent*4.76,0,0],"velocity":[4.76,0,0],"grounded":true,"generation":1,"yaw":0},tick,now)
+   tick+=6;next_delivery+=.1
+  var row: Dictionary=buffer.sample(now)
+  if row.is_empty():continue
+  var x: float=row.position[0]
+  if previous>=0.:
+   if x<previous-.001:reversals+=1
+   if now>2.+lost_time+1.5:
+    if x-previous<.001:stalls+=1
+    max_step=maxf(max_step,x-previous)
+  previous=x
+ check(stalls==0 and max_step<.11,"Remote walking recovers without reconnecting after %s seconds of lost server physics time; stalls=%d max_step=%s"%[lost_time,stalls,max_step])
+ check(reversals==0,"Clock recovery never reverses remote walking")
+func client_pause_check() -> void:
+ var buffer=Buffer.new();var index:=0;var previous:=-1.;var stalls:=0;var max_step:=0.
+ for frame in range(360):
+  if frame>=100 and frame<170:continue
+  var now:=frame/60.
+  while index*.1+.13<=now:
+   var sent:=index*.1
+   buffer.push({"position":[sent*4.76,0,0],"velocity":[4.76,0,0],"grounded":true,"generation":1},index*6,now);index+=1
+  var row: Dictionary=buffer.sample(now)
+  if row.is_empty():continue
+  var x: float=row.position[0]
+  if previous>=0. and frame>230:
+   if x-previous<.001:stalls+=1
+   max_step=maxf(max_step,x-previous)
+  previous=x
+ check(stalls==0 and max_step<.11,"A client rendering pause and queued packet burst do not leave remote motion stuttering")
+ var before: Dictionary=buffer.sample(6.).duplicate(true)
+ buffer.push({"position":[99,0,0],"velocity":[0,0,0]},1,6.)
+ check(buffer.sample(6.)==before,"A stale packet cannot rewind motion or disturb recovered timing")
 func check(ok: bool,label_: String) -> void:
  checks+=1
  if not ok:failures.append(label_)

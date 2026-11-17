@@ -590,7 +590,10 @@ func update_ghost(point_: Vector2) -> void:
 		clear_preview();return
 	var result:=Layout.preview_opening(layout,row,moving_id) if row.type in ["door","window"] else (Extension.preview_stair(layout,row,moving_id) if row.type=="stairs" else Layout.validate(candidate_layout(row)))
 	if result.ok and parcel_id!="":
-		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(city.session.state(),parcel_id,candidate_layout(row),parcel_revision)
+		# Match commit: compare against the normalized private draft. Wire snapshots
+		# may contain different numeric types or a newer version of another parcel.
+		var draft_state: Dictionary=city.session.state().duplicate();draft_state.build_layout=layout
+		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(draft_state,parcel_id,result.get("layout",candidate_layout(row)),parcel_revision)
 		if not access.ok:result=access
 	if row.type=="template":
 		update_template_preview(Vector2(row.position[0],row.position[1]),result.ok)

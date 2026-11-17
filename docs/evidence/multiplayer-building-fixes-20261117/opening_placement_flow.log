@@ -1,0 +1,68 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+2026-11-17 11:40:04.319 Godot[55058:110651963] not in fullscreen state
+RENDER_BUDGET output=(1280, 720) scale=1.0 mode=0 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS A complete roof and four solid walls are committed once
+PASS Mouse ray selects the actual wall in complete view: window/classic
+PASS Before clicking, cached model overlays the unchanged solid wall: window/classic
+PASS Full walls leave the roof hidden and committed layout intact: window/classic
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Mouse ray selects the actual wall in complete view: window/arch
+PASS Before clicking, cached model overlays the unchanged solid wall: window/arch
+PASS Full walls leave the roof hidden and committed layout intact: window/arch
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Mouse ray selects the actual wall in complete view: window/round
+PASS Before clicking, cached model overlays the unchanged solid wall: window/round
+PASS Full walls leave the roof hidden and committed layout intact: window/round
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Mouse ray selects the actual wall in complete view: door/classic
+PASS Before clicking, cached model overlays the unchanged solid wall: door/classic
+PASS Full walls leave the roof hidden and committed layout intact: door/classic
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Mouse ray selects the actual wall in complete view: door/arch
+PASS Before clicking, cached model overlays the unchanged solid wall: door/arch
+PASS Full walls leave the roof hidden and committed layout intact: door/arch
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Mouse ray selects the actual wall in complete view: door/glass
+PASS Before clicking, cached model overlays the unchanged solid wall: door/glass
+PASS Full walls leave the roof hidden and committed layout intact: door/glass
+PASS Moving preview reuses its model without rebuilding walls
+PASS Preview does not invalidate shadow maps
+PASS Temporary opening geometry never changes walk/pick collision
+PASS The original solid wall still exists physically before clicking
+PASS Cancel restores the original wall without any save/undo mutation
+PASS Wall-snapped furniture also retains a visible placement silhouette: bookshelf
+PASS Wall-snapped furniture also retains a visible placement silhouette: forest_cabinet
+PASS Moving over the toolbar restores the original wall instead of leaving a temporary hole
+PASS Switching roof/wall view releases temporary replacement geometry
+PASS Click commits the same window shown in the opening preview
+PASS Only the actual placement writes one window and releases all temporary walls
+PASS An overlapping invalid placement keeps the real wall and shows only the red model silhouette
+PASS Moving an existing opening uses the same wall picking as initial placement
+PASS Moving an existing window previews only its new frame and hides the old frame
+PASS Cancelling a window move restores its original frame and walls
+OPENING_PLACEMENT_FLOW_RESULT PASS checks=59 failures=[]

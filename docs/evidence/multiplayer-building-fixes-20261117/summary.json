@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-17",
+  "baseline_commit": "969dd3cdc4998fcc74c5a5a2984015dd43baf07d",
+  "delivery": {
+    "source_only": true,
+    "exported": false,
+    "published": false,
+    "deployed": false,
+    "production_unchanged": "0.4.0/build7/launcher2/protocol4"
+  },
+  "validation": [
+    {
+      "name": "project_integrity",
+      "checks": 468,
+      "result": "PASS",
+      "log": "project_integrity.log"
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "checks": 59,
+      "result": "PASS",
+      "log": "building_multiplayer_rules.log"
+    },
+    {
+      "name": "release04_building_rules",
+      "checks": 369,
+      "result": "PASS",
+      "log": "release04_building_rules.log"
+    },
+    {
+      "name": "building_update_lifecycle",
+      "checks": 1,
+      "result": "PASS",
+      "log": "building_update_lifecycle.log"
+    },
+    {
+      "name": "building_multiplayer_flow",
+      "checks": 52,
+      "result": "PASS",
+      "log": "building_multiplayer_flow.log"
+    },
+    {
+      "name": "building_controls",
+      "checks": 34,
+      "result": "PASS",
+      "log": "building_controls.log"
+    },
+    {
+      "name": "opening_placement_flow",
+      "checks": 59,
+      "result": "PASS",
+      "log": "opening_placement_flow.log"
+    },
+    {
+      "name": "doorway_step_flow",
+      "checks": 45,
+      "result": "PASS",
+      "log": "doorway_step_flow.log"
+    },
+    {
+      "name": "motion_buffer_rules",
+      "checks": 125,
+      "result": "PASS",
+      "log": "motion_buffer_rules.log"
+    }
+  ],
+  "groups": 9,
+  "checks": 1212,
+  "local_preview": {
+    "command": "python3 tools/local_multiplayer.py --check",
+    "clients": 2,
+    "separate_world_process": true,
+    "other_players_seen_per_client": 1,
+    "isolated": true,
+    "result": "PASS"
+  },
+  "regressions": [
+    "Server physics clock loss of 0.08, 0.4 and 1.8 seconds recovers without reconnecting or reversing walking",
+    "Normal 10 Hz jitter, client pause with queued packets, stale packets and teleport remain covered",
+    "Green placement agrees with commit while another parcel publishes; crossing boundaries remains red and rejected",
+    "Default open/closed doors agree on both sides; real visitor and local actor enter fresh open doors without toggling"
+  ],
+  "before_fix": "motion_buffer_before.log: persistent stalls after 0.4 and 1.8 seconds of simulated lost physics time",
+  "source_hashes": "source-sha256.json",
+  "file_inventory": "files.txt",
+  "limitations": [
+    "Existing Variant pool exit diagnostic remains in multiplayer graphical flow, also present in historical evidence",
+    "Headless manual-preview self-check has ObjectDB/resource exit cleanup diagnostics",
+    "No script/shader errors in successful checks; no Windows device, long-running full-capacity or real WAN soak performed"
+  ]
+}

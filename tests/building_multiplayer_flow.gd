@@ -75,6 +75,8 @@ func run() -> void:
 	check(server.state().build_layout.elements.size()==99 and snapshot.state.build_layout.elements.size()==99,"Only confirmed completion updates both clients and persisted world")
 	check(city.get_instance_id()==city_identity and city.bunny.get_instance_id()==player_identity and city.scenery.get_instance_id()==scenery_identity,"Publication keeps the same scene, map and player nodes")
 	check(not city.has_node("ConstructionSites/east_nw") and not snapshot.state.building_sites.has("east_nw"),"Finished parcel reopens for visitors")
+	await create_timer(.7).timeout
+	await check_new_doors(editor)
 	city.set_process(false);city.update_lighting(.5);city.camera.position=Vector3(118,23,25);city.camera.look_at(Vector3(89,4,-4));await frames(4);root.get_texture().get_image().save_png(output+"/completed-online-house.png");city.set_process(true)
 	var identities: Dictionary={}
 	for id in editor.room.render_cache:identities[id]=editor.room.render_cache[id].node.get_instance_id()
@@ -115,6 +117,18 @@ func run() -> void:
 	check(identities.keys().all(func(id):return editor.room.render_cache[id].node.get_instance_id()==identities[id]),"Publishing a later edit still preserves the other owner's complete house")
 	place(session.active_character_id,Land.sign_position("east_nw")+Vector3(0,.1,1.7));await frames()
 	result=await editor.open_nearby_parcel();check(result.get("ok",false),"Owner can reopen a completed house for another editing session")
+	# Change the other parcel while this owner's private draft remains open.
+	result=await client.request("build_begin",{"parcel_id":"east_ne"});check(result.get("ok",false),"Other owner can edit concurrently with this private draft")
+	for row in second_rows:
+		if row.get("kind","")=="sofa":row.color="bb7755"
+	result=await client.request("build_finish",{"parcel_id":"east_ne","lease":result.get("lease",""),"expected_revision":2,"elements":second_rows});check(result.get("ok",false),"Concurrent publication updates the other parcel")
+	await frames(4)
+	editor.choose_tool("object:forest_planter");editor.update_ghost(Vector2(77.,-13.))
+	check(editor.ghost_material.albedo_color.r>.8 and not editor.place_at(Vector2(77.,-13.)),"Preview and placement both reject an object crossing the parcel boundary")
+	editor.update_ghost(Vector2(78.,-13.))
+	check(editor.ghost_material.albedo_color.g>.6,"Legal new object preview stays green after another parcel publishes")
+	check(editor.place_at(Vector2(78.,-13.)),"The green preview and the actual private placement agree")
+	editor.undo()
 	var own_rows: Array=editor.editing_layout().elements;check(editor.commit(L.remove(editor.layout,own_rows[-1].id)),"Owner can revise their private draft before discarding")
 	await editor.discard_online();check(not editor.active and server.state().build_layout.elements.size()==198,"Explicit discard reopens the parcel and keeps the published buildings")
 	result=await editor.open_nearby_parcel();check(result.get("ok",false),"Owner starts the 0.4 facade and finish transaction")
@@ -149,3 +163,26 @@ func run() -> void:
 		check(JSON.stringify(server.state().build_layout.elements.filter(func(row):return Land.contains_row("east_ne",row,server.state().build_layout)))==JSON.stringify(second_rows),"Facade transaction preserves the other owner's published rows")
 	client.close();client.queue_free();await session.leave_online();city.queue_free();await process_frame;server.listener.stop();server.queue_free();await process_frame
 	print("BUILDING_MULTIPLAYER_FLOW_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)
+
+func check_new_doors(editor: Node) -> void:
+	var matching:=true;var first: Node3D
+	for row in editor.layout.elements:
+		if row.type!="door":continue
+		var key: String="city:build:"+str(row.id)
+		var local: Node3D=editor.room.render_cache[row.id].node
+		var authority: Node3D=server.maps.city.targets["build:"+str(row.id)].node
+		var expected: bool=row.get("default_open",true)
+		if server.doors.get(key,{}).get("open")!=expected or local.door_open!=expected or authority.door_open!=expected or local.portal.disabled!=expected or authority.portal.disabled!=expected:matching=false
+		if first==null and expected and int(row.get("storey",0))==0:first=local
+	check(matching,"Fresh open and closed doors agree in snapshots, client visuals and authority collision")
+	if first==null:check(false,"Template has a ground-floor door for real movement");return
+	var id: String=str(first.name);var pawn: CharacterBody3D=server.pawns[other_id]
+	pawn.set_physics_process(false)
+	for pair in [[server.maps.city.targets["build:"+id].node,pawn],[first,city.bunny]]:
+		var door: Node3D=pair[0];var actor: CharacterBody3D=pair[1];var normal: Vector3=door.global_basis.z.normalized()
+		var start: Vector3=door.global_position+normal*1.4+Vector3.UP*.02
+		actor.position=start;actor.velocity=Vector3.ZERO;actor.reset_physics_interpolation();await physics_frame
+		for i in range(60):actor.simulate_movement(1./60.,-normal,false,false,true)
+		check((actor.position-start).dot(normal)<-2.2,"Real actor enters a freshly built open door without toggling: "+("server visitor" if actor==pawn else "local owner"))
+	pawn.set_physics_process(true)
+	place(session.active_character_id,Land.sign_position("east_nw")+Vector3(0,.1,1.6));place(other_id,Land.sign_position("east_ne")+Vector3(0,.1,1.6))

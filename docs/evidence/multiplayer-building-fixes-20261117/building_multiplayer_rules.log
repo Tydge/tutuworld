@@ -1,0 +1,63 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TUTU_SERVER_READY version=0.4.0 build=7
+PASS Create isolated character 0
+PASS Join shared physics map 0
+PASS Create isolated character 1
+PASS Join shared physics map 1
+PASS Create isolated character 2
+PASS Join shared physics map 2
+PASS Server rejects a purchase far from the board
+PASS Owner purchases land through server authority
+PASS Duplicate purchase token charges once
+PASS Second player cannot buy the same parcel
+PASS Nonowner cannot start construction
+PASS Failed evacuation save rejects construction
+PASS Save failure rolls back both visitors and the lease
+PASS Owner gets a private construction lease
+PASS Every visitor is moved to safe ground outside the parcel
+PASS Evacuated visitors receive different safe landing positions
+PASS Authority blocks entering the fenced parcel
+PASS Owner is stationary and cannot start other interactions while editing
+PASS A second construction session cannot replace the lease
+PASS Owner renews the construction lease
+PASS Even a copied lease cannot grant another player editing rights
+PASS Draft preparation does not change the shared map
+PASS Stale parcel revision is rejected
+PASS Forged construction token is rejected
+PASS Server independently rejects rows belonging to another parcel
+PASS Malformed network rows return a failure instead of crashing
+PASS Publication requires a successful atomic save
+PASS Failed publication keeps original map and active construction session
+PASS Confirming completion publishes the finished parcel
+PASS Layout and parcel revision commit together
+PASS Successful completion removes exclusion and restores movement
+PASS Published floor has real scene geometry and collision
+PASS Repeated completion does not apply a second edit
+PASS Another player purchases a separate parcel
+PASS Independent parcel can be under construction
+PASS Conflicting temporary element IDs are merged without replacing the first owner's floor
+PASS Concurrent parcel results have unique IDs and preserve both buildings
+PASS Discarding a draft restores access without publishing changes
+PASS Expired sessions reopen the parcel and keep the published map
+PASS Disconnect releases construction without publishing the draft
+PASS World save contains completed buildings and ownership, no transient leases
+PASS Private construction tokens never persist through the deduplication cache
+PASS Building and land state never leak into per-character saves
+PASS Loading the server save preserves shared buildings and ownership
+PASS Owner rejoins the saved shared world
+PASS Furniture integration fixture obeys building rules
+PASS Server publishes functional furniture through the same completion transaction
+PASS A visitor can sit on another owner's completed sofa
+PASS Visitor safely leaves the built sofa
+PASS Built beds use their own authoritative sleep pose
+PASS Starting construction also evacuates sleeping visitors and clears their pose
+PASS Evacuation releases the visitor's furniture lock
+PASS Using or evacuating a built bed preserves another bed's occupant
+PASS Server chooses a real paired dining chair and meal position, ignoring a forged chair
+PASS Cancelling a built-table meal keeps the food
+PASS Visitors can cook at the completed placed kitchen counter
+PASS An old server without the capability flag keeps construction disabled
+PASS Old-server fallback keeps the original movement envelope
+PASS A capable source server enables the extended world explicitly
+BUILDING_MULTIPLAYER_RULES_RESULT PASS checks=59 failures=[]

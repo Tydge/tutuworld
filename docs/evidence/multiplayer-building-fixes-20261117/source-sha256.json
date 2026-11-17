@@ -1,0 +1,10 @@
+{
+  "scripts/services/motion_buffer.gd": "274cac9d26cce19019e994dc4385525d8833020897f1cdd62741f97adb152ce1",
+  "scripts/building/editor.gd": "909da328e0b23fae50f086b0162938c93b39a9d6b4112baa64f53a6290d9fdef",
+  "server/world_server.gd": "f96351c717f81847ae22ad4b49270bdb1fefad0a079b0c92cebd2eed281b49cf",
+  "tests/motion_buffer_rules.gd": "238bbda1b60a0219b4c11a4499c170bd1285d00edc4f4505694b3b9473200e34",
+  "tests/building_multiplayer_flow.gd": "341a33fe0b9faba8ea9de65bcd3b0c3c57a2948a6f7577919562f228a6ca7d36",
+  "tools/local_multiplayer.py": "c62903406995501867f8403acf648f3af77d13641c5e2fc53a78b8be888817d0",
+  "tools/local_multiplayer_preview.gd": "5997008119c8153c11f89c58633403cf6e9be653888e5fab720362e31c3537d4",
+  "tools/本地双人建造测试.command": "e276b872b0b2d75de110272ad28b1b513935231e8105fef0e0182d34f744ceb4"
+}
