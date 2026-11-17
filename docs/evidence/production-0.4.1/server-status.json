@@ -1,0 +1,22 @@
+{
+  "18896": "URLError",
+  "18892": {
+    "ok": true,
+    "version": "0.4.1",
+    "build": 8
+  },
+  "tutuworld-stage-world": "MemoryCurrent=[not set]\nCPUUsageNSec=[not set]\nActiveState=inactive\nSubState=dead",
+  "tutuworld-world": "MemoryCurrent=608866304\nCPUUsageNSec=136508257000\nActiveState=active\nSubState=running",
+  "tutuworld-auth": "MemoryCurrent=10604544\nCPUUsageNSec=272899000\nActiveState=active\nSubState=running",
+  "world_clock": {
+    "epoch": 1793584800.0,
+    "alignment": {
+      "version": 1.0,
+      "aligned_at": 1793586414.607895,
+      "shift": 1332.9790070056915,
+      "real_hour_game_hour": 0.0,
+      "real_half_hour_game_hour": 12.0
+    },
+    "phase_error_seconds": -1.4066696166992188e-05
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "project.godot": "3ec1938a271b638d3012c1148b29a88e48121ee258ad96058fbab11b5aa81ed1",
+  "export_presets.cfg": "92da10c5d6be198ba51225fa8deeca86b2e381e71095a4e8ba7a27647d191825",
+  "scripts/boot.gd": "c1ec800882b81694b51478821425ac5dd67c8b52c554eafb30c23d960dd483b4",
+  "scripts/services/release.gd": "aaf223e64542da52459e71e9ea3d0190f2bd97be27ca80aff359be857d540271",
+  "server/world_server.gd": "496d43b4fbc566a2a215a9d5f2922a2128269183e8ae0237c99cb238bfda7e3d",
+  "scripts/valley/valley_layout.gd": "79d3ccdfc8b33e88282fcf793317ece1f3c0965b040f0a9180e0f7d2ac779c92",
+  "scripts/valley/valley_world.gd": "9d344b5cf0fec68a1ead31c9f258c2482791e9bac89d54c1eabbf323158a85c7",
+  "scenes/valley_map.scn": "e131e079c96223d821f3cf59cfa8dd0929029f9de61da0c7a2ca924225a966e2",
+  "scripts/services/motion_buffer.gd": "274cac9d26cce19019e994dc4385525d8833020897f1cdd62741f97adb152ce1",
+  "scripts/building/editor.gd": "909da328e0b23fae50f086b0162938c93b39a9d6b4112baa64f53a6290d9fdef",
+  "tests/valley_server_migration.gd": "d738e74dd5fa02ec01d012d46bb60959ab1ad553c069425cc1de36fce24be49f",
+  "tests/valley_multiplayer_flow.gd": "9f3b878a4a5a380f3f1ab23edce1ce4761523c0d38c0be58ab511a3ed23d47c4",
+  "tests/valley_deck_clearance.gd": "d6f002e922cfba30b553f08d9d24296a829b7ff8f386aa6d07755aea2f23b04a",
+  "tools/test_suites.json": "5f107cd21e349f3986bd05b2dc0f827b115147df4ebf08640b6dc88cca143037"
+}

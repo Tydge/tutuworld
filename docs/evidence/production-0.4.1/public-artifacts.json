@@ -1,0 +1,17 @@
+{
+  "signed_manifest_matches_reviewed_candidate": true,
+  "version": "0.4.1",
+  "build": 8,
+  "installers": {
+    "macos": {
+      "status": 200,
+      "bytes": 113996342,
+      "url": "https://47.119.37.251/tutuworld/releases/0.4.1/TutuWorld-macOS.zip"
+    },
+    "windows": {
+      "status": 200,
+      "bytes": 95600410,
+      "url": "https://47.119.37.251/tutuworld/releases/0.4.1/TutuWorld-Windows.zip"
+    }
+  }
+}

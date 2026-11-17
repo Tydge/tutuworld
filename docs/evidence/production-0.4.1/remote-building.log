@@ -1,0 +1,27 @@
+PASS Deployed candidate rejects the previous production build
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS Remote server migrated the legacy valley resident
+PASS Migrated resident lands near the expected real terrain
+PASS Fixture migration preserves starting balances
+PASS buy_land succeeds
+PASS build_begin succeeds
+PASS Closed construction site belongs to the correct owner
+PASS build_finish succeeds
+PASS buy_land succeeds
+PASS build_begin succeeds
+PASS Closed construction site belongs to the correct owner
+PASS build_finish succeeds
+PASS Both remote clients see two completed 99-record houses
+PASS Published parcels reopen on the remote authority
+PASS Remote snapshots preserve new default-open and default-closed doors
+PASS A fresh open ground-floor exterior door is available
+PASS Real sequenced inputs walk to the freshly built exterior door
+PASS Real authoritative character enters without toggling the fresh open door
+PASS Character crosses the actual doorway collision plane
+PASS Character can leave the new doorway again
+REMOTE_RELEASE041_BUILDING_RESULT PASS checks=26

@@ -1,0 +1,20 @@
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS Completed buildings persist through the staged server restart
+PASS Current valley character is not migrated a second time
+PASS Real remote valley movement advances on the saved terrain
+PASS Remote authoritative jumping rises above the valley surface
+PASS gather succeeds
+PASS Remote real-time gathering awards inventory and consumes the shared resource
+PASS travel succeeds
+PASS Outbound trip reaches the new valley and charges once
+PASS Real inputs follow the valley trail and pier [-21,0,88]
+PASS Real inputs follow the valley trail and pier [-21,0,94.4]
+PASS Real inputs follow the valley trail and pier [-14.1999998092651,0.2,94.4000015258789]
+PASS travel succeeds
+PASS Return boat reaches the city without an extra fare
+REMOTE_RELEASE041_VALLEY_RESULT PASS checks=19
