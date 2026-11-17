@@ -2,13 +2,13 @@
 
 11-17本地增补：山谷现用`woodland/forest_turf_v1.png`和透明树叶图集，城镇保留`spring_lawn_v1.png`；只有新山谷增加有距离上限的近景草几何。新素材/提示词见[woodland记录](woodland/ASSET_NOTES.md)，未发布部署。下述11-06内容保留原素材与压缩决策。
 
-更新：2026-11-06。本地工作区已接入，尚未随正式0.3.3/build6发布。原始PNG保留不改像素，运行时只依赖项目内文件；生成工具均为内置image_gen。
+下表沿用11-06素材记录，已随11-13正式0.4发布；11-17新增素材见上段。原始PNG保留不改像素，运行时只依赖项目内文件；生成工具均为内置image_gen。
 
 ## 资产与来源
 
 | 资产 | 用途 | 精确提示词、原始输出路径与SHA256 |
 | --- | --- | --- |
-| `spring_lawn_v1.png` | 城镇与山谷共用草坪 | [草坪来源](ASSET_NOTES.md) |
+| `spring_lawn_v1.png` | 城镇草坪；旧山谷亦使用 | [草坪来源](ASSET_NOTES.md) |
 | `packed_earth_path_v1.png` | 山谷小径、菜园底土 | [地表清单](surface_assets_v1.json) |
 | `cultivated_soil_v1.png` | 菜地土垄、花坛种植土 | 同上 |
 | `village_stone_paving_v1.png` | 城镇街道、广场 | 同上 |

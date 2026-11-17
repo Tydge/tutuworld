@@ -1,0 +1,30 @@
+{
+  "inventory_files": 1934,
+  "directory_counts": {
+    "[根目录文件]": 8,
+    "assets": 170,
+    "config": 5,
+    "data": 10,
+    "docs": 1016,
+    "scenes": 15,
+    "scripts": 326,
+    "server": 14,
+    "tests": 357,
+    "tools": 13
+  },
+  "markdown_documents": 40,
+  "local_links_checked": 429,
+  "missing_link_targets": [],
+  "registered_test_entries": 130,
+  "missing_test_scripts": [],
+  "uid_sidecar_orphans": [],
+  "doctor": "Godot 4.6.3; all literal resource paths valid",
+  "frozen_evidence": "Hash-verified 1162 existing files unchanged; no rewriting historical evidence",
+  "sensitive_content_scan": {
+    "files_reviewed": 327,
+    "candidates": 0,
+    "private_hashes_published": false
+  },
+  "whitespace_diff_check": "passed",
+  "test_processes_left_running": false
+}

@@ -1,0 +1,103 @@
+{
+  "tests": [
+    {
+      "name": "project_integrity",
+      "result": "PASS",
+      "checks": 468,
+      "log": "project_integrity.log",
+      "sha256": "b09de70c6925ae7aa5da3fc32ec54e85bdd1fbb4d26a2f5e9fb8fd4356be7dd0",
+      "script_shader_errors": false
+    },
+    {
+      "name": "valley_landscape_rules",
+      "result": "PASS",
+      "checks": 14,
+      "log": "valley_landscape_rules.log",
+      "sha256": "da805f959df05d9b06c9092e7089964c3b7ab351c6df2dbcc171a81b48d21b0c",
+      "script_shader_errors": false
+    },
+    {
+      "name": "valley_rules",
+      "result": "PASS",
+      "checks": 215,
+      "log": "valley_rules.log",
+      "sha256": "6cd40c459e39f63c6524205d4c6b0a9745da478898e89516628189f2b682a853",
+      "script_shader_errors": false
+    },
+    {
+      "name": "character_roster_rules",
+      "result": "PASS",
+      "checks": 44,
+      "log": "character_roster_rules.log",
+      "sha256": "8410babe09c6edc06ee5f3027749449f4e8a0f7ad6ab5413f8ce0b6134d28f33",
+      "script_shader_errors": false
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "result": "PASS",
+      "checks": 59,
+      "log": "building_multiplayer_rules.log",
+      "sha256": "e88247de6d5089cf8ee692db205b858a8291084a9122583baf9eb1e74dc559b6",
+      "script_shader_errors": false
+    },
+    {
+      "name": "release04_building_rules",
+      "result": "PASS",
+      "checks": 369,
+      "log": "release04_building_rules.log",
+      "sha256": "fdddcc4407db9c2a80921288e004903517e67f3fa9272b6de69ebd8c00a8601c",
+      "script_shader_errors": false
+    },
+    {
+      "name": "valley_deck_clearance",
+      "result": "PASS",
+      "checks": 10,
+      "log": "valley_deck_clearance.log",
+      "sha256": "2c81e44b073f376fc32d3a5014753b9be2b50ddfc90352e1706f8c235ba12d00",
+      "script_shader_errors": false
+    },
+    {
+      "name": "valley_journey",
+      "result": "PASS",
+      "checks": 18,
+      "log": "valley_journey.log",
+      "sha256": "73d011ea8eeb39c54340a271761844e4a481fb0395d728e01a5f6717b99ac72b",
+      "script_shader_errors": false
+    },
+    {
+      "name": "forest_art_structure",
+      "result": "PASS",
+      "checks": 648,
+      "log": "forest_art_structure.log",
+      "sha256": "bcb282fc04f38fa17901babd07456eba294a4566d2638b422ed0ffa506ed9c52",
+      "script_shader_errors": false
+    },
+    {
+      "name": "building_multiplayer_flow",
+      "result": "PASS",
+      "checks": 44,
+      "log": "building_multiplayer_flow.log",
+      "sha256": "075d61d7de2049894530ed782f635724db8d68417ef0b2cc78b07e1a6338e07f",
+      "script_shader_errors": false
+    }
+  ],
+  "checks": 1889,
+  "groups": 10,
+  "initial_failed_attempt": {
+    "test": "forest_art_structure",
+    "outcome": "240s screenshot wait timeout; runner terminated process",
+    "log": "forest_art_structure-before-timeout.log",
+    "resolution": "Render screenshots explicitly instead of awaiting optional native-window frame_post_draw; rerun passed with image assertions"
+  },
+  "images": [
+    {
+      "file": "forest-ground.png",
+      "sha256": "4a632c9fcd1ca2587a0cfbe3cddc9070c4530fb05273ab2e821beb36b613e02f"
+    },
+    {
+      "file": "pier-day-north.png",
+      "sha256": "9eb213b817a4f8f874b01eefcc10e11d72bfb0eda69a3a383af2eee1fbef4078"
+    }
+  ],
+  "native_diagnostics": "building_multiplayer_flow exits with one existing Variant pool cleanup diagnostic; not a script/shader error or a silent zero-error claim"
+}

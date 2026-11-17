@@ -1,0 +1,39 @@
+{
+  "player": {
+    "files_checked": 273,
+    "unchanged": 271,
+    "changed": 2,
+    "missing": 0,
+    "observation": "Two live save files continue changing every 15 seconds after all tests and isolated account service have exited. A pre-existing normal game (started before cleanup, without --test) remains active. No live saves restored, deleted or manually rewritten; tests use --test or explicit isolated save paths. Do not claim all 273 files byte-identical."
+  },
+  "recovery": {
+    "files_checked": 21,
+    "unchanged": 21,
+    "changed": 0,
+    "missing": 0
+  },
+  "published_artifacts": {
+    "files_checked": 34,
+    "unchanged": 34,
+    "changed": 0,
+    "missing": 0
+  },
+  "build_dependencies": {
+    "files_checked": 2,
+    "unchanged": 2,
+    "changed": 0,
+    "missing": 0
+  },
+  "fixed_evidence": {
+    "files_checked": 1162,
+    "unchanged": 1162,
+    "changed": 0,
+    "missing": 0
+  },
+  "private_materials": {
+    "files_checked": 83,
+    "unchanged": 83,
+    "changed": 0,
+    "missing": 0
+  }
+}

@@ -6,6 +6,12 @@ func _initialize() -> void: call_deferred("run")
 func check(ok: bool,label_: String) -> void:
 	checks+=1;print("PASS " if ok else "FAIL ",label_)
 	if not ok: failures.append(label_)
+func capture(file_name: String) -> void:
+	# Native windows may stop emitting frame_post_draw while obscured.
+	RenderingServer.force_draw()
+	var frame:=root.get_texture().get_image()
+	check(not frame.is_empty(),"Rendered screenshot available: "+file_name)
+	if not frame.is_empty():frame.save_png(OUT+file_name)
 func run() -> void:
 	root.size=Vector2i(1440,900)
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
@@ -50,10 +56,10 @@ func run() -> void:
 	game.set_process(false);game.hud.visible=false;game.bunny.hide()
 	game.bunny.position=Vector3(-35,preload("res://scripts/valley/valley_layout.gd").height_at(-35,-28)+.035,-28);game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation();game.update_lighting(.5)
 	game.camera.position=game.bunny.position+Vector3(6,5,12);game.camera.look_at(game.bunny.position+Vector3(0,2,-5))
-	await create_timer(.4).timeout;await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(OUT+"山谷-草坪与林下植物.png")
+	await create_timer(.4).timeout;capture("山谷-草坪与林下植物.png")
 	game.bunny.show();game.bunny.position=game.home.to_global(Vector3(-.8,.25,2.5));game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation()
 	game.camera.position=game.home.to_global(Vector3(10,12,15));game.camera.look_at(game.home.to_global(Vector3(0,1,0)))
-	await create_timer(.6).timeout;await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(OUT+"山谷-全新林间样板间.png")
+	await create_timer(.6).timeout;capture("山谷-全新林间样板间.png")
 	game.queue_free();await process_frame;await process_frame
 	session.state().map_id="city";session.state().player_position=[0,.1,9]
 	game=load("res://scenes/city.tscn").instantiate();root.add_child(game);await create_timer(.8).timeout;session.active=false
@@ -66,6 +72,6 @@ func run() -> void:
 	game.set_process(false);game.bunny.can_move=false;game.hud.visible=false;game.update_lighting(.5)
 	game.bunny.position=Vector3(11,.1,13);game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation()
 	game.camera.position=Vector3(22,9,24);game.camera.look_at(Vector3(10,1,9))
-	await create_timer(.4).timeout;await RenderingServer.frame_post_draw;root.get_texture().get_image().save_png(OUT+"城镇-新草坪.png")
+	await create_timer(.4).timeout;capture("城镇-新草坪.png")
 	print("FOREST_ART_STRUCTURE_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

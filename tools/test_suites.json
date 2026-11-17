@@ -83,7 +83,7 @@
       "gameplay_revision_flow"
     ],
     "visual": [
-      "valley_revision_preview",
+      "valley_landscape_preview",
       "panda_model_preview",
       "clothing_shop_preview"
     ],
@@ -282,11 +282,6 @@
     },
     "skill_experience_rules": {
       "headless": true
-    },
-    "valley_revision_preview": {
-      "args": [
-        "--warmup-test"
-      ]
     },
     "valley_performance": {
       "args": [

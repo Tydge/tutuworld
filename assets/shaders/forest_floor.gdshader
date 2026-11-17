@@ -24,7 +24,6 @@ void fragment(){
  float macro=noise(p.xz*.065);float patch=noise(p.xz*.6);
  float path=1.-smoothstep(1.30+patch*.35,2.45+macro*.45,pathdist);
  vec3 turf=texture(lawn_texture,p.xz*.36).rgb;
- float leaf_value=clamp(dot(turf,vec3(.25,.60,.15))/.23,.57,1.45);
  vec3 grass=mix(forest_color.rgb,turf*.86,.72)*mix(.88,1.12,macro);
  grass=mix(grass,grass*vec3(.87,.94,1.06),noise(p.xz*.15+18.)*.18);
  vec3 earth_detail=texture(path_texture,p.xz*.45).rgb;

@@ -14,7 +14,6 @@ vec3 ripple_flow(vec2 p,vec2 current){
  vec2 b=texture(ripple_normal,mat2(vec2(.8,.6),vec2(-.6,.8))*p*.26-warp*.7-TIME*current*.72).rg*2.-1.;
  return normalize(water_base_normal+vec3((a+b*.48)*ripple_strength,0.).xzy);
 }
-vec3 ripple_at(vec2 p){return ripple_flow(p,flow);}
 float water_thickness(vec2 screen,mat4 inv_projection,float surface_z){
  float depth=textureLod(water_depth,screen,0.).r;
  #if CURRENT_RENDERER == RENDERER_COMPATIBILITY

@@ -8,8 +8,6 @@ var groups: Dictionary={}
 var trees: Array=[]
 var bark: ShaderMaterial
 var leaves: ShaderMaterial
-static func triangle(st: SurfaceTool,a: Vector3,b: Vector3,c: Vector3,color: Color,uv: Vector2=Vector2.ZERO) -> void:
-	for p in [a,b,c]:st.set_color(color);st.set_uv(uv);st.add_vertex(p)
 static func tube(st: SurfaceTool,points: Array,radii: Array,sides: int=12) -> void:
 	var frames: Array=[]
 	for k in range(points.size()):

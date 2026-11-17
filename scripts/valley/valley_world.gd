@@ -1,5 +1,4 @@
 extends "res://scripts/city/city_world.gd"
-var stream_material: ShaderMaterial
 const Layout=preload("res://scripts/valley/valley_layout.gd")
 func can_walk(p: Vector3) -> bool: return Layout.can_walk(p)
 func can_navigate(p: Vector3) -> bool: return Layout.can_navigate(p)
@@ -64,13 +63,6 @@ func recover_spawn() -> void:
 func prepare_scenery() -> void:
 	recover_spawn.call_deferred()
 	var forest_view=preload("res://scripts/valley/woodland_view.gd").new();forest_view.city=self;add_child(forest_view)
-	# Each running map owns its daylight uniforms.
-	var creek: Node3D=scenery.get_node("Creek")
-	if not creek.get_meta("unified_water",false):
-		var original: ShaderMaterial=creek.get_meta("stream_material")
-		stream_material=original.duplicate()
-		for node in scenery.find_children("*","GeometryInstance3D",true,false):
-			if node.material_override==original:node.material_override=stream_material
 	# Trail entrance, bridge and cottage only; moonlight carries the forest.
 	for lamp in scenery.get_node("Streetlights").get_children():
 		var point:=Vector2(lamp.position.x,lamp.position.z)
@@ -78,10 +70,6 @@ func prepare_scenery() -> void:
 			lamp.get_parent().remove_child(lamp);lamp.free()
 func update_lighting(override_time: float=-1) -> void:
 	super.update_lighting(override_time)
-	if stream_material:
-		var sea: ShaderMaterial=scenery.get_node("Island").get_meta("sea_material")
-		stream_material.set_shader_parameter("sea_color",sea.get_shader_parameter("sea_color"))
-		stream_material.set_shader_parameter("daylight",ambient_day)
 	sun.light_energy=lerpf(.30,1.45,ambient_day)
 	sun.light_color=Color("b0c9f2").lerp(Color("fff6e6"),ambient_day)
 	if ambient_day<.01: sun.rotation_degrees=Vector3(-43,-32,0)

@@ -1,0 +1,1061 @@
+{
+  "date": "2026-11-17",
+  "baseline_commit": "ae11b0b",
+  "scope": "local regenerated QA and isolated fixtures; no release/export/deployment",
+  "private_source_probe_recovery": ".qa-artifacts/handoff-private-20261117/removed-probes/",
+  "items": [
+    {
+      "path": ".qa-artifacts/20261107-163151-644286",
+      "files": 46,
+      "bytes": 203194033,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261107-163520-261783",
+      "files": 9,
+      "bytes": 8314614,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143011-552460",
+      "files": 1,
+      "bytes": 653,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143016-408899",
+      "files": 1,
+      "bytes": 913,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143036-876405",
+      "files": 2,
+      "bytes": 2240,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143336-058365",
+      "files": 1,
+      "bytes": 126,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143430-868082",
+      "files": 1,
+      "bytes": 2527,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143542-151976",
+      "files": 1,
+      "bytes": 689,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143623-988613",
+      "files": 2,
+      "bytes": 5221677,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143659-475959",
+      "files": 1,
+      "bytes": 2527,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143800-066173",
+      "files": 2,
+      "bytes": 5213756,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143818-659121",
+      "files": 3,
+      "bytes": 2453,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-143922-536929",
+      "files": 1,
+      "bytes": 1477,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144052-669266",
+      "files": 3,
+      "bytes": 11168555,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144331-899349",
+      "files": 1,
+      "bytes": 1069,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144506-118724",
+      "files": 3,
+      "bytes": 10892536,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144515-321225",
+      "files": 4,
+      "bytes": 7739,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144617-836944",
+      "files": 3,
+      "bytes": 10885673,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-144845-330983",
+      "files": 3,
+      "bytes": 11423107,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-145138-490026",
+      "files": 3,
+      "bytes": 11095199,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-145300-559262",
+      "files": 3,
+      "bytes": 11219390,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-145743-040861",
+      "files": 1,
+      "bytes": 2258,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-145849-435191",
+      "files": 1,
+      "bytes": 3821,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-145950-366061",
+      "files": 1,
+      "bytes": 3260,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150023-401723",
+      "files": 1,
+      "bytes": 1750,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150122-627934",
+      "files": 1,
+      "bytes": 3418,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150256-969638",
+      "files": 1,
+      "bytes": 3493,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150349-971209",
+      "files": 1,
+      "bytes": 3703,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150417-993869",
+      "files": 3,
+      "bytes": 8884104,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-150852-809774",
+      "files": 1,
+      "bytes": 3201,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-151006-612275",
+      "files": 3,
+      "bytes": 10986783,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-151246-823091",
+      "files": 5,
+      "bytes": 8539,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-151318-689723",
+      "files": 3,
+      "bytes": 13765936,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-151441-764159",
+      "files": 26,
+      "bytes": 103000425,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-151709-237810",
+      "files": 25,
+      "bytes": 98054478,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-152321-088259",
+      "files": 14,
+      "bytes": 18347262,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-152342-450924",
+      "files": 3,
+      "bytes": 5796,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-152614-512734",
+      "files": 2,
+      "bytes": 3633,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-152941-384050",
+      "files": 2,
+      "bytes": 3052,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-153140-821150",
+      "files": 6,
+      "bytes": 13786260,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-153316-578899",
+      "files": 25,
+      "bytes": 101888558,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261112-154149-305365",
+      "files": 6,
+      "bytes": 13781568,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000256-022125",
+      "files": 2,
+      "bytes": 2341,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000423-121711",
+      "files": 2,
+      "bytes": 2890,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000444-133740",
+      "files": 7,
+      "bytes": 34004109,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000525-626874",
+      "files": 11,
+      "bytes": 58508222,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000544-374494",
+      "files": 4,
+      "bytes": 4115,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000621-919244",
+      "files": 3,
+      "bytes": 5763,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000737-862096",
+      "files": 1,
+      "bytes": 861,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000807-825334",
+      "files": 9,
+      "bytes": 18326438,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-000959-855209",
+      "files": 5,
+      "bytes": 7903515,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001046-544989",
+      "files": 8,
+      "bytes": 26615,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001155-577932",
+      "files": 1,
+      "bytes": 1178,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001236-924865",
+      "files": 1,
+      "bytes": 1614,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001253-937506",
+      "files": 9,
+      "bytes": 52001714,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001345-906038",
+      "files": 2,
+      "bytes": 295,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001417-169187",
+      "files": 1,
+      "bytes": 570,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001428-867291",
+      "files": 3,
+      "bytes": 13782776,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001530-536137",
+      "files": 5,
+      "bytes": 15264546,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001618-669187",
+      "files": 5,
+      "bytes": 13854006,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001749-372648",
+      "files": 4,
+      "bytes": 15211980,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001756-408263",
+      "files": 2,
+      "bytes": 3811,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001831-231523",
+      "files": 4,
+      "bytes": 14827774,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001841-003328",
+      "files": 5,
+      "bytes": 13857811,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-001951-944781",
+      "files": 14,
+      "bytes": 61399634,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-002659-857072",
+      "files": 1,
+      "bytes": 154,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-002952-488501",
+      "files": 1,
+      "bytes": 119,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-003149-412278",
+      "files": 2,
+      "bytes": 410,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261113-003426-893842",
+      "files": 2,
+      "bytes": 275,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-013055-561198",
+      "files": 7,
+      "bytes": 39777659,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-014827-433874",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-014952-028135",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-015140-081299",
+      "files": 9,
+      "bytes": 50735229,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-020717-518844",
+      "files": 1,
+      "bytes": 600,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-020818-889951",
+      "files": 1,
+      "bytes": 1037,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-021657-041057",
+      "files": 1,
+      "bytes": 600,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-021708-332605",
+      "files": 11,
+      "bytes": 80211133,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-021856-167557",
+      "files": 1,
+      "bytes": 1039,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022026-938325",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022124-826886",
+      "files": 1,
+      "bytes": 3078,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022218-122644",
+      "files": 1,
+      "bytes": 634,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022233-046699",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022250-873665",
+      "files": 13,
+      "bytes": 94953781,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022707-859892",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022731-587233",
+      "files": 11,
+      "bytes": 88300818,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022820-923534",
+      "files": 2,
+      "bytes": 9410,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-022958-229739",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023029-053075",
+      "files": 1,
+      "bytes": 8351,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023044-872387",
+      "files": 1,
+      "bytes": 8308,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023135-984877",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023229-724409",
+      "files": 1,
+      "bytes": 418,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023240-854847",
+      "files": 1,
+      "bytes": 12134,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023550-716836",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023610-540910",
+      "files": 3,
+      "bytes": 15514,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-023939-666699",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-024004-988725",
+      "files": 9,
+      "bytes": 38575360,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-024154-486532",
+      "files": 9,
+      "bytes": 27839326,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-024526-383614",
+      "files": 21,
+      "bytes": 113301650,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-024937-664682",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-025136-238748",
+      "files": 18,
+      "bytes": 129983678,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-025430-101285",
+      "files": 1,
+      "bytes": 1205,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-025540-274671",
+      "files": 1,
+      "bytes": 498,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-025833-393720",
+      "files": 6,
+      "bytes": 30758537,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-030007-916885",
+      "files": 1,
+      "bytes": 11946,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-030300-431225",
+      "files": 2,
+      "bytes": 14834,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-093937-020407",
+      "files": 5,
+      "bytes": 28996216,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094043-341565",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094149-150164",
+      "files": 7,
+      "bytes": 29048274,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094405-449749",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094532-046464",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094616-394794",
+      "files": 5,
+      "bytes": 28944157,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094825-888874",
+      "files": 1,
+      "bytes": 601,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-094935-949543",
+      "files": 5,
+      "bytes": 30310344,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-102210-702326",
+      "files": 6,
+      "bytes": 15429,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-102911-635028",
+      "files": 9,
+      "bytes": 44474035,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-103359-467804",
+      "files": 4,
+      "bytes": 28160204,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/20261117-103450-272250",
+      "files": 5,
+      "bytes": 16815240,
+      "reason": "Reproducible dated test outputs; selected current logs and images archived to docs/evidence/handoff-20261117"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1232405",
+      "files": 2,
+      "bytes": 57903,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1258702",
+      "files": 2,
+      "bytes": 96411,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1297762",
+      "files": 2,
+      "bytes": 96414,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1300426",
+      "files": 2,
+      "bytes": 96155,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1354915",
+      "files": 2,
+      "bytes": 96413,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1371356",
+      "files": 2,
+      "bytes": 96414,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1378779",
+      "files": 2,
+      "bytes": 96096,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1420270",
+      "files": 2,
+      "bytes": 96094,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1442176",
+      "files": 2,
+      "bytes": 95811,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1447046",
+      "files": 2,
+      "bytes": 38609,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1467458",
+      "files": 2,
+      "bytes": 96090,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1514542",
+      "files": 2,
+      "bytes": 96096,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1560047",
+      "files": 2,
+      "bytes": 17407,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1600339",
+      "files": 2,
+      "bytes": 96096,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1655439",
+      "files": 2,
+      "bytes": 96092,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1673389",
+      "files": 2,
+      "bytes": 57900,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1750354",
+      "files": 2,
+      "bytes": 20119,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1777663",
+      "files": 2,
+      "bytes": 96093,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-2018696",
+      "files": 2,
+      "bytes": 96096,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-2326761",
+      "files": 2,
+      "bytes": 20118,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-2745598",
+      "files": 2,
+      "bytes": 96094,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-flow-3096142",
+      "files": 2,
+      "bytes": 95811,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1164387",
+      "files": 2,
+      "bytes": 26066,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1169752",
+      "files": 2,
+      "bytes": 26066,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1170171",
+      "files": 2,
+      "bytes": 26095,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1182786",
+      "files": 2,
+      "bytes": 28576,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1194376",
+      "files": 2,
+      "bytes": 26066,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1224158",
+      "files": 2,
+      "bytes": 26100,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1350091",
+      "files": 2,
+      "bytes": 24907,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1399612",
+      "files": 2,
+      "bytes": 26097,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-642451",
+      "files": 2,
+      "bytes": 24908,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-677361",
+      "files": 2,
+      "bytes": 28574,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-704556",
+      "files": 2,
+      "bytes": 24940,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-868057",
+      "files": 2,
+      "bytes": 27086,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-885147",
+      "files": 2,
+      "bytes": 28309,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-900237",
+      "files": 2,
+      "bytes": 28310,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-926000",
+      "files": 2,
+      "bytes": 28348,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-940805",
+      "files": 2,
+      "bytes": 28341,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/building-rules-950434",
+      "files": 2,
+      "bytes": 28573,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/dining-save-10055432",
+      "files": 1,
+      "bytes": 9533,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/dining-save-8966581",
+      "files": 1,
+      "bytes": 9548,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/double-seat-655774",
+      "files": 2,
+      "bytes": 20094,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/handoff-auth-20261117",
+      "files": 4,
+      "bytes": 119296,
+      "reason": "This cleanup validation isolated loopback account database; service stopped after test"
+    },
+    {
+      "path": ".qa-artifacts/local-valley-preview",
+      "files": 1,
+      "bytes": 8910419,
+      "reason": "Reproducible temporary preview artifacts; canonical evidence and test entry points retained"
+    },
+    {
+      "path": ".qa-artifacts/local-valley-preview.log",
+      "files": 1,
+      "bytes": 395,
+      "reason": "Reproducible temporary preview artifacts; canonical evidence and test entry points retained"
+    },
+    {
+      "path": ".qa-artifacts/production-multi-689040",
+      "files": 2,
+      "bytes": 20598,
+      "reason": "Generated isolated test state, never live player or production state"
+    },
+    {
+      "path": ".qa-artifacts/release04-native",
+      "files": 59,
+      "bytes": 820214485,
+      "reason": "Disposable native update/install test copies; official releases and frozen production evidence retained"
+    },
+    {
+      "path": ".qa-artifacts/stair_collision_probe.gd",
+      "files": 1,
+      "bytes": 2900,
+      "reason": "Retired ad-hoc probe, exact source saved privately; maintained replacements under tests/"
+    },
+    {
+      "path": ".qa-artifacts/template-mirrors-20261112",
+      "files": 2,
+      "bytes": 7226890,
+      "reason": "Reproducible temporary preview artifacts; canonical evidence and test entry points retained"
+    },
+    {
+      "path": ".qa-artifacts/template_mirror_preview.gd",
+      "files": 1,
+      "bytes": 2097,
+      "reason": "Retired ad-hoc probe, exact source saved privately; maintained replacements under tests/"
+    },
+    {
+      "path": ".qa-artifacts/wall-authority-6194189",
+      "files": 2,
+      "bytes": 16534,
+      "reason": "Generated isolated test state, never live player or production state"
+    }
+  ],
+  "removed_roots": 168,
+  "removed_files": 688,
+  "removed_bytes": 2730245360,
+  "removed_tracked_files": [
+    {
+      "path": "assets/shaders/forest_stream.gdshader",
+      "sha256_at_ae11b0b": "b68eddc621ca880096fe81eb047cd51ef922dcc82deff6c66e19d03fed85d6b8",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "assets/shaders/forest_stream.gdshader.uid",
+      "sha256_at_ae11b0b": "e0074398d44b204ee00aeee73d8973cefa8d37f4ca08026ef756901ba8aecf63",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "assets/shaders/ocean_surface.gdshaderinc",
+      "sha256_at_ae11b0b": "1b9defd5e694a4534ffacc4db39a567e61b39fc4bbb5cf4a1439e13227827c94",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "assets/shaders/ocean_surface.gdshaderinc.uid",
+      "sha256_at_ae11b0b": "aed1f6954408bb97aacd208bd23866656470d0193cfded9cabaf3658cfae076d",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "tests/valley_preview.gd",
+      "sha256_at_ae11b0b": "786e9a76bbed8b331271a14248e630bd25f93a0ef1bf30243fe59cbef25ab4bb",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "tests/valley_preview.gd.uid",
+      "sha256_at_ae11b0b": "b6bccd591e8f94a5f377f8aed77163bc6aebf2c955aa548856f31105f6dc3496",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "tests/valley_revision_preview.gd",
+      "sha256_at_ae11b0b": "dd80073019085f63b5f712ad1edd179848f5f5fe27d2ecfc3cb914db3a4f74c7",
+      "restore_from": "ae11b0b"
+    },
+    {
+      "path": "tests/valley_revision_preview.gd.uid",
+      "sha256_at_ae11b0b": "5f61657b7958dd014faa5cf648a6670e4a4280abbcaf3c38df7e7a48bb9abf27",
+      "restore_from": "ae11b0b"
+    }
+  ]
+}

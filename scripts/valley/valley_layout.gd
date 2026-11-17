@@ -4,7 +4,6 @@ const REVISION:=2
 const LEGACY_SIZE:=Vector2(108,106)
 const SIZE:=LEGACY_SIZE*2.
 const HOUSE:=Vector3(24,8,-72)
-const STAIRS: Array[Vector2]=[] # The old rectangular terrace steps are retired.
 const BRIDGE_Z:=10.
 const DOCK:=Vector2(-14.2,94.4)
 const DOCK_HEIGHT:=.18
@@ -15,7 +14,6 @@ static func river_x(z: float) -> float:return sin(z*.035)*4.
 static func river_half_width(z: float) -> float:return 6.1+smoothstep(56.,116.,z)*12.
 static func water_level(z: float) -> float:return lerpf(5.8,-1.55,smoothstep(-94.,117.,z))
 static func bank_height(z: float) -> float:return water_level(z)+.65
-static func stair_lane(_x: float) -> bool:return false
 static func terrain_contains(x: float,z: float) -> bool:
 	return Vector2(x,z/.88).length()<106 or Vector2((x+26)/28.,(z-84)/38.).length()<1 or Vector2(x/58.,(z-98)/44.).length()<1
 static func height_at(x: float,z: float) -> float:
@@ -60,7 +58,6 @@ static func backdrop_height(radius: float,angle: float) -> float:
 static func normal_at(x: float,z: float) -> Vector3:
 	var step:=.25
 	return Vector3(height_at(x-step,z)-height_at(x+step,z),step*2.,height_at(x,z-step)-height_at(x,z+step)).normalized()
-static func stair_height(z: float,_center: float,_lower: float) -> float:return height_at(0,z)
 static func bridge_at(p: Vector3) -> bool:return absf(p.z-BRIDGE_Z)<2.1 and absf(p.x)<12.4
 static func bridge_height(x: float) -> float:return bank_height(BRIDGE_Z)+.10+.65*sin(clampf((x+12)/24.,0,1)*PI)
 static func on_dock(p: Vector3) -> bool:return p.x> -22.5 and p.x< -11.1 and absf(p.z-DOCK.y)<1.95

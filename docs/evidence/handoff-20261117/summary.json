@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-17",
+  "baseline_commit": "ae11b0b",
+  "delivery": {
+    "branches": [
+      "main",
+      "codex/multiplayer-building"
+    ],
+    "source_only": true,
+    "exported": false,
+    "deployed": false,
+    "production_unchanged": "11-13 release: 0.4.0/build7/launcher2/protocol4",
+    "new_valley_published": false
+  },
+  "cleanup": {
+    "removed_roots": 168,
+    "removed_files": 688,
+    "removed_bytes": 2730245360
+  },
+  "tracked_files_removed": 8,
+  "cleanup_manifest": "cleanup.json",
+  "validation": "validation.json",
+  "groups": 10,
+  "checks": 1889,
+  "protection": "protection.json",
+  "test_processes_left_running": false,
+  "preexisting_normal_game": "Kept running; its live autosaves are documented separately, never stopped or overwritten",
+  "failure_and_resolution": {
+    "test": "forest_art_structure",
+    "outcome": "240s screenshot wait timeout; runner terminated process",
+    "log": "forest_art_structure-before-timeout.log",
+    "resolution": "Render screenshots explicitly instead of awaiting optional native-window frame_post_draw; rerun passed with image assertions"
+  },
+  "source_hashes": "source-sha256.json",
+  "file_inventory": "files.txt",
+  "static_checks": "static-checks.json",
+  "limitations": [
+    "New valley server/client map consistency, existing online character migration and real online round-trip/walking/harvesting require acceptance before future release",
+    "Strict independent 20-mirror performance, initial texture allocation and shadow parity remain unresolved",
+    "Existing Variant pool cleanup diagnostic at multiplayer flow exit; no script or shader errors in successful selected tests",
+    "No Windows physical device, full capacity combination or long-running performance regression repeated"
+  ],
+  "frozen_evidence": "All 1162 pre-existing evidence files kept byte-identical; dated records describe their original stage"
+}
