@@ -1,8 +1,6 @@
 extends Node
 var bunny: CharacterBody3D
 var route: Array[Vector3]=[]
-var index:=0
-var previous_index:=-1
 var wait:=0.0
 var speed:=1.45
 var city: Node3D
@@ -37,8 +35,6 @@ func choose_destination() -> void:
 		if destination.distance_to(bunny.position)<3: continue
 		var next: PackedVector3Array=city.navigation.path_between(bunny.position,destination)
 		if next.size()<2: continue
-		previous_index=index
-		index=candidate
 		recent.append(candidate)
 		if recent.size()>4: recent.pop_front()
 		path=next

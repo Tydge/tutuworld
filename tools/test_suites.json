@@ -249,23 +249,6 @@
       "woodland_sweep_performance",
       "valley_landscape_preview"
     ],
-    "release041": [
-      "project_integrity",
-      "valley_server_migration",
-      "valley_landscape_rules",
-      "valley_rules",
-      "valley_spawn_regression",
-      "valley_traversal_regression",
-      "valley_deck_clearance",
-      "valley_multiplayer_flow",
-      "motion_buffer_rules",
-      "building_multiplayer_rules",
-      "building_multiplayer_flow",
-      "building_update_lifecycle",
-      "release04_building_rules",
-      "character_roster_rules",
-      "save_transactions"
-    ],
     "woodland_lighting": [
       "curved_shadow_surface",
       "woodland_shadow_stability",
@@ -280,6 +263,29 @@
       "woodland_sweep_performance",
       "valley_performance",
       "project_integrity"
+    ],
+    "release": [
+      "project_integrity",
+      "valley_server_migration",
+      "valley_landscape_rules",
+      "valley_rules",
+      "valley_spawn_regression",
+      "valley_traversal_regression",
+      "valley_deck_clearance",
+      "valley_multiplayer_flow",
+      "motion_buffer_rules",
+      "building_multiplayer_rules",
+      "building_multiplayer_flow",
+      "building_update_lifecycle",
+      "release04_building_rules",
+      "character_roster_rules",
+      "save_transactions",
+      "valley_npc_recovery",
+      "curved_shadow_surface",
+      "woodland_lod_flow",
+      "woodland_lighting_flow",
+      "woodland_shadow_stability",
+      "woodland_sweep_performance"
     ]
   },
   "tests": {
