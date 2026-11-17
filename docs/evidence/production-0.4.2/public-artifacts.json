@@ -1,0 +1,23 @@
+{
+  "TutuWorld-macOS.zip": {
+    "https_status": 200,
+    "bytes": 114037258,
+    "length_matches": true
+  },
+  "TutuWorld-Windows.zip": {
+    "https_status": 200,
+    "bytes": 95649214,
+    "length_matches": true
+  },
+  "city.pck": {
+    "https_status": 200,
+    "bytes": 75319028,
+    "length_matches": true
+  },
+  "health": {
+    "ok": true,
+    "version": "0.4.2",
+    "build": 9
+  },
+  "manifest_build": 9
+}

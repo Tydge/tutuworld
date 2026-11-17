@@ -1,0 +1,32 @@
+{
+  "character_ids_preserved": true,
+  "all_character_assets_and_progress_preserved": true,
+  "unmigrated_positions_preserved": true,
+  "all_landscape_markers_current": true,
+  "characters_migrated_from_valley": 0,
+  "world_epoch_preserved": true,
+  "clock_alignment_preserved": true,
+  "build_layout_preserved": true,
+  "land_parcels_preserved": true,
+  "resource_ids_preserved": true,
+  "existing_door_states_preserved": true,
+  "accounts_preserved": true,
+  "sessions_preserved": true,
+  "auth_failure_records_preserved": true,
+  "other_nginx_vhost_unchanged": true,
+  "passed": true,
+  "characters": 4,
+  "accounts": 3,
+  "buildings": 143,
+  "land_plots": 2,
+  "health": {
+    "ok": true,
+    "version": "0.4.2",
+    "build": 9
+  },
+  "serialization_normalization": {
+    "missing_empty_net_pose_defaults": 1,
+    "stamina_elapsed_float_roundtrips": 1,
+    "max_absolute_float_delta": 4.440892098500626e-16
+  }
+}

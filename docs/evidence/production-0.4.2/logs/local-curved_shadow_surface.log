@@ -1,0 +1,80 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+CURVED_SHADOW {"affected":0.000726057185989253,"far":false,"mean":0.0000741069732017333,"pixels":278215,"rotation":"(-70.0, 0.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere false (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere false (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.000283953057886886,"far":false,"mean":0.0000382799913960207,"pixels":278215,"rotation":"(-50.0, -20.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere false (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere false (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0000323490825440756,"far":false,"mean":0.0000242933548193288,"pixels":278215,"rotation":"(-25.0, -40.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere false (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere false (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":true,"mean":0.0000534657295972052,"pixels":20840,"rotation":"(-70.0, 0.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere true (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere true (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.0000479846449136276,"far":true,"mean":0.0000352947845797621,"pixels":20840,"rotation":"(-50.0, -20.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere true (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere true (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":true,"mean":0.0000301589520787552,"pixels":20840,"rotation":"(-25.0, -40.0, 0.0)","species":"sphere"}
+PASS Convex skin sample is visible: sphere true (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: sphere true (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.00219633653964641,"far":false,"mean":0.000113545288372143,"pixels":275914,"rotation":"(-70.0, 0.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny false (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny false (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.00107279804576788,"far":false,"mean":0.0000569214934543428,"pixels":275914,"rotation":"(-50.0, -20.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny false (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny false (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0000688620367215872,"far":false,"mean":0.0000119365757305991,"pixels":275914,"rotation":"(-25.0, -40.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny false (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny false (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.000774930982709352,"far":true,"mean":0.0000841820327203407,"pixels":20647,"rotation":"(-70.0, 0.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny true (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny true (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.000726497796290018,"far":true,"mean":0.0000548713252395096,"pixels":20647,"rotation":"(-50.0, -20.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny true (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny true (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0000484331864193345,"far":true,"mean":0.0000160174340481688,"pixels":20647,"rotation":"(-25.0, -40.0, 0.0)","species":"bunny"}
+PASS Convex skin sample is visible: bunny true (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: bunny true (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.00476300058333378,"far":false,"mean":0.000166166829170473,"pixels":186857,"rotation":"(-70.0, 0.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher false (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher false (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.000107030856996072,"far":false,"mean":0.0000155650482676257,"pixels":186862,"rotation":"(-50.0, -20.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher false (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher false (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.000422326645603793,"far":false,"mean":0.0000275136546180012,"pixels":187059,"rotation":"(-25.0, -40.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher false (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher false (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.00369922458561571,"far":true,"mean":0.000137118511487607,"pixels":14057,"rotation":"(-70.0, 0.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher true (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher true (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.0000711237553342817,"far":true,"mean":0.000017801139127479,"pixels":14060,"rotation":"(-50.0, -20.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher true (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher true (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0000710378631810755,"far":true,"mean":0.0000189520773786353,"pixels":14077,"rotation":"(-25.0, -40.0, 0.0)","species":"cat_teacher"}
+PASS Convex skin sample is visible: cat_teacher true (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: cat_teacher true (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":false,"mean":0.00000737466694834079,"pixels":167117,"rotation":"(-70.0, 0.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda false (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda false (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":false,"mean":0.00000776678690790917,"pixels":167181,"rotation":"(-50.0, -20.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda false (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda false (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":false,"mean":0.0000143287190974841,"pixels":167039,"rotation":"(-25.0, -40.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda false (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda false (-25.0, -40.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":true,"mean":0.0000048366056189057,"pixels":12723,"rotation":"(-70.0, 0.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda true (-70.0, 0.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda true (-70.0, 0.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":true,"mean":0.00000622195098644287,"pixels":12723,"rotation":"(-50.0, -20.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda true (-50.0, -20.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda true (-50.0, -20.0, 0.0)
+CURVED_SHADOW {"affected":0.0,"far":true,"mean":0.0000140805479506372,"pixels":12709,"rotation":"(-25.0, -40.0, 0.0)","species":"panda"}
+PASS Convex skin sample is visible: panda true (-25.0, -40.0, 0.0)
+PASS Convex skin stays free of shadow waves: panda true (-25.0, -40.0, 0.0)
+SHADOW_CONTACT {"gap_m":0.04,"luminance_difference":0.288994550704956}
+PASS Real cast shadow stays attached to ground within 0.04m
+SHADOW_CONTACT {"gap_m":0.25,"luminance_difference":0.288994550704956}
+PASS Real cast shadow stays attached to ground within 0.25m
+CURVED_SHADOW_SURFACE_RESULT PASS checks=50 failures=[]

@@ -1,0 +1,7 @@
+PASS register succeeds
+PASS create_character succeeds
+PASS register succeeds
+PASS create_character succeeds
+PASS register succeeds
+PASS create_character succeeds
+REMOTE_RELEASE042_SEED_RESULT PASS checks=6

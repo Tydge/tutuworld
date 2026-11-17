@@ -1,0 +1,19 @@
+{
+  "documents": 41,
+  "missing_local_links": [],
+  "inventory_files": 2153,
+  "directory_counts": {
+    "[根目录文件]": 8,
+    "assets": 172,
+    "config": 5,
+    "data": 10,
+    "docs": 1208,
+    "scenes": 15,
+    "scripts": 326,
+    "server": 14,
+    "tests": 377,
+    "tools": 18
+  },
+  "runtime_unchanged_since_export": true,
+  "existing_tracked_historical_evidence_unchanged": true
+}

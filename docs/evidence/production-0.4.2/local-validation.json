@@ -1,0 +1,132 @@
+{
+  "groups": [
+    {
+      "name": "building_multiplayer_flow",
+      "checks": 52,
+      "passed": true,
+      "log": "logs/local-building_multiplayer_flow.log"
+    },
+    {
+      "name": "building_multiplayer_rules",
+      "checks": 59,
+      "passed": true,
+      "log": "logs/local-building_multiplayer_rules.log"
+    },
+    {
+      "name": "building_update_lifecycle",
+      "checks": 1,
+      "passed": true,
+      "log": "logs/local-building_update_lifecycle.log"
+    },
+    {
+      "name": "character_roster_rules",
+      "checks": 44,
+      "passed": true,
+      "log": "logs/local-character_roster_rules.log"
+    },
+    {
+      "name": "curved_shadow_surface",
+      "checks": 50,
+      "passed": true,
+      "log": "logs/local-curved_shadow_surface.log"
+    },
+    {
+      "name": "motion_buffer_rules",
+      "checks": 125,
+      "passed": true,
+      "log": "logs/local-motion_buffer_rules.log"
+    },
+    {
+      "name": "project_integrity",
+      "checks": 476,
+      "passed": true,
+      "log": "logs/local-project_integrity.log"
+    },
+    {
+      "name": "release04_building_rules",
+      "checks": 369,
+      "passed": true,
+      "log": "logs/local-release04_building_rules.log"
+    },
+    {
+      "name": "save_transactions",
+      "checks": 10,
+      "passed": true,
+      "log": "logs/local-save_transactions.log"
+    },
+    {
+      "name": "valley_deck_clearance",
+      "checks": 10,
+      "passed": true,
+      "log": "logs/local-valley_deck_clearance.log"
+    },
+    {
+      "name": "valley_landscape_rules",
+      "checks": 14,
+      "passed": true,
+      "log": "logs/local-valley_landscape_rules.log"
+    },
+    {
+      "name": "valley_multiplayer_flow",
+      "checks": 48,
+      "passed": true,
+      "log": "logs/local-valley_multiplayer_flow.log"
+    },
+    {
+      "name": "valley_npc_recovery",
+      "checks": 7,
+      "passed": true,
+      "log": "logs/local-valley_npc_recovery.log"
+    },
+    {
+      "name": "valley_rules",
+      "checks": 215,
+      "passed": true,
+      "log": "logs/local-valley_rules.log"
+    },
+    {
+      "name": "valley_server_migration",
+      "checks": 32,
+      "passed": true,
+      "log": "logs/local-valley_server_migration.log"
+    },
+    {
+      "name": "valley_spawn_regression",
+      "checks": 15,
+      "passed": true,
+      "log": "logs/local-valley_spawn_regression.log"
+    },
+    {
+      "name": "valley_traversal_regression",
+      "checks": 33,
+      "passed": true,
+      "log": "logs/local-valley_traversal_regression.log"
+    },
+    {
+      "name": "woodland_lighting_flow",
+      "checks": 6,
+      "passed": true,
+      "log": "logs/local-woodland_lighting_flow.log"
+    },
+    {
+      "name": "woodland_lod_flow",
+      "checks": 12,
+      "passed": true,
+      "log": "logs/local-woodland_lod_flow.log"
+    },
+    {
+      "name": "woodland_shadow_stability",
+      "checks": 12,
+      "passed": true,
+      "log": "logs/local-woodland_shadow_stability.log"
+    },
+    {
+      "name": "woodland_sweep_performance",
+      "checks": null,
+      "passed": true,
+      "log": "logs/local-woodland_sweep_performance.log"
+    }
+  ],
+  "counted_checks": 1590,
+  "performance": "WOODLAND_SWEEP output=(3024, 1890) scale=0.59155237674713 method=forward_plus fps=60.0833333333333 p95_ms=19.609 max_ms=22.741 over50=0 draws=1066 primitives=1433564 vram_mb=568.890625"
+}

@@ -20,7 +20,8 @@ try:account=pwd.getpwnam('tutuworld')
 except KeyError:
  subprocess.run(['useradd','--system','--home-dir','/var/lib/tutuworld','--shell','/usr/sbin/nologin','tutuworld'],check=True)
  account=pwd.getpwnam('tutuworld')
-for name in ['/var/lib/tutuworld','/var/lib/tutuworld-staging']:
+staging=Path('/var/lib/tutuworld-staging-'+VERSION)
+for name in ['/var/lib/tutuworld',str(staging)]:
  p=Path(name);p.mkdir(parents=True,exist_ok=True);p.chmod(0o700);os.chown(p,account.pw_uid,account.pw_gid)
 release=Path('/srv/tutuworld/releases')/VERSION;release.mkdir(parents=True,exist_ok=True)
 if (release/'released.json').exists():raise SystemExit('Refusing to overwrite a released service')
@@ -39,7 +40,7 @@ with tarfile.open(archive) as t:
  temporary.unlink();engine.chmod(0o755)
 archive.unlink()
 subprocess.run([str(engine),'--headless','--version'],check=True)
-common=['systemd-run','--collect','--property=User=tutuworld','--property=Group=tutuworld','--setenv=TUTU_STATE_DIR=/var/lib/tutuworld-staging','--setenv=TUTU_AUTH_PORT=18896','--setenv=TUTU_GAME_PORT=18895','--setenv=TUTU_VERSION='+VERSION,'--setenv=TUTU_BUILD='+str(BUILD)]
+common=['systemd-run','--collect','--property=User=tutuworld','--property=Group=tutuworld','--setenv=TUTU_STATE_DIR='+str(staging),'--setenv=TUTU_AUTH_PORT=18896','--setenv=TUTU_GAME_PORT=18895','--setenv=TUTU_VERSION='+VERSION,'--setenv=TUTU_BUILD='+str(BUILD)]
 subprocess.run(common+['--unit=tutuworld-stage-auth','/usr/bin/python3',str(release/'auth_service.py')],check=True)
 subprocess.run(common+['--unit=tutuworld-stage-world',str(engine),'--headless','--main-pack',str(release/'server.pck'),'--script','res://server/main.gd'],check=True)
 print(json.dumps({'prepared':True,'version':VERSION,'staging_game_port':18895,'staging_auth_port':18896}))

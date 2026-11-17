@@ -1,0 +1,14 @@
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS Completed buildings persist through the staged server restart
+PASS Current valley character is not migrated a second time
+NPC_DISPLACEMENTS [{"id":"ValleyVisitor0","distance":12.581473969713368},{"id":"ValleyVisitor1","distance":12.630398189882142}]
+PASS Both valley rabbits move on the Linux candidate server
+PASS Real remote valley movement advances on the saved terrain
+PASS Remote authoritative jumping rises above the valley surface
+FAIL gather succeeds: 这里已经采集过了，过会儿再来吧。
+REMOTE_RELEASE042_RESULT FAIL gather succeeds: 这里已经采集过了，过会儿再来吧。

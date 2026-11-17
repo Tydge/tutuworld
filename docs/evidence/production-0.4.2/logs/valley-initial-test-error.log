@@ -1,0 +1,11 @@
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS Completed buildings persist through the staged server restart
+PASS Current valley character is not migrated a second time
+NPC_DISPLACEMENTS [{"id":"Panda","distance":6.198721435972306},{"id":"ValleyVisitor0","distance":10.433402022371062},{"id":"ValleyVisitor1","distance":8.61934947865277}]
+FAIL Both valley rabbits move on the Linux candidate server
+REMOTE_RELEASE042_RESULT FAIL Both valley rabbits move on the Linux candidate server

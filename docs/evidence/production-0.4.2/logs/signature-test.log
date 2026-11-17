@@ -1,0 +1,12 @@
+[PASS] update_integrity (0.8s) 
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Authentic signed release accepted
+PASS Tampered payload rejected
+PASS Forged signature rejected
+PASS Malformed release rejected
+PASS Absent release rejected
+UPDATE_INTEGRITY_RESULT PASS failures=[]
+Log: /Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261118-002135-702171/update_integrity/run.log
+All selected checks passed. Evidence: /Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261118-002135-702171

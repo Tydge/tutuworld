@@ -1,0 +1,60 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+TUTU_SERVER_READY version=0.4.2 build=9
+PASS Migration fixture connects through real transport
+WANDER_GRID_READY cells=19995 components=7
+PASS Isolated owner account registers
+PASS Second real client connects
+PASS Second isolated account registers
+PASS Offline legacy online character fixture is durably saved
+PASS Real server load migrates the offline valley resident
+PASS Owner resumes the migrated account
+WANDER_GRID_READY cells=47740 components=9
+PASS Migrated resident joins the new valley physics world
+PASS Visitor joins the city
+PASS Real online client loads the valley scene
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+PASS Client and authority spawn beside the migrated position
+PASS Online snapshot retains species, currency and migration marker
+PASS Client/server saved collision surface agrees (-78.0, -4.695606)
+PASS Client/server saved collision surface agrees (-15.0, 10.0)
+PASS Client/server saved collision surface agrees (0.0, 10.0)
+PASS Client/server saved collision surface agrees (-14.2, 94.4)
+PASS Client/server saved collision surface agrees (24.0, -72.0)
+WANDER_GRID_READY cells=47740 components=9
+PASS Real keyboard walking predicts and converges on the new valley
+PASS Networked valley jumping rises above the terrain
+PASS Authority finds a real safe landing beside a valley resource
+PASS Actual network command starts gathering on the new map
+PASS Real timed gathering awards once and consumes the shared resource
+PASS Valley return pier has a safe authority landing
+PASS Real online return changes to the city scene
+WANDER_GRID_READY cells=19995 components=7
+PASS Free return retains gathered inventory
+PASS Real outbound boat returns to the new valley
+PASS Round trip charges the outward fare exactly once and keeps progress
+PASS Visitor reaches the city's real boat departure point
+PASS Second live client independently travels to the new valley
+WANDER_GRID_READY cells=47740 components=9
+PASS Online valley renders the other player and buffered NPC movement
+PASS Rabbit walks on authority and rendered online client (daytime): ValleyVisitor0
+PASS Second real client receives the same moving rabbit (daytime): ValleyVisitor0
+PASS Rabbit walks on authority and rendered online client (daytime): ValleyVisitor1
+PASS Second real client receives the same moving rabbit (daytime): ValleyVisitor1
+PASS Second player reaches a real safe position beside the rabbit
+PASS Second player starts a real authority conversation
+PASS Rabbit stops naturally while another player talks
+PASS Second player ends the conversation
+PASS Conversation partner leaves room for the rabbit to resume
+PASS Rabbit resumes roaming after the conversation
+PASS Night absence reaches both real clients: ValleyVisitor0
+PASS Night absence reaches both real clients: ValleyVisitor1
+PASS Dawn restores rabbit interaction on authority and client: ValleyVisitor0
+PASS Dawn restores rabbit interaction on authority and client: ValleyVisitor1
+PASS Rabbit walks on authority and rendered online client (after dawn): ValleyVisitor0
+PASS Second real client receives the same moving rabbit (after dawn): ValleyVisitor0
+PASS Rabbit walks on authority and rendered online client (after dawn): ValleyVisitor1
+PASS Second real client receives the same moving rabbit (after dawn): ValleyVisitor1
+NET_SERVER players=2 queued_inputs=0 frame_ms_avg=19.6 frame_ms_max=147.1
+VALLEY_MULTIPLAYER_FLOW_RESULT PASS checks=48 failures=[]

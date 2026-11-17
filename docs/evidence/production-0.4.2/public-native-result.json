@@ -1,0 +1,8 @@
+{
+  "checks": 10,
+  "failures": [],
+  "native": true,
+  "executable_unchanged": true,
+  "base_version": "0.4.1",
+  "patch": "actual HTTPS downloaded build-9.pck"
+}

@@ -1,0 +1,6 @@
+[PASS] multiplayer_live (18.5s) 
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+MULTIPLAYER_LIVE_RESULT PASS endpoint=ws://127.0.0.1:18945 checks=42 failures=[]
+Log: /Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261118-002136-613061/multiplayer_live/run.log
+All selected checks passed. Evidence: /Users/wangtaizhi/兔兔的世界/.qa-artifacts/20261118-002136-613061

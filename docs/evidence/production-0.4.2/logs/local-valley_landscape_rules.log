@@ -1,0 +1,17 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Exactly four times original map area
+PASS Continuous terrain, including bridge approaches, max 2mm probe change=0.00574741928614
+PASS Valley has substantial real relief: 58.4132832903053
+PASS Walkable western overlook stands over twenty metres above riverbank
+PASS Actual ascending trails remain below walking slope limit, max grade=0.60506530556415
+PASS Continuous water is contained below both banks before the estuary
+PASS Legacy position moves onto new landscape (-8.0, 0.1, 32.0)
+PASS Migration is idempotent; species and inventory retained
+PASS Legacy position moves onto new landscape (22.0, 4.2, -31.0)
+PASS Migration is idempotent; species and inventory retained
+PASS Legacy position moves onto new landscape (12.0, 4.2, -36.0)
+PASS Migration is idempotent; species and inventory retained
+PASS Legacy position moves onto new landscape (-5.8, 0.18, 47.2)
+PASS Migration is idempotent; species and inventory retained
+VALLEY_LANDSCAPE_RULES_RESULT PASS checks=14 failures=[]

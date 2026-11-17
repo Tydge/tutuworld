@@ -1,0 +1,44 @@
+{
+  "version": "0.4.2",
+  "build": 9,
+  "artifacts": {
+    "TutuWorld-macOS.zip": {
+      "bytes": 114037258,
+      "sha256": "4163d2a498bce1b62ad6c2915f4ae4ad965236eecccf6506df5f8171627e7715"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 95649214,
+      "sha256": "e66dcc561995cc1ff02cb687b8a6c98e5eac4bd4e2227480605be56e522e9f87"
+    },
+    "city.pck": {
+      "bytes": 75319028,
+      "sha256": "4275ba241552abfb5fa5177e9f409e7fe7f8297ede7dbd140deb32e5657cac1d"
+    },
+    "server.pck": {
+      "bytes": 66663772,
+      "sha256": "0a60f719827c14ae630dd827dd257f31b54d9c43b1606e2bd4732136f0444da6"
+    },
+    "manifest.json": {
+      "bytes": 1176,
+      "sha256": "ff0ba43ac8dbff51dc913f8671192cd5d30af3b99c05248338bc22c6f36c442b"
+    }
+  },
+  "macos": {
+    "version_metadata": true,
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "ad_hoc_signature_verified": true,
+    "notarized": false
+  },
+  "windows": {
+    "version_resource": "0.4.2.0",
+    "sdk_dll_and_licenses_byte_identical": [
+      "LICENSE-CODE.txt",
+      "D3D12Core.dll",
+      "LICENSE.txt"
+    ],
+    "physical_device_tested": false
+  }
+}

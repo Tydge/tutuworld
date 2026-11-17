@@ -1,0 +1,410 @@
+{
+  "protected_files": 1078,
+  "protected_content_unchanged": true,
+  "removed": [
+    {
+      "path": ".qa-artifacts/auth-release04",
+      "files": 3,
+      "bytes": 448896,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-230945-374198",
+      "files": 1,
+      "bytes": 600,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-225744-360392",
+      "files": 1,
+      "bytes": 600,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1185192",
+      "files": 2,
+      "bytes": 97660,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-123145-952278",
+      "files": 1,
+      "bytes": 154,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/release041-exported-world",
+      "files": 2,
+      "bytes": 24993,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-113653-032891",
+      "files": 5,
+      "bytes": 16806747,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-online-1283769",
+      "files": 2,
+      "bytes": 20462,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-234331-839194",
+      "files": 31,
+      "bytes": 1828058,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-114059-237803",
+      "files": 1,
+      "bytes": 156,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122642-406977",
+      "files": 7,
+      "bytes": 37516145,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-132647-225934",
+      "files": 1,
+      "bytes": 154,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-113429-167021",
+      "files": 1,
+      "bytes": 418,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-online-1245565",
+      "files": 2,
+      "bytes": 20490,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-npc-investigation",
+      "files": 27,
+      "bytes": 286353,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": [
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/ranges.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/linux_recovery.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/support_probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/remote_probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/long_probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/valley-npc-investigation/online_probe.gd"
+      ]
+    },
+    {
+      "path": ".qa-artifacts/20261117-230042-145406",
+      "files": 1,
+      "bytes": 600,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1199249",
+      "files": 2,
+      "bytes": 26259,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-215219-501855",
+      "files": 1,
+      "bytes": 1402,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122532-406873",
+      "files": 3,
+      "bytes": 254238,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-133125-495696",
+      "files": 2,
+      "bytes": 410,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-230115-398989",
+      "files": 15,
+      "bytes": 47900160,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1557943",
+      "files": 2,
+      "bytes": 97538,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-231447-422437",
+      "files": 4,
+      "bytes": 7369193,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-225643-568899",
+      "files": 1,
+      "bytes": 3032,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/release041-native",
+      "files": 31,
+      "bytes": 877001236,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": [
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-native/make-native-fixture.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-native/probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-native/native-probe.tscn",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-native/probe-project.godot",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-native/native-probe.gd"
+      ]
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1329641",
+      "files": 2,
+      "bytes": 26443,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122851-299010",
+      "files": 8,
+      "bytes": 16810875,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-231254-155548",
+      "files": 1,
+      "bytes": 755,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-113452-568235",
+      "files": 1,
+      "bytes": 156,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/auth-release041",
+      "files": 3,
+      "bytes": 345896,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-113857-041432",
+      "files": 17,
+      "bytes": 51307825,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-215327-666473",
+      "files": 8,
+      "bytes": 23395217,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1255199",
+      "files": 2,
+      "bytes": 97931,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-online-1599829",
+      "files": 2,
+      "bytes": 20460,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/release041-remote",
+      "files": 28,
+      "bytes": 45633,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": [
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/geometry.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/geometry.json",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/acceptance.js",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/anchors.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/preservation.py",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/seed_stage.py",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/release041-remote/production_snapshot.py"
+      ]
+    },
+    {
+      "path": ".qa-artifacts/20261117-215303-450008",
+      "files": 1,
+      "bytes": 1338,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-rules-1281551",
+      "files": 2,
+      "bytes": 26476,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-231752-568487",
+      "files": 7,
+      "bytes": 47944971,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/woodland-lighting-20261117",
+      "files": 92,
+      "bytes": 255797743,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": [
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/map_preservation.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/two_splits.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/shadow_before.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/before/scripts/valley/woodland_groundcover.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/before/scripts/valley/ancient_forest.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/before/scripts/valley/build_valley.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/before/scripts/valley/valley_world.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/woodland-lighting-20261117/before/scripts/valley/woodland_view.gd"
+      ]
+    },
+    {
+      "path": ".qa-artifacts/valley-online-825626",
+      "files": 2,
+      "bytes": 20464,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122720-045423",
+      "files": 5,
+      "bytes": 3715,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122203-981517",
+      "files": 6,
+      "bytes": 8011133,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-122605-024201",
+      "files": 4,
+      "bytes": 255438,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/release041-public-updates",
+      "files": 2,
+      "bytes": 75273175,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/shadow-acne-20261117",
+      "files": 69,
+      "bytes": 7926952,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": [
+        ".qa-artifacts/handoff-private-20261118/removed-probes/shadow-acne-20261117/valley_comparison.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/shadow-acne-20261117/probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/shadow-acne-20261117/depth_probe.gd",
+        ".qa-artifacts/handoff-private-20261118/removed-probes/shadow-acne-20261117/skin_probe.gd"
+      ]
+    },
+    {
+      "path": ".qa-artifacts/20261117-113550-562825",
+      "files": 4,
+      "bytes": 3962,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/building-flow-1244630",
+      "files": 2,
+      "bytes": 97808,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-231056-263033",
+      "files": 38,
+      "bytes": 68117412,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/20261117-230336-778650",
+      "files": 1,
+      "bytes": 600,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-online-1291246",
+      "files": 2,
+      "bytes": 18619,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/valley-online-1343086",
+      "files": 2,
+      "bytes": 20462,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    },
+    {
+      "path": ".qa-artifacts/release041-preflight",
+      "files": 5,
+      "bytes": 4366,
+      "reason": "obsolete regenerable QA or isolated release fixture",
+      "archived_probes": []
+    }
+  ],
+  "removed_files": 465,
+  "removed_bytes": 1545281779,
+  "private_probe_archive": ".qa-artifacts/handoff-private-20261118/removed-probes",
+  "notes": "Excludes active logs. All existing fixed evidence, releases, dependencies and selected private/player recovery files preserved. Private paths/hashes are not published."
+}

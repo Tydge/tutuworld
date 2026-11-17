@@ -1,0 +1,24 @@
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS Completed buildings persist through the staged server restart
+PASS Current valley character is not migrated a second time
+NPC_DISPLACEMENTS [{"id":"ValleyVisitor0","distance":10.3668323380603},{"id":"ValleyVisitor1","distance":10.065518152477516}]
+PASS Both valley rabbits move on the Linux candidate server
+PASS Real remote valley movement advances on the saved terrain
+PASS Remote authoritative jumping rises above the valley surface
+PASS Character approaches the resource again after movement and jumping
+GATHER_FIXTURE {"available":true,"position":[-55.7458000183105,21.6457214355469,53.7474479675293],"target":[-57.7495613098145,22.3184265587444,53.7474632263184]}
+PASS gather succeeds
+PASS Remote real-time gathering awards inventory and consumes the shared resource
+PASS travel succeeds
+PASS Outbound trip reaches the new valley and charges once
+PASS Real inputs follow the valley trail and pier [-21,0,88]
+PASS Real inputs follow the valley trail and pier [-21,0,94.4]
+PASS Real inputs follow the valley trail and pier [-14.1999998092651,0.2,94.4000015258789]
+PASS travel succeeds
+PASS Return boat reaches the city without an extra fare
+REMOTE_RELEASE042_VALLEY_RESULT PASS checks=21

@@ -1,0 +1,11 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Original exported client resources load in the native executable
+PASS Real exported native executable
+PASS Native client accepts the signed 0.4.2 manifest
+PASS Native resources report 0.4.2/build9/launcher2/protocol4
+PASS Native resources contain the new landscape revision
+PASS Native package loads the continuous valley and forest
+PASS Native package retains 27 stable valley resources
+PASS Client package excludes authority code and development fixtures
+NATIVE_RELEASE042_RESULT PASS checks=8 failures=[]

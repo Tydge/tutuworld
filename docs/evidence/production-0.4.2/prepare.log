@@ -1,0 +1,4 @@
+4.6.3.stable.official.7d41c59c4
+Running as unit: tutuworld-stage-auth.service; invocation ID: 6af714fe652b42b0aa29aae6837b21f5
+Running as unit: tutuworld-stage-world.service; invocation ID: c975e6ffca5a44819cdb4258703e0142
+{"prepared": true, "version": "0.4.2", "staging_game_port": 18895, "staging_auth_port": 18896}

@@ -1,0 +1,31 @@
+{
+  "current": "/srv/tutuworld/releases/0.4.2",
+  "release_marker": {
+    "version": "0.4.2",
+    "activated_at": "2026-11-17T16:29:54.667243+00:00"
+  },
+  "services": {
+    "tutuworld-world": "active",
+    "tutuworld-auth": "active",
+    "tutuworld-backup.timer": "active"
+  },
+  "staging_services": {
+    "tutuworld-stage-world": "inactive",
+    "tutuworld-stage-auth": "inactive"
+  },
+  "script_or_shader_errors": [],
+  "previous_public_artifacts_unchanged": {
+    "0.4.0": {
+      "city.pck": true,
+      "TutuWorld-macOS.zip": true,
+      "TutuWorld-Windows.zip": true,
+      "manifest.json": true
+    },
+    "0.4.1": {
+      "TutuWorld-macOS.zip": true,
+      "TutuWorld-Windows.zip": true,
+      "city.pck": true,
+      "manifest.json": true
+    }
+  }
+}
