@@ -2,6 +2,9 @@ shader_type spatial;
 render_mode diffuse_burley;
 uniform vec4 tint : source_color=vec4(1.0);
 uniform int pattern=0;
+uniform bool roof_snow=false;
+uniform sampler2D roof_snow_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+varying vec3 surface_world_normal;
 uniform bool vertex_tint=false;
 uniform float opacity=1.0;
 // Only free-occlusion fades are camera-local; editor/automatic cutaways stay intact.
@@ -29,7 +32,7 @@ float building_hidden(vec2 position){
  if(any(lessThan(uv,vec2(0.)))||any(greaterThanEqual(uv,vec2(1.))))return 0.;
  return texture(building_cut_mask,uv).r;
 }
-void vertex(){p=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;local_pos=building_world_pattern?p:VERTEX;local_normal=building_world_pattern?(MODEL_NORMAL_MATRIX*NORMAL):NORMAL;}
+void vertex(){surface_world_normal=normalize(MODEL_NORMAL_MATRIX*NORMAL);p=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;local_pos=building_world_pattern?p:VERTEX;local_normal=building_world_pattern?(MODEL_NORMAL_MATRIX*NORMAL):NORMAL;}
 void fragment(){
  if(building_roof_cut && building_hidden(p.xz)>.5)discard;
  if(building_wall_cut && p.y>=cut_base_height){
@@ -122,5 +125,11 @@ void fragment(){
   float plaster=dot(texture(plaster_texture,wall_uv).rgb,vec3(.333333));
   color*=mix(1.,clamp(plaster/.72,.82,1.13),plaster_strength);
  }
+ float snow_cover=roof_snow?smoothstep(.32,.62,surface_world_normal.y):0.;
+ if(snow_cover>.001){
+  vec3 powder=texture(roof_snow_texture,p.xz*.30).rgb;
+  color=mix(color,mix(vec3(.70,.80,.87),vec3(.96,.98,1.),clamp(dot(powder,vec3(.3333))*1.2,0.,1.)),snow_cover);
+ }
  ALBEDO=color;ROUGHNESS=pattern==8?.34:(pattern==7?.58:roughness_value);SPECULAR=pattern==8?.36:.22;
+ if(snow_cover>.001){ROUGHNESS=mix(ROUGHNESS,.94,snow_cover);SPECULAR=mix(SPECULAR,.18,snow_cover);}
 }

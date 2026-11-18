@@ -193,7 +193,8 @@ func sample(mouse: Vector2) -> void:
 		var side: String="positive" if (Vector2(editor.city.camera.position.x,editor.city.camera.position.z)-L.rect(row).get_center()).dot(preload("res://scripts/building/structure_catalog.gd").normal(row))>=0. else "negative"
 		copied.merge(preload("res://scripts/building/structure_catalog.gd").surface(row,side),true)
 	var tool: String="object:"+row.kind if type=="object" else type+(":"+row.get("form","classic") if type in ["door","window","roof","stairs"] else "")
-	editor.choose_tool(tool);brush=copied;editor.rotation=float(row.get("yaw",0.));editor.brush_painted=bool(copied.get("painted",true));editor.ui.color.color=Color(copied.color);editor.ui.style.selected=maxi(0,editor.ui.STYLES.find(copied.style))
+	editor.choose_tool(tool);editor.roof_snow=bool(row.get("snow",false)) if type=="roof" else editor.roof_snow;brush=copied;editor.rotation=float(row.get("yaw",0.));editor.brush_painted=bool(copied.get("painted",true));editor.ui.color.color=Color(copied.color);editor.ui.style.selected=maxi(0,editor.ui.STYLES.find(copied.style))
+	editor.refresh_ui()
 	editor.ui.message("已吸取 · "+C.name_for(row)+(" · 点击同类表面刷样式" if type in ["floor","wall"] else " · 点击放置同款"))
 func apply_brush(row: Dictionary) -> Dictionary:
 	if brush.is_empty() or row.get("type","")!=brush.get("type",""):return row

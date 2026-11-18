@@ -27,7 +27,7 @@ func run() -> void:
 	var before_coins: int=session.state().coins;var before_xp: int=session.state().experience
 	session.state().skill_experience.mining=73
 	session.state().resources.resource_00.available=false;session.state().resources.resource_00.respawn_at=session.state().time+4000
-	await Travel.go(game)
+	await Travel.go(game,"valley")
 	var deadline:=Time.get_ticks_msec()+15000
 	while (current_scene==null or current_scene.name!="MianfengValley") and Time.get_ticks_msec()<deadline: await process_frame
 	check(current_scene!=null and current_scene.name=="MianfengValley","Actual outbound scene transition")

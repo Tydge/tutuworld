@@ -78,7 +78,7 @@ func _ready() -> void:
 	preload("res://scripts/city/render_budget.gd").ensure(self)
 	session=get_node("/root/Session")
 	session.player_started=true
-	scenery=load("res://scenes/valley_map.scn" if map_id=="valley" else "res://scenes/city_map.tscn").instantiate()
+	scenery=load(preload("res://scripts/services/map_routes.gd").scenery(map_id)).instantiate()
 	add_child(scenery)
 	preload("res://scripts/city/scenery_polish.gd").apply(scenery)
 	scenery.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
@@ -295,7 +295,7 @@ func spawn_npc(id: String,label_: String,p: Vector3,equipment: Dictionary,specie
 	n.collision_mask=15
 	add_child(n)
 	n.position=p
-	n.world=null
+	n.world=null;n.move_speed=2.8
 	var worn:=equipment.duplicate()
 	if npc_neckwear.has(id): worn.neck=npc_neckwear[id]
 	n.set_meta("equipment",worn)
@@ -437,7 +437,7 @@ func update_target() -> void:
 			"workshop": text="E   制造工作台 · 制造道具"
 			"kitchen": text="E   "+t.get("name","海风小厨房")+" · 烹饪料理"
 			"dining": text="E   入座用餐 · 选择料理"
-			"boat": text="E   坐船回海岛城 · 免费" if map_id=="valley" else "E   坐船去眠风山谷 · 10 贝壳币"
+			"boat": text="E   坐船回海岛城 · 免费" if map_id!="city" else "E   选择航线 · 山谷 / 冰原岛 · 10 贝壳币"
 			"resource":
 				var locked: String=session.authority.resource_lock_reason(t.item)
 				text="E   %s · %s"%[DB.item(t.item).name,locked] if locked!="" else "E   %s %s · %s 秒 · %d 耐力"%["采摘" if t.item=="orange" else "采集",DB.item(t.item).name,str(snappedf(session.authority.action_duration("gather",t.item),.1)),preload("res://scripts/services/character_stats.gd").work_tier(t.item)]

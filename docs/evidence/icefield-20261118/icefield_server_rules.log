@@ -1,0 +1,74 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+TUTU_SERVER_READY version=0.4.2 build=9
+WANDER_GRID_READY cells=19995 components=7
+WANDER_GRID_READY cells=47740 components=9
+WANDER_GRID_READY cells=108459 components=6
+PASS Authority loads three independent collision worlds and new residents
+PASS Authority joins species 0
+PASS Authoritative ferry enters icefield 0
+PASS World, position and fare change together 0
+PASS Repeated travel token cannot double debit 0
+PASS Authority joins species 1
+PASS Authoritative ferry enters icefield 1
+PASS World, position and fare change together 1
+PASS Repeated travel token cannot double debit 1
+PASS Authority joins species 2
+PASS Authoritative ferry enters icefield 2
+PASS World, position and fare change together 2
+PASS Repeated travel token cannot double debit 2
+PASS Shared harbor finds separated arrival places
+PASS Shared harbor finds separated arrival places
+PASS Shared harbor finds separated arrival places
+PASS Authority rejects an unlisted inter-island route
+PASS Authority uses same slow ice acceleration
+PASS Authority preserves glide after release
+PASS Actual authority walk speed is +25 percent for species 0
+PASS Actual authority sprint is +25 percent even at zero stamina for species 0
+PASS Authority sprint has no cost or legacy debt for species 0
+PASS Actual authority walk speed is +25 percent for species 1
+PASS Actual authority sprint is +25 percent even at zero stamina for species 1
+PASS Authority sprint has no cost or legacy debt for species 1
+PASS Actual authority walk speed is +25 percent for species 2
+PASS Actual authority sprint is +25 percent even at zero stamina for species 2
+PASS Authority sprint has no cost or legacy debt for species 2
+PASS Physical approach to resource icefield_branch_00
+PASS Physical approach to resource icefield_branch_01
+PASS Physical approach to resource icefield_branch_02
+PASS Physical approach to resource icefield_branch_03
+PASS Physical approach to resource icefield_branch_04
+PASS Physical approach to resource icefield_branch_05
+PASS Physical approach to resource icefield_birch_00
+PASS Physical approach to resource icefield_birch_01
+PASS Physical approach to resource icefield_birch_02
+PASS Physical approach to resource icefield_birch_03
+PASS Physical approach to resource icefield_birch_04
+PASS Physical approach to resource icefield_birch_05
+PASS Physical approach to resource icefield_copper_00
+PASS Physical approach to resource icefield_copper_01
+PASS Physical approach to resource icefield_copper_02
+PASS Physical approach to resource icefield_copper_03
+PASS Physical approach to resource icefield_copper_04
+PASS Physical approach to resource icefield_copper_05
+PASS Physical approach to resource icefield_iron_00
+PASS Physical approach to resource icefield_iron_01
+PASS Physical approach to resource icefield_iron_02
+PASS Physical approach to resource icefield_iron_03
+PASS Physical approach to resource icefield_limestone_00
+PASS Physical approach to resource icefield_limestone_01
+PASS Physical approach to resource icefield_limestone_02
+PASS Physical approach to resource icefield_limestone_03
+PASS Physical approach to resource icefield_limestone_04
+PASS Physical approach to resource icefield_limestone_05
+PASS Physical approach to resource icefield_sandstone_00
+PASS Physical approach to resource icefield_sandstone_01
+PASS Physical approach to resource icefield_sandstone_02
+PASS Physical approach to resource icefield_sandstone_03
+PASS Authority starts icefield gathering
+PASS Authority grants and saves shared icefield resource
+PASS New map participates in motion packets
+PASS Authority returns for free
+PASS Failed durable save rolls back world transfer and fare
+PASS Isolated server snapshot saves
+PASS Offline records retain new map and species
+ICEFIELD_SERVER_RULES_RESULT PASS checks=67 failures=[]

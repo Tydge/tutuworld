@@ -43,7 +43,7 @@ func _ready() -> void:
 	building.manager=self
 	load_world()
 	world.state.building_sites={}
-	for id in ["city","valley"]:
+	for id in preload("res://scripts/services/map_routes.gd").IDS:
 		var viewport:=SubViewport.new();viewport.own_world_3d=true;viewport.size=Vector2i(16,16)
 		viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED;add_child(viewport)
 		var host=load("res://server/"+id+"_host.gd").new()
@@ -482,8 +482,8 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 	if verb=="travel":
 		if not a.job.is_empty() or not a.state.get("net_pose",{}).is_empty():return fail("先结束当前动作吧。")
 		var destination: String=str(args.get("destination",""))
-		if destination not in ["city","valley"]:return fail("航线不正确。")
-		var arrival: Array=preload("res://scripts/valley/valley_layout.gd").arrival(destination)
+		if not preload("res://scripts/services/map_routes.gd").allowed(map_id,destination):return fail("航线不正确。")
+		var arrival: Array=preload("res://scripts/services/map_routes.gd").arrival(destination)
 		var point:=safe_position(destination,vector_from(arrival),id,pawn)
 		if point.is_empty():return fail("码头有点挤，稍等一下再出发吧。")
 		var result: Dictionary=a.execute(command_for(id,request,verb,args))
@@ -681,9 +681,10 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 	return {}
 func actor_packet(id: String) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
-	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"watering_can":a.watering_can_id(),"action":pawn.action,"walking":pawn.walking,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job}
+	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"watering_can":a.watering_can_id(),"action":pawn.action,"walking":pawn.walking,"animation_speed":pawn.animation_speed,"ice_inertia":pawn.ice_inertia,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job}
 func broadcast_motion() -> void:
-	var batches: Dictionary={"city":[],"valley":[]}
+	var batches: Dictionary={}
+	for map_id in maps:batches[map_id]=[]
 	for id in actors:batches[actors[id].state.map_id].append(actor_packet(id))
 	for map_id in maps:
 		for npc in maps[map_id].npcs:

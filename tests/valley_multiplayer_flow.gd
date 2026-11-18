@@ -110,7 +110,7 @@ func run() -> void:
 	await Travel.go(game);check(await wait_scene("city"),"Real online return changes to the city scene")
 	await create_timer(.8).timeout
 	check(session.state().coins==coins and session.authority.count("branch")==branches,"Free return retains gathered inventory")
-	await Travel.go(game);check(await wait_scene("valley"),"Real outbound boat returns to the new valley")
+	await Travel.go(game,"valley");check(await wait_scene("valley"),"Real outbound boat returns to the new valley")
 	await create_timer(.8).timeout
 	check(session.state().coins==coins-10 and session.authority.count("branch")==branches,"Round trip charges the outward fare exactly once and keeps progress")
 	check(place(friend_id,Vector3(13,.2,41.5)),"Visitor reaches the city's real boat departure point")

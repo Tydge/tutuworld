@@ -194,7 +194,7 @@ func start_game() -> void:
 func launch_character(_id: String) -> void:
 	if launching: return
 	launching=true
-	start_button.text="正在走进眠风山谷…" if session.state().get("map_id","city")=="valley" else "正在走进海岛城…"
+	start_button.text="正在走进"+preload("res://scripts/services/map_routes.gd").title(session.state().get("map_id","city"))+"…"
 	start_button.disabled=true
 	await get_tree().process_frame
 	await get_tree().create_timer(.12).timeout

@@ -1,0 +1,39 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Sun and moon are continuous across midnight
+PASS Midnight has subdued overhead moonlight and no horizon sun
+DRAW_STATE can_draw=true visible=true mode=3 enabled=true
+PASS Snowfall uses a small fixed budget of fine dots
+PASS Campfire clearing stays outside fir tree crowns (-38.0, 33.0)
+PASS Campfire clearing stays outside fir tree crowns (-115.0, -40.0)
+PASS Campfire clearing stays outside fir tree crowns (43.0, 62.0)
+PASS Shop has no detached roof overlay
+PASS Shop snow and canopy share their registered cutaway materials
+PASS Shop snow and canopy share their registered cutaway materials
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=108459 components=6
+PASS Free occlusion hides roof snow and the awning together
+ORBIT_SAMPLE 0 center=(1584.917, 1036.223) expected=(1585.438, 1036.63) pixels=7691
+ORBIT_SAMPLE 1 center=(1589.632, 1036.533) expected=(1590.221, 1037.026) pixels=7784
+ORBIT_SAMPLE 2 center=(1594.64, 1036.935) expected=(1595.019, 1037.449) pixels=7856
+ORBIT_SAMPLE 3 center=(1599.764, 1037.578) expected=(1599.835, 1037.899) pixels=7773
+ORBIT_SAMPLE 4 center=(1604.594, 1037.978) expected=(1604.667, 1038.379) pixels=7864
+ORBIT_SAMPLE 5 center=(1609.396, 1038.255) expected=(1609.519, 1038.886) pixels=7832
+ORBIT_SAMPLE 6 center=(1613.687, 1038.982) expected=(1614.389, 1039.424) pixels=7973
+ORBIT_SAMPLE 7 center=(1619.15, 1039.739) expected=(1619.28, 1039.992) pixels=7997
+ORBIT_SAMPLE 8 center=(1623.906, 1040.205) expected=(1624.193, 1040.591) pixels=8041
+ORBIT_SAMPLE 9 center=(1629.389, 1040.703) expected=(1629.127, 1041.221) pixels=8018
+ORBIT_SAMPLE 10 center=(1633.602, 1041.07) expected=(1634.085, 1041.884) pixels=8150
+ORBIT_SAMPLE 11 center=(1638.427, 1041.326) expected=(1639.068, 1042.581) pixels=8032
+ORBIT_SAMPLE 12 center=(1642.583, 1040.274) expected=(1644.076, 1043.312) pixels=7698
+ORBIT_SAMPLE 13 center=(1646.295, 1039.388) expected=(1649.11, 1044.078) pixels=7299
+REFLECTION_ORBIT max_pixel_error=5.46986722946167 missing=0 updates=14
+PASS Reflection capture updates every displayed orbit frame
+PASS Reflected object stays registered to the surface during camera motion
+PASS Boundary is reached at a visible mountain or water edge 0.0
+PASS Boundary is reached at a visible mountain or water edge -0.78539816339745
+PASS Boundary is reached at a visible mountain or water edge -1.5707963267949
+PASS Boundary is reached at a visible mountain or water edge 3.14159265358979
+PASS Boundary is reached at a visible mountain or water edge 1.5707963267949
+ICEFIELD_POLISH_RESULT PASS checks=17 failures=[]

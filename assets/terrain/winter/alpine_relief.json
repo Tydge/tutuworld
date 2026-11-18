@@ -1,0 +1,61 @@
+{
+  "dataset": "Mapzen Terrain Tiles, Alpine relief near Zermatt",
+  "accessed": "2026-11-18",
+  "registry": "https://registry.opendata.aws/terrain-tiles/",
+  "attribution_url": "https://github.com/tilezen/joerd/blob/master/docs/attribution.md",
+  "attribution": [
+    "Mapzen terrain tiles",
+    "Produced using Copernicus data and information funded by the European Union - EU-DEM layers.",
+    "SRTM and GMTED2010 data courtesy of the U.S. Geological Survey."
+  ],
+  "center": [
+    46.0207,
+    7.7491
+  ],
+  "zoom": 11,
+  "size": [
+    512,
+    512
+  ],
+  "format": "little-endian uint16 integer metres",
+  "modifications": "Decoded from Terrarium; cropped and rounded to metres; world terrain is rotated, rescaled and blended into a fictional island. Not a geographic or navigation representation.",
+  "sha256": "8f2c69cb639004a70e136f3a4c19eea820ee06dda744f692e3b1efbfefd3d47d",
+  "tiles": [
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1067/727.png",
+      "sha256": "c8f9231f0271e993da506143340a3d968f14dc33b87e314e56426a38855b5ceb"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1068/727.png",
+      "sha256": "48dfd90d40fd42c13a2424c64f0be07a2fe1de36afb74a20a96b25a6003e5e3d"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1069/727.png",
+      "sha256": "0e1e58f13a4e95f41e362dc4c6edb3ced422150bc6a6ddde3997a777ae64deef"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1067/728.png",
+      "sha256": "75f681eebaa244a4d46c34367a8984223b181ee34e621ccce408fd5bd6fd4b14"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1068/728.png",
+      "sha256": "f3af91a75c52c7b46d4634de06641550e93bedbf999066730b487ac8f14e194d"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1069/728.png",
+      "sha256": "79591d6407b7412a2c72dcb782ef230bc61c9199e76f17c8c4455a5e0b8bbfa9"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1067/729.png",
+      "sha256": "6e087b66d22ecb057cfac6fbc7180045f7dda35e7b2c3809de7a7f472c6d25af"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1068/729.png",
+      "sha256": "b2484e4bded81411efc976c1fdb001560d9739a079a7c099114bca5b23501436"
+    },
+    {
+      "url": "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/11/1069/729.png",
+      "sha256": "996c3ea2d3aa1e8733418ffc028de4ca261b202aaf6e5a4db6a5bb538688a30b"
+    }
+  ]
+}

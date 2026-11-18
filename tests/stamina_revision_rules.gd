@@ -14,8 +14,8 @@ func run() -> void:
 	a.running=true;a.tick_stamina(1.4);a.running=false;a.tick_stamina(.4);a.running=true;a.tick_stamina(1.59)
 	check(a.state.stamina==100,"Pauses do not charge early")
 	a.tick_stamina(.01)
-	check(a.state.stamina==99 and a.state.stamina_run_elapsed<.00001,"Three accumulated running seconds cost exactly one point")
-	a.running=false;a.state.stamina_recovery_elapsed=0;a.tick_stamina(29.99)
+	check(a.state.stamina==100 and a.state.stamina_run_elapsed<.00001,"Running never consumes stamina or accumulates debt")
+	a.running=false;a.state.stamina=99;a.state.stamina_recovery_elapsed=0;a.tick_stamina(29.99)
 	check(a.state.stamina==99,"Recovery waits for thirty real seconds")
 	a.tick_stamina(.01);check(a.state.stamina==100,"Thirty real seconds recover one point")
 	a.state.stamina=80;a.state.stamina_recovery_elapsed=0;a.sleeping=true;a.tick_stamina(14.99)
@@ -42,7 +42,7 @@ func run() -> void:
 	s.activate_record(s.active_character_id)
 	check(s.state().stamina==52 and s.state().stamina_recovery_elapsed>10.9,"Inactive / offline recovery uses wall-clock age")
 	s.authority.running=true;s.authority.tick_stamina(.2)
-	check(s.state().stamina==51,"Accumulated running debt survives switching / restoration")
+	check(s.state().stamina==52 and s.state().stamina_run_elapsed==0.,"Legacy running debt is cleared without charging after restoration")
 	var before: float=s.state().stamina
 	s.set_testing_time(23,59)
 	check(s.state().stamina==before,"Changing the game clock cannot grant real-time stamina")
@@ -53,7 +53,7 @@ func run() -> void:
 	data.saved_at=Time.get_unix_time_from_system()-60
 	var f:=FileAccess.open(fixture,FileAccess.WRITE);f.store_string(JSON.stringify(data));f.close()
 	var loaded:=S.new();root.add_child(loaded);loaded.save_path=fixture;loaded.load_save()
-	check(loaded.state().stamina==72 and absf(loaded.state().stamina_run_elapsed-2.5)<.00001,"Offline recovery is applied once and keeps running remainder")
+	check(loaded.state().stamina==72 and loaded.state().stamina_run_elapsed==0.,"Offline recovery is applied once and discards old running debt")
 	# Sleeping and its real-time recovery survive a real save/reload for either species.
 	for species in ["bunny","cat_teacher"]:
 		s.create_character("睡眠"+species,species,"vest_sage")

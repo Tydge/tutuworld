@@ -3,6 +3,7 @@ const UI=preload("res://scripts/ui/ui_kit.gd")
 const Catalog=preload("res://scripts/building/catalog.gd")
 const Structures=preload("res://scripts/building/structure_catalog.gd")
 const STYLES=Structures.STYLES
+var roof_snow: CheckButton
 var floor_choice: Label
 var batch_paint: CheckButton
 var wall_face: OptionButton
@@ -95,6 +96,10 @@ func _ready() -> void:
 	var selected_row:=UI.row(8);details.add_child(selected_row)
 	selected_preview=TextureRect.new();selected_preview.custom_minimum_size=Vector2(80,66);selected_preview.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;selected_preview.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;selected_row.add_child(selected_preview)
 	var texts:=UI.column(3);texts.size_flags_horizontal=Control.SIZE_EXPAND_FILL;selected_row.add_child(texts);selection=UI.label("选择一件物品",17);texts.add_child(selection);selection_hint=UI.label("从下方目录开始布置",12,UI.MUTED);selection_hint.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;selection_hint.custom_minimum_size.x=170;texts.add_child(selection_hint)
+	roof_snow=CheckButton.new();roof_snow.name="RoofSnow";roof_snow.text="屋顶积雪";roof_snow.tooltip_text="为屋顶覆上积雪；与屋顶一起避挡，可随时关闭。"
+	roof_snow.toggled.connect(func(value):
+		if not updating:editor.set_roof_snow(value))
+	details.add_child(roof_snow)
 	var actions:=UI.row(5);details.add_child(actions)
 	move_button=compact("移动 G",func():editor.begin_move(),"MoveBuildElement");rotate_button=compact("旋转 R",func():editor.rotate_selected(),"RotateBuildElement");delete_button=compact("删除",func():editor.delete_selected(),"DeleteBuildElement")
 	for button in [move_button,rotate_button,delete_button]:button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;actions.add_child(button)
@@ -165,6 +170,8 @@ func refresh(row: Dictionary) -> void:
 	var preview_row:=row
 	if preview_row.is_empty() and editor.tool in ["template","room","floor","wall","window","door","roof","stairs","railing"]:preview_row={"type":editor.tool,"form":editor.structure_form}
 	if preview_row.is_empty() and editor.tool.begins_with("object:"):preview_row={"type":"object","kind":editor.tool.trim_prefix("object:")}
+	roof_snow.visible=preview_row.get("type","")=="roof"
+	roof_snow.set_pressed_no_signal(bool(row.get("snow",false)) if row.get("type","")=="roof" else editor.roof_snow)
 	selected_kind=str(preview_row.get("kind",preview_row.get("type","")))
 	selection.text=Catalog.name_for(preview_row) if not preview_row.is_empty() else "选择一件物品"
 	selection_hint.text=("已选中半米网格 · 可移动、改色或拆除" if row.get("type","") in ["floor","wall"] else "已选中 · 可移动、旋转或删除") if not row.is_empty() else "选择目录物品，再点击场景放置"

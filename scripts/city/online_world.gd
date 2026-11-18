@@ -176,7 +176,12 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	actor.position=target
 	actor.velocity=from_array(row.get("velocity",[0,0,0]));actor.walking=row.get("walking",false);actor.network_grounded=row.get("grounded",true)
 	if str(row.get("id",""))!=city.talking_npc or city.targets.get(city.talking_npc,{}).get("kind","")!="shop":actor.visual.rotation.y=lerp_angle(actor.visual.rotation.y,float(row.get("yaw",0)),1-exp(-delta*18))
-	actor.step_phase+=delta*minf(13,Vector2(actor.velocity.x,actor.velocity.z).length()*3)
+	actor.animation_speed=float(row.get("animation_speed",-1.))
+	actor.ice_inertia=bool(row.get("ice_inertia",false))
+	if actor.walking and actor.network_grounded:
+		var gait_speed: float=actor.animation_speed if actor.animation_speed>=0. else Vector2(actor.velocity.x,actor.velocity.z).length()
+		var rate: float=8.6*minf(gait_speed/(actor.move_speed*actor.speed_multiplier),1.)+1.6*clampf((gait_speed/(actor.move_speed*actor.speed_multiplier)-1.)/.7,0.,1.)
+		actor.step_phase+=delta*rate
 	var sleeping: bool=row.get("sleeping",false) or row.get("pose",{}).get("kind","")=="sleep"
 	if sleeping:
 		if not actor.sleeping:actor.lie_in_bed(city.targets.get(row.get("pose",{}).get("target","home_bed"),{}).get("node",city.home.get_node("Furnishing/bed")))

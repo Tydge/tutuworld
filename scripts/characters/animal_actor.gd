@@ -26,6 +26,9 @@ var action := ""
 var action_time := 0.0
 var action_length := 0.0
 var walking := false
+# Input drives the gait on ice; horizontal velocity has its own inertia.
+var ice_inertia:=false
+var animation_speed:=-1.0
 var meal_item:=""
 var meal_origin:=Vector3.INF
 var meal_elapsed:=-1.0
@@ -34,7 +37,8 @@ var seated := false
 var was_on_floor := true
 var facing := 0.0
 var can_move := true
-var move_speed := 2.8
+const PLAYER_WALK_SPEED:=3.5
+var move_speed := PLAYER_WALK_SPEED
 var speed_multiplier := 1.0
 var run_speed_multiplier := 1.0
 var stamina_fraction:=1.0
@@ -72,13 +76,14 @@ var presentation_applied:=Vector3.ZERO
 const INPUT_STEP:=1.0/60.0
 func reset_network_motion() -> void:
 	network_generation+=1;network_ack=0;network_received=0;network_queue.clear();network_budget=0
-	network_direction=Vector3.ZERO;network_jump=false
+	network_direction=Vector3.ZERO;network_jump=false;ice_inertia=false;animation_speed=-1.
 func movement_state() -> Dictionary:
-	return {"position":[position.x,position.y,position.z],"velocity":[velocity.x,velocity.y,velocity.z],"grounded":is_on_floor()}
+	return {"position":[position.x,position.y,position.z],"velocity":[velocity.x,velocity.y,velocity.z],"grounded":is_on_floor(),"ice_inertia":ice_inertia,"animation_speed":animation_speed}
 func restore_movement_state(value: Dictionary) -> void:
 	var p: Array=value.position;var v: Array=value.velocity
 	position=Vector3(p[0],p[1],p[2]);velocity=Vector3(v[0],v[1],v[2])
 	network_restore_grounded=bool(value.get("grounded",false));was_on_floor=network_restore_grounded
+	ice_inertia=bool(value.get("ice_inertia",false));animation_speed=float(value.get("animation_speed",-1.))
 
 
 func _ready() -> void:
@@ -110,8 +115,7 @@ func _ready() -> void:
 		step_floor_offset=maxf(step_floor_offset,half_height-child.position.y+safe_margin+.004)
 
 func toggle_run() -> void:
-	if run_enabled: run_enabled=false
-	elif stamina_fraction>.0001: run_enabled=true
+	run_enabled=not run_enabled
 func play_action(kind: String, duration: float, symbol: String = "") -> void:
 	action = kind
 	action_time = 0.0
@@ -121,6 +125,7 @@ func play_action(kind: String, duration: float, symbol: String = "") -> void:
 
 func sit_on(seat: Transform3D) -> void:
 	seated = true
+	ice_inertia=false;animation_speed=-1.
 	can_move = false
 	walking = false
 	velocity = Vector3.ZERO
@@ -133,6 +138,7 @@ func sit_on_surface(seat: Transform3D) -> void:
 	seat.origin.y-=rig_profile.body_center.y-rig_profile.body_radii.y-.018
 	sit_on(seat)
 func stand_up(exit_position: Vector3) -> void:
+	ice_inertia=false;animation_speed=-1.
 	sleeping=false
 	collision_layer=sleep_collision_layer
 	action="";eyes.scale.y=1;head.position=head_rest_position
@@ -169,7 +175,6 @@ func _physics_process(delta: float) -> void:
 			network_ack=int(input.seq)
 		if count_==0 and network_idle>.3:simulate_movement(delta,Vector3.ZERO,false,false)
 		return
-	if stamina_fraction<=.0001:run_enabled=false
 	var text_entry: bool=world.has_method("is_text_entry_active") and world.is_text_entry_active()
 	if not network_controlled and Input.is_action_just_pressed("sprint") and can_move and action=="" and not world.paused and not text_entry:toggle_run()
 	var axis:=Input.get_vector("move_left","move_right","move_up","move_down")
@@ -185,7 +190,6 @@ func _physics_process(delta: float) -> void:
 func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool=true,replay: bool=false) -> void:
 	is_running=false
 	if seated:velocity=Vector3.ZERO;walking=false;return
-	if stamina_fraction<=.0001:run_enabled=false
 	var text_entry: bool=world.has_method("is_text_entry_active") and world.is_text_entry_active()
 	if not can_move or action!="" or (not replay and (world.paused or text_entry)):direction=Vector3.ZERO;jump=false
 	direction=direction.limit_length(1)
@@ -197,9 +201,19 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 		else: direction=offset.normalized()
 	var base_speed:=move_speed*speed_multiplier
 	var target_speed := minf(2.4,global_position.distance_to(work_position)*12.0) if work_align_active else base_speed*(SPRINT_MULTIPLIER*run_speed_multiplier if run_enabled else 1.0)
-	var acceleration := 20.0 if direction.length_squared()>.01 else 24.0
-	velocity.x = move_toward(velocity.x,direction.x*target_speed,acceleration*delta)
-	velocity.z = move_toward(velocity.z,direction.z*target_speed,acceleration*delta)
+	var input_moving:=direction.length_squared()>.01
+	if grounded:ice_inertia=world.has_method("is_ice_surface") and world.is_ice_surface(global_position)
+	var sliding: bool=ice_inertia and can_move and action=="" and not work_align_active and not world.paused
+	var acceleration := 20.0 if input_moving else 24.0
+	if sliding:
+		# Leaving the ice in a jump preserves horizontal momentum. Air steering
+		# is gradual; releasing the key in flight applies no artificial brake.
+		acceleration=(2.3 if input_moving else 0.) if not grounded else world.movement_acceleration(global_position,input_moving)
+		var planar:=Vector2(velocity.x,velocity.z).move_toward(Vector2(direction.x,direction.z)*target_speed,acceleration*delta)
+		velocity.x=planar.x;velocity.z=planar.y
+	else:
+		velocity.x = move_toward(velocity.x,direction.x*target_speed,acceleration*delta)
+		velocity.z = move_toward(velocity.z,direction.z*target_speed,acceleration*delta)
 	if direction.length()>.1:
 		facing = atan2(direction.x,direction.z)
 		visual.rotation.y = lerp_angle(visual.rotation.y,facing,1.0-exp(-delta*12.0))
@@ -216,11 +230,13 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 		if action=="": mood_label.text = ""
 	was_on_floor = is_on_floor()
 	var speed := Vector2(velocity.x,velocity.z).length()
-	walking = speed>.2
-	is_running=run_enabled and direction.length_squared()>.01 and speed>base_speed*1.05 and can_move and action=="" and not world.paused
+	animation_speed=target_speed if sliding and input_moving else (0. if sliding else -1.)
+	walking = input_moving if sliding else speed>.2
+	var gait_speed:=animation_speed if animation_speed>=0. else speed
+	is_running=run_enabled and input_moving and gait_speed>base_speed*1.05 and can_move and action=="" and not world.paused
 	if walking and is_on_floor():
-		var pace := clampf((speed-move_speed*speed_multiplier)/(move_speed*speed_multiplier*(SPRINT_MULTIPLIER*run_speed_multiplier-1)),0,1)
-		var rate := 8.6*minf(speed/(move_speed*speed_multiplier),1.0)+1.6*pace
+		var pace := clampf((gait_speed-base_speed)/maxf(.01,base_speed*(SPRINT_MULTIPLIER*run_speed_multiplier-1)),0,1)
+		var rate := 8.6*minf(gait_speed/base_speed,1.0)+1.6*pace
 		var next_phase := step_phase+delta*rate
 		if feedback and int(step_phase/PI)!=int(next_phase/PI): world.footstep(global_position)
 		step_phase = fmod(next_phase,TAU*100)
@@ -259,7 +275,7 @@ func animate_pose(delta: float) -> void:
 			eyes.scale.y = 1
 	var grounded:=network_grounded if network_replica else is_on_floor()
 	var moving := walking and grounded and not seated and (action=="" or work_align_active)
-	var speed := Vector2(velocity.x,velocity.z).length()
+	var speed := animation_speed if animation_speed>=0. else Vector2(velocity.x,velocity.z).length()
 	var pace := clampf((speed-move_speed*speed_multiplier)/(move_speed*speed_multiplier*(SPRINT_MULTIPLIER*run_speed_multiplier-1)),0,1) if moving else 0.0
 	gait_blend = move_toward(gait_blend,1.0 if moving else 0.0,delta*8)
 	run_blend = move_toward(run_blend,pace,delta*5)

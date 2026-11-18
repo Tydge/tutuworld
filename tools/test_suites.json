@@ -286,6 +286,16 @@
       "woodland_lighting_flow",
       "woodland_shadow_stability",
       "woodland_sweep_performance"
+    ],
+    "icefield": [
+      "project_integrity",
+      "icefield_rules",
+      "icefield_server_rules",
+      "winter_roof_flow",
+      "winter_roof_geometry",
+      "icefield_journey",
+      "icefield_polish",
+      "icefield_performance"
     ]
   },
   "tests": {
@@ -547,6 +557,21 @@
     "woodland_lighting_flow": {
       "headless": true
     },
-    "curved_shadow_surface": {}
+    "curved_shadow_surface": {},
+    "icefield_rules": {
+      "headless": true
+    },
+    "icefield_preview": {},
+    "icefield_server_rules": {
+      "headless": true
+    },
+    "icefield_journey": {},
+    "icefield_performance": {},
+    "icefield_polish": {},
+    "winter_roof_flow": {},
+    "winter_roof_geometry": {
+      "headless": true
+    },
+    "winter_models_preview": {}
   }
 }

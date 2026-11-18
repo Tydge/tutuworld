@@ -5,7 +5,9 @@ var wall_finishes: Dictionary={}
 var roof_form:="classic"
 func build_roof(n: Node3D) -> void:
 	if roof_form=="classic":super.build_roof(n)
-	else:Forms.roof(self,n,roof_form)
+	else:
+		Forms.roof(self,n,roof_form)
+		preload("res://scripts/building/roof_snow.gd").apply(n,bool(blueprint.get("snow",false)))
 func build_door(n: Node3D) -> void:
 	var form: String=blueprint.walls[0].openings[0].get("form","classic")
 	if form=="classic":super.build_door(n)

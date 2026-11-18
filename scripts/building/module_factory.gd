@@ -288,7 +288,7 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 		"roof":
 			module=group(parent,row.id);var r:=Layout.rect(row);var mid:=r.get_center()-Vector2(Site.CENTER.x,Site.CENTER.z);module.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
 			var turn: float=row.get("yaw",0.);module.rotation.y=deg_to_rad(turn)
-			b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.y,r.size.x] if roundi(turn/90.)%2!=0 else [r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
+			b.blueprint.snow=bool(row.get("snow",false));b.roof_form=row.get("form","classic");b.blueprint.size=[r.size.y,r.size.x] if roundi(turn/90.)%2!=0 else [r.size.x,r.size.y];b.blueprint.materials.roof=row.color;b.build_roof(module);b.bake_section(module)
 		"stairs":
 			module=group(parent,row.id);Stairs.build(b,module,row,Layout.walkable_grid(layout,Storeys.of(row)+1).floors,Stairs.explicit_guard_edges(layout,Storeys.of(row)+1))
 		"railing":

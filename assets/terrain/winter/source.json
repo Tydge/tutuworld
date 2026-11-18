@@ -1,0 +1,31 @@
+{
+  "created": "2026-11-18",
+  "tool": "built-in image_gen",
+  "original_pixels_preserved": true,
+  "assets": [
+    {
+      "file": "snow_fir_boughs_v1.png",
+      "sha256": "dd5afb82b1e97a6e4bcae0a91b1d45d03c5d2965ffb419c2fcfda557720eab0e",
+      "prompt": "Use case: photorealistic-natural. Asset type: one square RGBA texture atlas for realistic 3D evergreen branch cards in a snowy winter game. Primary request: Four separate natural fir boughs, one in each equal quadrant of a 2 by 2 atlas, on genuinely transparent background. Each bough is a horizontal slightly drooping fan of realistic dark green spruce needles, thin dark brown woody twigs, thick irregular clumps of fresh white powder snow resting ON TOP of the branches. All four boughs are different but equally detailed, wide rather than tall, arranged with generous transparent padding and no overlap. Their stems start at the left edge of their quadrant and fine needles taper toward the right. Orthographic side-top view at 30 degrees to reveal snowy upper surfaces and needle fringes. Neutral even diffuse ambient lighting, no directional cast shadows, no glow, no backdrop, no snowflakes floating in the background, no pots, no trunks, no complete trees. Natural needle silhouettes and small gaps between twigs are essential. Crisp high resolution texture detail suitable for alpha-scissor foliage rendering. No text, labels, borders, watermark, contact shadow or layout guides."
+    },
+    {
+      "file": "powder_snow_v1.png",
+      "sha256": "c91fdb4bbdd45f6dec5487c21db259e095884f8d6c72ed5817e3b81a6dd39935",
+      "prompt": "Use case: photorealistic-natural. Asset type: seamless tileable square albedo texture for a realistic 3D winter game snow ground. A straight-down orthographic macro photograph of undisturbed compact powder snow over a 2 meter square area. Subtle soft wind-combed tiny ripples and countless delicate white snow crystals with a few gentle shallow drifts. Natural cold ivory white with very faint blue-gray in tiny recesses. Very restrained contrast and no deep holes. Flat diffuse overcast illumination, no directional shadow, no gradients across the image, no sky, no horizon, no footprints, no rocks, no branches, no objects, no text, no watermark. Material scan look rather than illustration. Edge-to-edge texture that can repeat seamlessly in both directions."
+    },
+    {
+      "file": "distant_alpine_v1.png",
+      "sha256": "50e09a5818e0f393207a42ef5a062194abff940ee7b412ac7225bb022cfeeacb",
+      "generation_brief": "Photoreal distant snowy Alpine mountain range as a very wide transparent RGBA horizon strip, detailed rock strata and glaciers, irregular continuous peaks, no sky, no text or watermark; intended as a distant background for a 3D winter island.",
+      "brief_is_verbatim_prompt": false,
+      "generated_source_file": "exec-dd815fa6-5892-4919-b7ad-8a3a9142d1cb.png"
+    },
+    {
+      "file": "campfire_flames_v1.png",
+      "sha256": "7d8fa1914edc858f4d0a6148a38b9b74b7079e4814dd874c91f40a967d6790a9",
+      "generation_brief": "Realistic warm orange and yellow campfire flame animation atlas, 16 distinct successive frames in a regular 4 by 4 arrangement, isolated RGBA flames with generous cell padding, no logs, smoke, labels, guides or text; intended for small crossed flame cards.",
+      "brief_is_verbatim_prompt": false,
+      "generated_source_file": "exec-a4551661-59f7-4cbd-afe3-0cc8102c09b6.png"
+    }
+  ]
+}

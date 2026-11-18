@@ -28,6 +28,7 @@ static func run(city: Node3D) -> void:
 	column.add_child(logo)
 	var title:=UI.label("海风正在穿过街道…",25)
 	if city.map_id=="valley": title.text="溪水正在唤醒山谷…"
+	if city.map_id=="icefield":title.text="雪山与冰原正在迎接你…"
 	title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(title)
 	var progress:=ProgressBar.new()
@@ -43,6 +44,10 @@ static func run(city: Node3D) -> void:
 		for point in [Vector2(-20,88),Vector2(-24,55),Vector2(0,10),Vector2(-42,-24),Vector2(44,-50),Vector2(24,-68),Vector2(-65,-61)]:
 			focuses.append(Vector3(point.x,preload("res://scripts/valley/valley_layout.gd").walk_height(point.x,point.y)+1.4,point.y))
 	var view_steps:=0
+	if city.map_id=="icefield":
+		focuses=[]
+		for point in [Vector2(-104,116),Vector2(-64,25),Vector2(-80,-12),Vector2(-80,-70),Vector2(12,16),Vector2(80,-40),Vector2(100,60)]:
+			focuses.append(Vector3(point.x,preload("res://scripts/icefield/icefield_layout.gd").walk_height(point.x,point.y)+1.4,point.y))
 	for focus in focuses: view_steps+=8 if focus.z>=30 else 4
 	var step:=0
 	for time_ in [.5,.92]:

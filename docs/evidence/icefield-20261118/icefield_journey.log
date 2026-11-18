@@ -1,0 +1,34 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced
+WANDER_GRID_READY cells=19995 components=7
+PASS City ferry opens both destination choices
+WANDER_GRID_READY cells=108459 components=6
+PASS Menu travels to correct harbor and charges once
+PASS Three merchants plus exactly six new roaming residents
+PASS Resident walks with real collision: SnowBunny0
+PASS Resident walks with real collision: SnowBunny1
+PASS Resident walks with real collision: SnowBunny2
+PASS Resident walks with real collision: SnowBunny3
+PASS Resident walks with real collision: SnowCat
+PASS Resident walks with real collision: SnowPanda
+PASS Player walking and running base speeds are both increased by 25 percent
+PASS Running can be enabled at zero stamina
+PASS Ice takes time to accelerate
+PASS Ice startup uses the normal input gait while translation accelerates
+PASS Releasing input produces a genuine ice glide
+PASS Releasing input stops limbs while the body coasts
+PASS A jump preserves the current ice momentum without input
+PASS Prediction restore preserves airborne ice inertia
+PASS Ice glide naturally stops
+PASS Packed snow keeps normal braking
+PASS Actual walking leaves pooled temporary snow footprints
+PASS Footprints advance beyond their fade lifetime
+PASS Walk-in merchant is physically reachable farm
+PASS Walk-in merchant is physically reachable tools
+PASS Walk-in merchant is physically reachable clothes
+PASS Resume remains on icefield
+WANDER_GRID_READY cells=19995 components=7
+PASS Icefield ferry returns to city for free
+ICEFIELD_JOURNEY_RESULT PASS checks=26 failures=[]

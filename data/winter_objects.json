@@ -1,0 +1,327 @@
+{
+  "schema": 1,
+  "purpose": "Reusable winter modules, prepared for later building catalog integration; no current player build catalog or prices are changed.",
+  "items": [
+    {
+      "id": "snowman",
+      "name": "雪人",
+      "scene": "res://scenes/winter/snowman.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        2.2,
+        2.9,
+        1.5
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "campfire",
+      "name": "石圈篝火",
+      "scene": "res://scenes/winter/campfire.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        2.3,
+        2.0,
+        2.3
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ],
+      "anchors": [
+        "ActionAnchor",
+        "EffectAnchor"
+      ],
+      "light_budget": 1
+    },
+    {
+      "id": "sled",
+      "name": "木雪橇",
+      "scene": "res://scenes/winter/sled.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        1.2,
+        0.7,
+        2.3
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "log_stack",
+      "name": "覆雪木柴堆",
+      "scene": "res://scenes/winter/log_stack.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        1.7,
+        1.2,
+        1.8
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "snow_fence",
+      "name": "雪顶木围栏",
+      "scene": "res://scenes/winter/snow_fence.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        4.3,
+        1.5,
+        0.3
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "snow_bench",
+      "name": "雪顶长椅",
+      "scene": "res://scenes/winter/snow_bench.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        2.8,
+        1.7,
+        1.8
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ],
+      "anchors": [
+        "SeatAnchor",
+        "ExitAnchor"
+      ]
+    },
+    {
+      "id": "ice_fishing",
+      "name": "冰钓小景",
+      "scene": "res://scenes/winter/ice_fishing.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        3.3,
+        1.9,
+        2.0
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ],
+      "anchors": [
+        "ActionAnchor",
+        "ExitAnchor"
+      ],
+      "interaction": "decorative; fishing gameplay is not implemented"
+    },
+    {
+      "id": "winter_lantern",
+      "name": "雪顶提灯",
+      "scene": "res://scenes/winter/winter_lantern.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        0.5,
+        0.7,
+        0.5
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "trail_sign",
+      "name": "雪原路标",
+      "scene": "res://scenes/winter/trail_sign.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        2.4,
+        2.1,
+        0.3
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "ice_crystal",
+      "name": "冰晶簇",
+      "scene": "res://scenes/winter/ice_crystal.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        1.5,
+        1.9,
+        1.5
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "picnic_table",
+      "name": "雪地野餐桌",
+      "scene": "res://scenes/winter/picnic_table.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        3.3,
+        1.1,
+        2.5
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "snow_pine",
+      "name": "积雪冷杉",
+      "scene": "res://scenes/winter/snow_pine.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        6.4,
+        9.2,
+        6.4
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "chalet",
+      "name": "雪镇木屋",
+      "scene": "res://scenes/winter/chalet.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        12.5,
+        9.2,
+        12.0
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    },
+    {
+      "id": "chapel",
+      "name": "极光钟楼",
+      "scene": "res://scenes/winter/chapel.scn",
+      "category": "winter",
+      "origin": "ground_center",
+      "size": [
+        12.5,
+        19.7,
+        12.0
+      ],
+      "rotation_step_degrees": 15,
+      "module_schema": 1,
+      "buildable_reference": true,
+      "placement_surface": [
+        "snow",
+        "ice"
+      ],
+      "collision_layers": [
+        4
+      ]
+    }
+  ]
+}

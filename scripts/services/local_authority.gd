@@ -19,7 +19,6 @@ var revision := 0
 var running:=false
 var sleeping:=false
 var reward_random := RandomNumberGenerator.new()
-const RUN_POINT_SECONDS:=3.0
 const RECOVERY_POINT_SECONDS:=30.0
 
 func _init() -> void:
@@ -139,11 +138,8 @@ func stamina_max() -> float: return maxf(1,floor(100.0*multiplier("stamina_capac
 func tick_stamina(delta: float) -> void:
 	if delta<=0: return
 	state.stamina=clampf(floor(float(state.stamina)+.000001),0,stamina_max())
-	if running and state.stamina>0:
-		var elapsed: float=float(state.get("stamina_run_elapsed",0))+delta
-		var points:=int(floor((elapsed+.0000001)/RUN_POINT_SECONDS))
-		state.stamina=maxf(0,state.stamina-points)
-		state.stamina_run_elapsed=maxf(0,elapsed-points*RUN_POINT_SECONDS)
+	# Legacy remainder stays readable in old saves but never creates running debt.
+	state.stamina_run_elapsed=0.0
 	# Natural recovery uses real elapsed seconds, including while moving.
 	if state.stamina<stamina_max():
 		var elapsed: float=float(state.get("stamina_recovery_elapsed",0))+delta*multiplier("stamina_regen")*(2.0 if sleeping else 1.0)
@@ -194,17 +190,19 @@ func _apply(c: Dictionary) -> Dictionary:
 	if verb=="travel":
 		if not job.is_empty() or state.get("rest_mode","")!="": return fail("先完成手上的事情，再坐船吧。")
 		var destination: String=c.get("destination","")
-		if destination!=("valley" if map_id=="city" else "city") or not near_position(Valley.dock(map_id),3.6): return fail("请来到码头，再和小船一起出发。")
+		var routes=preload("res://scripts/services/map_routes.gd")
+		if not routes.allowed(map_id,destination) or not near_position(routes.dock(map_id),3.6): return fail("请来到码头，再和小船一起出发。")
 		var fare:=10 if map_id=="city" else 0
 		if state.coins<fare: return fail("船票需要 10 贝壳币。")
-		state.coins-=fare;state.map_id=destination;state.player_position=Valley.arrival(destination)
-		return {"ok":true,"message":"出发，去听山谷的风。" if destination=="valley" else "海岛城，我们回来啦。"}
-	if map_id!="city" and verb in ["buy","sell","plant","water","weed","harvest","craft","refill","eat","rest"]: return fail("这件事要回海岛城才能做哦。")
+		state.coins-=fare;state.map_id=destination;state.player_position=routes.arrival(destination)
+		return {"ok":true,"message":"出发，前往"+routes.title(destination)+"。"}
+	if map_id!="city" and verb in ["plant","water","weed","harvest","craft","refill","eat","rest"]: return fail("这件事要回海岛城才能做哦。")
+	if map_id not in ["city","icefield"] and verb in ["buy","sell"]:return fail("请来到有商店的镇上。")
 	var definition := DB.item(item)
 	var quantity := int(c.get("quantity",1))
 	if verb in ["buy","sell"]:
 		var shop: String=c.get("shop","")
-		if not DB.shops().has(shop) or not near_position(DB.shops()[shop],4.8): return fail("请先来到对应商店，再进行交易。")
+		if not DB.shops(map_id).has(shop) or not near_position(DB.shops(map_id)[shop],4.8): return fail("请先来到对应商店，再进行交易。")
 		if trade_access.is_valid() and not trade_access.call(shop):return fail("请走进店里，来到商人面前再交易。")
 		if quantity<1 or quantity>99 or definition.is_empty(): return fail("物品或数量不正确。")
 		if not job.is_empty(): return fail("先完成手上的事情吧。")

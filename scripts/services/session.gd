@@ -375,8 +375,9 @@ func restore_state(raw: Dictionary):
 	s.player_id=str(raw.get("player_id","local_bunny")).left(80)
 	s.character_name=str(raw.get("character_name","")).strip_edges().left(12)
 	if valid_name(s.character_name)!="": s.character_name=Animals.display_name(str(raw.get("species","bunny")))
-	s.map_id="valley" if raw.get("map_id","city")=="valley" else "city"
-	if s.map_id=="valley": s.player_position=preload("res://scripts/valley/valley_layout.gd").arrival("valley")
+	var routes=preload("res://scripts/services/map_routes.gd")
+	s.map_id=str(raw.get("map_id","city")) if raw.get("map_id","city") in routes.IDS else "city"
+	if s.map_id!="city":s.player_position=routes.arrival(s.map_id)
 	s.species=str(raw.get("species","bunny"))
 	if not Animals.supports(s.species): s.species="bunny"
 	s.coins=clampi(int(raw.get("coins",650)),0,99999999)
@@ -401,7 +402,7 @@ func restore_state(raw: Dictionary):
 		for key in s.skills:
 			s.skill_experience[key]=clampi(int(raw.get("skill_experience",{}).get(key,0)),0,Stats.skill_start(Stats.MAX_LEVEL))
 			s.skills[key]=Stats.skill_progress(s.skill_experience[key]).level
-	s.stamina_run_elapsed=clampf(float(raw.get("stamina_run_elapsed",0)),0,2.999999)
+	s.stamina_run_elapsed=0.0 # Running is free; discard legacy fractional debt.
 	s.stamina_recovery_elapsed=clampf(float(raw.get("stamina_recovery_elapsed",0)),0,29.999999)
 	var bed_id:=str(raw.get("rest_bed",""));var bed_valid:=bed_id=="home_bed"
 	if bed_id.begins_with("build:") and s.map_id=="city":
@@ -453,7 +454,7 @@ func set_setting(key: String,value: Variant) -> void:
 		if preferences!=null:preferences.store_string(JSON.stringify(settings));preferences.close();DirAccess.rename_absolute("user://preferences.json.tmp","user://preferences.json")
 	save_game()
 
-func scene_path() -> String: return preload("res://scripts/valley/valley_layout.gd").scene_path(str(state().get("map_id","city")))
+func scene_path() -> String: return preload("res://scripts/services/map_routes.gd").scene(str(state().get("map_id","city")))
 
 func is_online() -> bool:return transport_mode=="remote_authority"
 func ensure_remote() -> void:

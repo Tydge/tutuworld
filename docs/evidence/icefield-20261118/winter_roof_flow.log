@@ -1,0 +1,16 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS Normal build layout accepts a roof without new settings
+PASS Selecting a roof exposes the off-by-default snow control
+PASS Real control saves snow and preserves it through mesh batching
+PASS One undo removes roof snow
+PASS Redo restores roof snow
+PASS Roof snow round-trips through durable layout validation
+PASS Authority rejects malformed snow settings
+PASS Snow survives batching for classic roof
+PASS Snow survives batching for hip roof
+PASS Snow survives batching for shed roof
+PASS Turning snow off restores the ordinary roof
+WINTER_ROOF_FLOW_RESULT PASS checks=11 failures=[]
+RENDER_BUDGET output=(3024, 1890) scale=0.592 mode=3 quality=balanced

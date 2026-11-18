@@ -29,20 +29,24 @@ func append_part(part: MeshInstance3D) -> void:
 	var dye:=Color.WHITE
 	var pattern:=-1
 	var rough:=.94
+	var snow:=false
 	if m is ShaderMaterial and m.shader==load("res://assets/shaders/home_surface.gdshader"):
 		dye=m.get_shader_parameter("tint")
 		pattern=int(m.get_shader_parameter("pattern"))
 		rough=float(m.get_shader_parameter("roughness_value"))
+		snow=m.get_shader_parameter("roof_snow")==true
 	elif m is StandardMaterial3D and m.transparency==BaseMaterial3D.TRANSPARENCY_DISABLED and not m.emission_enabled and m.roughness>.69:
 		dye=m.albedo_color;pattern=0
 	elif m is ShaderMaterial and m.shader==Fabric.shader_for("") and not m.get_shader_parameter("patterned"):
 		dye=m.get_shader_parameter("dye");pattern=0
 	if pattern>=0:
-		var cache_key:=str(pattern)+str(rough)
+		var cache_key:=str(pattern)+str(rough)+str(snow)
 		if not builder.batch_materials.has(cache_key):
 			var shared:=ShaderMaterial.new();shared.shader=load("res://assets/shaders/home_surface.gdshader")
 			shared.set_shader_parameter("tint",Color.WHITE);shared.set_shader_parameter("vertex_tint",true)
 			shared.set_shader_parameter("pattern",pattern);shared.set_shader_parameter("roughness_value",rough)
+			shared.set_shader_parameter("roof_snow",snow)
+			if snow:shared.set_shader_parameter("roof_snow_texture",preload("res://assets/terrain/winter/powder_snow_v1.png"))
 			builder.batch_materials[cache_key]=shared
 		m=builder.batch_materials[cache_key]
 		var colored:=ArrayMesh.new()

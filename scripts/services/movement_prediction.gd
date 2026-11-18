@@ -47,7 +47,7 @@ func reconcile(actor: CharacterBody3D) -> void:
 	history=remaining
 	# Tiny rounding errors do not warrant a physics rewind.
 	var v: Array=found.state.velocity;var w: Array=row.velocity
-	if error.length()<.025 and Vector3(v[0]-w[0],v[1]-w[1],v[2]-w[2]).length()<.1:return
+	if error.length()<.025 and Vector3(v[0]-w[0],v[1]-w[1],v[2]-w[2]).length()<.1 and bool(found.state.get("ice_inertia",false))==bool(row.get("ice_inertia",false)):return
 	var before:=actor.position
 	var yaw: float=actor.visual.rotation.y;var step: float=actor.step_phase
 	actor.restore_movement_state(row)

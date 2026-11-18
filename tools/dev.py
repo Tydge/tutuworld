@@ -101,7 +101,7 @@ def main():
     test.add_argument('--allow-network', action='store_true', help='Required for the live update download test')
     test.add_argument('--game-arg', action='append', default=[])
     build = commands.add_parser('build')
-    build.add_argument('map', choices=['city', 'valley'])
+    build.add_argument('map', choices=['city', 'valley', 'icefield'])
     build.add_argument('--timeout', type=int, default=180)
     args = parser.parse_args()
     binary = godot_path(args.godot)

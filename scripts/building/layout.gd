@@ -100,6 +100,8 @@ static func validate(raw: Variant) -> Dictionary:
 			if form!="classic":row.form=form
 			if type=="door" and not bool(value.get("default_open",true)):row.default_open=false
 			if type=="roof":
+				if value.has("snow") and not value.snow is bool:return fail("屋顶积雪设置无效。")
+				if value.get("snow",false):row.snow=true
 				var turn: float=float(value.get("yaw",0))
 				if not is_finite(turn) or absf(turn/90.-roundf(turn/90.))>.001:return fail("屋顶旋转须对齐90度。")
 				if not is_zero_approx(fposmod(turn,360.)):row.yaw=fposmod(turn,360.)

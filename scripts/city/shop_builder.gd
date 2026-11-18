@@ -3,9 +3,9 @@ const Tools=preload("res://scripts/city/tool_models.gd")
 static func build_shop(world: Node3D,kind: String,title: String,p: Vector3,wall_color: String,roof_color: String) -> Node3D:
 	var builder=load("res://scripts/city/shop_builder.gd").new()
 	return pack_module(world,builder.construct_shop(world,kind,title,p,wall_color,roof_color),"res://scenes/shop_"+kind+".scn")
-func construct_shop(world: Node3D,kind: String,title: String,p: Vector3,wall_color: String,roof_color: String) -> Node3D:
+func construct_shop(world: Node3D,kind: String,title: String,p: Vector3,wall_color: String,roof_color: String,snow: bool=false) -> Node3D:
 	floor_y=.18;height=4.4;thickness=.24
-	blueprint={"schema":1,"id":"shop_"+kind,"size":[9.6,8.0],"floor_height":floor_y,"wall_height":height,"wall_thickness":thickness,"roof_rise":1.65,"chimney":false,
+	blueprint={"schema":1,"id":"shop_"+kind,"size":[9.6,8.0],"floor_height":floor_y,"wall_height":height,"wall_thickness":thickness,"roof_rise":1.65,"chimney":false,"snow":snow,
 		"materials":{"plaster":wall_color,"trim":"f3e7ce","roof":roof_color,"panel":"94ae9d"},"walls":[
 		{"id":"south","a":[-4.8,4.0],"b":[4.8,4.0],"openings":[{"type":"window","offset":1.1,"width":1.4,"bottom":1.1,"height":2.1},{"type":"door","offset":4.8,"width":3.8,"bottom":0.0,"height":3.6},{"type":"window","offset":8.5,"width":1.4,"bottom":1.1,"height":2.1}]},
 		{"id":"east","a":[4.8,4.0],"b":[4.8,-4.0],"openings":[{"type":"window","offset":3.0,"width":2.0,"bottom":1.2,"height":2.0}]},
@@ -30,10 +30,11 @@ func construct_shop(world: Node3D,kind: String,title: String,p: Vector3,wall_col
 	rounded(exterior,Vector3(0,.10,4.45),Vector3(4.2,.20,1.0),.045,material("c8b894"))
 	floor_collision(exterior,Vector3(0,.005,4.45),Vector3(4.2,.39,1.0))
 	var hood:=group(root,"PorchCanopy")
-	var awning:=block(hood,Vector3(0,3.64,4.55),Vector3(7.8,.13,1.40),material(roof_color));awning.rotation.x=.13
+	var awning:=block(hood,Vector3(0,3.64,4.55),Vector3(7.8,.13,1.40),material(roof_color),"Awning");awning.rotation.x=.13
 	for i in range(12):
-		var stripe:=block(hood,Vector3(-3.6+i*.65,3.723,4.55),Vector3(.26,.025,1.42),material("f8eacb"));stripe.rotation.x=.13
+		var stripe:=block(hood,Vector3(-3.6+i*.65,3.723,4.55),Vector3(.26,.025,1.42),material("f8eacb"),"AwningStripe");stripe.rotation.x=.13
 		rounded(hood,Vector3(-3.6+i*.65,3.46,5.23),Vector3(.27,.23,.09),.025,material("f8eacb"))
+	preload("res://scripts/building/roof_snow.gd").apply(hood,snow)
 	var sign:=group(hood,"ShopSign",Vector3(0,4.02,4.20))
 	rounded(sign,Vector3.ZERO,Vector3(6.8,.56,.16),.04,material("e5ce9c"))
 	G.text3d(sign,title,Vector3(0,0,.095),31,Color("416c5b"))

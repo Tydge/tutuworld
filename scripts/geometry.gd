@@ -114,3 +114,12 @@ static func text3d(parent: Node3D, words: String, pos: Vector3, font_size: int =
 	n.font = load("res://assets/fonts/NotoSansSC.ttf") if FileAccess.file_exists("res://assets/fonts/NotoSansSC.ttf") else f
 	parent.add_child(n)
 	return n
+
+# SurfaceTool.append_from preserves source indices. Mixing an indexed box with an
+# unindexed triangle can leave the triangle's vertices unused in the final batch.
+static func append_indexed(target: SurfaceTool,shape: Mesh,surface: int,placement: Transform3D) -> void:
+	var arrays:=shape.surface_get_arrays(surface)
+	if arrays[Mesh.ARRAY_INDEX]==null or arrays[Mesh.ARRAY_INDEX].is_empty():
+		var indexed:=SurfaceTool.new();indexed.create_from(shape,surface);indexed.index()
+		target.append_from(indexed.commit(),0,placement)
+	else:target.append_from(shape,surface,placement)

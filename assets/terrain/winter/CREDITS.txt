@@ -1,0 +1,13 @@
+Winter terrain and assets
+
+Mapzen Terrain Tiles, accessed 2026-11-18.
+https://registry.opendata.aws/terrain-tiles/
+Produced using Copernicus data and information funded by the European Union - EU-DEM layers.
+SRTM and GMTED2010 data courtesy of the U.S. Geological Survey.
+Elevation was cropped, rounded, rotated, rescaled and blended into a fictional island.
+This is an artistic environment, not a geographic or navigation representation.
+Source tile URLs and hashes: alpine_relief.json.
+
+Snow fir bough atlas, powder snow albedo, distant Alpine horizon and flame atlas: original assets generated with built-in image_gen.
+Original PNG pixels preserved. Prompts / generation briefs and hashes: source.json.
+3D modules, meshes and shaders: project-authored.

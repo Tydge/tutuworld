@@ -12,10 +12,10 @@ func _initialize() -> void:
 	check(a.state.experience==0 and a.state.stamina==100,"Fresh experience and full stamina")
 	a.running=true
 	a.tick(29.9)
-	check(a.state.stamina==91,"Running consumes nine points in the first 29.9 seconds")
+	check(a.state.stamina==100,"Running is free for the first 29.9 seconds")
 	a.tick(.1)
-	check(a.state.stamina==91,"Thirty real seconds consume ten points and naturally recover one")
-	a.running=false
+	check(a.state.stamina==100,"Continuous running remains free after thirty seconds")
+	a.running=false;a.state.stamina=91;a.state.stamina_recovery_elapsed=0.
 	a.tick(15)
 	check(a.state.stamina==91,"Fifteen real seconds preserve a partial recovery interval")
 	a.tick(15)

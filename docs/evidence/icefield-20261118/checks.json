@@ -1,0 +1,106 @@
+{
+  "scope": "Local source only; no deployment or production data use",
+  "checks": [
+    {
+      "test": "city_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "CITY_RULES_RESULT PASS checks=56 failures=[]"
+    },
+    {
+      "test": "character_roster_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "CHARACTER_ROSTER_RULES_RESULT PASS checks=44 failures=[]"
+    },
+    {
+      "test": "stamina_revision_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "STAMINA_REVISION_RULES_RESULT PASS checks=30 failures=[]"
+    },
+    {
+      "test": "progression_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "PROGRESSION_RULES_RESULT PASS checks=24 failures=[]"
+    },
+    {
+      "test": "valley_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "VALLEY_RULES_RESULT PASS checks=215 failures=[]"
+    },
+    {
+      "test": "building_grid_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "BUILDING_GRID_RULES_RESULT PASS checks=29 failures=[]"
+    },
+    {
+      "test": "motion_buffer_rules",
+      "source_run": "20261118-112841-972469",
+      "result": "MOTION_BUFFER_RESULT PASS checks=125 max_step=0.0793342590332 stalls=0 failures=[]"
+    },
+    {
+      "test": "save_transactions",
+      "source_run": "20261118-112841-972469",
+      "result": "SAVE_TRANSACTIONS_RESULT PASS checks=10 failures=[]"
+    },
+    {
+      "test": "icefield_journey",
+      "source_run": "20261118-112841-972469",
+      "result": "ICEFIELD_JOURNEY_RESULT PASS checks=26 failures=[]"
+    },
+    {
+      "test": "icefield_server_rules",
+      "source_run": "20261118-113334-752835",
+      "result": "ICEFIELD_SERVER_RULES_RESULT PASS checks=67 failures=[]"
+    },
+    {
+      "test": "valley_journey",
+      "source_run": "20261118-113334-752835",
+      "result": "VALLEY_JOURNEY_RESULT PASS checks=18 failures=[]"
+    },
+    {
+      "test": "wall_occlusion_flow",
+      "source_run": "20261118-113334-752835",
+      "result": "WALL_OCCLUSION_FLOW_RESULT PASS checks=27 failures=[]"
+    },
+    {
+      "test": "winter_roof_geometry",
+      "source_run": "20261118-114553-334899",
+      "result": "WINTER_ROOF_GEOMETRY_RESULT PASS checks=32 failures=[]"
+    },
+    {
+      "test": "winter_roof_flow",
+      "source_run": "20261118-114553-334899",
+      "result": "WINTER_ROOF_FLOW_RESULT PASS checks=11 failures=[]"
+    },
+    {
+      "test": "building_surface_flow",
+      "source_run": "20261118-114553-334899",
+      "result": "BUILDING_SURFACE_FLOW_RESULT PASS checks=15 failures=[]"
+    },
+    {
+      "test": "project_integrity",
+      "source_run": "20261118-115642-585791",
+      "result": "PROJECT_INTEGRITY_RESULT PASS checks=584 failures=[]"
+    },
+    {
+      "test": "icefield_polish",
+      "source_run": "20261118-114553-334899",
+      "result": "ICEFIELD_POLISH_RESULT PASS checks=17 failures=[]"
+    },
+    {
+      "test": "icefield_performance",
+      "source_run": "20261118-114553-334899",
+      "result": "ICEFIELD_PERFORMANCE_RESULT PASS failures=[]"
+    },
+    {
+      "test": "icefield_rules",
+      "source_run": "20261118-115124-437041",
+      "result": "ICEFIELD_RULES_RESULT PASS checks=212 failures=[]"
+    }
+  ],
+  "delivered_reflection": {
+    "width": 960,
+    "update": "every displayed frame",
+    "antialiasing": "linear sampling, no second multisample pass",
+    "canonical_gpu_run": "20261118-114553-334899"
+  }
+}

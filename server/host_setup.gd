@@ -2,7 +2,7 @@ extends RefCounted
 const DB=preload("res://scripts/services/game_data.gd")
 const Animals=preload("res://scripts/characters/animal_factory.gd")
 static func setup(host: Node3D) -> void:
-	host.scenery=load("res://scenes/valley_map.scn" if host.map_id=="valley" else "res://scenes/city_map.tscn").instantiate()
+	host.scenery=load(preload("res://scripts/services/map_routes.gd").scenery(host.map_id)).instantiate()
 	host.add_child(host.scenery)
 	if host.map_id=="city":
 		preload("res://scripts/city/town_shore.gd").ensure(host.scenery)
@@ -24,6 +24,7 @@ static func setup(host: Node3D) -> void:
 		host.targets.dining={"kind":"dining","position":host.scenery.get_node("DiningTable/MealAnchor").global_position}
 		for plot in DB.plots():host.targets[plot.id]={"kind":"plot","position":Vector3(plot.x,0,plot.z)}
 	for id in ["home_sofa","home_desk"]:
+		if not is_instance_valid(host.home):continue
 		var seat: Node3D=host.home.seat_node(id)
 		preload("res://scripts/city/seating.gd").ensure(seat,2 if id=="home_sofa" else 1)
 		host.targets[id]={"kind":"bench","position":seat.get_node("ExitAnchor").global_position,"node":seat}

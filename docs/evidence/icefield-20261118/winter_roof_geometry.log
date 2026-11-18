@@ -1,0 +1,35 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+PASS Actual outward-facing closed gable chalet side=-1.0 x=-4.0
+PASS Actual outward-facing closed gable chalet side=-1.0 x=-2.0
+PASS Actual outward-facing closed gable chalet side=-1.0 x=0.0
+PASS Actual outward-facing closed gable chalet side=-1.0 x=2.0
+PASS Actual outward-facing closed gable chalet side=-1.0 x=4.0
+PASS Actual outward-facing closed gable chalet side=1.0 x=-4.0
+PASS Actual outward-facing closed gable chalet side=1.0 x=-2.0
+PASS Actual outward-facing closed gable chalet side=1.0 x=0.0
+PASS Actual outward-facing closed gable chalet side=1.0 x=2.0
+PASS Actual outward-facing closed gable chalet side=1.0 x=4.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=-5.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=-3.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=-1.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=1.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=3.0
+PASS Saved snow roof physically meets the gable without a raised gap chalet x=5.0
+PASS Actual outward-facing closed gable chapel side=-1.0 x=-4.0
+PASS Actual outward-facing closed gable chapel side=-1.0 x=-2.0
+PASS Actual outward-facing closed gable chapel side=-1.0 x=0.0
+PASS Actual outward-facing closed gable chapel side=-1.0 x=2.0
+PASS Actual outward-facing closed gable chapel side=-1.0 x=4.0
+PASS Actual outward-facing closed gable chapel side=1.0 x=-4.0
+PASS Actual outward-facing closed gable chapel side=1.0 x=-2.0
+PASS Actual outward-facing closed gable chapel side=1.0 x=0.0
+PASS Actual outward-facing closed gable chapel side=1.0 x=2.0
+PASS Actual outward-facing closed gable chapel side=1.0 x=4.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=-5.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=-3.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=-1.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=1.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=3.0
+PASS Saved snow roof physically meets the gable without a raised gap chapel x=5.0
+WINTER_ROOF_GEOMETRY_RESULT PASS checks=32 failures=[]

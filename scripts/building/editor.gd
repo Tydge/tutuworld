@@ -7,6 +7,7 @@ var upper_floor_locked:=false
 var upper_floor_key:=""
 var editing_storey:=0
 var roof_view:=false
+var roof_snow:=false
 var template_kind:="cottage"
 const Grid=preload("res://scripts/building/grid_layout.gd")
 const Layout=preload("res://scripts/building/layout.gd")
@@ -248,6 +249,15 @@ func choose_tool(id: String) -> void:
 func set_night_preview(value: bool) -> void:
 	night_preview=value;city.update_lighting(.92 if value else -1)
 	ui.root_ui.find_child("NightPreview",true,false).set_pressed_no_signal(value)
+func set_roof_snow(value: bool) -> void:
+	roof_snow=value;clear_preview();ghost_key=""
+	var row:=selected_row()
+	if row.get("type","")=="roof":
+		row=row.duplicate(true)
+		if value:row.snow=true
+		else:row.erase("snow")
+		commit(Layout.replace(layout,row))
+	refresh_ui()
 func set_roof_visible(value: bool) -> void:
 	restore_surface_preview()
 	clear_preview();ghost_key=""
@@ -464,6 +474,7 @@ func closest_wall(point_: Vector2) -> Dictionary:
 func row_at(point_: Vector2) -> Dictionary:
 	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):return {}
 	var row:={"type":tool,"storey":editing_storey+(1 if roof_view and tool=="floor" else 0),"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
+	if tool=="roof" and roof_snow:row.snow=true
 	if tool in ["door","window","roof","stairs"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y],"yaw":rotation}
 	if tool=="stairs":row.form=structure_form;row.position=[point_.x,point_.y];row.yaw=rotation
@@ -705,7 +716,7 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 			"roof":
 				if minf(area.size.x,area.size.y)<.01:return
 				var turn: float=row.get("yaw",0.);preview.rotation.y=deg_to_rad(turn)
-				b.roof_form=row.get("form","classic");b.blueprint.size=[area.size.y,area.size.x] if roundi(turn/90.)%2!=0 else [area.size.x,area.size.y];b.blueprint.materials.roof=row.color;b.build_roof(preview)
+				b.blueprint.snow=bool(row.get("snow",false));b.roof_form=row.get("form","classic");b.blueprint.size=[area.size.y,area.size.x] if roundi(turn/90.)%2!=0 else [area.size.x,area.size.y];b.blueprint.materials.roof=row.color;b.build_roof(preview)
 			"door","window":
 				var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var end:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(end-a).normalized();var p:=a+dir*float(row.offset)
 				preview.position=Vector3(p.x,Storeys.elevation(row),p.y);var holder:=Node3D.new();preview.add_child(holder);holder.rotation.y=-atan2(dir.y,dir.x)

@@ -186,6 +186,7 @@ func build_roof(n: Node3D) -> void:
 		block(n,Vector3(-2.8,y+1.60,-4.2),Vector3(.76,2.3,.72),material("b18b6b",3),"Chimney")
 		rounded(n,Vector3(-2.8,y+2.77,-4.2),Vector3(.96,.16,.92),.035,material("cfb590"),"ChimneyCap")
 		block(n,Vector3(-2.8,y+2.86,-4.2),Vector3(.50,.02,.48),material("4d514a"),"ChimneyMouth")
+	preload("res://scripts/building/roof_snow.gd").apply(n,bool(blueprint.get("snow",false)))
 func build_door(n: Node3D) -> void:
 	var wall: Dictionary={};var opening: Dictionary={}
 	for candidate in blueprint.walls:

@@ -312,6 +312,9 @@ func rebuild() -> void:
 	content.add_child(head)
 	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活","land":"海风花庭 · 地皮认购"}
 	var title:=UI.label(titles.get(mode,""),28)
+	if mode=="travel":title.text="乘船出发 · 选择目的地"
+	if mode=="map" and city.map_id=="icefield":title.text="冰原岛 · 霜光雪镇"
+	if mode=="shop" and city.map_id=="icefield":title.text={"farm":"雪芽杂货铺","tools":"霜石工具铺","clothes":"绒雪裁缝店"}.get(shop,"商店")
 	title.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	head.add_child(title)
 	head.add_child(UI.button("返回",close_panel))
@@ -326,6 +329,7 @@ func rebuild() -> void:
 		"workshop": build_workshop()
 		"dining": build_dining()
 		"map": build_map()
+		"travel": preload("res://scripts/icefield/ferry_menu.gd").build(self)
 		"land": build_land()
 		"dialogue":
 			var speech:=UI.label(city.dialogue_text,24)
@@ -730,6 +734,8 @@ func build_settings() -> void:
 	volume.value_changed.connect(func(v): session.set_setting("volume",v))
 	options.add_child(volume)
 	preload("res://scripts/ui/audio_credits.gd").add_to(options)
+	if city.map_id=="icefield":
+		var credit:=UI.label("冰原远山地形：Mapzen · Copernicus EU-DEM · USGS\n雪松与积雪素材：原创生成并制作",12,UI.MUTED);options.add_child(credit)
 	var full:=CheckButton.new()
 	full.text="全屏显示"
 	full.button_pressed=session.settings.fullscreen
@@ -771,6 +777,7 @@ func build_land() -> void:
 	purchase.name="Purchase_"+id;purchase.disabled=int(session.state().coins)<land.PRICE;content.add_child(purchase)
 	var cancel:=UI.button("再想一想",close_panel);cancel.name="CancelLandPurchase";content.add_child(cancel)
 func build_map() -> void:
+	if city.map_id=="icefield":preload("res://scripts/icefield/island_map.gd").build(self);return
 	if city.map_id=="valley": build_valley_map();return
 	var east_building: bool=city.has_building_world()
 	content.add_child(UI.label("北 · 商业街     东 · 菜园"+("与海风花庭 · 四块可购买地皮" if east_building else "")+"     南 · 沙滩     西 · 住宅

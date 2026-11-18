@@ -54,12 +54,12 @@ func run() -> void:
 	check(session.scene_path()=="res://scenes/valley.tscn","Resume chooses saved map")
 	var old: Dictionary=session.snapshot();old.erase("map_id");var restored=session.restore_state(old)
 	check(restored.state.map_id=="city","Legacy save defaults to city")
-	check(restored.state.resources.size()==46,"Both map resources share one saved world")
+	check(restored.state.resources.size()==DB.all_resources().size(),"All map resources share one saved world")
 	session.state().player_position=[L.DOCK.x,.18,L.DOCK.y]
 	session.save_path="user://valley_progress_qa.json";session.test_mode=false
 	check(session.save_game(),"Write isolated valley save")
 	var loaded=load("res://scripts/services/session.gd").new();loaded.save_path=session.save_path;loaded.load_save()
-	check(loaded.state().map_id=="valley" and loaded.authority.count("copper_axe")==1 and loaded.state().resources.size()==46,"Disk save restores valley and shared world")
+	check(loaded.state().map_id=="valley" and loaded.authority.count("copper_axe")==1 and loaded.state().resources.size()==DB.all_resources().size(),"Disk save restores valley and shared world")
 	check(Vector3(loaded.state().player_position[0],loaded.state().player_position[1],loaded.state().player_position[2]).is_equal_approx(Vector3(L.DOCK.x,.18,L.DOCK.y)),"Extended harbor position survives disk restore")
 	loaded.free()
 	for suffix in ["",".tmp",".bak"]:

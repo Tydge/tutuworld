@@ -1,0 +1,71 @@
+{
+	"draw_policy": "one_forced_draw_per_process_frame",
+	"failures": [],
+	"output_pixels": [
+		3024,
+		1890
+	],
+	"samples": [
+		{
+			"cpu_p95_ms": 27.835,
+			"draws": 712,
+			"engine_cap": 60,
+			"fps": 59.9928808448064,
+			"frame_setup_ms": 0.226,
+			"max_ms": 25.11,
+			"over50": 0,
+			"p95_ms": 17.276,
+			"reflection_updates": 0,
+			"view": "town-day"
+		},
+		{
+			"cpu_p95_ms": 27.557,
+			"draws": 723,
+			"engine_cap": 60,
+			"fps": 59.8376803191875,
+			"frame_setup_ms": 0.106,
+			"max_ms": 24.93,
+			"over50": 0,
+			"p95_ms": 18.068,
+			"reflection_updates": 0,
+			"view": "festival-night"
+		},
+		{
+			"cpu_p95_ms": 34.635,
+			"draws": 1570,
+			"engine_cap": 60,
+			"fps": 57.5068933479815,
+			"frame_setup_ms": 0.082,
+			"max_ms": 36.59,
+			"over50": 0,
+			"p95_ms": 19.289,
+			"reflection_updates": 274,
+			"view": "ice-sunset"
+		},
+		{
+			"cpu_p95_ms": 30.191,
+			"draws": 1230,
+			"engine_cap": 60,
+			"fps": 59.7974858479283,
+			"frame_setup_ms": 0.071,
+			"max_ms": 33.36,
+			"over50": 0,
+			"p95_ms": 17.112,
+			"reflection_updates": 560,
+			"view": "ice-fishing"
+		},
+		{
+			"cpu_p95_ms": 27.834,
+			"draws": 206,
+			"engine_cap": 60,
+			"fps": 60.0016641345522,
+			"frame_setup_ms": 0.078,
+			"max_ms": 25.979,
+			"over50": 0,
+			"p95_ms": 17.874,
+			"reflection_updates": 560,
+			"view": "harbor"
+		}
+	],
+	"scale_3d": 0.591552376747131
+}

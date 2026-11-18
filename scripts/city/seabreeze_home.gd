@@ -152,7 +152,11 @@ func _process(delta: float) -> void:
 	if view_mode==View.FULL:roof_hidden=false
 	if view_mode!=View.AUTO:remove_roof=false
 	var occluded:=View.sample_targets(sections,city.camera.global_position,point,occlusion_cache,view_changed) if view_mode==View.OCCLUSION and (inside or obstructs) else {}
-	if view_mode==View.OCCLUSION:roof_hidden=false
+	if view_mode==View.OCCLUSION:
+		roof_hidden=false
+		if inside:
+			for section in sections:
+				if section.roof:occluded[View.face(section)]=true
 	for section in sections:
 		var hide_section:=false
 		if section.roof: hide_section=remove_roof

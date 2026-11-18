@@ -4,6 +4,7 @@ const Clothes=preload("res://scripts/appearance/clothing_catalog.gd")
 static var _plots: Array = []
 static var _resources: Array = []
 static var _valley_resources: Array=[]
+static var _icefield_resources: Array=[]
 const Valley=preload("res://scripts/valley/valley_layout.gd")
 static func catalog() -> Dictionary:
 	if _catalog.is_empty():
@@ -40,6 +41,7 @@ static func plots() -> Array:
 	return _plots
 static func resources(map_id: String="city") -> Array:
 	if map_id=="valley": return valley_resources()
+	if map_id=="icefield": return icefield_resources()
 	if map_id!="city": return []
 	if not _resources.is_empty(): return _resources
 	# Seeded spatial samples are stable save identities; refresh deadlines vary per node/generation.
@@ -57,7 +59,7 @@ static func resources(map_id: String="city") -> Array:
 		var point: Vector2=[Vector2(-12,-7),Vector2(12,-7),Vector2(-12,6),Vector2(12,6)][i]
 		_resources.append({"id":"city_orange_%d"%i,"item":"orange","x":point.x,"z":point.y,"map":"city"})
 	return _resources
-static func all_resources() -> Array: return resources("city")+resources("valley")
+static func all_resources() -> Array: return resources("city")+resources("valley")+resources("icefield")
 static func resource(id: String) -> Dictionary:
 	for source in all_resources():
 		if source.id==id: return source
@@ -66,7 +68,8 @@ static func refresh_delay(id: String,generation: int) -> float:
 	var random:=RandomNumberGenerator.new();random.seed=(id+":"+str(generation)).hash()
 	return random.randf_range(3600,7200)
 
-static func shops() -> Dictionary:
+static func shops(map_id: String="city") -> Dictionary:
+	if map_id=="icefield":return preload("res://scripts/icefield/icefield_layout.gd").shop_positions()
 	return {"farm":Vector2(-18,-28.72),"tools":Vector2(-5,-28.72),"clothes":Vector2(8,-28.72)}
 
 static func category(id: String,clothing_slots: bool=false) -> String:
@@ -110,3 +113,20 @@ static func valley_resources() -> Array:
 					if found:break
 			_valley_resources.append({"id":"valley_%s_%d"%[type_,i],"item":type_,"x":point.x,"z":point.y,"y":Valley.height_at(point.x,point.y),"map":"valley"})
 	return _valley_resources
+static func icefield_resources() -> Array:
+	if not _icefield_resources.is_empty():return _icefield_resources
+	var layout=preload("res://scripts/icefield/icefield_layout.gd")
+	var points: Dictionary={
+		"branch":[Vector2(-147,8),Vector2(-145,46),Vector2(-105,91),Vector2(-31,74),Vector2(-36,-93),Vector2(23,98)],
+		"birch":[Vector2(-146,-29),Vector2(-127,88),Vector2(-44,93),Vector2(-39,-47),Vector2(-141,-76),Vector2(-52,113)],
+		"copper":[Vector2(-146,-59),Vector2(-76,-112),Vector2(37,-114),Vector2(117,-60),Vector2(133,36),Vector2(61,116)],
+		"iron":[Vector2(-138,59),Vector2(-27,-124),Vector2(83,-99),Vector2(150,-18)],
+		"limestone":[Vector2(-151,-2),Vector2(-118,99),Vector2(15,-126),Vector2(142,60),Vector2(95,96),Vector2(-18,105)],
+		"sandstone":[Vector2(-137,-80),Vector2(-58,-117),Vector2(112,-84),Vector2(121,78)]}
+	for type_ in points:
+		for i in range(points[type_].size()):
+			var p: Vector2=points[type_][i]
+			var radial: float=layout.ellipse(p.x,p.y)
+			if radial>.895:p*=.895/radial
+			_icefield_resources.append({"id":"icefield_%s_%02d"%[type_,i],"item":type_,"x":p.x,"z":p.y,"y":layout.height_at(p.x,p.y),"map":"icefield"})
+	return _icefield_resources
