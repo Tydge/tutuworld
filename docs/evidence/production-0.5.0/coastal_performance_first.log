@@ -1,0 +1,8 @@
+COASTAL_TOWN {"draws":1238,"fps":60.2652968016061,"frames":242,"max_ms":27.507,"over50":0,"p95_ms":17.563,"p99_ms":26.409,"view":"plaza"}
+COASTAL_TOWN {"draws":920,"fps":60.1896899306894,"frames":241,"max_ms":27.607,"over50":0,"p95_ms":17.647,"p99_ms":25.71,"view":"shops"}
+COASTAL_SLOW_FRAME quay ms=1018.885 since_start_ms=3466.093 cpu_setup_ms=0.137
+COASTAL_TOWN {"draws":335,"fps":45.4499822944849,"frames":182,"max_ms":1018.885,"over50":1,"p95_ms":20.332,"p99_ms":25.907,"view":"quay"}
+COASTAL_TOWN {"draws":994,"fps":58.4559972480715,"frames":234,"max_ms":38.886,"over50":0,"p95_ms":22.001,"p99_ms":31.484,"view":"lamplight"}
+COASTAL_SLOW_FRAME parcel ms=81.941 since_start_ms=435.589 cpu_setup_ms=0.049
+COASTAL_TOWN {"draws":515,"fps":59.3762450612311,"frames":238,"max_ms":81.941,"over50":1,"p95_ms":19.619,"p99_ms":36.003,"view":"parcel"}
+COASTAL_TOWN_WALK_RESULT FAIL failures=["quay", "parcel"]

@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "checks": {
+    "server_updated": true,
+    "accounts_sessions_and_auth_history_preserved": true,
+    "characters_preserved": true,
+    "buildings_parcels_revisions_preserved": true,
+    "clock_alignment_preserved": true,
+    "care_history_preserved": true,
+    "existing_doors_preserved": true,
+    "crop_progress_preserved": true,
+    "existing_resource_state_preserved": true,
+    "icefield_resources_ready": true,
+    "other_nginx_site_unchanged": true
+  },
+  "previous": {
+    "characters": 4,
+    "accounts": 3,
+    "buildings": 143,
+    "parcels": 2,
+    "resources": 78
+  },
+  "current": {
+    "characters": 4,
+    "accounts": 3,
+    "buildings": 143,
+    "parcels": 2,
+    "resources": 78
+  },
+  "icefield_resources": 32,
+  "added_on_this_restart": 0,
+  "health": {
+    "ok": true,
+    "version": "0.5.0",
+    "build": 10
+  }
+}

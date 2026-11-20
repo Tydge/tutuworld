@@ -1,0 +1,32 @@
+{
+  "current": "/srv/tutuworld/releases/0.5.0",
+  "activation": "2026-11-20T12:10:42.738070+00:00",
+  "services": {
+    "tutuworld-world": "active",
+    "tutuworld-auth": "active",
+    "tutuworld-backup.timer": "active",
+    "tutuworld-stage-world": "inactive",
+    "tutuworld-stage-auth": "inactive"
+  },
+  "script_or_shader_errors": [],
+  "current_server_sha256": "3273041c3bef1e395d81051f7b518f3c67b4a35e59dbfa56bb5232059219aac2",
+  "new_digests": {
+    "city.pck": "a9d927ddd262303286c08fd4c05f6a34fd5a423e71f6a0d775062a4239e3f11b",
+    "TutuWorld-macOS.zip": "e22bbb3dbab0e915ed8691db09476787edf18ff8f0a04503c311b925a329eeae",
+    "TutuWorld-Windows.zip": "5f4c8a84f777b75e558a523c835d9a524bab3917123c6213e096aaaa8b10a894",
+    "manifest.json": "9a708a6e1ee42547630ff7ed032de338d576efb88101eadc2ff4ff6d8eabd70c"
+  },
+  "old_digests": {
+    "city.pck": "4275ba241552abfb5fa5177e9f409e7fe7f8297ede7dbd140deb32e5657cac1d",
+    "TutuWorld-macOS.zip": "4163d2a498bce1b62ad6c2915f4ae4ad965236eecccf6506df5f8171627e7715",
+    "TutuWorld-Windows.zip": "e66dcc561995cc1ff02cb687b8a6c98e5eac4bd4e2227480605be56e522e9f87",
+    "manifest.json": "ff0ba43ac8dbff51dc913f8671192cd5d30af3b99c05248338bc22c6f36c442b"
+  },
+  "health": {
+    "ok": true,
+    "version": "0.5.0",
+    "build": 10
+  },
+  "public_manifest_sha256": "9a708a6e1ee42547630ff7ed032de338d576efb88101eadc2ff4ff6d8eabd70c",
+  "public_release_lengths_verified": true
+}

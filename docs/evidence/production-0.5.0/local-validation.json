@@ -1,0 +1,326 @@
+{
+  "source_commit": "87e2de3ea419b67daa13a31b048fd5847f72c527",
+  "account_service_unit_tests": {
+    "passed": 3
+  },
+  "suites": {
+    "release": [
+      {
+        "name": "project_integrity",
+        "outcome": "pass",
+        "seconds": 7.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/project_integrity/run.log",
+        "counted_assertions": 648
+      },
+      {
+        "name": "valley_server_migration",
+        "outcome": "pass",
+        "seconds": 1.0,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_server_migration/run.log",
+        "counted_assertions": 32
+      },
+      {
+        "name": "valley_landscape_rules",
+        "outcome": "pass",
+        "seconds": 0.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_landscape_rules/run.log",
+        "counted_assertions": 14
+      },
+      {
+        "name": "valley_rules",
+        "outcome": "pass",
+        "seconds": 0.6,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_rules/run.log",
+        "counted_assertions": 215
+      },
+      {
+        "name": "valley_spawn_regression",
+        "outcome": "pass",
+        "seconds": 7.7,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_spawn_regression/run.log",
+        "counted_assertions": 15
+      },
+      {
+        "name": "valley_traversal_regression",
+        "outcome": "pass",
+        "seconds": 43.0,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_traversal_regression/run.log",
+        "counted_assertions": 33
+      },
+      {
+        "name": "valley_deck_clearance",
+        "outcome": "pass",
+        "seconds": 8.2,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_deck_clearance/run.log",
+        "counted_assertions": 10
+      },
+      {
+        "name": "valley_multiplayer_flow",
+        "outcome": "pass",
+        "seconds": 61.4,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_multiplayer_flow/run.log",
+        "counted_assertions": 48
+      },
+      {
+        "name": "motion_buffer_rules",
+        "outcome": "pass",
+        "seconds": 0.4,
+        "local_log": ".qa-artifacts/20261120-195555-825614/motion_buffer_rules/run.log",
+        "counted_assertions": 125
+      },
+      {
+        "name": "building_multiplayer_rules",
+        "outcome": "pass",
+        "seconds": 7.1,
+        "local_log": ".qa-artifacts/20261120-195555-825614/building_multiplayer_rules/run.log",
+        "counted_assertions": 59
+      },
+      {
+        "name": "building_multiplayer_flow",
+        "outcome": "pass",
+        "seconds": 56.1,
+        "local_log": ".qa-artifacts/20261120-195555-825614/building_multiplayer_flow/run.log",
+        "counted_assertions": 52
+      },
+      {
+        "name": "building_update_lifecycle",
+        "outcome": "pass",
+        "seconds": 0.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/building_update_lifecycle/run.log",
+        "counted_assertions": 1
+      },
+      {
+        "name": "release04_building_rules",
+        "outcome": "pass",
+        "seconds": 1.2,
+        "local_log": ".qa-artifacts/20261120-195555-825614/release04_building_rules/run.log",
+        "counted_assertions": 369
+      },
+      {
+        "name": "character_roster_rules",
+        "outcome": "pass",
+        "seconds": 0.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/character_roster_rules/run.log",
+        "counted_assertions": 44
+      },
+      {
+        "name": "save_transactions",
+        "outcome": "pass",
+        "seconds": 0.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/save_transactions/run.log",
+        "counted_assertions": 10
+      },
+      {
+        "name": "valley_npc_recovery",
+        "outcome": "pass",
+        "seconds": 26.9,
+        "local_log": ".qa-artifacts/20261120-195555-825614/valley_npc_recovery/run.log",
+        "counted_assertions": 7
+      },
+      {
+        "name": "curved_shadow_surface",
+        "outcome": "pass",
+        "seconds": 9.8,
+        "local_log": ".qa-artifacts/20261120-195555-825614/curved_shadow_surface/run.log",
+        "counted_assertions": 50
+      },
+      {
+        "name": "woodland_lod_flow",
+        "outcome": "pass",
+        "seconds": 2.7,
+        "local_log": ".qa-artifacts/20261120-195555-825614/woodland_lod_flow/run.log",
+        "counted_assertions": 12
+      },
+      {
+        "name": "woodland_lighting_flow",
+        "outcome": "pass",
+        "seconds": 4.9,
+        "local_log": ".qa-artifacts/20261120-195555-825614/woodland_lighting_flow/run.log",
+        "counted_assertions": 6
+      },
+      {
+        "name": "woodland_shadow_stability",
+        "outcome": "pass",
+        "seconds": 4.7,
+        "local_log": ".qa-artifacts/20261120-195555-825614/woodland_shadow_stability/run.log",
+        "counted_assertions": 12
+      },
+      {
+        "name": "woodland_sweep_performance",
+        "outcome": "pass",
+        "seconds": 20.6,
+        "local_log": ".qa-artifacts/20261120-195555-825614/woodland_sweep_performance/run.log"
+      }
+    ],
+    "icefield": [
+      {
+        "name": "project_integrity",
+        "outcome": "pass",
+        "seconds": 7.7,
+        "local_log": ".qa-artifacts/20261120-200023-349412/project_integrity/run.log",
+        "counted_assertions": 648
+      },
+      {
+        "name": "icefield_rules",
+        "outcome": "pass",
+        "seconds": 1.4,
+        "local_log": ".qa-artifacts/20261120-200023-349412/icefield_rules/run.log",
+        "counted_assertions": 212
+      },
+      {
+        "name": "icefield_server_rules",
+        "outcome": "pass",
+        "seconds": 35.5,
+        "local_log": ".qa-artifacts/20261120-200023-349412/icefield_server_rules/run.log",
+        "counted_assertions": 74
+      },
+      {
+        "name": "winter_roof_flow",
+        "outcome": "pass",
+        "seconds": 7.3,
+        "local_log": ".qa-artifacts/20261120-200023-349412/winter_roof_flow/run.log",
+        "counted_assertions": 11
+      },
+      {
+        "name": "winter_roof_geometry",
+        "outcome": "pass",
+        "seconds": 0.6,
+        "local_log": ".qa-artifacts/20261120-200023-349412/winter_roof_geometry/run.log",
+        "counted_assertions": 32
+      },
+      {
+        "name": "winter_costume_fitting",
+        "outcome": "pass",
+        "seconds": 2.0,
+        "local_log": ".qa-artifacts/20261120-200023-349412/winter_costume_fitting/run.log"
+      },
+      {
+        "name": "winter_rooms_and_tailor",
+        "outcome": "pass",
+        "seconds": 65.8,
+        "local_log": ".qa-artifacts/20261120-200023-349412/winter_rooms_and_tailor/run.log"
+      },
+      {
+        "name": "icefield_journey",
+        "outcome": "pass",
+        "seconds": 55.3,
+        "local_log": ".qa-artifacts/20261120-200023-349412/icefield_journey/run.log",
+        "counted_assertions": 26
+      },
+      {
+        "name": "icefield_polish",
+        "outcome": "pass",
+        "seconds": 47.7,
+        "local_log": ".qa-artifacts/20261120-200023-349412/icefield_polish/run.log",
+        "counted_assertions": 17
+      },
+      {
+        "name": "icefield_performance",
+        "outcome": "pass",
+        "seconds": 53.6,
+        "local_log": ".qa-artifacts/20261120-200023-349412/icefield_performance/run.log"
+      }
+    ],
+    "coastal_town": [
+      {
+        "name": "cat_city_lighting",
+        "outcome": "pass",
+        "seconds": 13.2,
+        "local_log": ".qa-artifacts/20261120-200500-637322/cat_city_lighting/run.log"
+      },
+      {
+        "name": "project_integrity",
+        "outcome": "pass",
+        "seconds": 7.7,
+        "local_log": ".qa-artifacts/20261120-200500-637322/project_integrity/run.log",
+        "counted_assertions": 648
+      },
+      {
+        "name": "appearance_rules",
+        "outcome": "pass",
+        "seconds": 1.2,
+        "local_log": ".qa-artifacts/20261120-200500-637322/appearance_rules/run.log",
+        "counted_assertions": 223
+      },
+      {
+        "name": "wall_furniture_rules",
+        "outcome": "pass",
+        "seconds": 0.8,
+        "local_log": ".qa-artifacts/20261120-200500-637322/wall_furniture_rules/run.log",
+        "counted_assertions": 94
+      },
+      {
+        "name": "town_polish_flow",
+        "outcome": "pass",
+        "seconds": 28.1,
+        "local_log": ".qa-artifacts/20261120-200500-637322/town_polish_flow/run.log",
+        "counted_assertions": 52
+      },
+      {
+        "name": "garden_coast_flow",
+        "outcome": "pass",
+        "seconds": 14.7,
+        "local_log": ".qa-artifacts/20261120-200500-637322/garden_coast_flow/run.log",
+        "counted_assertions": 11
+      },
+      {
+        "name": "coastal_modules_flow",
+        "outcome": "pass",
+        "seconds": 15.8,
+        "local_log": ".qa-artifacts/20261120-200500-637322/coastal_modules_flow/run.log",
+        "counted_assertions": 67
+      },
+      {
+        "name": "coastal_town_walk",
+        "outcome": "fail",
+        "seconds": 38.3,
+        "local_log": ".qa-artifacts/20261120-200500-637322/coastal_town_walk/run.log"
+      }
+    ],
+    "coastal_performance_retry": [
+      {
+        "name": "coastal_town_walk",
+        "outcome": "pass",
+        "seconds": 38.3,
+        "local_log": ".qa-artifacts/20261120-200718-456779/coastal_town_walk/run.log"
+      },
+      {
+        "name": "town_performance",
+        "outcome": "pass",
+        "seconds": 22.1,
+        "local_log": ".qa-artifacts/20261120-200718-456779/town_performance/run.log"
+      }
+    ],
+    "model_surface": [
+      {
+        "name": "model_surface",
+        "outcome": "pass",
+        "seconds": 1.0,
+        "local_log": ".qa-artifacts/20261120-200700-539002/model_surface/run.log"
+      }
+    ],
+    "migration_updated": [
+      {
+        "name": "valley_server_migration",
+        "outcome": "pass",
+        "seconds": 1.0,
+        "local_log": ".qa-artifacts/20261120-200006-181239/valley_server_migration/run.log",
+        "counted_assertions": 34
+      }
+    ],
+    "signature": [
+      {
+        "name": "update_integrity",
+        "outcome": "pass",
+        "seconds": 1.5,
+        "local_log": ".qa-artifacts/20261120-200655-489370/update_integrity/run.log"
+      }
+    ]
+  },
+  "additional_logs": {
+    "coastal_performance_first": "coastal_performance_first.log",
+    "coastal_performance_retest": "coastal_performance_retest.log",
+    "icefield_performance": "icefield_performance.log",
+    "cat_lighting": "cat_lighting.log"
+  }
+}

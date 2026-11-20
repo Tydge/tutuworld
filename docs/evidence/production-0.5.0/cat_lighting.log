@@ -1,0 +1,9 @@
+CAT_CITY_SHADOW 9/600
+CAT_CITY_FUR Player noon difference=0.0
+CAT_CITY_FUR CatTeacher noon difference=0.0
+CAT_CITY_FUR Player dusk difference=0.0
+CAT_CITY_FUR CatTeacher dusk difference=0.0
+CAT_CITY_FUR Player night difference=0.0
+CAT_CITY_FUR CatTeacher night difference=0.0
+CAT_CHEEK_PAINT { "noon": 0.33003374934196, "dusk": 0.15820628404617, "night": 0.15036314725876 }
+CAT_CITY_LIGHTING_RESULT PASS []

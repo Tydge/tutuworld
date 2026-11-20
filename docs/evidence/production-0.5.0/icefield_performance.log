@@ -1,0 +1,8 @@
+ICEFIELD_PERF {"cpu_p95_ms":23.645,"draws":670,"engine_cap":60,"fps":59.9999600000267,"frame_setup_ms":0.174,"max_ms":23.841,"over50":0,"p95_ms":17.515,"reflection_updates":0,"view":"town-day"}
+ICEFIELD_PERF {"cpu_p95_ms":22.744,"draws":695,"engine_cap":60,"fps":59.9382436296469,"frame_setup_ms":0.115,"max_ms":24.835,"over50":0,"p95_ms":18.238,"reflection_updates":0,"view":"festival-night"}
+ICEFIELD_PERF {"cpu_p95_ms":32.732,"draws":1583,"engine_cap":60,"fps":57.9687355286382,"frame_setup_ms":0.073,"max_ms":35.357,"over50":0,"p95_ms":19.309,"reflection_updates":276,"view":"ice-sunset"}
+ICEFIELD_PERF {"cpu_p95_ms":30.297,"draws":1476,"engine_cap":60,"fps":60.0790587304332,"frame_setup_ms":0.11,"max_ms":33.519,"over50":0,"p95_ms":17.134,"reflection_updates":562,"view":"ice-fishing"}
+ICEFIELD_PERF {"cpu_p95_ms":16.454,"draws":203,"engine_cap":60,"fps":59.9973001214945,"frame_setup_ms":0.087,"max_ms":23.854,"over50":0,"p95_ms":18.439,"reflection_updates":562,"view":"harbor"}
+ICEFIELD_PERF {"cpu_p95_ms":19.876,"draws":477,"engine_cap":60,"fps":59.9933311280536,"frame_setup_ms":0.077,"max_ms":26.848,"over50":0,"p95_ms":18.159,"reflection_updates":562,"view":"bakery-interior"}
+ICEFIELD_PERF {"cpu_p95_ms":28.189,"draws":1029,"engine_cap":60,"fps":59.9951803871756,"frame_setup_ms":0.088,"max_ms":30.612,"over50":0,"p95_ms":18.067,"reflection_updates":562,"view":"library-night"}
+ICEFIELD_PERFORMANCE_RESULT PASS failures=[]

@@ -1,0 +1,10 @@
+COASTAL_TOWN {"draws":1222,"fps":60.3255986941751,"frames":242,"max_ms":30.902,"over50":0,"p95_ms":18.096,"p99_ms":29.724,"view":"plaza"}
+COASTAL_TOWN {"draws":912,"fps":60.3735024190565,"frames":242,"max_ms":29.415,"over50":0,"p95_ms":17.609,"p99_ms":26.992,"view":"shops"}
+COASTAL_TOWN {"draws":335,"fps":60.3544853358553,"frames":242,"max_ms":21.673,"over50":0,"p95_ms":17.488,"p99_ms":18.223,"view":"quay"}
+COASTAL_TOWN {"draws":927,"fps":58.6537345581564,"frames":235,"max_ms":34.139,"over50":0,"p95_ms":19.767,"p99_ms":33.181,"view":"lamplight"}
+COASTAL_TOWN {"draws":515,"fps":60.4444515490264,"frames":242,"max_ms":19.897,"over50":0,"p95_ms":18.213,"p99_ms":19.421,"view":"parcel"}
+COASTAL_TOWN_WALK_RESULT PASS failures=[]
+TOWN_PERF park-day fps=59.4888126330442 p95_ms=17.283 max_ms=25.615 over50=0 draws=975
+TOWN_PERF park-night fps=59.9973901135301 p95_ms=17.342 max_ms=20.402 over50=0 draws=833
+TOWN_PERF coast-day fps=59.7743518218724 p95_ms=17.444 max_ms=24.63 over50=0 draws=1286
+TOWN_PERFORMANCE_RESULT PASS failures=[]

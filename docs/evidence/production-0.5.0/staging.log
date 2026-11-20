@@ -1,0 +1,41 @@
+PASS Previous production build is directed to 0.5.0
+PASS Matching build still requires protocol 5
+PASS resume succeeds
+PASS resume succeeds
+PASS resume succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS join succeeds
+PASS join succeeds
+PASS join succeeds
+PASS Legacy world now reports all 32 new resource IDs
+PASS Saved valley resource generation is retained
+PASS travel succeeds
+PASS Travel lands in icefield with the expected balance
+PASS Icefield motion contains its ten NPCs
+PASS Protocol carries the new map and ice movement fields
+PASS Direct icefield-to-valley travel is refused without a charge
+PASS Resident outfit changes require the snow tailor location
+PASS Tailor fitting requires an owned garment
+PASS buy succeeds
+PASS dress_resident succeeds
+PASS Second client receives the shared outfit in NPC motion
+PASS Dressing a resident preserves the player outfit
+PASS gather succeeds
+PASS Gathering migrated icefield resource awards inventory and triggers cooldown
+PASS travel succeeds
+PASS Travel lands in city with the expected balance
+ICEFIELD_REMOTE_RESULT PASS checks=27
+PASS resume succeeds
+PASS resume succeeds
+PASS resume succeeds
+PASS resume succeeds
+PASS join succeeds
+PASS join succeeds
+PASS join succeeds
+PASS join succeeds
+PASS Icefield travel and fare survive restart
+PASS Free return survives restart
+PASS Gathered inventory survives restart
+PASS Shared resident outfit survives restart
+ICEFIELD_REMOTE_RESULT PASS checks=12

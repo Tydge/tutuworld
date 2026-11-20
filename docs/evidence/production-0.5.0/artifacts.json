@@ -1,0 +1,40 @@
+{
+  "version": "0.5.0",
+  "build": 10,
+  "protocol": 5,
+  "macos": {
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "signed": true,
+    "notarized": false
+  },
+  "windows": {
+    "version_resource": "0.5.0.0",
+    "verified_sdk": true,
+    "physical_device_tested": false
+  },
+  "artifacts": {
+    "TutuWorld-macOS.zip": {
+      "bytes": 134702893,
+      "sha256": "e22bbb3dbab0e915ed8691db09476787edf18ff8f0a04503c311b925a329eeae"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 122446242,
+      "sha256": "5f4c8a84f777b75e558a523c835d9a524bab3917123c6213e096aaaa8b10a894"
+    },
+    "city.pck": {
+      "bytes": 111935280,
+      "sha256": "a9d927ddd262303286c08fd4c05f6a34fd5a423e71f6a0d775062a4239e3f11b"
+    },
+    "server.pck": {
+      "bytes": 92584000,
+      "sha256": "3273041c3bef1e395d81051f7b518f3c67b4a35e59dbfa56bb5232059219aac2"
+    },
+    "manifest.json": {
+      "bytes": 1145,
+      "sha256": "9a708a6e1ee42547630ff7ed032de338d576efb88101eadc2ff4ff6d8eabd70c"
+    }
+  }
+}

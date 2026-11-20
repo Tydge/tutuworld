@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "file": ".qa-artifacts/release042/public-updates/build-9.pck",
+      "identical_source": "releases/0.4.2/city.pck",
+      "bytes": 75319028,
+      "sha256": "4275ba241552abfb5fa5177e9f409e7fe7f8297ede7dbd140deb32e5657cac1d"
+    },
+    {
+      "file": ".qa-artifacts/release042/native/native-0.4.1",
+      "identical_source": "releases/0.4.1/TutuWorld-macOS.zip",
+      "bytes": 185671040,
+      "sha256": "48cd21ca21319313652cffc56bff092f7bca501d7ad4d67ecfd43ab45b3a98b8"
+    },
+    {
+      "file": ".qa-artifacts/release042/native/native-0.4.2",
+      "identical_source": "releases/0.4.2/TutuWorld-macOS.zip",
+      "bytes": 185671040,
+      "sha256": "dab1edbc17a42fbf47d1d2abd1dce181678a3a943c3b5f797d7e4d2809c7f165"
+    }
+  ],
+  "bytes": 446661108
+}

@@ -1,0 +1,18 @@
+[PASS] multiplayer_public (10.3s)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+MULTIPLAYER_PUBLIC_RESULT PASS checks=4 failures=[]
+[PASS] update_download (9.4s)
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+Metal 3.2 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+PASS HTTPS signed manifest downloaded
+PASS HTTPS pack staged and SHA256 verified
+PASS Verified pack size=111935280
+UPDATE_DOWNLOAD_RESULT PASS
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+TUTU_CLIENT_READY version=0.5.0 build=10
+NATIVE_OLD_BOOT_UPDATE_RESULT PASS
+ERROR: 2 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 1 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
