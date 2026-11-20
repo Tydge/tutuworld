@@ -288,6 +288,7 @@
       "woodland_sweep_performance"
     ],
     "coastal_town": [
+      "cat_city_lighting",
       "project_integrity",
       "appearance_rules",
       "wall_furniture_rules",
@@ -570,6 +571,7 @@
       "headless": true
     },
     "curved_shadow_surface": {},
+    "cat_city_lighting": {},
     "icefield_rules": {
       "headless": true
     },

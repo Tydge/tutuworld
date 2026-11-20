@@ -12,28 +12,33 @@ func shape(parent: Node3D,p: Vector3,size_: Vector3,material: Material,label_: S
 	n.mesh.radial_segments=48
 	n.mesh.rings=24
 	return n
-# A tapered strip follows the cheek surface. Each drawing group is baked
-# into one mesh so blinking and chewing retain their independent pivots.
+# Ink is drawn just above the skin. Bake its outward normals from the same
+# surface as the head so pigment follows the cheek when a light moves past.
+func ink_triangle(st: SurfaceTool,pivot: Vector3,a: Vector2,b: Vector2,c: Vector2) -> void:
+	var points: Array=[a,c,b] if (b-a).cross(c-a)>0. else [a,b,c]
+	for point: Vector2 in points:
+		var skin:=Surface.face_point(point)
+		st.set_normal(head_normal(skin-Vector3.BACK*Surface.INK_OFFSET))
+		st.add_vertex(skin-pivot)
+
 func ribbon(st: SurfaceTool,pivot: Vector3,a: Vector2,b: Vector2,c: Vector2,width: float,edge_width: float=0.) -> void:
-	var previous: Array[Vector3]=[]
+	var previous: Array[Vector2]=[]
 	for i in range(25):
 		var t:=i/24.
 		var center:=a.lerp(b,t).lerp(b.lerp(c,t),t)
 		var tangent: Vector2=(b-a).lerp(c-b,t).normalized()
 		var normal:=Vector2(-tangent.y,tangent.x)
 		var radius:=lerpf(edge_width,width,pow(maxf(0.,sin(t*PI)),.65))
-		var pair: Array[Vector3]=[Surface.face_point(center-normal*radius)-pivot,Surface.face_point(center+normal*radius)-pivot]
+		var pair: Array[Vector2]=[center-normal*radius,center+normal*radius]
 		if not previous.is_empty():
-			for point in [previous[0],previous[1],pair[0],pair[0],previous[1],pair[1]]:
-				st.set_normal(Vector3.BACK)
-				st.add_vertex(point)
+			ink_triangle(st,pivot,previous[0],previous[1],pair[0])
+			ink_triangle(st,pivot,pair[0],previous[1],pair[1])
 		previous=pair
 
 func ink_draw(parent: Node3D,st: SurfaceTool,color_: String) -> void:
 	st.index()
-	var ink:=G.mat(color_).duplicate() as StandardMaterial3D
-	ink.cull_mode=BaseMaterial3D.CULL_DISABLED
-	ink.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED
+	var ink:=G.mat(color_,.94).duplicate() as StandardMaterial3D
+	ink.metallic_specular=.18
 	var draw:=G.mesh(parent,st.commit(),Vector3.ZERO,ink,"Brushwork")
 	draw.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
@@ -65,8 +70,10 @@ func face() -> void:
 		ribbon(eyes_st,eyes.position,a,lower,b,.004,.0006)
 		for i in range(8):
 			var t0:=.35+i*.038;var t1:=t0+.038
-			for k in [[t0,true],[t0,false],[t1,true],[t1,true],[t0,false],[t1,false]]:
-				eyes_st.set_normal(Vector3.BACK);eyes_st.add_vertex(Surface.face_point(eye_edge(k[0],side,k[1]))-eyes.position)
+			var upper0:=eye_edge(t0,side,true);var lower0:=eye_edge(t0,side,false)
+			var upper1:=eye_edge(t1,side,true);var lower1:=eye_edge(t1,side,false)
+			ink_triangle(eyes_st,eyes.position,upper0,lower0,upper1)
+			ink_triangle(eyes_st,eyes.position,upper1,lower0,lower1)
 		# Five tapered strokes: three at the temple, two following the cheek.
 		for mark in [[308,241,309,230,316,221, .011],[311,250,321,245,326,236,.013],[312,258,324,259,329,251,.013],[270,303,283,306,297,298,.013],[274,325,288,328,297,317,.012]]:
 			var start:=drawing_point(mark[0],mark[1]);start.x*=side
@@ -76,11 +83,15 @@ func face() -> void:
 	# The lip and its outline share the same curved projection and bite pivot.
 	var left:=drawing_point(165,328);var right:=drawing_point(200,327)
 	var top:=drawing_point(181,318);var chin:=drawing_point(185,351)
+	var fill_pivot:=mouth.position+Vector3.BACK*.0008
 	for i in range(16):
-		for k in [[i,true],[i,false],[i+1,true],[i+1,true],[i,false],[i+1,false]]:
-			var t: float=k[0]/16.;var ctrl: Vector2=top if k[1] else chin
-			var point:=left.lerp(ctrl,t).lerp(ctrl.lerp(right,t),t)
-			lip_st.set_normal(Vector3.BACK);lip_st.add_vertex(Surface.face_point(point)-mouth.position-Vector3.BACK*.0008)
+		var t0:=i/16.;var t1:=(i+1)/16.
+		var upper0:=left.lerp(top,t0).lerp(top.lerp(right,t0),t0)
+		var upper1:=left.lerp(top,t1).lerp(top.lerp(right,t1),t1)
+		var lower0:=left.lerp(chin,t0).lerp(chin.lerp(right,t0),t0)
+		var lower1:=left.lerp(chin,t1).lerp(chin.lerp(right,t1),t1)
+		ink_triangle(lip_st,fill_pivot,upper0,lower0,upper1)
+		ink_triangle(lip_st,fill_pivot,upper1,lower0,lower1)
 	ribbon(mouth_st,mouth.position,left,top,right,.004)
 	ribbon(mouth_st,mouth.position,left,chin,right,.004)
 	ink_draw(eyes,eyes_st,"3f3937")

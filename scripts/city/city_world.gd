@@ -783,7 +783,6 @@ func update_lighting(override_time: float=-1) -> void:
 	sun.light_color=Color("91afe8").lerp(Color("fff6e6"),day)
 	sun.shadow_opacity=lerpf(.62,.86,day)
 	sun.shadow_blur=1.85
-	sun.shadow_bias=.025
 	sun.shadow_normal_bias=.65
 	sun.rotation_degrees=Vector3(-maxf(22,palette.height*70),-80+t*160,0)
 	update_ambient_lighting()

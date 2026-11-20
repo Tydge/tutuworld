@@ -39,7 +39,7 @@ func build() -> void:
 	var sun_: DirectionalLight3D=world.get_node("Sun")
 	sun_.directional_shadow_max_distance=48
 	sun_.shadow_blur=1.85
-	sun_.shadow_bias=.025
+	sun_.shadow_bias=.10
 	sun_.shadow_normal_bias=.65
 	sun_.shadow_opacity=.85
 	sun_.light_energy=1.45

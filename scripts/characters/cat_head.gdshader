@@ -1,4 +1,5 @@
 shader_type spatial;
+render_mode diffuse_burley;
 uniform vec4 cream : source_color=vec4(.98,.97,.94,1);
 uniform vec4 ginger : source_color=vec4(.87,.635,.42,1);
 uniform vec4 grey : source_color=vec4(.58,.56,.55,1);
@@ -11,7 +12,6 @@ void fragment(){
 	vec3 split=mix(ginger.rgb,grey.rgb,smoothstep(-.012,.012,p.x+.035-.07*p.y));
 	float painted=(1.0-smoothstep(.99,1.01,edge))*(1.0-smoothstep(.40,.90,ear_mask));
 	ALBEDO=mix(cream.rgb,split,painted);
-	EMISSION=ALBEDO*.16;
 	ROUGHNESS=.94;
 	SPECULAR=.18;
 }

@@ -4,6 +4,7 @@ extends RefCounted
 const CENTER_Y:=.027
 const HEIGHT_RADIUS:=.619
 const DEPTH_RADIUS:=.622
+const INK_OFFSET:=.004
 
 static func half_width(latitude: float) -> float:
 	# A little fullness below the eyes and a gradual taper towards the temples.
@@ -43,4 +44,4 @@ static func head_distance(p: Vector3) -> float:
 static func face_point(p: Vector2) -> Vector3:
 	var h: float=(p.y-CENTER_Y)/HEIGHT_RADIUS
 	var u:=p.x/half_width(h)
-	return Vector3(p.x,p.y,DEPTH_RADIUS*sqrt(maxf(.0001,1.-h*h-u*u))+.004)
+	return Vector3(p.x,p.y,DEPTH_RADIUS*sqrt(maxf(.0001,1.-h*h-u*u))+INK_OFFSET)
