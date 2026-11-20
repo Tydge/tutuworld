@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/citrus.res" id="1"]
+[ext_resource type="ShaderMaterial" path="res://scenes/coastal/orchard_material.tres" id="2"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/citrus_shadow.res" id="3"]
+
+[node name="OrchardTree" type="Node3D"]
+metadata/module_id = "harbor_orchard_tree"
+metadata/buildable_reference = true
+
+[node name="WoodAndLeaves" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+lod_bias = 0.62
+mesh = ExtResource("1")
+material_override = ExtResource("2")
+visibility_range_end = 145.0
+visibility_range_end_margin = 12.0
+
+[node name="LeafShadows" type="MeshInstance3D" parent="."]
+cast_shadow = 3
+lod_bias = 0.55
+mesh = ExtResource("3")
+visibility_range_end = 65.0
+visibility_range_end_margin = 8.0

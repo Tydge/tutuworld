@@ -1,4 +1,6 @@
 extends Node3D
+var harbor: Script
+var civic_dial: ShaderMaterial
 const G=preload("res://scripts/geometry.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const Animals=preload("res://scripts/characters/animal_factory.gd")
@@ -57,6 +59,7 @@ var lamps: Array[Node]=[]
 var night_windows: Array[StandardMaterial3D]=[]
 var cloud_meshes: Array[GeometryInstance3D]=[]
 var lamp_visuals: Array=[]
+var harbor_lamps: Node3D
 var lighting_timer := 1.0
 var occlusion_timer := 0.0
 var cached_warmth := -1.0
@@ -93,6 +96,10 @@ func _ready() -> void:
 		preload("res://scripts/city/town_shore.gd").ensure(scenery)
 		preload("res://scripts/building/site.gd").ensure(scenery)
 		refresh_land_parcels();session.changed.connect(refresh_land_parcels)
+	if map_id=="city":
+		harbor=load("res://scripts/city/coastal/harbor.gd")
+		civic_dial=harbor.dress(scenery)
+		harbor.finish_interiors(interiors)
 	sun=scenery.get_node("Sun")
 	fountain_glow=scenery.get_node_or_null("CentralPark/Fountain/FountainGlow")
 	if fountain_glow==null:fountain_glow=scenery.get_node_or_null("CentralPark/FountainGlow")
@@ -100,7 +107,10 @@ func _ready() -> void:
 	var window_copies: Dictionary={}
 	var sea_original: ShaderMaterial=scenery.get_node("Island").get_meta("sea_material")
 	var sea_copy: ShaderMaterial=sea_original.duplicate()
+	var paving_copies: Dictionary={}
+	if map_id=="city":sea_copy.set_shader_parameter("coastal_bay",true)
 	for node in scenery.find_children("*","GeometryInstance3D",true,false):
+		if map_id=="city":harbor.bind_streets(node,paving_copies)
 		if node.material_override==sea_original:
 			node.material_override=sea_copy
 			# The ocean spans the map; distance to its batch origin is not distance to water.
@@ -113,14 +123,24 @@ func _ready() -> void:
 				night_windows.append(window_copies[id])
 			node.material_override=window_copies[id]
 	scenery.get_node("Island").set_meta("sea_material",sea_copy)
+	if map_id=="city":
+		harbor_lamps=preload("res://scripts/city/coastal/street_lights.gd").new()
+		harbor_lamps.name="HarborLanterns"
+		scenery.add_child(harbor_lamps)
+		harbor_lamps.build(lamps)
 	for lamp_ in lamps:
-		for part in ["GlowGlass","LanternHalo","WarmPool"]:
-			var mesh_: MeshInstance3D=lamp_.get_node(part)
-			mesh_.material_override=mesh_.material_override.duplicate()
-		lamp_visuals.append({"light":lamp_.get_node("NightLight"),"glass":lamp_.get_node("GlowGlass").material_override,"halo":lamp_.get_node("LanternHalo").material_override,"pool":lamp_.get_node("WarmPool").material_override})
-		var lamp_light: OmniLight3D=lamp_.get_node("NightLight")
+		var entry: Dictionary={"light":lamp_.get_node("NightLight")}
+		if harbor_lamps==null:
+			for pair in [["glass","GlowGlass"],["halo","LanternHalo"],["pool","WarmPool"]]:
+				var mesh_: MeshInstance3D=lamp_.get_node(pair[1])
+				mesh_.material_override=mesh_.material_override.duplicate()
+				entry[pair[0]]=mesh_.material_override
+		lamp_visuals.append(entry)
+		var lamp_light: Light3D=lamp_.get_node("NightLight")
 		lamp_light.distance_fade_enabled=false
 		lamp_light.shadow_enabled=absf(lamp_.position.x)<5 and absf(lamp_.position.z-5)<1
+		if harbor_lamps!=null and lamp_light.shadow_enabled:
+			lamp_light.shadow_caster_mask &= ~harbor_lamps.FIXTURE_LAYER
 		lamp_light.shadow_blur=1.65
 		lamp_light.shadow_bias=.06
 		lamp_light.shadow_normal_bias=.70
@@ -128,6 +148,9 @@ func _ready() -> void:
 		if str(node.name).begins_with("Cloud"):
 			for mesh_ in node.find_children("*","GeometryInstance3D",true,false): cloud_meshes.append(mesh_)
 	atmosphere=scenery.get_node("Atmosphere").environment.duplicate(true)
+	if map_id=="city":
+		sun.directional_shadow_mode=DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
+		sun.directional_shadow_split_1=.34
 	scenery.get_node("Atmosphere").environment=atmosphere
 	if RenderingServer.get_current_rendering_method()=="gl_compatibility":
 		atmosphere.tonemap_mode=Environment.TONE_MAPPER_FILMIC
@@ -145,6 +168,10 @@ func _ready() -> void:
 	add_child(bunny)
 	var pos: Array=session.state().player_position
 	bunny.position=player_spawn_position(pos)
+	# Frame the skyline at the starting plaza, with the usual orbit controls available immediately.
+	if map_id=="city" and Vector2(bunny.position.x,bunny.position.z).distance_to(Vector2(0,9))<1.0:
+		yaw=.28
+		pitch=.14
 	bunny.world=self
 	bunny.collision_mask=15
 	# Clothing nodes are attached at runtime; bunny.tscn remains byte-for-byte intact.
@@ -776,14 +803,17 @@ func update_lighting(override_time: float=-1) -> void:
 		sea.set_shader_parameter("sea_color",palette.sea)
 		sea.set_shader_parameter("horizon_color",palette.horizon)
 		sea.set_shader_parameter("daylight",day)
+	if map_id=="city":harbor.update_landmarks(sun,sea,civic_dial,t,day)
 	# All street lights follow the day/night cycle, independent of player or camera position.
 	var warmth:=1.0-smoothstep(.20,.65,day)
 	if absf(warmth-cached_warmth)>.001:
 		cached_warmth=warmth
 		if is_instance_valid(fountain_glow): fountain_glow.light_energy=.95*warmth
+		if harbor_lamps!=null:harbor_lamps.set_warmth(warmth)
 		for entry in lamp_visuals:
 			entry.light.visible=warmth>.001
 			entry.light.light_energy=2.7*warmth
+			if harbor_lamps!=null:continue
 			entry.glass.emission_energy_multiplier=lerpf(.04,.82,warmth)
 			entry.glass.emission=Color("ffd18b")
 			entry.halo.set_shader_parameter("strength",.30*warmth)
@@ -888,7 +918,7 @@ func setup_occluders() -> void:
 		var materials: Array[ShaderMaterial]=[]
 		var copies: Dictionary={}
 		for mesh_ in tree_.find_children("*","GeometryInstance3D",true,false):
-			if mesh_.material_override is ShaderMaterial and mesh_.material_override.shader in [fade_shader,preload("res://assets/shaders/tree_bark.gdshader")]:
+			if mesh_.material_override is ShaderMaterial and mesh_.material_override.shader in [fade_shader,preload("res://assets/shaders/tree_bark.gdshader"),preload("res://assets/shaders/coastal_foliage.gdshader"),preload("res://assets/shaders/coastal_orchard.gdshader")]:
 				var copy: ShaderMaterial=mesh_.material_override.duplicate()
 				mesh_.material_override=copy;materials.append(copy)
 				continue

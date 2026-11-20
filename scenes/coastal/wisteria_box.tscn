@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/wall_bracket.res" id="1"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/wisteria.res" id="2"]
+[ext_resource type="ShaderMaterial" path="res://scenes/coastal/foliage.tres" id="3"]
+
+[sub_resource type="StandardMaterial3D" id="Timber"]
+vertex_color_use_as_albedo = true
+roughness = 0.78
+
+[node name="WisteriaBox" type="Node3D"]
+metadata/module_id = "wisteria_box"
+metadata/buildable_reference = true
+
+[node name="Bracket" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.66, 0)
+mesh = ExtResource("1")
+material_override = SubResource("Timber")
+metadata/appearance_part = "bracket"
+metadata/dynamic_mesh = true
+
+[node name="Racemes" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.66, 0)
+mesh = ExtResource("2")
+material_override = ExtResource("3")
+metadata/dynamic_mesh = true

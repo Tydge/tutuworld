@@ -134,6 +134,8 @@ def main():
         if args.windowed and not entry.get('headless', False):
             flags += ['--windowed', '--always-on-top']
         flags += ['--script', f'res://tests/{script}.gd', '--', '--test']
+        if args.windowed and script == 'valley_performance':
+            flags.append('--benchmark-window')
         flags += entry.get('args', []) + args.game_arg
         if guarded(binary, name, flags, output, args.timeout):
             return 1

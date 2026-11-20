@@ -4,6 +4,8 @@ const P=preload("res://scripts/city/prop_collisions.gd")
 static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 	var oak: Material=b.material("b58b62",1);var cream: Material=b.material("efe5cf");var brass: Material=b.material("c5a66a")
 	match kind:
+		"wisteria_box":
+			n.add_child(load("res://scenes/coastal/wisteria_box.tscn").instantiate())
 		"wall_botanical":
 			b.rounded(n,Vector3(0,.525,.055),Vector3(1.2,1.05,.11),.035,oak)
 			b.block(n,Vector3(0,.525,.116),Vector3(1.04,.89,.012),cream)
@@ -48,5 +50,5 @@ static func build(b: RefCounted,n: Node3D,kind: String) -> void:
 				var x: float=(i-1)*.27;var h: float=[.27,.36,.24][i];var ceramic: Material=b.material("d3dfcd" if i==1 else "efe5cf")
 				G.cylinder(n,Vector3(x,.06+h*.5,0),.11,h,ceramic,.105)
 				G.cylinder(n,Vector3(x,h+.08,0),.12,.04,b.material("99794e",1));G.ball(n,Vector3(x,h+.12,0),Vector3(.028,.022,.028),b.material("99794e",1))
-	if kind.begins_with("wall_"):
+	if preload("res://scripts/building/catalog.gd").OBJECTS[kind].get("mount","")=="wall":
 		var definition: Dictionary=preload("res://scripts/building/catalog.gd").OBJECTS[kind];P.box(n,"WallObjectCollision",Vector3(0,definition.height*.5,definition.offset.y),Vector3(definition.size.x,definition.height,definition.size.y))

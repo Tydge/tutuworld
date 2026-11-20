@@ -1,0 +1,33 @@
+{
+  "created": "2026-11-20",
+  "tool": "built-in image_gen",
+  "assets": [
+    {
+      "file": "wisteria.png",
+      "generated_source_file": "exec-2a966d20-1fa4-406a-bd6b-09acef7b3c85.png",
+      "prompt": "A technical 2 by 2 texture atlas on a square TRANSPARENT background for a realistic 3D coastal orchard and pergola. Four separate botanical cutouts, each entirely contained in its own quadrant with clear transparent gutter and edges. Upper left: one wide fan-shaped dense spray of silvery olive branches, many small elongated olive leaves, muted sage/silver, clearly branching out from one woody stem emerging near bottom center. Upper right: a similar wide fan-shaped spray of dark green citrus tree boughs with abundant fresh oval leaves, clear graceful branching stems, a few lighter spring leaves, no fruits. Lower left: a hanging cascade of real flowering wisteria vine, three prominent dangling pale lilac papery flower racemes framed by tiny green leaves, the stem begins at the TOP and flowers hang DOWN. Lower right: a hanging vine with ivory white wisteria flowers and sage foliage, similar orientation but visually distinct. Beautiful natural physical foliage, photographic Mediterranean garden cutout, diffuse overcast natural lighting, fine natural leaf variation, dense but irregular silhouettes with little holes between groups, flat facing the camera. Full plant details in focus. No pots, no background, no text, no swatches or grid, no fabric, no border, no rendered example scene. Leave a small amount of clear negative space around every item, no neighbor touches. Optimized for alpha-tested textured cards in a premium cozy game.",
+      "generated_sha256": "53292142422f904d59f247670ffc4fab96e305f34e62a2bff2404070590c5e55",
+      "sha256": "fe9ff64eda99101d6b0a3e30d2e6a36308bf9e3a6a5376d34b09e5bc47d8e2a2",
+      "crop_xywh": [
+        0,
+        515,
+        1254,
+        739
+      ]
+    },
+    {
+      "file": "barrel_tiles.png",
+      "generated_source_file": "exec-15c98ddd-e877-4f86-bbad-af64133ded31.png",
+      "prompt": "Texture asset for a realistic Mediterranean island village roof in a real-time game. One seamless tileable high-resolution square photographic albedo material scan viewed perfectly orthographically straight down, covering SIXTEEN columns by EIGHT staggered rows of bare aged barrel roof tiles. Traditional rounded overlapping Roman imbrex and tegula tiles, narrow convex ridges alternating with broad flat troughs. Ridge channels run strictly vertically in the image, courses across horizontally. The edge of each course casts a small soft occlusion sliver. Muted pale neutral gray limestone-clay color throughout with subtle mineral patina; this grayscale material will tint individually to sea-green, terracotta and blue. Gentle variations in brightness, realistic tiny speckles, subtle aged edges. Consistent evenly diffused light, no cast shadows except crevices, no directional sunlight, no black holes or highlights. Edge to edge uniform repeatable masonry material. No perspective, no eaves, no houses or sky, no lettering or labels, no objects, no border, no vegetation.",
+      "generated_sha256": "298f2da31ab3f619f3f87747e6620948fdb7809b8afd2fae0bf7df90b8a52c4e",
+      "sha256": "298f2da31ab3f619f3f87747e6620948fdb7809b8afd2fae0bf7df90b8a52c4e"
+    },
+    {
+      "file": "quay_oak.png",
+      "generated_source_file": "exec-b61a3328-ab9b-4f77-81fd-965c6be64710.png",
+      "prompt": "Photorealistic albedo material scan of a SINGLE broad weathered silver-brown oak plank from a working seaport. Perfect top-down orthographic macro flat texture. Wood grain flows strictly horizontally left to right, with fine irregular longitudinal fibers, scattered tiny splits, subtle gray salt bleaching, a few small broken cathedrals and one quiet knot near the upper third. Natural driftwood taupe brown colors, no paint. Uniform diffuse overcast light, only micro contrast, no directional shadows. Edge-to-edge seamless tileable surface, square image. No gaps between boards, absolutely no multiple planks or distinct borders, no edge of plank, nail, rope, grass, scene, perspective, labels, graphic or text. Premium physically based game wood material, detailed but not grungy.",
+      "generated_sha256": "462ae61535ca2513fda22ceed104c96346530b90e371351964726556bbb37455",
+      "sha256": "462ae61535ca2513fda22ceed104c96346530b90e371351964726556bbb37455"
+    }
+  ]
+}

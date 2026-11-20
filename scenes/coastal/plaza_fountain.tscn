@@ -1,0 +1,75 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_stone.res" id="stone"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_trim.res" id="trim"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_tile.res" id="tile"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_metal.res" id="metal"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_streams.res" id="streams"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/fountain_pools.res" id="pools"]
+[ext_resource type="Shader" path="res://assets/shaders/fountain_water.gdshader" id="water"]
+[ext_resource type="Texture2D" path="res://assets/terrain/water_ripple_normals_v1.png" id="ripple"]
+
+[sub_resource type="ShaderMaterial" id="Flow"]
+shader = ExtResource("water")
+shader_parameter/jet = true
+shader_parameter/ripple_normal = ExtResource("ripple")
+
+[sub_resource type="ShaderMaterial" id="WaterSurface"]
+shader = ExtResource("water")
+shader_parameter/ripple_normal = ExtResource("ripple")
+
+[sub_resource type="CylinderShape3D" id="Basin"]
+radius = 3.04
+height = 0.68
+
+[node name="Fountain" type="Node3D"]
+metadata/buildable_reference = true
+metadata/module_id = "plaza_fountain"
+metadata/module_type = "fountain"
+
+[node name="Stone" type="MeshInstance3D" parent="."]
+mesh = ExtResource("stone")
+metadata/appearance_part = "stone"
+metadata/dynamic_mesh = true
+
+[node name="Trim" type="MeshInstance3D" parent="."]
+mesh = ExtResource("trim")
+metadata/appearance_part = "trim"
+metadata/dynamic_mesh = true
+
+[node name="Tile" type="MeshInstance3D" parent="."]
+mesh = ExtResource("tile")
+metadata/appearance_part = "tile"
+metadata/dynamic_mesh = true
+
+[node name="Metal" type="MeshInstance3D" parent="."]
+mesh = ExtResource("metal")
+metadata/appearance_part = "metal"
+metadata/dynamic_mesh = true
+
+[node name="PoolWater" type="MeshInstance3D" parent="."]
+mesh = ExtResource("pools")
+material_override = SubResource("WaterSurface")
+cast_shadow = 0
+metadata/dynamic_mesh = true
+
+[node name="RunningWater" type="MeshInstance3D" parent="."]
+mesh = ExtResource("streams")
+material_override = SubResource("Flow")
+cast_shadow = 0
+custom_aabb = AABB(-2.6, 0, -2.6, 5.2, 3.6, 5.2)
+metadata/dynamic_mesh = true
+
+[node name="PoolCollision" type="StaticBody3D" parent="."]
+position = Vector3(0,0.34,0)
+collision_layer = 5
+collision_mask = 0
+
+[node name="Basin" type="CollisionShape3D" parent="PoolCollision"]
+shape = SubResource("Basin")
+
+[node name="FountainGlow" type="OmniLight3D" parent="."]
+position = Vector3(0,1.05,0)
+light_color = Color(0.59,0.85,0.83,1)
+light_energy = 0.0
+omni_range = 6.0

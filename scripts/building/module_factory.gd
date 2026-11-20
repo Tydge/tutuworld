@@ -341,6 +341,8 @@ static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
 			var previous: Material=mesh.material_override;var own: Material=previous.duplicate();mesh.material_override=own
 			var original: Material=mesh.get_meta("appearance_original",previous)
 			mesh.set_meta("appearance_original",own if original==previous else original.duplicate())
+	if row.type=="roof" and is_instance_valid(root.get("city")) and root.city.get("map_id")=="city":
+		load("res://scripts/city/coastal/harbor.gd").roof_module(module)
 	if row.type=="wall":
 		for mesh in module.find_children("*","MeshInstance3D",true,false):
 			if mesh.material_override is ShaderMaterial:mesh.material_override.set_shader_parameter("building_world_pattern",true)

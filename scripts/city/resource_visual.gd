@@ -4,15 +4,25 @@ static func fruit_cluster(tree_: Node3D) -> Node3D:
 	var cluster:=Node3D.new();cluster.name="HarvestableOranges"
 	tree_.get_node("Crown").add_child(cluster)
 	var crown: Node3D=tree_.get_node("Crown")
-	var shell: MeshInstance3D=crown.get_node_or_null("SoftCrown")
-	var radius: float=tree_.get_meta("fruit_crown_size",Vector2(1.65,1.5)).x
-	var height_: float=tree_.get_meta("fruit_crown_size",Vector2(1.65,1.5)).y
-	for i in range(5):
+	var size_: Vector2=tree_.get_meta("fruit_crown_size",Vector2(1.65,1.5))
+	var fruit:=MultiMesh.new()
+	fruit.transform_format=MultiMesh.TRANSFORM_3D
+	fruit.mesh=preload("res://scenes/coastal/orange.res")
+	fruit.instance_count=preload("res://scripts/city/coastal/fruit_spurs.gd").COUNT
+	for i in range(fruit.instance_count):
 		var angle:=.45+i*TAU/5
-		var p:=Vector3(sin(angle)*radius*.91,-height_*.35,cos(angle)*radius*.91)
-		G.ball(cluster,p,Vector3(.22,.24,.22),G.mat("ed9a35"),"Orange")
-		G.capsule(cluster,p+Vector3(0,.20,0),p+Vector3(0,.32,0),.020,G.mat("8b7750"))
-		var leaf:=G.ball(cluster,p+Vector3(.10,.25,0),Vector3(.13,.035,.065),G.mat("508b4b"));leaf.rotation.z=.35
+		var point:=Vector3(sin(angle)*size_.x*.81,-size_.y*.30,cos(angle)*size_.x*.81)
+		var rotation_:=Basis(Vector3.UP,angle)
+		var spur:=crown.get_node_or_null("FruitSpur%d"%i)
+		if spur!=null:
+			rotation_=rotation_.scaled_local(Vector3.ONE*float([.92,1.06,.98,.88,1.03][i]))
+			point=spur.position-rotation_*preload("res://scripts/city/coastal/fruit_spurs.gd").STEM_END
+		fruit.set_instance_transform(i,Transform3D(rotation_,point))
+	var fruit_mesh:=MultiMeshInstance3D.new()
+	fruit_mesh.multimesh=fruit
+	var canopy: MeshInstance3D=tree_.get_node_or_null("OrchardTree/WoodAndLeaves")
+	if canopy!=null:fruit_mesh.material_override=canopy.material_override
+	cluster.add_child(fruit_mesh)
 	return cluster
 static func make(item: String) -> Node3D:
 	var visual:=Node3D.new()

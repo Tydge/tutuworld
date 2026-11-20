@@ -15,6 +15,7 @@ func run() -> void:
 	check(session.settings.fps_limit_enabled and session.settings.fps_limit==60 and session.settings.background_throttle,"Power defaults")
 	preload("res://scripts/city/frame_pacer.gd").ensure(session);await process_frame
 	var pacer:=root.get_node("FramePacer")
+	pacer.set_background(false)
 	for rate in [60,90,120]:
 		session.set_setting("fps_limit",rate);check(pacer.desired_fps()==rate and Engine.max_fps==rate,"Foreground cap "+str(rate))
 		pacer.set_background(true);check(pacer.desired_fps()==20 and Engine.max_fps==20,"Background 20 FPS "+str(rate));pacer.set_background(false)

@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/clocktower.res" id="1"]
+
+[ext_resource type="ShaderMaterial" path="res://scenes/coastal/clock_dial.tres" id="2"]
+
+[node name="CivicClocktower" type="Node3D"]
+metadata/module_id = "civic_clocktower"
+metadata/buildable_reference = true
+
+[node name="Stonework" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1")
+material_override = ExtResource("2")

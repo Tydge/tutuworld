@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/mill.res" id="1"]
+[ext_resource type="ArrayMesh" path="res://scenes/coastal/sails.res" id="2"]
+[ext_resource type="Shader" path="res://assets/shaders/windmill_sails.gdshader" id="3"]
+
+[sub_resource type="ShaderMaterial" id="Canvas"]
+shader = ExtResource("3")
+
+[node name="MeadowWindmill" type="Node3D"]
+metadata/module_id = "meadow_windmill"
+metadata/buildable_reference = true
+
+[node name="Mill" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1")
+
+[node name="Sails" type="MeshInstance3D" parent="."]
+position = Vector3(0, 6.40, 1.94)
+custom_aabb = AABB(-4.72, -4.72, -0.2, 9.44, 9.44, 0.5)
+mesh = ExtResource("2")
+material_override = SubResource("Canvas")

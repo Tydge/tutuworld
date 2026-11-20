@@ -15,7 +15,7 @@ func run() -> void:
 	for level in [0,1]:
 		data=L.add(data,{"type":"floor","a":[70.,1.],"b":[82.,13.],"storey":level})
 		for line in [[[70.,1.],[82.,1.]],[[70.,1.],[70.,13.]],[[82.,1.],[82.,13.]],[[70.,13.],[82.,13.]]]:data=L.add(data,{"type":"wall","a":line[0],"b":line[1],"storey":level})
-	for kind in ["wall_botanical","wall_mirror","wall_clock","wall_sconce"]:
+	for kind in ["wisteria_box","wall_botanical","wall_mirror","wall_clock","wall_sconce"]:
 		for level in [0,1]:
 			for pair in [[Vector2(76,1),Vector2(76,5)],[Vector2(76,13),Vector2(76,9)],[Vector2(70,7),Vector2(75,7)],[Vector2(82,7),Vector2(77,7)]]:
 				var row:=W.attach(data,{"type":"object","kind":kind,"position":[pair[0].x,pair[0].y],"yaw":0.,"storey":level},pair[0],pair[1]);var result:=L.validate(L.add(data,row))

@@ -2,6 +2,7 @@ shader_type spatial;
 render_mode diffuse_burley;
 uniform vec4 tint : source_color=vec4(1.0);
 uniform int pattern=0;
+#include "res://assets/shaders/coastal_tiles.gdshaderinc"
 uniform bool roof_snow=false;
 uniform sampler2D roof_snow_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 varying vec3 surface_world_normal;
@@ -53,6 +54,8 @@ void fragment(){
   float streak=sin(uv.x*24.0+sin(uv.x*2.0+row)*2.8+uv.y*135.0)*.012;
   color*=.94+hash(vec2(floor(uv.x*.48),row))*.11+streak+grain;
   color=mix(base*.72,color,seam);
+ }else if(pattern==2 && coastal_tiles){
+  color=clay_tiles(base,local_pos.xz);
  }else if(pattern==2){
   vec2 uv=vec2(abs(local_pos.x)*2.2,local_pos.z*1.6);uv.y+=mod(floor(uv.x),2.0)*.5;
   vec2 f=fract(uv);float edge=min(min(f.x,1.0-f.x),min(f.y,1.0-f.y));

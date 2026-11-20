@@ -582,7 +582,7 @@
       },
       {
         "id": "tile",
-        "name": "花碗与马赛克",
+        "name": "釉面马赛克",
         "family": "ceramic",
         "colors": [
           "618f87"
@@ -590,7 +590,7 @@
       },
       {
         "id": "metal",
-        "name": "金属喷头",
+        "name": "海豚铜雕与喷头",
         "family": "metal",
         "colors": [
           "b89a5e"
@@ -1056,6 +1056,16 @@
         "family": "fabric",
         "colors": [
           "91aa94"
+        ]
+      }
+    ],
+    "wisteria_box": [
+      {
+        "id": "bracket",
+        "name": "花箱与托架",
+        "family": "wood",
+        "colors": [
+          "956e4f"
         ]
       }
     ],

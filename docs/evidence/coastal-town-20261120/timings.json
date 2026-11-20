@@ -1,0 +1,317 @@
+{
+  "date": "2026-11-20",
+  "engine": "Godot 4.6.3, Metal Forward+",
+  "device": "Apple M1 Pro",
+  "quality": "balanced",
+  "baseline_commit": "a940587",
+  "baseline_run": "20261120-174354-659805",
+  "motion_and_modules_run": "20261120-174252-959977",
+  "local_run": "20261120-174507-341403",
+  "sample_warmup_frames": 110,
+  "before": {
+    "fps_cap": 60,
+    "height": 1890,
+    "msaa": 2,
+    "scale_3d": 0.591552376747131,
+    "seconds_per_view": 4,
+    "views": [
+      {
+        "draws": 1587,
+        "fps": 60.3333291781454,
+        "frames": 242,
+        "max_ms": 25.278,
+        "over50": 0,
+        "p95_ms": 17.784,
+        "p99_ms": 24.8,
+        "view": "plaza"
+      },
+      {
+        "draws": 986,
+        "fps": 60.2596843786978,
+        "frames": 242,
+        "max_ms": 26.3,
+        "over50": 0,
+        "p95_ms": 17.425,
+        "p99_ms": 24.091,
+        "view": "shops"
+      },
+      {
+        "draws": 376,
+        "fps": 60.3693757631924,
+        "frames": 242,
+        "max_ms": 34.153,
+        "over50": 0,
+        "p95_ms": 18.732,
+        "p99_ms": 24.199,
+        "view": "quay"
+      },
+      {
+        "draws": 1974,
+        "fps": 60.2967997847255,
+        "frames": 242,
+        "max_ms": 30.873,
+        "over50": 0,
+        "p95_ms": 18.241,
+        "p99_ms": 28.082,
+        "view": "lamplight"
+      },
+      {
+        "draws": 579,
+        "fps": 60.4455234719709,
+        "frames": 242,
+        "max_ms": 28.521,
+        "over50": 0,
+        "p95_ms": 17.669,
+        "p99_ms": 19.347,
+        "view": "parcel"
+      }
+    ],
+    "width": 3024
+  },
+  "after": {
+    "fps_cap": 60,
+    "height": 1890,
+    "msaa": 2,
+    "scale_3d": 0.591552376747131,
+    "seconds_per_view": 4,
+    "views": [
+      {
+        "draws": 1210,
+        "fps": 60.3129694816374,
+        "frames": 242,
+        "max_ms": 28.674,
+        "over50": 0,
+        "p95_ms": 17.3,
+        "p99_ms": 27.69,
+        "view": "plaza"
+      },
+      {
+        "draws": 888,
+        "fps": 60.3677342941615,
+        "frames": 242,
+        "max_ms": 26.469,
+        "over50": 0,
+        "p95_ms": 17.476,
+        "p99_ms": 25.078,
+        "view": "shops"
+      },
+      {
+        "draws": 335,
+        "fps": 60.3815766328289,
+        "frames": 242,
+        "max_ms": 20.407,
+        "over50": 0,
+        "p95_ms": 17.925,
+        "p99_ms": 18.578,
+        "view": "quay"
+      },
+      {
+        "draws": 913,
+        "fps": 59.9647557148286,
+        "frames": 240,
+        "max_ms": 36.978,
+        "over50": 0,
+        "p95_ms": 19.352,
+        "p99_ms": 31.651,
+        "view": "lamplight"
+      },
+      {
+        "draws": 515,
+        "fps": 60.4335533081377,
+        "frames": 242,
+        "max_ms": 23.143,
+        "over50": 0,
+        "p95_ms": 18.768,
+        "p99_ms": 21.028,
+        "view": "parcel"
+      }
+    ],
+    "width": 3024
+  },
+  "normal_render_run": "20261120-175616-367421",
+  "normal_render_loop": [
+    {
+      "view": "park-day",
+      "fps": 59.9972701242094,
+      "p95_ms": 17.353,
+      "max_ms": 20.014,
+      "over50": 0,
+      "draws": 1061
+    },
+    {
+      "view": "park-night",
+      "fps": 60.0292208355968,
+      "p95_ms": 17.935,
+      "max_ms": 20.312,
+      "over50": 0,
+      "draws": 912
+    },
+    {
+      "view": "coast-day",
+      "fps": 59.7268987554408,
+      "p95_ms": 17.33,
+      "max_ms": 33.936,
+      "over50": 0,
+      "draws": 1338
+    }
+  ],
+  "normal_render_window": {
+    "width": 3024,
+    "height": 1890,
+    "scale_3d": 0.59155237674713,
+    "mode": 3,
+    "drawable": true,
+    "focus": true
+  },
+  "night_soak_run": "20261120-174637-820288",
+  "night_soak": {
+    "fps_cap": 60,
+    "height": 1890,
+    "msaa": 2,
+    "scale_3d": 0.591552376747131,
+    "seconds_per_view": 60,
+    "views": [
+      {
+        "draws": 1036,
+        "fps": 59.9234200022176,
+        "frames": 3596,
+        "max_ms": 42.041,
+        "over50": 0,
+        "p95_ms": 17.911,
+        "p99_ms": 30.078,
+        "view": "lamplight"
+      }
+    ],
+    "width": 3024
+  },
+  "build_soak_run": "20261120-175040-768997",
+  "build_soak": {
+    "fps_cap": 60,
+    "height": 1890,
+    "msaa": 2,
+    "scale_3d": 0.591552376747131,
+    "seconds_per_view": 60,
+    "views": [
+      {
+        "draws": 515,
+        "fps": 60.0321116798606,
+        "frames": 3602,
+        "max_ms": 24.813,
+        "over50": 0,
+        "p95_ms": 19.073,
+        "p99_ms": 20.995,
+        "view": "parcel"
+      }
+    ],
+    "width": 3024
+  },
+  "earlier_build_hitch": {
+    "run": "20261120-174049-619949",
+    "view": "parcel",
+    "max_ms": 87.023,
+    "over50": 1
+  },
+  "separate_window_sample": {
+    "run": "20261120-174947-493435",
+    "width": 1920,
+    "height": 1200,
+    "results": [
+      {
+        "view": "park-day",
+        "fps": 2.5,
+        "p95_ms": 1000.356,
+        "max_ms": 1000.356,
+        "over50": 3,
+        "draws": 952
+      },
+      {
+        "view": "park-night",
+        "fps": 2.5,
+        "p95_ms": 990.655,
+        "max_ms": 990.655,
+        "over50": 3,
+        "draws": 737
+      },
+      {
+        "view": "coast-day",
+        "fps": 2.5,
+        "p95_ms": 996.471,
+        "max_ms": 996.471,
+        "over50": 3,
+        "draws": 1085
+      }
+    ]
+  },
+  "latest_functional_checks": "20261120-175732-559529",
+  "coastal_suite": {
+    "project_integrity": 634,
+    "appearance_rules": 207,
+    "wall_furniture_rules": 94,
+    "town_polish_flow": 52,
+    "garden_coast_flow": 11,
+    "coastal_modules_flow": 67,
+    "coastal_town_walk": "pass",
+    "town_performance": "pass"
+  },
+  "focused_window_run": "20261120-175732-559529",
+  "focused_window": {
+    "width": 1920,
+    "height": 1200,
+    "results": [
+      {
+        "view": "park-day",
+        "fps": 59.7569981669541,
+        "p95_ms": 17.371,
+        "max_ms": 25.22,
+        "over50": 0,
+        "draws": 1002
+      },
+      {
+        "view": "park-night",
+        "fps": 60.014631666398,
+        "p95_ms": 17.475,
+        "max_ms": 20.542,
+        "over50": 0,
+        "draws": 814
+      },
+      {
+        "view": "coast-day",
+        "fps": 59.5337613480031,
+        "p95_ms": 17.325,
+        "max_ms": 24.928,
+        "over50": 0,
+        "draws": 1296
+      }
+    ]
+  },
+  "orchard_shadow": {
+    "darker_points": 370,
+    "ground_samples": 441
+  },
+  "gl_map_exit": {
+    "before": {
+      "maps": [
+        "city",
+        "valley"
+      ],
+      "leaked_texture_bytes_on_process_exit": [
+        21844,
+        21844,
+        21844,
+        21844
+      ]
+    },
+    "after": {
+      "maps": [
+        "city",
+        "valley"
+      ],
+      "leaked_texture_bytes_on_process_exit": [
+        21844,
+        21844,
+        21844,
+        21844
+      ]
+    }
+  }
+}

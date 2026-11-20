@@ -1,0 +1,51 @@
+{
+  "game_source_frames": 186,
+  "captured_seconds": 6.165,
+  "source_size": [
+    960,
+    600
+  ],
+  "video_frames": 185,
+  "video_fps": 30.0,
+  "pixel_check_interval_seconds": [
+    0.5,
+    1.5
+  ],
+  "pool_and_stream_fraction_changed_over_8_of_255": 0.293,
+  "static_paving_fraction_changed_over_8_of_255": 0.0,
+  "regions_normalized_xyxy": {
+    "pool_and_streams": [
+      0.29,
+      0.57,
+      0.67,
+      0.73
+    ],
+    "paving": [
+      0.1,
+      0.88,
+      0.19,
+      0.925
+    ]
+  },
+  "gif": {
+    "width": 500,
+    "height": 350,
+    "frames": 60,
+    "duration_ms": 4000,
+    "comparison_frames": [
+      7,
+      22
+    ],
+    "foreground_pool_region_normalized_xyxy": [
+      0.25,
+      0.65,
+      0.7,
+      0.86
+    ],
+    "fraction_changed_over_8_of_255": 0.2985
+  },
+  "sha256": {
+    "fountain-motion.mp4": "dfa0c2f36ecd436f02f5430ac7e046d37a85f756ce9d9a12e6f885aed6ba2574",
+    "fountain-motion.gif": "42f41658720b3425603074653c98912bf2028813ddd554eddc361adcf5b6f8fd"
+  }
+}

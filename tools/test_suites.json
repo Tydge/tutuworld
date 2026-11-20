@@ -287,6 +287,16 @@
       "woodland_shadow_stability",
       "woodland_sweep_performance"
     ],
+    "coastal_town": [
+      "project_integrity",
+      "appearance_rules",
+      "wall_furniture_rules",
+      "town_polish_flow",
+      "garden_coast_flow",
+      "coastal_modules_flow",
+      "coastal_town_walk",
+      "town_performance"
+    ],
     "icefield": [
       "project_integrity",
       "icefield_rules",
@@ -561,6 +571,11 @@
     "icefield_rules": {
       "headless": true
     },
+    "town_polish_flow": {
+      "args": ["--frame-policy-test"]
+    },
+    "coastal_modules_flow": {},
+    "coastal_town_walk": {},
     "icefield_preview": {},
     "icefield_server_rules": {
       "headless": true

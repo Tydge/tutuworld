@@ -66,6 +66,10 @@ func recover_spawn() -> void:
 	if not result.is_empty():
 		bunny.position=result.position;bunny.velocity=Vector3.ZERO;bunny.reset_physics_interpolation();session.set_player_position(bunny.position)
 func prepare_scenery() -> void:
+	for source in DB.resources("valley"):
+		if source.item=="orange":
+			var tree_: Node3D=preload("res://scripts/city/scenery_polish.gd").tree_at(scenery,Vector3(source.x,source.y,source.z))
+			preload("res://scripts/city/coastal/orchard_tree.gd").install(tree_,true)
 	recover_spawn.call_deferred()
 	var forest_view=preload("res://scripts/valley/woodland_view.gd").new();forest_view.city=self;add_child(forest_view)
 	# Trail entrance, bridge and cottage only; moonlight carries the forest.
