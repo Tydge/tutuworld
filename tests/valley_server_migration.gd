@@ -23,7 +23,22 @@ func run() -> void:
 	var x:=-78.;var z:=L.ascent_path_z(x);high.state.player_position=[x,L.walk_height(x,z)+.035,z];server.records.high=high.state.duplicate(true)
 	var source: Dictionary=JSON.parse_string(JSON.stringify(server.records))
 	check(server.save_world(),"Legacy fixture saves through the real atomic server writer")
+	var db=preload("res://scripts/services/game_data.gd")
+	var ice_resources: Array=db.resources("icefield")
+	var old_resource: String=db.resources("valley")[0].id
+	var old_state: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(server.save_path))
+	for resource in ice_resources:old_state.world.resources.erase(resource.id)
+	var stored_resource:={"available":false,"respawn_at":1250.,"generation":3}
+	old_state.world.resources[old_resource]=stored_resource
+	var fixture:=FileAccess.open(server.save_path,FileAccess.WRITE)
+	fixture.store_string(JSON.stringify(old_state));fixture.close()
 	server.load_world()
+	var restored_resource: Dictionary=server.state().resources.get(old_resource,{})
+	check(not restored_resource.get("available",true) and restored_resource.get("respawn_at")==1250. and int(restored_resource.get("generation",-1))==3,"Existing resource cooldown and generation are preserved")
+	var new_resources_ready:=true
+	for resource in ice_resources:
+		if server.state().resources.get(resource.id,{})!={"available":true,"respawn_at":0.,"generation":0}:new_resources_ready=false
+	check(new_resources_ready,"Legacy world receives all icefield resources")
 	for id in expected:
 		var record: Dictionary=server.records[id]
 		check(server.vector_from(record.player_position).is_equal_approx(expected[id]) and record.valley_landscape_revision==L.REVISION,"Server migrates old valley position "+id)

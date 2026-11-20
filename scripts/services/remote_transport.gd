@@ -6,7 +6,6 @@ signal connection_lost
 signal update_required(version: String)
 const Release=preload("res://scripts/services/release.gd")
 const Codec=preload("res://scripts/services/packet_codec.gd")
-const PROTOCOL_VERSION:=Release.PROTOCOL
 var socket:=WebSocketPeer.new()
 var connected:=false
 var connecting:=false
@@ -18,7 +17,7 @@ var round_trip_ms:=0.0
 var ping_at:=0
 var handshake_sent:=false
 var required_version:=""
-func connect_world(url: String=Release.WORLD_URL,_token: String="") -> Error:
+func connect_world(url: String=Release.WORLD_URL) -> Error:
 	if connected or connecting:return OK
 	if not url.begins_with("wss://") and not (OS.get_cmdline_user_args().has("--test") and url.begins_with("ws://127.0.0.1:")):return ERR_UNAUTHORIZED
 	endpoint=url;socket=WebSocketPeer.new();socket.inbound_buffer_size=Codec.MAX_BYTES;socket.outbound_buffer_size=Codec.MAX_BYTES

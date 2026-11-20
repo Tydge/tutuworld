@@ -74,7 +74,10 @@ func load_world() -> void:
 	if data.is_empty():return
 	epoch=float(data.epoch);records=data.get("characters",{});care_history=data.get("care_history",{});doors=data.get("doors",{})
 	clock_alignment=data.get("clock_alignment",{})
+	var resources: Dictionary=world.state.resources
 	world.state.merge(data.world,true)
+	resources.merge(world.state.resources,true)
+	world.state.resources=resources
 	world.state.build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("build_layout",{}))
 	world.state.land_parcels=preload("res://scripts/building/parcels.gd").normalize(data.world.get("land_parcels",{}))
 	for record in records.values():
