@@ -24,6 +24,7 @@ const RECOVERY_POINT_SECONDS:=30.0
 func _init() -> void:
 	reward_random.randomize()
 	state = {"schema":2,"player_id":"local_bunny","character_name":"兔兔","species":"bunny","map_id":"city","world_id":"peace_island_v1","time":DAY_SECONDS/3,"coins":650,"inventory":{"seed_carrot":3,"seed_lettuce":3,"seed_tomato":2,"seed_pumpkin":2},"equipment":{"head":"","body":"","neck":""},"plots":{},"resources":{},"player_position":[0,.1,9],"revision":0,"food_effect":{},"experience":0,"stamina":100.0,"attributes":Stats.defaults(),"skills":Stats.skill_defaults(),"skill_experience":Stats.skill_xp_defaults()}
+	state["winter_outfits"]={}
 	state["land_parcels"]=preload("res://scripts/building/parcels.gd").empty()
 	state["build_layout"]=preload("res://scripts/building/layout.gd").empty()
 	for p in DB.plots(): state.plots[p.id] = empty_plot()
@@ -207,6 +208,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		if quantity<1 or quantity>99 or definition.is_empty(): return fail("物品或数量不正确。")
 		if not job.is_empty(): return fail("先完成手上的事情吧。")
 		if verb=="buy":
+			if definition.get("shop_map",map_id)!=map_id:return fail("这件冬装在绒雪裁缝店出售。")
 			if not definition.has("price") or definition.get("shop","")!=c.get("shop",""): return fail("这家店没有这件物品。")
 			if definition.kind in ["tool","clothing"] and (count(item)>0 or quantity!=1): return fail("这件已经拥有啦。")
 			var cost := int(definition.price)*quantity
@@ -218,6 +220,20 @@ func _apply(c: Dictionary) -> Dictionary:
 		add(item,-quantity)
 		state.coins += int(definition.sell)*quantity
 		return {"ok":true,"message":"卖出 %s，获得 %d 贝壳币。"%[definition.name,int(definition.sell)*quantity]}
+	if verb=="dress_resident":
+		if map_id!="icefield" or not near_position(DB.shops(map_id).clothes,4.8) or (trade_access.is_valid() and not trade_access.call("clothes")):return fail("请到绒雪裁缝店找绒绒搭配。")
+		var resident:=str(c.get("target",""))
+		if not preload("res://scripts/icefield/winter_neighbors.gd").DIALOGUE.has(resident):return fail("请选择雪镇居民。")
+		var changed: Variant=c.get("outfit")
+		if not changed is Dictionary or changed.size()>3 or not job.is_empty():return fail("这套搭配暂时不能使用。")
+		var outfits: Dictionary=state.get("winter_outfits",{})
+		for slot in changed:
+			var id:=str(changed[slot])
+			if slot not in ["head","neck","body"] or DB.item(id).get("slot","")!=slot or count(id)<1:return fail("请先买下要让居民穿上的服装。")
+		if changed.is_empty():outfits.erase(resident)
+		else:outfits[resident]=outfits.get(resident,{}).merged(changed,true)
+		state.winter_outfits=outfits
+		return {"ok":true,"message":"居民的搭配已保存。"}
 	if verb=="equip":
 		var slot: String = c.get("slot","")
 		if slot not in ["head","body","neck"]: return fail("装饰位置不正确。")

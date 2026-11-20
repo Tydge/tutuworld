@@ -2,6 +2,10 @@ extends RefCounted
 ## X/Z offsets follow Godot's positive Y rotation (opposite Vector2 rotation).
 const CATEGORIES:=["结构","床","座椅","桌柜","厨房","照明","装饰","庭院"]
 const OBJECTS:={
+	"bread_case":{"name":"雪绒面包柜","size":Vector2(2.72,1.12),"height":1.69,"category":"厨房"},
+	"tile_stove":{"name":"青釉蓄热炉","size":Vector2(1.55,1.16),"height":2.46,"category":"桌柜"},
+	"atlas_stand":{"name":"展开的雪境图册","size":Vector2(1.53,1.05),"height":1.72,"category":"装饰"},
+	"sled":{"name":"雪镇木雪橇","size":Vector2(1.22,2.32),"height":.69,"category":"庭院","outdoor":true},
 	"dining_table":{"name":"橡木餐桌","size":Vector2(3.2,1.8),"height":1.14,"surface":Vector2(3.05,1.65),"surface_height":1.14,"category":"桌柜"},
 	"dining_chair":{"name":"软垫餐椅","size":Vector2(1.02,1.02),"height":1.5,"category":"座椅","seats":1},
 	"cooking_counter":{"name":"青瓷料理台","size":Vector2(3.9,1.3),"height":1.85,"category":"厨房","facility":"kitchen"},

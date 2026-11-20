@@ -1,4 +1,5 @@
 extends CharacterBody3D
+signal wardrobe_changed
 const Meal=preload("res://scripts/city/meal_timeline.gd")
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
 ## Shared semantic rig: four limb pivots, head, eyes, mouth and wearable slots.

@@ -69,6 +69,26 @@ func _draw() -> void:
 		draw_circle(Vector2(0,2),8,Color("fff4d6"))
 		draw_line(Vector2(0,9),Vector2(0,-7),Color("5f9466"),3,true)
 		draw_circle(Vector2(-4,-4),4,Color("83aa63"))
+	elif shape=="pompom_cap":
+		var dome:=PackedVector2Array()
+		for i in range(25):
+			var a:=PI+i*PI/24.;dome.append(Vector2(cos(a)*19,7+sin(a)*24))
+		cloth_polygon(dome,color)
+		draw_style_box(_box(Color(definition.accent)),Rect2(-20,5,40,8))
+		draw_circle(Vector2(0,-18),5,Color(definition.accent))
+	elif shape=="winter_rosette":
+		for i in range(5):
+			var a:=TAU*i/5.
+			draw_circle(Vector2(sin(a),cos(a))*11.,8,color,true,-1.,true)
+		draw_circle(Vector2.ZERO,6,Color(definition.accent))
+	elif shape in ["kerchief","loop_cowl"]:
+		var points:=PackedVector2Array([Vector2(-18,-8),Vector2(17,-8),Vector2(15,4),Vector2(0,19 if shape=="kerchief" else 11),Vector2(-16,3)])
+		cloth_polygon(points,color)
+		draw_arc(Vector2(0,-12),15,0,PI,28,Color(definition.accent),4,true)
+	elif shape in ["capelet","duffle"]:
+		var width_:=21. if shape=="capelet" else 16.
+		cloth_polygon(PackedVector2Array([Vector2(-8,-17),Vector2(8,-17),Vector2(width_,13),Vector2(0,17),Vector2(-width_,13)]),color)
+		for y in ([-5,3,10] if shape=="duffle" else [-9]):draw_line(Vector2(-4,y),Vector2(4,y),Color(definition.accent),3,true)
 	elif shape=="bow":
 		for side in [-1,1]:
 			cloth_polygon(PackedVector2Array([Vector2(side*4,-4),Vector2(side*20,-13),Vector2(side*22,-9),Vector2(side*22,10),Vector2(side*19,13),Vector2(side*4,4)]),color)

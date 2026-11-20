@@ -154,6 +154,63 @@
         "quilt": 0.9
       },
       "accent_label": "花纹色"
+    },
+    "snowstar": {
+      "name": "雪晶提花",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "clothing",
+        "furniture"
+      ],
+      "order": 90,
+      "texture": "res://assets/fabrics/snowstar.svg",
+      "scale": {
+        "clothing": 3.0,
+        "furniture": 2.0,
+        "quilt": 2.0
+      },
+      "accent_label": "织纹色"
+    },
+    "herringbone": {
+      "name": "人字纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "clothing",
+        "furniture"
+      ],
+      "order": 91,
+      "texture": "res://assets/fabrics/herringbone.svg",
+      "scale": {
+        "clothing": 3.0,
+        "furniture": 2.0,
+        "quilt": 2.0
+      },
+      "accent_label": "织纹色"
+    },
+    "argyle": {
+      "name": "菱格纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "clothing",
+        "furniture"
+      ],
+      "order": 92,
+      "texture": "res://assets/fabrics/argyle.svg",
+      "scale": {
+        "clothing": 3.0,
+        "furniture": 2.0,
+        "quilt": 2.0
+      },
+      "accent_label": "织纹色"
     }
   }
 }

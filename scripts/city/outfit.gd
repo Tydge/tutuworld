@@ -22,6 +22,11 @@ static func apply(bunny: Node3D, equipment: Dictionary,looks: Dictionary={}) -> 
 		var rig: Resource=bunny.rig_profile
 		var root := Node3D.new()
 		root.name="Wardrobe_"+slot
+		if item.style in ["pompom_cap","winter_rosette","loop_cowl","kerchief","duffle","capelet"]:
+			var anchor: Node3D=bunny.get_node("Visual/Head" if slot=="head" else "Visual")
+			anchor.add_child(root)
+			preload("res://scripts/appearance/winter_outfit.gd").build(root,rig,item,material)
+			continue
 		if slot=="head":
 			bunny.get_node("Visual/Head").add_child(root)
 			if item.style=="bow":
@@ -56,6 +61,8 @@ static func apply(bunny: Node3D, equipment: Dictionary,looks: Dictionary={}) -> 
 					G.mesh(sleeve,trouser_leg(rig),Vector3.ZERO,material,"TrouserLeg")
 			else:
 				for y in [-.10,.02,.14]: G.ball(root,rig.body_center+Vector3(rig.body_radii.x*.35,y,rig.body_radii.z+.005),Vector3.ONE*.018,G.mat("e8d69a"))
+
+	bunny.wardrobe_changed.emit()
 
 static func trouser_leg(rig: Resource) -> ArrayMesh:
 	var key:=str(rig.leg_end)+str(rig.leg_radius)+str(rig.sleeve_radius)+str(rig.sleeve_length)

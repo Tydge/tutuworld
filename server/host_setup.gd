@@ -16,6 +16,7 @@ static func setup(host: Node3D) -> void:
 	host.set_meta("idle_bunny",host.bunny)
 	host.navigation=preload("res://scripts/city/wander_navigation.gd").new()
 	host.add_child(host.navigation)
+	if host.map_id=="icefield":host.register_winter_rooms(false)
 	host.spawn_npcs()
 	if host.map_id=="city":
 		host.targets.home_bed={"kind":"bed","position":host.home.get_node("Furnishing/bed/ActionAnchor").global_position,"node":host.home.get_node("Furnishing/bed")}

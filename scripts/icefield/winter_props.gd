@@ -12,6 +12,10 @@ static func mat(id: String) -> Material:
 		"wood","darkwood":
 			m=ShaderMaterial.new();m.shader=load("res://assets/shaders/home_surface.gdshader");m.set_shader_parameter("tint",Color("866147" if id=="wood" else "453d3a"));m.set_shader_parameter("pattern",1)
 		"glass":m=G.mat("638c8b",.30,.10)
+		"clear_glass":
+			m=StandardMaterial3D.new();m.albedo_color=Color("b3d6cf",.12)
+			m.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+			m.roughness=.28
 		"gold":m=G.mat("ffc76d",.3,2.2)
 		"ice":m=G.mat("bbdfed",.18)
 		"pine":m=G.mat("244541",.9)
@@ -39,45 +43,89 @@ static func window(n: Node3D,p: Vector3,width_: float=1.3,height_: float=1.5) ->
 static func chalet(chapel: bool=false) -> Node3D:
 	var n:=module("chapel" if chapel else "chalet")
 	var width_:=10.8;var depth:=9.2;var eave:=5.5;var rise:=3.1
-	box(n,Vector3(0,.35,0),Vector3(width_,.7,depth),"69757b")
-	box(n,Vector3(0,2.9,0),Vector3(width_-.3,5.2,depth-.3),"wood")
-	P.box(n,"BuildingShell",Vector3(0,3.1,0),Vector3(width_,6.2,depth))
-	for y in [1.0,2.0,3.0,4.0,5.2]:box(n,Vector3(0,y,depth*.5),Vector3(width_,.10,.13),"darkwood")
-	for x in [-4.8,0.,4.8]:box(n,Vector3(x,3.05,depth*.5+.08),Vector3(.20,4.8,.18),"darkwood")
-	for x in [-3.3,3.3]:
-		window(n,Vector3(x,2.1,depth*.5+.1));window(n,Vector3(x,4.25,depth*.5+.1),1.15,1.15)
-	box(n,Vector3(0,1.6,depth*.5+.14),Vector3(1.6,2.5,.22),"darkwood")
-	window(n,Vector3(0,2.05,depth*.5+.29),.75,.8)
-	box(n,Vector3(0,.22,depth*.5+.8),Vector3(3.,.45,1.4),"69757b")
-	box(n,Vector3(0,.48,depth*.5+.8),Vector3(3.1,.1,1.5),"snow")
+	var sections:=group(n,"Sections")
+	var front:=group(sections,"Front")
+	var back:=group(sections,"Back")
+	var roof:=group(sections,"Roof")
+	var floor_mesh:=box(n,Vector3(0,.03,0),Vector3(width_,.18,depth),"wood")
+	var floor_body:=G.solid_box(n,floor_mesh.position,Vector3(width_,.18,depth),"WalkFloor")
+	floor_body.collision_layer=8;floor_body.collision_mask=0
+	for side in [-1.,1.]:
+		var wall:=group(sections,"West" if side<0 else "East")
+
+		panel(front,Vector3(side*3.50,2.75,4.50),Vector3(3.80,5.5,.22))
+		for y in [1.,2.,3.,4.,5.2]:
+			box(front,Vector3(side*3.5,y,4.64),Vector3(3.8,.09,.12),"darkwood")
+		box(front,Vector3(side*1.64,1.74,4.67),Vector3(.16,3.48,.30),"darkwood")
+		window(front,Vector3(side*3.65,2.16,4.69))
+		window(front,Vector3(side*3.65,4.3,4.69),1.15,1.05)
+		var windows:=group(wall,"Windows",Vector3(side*5.28,0,0))
+		windows.rotation.y=side*PI*.5
+		# Openings match the buildable windows. Shared timber and a single clear
+		# pane per opening keep the whole village inexpensive from the frozen lake.
+		panel(windows,Vector3(0,.72,0),Vector3(depth,1.44,.24))
+		panel(windows,Vector3(0,4.37,0),Vector3(depth,2.26,.24))
+		for span in [[-3.98,1.24],[0.,3.28],[3.98,1.24]]:
+			panel(windows,Vector3(span[0],2.34,0),Vector3(span[1],1.8,.24))
+		for x in [-2.50,2.50]:
+			for jamb in [-.86,.86]:
+				box(windows,Vector3(x+jamb,2.34,0),Vector3(.13,1.90,.34),"wood")
+			box(windows,Vector3(x,3.24,0),Vector3(1.92,.15,.36),"wood")
+			box(windows,Vector3(x,1.44,0),Vector3(2.04,.14,.50),"wood")
+			box(windows,Vector3(x,2.34,0),Vector3(.065,1.8,.14),"wood")
+			box(windows,Vector3(x,2.43,0),Vector3(1.72,.065,.14),"wood")
+			var pane:=box(windows,Vector3(x,2.34,0),Vector3(1.66,1.74,.012),"clear_glass")
+			pane.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	panel(front,Vector3(0,4.50,4.50),Vector3(3.2,2.,.22))
+	panel(back,Vector3(0,2.75,-4.50),Vector3(width_,5.5,.22))
+	box(back,Vector3(0,3.22,-4.37),Vector3(10.48,4.36,.05),"ece0c7")
+	for y in [.26,1.13,4.94]:
+		box(back,Vector3(0,y,-4.31),Vector3(10.6,.14,.14),"wood")
+	for x in [-5.09,-1.75,1.75,5.09]:
+		box(back,Vector3(x,3.12,-4.32),Vector3(.13,3.74,.14),"wood")
+	box(front,Vector3(0,3.79,5.69),Vector3(3.4,.52,.14),"darkwood")
+	box(front,Vector3(0,3.55,4.67),Vector3(3.44,.18,.32),"darkwood")
+	group(n,"Entrance",Vector3(0,.12,5.35))
 	# Closed, correctly wound front/back triangular walls meet the roof underside.
 	# The overhang extends the same slope outward, rather than lifting the whole
 	# roof above the gable and leaving an open attic silhouette.
 	var walls=preload("res://scripts/city/home_builder.gd").new()
-	for side in [-1,1]:walls.triangle_prism(n,eave,side*depth*.5,width_,rise,.26,mat("wood"))
+	for side in [-1,1]:walls.triangle_prism(roof,eave,side*depth*.5,width_,rise,.26,mat("wood"))
 	var overhang:=.7
-	cap_roof(n,width_+overhang*2.,depth+1.6,eave-overhang*rise/(width_*.5),rise*(width_+overhang*2.)/width_)
-	window(n,Vector3(0,6.35,depth*.5+.06),1.3,1.15)
-	for side in [-1,1]:
-		var wall:=group(n,"SideWindows");wall.position=Vector3(side*width_*.5,0,0);wall.rotation.y=side*PI*.5
-		for x in [-2.5,2.5]:window(wall,Vector3(x,2.35,.12),1.15,1.45);window(wall,Vector3(x,4.35,.12),.95,1.05)
-		G.capsule(n,Vector3(side*(width_*.5+.62),eave+.1,-depth*.5-.7),Vector3(side*(width_*.5+.62),eave+.1,depth*.5+.7),.14,mat("snow"))
+	cap_roof(roof,width_+overhang*2.,depth+1.6,eave-overhang*rise/(width_*.5),rise*(width_+overhang*2.)/width_)
+	window(roof,Vector3(0,6.35,depth*.5+.06),1.3,1.15)
 	# A snow-capped timber balcony breaks up the facade and catches warm window light.
-	box(n,Vector3(0,3.29,5.1),Vector3(8.2,.18,1.2),"wood")
-	box(n,Vector3(0,3.41,5.1),Vector3(8.25,.08,1.22),"snow")
-	for x in [-3.8,-3.0,-2.2,-1.4,-.6,.6,1.4,2.2,3.0,3.8]:box(n,Vector3(x,3.8,5.65),Vector3(.08,.8,.1),"darkwood")
-	box(n,Vector3(0,4.2,5.65),Vector3(8.2,.12,.16),"wood");box(n,Vector3(0,4.29,5.65),Vector3(8.25,.08,.23),"snow")
-	box(n,Vector3(3.0,7.7,-2.2),Vector3(.9,2.3,1.0),"69757b")
-	box(n,Vector3(3.0,8.9,-2.2),Vector3(1.15,.22,1.25),"snow")
+	box(front,Vector3(0,3.29,5.1),Vector3(8.2,.18,1.2),"wood")
+	box(front,Vector3(0,3.41,5.1),Vector3(8.25,.08,1.22),"snow")
+	for x in [-3.8,-3.0,-2.2,-1.4,-.6,.6,1.4,2.2,3.0,3.8]:box(front,Vector3(x,3.8,5.65),Vector3(.08,.8,.1),"darkwood")
+	box(front,Vector3(0,4.2,5.65),Vector3(8.2,.12,.16),"wood");box(front,Vector3(0,4.29,5.65),Vector3(8.25,.08,.23),"snow")
+	box(roof,Vector3(3.0,7.7,-2.2),Vector3(.9,2.3,1.0),"69757b")
+	box(roof,Vector3(3.0,8.9,-2.2),Vector3(1.15,.22,1.25),"snow")
 	if chapel:
-		box(n,Vector3(0,9.6,-1.7),Vector3(3.2,7.8,3.3),"69757b")
+		box(roof,Vector3(0,9.6,-1.7),Vector3(3.2,7.8,3.3),"69757b")
 		for z in [-.02,-3.38]:
-			var disc:=G.cylinder(n,Vector3(0,11.9,z),.87,.08,mat("glass"));disc.rotation.x=PI*.5
-			box(n,Vector3(0,12.05,z+.07),Vector3(.055,.68,.08),"darkwood");box(n,Vector3(.2,11.9,z+.08),Vector3(.45,.055,.08),"darkwood")
-		var spire:=G.cylinder(n,Vector3(0,15.5,-1.7),2.35,5.9,mat("snow"),.025);spire.mesh.radial_segments=4
-		G.capsule(n,Vector3(0,18.3,-1.7),Vector3(0,19.6,-1.7),.055,mat("gold"))
-		G.capsule(n,Vector3(-.38,19.2,-1.7),Vector3(.38,19.2,-1.7),.055,mat("gold"))
-	merge(n);return n
+			var disc:=G.cylinder(roof,Vector3(0,11.9,z),.87,.08,mat("glass"));disc.rotation.x=PI*.5
+			box(roof,Vector3(0,12.05,z+.07),Vector3(.055,.68,.08),"darkwood");box(roof,Vector3(.2,11.9,z+.08),Vector3(.45,.055,.08),"darkwood")
+		var spire:=G.cylinder(roof,Vector3(0,15.5,-1.7),2.35,5.9,mat("snow"),.025);spire.mesh.radial_segments=4
+		G.capsule(roof,Vector3(0,18.3,-1.7),Vector3(0,19.6,-1.7),.055,mat("gold"))
+		G.capsule(roof,Vector3(-.38,19.2,-1.7),Vector3(.38,19.2,-1.7),.055,mat("gold"))
+	# One exterior batch per material at street distance. The alternate faces
+	# reuse the same resources across houses and only draw for a cutaway.
+	for section in sections.get_children():merge(section)
+	var skin:=group(n,"Exterior")
+	for part in sections.find_children("*","MeshInstance3D",true,false):
+		var copy:=G.mesh(skin,part.mesh,part.position,part.material_override)
+		copy.cast_shadow=part.cast_shadow
+		part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	merge(skin)
+	sections.hide()
+	group(n,"Furnishing").hide()
+	n.set_script(preload("res://scripts/icefield/winter_room.gd"))
+	return n
+
+static func panel(parent: Node3D,p: Vector3,size_: Vector3) -> void:
+	box(parent,p,size_,"wood")
+	P.box(parent,"TimberWall",p,size_)
 static func pine() -> Node3D:
 	var n:=module("snow_pine")
 	var trunk:=G.cylinder(n,Vector3(0,3.5,0),.22,7.,mat("wood"),.09);trunk.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

@@ -45,6 +45,7 @@ func run() -> void:
 	session.active=false
 	var neck_count:=0
 	for id in DB.catalog().items:
+		if DB.item(id).has("shop_map"):continue
 		if DB.item(id).get("slot","")=="neck": neck_count+=1
 	check(neck_count==6,"Three plaid scarves and three colored-band bells are sold")
 	var cat: CharacterBody3D=game.get_node("CatTeacher")
@@ -61,6 +62,7 @@ func run() -> void:
 	session.authority.state.coins=2000
 	await travel(Vector3(6,.1,-20))
 	for id in DB.catalog().items:
+		if DB.item(id).has("shop_map"):continue
 		if DB.item(id).get("slot","")!="neck": continue
 		check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Buy "+id)
 		check(session.dispatch("equip",{"slot":"neck","item":id}).ok,"Equip "+id)

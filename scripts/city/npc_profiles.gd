@@ -577,5 +577,5 @@ static func line_for_npc(id: String,previous: String="",hour: float=12.0) -> Str
 	if choices.size()>1: choices.erase(previous)
 	return str(choices.pick_random()) if not choices.is_empty() else "你也出来走走啊。"
 static func line_for(index: int,previous: String="",hour: float=12.0) -> String:
-	var ids: Array=["Passerby0","Passerby1","Passerby2","Passerby3","CatTeacher","Youmu","Panda","ValleyVisitor0","ValleyVisitor1","SnowBunny0","SnowBunny1","SnowBunny2","SnowBunny3","SnowCat","SnowPanda"]
+	var ids: Array=["Passerby0","Passerby1","Passerby2","Passerby3","CatTeacher","Youmu","Panda","ValleyVisitor0","ValleyVisitor1","SnowBunny0","SnowBunny1","SnowBunny2","SnowBunny3","SnowCat","SnowPanda","SnowBaker"]
 	return line_for_npc(ids[index] if index>=0 and index<ids.size() else "Passerby0",previous,hour)

@@ -36,8 +36,17 @@ func build_reflection_world() -> void:
 	var environment:=WorldEnvironment.new();environment.environment=city.atmosphere;reflection_root.add_child(environment)
 	reflected_sun=DirectionalLight3D.new();reflected_sun.shadow_enabled=false;reflection_root.add_child(reflected_sun)
 	var materials: Dictionary={};var batches: Dictionary={}
+	var exterior: Dictionary={}
+	var interior: Dictionary={}
+	# The lake always reflects complete houses, including when a save opens indoors.
+	for room in city.scenery.find_children("Room_*","Node3D",true,false):
+		if not room.has_node("Exterior"):continue
+		for part in room.get_node("Exterior").get_children():exterior[part]=true
+		for section in [room.get_node("Sections"),room.get_node("Furnishing")]:
+			for part in section.find_children("*","GeometryInstance3D",true,false):interior[part]=true
 	for source in city.scenery.find_children("*","GeometryInstance3D",true,false):
-		if source.material_override==material or source.name=="PolarSea" or not source.is_visible_in_tree() or source.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:continue
+		if source.material_override==material or source.name=="PolarSea" or interior.has(source):continue
+		if not exterior.has(source) and (not source.is_visible_in_tree() or source.cast_shadow==GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY):continue
 		if not source is MeshInstance3D:proxy(source,reflection_root);continue
 		var m: Material=source.material_override
 		if m==null:continue
@@ -54,9 +63,18 @@ func build_reflection_world() -> void:
 		entry.st.index();var draw:=MeshInstance3D.new();draw.mesh=entry.st.commit();draw.material_override=entry.material;draw.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;reflection_root.add_child(draw)
 	var actors: Array=[city.bunny];actors.append_array(city.npcs)
 	for actor: Node3D in actors:
-		for source in actor.find_children("*","GeometryInstance3D",true,false):
-			var copy:=proxy(source,reflection_root)
-			if copy!=null:dynamic_proxies.append({"source":weakref(source),"draw":copy,"actor":weakref(actor)})
+		refresh_actor(actor)
+		actor.wardrobe_changed.connect(refresh_actor.bind(actor))
+
+func refresh_actor(actor: Node3D) -> void:
+	for i in range(dynamic_proxies.size()-1,-1,-1):
+		if dynamic_proxies[i].actor.get_ref()==actor:
+			dynamic_proxies[i].draw.hide()
+			dynamic_proxies[i].draw.queue_free()
+			dynamic_proxies.remove_at(i)
+	for source in actor.find_children("*","GeometryInstance3D",true,false):
+		var copy:=proxy(source,reflection_root)
+		if copy!=null:dynamic_proxies.append({"source":weakref(source),"draw":copy,"actor":weakref(actor)})
 func mirror(p: Vector3) -> Vector3:return Vector3(p.x,2.*L.ICE_LEVEL-p.y,p.z)
 func _process(_delta: float) -> void:
 	if not is_instance_valid(city.camera):return

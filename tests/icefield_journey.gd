@@ -32,7 +32,7 @@ func run() -> void:
 	ice_button.pressed.emit()
 	if not await wait_map("icefield"):check(false,"Ferry loads icefield");quit(1);return
 	check(session.state().coins==coins-10 and game.bunny.position.distance_to(game.respawn_position())<1.,"Menu travels to correct harbor and charges once")
-	check(game.npcs.size()==9,"Three merchants plus exactly six new roaming residents")
+	check(game.npcs.size()==10,"Three merchants, six roaming residents and the bakery host")
 	game.set_process(false);session.active=false;game.hud.hide()
 	var starts: Dictionary={}
 	for d in game.RESIDENTS:starts[d.id]=game.targets[d.id].node.position

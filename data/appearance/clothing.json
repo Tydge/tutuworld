@@ -41,6 +41,42 @@
       "slot": "body",
       "price": 65,
       "description": "身体装饰，同位置只能穿着一件。"
+    },
+    "pompom_cap": {
+      "slot": "head",
+      "price": 72,
+      "description": "翻边软帽顶着一枚奶油色绒球。",
+      "shop_map": "icefield"
+    },
+    "winter_rosette": {
+      "slot": "head",
+      "price": 58,
+      "description": "呢绒叶片与小浆果，轻轻扣在耳边。",
+      "shop_map": "icefield"
+    },
+    "loop_cowl": {
+      "slot": "neck",
+      "price": 66,
+      "description": "两圈叠起的织物，把风挡在领口。",
+      "shop_map": "icefield"
+    },
+    "kerchief": {
+      "slot": "neck",
+      "price": 62,
+      "description": "折成小三角的羊毛领巾。",
+      "shop_map": "icefield"
+    },
+    "duffle": {
+      "slot": "body",
+      "price": 98,
+      "description": "暖绒短袄，胸前缀着木色牛角扣。",
+      "shop_map": "icefield"
+    },
+    "capelet": {
+      "slot": "body",
+      "price": 88,
+      "description": "宽摆短斗篷，边缘镶着一圈软绒。",
+      "shop_map": "icefield"
     }
   },
   "items": {
@@ -244,6 +280,150 @@
       "color": "629184",
       "accent": "f8e7c4",
       "description": "奶油小雏菊，像把一小片花园穿在身上。"
+    },
+    "pompom_cap_frost": {
+      "style": "pompom_cap",
+      "name": "雾蓝雪晶提花绒球针织帽",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "pompom_cap_pine": {
+      "style": "pompom_cap",
+      "name": "松针绿人字纹绒球针织帽",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "pompom_cap_berry": {
+      "style": "pompom_cap",
+      "name": "莓果红菱格纹绒球针织帽",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
+    },
+    "winter_rosette_frost": {
+      "style": "winter_rosette",
+      "name": "雾蓝雪晶提花冬青耳花",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "winter_rosette_pine": {
+      "style": "winter_rosette",
+      "name": "松针绿人字纹冬青耳花",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "winter_rosette_berry": {
+      "style": "winter_rosette",
+      "name": "莓果红菱格纹冬青耳花",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
+    },
+    "loop_cowl_frost": {
+      "style": "loop_cowl",
+      "name": "雾蓝雪晶提花双层围脖",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "loop_cowl_pine": {
+      "style": "loop_cowl",
+      "name": "松针绿人字纹双层围脖",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "loop_cowl_berry": {
+      "style": "loop_cowl",
+      "name": "莓果红菱格纹双层围脖",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
+    },
+    "kerchief_frost": {
+      "style": "kerchief",
+      "name": "雾蓝雪晶提花三角领巾",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "kerchief_pine": {
+      "style": "kerchief",
+      "name": "松针绿人字纹三角领巾",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "kerchief_berry": {
+      "style": "kerchief",
+      "name": "莓果红菱格纹三角领巾",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
+    },
+    "duffle_frost": {
+      "style": "duffle",
+      "name": "雾蓝雪晶提花牛角扣短袄",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "duffle_pine": {
+      "style": "duffle",
+      "name": "松针绿人字纹牛角扣短袄",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "duffle_berry": {
+      "style": "duffle",
+      "name": "莓果红菱格纹牛角扣短袄",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
+    },
+    "capelet_frost": {
+      "style": "capelet",
+      "name": "雾蓝雪晶提花滚边斗篷",
+      "color": "547998",
+      "accent": "f4eede",
+      "pattern": "snowstar",
+      "pattern_scale": 2.8
+    },
+    "capelet_pine": {
+      "style": "capelet",
+      "name": "松针绿人字纹滚边斗篷",
+      "color": "426d64",
+      "accent": "c3cdb0",
+      "pattern": "herringbone",
+      "pattern_scale": 4.0
+    },
+    "capelet_berry": {
+      "style": "capelet",
+      "name": "莓果红菱格纹滚边斗篷",
+      "color": "a55261",
+      "accent": "ffddbb",
+      "pattern": "argyle",
+      "pattern_scale": 2.8
     }
   },
   "starters": [

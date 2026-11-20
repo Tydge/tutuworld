@@ -78,7 +78,7 @@ func load_world() -> void:
 	world.state.build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("build_layout",{}))
 	world.state.land_parcels=preload("res://scripts/building/parcels.gd").normalize(data.world.get("land_parcels",{}))
 	for record in records.values():
-		for key in ["build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
+		for key in ["build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 		for token in record.get("seen",{}).keys():
 			if record.seen[token].has("lease"):record.seen.erase(token)
 		record.rest_mode="";record.rest_bed="";record.net_pose={}
@@ -107,7 +107,7 @@ func apply_door_states() -> void:
 func character_record(id: String) -> Dictionary:
 	var a=actors[id]
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","world_id","time","net_pose","build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
+	for key in ["plots","resources","world_id","time","net_pose","build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 	record.stamina=minf(a.stamina_max(),float(record.stamina)+a.reserved_work_stamina(a.job))
 	record.rest_mode="";record.rest_bed=""
 	if pawns.has(id):record.player_position=standing_exit(id)
@@ -118,7 +118,7 @@ func character_record(id: String) -> Dictionary:
 	return record
 func save_world() -> bool:
 	for id in actors:records[id]=character_record(id)
-	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
+	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"winter_outfits":world.state.get("winter_outfits",{}),"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
 	var old: Variant=JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
 	var backup_valid: bool=old is Dictionary and old.get("schema",0)==1 and old.get("world") is Dictionary
 	return preload("res://scripts/services/atomic_file.gd").write(save_path,JSON.stringify(data,"",false,true),backup_valid)
@@ -304,7 +304,7 @@ func create_character(account: String,args: Dictionary) -> Dictionary:
 	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system(),"valley_landscape_revision":preload("res://scripts/valley/valley_layout.gd").REVISION},true)
 	a.state.equipment[DB.item(starter).slot]=starter
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","time","world_id","build_layout","land_parcels","building_sites","building_revision"]:record.erase(key)
+	for key in ["plots","resources","time","world_id","build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 	records[id]=record
 	if not save_world():records.erase(id);return fail("角色还没有保存成功，请稍后再试。")
 	return {"ok":true,"character":id,"characters":roster(account)}
@@ -365,6 +365,8 @@ func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictiona
 		building.sync_state()
 		for other in pawns:pawns[other].can_move=building.owned_site(other)=="" and actors[other].state.get("net_pose",{}).is_empty() and actors[other].job.is_empty()
 		return fail("进度暂未保存成功，本次操作没有生效，请稍后再试。")
+	if result.get("ok",false) and verb=="dress_resident":
+		maps.icefield.apply_resident_outfits(world.state.get("winter_outfits",{}))
 	if result.get("ok",false) and verb in ["buy_land","build_begin","build_finish","build_cancel"]:
 		building.sync_state()
 		if verb=="build_finish" and defer_building:return result
@@ -490,6 +492,13 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if result.ok:
 			release_all(id);pawn.reparent(maps[destination],false);pawn.world=maps[destination];pawn.position=point.position;pawn.velocity=Vector3.ZERO
 			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
+		return result
+	if verb=="dress_resident":
+		if map_id!="icefield" or not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,"clothes"):return fail("请到绒雪裁缝店找绒绒搭配。")
+		a.state.winter_outfits=world.state.get("winter_outfits",{}).duplicate(true)
+		var result: Dictionary=a.execute(command_for(id,request,verb,args))
+		if result.ok:world.state.winter_outfits=a.state.winter_outfits
+		a.state.erase("winter_outfits")
 		return result
 	if verb not in ["buy","sell","equip","plant","water","weed","harvest","gather","craft","refill","eat","snack","rest"]:return fail("这项操作暂时不能使用。")
 	if verb in ["buy","sell"] and not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,str(args.get("shop",""))):return fail("请走进店里，来到商人面前再交易。")

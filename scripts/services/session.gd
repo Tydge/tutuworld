@@ -13,7 +13,7 @@ const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["world_id","time","plots","resources","build_layout","land_parcels"]
+const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","land_parcels"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
@@ -390,6 +390,16 @@ func restore_state(raw: Dictionary):
 		s.equipment[slot]=""
 		var id: String=raw.get("equipment",{}).get(slot,"")
 		if s.inventory.has(id) and DB.item(id).get("slot","")==slot: s.equipment[slot]=id
+	var outfits: Variant=raw.get("winter_outfits",{})
+	if outfits is Dictionary:
+		s.winter_outfits={}
+		for id in preload("res://scripts/icefield/winter_neighbors.gd").DIALOGUE:
+			if not outfits.get(id) is Dictionary:continue
+			var worn: Dictionary={}
+			for slot in ["head","neck","body"]:
+				var garment:=str(outfits[id].get(slot,""))
+				if DB.item(garment).get("slot","")==slot:worn[slot]=garment
+			if not worn.is_empty():s.winter_outfits[id]=worn
 	s.watering_water=raw.get("watering_water",{}).duplicate() if raw.get("watering_water",{}) is Dictionary else {}
 	s.experience=clampi(int(raw.get("experience",0)),0,2147483647)
 	s.attributes=Stats.defaults()

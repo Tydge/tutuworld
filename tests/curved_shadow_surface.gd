@@ -12,7 +12,7 @@ func valley_sun() -> DirectionalLight3D:
 	# Exercise the real runtime profile, including its override of the city light.
 	var source=load("res://scenes/valley_map.scn").instantiate()
 	var profile=load("res://scripts/valley/valley_world.gd").new()
-	profile.scenery=source;profile.sun=source.get_node("Sun");profile.atmosphere=source.get_node("Atmosphere").environment.duplicate(true)
+	profile.map_id="valley";profile.scenery=source;profile.sun=source.get_node("Sun");profile.atmosphere=source.get_node("Atmosphere").environment.duplicate(true)
 	profile.update_lighting(.42)
 	var sun: DirectionalLight3D=profile.sun.duplicate();profile.free();source.free();return sun
 func capture() -> Image:

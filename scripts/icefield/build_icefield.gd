@@ -111,13 +111,19 @@ func build_mountains() -> void:
 		if count_>0:
 			st.index();st.generate_normals();st.generate_tangents();var mesh:=G.mesh(mountains,st.commit(),Vector3.ZERO,m,"SnowRidge");mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 func build_town() -> void:
+	var furnishings:=preload("res://scripts/icefield/winter_furnishing.gd").new()
 	for b in L.BUILDINGS:
 		var building: Node3D
 		if b.kind=="shop":
 			building=preload("res://scripts/city/shop_builder.gd").new().construct_shop(world,b.id,b.title,at(b.x,b.z),b.wall,"4d626b",true)
-		else:building=place(b.kind,at(b.x,b.z))
+		else:
+			building=place(b.kind,at(b.x,b.z))
+			building.name="Room_"+b.id
+			furnishings.arrange(building,b.room)
 		building.set_meta("winter_asset_id",b.kind if b.kind!="shop" else "shop_"+b.id)
-		if b.title!="" and b.kind!="shop":G.text3d(building,b.title,Vector3(0,3.35,4.81),24,Color("ffdf9f"))
+		if b.kind!="shop":
+			var sign:=G.text3d(building,b.title,Vector3(0,3.79,5.78),34,Color("ffefc9"))
+			sign.name="HouseName";sign.visibility_range_end=45.
 		building.set_meta("placement_id",b.id)
 	build_festival_tree()
 	var lamps:=preload("res://scripts/city/lamp_builder.gd").new();lamps.lamps=world.get_node("Streetlights")

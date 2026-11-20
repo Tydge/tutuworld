@@ -31,5 +31,5 @@ sleeve_length = 0.20
 walk_speed_scale = 0.85
 tail_sway = 0.10
 grip_offset = Vector3(0.045,-0.46,0.025)
-portrait_center_offset = 0.08
-portrait_size = 1.75
+portrait_center_offset = 0.15
+portrait_size = 1.86

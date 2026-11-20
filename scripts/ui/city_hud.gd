@@ -35,6 +35,8 @@ var ring: Control
 var target_point := Vector3.ZERO
 var photo_mode := false
 var shop_tab := "buy"
+var fitting_resident:=""
+var resident_apply: Button
 var shop_preview_overrides: Dictionary={}
 var shop_preview_reset: Button
 var shop_grid: GridContainer
@@ -273,6 +275,7 @@ func set_prompt(text: String) -> void:
 	prompt_card.visible=text!="" and not overlay.visible and not photo_mode
 func close_panel() -> void:
 	mode=""
+	fitting_resident=""
 	shop_preview_overrides.clear()
 	overlay.hide()
 	if is_instance_valid(character_sheet):
@@ -287,6 +290,7 @@ func open_panel(kind: String) -> void:
 		return
 	if city.talking_npc!="": city.end_dialogue()
 	shop_preview_overrides.clear()
+	fitting_resident=""
 	mode=kind
 	panel_signature=JSON.stringify([session.state().inventory,session.state().equipment,session.state().coins,session.state().skill_experience,session.state().get("watering_water",{})])
 	overlay.show()
@@ -345,7 +349,8 @@ func build_profile() -> void:
 	character_sheet.process_mode=Node.PROCESS_MODE_INHERIT
 	character_sheet.portrait.process_mode=Node.PROCESS_MODE_INHERIT
 	character_sheet.show()
-	character_sheet.preview.update_equipment(session.state().equipment)
+	character_sheet.preview.update_character(session.state().species,session.state().equipment)
+	character_sheet.experience.show()
 	character_sheet.refresh()
 func ensure_character_sheet() -> void:
 	if not is_instance_valid(character_sheet):
@@ -359,13 +364,15 @@ func build_appearance_layout(worn: Dictionary) -> Control:
 	var layout:=UI.row(20);content.add_child(layout)
 	character_sheet.portrait.reparent(layout)
 	character_sheet.portrait.process_mode=Node.PROCESS_MODE_INHERIT
-	character_sheet.preview.update_equipment(worn)
+	character_sheet.preview.update_character(session.state().species,worn)
+	character_sheet.experience.show()
 	character_sheet.refresh()
 	var right:=UI.column(10);right.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 	layout.add_child(right)
 	return right
 func shop_preview_equipment() -> Dictionary:
 	var worn: Dictionary=session.state().equipment.duplicate()
+	if fitting_resident!="":worn=city.targets[fitting_resident].node.get_meta("equipment").duplicate()
 	worn.merge(shop_preview_overrides,true)
 	return worn
 func try_on_clothing(id: String) -> void:
@@ -382,7 +389,17 @@ func reset_shop_preview() -> void:
 func refresh_shop_preview() -> void:
 	if mode!="shop" or shop!="clothes" or not is_instance_valid(character_sheet): return
 	var worn:=shop_preview_equipment()
-	if character_sheet.preview.equipment!=worn: character_sheet.preview.update_equipment(worn)
+	var species: String=session.state().species
+	if fitting_resident!="":
+		var resident: Dictionary=city.targets[fitting_resident]
+		species=resident.node.rig_profile.species_id
+		character_sheet.character_name.text=resident.name
+	# Reuse the wardrobe preview; a fitting never changes the player's equipment.
+	character_sheet.experience.visible=fitting_resident==""
+	if character_sheet.preview.equipment!=worn or character_sheet.preview.species!=species:
+		character_sheet.preview.update_character(species,worn)
+	if is_instance_valid(resident_apply):
+		resident_apply.disabled=shop_preview_overrides.is_empty() or shop_preview_overrides.values().any(func(id):return session.authority.count(id)<1)
 	if is_instance_valid(shop_preview_reset): shop_preview_reset.disabled=shop_preview_overrides.is_empty()
 	for button in content.find_children("*","Button",true,false):
 		var id: String=button.get_meta("try_on_item","")
@@ -496,6 +513,7 @@ func build_shop() -> void:
 		shop_preview_reset.add_theme_font_size_override("font_size",14)
 		shop_preview_reset.set_meta("reset_shop_preview",true)
 		top.add_child(shop_preview_reset)
+	if clothes_shop and city.map_id=="icefield":build_resident_fitting(shop_parent)
 	if shop=="farm":
 		var buy_tab:=UI.button("购买",func(): shop_tab="buy"; rebuild(),shop_tab=="buy")
 		buy_tab.set_meta("shop_tab","buy");top.add_child(buy_tab)
@@ -507,6 +525,41 @@ func build_shop() -> void:
 	build_filters("shop_"+shop+"_"+shop_tab,choices,shop_parent)
 	shop_grid=scroll_grid(2 if clothes_shop else 3,shop_parent,650 if clothes_shop else 900)
 	refresh_shop_items()
+func refresh_resident_outfit(id: String) -> void:
+	if id==fitting_resident:refresh_shop_preview()
+
+func build_resident_fitting(parent: Control) -> void:
+	var row:=UI.row();parent.add_child(row)
+	row.add_child(UI.label("试穿对象",15,UI.MUTED))
+	var chooser:=OptionButton.new()
+	chooser.name="FittingSubject"
+	chooser.add_item("我自己");chooser.set_item_metadata(0,"")
+	for npc in city.npcs:
+		var id:=str(npc.name)
+		if not city.targets.has(id):continue
+		chooser.add_item(city.targets[id].name)
+		var index:=chooser.item_count-1;chooser.set_item_metadata(index,id)
+		if id==fitting_resident:
+			chooser.select(index)
+			var updated:=refresh_resident_outfit.bind(id)
+			if not npc.wardrobe_changed.is_connected(updated):npc.wardrobe_changed.connect(updated)
+	row.add_child(chooser)
+	chooser.item_selected.connect(func(index):
+		fitting_resident=chooser.get_item_metadata(index)
+		shop_preview_overrides.clear()
+		rebuild())
+	if fitting_resident=="":
+		resident_apply=null
+		return
+	resident_apply=UI.button("穿上已购搭配",func():
+		session.dispatch("dress_resident",{"target":fitting_resident,"outfit":shop_preview_overrides.duplicate()}),true)
+	resident_apply.name="DressResident"
+	row.add_child(resident_apply)
+	row.add_child(UI.button("恢复原装",func():
+		shop_preview_overrides.clear()
+		session.dispatch("dress_resident",{"target":fitting_resident,"outfit":{}})
+		refresh_shop_preview()))
+
 func refresh_shop_items() -> void:
 	if mode!="shop" or not is_instance_valid(shop_grid): return
 	shop_balance.text="贝壳币 %d"%session.state().coins
@@ -514,7 +567,7 @@ func refresh_shop_items() -> void:
 	var wanted: Array[String]=[]
 	for id in DB.catalog().items:
 		var item:=DB.item(id)
-		if shop_tab=="buy" and item.get("shop","")!=shop: continue
+		if shop_tab=="buy" and (item.get("shop","")!=shop or item.get("shop_map",city.map_id)!=city.map_id):continue
 		if category!="all" and DB.category(id,shop=="clothes")!=category: continue
 		if shop_tab=="sell" and (int(item.get("sell",0))<=0 or session.authority.count(id)<1): continue
 		wanted.append(id)

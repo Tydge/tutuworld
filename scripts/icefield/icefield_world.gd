@@ -1,15 +1,16 @@
 extends "res://scripts/city/city_world.gd"
 const IceLayout=preload("res://scripts/icefield/icefield_layout.gd")
+var current_outfits: Dictionary={}
 var footprints: Node3D
 var sun_target:=Quaternion.IDENTITY
 var sun_ready:=false
 const RESIDENTS=[
-	{"id":"SnowBunny0","name":"雪芽","species":"bunny","p":Vector2(-75,39),"head":"beret_sage","neck":"scarf_red"},
-	{"id":"SnowBunny1","name":"霜铃","species":"bunny","p":Vector2(-48,15),"head":"bow_rose","neck":"scarf_green"},
-	{"id":"SnowBunny2","name":"松露","species":"bunny","p":Vector2(-87,-45),"head":"beret_plaid_honey","neck":"scarf_red"},
-	{"id":"SnowBunny3","name":"小絮","species":"bunny","p":Vector2(16,21),"head":"beret_plaid_sage","neck":"scarf_green"},
-	{"id":"SnowCat","name":"米霜","species":"cat_teacher","p":Vector2(-43,52),"head":"","neck":"bell_red"},
-	{"id":"SnowPanda","name":"团雪","species":"panda","p":Vector2(-85,61),"head":"beret_plaid_sage","neck":"scarf_red"}
+	{"id":"SnowBunny0","name":"雪芽","species":"bunny","p":Vector2(-75,39),"head":"pompom_cap_frost","neck":"kerchief_pine","body":"duffle_frost"},
+	{"id":"SnowBunny1","name":"霜铃","species":"bunny","p":Vector2(-48,15),"head":"winter_rosette_berry","neck":"loop_cowl_frost","body":"capelet_berry"},
+	{"id":"SnowBunny2","name":"松露","species":"bunny","p":Vector2(-87,-45),"head":"pompom_cap_pine","neck":"loop_cowl_berry","body":"duffle_pine"},
+	{"id":"SnowBunny3","name":"小絮","species":"bunny","p":Vector2(16,21),"head":"winter_rosette_frost","neck":"kerchief_berry","body":"capelet_pine"},
+	{"id":"SnowCat","name":"米霜","species":"cat_teacher","p":Vector2(-43,52),"head":"winter_rosette_pine","neck":"bell_red","body":"duffle_berry"},
+	{"id":"SnowPanda","name":"团雪","species":"panda","p":Vector2(-85,61),"head":"pompom_cap_berry","neck":"kerchief_frost","body":"capelet_frost"}
 ]
 func _ready() -> void:
 	await super._ready()
@@ -18,7 +19,20 @@ func _ready() -> void:
 	var weather=preload("res://scripts/icefield/winter_atmosphere.gd").new();weather.name="WinterAtmosphere";weather.city=self;add_child(weather)
 	life.hide();ambience.volume_db=-31
 func prepare_scenery() -> void:
+	register_winter_rooms(true)
 	var reflection=preload("res://scripts/icefield/ice_reflections.gd").new();reflection.name="LakeReflection";reflection.city=self;add_child(reflection)
+func register_winter_rooms(render_rooms: bool) -> void:
+	for b in IceLayout.BUILDINGS:
+		if b.kind=="shop":continue
+		var room:=scenery.get_node("Room_"+b.id) as Node3D
+		room.city=self
+		room.set_process(render_rooms)
+		interiors.append(room)
+		for obj in room.get_node("Furnishing").get_children():
+			if not obj.has_node("SeatAnchor"):continue
+			var id: String="winter_seat:%s:%s"%[b.id,obj.name]
+			targets[id]={"kind":"bench","position":obj.global_position,"radius":2.4,"node":obj}
+
 func _process(delta: float) -> void:
 	super._process(delta)
 	if sun_ready:sun.quaternion=sun.quaternion.slerp(sun_target,1.-exp(-delta*6.))
@@ -41,18 +55,37 @@ func setup_targets() -> void:
 		var size_:=Vector3(.82,.10,.24) if r.item=="birch" else Vector3(.52,.10,.46)
 		G.ball(visual,Vector3(0,.64 if r.item=="birch" else .55,0),size_,preload("res://scripts/icefield/winter_props.gd").mat("snow"),"SnowCap")
 func spawn_npcs() -> void:
-	for d in [["farm","冬葵","beret_sage","apron_sage"],["tools","岩叔","beret_plaid_honey","vest_sage"],["clothes","绒绒","bow_rose","vest_rose"]]:
+	for d in [["farm","冬葵","beret_sage","apron_sage"],["tools","岩叔","beret_plaid_honey","vest_sage"],["clothes","绒绒","pompom_cap_berry","capelet_berry"]]:
 		var p: Vector3=scenery.get_node("Shop_"+d[0]+"/MerchantAnchor").global_position
 		var n:=spawn_npc("FrostMerchant_"+d[0],d[1],p,{"head":d[2],"body":d[3],"neck":"scarf_red"})
 		targets[str(n.name)]={"kind":"shop","position":p,"radius":3.3,"shop":d[0],"node":n,"name":d[1]}
 	var tour: Array[Vector2]=[Vector2(-79,90),Vector2(-79,47),Vector2(-40,16),Vector2(-16,16),Vector2(16,21),Vector2(48,-3),Vector2(48,42),Vector2(-79,-12),Vector2(-79,-49),Vector2(-102,-86),Vector2(-110,64)]
 	for i in range(RESIDENTS.size()):
 		var d: Dictionary=RESIDENTS[i];var p:=Vector3(d.p.x,IceLayout.height_at(d.p.x,d.p.y)+.03,d.p.y)
-		var n:=spawn_npc(d.id,d.name,p,{"head":d.head,"body":"vest_sage" if i%2==0 else "vest_rose","neck":d.neck},d.species)
+		var n:=spawn_npc(d.id,d.name,p,{"head":d.head,"body":d.body,"neck":d.neck},d.species)
 		var driver:=Driver.new();driver.name="WinterWander";driver.bunny=n;driver.city=self
 		for point: Vector2 in tour:driver.route.append(Vector3(point.x,IceLayout.walk_height(point.x,point.y)+.03,point.y))
 		n.add_child(driver)
 		targets[d.id]={"kind":"npc","position":p,"radius":2.8,"node":n,"name":d.name,"profile":9+i}
+	var bakery:=scenery.get_node("Room_bakery") as Node3D
+	var baker:=spawn_npc("SnowBaker","麦穗",bakery.to_global(Vector3(-1.45,.14,-2.15)),{"head":"pompom_cap_pine","neck":"kerchief_berry","body":"apron_honey"})
+	targets["SnowBaker"]={"kind":"npc","position":baker.position,"radius":3.,"node":baker,"name":"麦穗","profile":15}
+	for npc in npcs:npc.set_meta("winter_default",npc.get_meta("equipment").duplicate())
+	apply_resident_outfits(session.state().get("winter_outfits",{}))
+
+func apply_resident_outfits(overrides: Dictionary) -> void:
+	if npcs.is_empty() or overrides==current_outfits:return
+	current_outfits=overrides.duplicate(true)
+	for npc in npcs:
+		var worn: Dictionary=npc.get_meta("winter_default").merged(overrides.get(str(npc.name),{}),true)
+		if worn!=npc.get_meta("equipment"):
+			npc.set_meta("equipment",worn)
+			Outfit.apply(npc,worn)
+
+func refresh_world() -> void:
+	super.refresh_world()
+	if not session.is_online():apply_resident_outfits(session.state().get("winter_outfits",{}))
+
 func update_lighting(override_time: float=-1) -> void:
 	var old:=sun.quaternion
 	super.update_lighting(override_time)

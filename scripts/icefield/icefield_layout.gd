@@ -12,19 +12,19 @@ const BUILDINGS=[
 	{"id":"farm","x":-102.,"z":-24.,"kind":"shop","title":"雪芽杂货铺","wall":"a17a57"},
 	{"id":"tools","x":-80.,"z":-24.,"kind":"shop","title":"霜石工具铺","wall":"82766b"},
 	{"id":"clothes","x":-58.,"z":-24.,"kind":"shop","title":"绒雪裁缝店","wall":"8e615d"},
-	{"id":"lodge","x":-119.,"z":22.,"kind":"chalet","title":"松风旅舍"},
-	{"id":"bakery","x":-117.,"z":64.,"kind":"chalet","title":"雪绒面包房"},
-	{"id":"home_a","x":-127.,"z":-57.,"kind":"chalet","title":""},
-	{"id":"home_b","x":-94.,"z":-66.,"kind":"chalet","title":""},
-	{"id":"home_c","x":-56.,"z":-67.,"kind":"chalet","title":""},
-	{"id":"home_d","x":-81.,"z":74.,"kind":"chalet","title":""},
-	{"id":"home_e","x":-46.,"z":65.,"kind":"chalet","title":""},
-	{"id":"home_f","x":-49.,"z":43.,"kind":"chalet","title":""},
-	{"id":"home_g","x":-104.,"z":46.,"kind":"chalet","title":""},
-	{"id":"home_h","x":-128.,"z":-16.,"kind":"chalet","title":""},
-	{"id":"home_i","x":-124.,"z":-86.,"kind":"chalet","title":""},
-	{"id":"home_j","x":-65.,"z":-98.,"kind":"chalet","title":""},
-	{"id":"chapel","x":-102.,"z":-103.,"kind":"chapel","title":"极光钟楼"}
+	{"id":"lodge","x":-119.,"z":22.,"kind":"chalet","title":"松风旅舍","room":"lodge"},
+	{"id":"bakery","x":-117.,"z":64.,"kind":"chalet","title":"雪绒面包房","room":"bakery"},
+	{"id":"home_a","x":-127.,"z":-57.,"kind":"chalet","title":"北坡书屋","room":"library"},
+	{"id":"home_b","x":-94.,"z":-66.,"kind":"chalet","title":"霜铃的小屋","room":"study"},
+	{"id":"home_c","x":-56.,"z":-67.,"kind":"chalet","title":"围炉茶室","room":"tea"},
+	{"id":"home_d","x":-81.,"z":74.,"kind":"chalet","title":"雪芽的小屋","room":"home"},
+	{"id":"home_e","x":-46.,"z":65.,"kind":"chalet","title":"白桦餐厅","room":"dining"},
+	{"id":"home_f","x":-49.,"z":43.,"kind":"chalet","title":"织雪小屋","room":"study"},
+	{"id":"home_g","x":-104.,"z":46.,"kind":"chalet","title":"松果小馆","room":"dining"},
+	{"id":"home_h","x":-128.,"z":-16.,"kind":"chalet","title":"西街小屋","room":"home"},
+	{"id":"home_i","x":-124.,"z":-86.,"kind":"chalet","title":"雪线驿舍","room":"lodge"},
+	{"id":"home_j","x":-65.,"z":-98.,"kind":"chalet","title":"守钟人的家","room":"home"},
+	{"id":"chapel","x":-102.,"z":-103.,"kind":"chapel","title":"极光钟楼","room":"hall"}
 ]
 static func shore_x(z: float) -> float:return -21.+7.*sin(z*.024)+3.*sin(z*.065)
 static func ellipse(x: float,z: float) -> float:return Vector2(x/RADII.x,z/RADII.y).length()

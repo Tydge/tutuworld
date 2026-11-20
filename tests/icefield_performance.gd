@@ -16,7 +16,7 @@ func run() -> void:
 	while game.camera==null or not game.navigation.ready_for_paths or game.preparing:await process_frame
 	session.active=false;game.bunny.can_move=false
 	var results: Array=[]
-	for view in [[-79.,12.,.5,"town-day"],[-63.,43.,.92,"festival-night"],[45.,26.,.73,"ice-sunset"],[18.,32.,.5,"ice-fishing"],[-104.,116.,.5,"harbor"]]:
+	for view in [[-79.,12.,.5,"town-day"],[-63.,43.,.92,"festival-night"],[45.,26.,.73,"ice-sunset"],[18.,32.,.5,"ice-fishing"],[-104.,116.,.5,"harbor"],[-117.,65.4,.5,"bakery-interior"],[-127.,-55.3,.92,"library-night"]]:
 		game.bunny.position=Vector3(view[0],L.walk_height(view[0],view[1])+.035,view[1]);game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation();session.state().time=view[2]*3600.;game.update_lighting();game.yaw=.25;game.pitch=.28
 		var warm_start:=Time.get_ticks_usec()
 		while Time.get_ticks_usec()-warm_start<1800000:game.yaw+=.012;await process_frame;RenderingServer.force_draw()

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "purpose": "Reusable winter modules, prepared for later building catalog integration; no current player build catalog or prices are changed.",
+  "purpose": "Reusable winter modules for the icefield. The wooden sled is also available in the player building catalog.",
   "items": [
     {
       "id": "snowman",

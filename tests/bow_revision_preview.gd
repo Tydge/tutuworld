@@ -101,7 +101,7 @@ func run() -> void:
 				preview.portrait_camera.size=3.15 if preview.species=="bunny" else 2.65
 				preview.portrait_camera.position=center+Vector3(0,0,6);preview.portrait_camera.look_at(center)
 				preview.actor.visual.rotation.y=view[1]
-			await create_timer(.22).timeout;await RenderingServer.frame_post_draw
+			await create_timer(.22).timeout;RenderingServer.force_draw()
 			var output: String=preload("res://tests/test_support.gd").output_dir()+"/蝴蝶结-"+bow_id+"-"+view[0]+".png"
 			root.get_texture().get_image().save_png(output)
 	# The dressing screen uses this same full-body preview and mounting path.
@@ -112,7 +112,7 @@ func run() -> void:
 		preview.actor.visual.rotation.y=PI/4
 		preview.portrait_camera.size=3.55
 		preview.portrait_camera.position=Vector3(0,1.5,6);preview.portrait_camera.look_at(Vector3(0,1.5,0))
-	await create_timer(.22).timeout;await RenderingServer.frame_post_draw
+	await create_timer(.22).timeout;RenderingServer.force_draw()
 	root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/蝴蝶结-全身试穿.png")
 	print("BOW_REVISION_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

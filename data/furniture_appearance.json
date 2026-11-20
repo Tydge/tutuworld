@@ -1195,6 +1195,102 @@
           "99794e"
         ]
       }
+    ],
+    "bread_case": [
+      {
+        "id": "frame",
+        "name": "柜架",
+        "family": "wood",
+        "colors": [
+          "a47a51"
+        ]
+      },
+      {
+        "id": "tray",
+        "name": "托板与刻纹",
+        "family": "ceramic",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "loaf",
+        "name": "面包",
+        "family": "solid",
+        "colors": [
+          "cb9050"
+        ]
+      }
+    ],
+    "tile_stove": [
+      {
+        "id": "tiles",
+        "name": "釉面炉砖",
+        "family": "ceramic",
+        "colors": [
+          "678b83"
+        ]
+      },
+      {
+        "id": "rim",
+        "name": "炉沿",
+        "family": "ceramic",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "铁件",
+        "family": "metal",
+        "colors": [
+          "514c46"
+        ]
+      }
+    ],
+    "atlas_stand": [
+      {
+        "id": "frame",
+        "name": "阅读架",
+        "family": "wood",
+        "colors": [
+          "a47a51"
+        ]
+      },
+      {
+        "id": "pages",
+        "name": "书页",
+        "family": "paper",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "ink",
+        "name": "图文",
+        "family": "solid",
+        "colors": [
+          "708c87"
+        ]
+      }
+    ],
+    "sled": [
+      {
+        "id": "runners",
+        "name": "滑轨",
+        "family": "wood",
+        "colors": [
+          "453d3a"
+        ]
+      },
+      {
+        "id": "deck",
+        "name": "座板",
+        "family": "wood",
+        "colors": [
+          "866147"
+        ]
+      }
     ]
   },
   "presets": {

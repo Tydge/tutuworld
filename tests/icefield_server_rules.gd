@@ -20,7 +20,7 @@ func run() -> void:
 	server=Server.new();root.add_child(server)
 	while not server.ready_for_players or not server.maps.icefield.navigation.ready_for_paths:await process_frame
 	server.set_process(false) # Fixture sockets are in-memory, not connected peers.
-	check(server.maps.size()==3 and server.maps.icefield.npcs.size()==9,"Authority loads three independent collision worlds and new residents")
+	check(server.maps.size()==3 and server.maps.icefield.npcs.size()==10,"Authority loads three independent collision worlds and new residents")
 	for i in range(3):
 		var account:="frost-account-"+str(i);var created: Dictionary=server.create_character(account,{"name":"冰原联机"+str(i),"species":["bunny","cat_teacher","panda"][i],"starter":"bow_rose"});ids.append(created.character)
 		server.peers[i+1]={"account":account,"character":"","socket":WebSocketPeer.new()}
@@ -61,6 +61,20 @@ func run() -> void:
 	if not actor.job.is_empty():actor.job.duration=.02
 	await create_timer(.1).timeout;server.tick_actor(ids[0],.2)
 	check(actor.count("branch")>0 and not server.state().resources[target.id].available,"Authority grants and saves shared icefield resource")
+	var outfit:={"head":"pompom_cap_frost"}
+	check(not request(0,"dress_resident",{"target":"SnowBaker","outfit":outfit}).ok,"Cannot dress a resident remotely")
+	var tailor: Node3D=server.maps.icefield.targets.FrostMerchant_clothes.node
+	place(0,tailor.position+Vector3(0,0,2.05))
+	check(not request(0,"dress_resident",{"target":"SnowBaker","outfit":outfit}).ok,"A fitting requires ownership")
+	check(request(0,"buy",{"shop":"clothes","item":"pompom_cap_frost"}).ok,"Buy the winter garment at the snow tailor")
+	var actor_worn: Dictionary=actor.state.equipment.duplicate()
+	var fitting:={"target":"SnowBaker","outfit":outfit}
+	check(request(0,"dress_resident",fitting,"baker-cap").ok and request(0,"dress_resident",fitting,"baker-cap").ok,"Repeated fitting is idempotent")
+	check(server.state().winter_outfits.SnowBaker==outfit and server.maps.icefield.targets.SnowBaker.node.get_meta("equipment").head==outfit.head and actor.state.equipment==actor_worn,"Authoritative resident and player wear independent outfits")
+	var path: String=server.save_path
+	server.save_path=path.path_join("invalid")
+	check(not request(0,"dress_resident",{"target":"SnowBaker","outfit":{}}).ok and server.state().winter_outfits.SnowBaker==outfit and server.maps.icefield.targets.SnowBaker.node.get_meta("equipment").head==outfit.head,"Failed save preserves previous visible and durable outfit")
+	server.save_path=path
 	server.broadcast_motion();check(server.actor_packet(ids[0]).map=="icefield","New map participates in motion packets")
 	place(0,Vector3(L.DOCK.x,L.DOCK_HEIGHT+.035,L.DOCK.y));var coins: int=actor.state.coins
 	check(request(0,"travel",{"destination":"city"}).ok and actor.state.coins==coins,"Authority returns for free")
@@ -68,6 +82,7 @@ func run() -> void:
 	check(not request(0,"travel",{"destination":"icefield"}).ok and actor.state.map_id=="city" and actor.state.coins==coins and pawn.get_parent()==server.maps.city,"Failed durable save rolls back world transfer and fare")
 	server.save_path=original;check(server.save_world(),"Isolated server snapshot saves")
 	var saved: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(original));check(saved.characters[ids[1]].map_id=="icefield" and saved.characters[ids[2]].species=="panda","Offline records retain new map and species")
+	check(saved.world.winter_outfits.SnowBaker==outfit,"Shared outfits survive a server save")
 	server.listener.stop();server.queue_free();await process_frame
 	print("ICEFIELD_SERVER_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)
