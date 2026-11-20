@@ -1,8 +1,6 @@
 shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
 varying vec3 wp;
-varying vec3 wn;
-uniform vec4 horizon_color : source_color = vec4(.7,.65,.8,1.);
 uniform float daylight = 1.;
 uniform sampler2D reflection_texture : source_color,filter_linear,repeat_disable;
 uniform bool reflection_ready=false;
@@ -23,7 +21,7 @@ float fracture(vec2 p){
  }
  return edge;
 }
-void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;wn=normalize(MODEL_NORMAL_MATRIX*NORMAL);}
+void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
 void fragment(){
  vec2 p=wp.xz;float n=noise(p*.083),fine=noise(p*7.);
  vec2 bend=vec2(noise(p*.32),noise(p*.32+37.))*.17;
@@ -41,8 +39,7 @@ void fragment(){
  METALLIC=.05;
  ROUGHNESS=mix(.075+n*.045,.77,snow);
  SPECULAR=.68;
- // Opaque dielectric: sky radiance and the single shared reflection probe provide
- // reflection without transparent sorting, a second scene render or per-tile mirrors.
+ // The lake samples the shared planar reflection in screen space.
  NORMAL_MAP=normalize(vec3(sin(p.x*.9+sin(p.y*.7))*.016,(fine-.5)*.035,1.))*.5+.5;
  NORMAL_MAP_DEPTH=.34;
  EMISSION=vec3(.13,.34,.43)*halo*.035*daylight;

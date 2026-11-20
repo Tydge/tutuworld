@@ -72,7 +72,7 @@ func update_lighting(override_time: float=-1) -> void:
 	if sun_ready and override_time<0:sun.quaternion=old
 	sun_ready=true
 	atmosphere.fog_density=lerpf(.00038,.00048,day);atmosphere.fog_light_color=horizon
-	var ice: ShaderMaterial=scenery.get_meta("ice_material");ice.set_shader_parameter("daylight",day);ice.set_shader_parameter("horizon_color",horizon)
+	var ice: ShaderMaterial=scenery.get_meta("ice_material");ice.set_shader_parameter("daylight",day)
 	var warmth:=1.-smoothstep(.30,.86,day)
 	for entry in lamp_visuals:
 		entry.light.visible=warmth>.001;entry.light.light_energy=2.1*warmth

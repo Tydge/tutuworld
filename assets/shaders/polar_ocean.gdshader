@@ -12,7 +12,6 @@ void fragment(){
  float b=wp.z*1.04-wp.x*.36+TIME*.19;
  vec3 n=normalize(vec3(sin(a)*.022+sin(b)*.012,1.,cos(a)*.018+cos(b)*.012)*vec3(detail,1.,detail));
  NORMAL=normalize((VIEW_MATRIX*vec4(n,0.)).xyz);
- float fresnel=pow(1.-clamp(dot(NORMAL,VIEW),0.,1.),4.);
  ALBEDO=mix(vec3(.005,.018,.032),sea_color.rgb*.27,daylight);
  ROUGHNESS=mix(.24,.43,smoothstep(45.,800.,length(VERTEX)));
  SPECULAR=.48;METALLIC=0.;

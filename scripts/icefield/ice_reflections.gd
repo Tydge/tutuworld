@@ -7,13 +7,11 @@ var city: Node3D
 var viewport: SubViewport
 var reflected: Camera3D
 var material: ShaderMaterial
-var frames:=0
 var updates:=0
 var initialized:=false
 var reflection_root: Node3D
 var reflected_sun: DirectionalLight3D
 var dynamic_proxies: Array=[]
-var static_batches:=0
 func _ready() -> void:
 	process_priority=30
 	material=city.scenery.get_meta("ice_material")
@@ -53,7 +51,7 @@ func build_reflection_world() -> void:
 		if not batches.has(key):batches[key]={"st":SurfaceTool.new(),"material":m};batches[key].st.begin(Mesh.PRIMITIVE_TRIANGLES)
 		for surface in range(source.mesh.get_surface_count()):preload("res://scripts/geometry.gd").append_indexed(batches[key].st,source.mesh,surface,source.global_transform)
 	for entry in batches.values():
-		entry.st.index();var draw:=MeshInstance3D.new();draw.mesh=entry.st.commit();draw.material_override=entry.material;draw.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;reflection_root.add_child(draw);static_batches+=1
+		entry.st.index();var draw:=MeshInstance3D.new();draw.mesh=entry.st.commit();draw.material_override=entry.material;draw.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;reflection_root.add_child(draw)
 	var actors: Array=[city.bunny];actors.append_array(city.npcs)
 	for actor: Node3D in actors:
 		for source in actor.find_children("*","GeometryInstance3D",true,false):
@@ -63,7 +61,6 @@ func mirror(p: Vector3) -> Vector3:return Vector3(p.x,2.*L.ICE_LEVEL-p.y,p.z)
 func _process(_delta: float) -> void:
 	if not is_instance_valid(city.camera):return
 	if reflection_root==null:build_reflection_world()
-	frames+=1
 	if city.bunny.position.x< -43. or city.camera.position.y<L.ICE_LEVEL+.15:
 		material.set_shader_parameter("reflection_ready",false);return
 	# Every displayed frame gets its matching camera and capture. Temporal skipping

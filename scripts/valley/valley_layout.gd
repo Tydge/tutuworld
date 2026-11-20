@@ -84,7 +84,6 @@ static func legacy_position(p: Vector3) -> Vector3:
 	if p.x> -14.2 and p.x< -2.8 and p.z>45.2 and p.z<49.25:return Vector3(-16.8+(p.x+8.4),p.y,DOCK.y+(p.z-47.2))
 	var q:=Vector3(p.x*2,0,p.z*2);q.y=walk_height(q.x,q.z)+.035
 	return q
-static func scene_path(map_id: String) -> String:return "res://scenes/valley.tscn" if map_id=="valley" else "res://scenes/city.tscn"
 static func dock(map_id: String) -> Vector2:return DOCK if map_id=="valley" else Vector2(13,41.5)
 static func arrival(map_id: String) -> Array:return [-22,walk_height(-22,86)+.035,86] if map_id=="valley" else [13,.2,39.5]
 static func west_path(z: float) -> float:

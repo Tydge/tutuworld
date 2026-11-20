@@ -6,13 +6,12 @@ const Props=preload("res://scripts/icefield/winter_props.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 var world: Node3D
 var rng:=RandomNumberGenerator.new()
-var ridge:=FastNoiseLite.new()
 var alpine: PackedByteArray
 var prototypes: Dictionary={}
 func _initialize() -> void:call_deferred("build")
 func build() -> void:
 	if DisplayServer.get_name()=="headless":push_error("Build with graphical GL to preserve instance buffers.");quit(1);return
-	rng.seed=941803;ridge.seed=81594;ridge.frequency=.0065;ridge.fractal_octaves=6;ridge.fractal_type=FastNoiseLite.FRACTAL_RIDGED
+	rng.seed=941803
 	alpine=FileAccess.get_file_as_bytes("res://assets/terrain/winter/alpine_relief.r16")
 	world=Node3D.new();world.name="FrostlightIsland";root.add_child(world)
 	world.set_meta("scenery_polished",true);world.set_meta("groundcover_revision",3);world.set_meta("terrain_material_revision",1)
@@ -123,15 +122,6 @@ func build_town() -> void:
 	build_festival_tree()
 	var lamps:=preload("res://scripts/city/lamp_builder.gd").new();lamps.lamps=world.get_node("Streetlights")
 	for p in [Vector2(-89,99),Vector2(-72,76),Vector2(-86,49),Vector2(-71,27),Vector2(-38,12),Vector2(-21,15),Vector2(-112,7),Vector2(-103,-13),Vector2(-80,-13),Vector2(-57,-13),Vector2(-72,-49),Vector2(-85,-83)]:lamps.lamp(at(p.x,p.y))
-func build_paths() -> void:
-	var paths:=group(world,"PackedSnowLanes");var m: Material=Props.mat("d6e0e5")
-	var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for z in range(-112,126,2):
-		for x in range(-137,0,2):
-			if L.path_distance(x+1,z+1)>2.7 or not L.can_walk(Vector3(x,0,z)):continue
-			for c in [Vector2(0,0),Vector2(2,0),Vector2(0,2),Vector2(2,0),Vector2(2,2),Vector2(0,2)]:
-				var p: Vector2=Vector2(x,z)+c;st.set_normal(L.normal_at(p.x,p.y));st.set_uv(p);st.add_vertex(Vector3(p.x,L.height_at(p.x,p.y)+.014,p.y))
-	var mesh:=G.mesh(paths,st.commit(),Vector3.ZERO,m,"SnowLanes");mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 func build_festival_tree() -> void:
 	var tree:=place("snow_pine",at(-63,24));tree.name="FestivalFir";tree.scale=Vector3.ONE*1.55
 	var lights:=group(tree,"FairyLights");var gold: Material=Props.mat("gold")
