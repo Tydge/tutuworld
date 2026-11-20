@@ -97,7 +97,35 @@ func face() -> void:
 func head_normal(p: Vector3) -> Vector3:
 	var h:=.001
 	return Vector3(Surface.head_distance(p+Vector3(h,0,0))-Surface.head_distance(p-Vector3(h,0,0)),Surface.head_distance(p+Vector3(0,h,0))-Surface.head_distance(p-Vector3(0,h,0)),Surface.head_distance(p+Vector3(0,0,h))-Surface.head_distance(p-Vector3(0,0,h))).normalized()
+# Only the tips need extra geometry for the thick outline in close-ups.
+# Split an edge based on its endpoints so adjacent triangles always agree.
+func tip_surface(p: Vector3) -> Vector3:
+	return p-head_normal(p)*Surface.head_distance(p)
+
 func head_triangle(st: SurfaceTool,a: Vector3,b: Vector3,c: Vector3) -> void:
+	const TIP_LEVEL:=.70
+	var high:=int(a.y>TIP_LEVEL)+int(b.y>TIP_LEVEL)+int(c.y>TIP_LEVEL)
+	if high<2:
+		emit_triangle(st,a,b,c)
+		return
+	if high==2:
+		var corners: Array[Vector3]=[a,b,c]
+		var low:=0 if a.y<=TIP_LEVEL else (1 if b.y<=TIP_LEVEL else 2)
+		var edge_a:=corners[(low+1)%3]
+		var edge_b:=corners[(low+2)%3]
+		var midpoint:=tip_surface((edge_a+edge_b)*.5)
+		emit_triangle(st,edge_a,midpoint,corners[low])
+		emit_triangle(st,midpoint,edge_b,corners[low])
+		return
+	var ab:=tip_surface((a+b)*.5)
+	var bc:=tip_surface((b+c)*.5)
+	var ca:=tip_surface((c+a)*.5)
+	emit_triangle(st,a,ab,ca)
+	emit_triangle(st,b,bc,ab)
+	emit_triangle(st,c,ca,bc)
+	emit_triangle(st,ab,bc,ca)
+
+func emit_triangle(st: SurfaceTool,a: Vector3,b: Vector3,c: Vector3) -> void:
 	a=a.snapped(Vector3.ONE*.000001)
 	b=b.snapped(Vector3.ONE*.000001)
 	c=c.snapped(Vector3.ONE*.000001)
@@ -108,9 +136,11 @@ func head_triangle(st: SurfaceTool,a: Vector3,b: Vector3,c: Vector3) -> void:
 	for point in points:
 		var normal_: Vector3=head_normal(point)
 		# Continue the crown lighting across the ear root, as on a single fur surface.
-		var root_weight:=smoothstep(.12,.26,point.y)*(1.-smoothstep(.34,.67,point.y))
+		var root_weight:=smoothstep(.21,.34,point.y)*(1.-smoothstep(.44,.73,point.y))
 		root_weight*=smoothstep(-.14,.035,Surface.skull_distance(point)-Surface.ear_distance(point))
-		var crown_normal: Vector3=(point/(radii*radii)).normalized()
+		var h: float=(point.y-Surface.CENTER_Y)/Surface.HEIGHT_RADIUS
+		var w:=Surface.half_width(h)
+		var crown_normal:=Vector3(point.x/(w*w),h/Surface.HEIGHT_RADIUS,point.z/(Surface.DEPTH_RADIUS*Surface.DEPTH_RADIUS)).normalized()
 		st.set_normal((normal_.lerp(crown_normal,root_weight).normalized()*radii).normalized())
 		var ear_weight:=smoothstep(-.035,.035,Surface.skull_distance(point)-Surface.ear_distance(point))
 		st.set_color(Color(ear_weight,0,0,1))
@@ -149,7 +179,9 @@ func seamless_head_mesh() -> ArrayMesh:
 					var b:=lower+Vector3(Vector3i(x,y,z)+offsets[edge[1]])*step
 					average+=surface_cross(a,b,distances[edge[0]],distances[edge[1]])
 					crossings+=1
-				if crossings>0: cells[Vector3i(x,y,z)]=average/crossings
+				if crossings>0:
+					var point:=average/crossings
+					cells[Vector3i(x,y,z)]=tip_surface(point) if point.y>.685 else point
 	var st:=SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for z in range(1,counts.z):
