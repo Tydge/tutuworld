@@ -5,6 +5,9 @@ const Animals=preload("res://scripts/characters/animal_factory.gd")
 const Catalog=preload("res://scripts/characters/animal_catalog.gd")
 const Release=preload("res://scripts/services/release.gd")
 const Codec=preload("res://scripts/services/packet_codec.gd")
+const FurnitureAccess=preload("res://scripts/city/furniture_access.gd")
+const Storeys=preload("res://scripts/building/storeys.gd")
+const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
 var building=preload("res://server/building_service.gd").new()
 var built_room: Node3D
 var world=Authority.new()
@@ -262,8 +265,20 @@ func receive(peer_id: int,data: Dictionary) -> void:
 	if verb=="leave":leave_world(peer_id);answer(peer_id,data,{"ok":true});return
 	if peer.character=="":answer(peer_id,data,fail("请选择角色。"));return
 	if verb=="chat":chat(peer_id,data,str(args.get("text","")));return
+	if verb=="emote":answer(peer_id,data,perform_emote(peer.character,args));return
 	if verb=="build_finish":finish_building_request(peer_id,data,args);return
 	answer(peer_id,data,execute_player(peer_id,data,verb,args))
+func perform_emote(id: String, args: Dictionary) -> Dictionary:
+	var gesture: Variant = args.get("id", "")
+	if not gesture is String or gesture not in EmoteMotion.KEY_ORDER:
+		return fail("这个动作暂时不能使用。")
+	var actor = actors[id]
+	var pawn = pawns[id]
+	if not pawn.can_emote() or not actor.job.is_empty() or not actor.state.get("net_pose", {}).is_empty():
+		return fail("站稳并结束当前互动后再做动作。")
+	pawn.trigger_emote(gesture)
+	return {"ok": true}
+
 func authenticate(peer_id: int,request: Dictionary,action: String,args: Dictionary) -> void:
 	var http:=HTTPRequest.new();http.timeout=12;http.use_threads=true;add_child(http)
 	var error:=http.request(auth_url+action,PackedStringArray(["Content-Type: application/json"]),HTTPClient.METHOD_POST,JSON.stringify(args))
@@ -494,7 +509,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		var result: Dictionary=a.execute(command_for(id,request,verb,args))
 		if result.ok:
 			release_all(id);pawn.reparent(maps[destination],false);pawn.world=maps[destination];pawn.position=point.position;pawn.velocity=Vector3.ZERO
-			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
+			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion();pawn.stop_emote()
 		return result
 	if verb=="dress_resident":
 		if map_id!="icefield" or not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,"clothes"):return fail("请到绒雪裁缝店找绒绒搭配。")
@@ -515,11 +530,12 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if chosen==null:return fail("餐桌旁需要一张未被占用、通道畅通的餐椅。")
 		args=args.duplicate(true);args.seat=str(chosen.name)
 	var needs_lock:=verb in ["plant","water","weed","harvest","gather","craft","refill","eat","rest"]
+	var rest_exit: Dictionary={}
 	if not a.state.get("net_pose",{}).is_empty():return fail("先起身或结束交谈吧。")
 	if needs_lock:
 		if not host.targets.has(target):return fail("请来到对应地点。")
 		if verb=="rest":
-			if host.targets[target].kind!="bed" or not preload("res://scripts/city/furniture_access.gd").reachable(host,host.targets[target].node,pawn,2.0):return fail("再靠近床边一点吧。")
+			if host.targets[target].kind!="bed" or not FurnitureAccess.reachable(host,host.targets[target].node,pawn,2.0):return fail("再靠近床边一点吧。")
 		elif pawn.position.distance_to(host.targets[target].position)>4:return fail("再靠近一点吧。")
 		var reason:=lock_reason(map_id,target,id)
 		if reason!="":return fail(reason)
@@ -531,12 +547,15 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 			elif verb=="rest":anchor=host.targets[target].node.global_position
 			else: anchor=host.scenery.get_node("Kitchen/CookAnchor").global_position if verb=="craft" else host.scenery.get_node("DiningTable/SeatAnchor").global_position
 			if not body_clear(map_id,anchor,id):return fail("操作的位置有人，稍等一下吧。")
+		if verb=="rest":
+			rest_exit=sleep_landing(id,host.targets[target].node,pawn.position)
+			if rest_exit.is_empty():return fail("暂时找不到安全的起身位置，请稍后再试。")
 	var result: Dictionary=a.execute(command_for(id,request,verb,args))
 	if result.ok:
 		if needs_lock:occupy(map_id,target,id,"sleep" if verb=="rest" else "job")
 		if verb=="rest":
 			var bed: Node3D=host.targets[target].node
-			var exit_: Array=vector_array(pawn.position)
+			var exit_: Array=vector_array(rest_exit.position)
 			pawn.lie_in_bed(bed)
 			if bed==host.home.get_node("Furnishing/bed"):host.home.bed_occupant=pawn
 			a.state.net_pose={"kind":"sleep","target":target,"exit":exit_};pawn.reset_network_motion()
@@ -588,7 +607,9 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
 	var point:=safe_position(a.state.map_id,desired,id,pawn) if unstuck else pose_landing(id,desired)
 	if point.is_empty() and unstuck:point=safe_position(a.state.map_id,maps[a.state.map_id].respawn_position(),id,pawn)
-	if point.is_empty():return fail("附近有点挤，稍等一下再试吧。")
+	if point.is_empty():
+		if pawn.sleeping:return fail("暂时找不到安全的起身位置，请稍后再试。")
+		return fail("附近有点挤，稍等一下再试吧。")
 	a.execute({"verb":"cancel"});release_all(id)
 	if pawn.sleeping and maps[a.state.map_id].home.bed_occupant==pawn:maps[a.state.map_id].home.bed_occupant=null
 	pawn.stand_up(point.position);pawn.work_align_active=false;pawn.network_direction=Vector3.ZERO
@@ -597,9 +618,29 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 func pose_landing(id: String,desired: Vector3) -> Dictionary:
 	var a=actors[id];var host=maps[a.state.map_id];var pose: Dictionary=a.state.get("net_pose",{});var target: Dictionary=host.targets.get(str(pose.get("target","")),{})
 	if pose.get("seat","")!="" and is_instance_valid(built_room) and built_room.render_cache.has(pose.seat):target={"kind":"bench","node":built_room.render_cache[pose.seat].node}
-	if pose.get("kind","") in ["sit","sleep","eat","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
-		return preload("res://scripts/city/furniture_access.gd").landing(host,target.node,pawns[id],desired,func(point):return body_clear(a.state.map_id,point,id))
+	if pose.get("kind","")=="sleep":
+		return sleep_landing(id,target.get("node"),desired)
+	if pose.get("kind","") in ["sit","eat","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
+		return FurnitureAccess.landing(host,target.node,pawns[id],desired,func(point):return body_clear(a.state.map_id,point,id))
 	return safe_position(a.state.map_id,desired,id,pawns[id])
+
+func sleep_landing(id: String,bed: Node3D,preferred: Vector3) -> Dictionary:
+	var map_id: String=actors[id].state.map_id
+	var host: Node3D=maps[map_id]
+	var pawn: CharacterBody3D=pawns[id]
+	if is_instance_valid(bed):
+		var point:=FurnitureAccess.landing(host,bed,pawn,preferred,func(p):return body_clear(map_id,p,id))
+		if not point.is_empty():
+			return point
+		# A player can start on the mattress. Search around the bed's floor level.
+		var origin:=bed.global_position
+		var level:=Storeys.at_height(origin.y)
+		var same_floor_room:=func(p: Vector3) -> bool:
+			return Storeys.at_height(p.y)==level and FurnitureAccess.same_room(host,bed,p)
+		point=safe_position(map_id,origin,id,pawn,same_floor_room,18)
+		if not point.is_empty():
+			return point
+	return safe_position(map_id,host.respawn_position(),id,pawn)
 func tick_actor(id: String,delta: float) -> void:
 	var a=actors[id];var pawn=pawns[id]
 	var peer: Dictionary=peers.get(int(pawn.get_meta("peer_id",0)),{})
@@ -662,7 +703,7 @@ func body_clear(map_id: String,point: Vector3,ignore: String) -> bool:
 		var other: Vector3=npc.position
 		if absf(other.y-point.y)<2.6 and Vector2(other.x-point.x,other.z-point.z).length()<1.85:return false
 	return true
-func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: CharacterBody3D) -> Dictionary:
+func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: CharacterBody3D,accept: Callable=Callable(),max_rings: int=10) -> Dictionary:
 	if not desired.is_finite():return {}
 	var host=maps[map_id];var space: PhysicsDirectSpaceState3D=host.get_world_3d().direct_space_state
 	var floor_query:=PhysicsRayQueryParameters3D.new();floor_query.collision_mask=8
@@ -671,10 +712,12 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 	var sphere:=SphereShape3D.new();sphere.radius=maxf(pawn.rig_profile.head_collision_radius,pawn.rig_profile.head_radii.x+.03)
 	capsule.radius=maxf(.36,pawn.rig_profile.body_radii.x+.04)
 	var component: int=-1
-	if host.navigation.sampling_ready:
+	var filtered:=accept.is_valid()
+	if not filtered and host.navigation.sampling_ready:
 		component=host.navigation.component_of.get(host.navigation.closest_free(desired),-1)
-	for ring in range(10):
-		var count_: int=1 if ring==0 else 16
+	for ring in range(max_rings):
+		var samples:=maxi(16,ring*6) if filtered else 16
+		var count_:=1 if ring==0 else samples
 		for i in range(count_):
 			var angle:=float(i)*TAU/count_
 			var p:=desired+Vector3(cos(angle),0,sin(angle))*ring*.85
@@ -684,7 +727,8 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 			var floor_hit:=preload("res://scripts/city/local_landing.gd").floor_hit(space,floor_query)
 			if floor_hit.is_empty() or floor_hit.normal.y<.7:continue
 			p.y=float(floor_hit.position.y)+.025
-			if absf(p.y-desired.y)>1.2 or not body_clear(map_id,p,ignore):continue
+			if absf(p.y-desired.y)>1.2 or (filtered and not accept.call(p)):continue
+			if not body_clear(map_id,p,ignore):continue
 			query.shape=capsule;query.transform=Transform3D(Basis.IDENTITY,p+Vector3(0,.65,0))
 			if not space.intersect_shape(query,1).is_empty():continue
 			query.shape=sphere;query.transform=Transform3D(Basis.IDENTITY,p+pawn.rig_profile.head_center)
@@ -693,7 +737,7 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 	return {}
 func actor_packet(id: String) -> Dictionary:
 	var a=actors[id];var pawn=pawns[id]
-	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"watering_can":a.watering_can_id(),"action":pawn.action,"walking":pawn.walking,"animation_speed":pawn.animation_speed,"ice_inertia":pawn.ice_inertia,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job}
+	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"watering_can":a.watering_can_id(),"action":pawn.action,"walking":pawn.walking,"animation_speed":pawn.animation_speed,"ice_inertia":pawn.ice_inertia,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job,"emote":pawn.emote,"emote_revision":pawn.emote_revision,"emote_age":pawn.emote_age}
 func broadcast_motion() -> void:
 	var batches: Dictionary={}
 	for map_id in maps:batches[map_id]=[]

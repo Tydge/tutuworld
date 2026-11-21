@@ -266,6 +266,7 @@
     ],
     "release": [
       "project_integrity",
+      "emote_flow",
       "valley_server_migration",
       "valley_landscape_rules",
       "valley_rules",
@@ -312,6 +313,9 @@
     ]
   },
   "tests": {
+    "emote_flow": {
+      "headless": true
+    },
     "project_integrity": {
       "headless": true
     },

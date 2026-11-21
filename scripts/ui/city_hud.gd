@@ -121,10 +121,10 @@ func _ready() -> void:
 	prompt.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	prompt_card.add_child(prompt)
 	prompt_card.hide()
-	var hint:=UI.label("WASD 移动 · 空格 跳跃\nShift 切换跑步 · 右键视角\n滚轮缩放 · E 互动 · F 快捷互动",12,Color("f9f4dc"))
+	var hint:=UI.label("WASD 移动 · 空格 跳跃\nShift 切换跑步 · 右键视角\n滚轮缩放 · E 互动 · F 快捷互动\n1–0 动作 · 移动取消",12,Color("f9f4dc"))
 	hint.anchor_top=1
 	hint.anchor_bottom=1
-	hint.position=Vector2(28,-78)
+	hint.position=Vector2(28,-94)
 	hint.add_theme_color_override("font_shadow_color",Color("315f45",.85))
 	hint.add_theme_constant_override("shadow_offset_x",1)
 	hint.add_theme_constant_override("shadow_offset_y",1)

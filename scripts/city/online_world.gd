@@ -71,6 +71,10 @@ func _notification(what: int) -> void:
 func connection_changed(connected: bool) -> void:
 	connection_card.visible=not connected
 	city.bunny.can_move=connected and not (is_instance_valid(city.build_mode) and city.build_mode.active);city.paused=not connected or city.hud.overlay.visible or chat_card.visible or (is_instance_valid(city.build_mode) and city.build_mode.active)
+	if not connected:
+		city.bunny.stop_emote()
+		city.bunny.network_emote_revision = -1
+		motion.erase(session.active_character_id)
 	if connected:
 		prediction=preload("res://scripts/services/movement_prediction.gd").new()
 		var p: Array=session.state().player_position
@@ -170,12 +174,13 @@ func apply_local(row: Dictionary,delta: float) -> void:
 		actor.stand_up(from_array(row.position));city.sleep_active=false;city.nap_active=false
 	if kind=="eat":return
 	if kind=="waiting_exit":city.nap_active=true;actor.seated=true;actor.play_action("nap",INF);return
+	actor.sync_emote(row)
 
 func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	var target:=from_array(row.position)
 	actor.position=target
 	actor.velocity=from_array(row.get("velocity",[0,0,0]));actor.walking=row.get("walking",false);actor.network_grounded=row.get("grounded",true)
-	if str(row.get("id",""))!=city.talking_npc or city.targets.get(city.talking_npc,{}).get("kind","")!="shop":actor.visual.rotation.y=lerp_angle(actor.visual.rotation.y,float(row.get("yaw",0)),1-exp(-delta*18))
+	if str(row.get("id",""))!=city.talking_npc or city.targets.get(city.talking_npc,{}).get("kind","")!="shop":actor.set_visual_heading(lerp_angle(actor.visual_heading(),float(row.get("yaw",0)),1-exp(-delta*18)))
 	actor.animation_speed=float(row.get("animation_speed",-1.))
 	actor.ice_inertia=bool(row.get("ice_inertia",false))
 	if actor.walking and actor.network_grounded:
@@ -199,6 +204,8 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	if actor.action!=action:
 		if action!="":actor.play_action(action,INF)
 		else:actor.action="";actor.action_time=0
+	if not row.get("npc",false):
+		actor.sync_emote(row)
 	if row.get("npc",false):
 		var presence: float=row.get("presence",1)
 		actor.set_meta("presence",presence);actor.set_meta("interaction_available",presence>.999 and not sleeping)

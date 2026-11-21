@@ -57,10 +57,17 @@ func run() -> void:
 	result=await friend.request("create_character",{"name":"验收猫"+suffix.left(4),"species":"cat_teacher","starter":"vest_sage"})
 	check(result.get("ok",false),"Second client creates cat")
 	if not result.get("ok",false):print(result);quit(1);return
-	result=await friend.request("join",{"character":result.character})
+	var friend_id: String = result.character
+	result=await friend.request("join",{"character":friend_id})
 	check(result.get("ok",false),"Second client enters same world")
 	await wait(.6)
 	check(game.online_view.replicas.size()==1,"Second species appears as remote avatar")
+	var gesture: Dictionary = await friend.request("emote",{"id":"angry"})
+	await wait(.55)
+	var replica = game.online_view.replicas.get(friend_id,{}).get("actor")
+	check(gesture.ok and is_instance_valid(replica) and replica.emote=="angry" and replica.emote_face.visible and replica.emote_effects.visible,"Remote pose, expression and comic effects are visible together")
+	await wait(1.8)
+	check(is_instance_valid(replica) and replica.emote.is_empty() and replica.eyes.visible and not replica.emote_effects.visible,"Remote portrait returns to neutral after the short gesture")
 	await friend.request("chat",{"text":"你好呀！🍊🐰✨"})
 	await wait(.4)
 	check(game.online_view.bubbles.size()==1,"Emoji message displayed as world bubble")

@@ -137,8 +137,57 @@ func run() -> void:
 		clients[0].send({"type":"request","id":seen[-1],"verb":"gather","args":{"target":source.id}});await wait()
 		check(actor.count("branch")+server.actors[ids[1]].count("branch")==gathered and not server.locks.has("city:"+source.id),"Duplicate request cannot re-award or re-lock node")
 	park()
+	await wait(.3)
+	var gesture_packet: Dictionary = {}
+	clients[1].message_received.connect(func(message: Dictionary):
+		if message.get("type","")=="motion":
+			for row in message.get("actors",[]):
+				if row.id==ids[0]:
+					gesture_packet.assign(row))
+	result=await request(0,"emote",{"id":"dance_3"})
+	await wait(.3)
+	check(result.ok and gesture_packet.get("emote")=="dance_3" and float(gesture_packet.get("emote_age",0.))>0.,"A second client receives the dance and its elapsed time")
+	var dance_revision:=int(gesture_packet.get("emote_revision",-1))
+	result=await request(0,"emote",{"id":"rest"})
+	check(not result.ok and server.pawns[ids[0]].emote=="dance_3","Gesture requests cannot trigger gameplay actions")
+	var dancer: CharacterBody3D=server.pawns[ids[0]]
+	clients[0].send({"type":"motion","generation":dancer.network_generation,"inputs":[{"seq":dancer.network_received+1,"direction":[1,0,0],"running":false}]})
+	await wait(.3)
+	check(gesture_packet.get("emote") == "" and int(gesture_packet.get("emote_revision",-1))>dance_revision,"Normal motion cancels the dance on both clients")
+	check(not server.records[ids[0]].has("emote"),"Gestures are absent from character saves")
+	park()
 	var host=server.maps.city
-	var bed_exit: Vector3=host.home.get_node("Furnishing/bed/SleepExit").global_position
+	var bed: Node3D=host.home.get_node("Furnishing/bed")
+	var bed_exit: Vector3=bed.get_node("SleepExit").global_position
+	# An avatar on the mattress can reach the bed even when the floor is blocked.
+	var obstruction:=preload("res://scripts/geometry.gd").solid_box(host,bed.global_position+Vector3.UP*.24,Vector3(10.,.48,10.),"BlockedBedside")
+	obstruction.collision_layer=4
+	place(0,bed.to_global(Vector3(0,1.3,0)))
+	await wait()
+	var sleeper: CharacterBody3D=server.pawns[ids[0]]
+	var access=preload("res://scripts/city/furniture_access.gd")
+	check(access.reachable(host,bed,sleeper,2.) and access.landing(host,bed,sleeper,sleeper.position).is_empty(),"Mattress is reachable but has no standing exit")
+	result=await request(0,"rest",{"target":"home_bed"})
+	check(result.ok and sleeper.sleeping,"The bed is usable when there is a farther exit")
+	result=await request(0,"wake")
+	check(result.ok and not sleeper.sleeping and access.same_room(host,bed,sleeper.position),"Wake searches beyond the blocked bedside and stays in the room")
+	check(not server.locks.has("city:home_bed"),"The farther exit releases the bed")
+	place(0,bed.to_global(Vector3(0,1.3,0)))
+	await wait()
+	result=await request(0,"rest",{"target":"home_bed"})
+	check(result.ok and sleeper.sleeping,"The bed remains usable after a successful wake")
+	var obstruction_shape: BoxShape3D=obstruction.get_child(0).shape
+	obstruction_shape.size=Vector3(18.,.48,18.)
+	await wait()
+	server.save_path=path.path_join("cannot-write-here")
+	result=await request(0,"wake")
+	check(not result.ok and sleeper.sleeping and server.locks.has("city:home_bed"),"A failed wake save keeps the previous sleeping state and lock")
+	server.save_path=path
+	result=await request(0,"wake")
+	var respawn: Vector3=host.respawn_position()
+	check(result.ok and not sleeper.sleeping and sleeper.position.distance_to(respawn)<2.,"An exit blocked after falling asleep falls back to the current map's spawn area")
+	check(server.records[ids[0]].map_id=="city" and server.vector_from(server.records[ids[0]].player_position).distance_to(respawn)<2. and not server.locks.has("city:home_bed"),"Wake persists the safe fallback on the same map and releases the lock")
+	obstruction.free()
 	place(0,bed_exit);await wait()
 	result=await request(0,"rest",{"target":"home_bed"})
 	check(result.ok,"First player can use bed")

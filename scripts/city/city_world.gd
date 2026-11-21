@@ -4,6 +4,7 @@ var civic_dial: ShaderMaterial
 const G=preload("res://scripts/geometry.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const Animals=preload("res://scripts/characters/animal_factory.gd")
+const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
 const Outfit=preload("res://scripts/city/outfit.gd")
 const WanderNavigation=preload("res://scripts/city/wander_navigation.gd")
 const Driver=preload("res://scripts/city/npc_driver.gd")
@@ -532,6 +533,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if is_text_entry_active():return
 	if event is InputEventKey and event.pressed and not event.echo:
+		var gesture := EmoteMotion.from_key(event)
+		if gesture != "" and not paused:
+			handle_emote(gesture)
+			get_viewport().set_input_as_handled()
+			return
 		if event.keycode==KEY_V and not paused and hud.camera_control.visible:hud.camera_control.cycle();get_viewport().set_input_as_handled();return
 		if event.keycode==KEY_F6:open_build_mode();get_viewport().set_input_as_handled();return
 		if event.keycode==KEY_C: toggle_panel("profile"); return
@@ -553,6 +559,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	if event.is_action_pressed("interact") and (bunny.action=="" or sleep_active or nap_active): interact()
 	if event.is_action_pressed("daydream") and bunny.action=="": bunny.play_action("confused",2.5,"?")
+func handle_emote(id: String) -> void:
+	if talking_npc != "" or network_interaction_pending or network_action_pending or not session.job().is_empty() or not bunny.can_emote():
+		return
+	if session.is_online():
+		var result: Dictionary = await session.request_online("emote", {"id": id})
+		if not result.ok:
+			hud.notify(str(result.get("message", "")))
+	else:
+		bunny.trigger_emote(id)
+
 func toggle_panel(kind: String) -> void:
 	if hud.overlay.visible and hud.mode==kind: hud.close_panel()
 	else: hud.open_panel(kind)
@@ -707,10 +723,10 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		bunny.can_move=false
 		var animation: String=("gather_stone" if DB.recipe(item).get("station","")=="workshop" else "cook") if verb=="craft" else verb
 		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
-		if verb=="craft" and targets[target].has("work_anchor"): bunny.visual.rotation.y=targets[target].work_anchor.global_rotation.y+PI
-		elif verb=="eat":bunny.visual.rotation.y=preload("res://scripts/city/seating.gd").seat(dining_chair).basis.get_euler().y if is_instance_valid(dining_chair) else PI
-		elif verb=="craft":bunny.visual.rotation.y=PI
-		elif verb!="snack": bunny.visual.rotation.y=atan2(target_position(target).x-bunny.position.x,target_position(target).z-bunny.position.z)
+		if verb=="craft" and targets[target].has("work_anchor"): bunny.set_visual_heading(targets[target].work_anchor.global_rotation.y+PI)
+		elif verb=="eat":bunny.set_visual_heading(preload("res://scripts/city/seating.gd").seat(dining_chair).basis.get_euler().y if is_instance_valid(dining_chair) else PI)
+		elif verb=="craft":bunny.set_visual_heading(PI)
+		elif verb!="snack": bunny.set_visual_heading(atan2(target_position(target).x-bunny.position.x,target_position(target).z-bunny.position.z))
 		bunny.play_action(animation,float(session.job().duration)+.25,"")
 		if verb in ["water","weed","gather"] and animation!="harvest_tree":
 			bunny.align_work(target_position(target),1.30 if verb=="gather" else 1.45)

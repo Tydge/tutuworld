@@ -49,14 +49,14 @@ func reconcile(actor: CharacterBody3D) -> void:
 	var v: Array=found.state.velocity;var w: Array=row.velocity
 	if error.length()<.025 and Vector3(v[0]-w[0],v[1]-w[1],v[2]-w[2]).length()<.1 and bool(found.state.get("ice_inertia",false))==bool(row.get("ice_inertia",false)):return
 	var before:=actor.position
-	var yaw: float=actor.visual.rotation.y;var step: float=actor.step_phase
+	var yaw: float=actor.visual_heading();var step: float=actor.step_phase
 	actor.restore_movement_state(row)
 	for frame in history:
 		var input: Dictionary=frame.input
 		actor.run_enabled=bool(input.running)
 		actor.simulate_movement(actor.INPUT_STEP,Vector3(input.direction[0],0,input.direction[2]),bool(input.jump),false,true)
 		frame.state=actor.movement_state()
-	actor.visual.rotation.y=yaw;actor.step_phase=step
+	actor.set_visual_heading(yaw);actor.step_phase=step
 	corrections+=1
 	if before.distance_to(actor.position)>3:
 		actor.presentation_offset=Vector3.ZERO;actor.reset_physics_interpolation();hard_corrections+=1

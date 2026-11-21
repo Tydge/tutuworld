@@ -2,6 +2,9 @@ extends CharacterBody3D
 signal wardrobe_changed
 const Meal=preload("res://scripts/city/meal_timeline.gd")
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
+const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
+const EmoteFace=preload("res://scripts/characters/emote_face.gd")
+const EmoteEffects=preload("res://scripts/characters/emote_effects.gd")
 ## Shared semantic rig: four limb pivots, head, eyes, mouth and wearable slots.
 @export var rig_profile: Resource = preload("res://config/animals/bunny.tres")
 signal movement_predicted(direction: Vector3,jump: bool,running: bool)
@@ -26,6 +29,17 @@ var blink_time := -1.0
 var action := ""
 var action_time := 0.0
 var action_length := 0.0
+var emote := ""
+var emote_age := 0.0
+var emote_revision := 0
+var network_emote_revision := -1
+var emote_shift := Vector2.ZERO
+var emote_turn := 0.0
+var emote_stretch := 0.0
+var visual_rest_scale := Vector3.ONE
+var emote_aiming := false
+var emote_face: EmoteFace
+var emote_effects: EmoteEffects
 var walking := false
 # Input drives the gait on ice; horizontal velocity has its own inertia.
 var ice_inertia:=false
@@ -89,6 +103,7 @@ func restore_movement_state(value: Dictionary) -> void:
 
 func _ready() -> void:
 	visual = $Visual
+	visual_rest_scale = visual.scale
 	head = $Visual/Head
 	head_rest_position=head.position
 	eyes = $Visual/Head/Eyes
@@ -117,7 +132,43 @@ func _ready() -> void:
 
 func toggle_run() -> void:
 	run_enabled=not run_enabled
+func can_emote() -> bool:
+	return can_move and not seated and not sleeping and action.is_empty() and is_on_floor() and not walking
+
+func trigger_emote(id: String) -> void:
+	if emote == id and not EmoteMotion.is_short(id):
+		if EmoteMotion.DANCES.has(id):
+			stop_emote()
+		return
+	stop_emote()
+	emote = id
+	emote_age = 0.0
+	emote_revision += 1
+
+func stop_emote() -> void:
+	if emote.is_empty():
+		return
+	emote = ""
+	emote_age = 0.0
+	emote_revision += 1
+	if emote_aiming:
+		left_arm.scale = Vector3.ONE
+		right_arm.scale = Vector3.ONE
+		emote_aiming = false
+
+func sync_emote(row: Dictionary) -> void:
+	var revision := int(row.get("emote_revision", 0))
+	if revision <= network_emote_revision:
+		return
+	network_emote_revision = revision
+	var id := str(row.get("emote", ""))
+	stop_emote()
+	if id in EmoteMotion.KEY_ORDER:
+		emote = id
+		emote_age = float(row.get("emote_age", 0.0))
+
 func play_action(kind: String, duration: float, symbol: String = "") -> void:
+	stop_emote()
 	action = kind
 	action_time = 0.0
 	action_length = duration
@@ -125,6 +176,7 @@ func play_action(kind: String, duration: float, symbol: String = "") -> void:
 	held_cup.visible = kind == "tea"
 
 func sit_on(seat: Transform3D) -> void:
+	stop_emote()
 	seated = true
 	ice_inertia=false;animation_speed=-1.
 	can_move = false
@@ -132,13 +184,14 @@ func sit_on(seat: Transform3D) -> void:
 	velocity = Vector3.ZERO
 	global_position = seat.origin
 	reset_physics_interpolation()
-	visual.rotation.y = seat.basis.get_euler().y
-	facing = visual.rotation.y
+	set_visual_heading(seat.basis.get_euler().y)
+	facing = visual_heading()
 
 func sit_on_surface(seat: Transform3D) -> void:
 	seat.origin.y-=rig_profile.body_center.y-rig_profile.body_radii.y-.018
 	sit_on(seat)
 func stand_up(exit_position: Vector3) -> void:
+	stop_emote()
 	ice_inertia=false;animation_speed=-1.
 	sleeping=false
 	collision_layer=sleep_collision_layer
@@ -194,6 +247,7 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 	var text_entry: bool=world.has_method("is_text_entry_active") and world.is_text_entry_active()
 	if not can_move or action!="" or (not replay and (world.paused or text_entry)):direction=Vector3.ZERO;jump=false
 	direction=direction.limit_length(1)
+	if not replay and not emote.is_empty() and (direction.length_squared()>.01 or jump):stop_emote()
 	var grounded: bool=is_on_floor() if network_restore_grounded==null else bool(network_restore_grounded)
 	network_restore_grounded=null
 	if work_align_active:
@@ -217,7 +271,7 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 		velocity.z = move_toward(velocity.z,direction.z*target_speed,acceleration*delta)
 	if direction.length()>.1:
 		facing = atan2(direction.x,direction.z)
-		visual.rotation.y = lerp_angle(visual.rotation.y,facing,1.0-exp(-delta*12.0))
+		set_visual_heading(lerp_angle(visual_heading(),facing,1.0-exp(-delta*12.0)))
 	if not grounded: velocity.y -= 18.0*delta
 	if jump and grounded and action=="" and (replay or not world.paused):
 		velocity.y = 7.0
@@ -264,16 +318,25 @@ func animate_pose(delta: float) -> void:
 	left_arm.position=arm_rest_left
 	right_arm.position=arm_rest_right
 	clock += delta
-	blink_in -= delta
-	if blink_in<=0:
-		blink_time = 0
-		blink_in = randf_range(4.5,8.0)
-	if blink_time>=0:
-		blink_time += delta
-		eyes.scale.y = clampf(absf(blink_time-.09)/.09,.06,1)
-		if blink_time>=.18:
-			blink_time = -1
-			eyes.scale.y = 1
+	if not emote.is_empty():
+		emote_age += delta
+		if not can_move or not action.is_empty() or seated or sleeping or (EmoteMotion.is_short(emote) and emote_age >= EmoteMotion.SHORT_TIME):
+			stop_emote()
+	if not emote.is_empty() and rig_profile.species_id == "bunny":
+		# The rabbit's eyes and brows keep their neutral appearance during gestures.
+		eyes.scale.y = 1.0
+		blink_time = -1.0
+	else:
+		blink_in -= delta
+		if blink_in<=0:
+			blink_time = 0
+			blink_in = randf_range(4.5,8.0)
+		if blink_time>=0:
+			blink_time += delta
+			eyes.scale.y = clampf(absf(blink_time-.09)/.09,.06,1)
+			if blink_time>=.18:
+				blink_time = -1
+				eyes.scale.y = 1
 	var grounded:=network_grounded if network_replica else is_on_floor()
 	var moving := walking and grounded and not seated and (action=="" or work_align_active)
 	var speed := animation_speed if animation_speed>=0. else Vector2(velocity.x,velocity.z).length()
@@ -379,6 +442,19 @@ func animate_pose(delta: float) -> void:
 	if sleeping: lean=SleepPose.BODY_ANGLE
 	roll*=rig_profile.tilt_scale
 	var blend := 1.0-exp(-delta*18.0)
+	var gesture: EmoteMotion.Pose
+	var strength := 0.0
+	if not network_controlled and not emote.is_empty():
+		gesture = EmoteMotion.sample(emote, emote_age)
+		strength = EmoteMotion.weight(emote, emote_age)
+		arm_l = arm_l.lerp(gesture.left_arm, strength)
+		arm_r = arm_r.lerp(gesture.right_arm, strength)
+		leg_l = leg_l.lerp(gesture.left_leg, strength)
+		leg_r = leg_r.lerp(gesture.right_leg, strength)
+		lean = lerpf(lean, gesture.lean, strength)
+		roll = lerpf(roll, gesture.roll, strength)
+		head_roll = lerpf(head_roll, gesture.head_roll, strength)
+		bob = lerpf(bob, gesture.lift, strength)
 	pose_limb(left_arm,arm_l,blend)
 	pose_limb(right_arm,arm_r,blend)
 	pose_limb(left_leg,leg_l,blend)
@@ -392,14 +468,45 @@ func animate_pose(delta: float) -> void:
 		var b: Vector3=visual.basis*(right_leg.position+right_leg.basis*rig_profile.leg_end)
 		var sole: float=minf(a.y,b.y)-rig_profile.leg_radius
 		bob-=maxf(0,sole)*.55*run_blend
-	visual.position.y = lerpf(visual.position.y,bob,blend)
+	var heading := visual_heading()
+	if gesture != null or absf(emote_turn) > .0001:
+		var turn := gesture.turn if gesture != null else 0.0
+		emote_turn = wrapf(lerp_angle(emote_turn,turn,blend),-PI,PI)
+		if gesture == null and absf(emote_turn) <= .0001:
+			emote_turn = 0.0
+		set_visual_heading(heading)
+	if gesture != null or absf(emote_stretch) > .0001:
+		emote_stretch = lerpf(emote_stretch,gesture.stretch*strength if gesture != null else 0.0,blend)
+		if gesture == null and absf(emote_stretch) <= .0001:
+			emote_stretch = 0.0
+		visual.scale = visual_rest_scale * Vector3(1.-emote_stretch*.43,1.+emote_stretch,1.-emote_stretch*.43)
 	visual.rotation.z = lerp_angle(visual.rotation.z,roll,blend)
 	visual.rotation.x = lerp_angle(visual.rotation.x,lean,blend)
 	head.rotation.z = lerp_angle(head.rotation.z,head_roll,1.0-exp(-delta*7))
-	head.rotation.x = lerp_angle(head.rotation.x,SleepPose.HEAD_ANGLE if sleeping else -lean*.3,blend)
+	var head_pitch := SleepPose.HEAD_ANGLE if sleeping else -lean*.3
+	if gesture != null:
+		head_pitch = lerpf(head_pitch, gesture.head_pitch, strength)
+		var support := emote_floor_offset()
+		bob += strength * (support if gesture.grounded_pose else maxf(0.0, support))
+		if gesture.paw_to_cheek > 0.0 or gesture.clap > .002:
+			pose_emote_paws(gesture,strength)
+		elif emote_aiming:
+			left_arm.scale = Vector3.ONE
+			right_arm.scale = Vector3.ONE
+			emote_aiming = false
+	head.rotation.x = lerp_angle(head.rotation.x,head_pitch,blend)
+	visual.position.y = lerpf(visual.position.y,bob,blend)
+	if gesture != null or emote_shift.length_squared() > .000001:
+		emote_shift = emote_shift.lerp(gesture.shift * strength if gesture != null else Vector2.ZERO, blend)
+		if emote_shift.length_squared() <= .000001:
+			emote_shift = Vector2.ZERO
+		var offset := Basis(Vector3.UP, visual.rotation.y) * Vector3(emote_shift.x, 0, emote_shift.y)
+		visual.position.x = offset.x
+		visual.position.z = offset.z
 	ears[0].rotation.z = rig_profile.ear_rest.x+(sin(clock*2.1)*.012+stride*.02)*rig_profile.ear_motion
 	ears[1].rotation.z = rig_profile.ear_rest.y+(sin(clock*2.1+.5)*.012-stride*.016)*rig_profile.ear_motion
-	for ear in ears: ear.rotation.x = lerpf(ear.rotation.x,(-run_blend*.10+sin(step_phase-.4)*gait_blend*.022)*rig_profile.ear_motion,blend)
+	var flick := gesture.ear_flick * strength if gesture != null else 0.0
+	for ear in ears: ear.rotation.x = lerpf(ear.rotation.x,(-run_blend*.10+sin(step_phase-.4)*gait_blend*.022+flick)*rig_profile.ear_motion,blend)
 	if action=="harvest_tree": pose_tree_reach()
 	if sleeping:
 		eyes.scale.y=.045
@@ -409,6 +516,73 @@ func animate_pose(delta: float) -> void:
 	if held_cup.visible:
 		var hand := right_arm.to_global(rig_profile.grip_offset)
 		held_cup.global_transform = Transform3D(visual.global_basis,hand+visual.global_basis*Vector3(0,.12,.12))
+	if gesture != null or emote_face != null or emote_effects != null:
+		update_emote_expression(strength)
+
+func visual_heading() -> float:
+	return visual.rotation.y - emote_turn
+
+func set_visual_heading(value: float) -> void:
+	visual.rotation.y = value + emote_turn
+
+func pose_emote_paws(gesture: EmoteMotion.Pose,strength: float) -> void:
+	var radii: Vector3 = rig_profile.head_radii
+	var grip: Vector3 = rig_profile.grip_offset
+	emote_aiming = true
+	if gesture.paw_to_cheek > 0.0:
+		var cheek := head.to_global(Vector3(radii.x * .62, -radii.y * .53, radii.z * .85))
+		aim_hand(right_arm,right_arm.to_global(grip).lerp(cheek,gesture.paw_to_cheek*strength))
+	else:
+		# Set a shared clap target just in front of the shoulders, clear of the muzzle.
+		var center := Vector3(0,lerpf(1.03,1.52,gesture.clap_height),radii.z*.76+.19)
+		var blend := gesture.clap*strength
+		for side in [-1,1]:
+			var arm := left_arm if side < 0 else right_arm
+			var palm := arm.to_global(Vector3(grip.x*side,grip.y,grip.z))
+			var target := visual.to_global(center+Vector3(side*.072,0,0))
+			aim_hand(arm,palm.lerp(target,blend),side<0)
+
+func update_emote_expression(strength: float) -> void:
+	var expressive := emote in EmoteMotion.EXPRESSIONS and strength > .10
+	if expressive and rig_profile.species_id != "bunny":
+		if emote_face == null:
+			emote_face = EmoteFace.new()
+			emote_face.name = "EmoteFace"
+			emote_face.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			head.add_child(emote_face)
+		eyes.hide()
+		mouth.hide()
+		emote_face.show_expression(rig_profile.species_id, emote)
+	elif emote_face != null and emote_face.visible:
+		emote_face.hide()
+		eyes.show()
+		mouth.show()
+	if expressive:
+		if emote_effects == null:
+			emote_effects = EmoteEffects.new()
+			emote_effects.name = "EmoteEffects"
+			add_child(emote_effects)
+		emote_effects.show_effect(emote)
+		emote_effects.animate(self, emote_age, strength)
+	elif emote_effects != null:
+		emote_effects.hide()
+	if emote == "laugh" and rig_profile.species_id == "bunny":
+		var chuckle := .45 + .55 * absf(sin(emote_age * TAU * 3.))
+		mouth.scale.y = 1.0 + .65 * strength * chuckle
+
+# The physics capsule stays upright. Use the species' actual visual support
+# points so sitting paws and a supine head meet the floor at any body tilt.
+func emote_floor_offset() -> float:
+	var basis := visual.basis
+	var up := Vector3(basis.x.y, basis.y.y, basis.z.y)
+	var body_size: Vector3 = rig_profile.body_radii
+	var head_size: Vector3 = rig_profile.head_radii
+	var sole: float = minf(up.dot(rig_profile.body_center) - (up * body_size).length(),
+		up.dot(head.position) - ((head.basis.transposed() * up) * head_size).length())
+	for limb in [left_leg, right_leg]:
+		var foot: Vector3 = limb.transform * rig_profile.leg_end
+		sole = minf(sole, up.dot(foot) - rig_profile.leg_radius)
+	return .018 - sole
 
 func align_work(target: Vector3,distance_: float) -> void:
 	var away:=global_position-target;away.y=0
