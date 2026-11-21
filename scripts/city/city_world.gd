@@ -31,7 +31,7 @@ var distance_ := 13.5
 var camera_focus := Vector3.ZERO
 var current_target := ""
 var quick_action: Dictionary={}
-var npc_neckwear: Dictionary={}
+var default_atelier: Dictionary={}
 var talking_npc := ""
 var dialogue_text := ""
 var previous_dialogues: Dictionary={}
@@ -282,15 +282,7 @@ func setup_resources() -> void:
 		visual.name=r.id;resources[r.id]=visual
 func spawn_npcs() -> void:
 	var candidates: Array[String]=["Merchant_farm","Merchant_tools","Merchant_clothes","Passerby0","Passerby1","Passerby2","Passerby3"]
-	var decoration_rng:=RandomNumberGenerator.new()
-	decoration_rng.randomize()
-	var neck_items: Array[String]=[]
-	for id in DB.catalog().items:
-		if DB.item(id).get("slot","")=="neck": neck_items.append(id)
-	for i in range(2):
-		var index:=decoration_rng.randi_range(0,candidates.size()-1)
-		npc_neckwear[candidates.pop_at(index)]=neck_items[decoration_rng.randi_range(0,neck_items.size()-1)]
-	npc_neckwear["CatTeacher"]="bell_red"
+	default_atelier=preload("res://scripts/appearance/resident_atelier.gd").sample(candidates,9,"city")
 	var definitions := [["Merchant_farm","春芽","farm","beret_sage","apron_sage"],["Merchant_tools","木木","tools","beret_plaid_honey","vest_sage"],["Merchant_clothes","云朵","clothes","bow_rose","vest_rose"]]
 	for d in definitions:
 		var position_: Vector3=scenery.get_node("Shop_"+d[2]+"/MerchantAnchor").global_position
@@ -309,7 +301,7 @@ func spawn_npcs() -> void:
 		driver.speed=random.randf_range(1.15,1.7)
 		n.add_child(driver)
 		targets[str(n.name)]={"kind":"npc","position":n.position,"radius":2.6,"node":n,"name":person.name,"profile":i}
-	var teacher:=spawn_npc("CatTeacher","猫咪老师",Vector3(-10,.1,17.7),{},"cat_teacher")
+	var teacher:=spawn_npc("CatTeacher","猫咪老师",Vector3(-10,.1,17.7),{"neck":"bell_red"},"cat_teacher")
 	var teacher_driver:=Driver.new()
 	teacher_driver.bunny=teacher
 	teacher_driver.city=self
@@ -327,8 +319,7 @@ func spawn_npc(id: String,label_: String,p: Vector3,equipment: Dictionary,specie
 	add_child(n)
 	n.position=p
 	n.world=null;n.move_speed=2.8
-	var worn:=equipment.duplicate()
-	if npc_neckwear.has(id): worn.neck=npc_neckwear[id]
+	var worn:=equipment.merged(default_atelier.get(id,{}),true)
 	n.set_meta("equipment",worn)
 	Outfit.apply(n,worn)
 	optimize_npc(n)
@@ -358,7 +349,11 @@ func _process(delta: float) -> void:
 	update_camera(delta)
 	update_ambient_lighting()
 	update_occluders(delta)
-	if not session.is_online() and not session.job().is_empty() and bunny.position.distance_to(job_start)>1.0: cancel_action()
+	if not session.is_online() and not session.job().is_empty():
+		var anchor:=job_start
+		if session.job().verb=="water" and not job_start.is_equal_approx(bunny.work_position):
+			anchor=Geometry3D.get_closest_point_to_segment(bunny.position,job_start,bunny.work_position)
+		if bunny.position.distance_to(anchor)>1.0: cancel_action()
 	update_timer+=delta
 	if update_timer>.13:
 		update_timer=0
@@ -740,12 +735,15 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		elif verb=="craft":bunny.set_visual_heading(PI)
 		elif verb!="snack": bunny.set_visual_heading(atan2(target_position(target).x-bunny.position.x,target_position(target).z-bunny.position.z))
 		bunny.play_action(animation,float(session.job().duration)+.25,"")
-		if verb in ["water","weed","gather"] and animation!="harvest_tree":
+		if verb=="water":
+			preload("res://scripts/city/watering_pose.gd").approach(bunny,target_position(target))
+		elif verb in ["weed","gather"] and animation!="harvest_tree":
 			bunny.align_work(target_position(target),1.30 if verb=="gather" else 1.45)
 		session.authority.running=false
 		tools.target_point=target_position(target)+Vector3(0,(.38 if targets.get(target,{}).get("item","")=="birch" else .65) if verb=="gather" else .18,0)
 		if targets.get(target,{}).has("effect_anchor"): tools.target_point=targets[target].effect_anchor.global_position
-		tools.show_tool(animation,session.authority.watering_can_id(),str(session.job().get("item","")))
+		if verb=="water": tools.target_point=target_position(target)
+		tools.show_tool(animation,session.authority.watering_can_id(),str(session.job().get("item","")),float(session.job().duration))
 	return result
 func cancel_action() -> void:
 	if session.is_online():

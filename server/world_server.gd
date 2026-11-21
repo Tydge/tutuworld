@@ -618,7 +618,8 @@ func begin_job_pose(id: String) -> void:
 	if host.targets.has(j.target):
 		var point: Vector3=host.targets[j.target].position
 		if j.verb not in ["craft","eat"]:pawn.visual.rotation.y=atan2(point.x-pawn.position.x,point.z-pawn.position.z)
-		if j.verb in ["water","weed","gather"] and animation!="harvest_tree":pawn.align_work(point,1.30 if j.verb=="gather" else 1.45)
+		if j.verb=="water":preload("res://scripts/city/watering_pose.gd").approach(pawn,point)
+		elif j.verb in ["weed","gather"] and animation!="harvest_tree":pawn.align_work(point,1.30 if j.verb=="gather" else 1.45)
 	pawn.play_action(animation,INF);a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion()
 func finish_pose(id: String) -> void:
 	var a=actors[id];var pawn=pawns[id]

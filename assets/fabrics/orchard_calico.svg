@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <g id="spray">
+      <path fill="none" stroke="#b0b0b0" stroke-width="2.3" d="M-8 17Q0 10 2-4Q4-12 11-17M0 3Q-6-1-10-8"/>
+      <path fill="#ababab" d="M-4 11Q-17 13-18 4Q-9 2-4 11M1 1Q15 0 16-9Q7-10 1 1"/>
+      <g fill="#eee">
+        <path d="M9-17q-8-6-4-9q4-2 6 5q-1-9 4-8q5 1-1 10q8-5 9-1q1 5-9 6z"/>
+        <path d="M-10-8q-9 0-10-5q0-4 7 0q-5-7-1-8q4-1 6 8q2-7 5-4q2 4-4 9z"/>
+      </g>
+      <circle fill="#777" cx="11" cy="-16" r="2.5"/>
+    </g>
+  </defs>
+  <rect width="128" height="128" fill="#090909"/>
+  <use href="#spray" transform="translate(33 39) rotate(-13)"/>
+  <use href="#spray" transform="translate(94 97) rotate(153)"/>
+  <g fill="#8c8c8c"><circle cx="89" cy="27" r="2.7"/><circle cx="96" cy="23" r="1.7"/><circle cx="25" cy="94" r="2.5"/><circle cx="31" cy="89" r="1.5"/></g>
+</svg>

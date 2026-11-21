@@ -25,9 +25,12 @@ func run() -> void:
 		session.state().time=1800;game.update_lighting();game.hud.toast.hide();game.yaw=.70;game.pitch=.42;game.distance_=8.8
 		for item in ["watering_can","pickaxe","stone_hammer"]: session.authority.add(item,1)
 		session.authority.add("herbicide",4)
+		session.state().watering_water.watering_can=3
 		session.state().plots.plot_00={"crop":"carrot","growth":0.0,"water_stage":-1,"weed_stage":0};game.refresh_world()
 		for kind in ["water","weed"]:
-			if kind=="weed": session.state().plots.plot_00.weed_stage=-1
+			if kind=="weed":
+				session.state().plots.plot_00.growth=1400.
+				session.state().plots.plot_00.weed_stage=-1
 			var target: Vector3=game.target_position("plot_00")
 			await travel(target+Vector3(0,.2,-1.65))
 			game.update_target();await create_timer(.1).timeout
@@ -40,7 +43,12 @@ func run() -> void:
 			var nozzle: Vector3=game.tools.prop.get_node("Outlet").get_global_transform_interpolated().origin
 			var start: Vector3=game.tools.spray.material_override.get_shader_parameter("start")
 			var end: Vector3=game.tools.spray.material_override.get_shader_parameter("finish")
-			check(start.distance_to(nozzle)<.035 and end.distance_to(target+Vector3(0,.18,0))<.001,"Effect starts at the real nozzle and lands on the selected plot")
+			if kind=="water":
+				var direction: Vector3=game.tools.prop.get_node("Outlet").get_global_transform_interpolated().basis.z.normalized()
+				var gravity_drop: float=game.tools.spray.material_override.get_shader_parameter("fall")
+				check(start.distance_to(nozzle)<.035 and (end-start+Vector3.UP*gravity_drop).normalized().dot(direction)>.998 and maxf(absf(end.x-target.x),absf(end.z-target.z))<.88,"Pour leaves the tilted rose and lands inside the bed")
+			else:
+				check(start.distance_to(nozzle)<.035 and end.distance_to(target+Vector3(0,.18,0))<.001,"Spray starts at the nozzle and lands on the selected plot")
 			await capture("新版作业-"+species+"-"+kind)
 			await create_timer(1.3).timeout
 			check(session.job().is_empty() and not game.tools.effects.visible,"Effect stops on completion")

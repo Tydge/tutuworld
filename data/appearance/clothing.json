@@ -77,6 +77,42 @@
       "price": 88,
       "description": "宽摆短斗篷，边缘镶着一圈软绒。",
       "shop_map": "icefield"
+    },
+    "cowboy_hat": {
+      "slot": "head",
+      "price": 86,
+      "description": "翻起的宽檐压着皮滚边，帽带正面扣一枚松石。",
+      "collection": "atelier"
+    },
+    "top_hat": {
+      "slot": "head",
+      "price": 92,
+      "description": "微微外张的毡帽冠，配酒红罗纹缎带和侧结。",
+      "collection": "atelier"
+    },
+    "day_dress": {
+      "slot": "body",
+      "price": 105,
+      "description": "小花印在蓝布上，奶油色翻领搭配收腰压褶裙摆。",
+      "collection": "atelier"
+    },
+    "oxford_shirt": {
+      "slot": "body",
+      "price": 82,
+      "description": "双线织纹、翻领和贴袋，门襟缀着细小贝母扣。",
+      "collection": "atelier"
+    },
+    "silk_bowtie": {
+      "slot": "neck",
+      "price": 58,
+      "description": "窄缎带束住领心，两侧蝶翼叠起柔软的丝褶。",
+      "collection": "atelier"
+    },
+    "gold_chain": {
+      "slot": "neck",
+      "price": 110,
+      "description": "厚实椭圆金环交错相扣，顺着胸口自然垂下。",
+      "collection": "atelier"
     }
   },
   "items": {
@@ -424,6 +460,48 @@
       "accent": "ffddbb",
       "pattern": "argyle",
       "pattern_scale": 2.8
+    },
+    "cowboy_hat_saddle": {
+      "style": "cowboy_hat",
+      "name": "鞍棕牛仔帽",
+      "color": "b37a46",
+      "accent": "684735"
+    },
+    "top_hat_midnight": {
+      "style": "top_hat",
+      "name": "午夜蓝礼帽",
+      "color": "323e52",
+      "accent": "8a4e56"
+    },
+    "day_dress_cornflower": {
+      "style": "day_dress",
+      "name": "矢车菊碎花连身裙",
+      "color": "406c83",
+      "accent": "edce9c",
+      "pattern": "orchard_calico",
+      "pattern_scale": 4.2,
+      "pattern_strength": 0.86
+    },
+    "oxford_shirt_tide": {
+      "style": "oxford_shirt",
+      "name": "海盐细条纹衬衫",
+      "color": "6691a0",
+      "accent": "e1e4cc",
+      "pattern": "oxford_tick",
+      "pattern_scale": 2.8,
+      "pattern_strength": 0.68
+    },
+    "silk_bowtie_claret": {
+      "style": "silk_bowtie",
+      "name": "正红缎面蝴蝶领结",
+      "color": "c51e2c",
+      "accent": "891324"
+    },
+    "gold_chain_cable": {
+      "style": "gold_chain",
+      "name": "抛光大金链子",
+      "color": "e8af46",
+      "accent": "ffdf8a"
     }
   },
   "starters": [

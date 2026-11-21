@@ -47,12 +47,12 @@ func run() -> void:
 	for id in DB.catalog().items:
 		if DB.item(id).has("shop_map"):continue
 		if DB.item(id).get("slot","")=="neck": neck_count+=1
-	check(neck_count==6,"Three plaid scarves and three colored-band bells are sold")
+	check(neck_count==8,"City neckwear includes three scarves, three bells, a bow tie and a chain")
 	var cat: CharacterBody3D=game.get_node("CatTeacher")
 	check(cat.get_meta("equipment").get("neck","")=="bell_red","Cat NPC wears a red-band bell via shared equipment")
 	var dressed:=0
 	for npc in game.npcs:
-		if npc!=cat and npc.get_meta("equipment").has("neck"): dressed+=1
+		if npc!=cat and npc.name!="Youmu" and npc.get_meta("equipment").has("neck"): dressed+=1
 	check(dressed==2,"Exactly two other randomly selected NPCs wear neck accessories")
 	var base:=Animals.create("cat_teacher")
 	check(base.find_children("InnerEar*","Node",true,false).is_empty(),"No contrasting inner ear patch")
@@ -60,7 +60,7 @@ func run() -> void:
 	check(base.get_node("Visual/Head/RoundCatHead").mesh is ArrayMesh,"Cat ears and head are one continuous surface")
 	base.free()
 	session.authority.state.coins=2000
-	await travel(Vector3(6,.1,-20))
+	await travel(game.targets.Merchant_clothes.node.global_position+Vector3(0,0,1.2))
 	for id in DB.catalog().items:
 		if DB.item(id).has("shop_map"):continue
 		if DB.item(id).get("slot","")!="neck": continue
@@ -142,6 +142,7 @@ func run() -> void:
 	session.authority.state.plots.plot_00={"crop":"carrot","growth":0.0,"water_stage":-1,"weed_stage":0}
 	game.refresh_world()
 	session.authority.add("watering_can",1)
+	session.state().watering_water.watering_can=3
 	session.authority.add("herbicide",2)
 	await travel(Vector3(23.5,.1,-5.4))
 	game.yaw=.30
@@ -152,7 +153,7 @@ func run() -> void:
 	await travel(Vector3(22.4,.1,-6.2))
 	game.update_target()
 	check(game.current_target=="plot_00" and game.quick_action.target==game.current_target,"E, F and the floating marker share the selected crop")
-	check(game.hud.prompt.text.contains("F   快捷互动"),"HUD advertises the F shortcut")
+	check(game.hud.prompt.text.contains("F   浇水"),"HUD advertises the F shortcut")
 	await create_timer(.5).timeout
 	game.hud.toast.hide()
 	await capture("更新-F快捷互动提示")
@@ -180,11 +181,12 @@ func run() -> void:
 	check(session.authority.count("herbicide")==1 and not session.authority.needs(plot).weed,"Shortcut consumes exactly one herbicide on completion")
 	session.active=false
 	plot.growth=3600
+	var expected_carrots: int=session.authority.count("carrot")+session.authority.crop_yield(plot)
 	await press_f()
 	check(session.job().get("verb","")=="harvest","Ripe crops offer shortcut harvesting")
 	session.active=true
 	await create_timer(2.15).timeout
-	check(session.authority.count("carrot")==3 and session.state().plots.plot_00.crop=="","Shortcut harvest delivers crops")
+	check(session.authority.count("carrot")==expected_carrots and session.state().plots.plot_00.crop=="","Shortcut harvest delivers crops")
 	await travel(Vector3(0,.1,9))
 	check(not game.quick_interact().ok and session.job().is_empty(),"Shortcut cannot affect distant crops")
 	game.hud.open_panel("bag")

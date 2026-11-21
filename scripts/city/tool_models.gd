@@ -17,7 +17,9 @@ static func make(kind: String,water_id: String="") -> Node3D:
 				for y in [-.04,.025]: G.ball(root,Vector3(x,.28+y,.634),Vector3(.012,.012,.006),dark)
 			for side in [-1,1]: G.capsule(root,Vector3(side*.20,.03,-.10),Vector3(side*.20,.35,-.10),.035,wood)
 			G.capsule(root,Vector3(-.20,.35,-.10),Vector3(.20,.35,-.10),.04,wood)
-			marker(root,"GripR",Vector3(0,.35,-.10));marker(root,"Outlet",Vector3(0,.28,.665))
+			marker(root,"GripR",Vector3(.16,.35,-.10))
+			marker(root,"GripL",Vector3(-.16,.35,-.10))
+			marker(root,"Outlet",Vector3(0,.28,.635))
 		"weed":
 			G.cylinder(root,Vector3.ZERO,.105,.26,G.mat("669989"),.09)
 			G.cylinder(root,Vector3(0,.15,0),.055,.055,brass)

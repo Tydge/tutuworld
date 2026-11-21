@@ -144,9 +144,13 @@ func _process(delta: float) -> void:
 				var meal_changed: bool=str(row.get("action",""))=="eat" and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
 				if replica.action!=str(row.get("action","")) or meal_changed:
 					replica.action=str(row.get("action",""));replica.props.hide_tool()
-					if replica.action!="":replica.props.show_tool(replica.action,str(row.get("watering_can","")),str(row.get("job",{}).get("item","")))
+					if replica.action!="":
+						var job: Dictionary=row.get("job",{})
+						replica.props.show_tool(replica.action,str(row.get("watering_can","")),str(job.get("item","")),float(job.get("duration",2.)))
+						if replica.action=="water":replica.props.clock=float(job.get("elapsed",0.))
 				var target: String=row.get("job",{}).get("target","")
-				if city.targets.has(target):replica.props.target_point=city.targets[target].effect_anchor.global_position if city.targets[target].has("effect_anchor") else city.target_position(target)+Vector3(0,.6,0)
+				if city.targets.has(target) and replica.action=="water":replica.props.target_point=city.target_position(target)
+				elif city.targets.has(target):replica.props.target_point=city.targets[target].effect_anchor.global_position if city.targets[target].has("effect_anchor") else city.target_position(target)+Vector3(0,.6,0)
 	if city.map_id=="city" and is_instance_valid(city.culinary):
 		var meal:=""
 		for id in replicas:

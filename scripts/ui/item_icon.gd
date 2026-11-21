@@ -1,6 +1,19 @@
 extends Control
 const FoodIcons=preload("res://scripts/ui/food_icons.gd")
 const Swatch=preload("res://scripts/ui/fabric_swatch.gd")
+const FIELD_ICONS := {
+	"cowboy_hat": preload("res://assets/ui/atelier/cowboy_hat.png"),
+	"top_hat": preload("res://assets/ui/atelier/top_hat.png"),
+	"day_dress": preload("res://assets/ui/atelier/day_dress.png"),
+	"oxford_shirt": preload("res://assets/ui/atelier/oxford_shirt.png"),
+	"silk_bowtie": preload("res://assets/ui/atelier/silk_bowtie.png"),
+	"gold_chain": preload("res://assets/ui/atelier/gold_chain.png"),
+	"carrot": preload("res://assets/ui/atelier/carrot.png"),
+	"lettuce": preload("res://assets/ui/atelier/lettuce.png"),
+	"tomato": preload("res://assets/ui/atelier/tomato.png"),
+	"pumpkin": preload("res://assets/ui/atelier/pumpkin.png"),
+	"wheat": preload("res://assets/ui/atelier/wheat.png"),
+}
 var definition: Dictionary={}
 var item_id := ""
 var icon_extent:=56
@@ -15,6 +28,9 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO,25,Color("eff0dc"))
 	var kind: String=definition.get("kind","")
 	var shape: String=definition.get("style",definition.get("icon",item_id))
+	if FIELD_ICONS.has(shape):
+		draw_texture_rect(FIELD_ICONS[shape],Rect2(-27,-27,54,54),false)
+		return
 	if kind=="food" and FoodIcons.texture(item_id)!=null:
 		draw_texture_rect(FoodIcons.texture(item_id),Rect2(-27,-27,54,54),false)
 		return
@@ -66,9 +82,13 @@ func _draw() -> void:
 			draw_rect(Rect2(-8,0,16,12),Color("f5ead1"))
 	elif kind=="seed":
 		draw_style_box(_box(color),Rect2(-15,-18,30,36))
-		draw_circle(Vector2(0,2),8,Color("fff4d6"))
-		draw_line(Vector2(0,9),Vector2(0,-7),Color("5f9466"),3,true)
-		draw_circle(Vector2(-4,-4),4,Color("83aa63"))
+		var seed_crop := item_id.trim_prefix("seed_")
+		if FIELD_ICONS.has(seed_crop):
+			draw_texture_rect(FIELD_ICONS[seed_crop],Rect2(-13,-13,26,26),false)
+		else:
+			draw_circle(Vector2(0,2),8,Color("fff4d6"))
+			draw_line(Vector2(0,9),Vector2(0,-7),Color("5f9466"),3,true)
+			draw_circle(Vector2(-4,-4),4,Color("83aa63"))
 	elif shape=="pompom_cap":
 		var dome:=PackedVector2Array()
 		for i in range(25):
@@ -140,15 +160,6 @@ func _draw() -> void:
 		draw_circle(Vector2(-7,-5),4,Color("f6bd58"))
 		draw_line(Vector2(0,-13),Vector2(1,-20),Color("89744a"),3,true)
 		draw_colored_polygon(PackedVector2Array([Vector2(0,-16),Vector2(7,-23),Vector2(15,-19),Vector2(7,-14)]),Color("609359"))
-	elif shape=="wheat":
-		for offset in [-8,8]:
-			draw_line(Vector2(offset,20),Vector2(offset-2,-17),Color("aa8c46"),2,true)
-			for row in range(4):
-				for side in [-1,1]:
-					var point:=Vector2(offset+side*4,-12+row*7)
-					draw_set_transform(c+point*scale_,side*-.55,Vector2(scale_*3.4,scale_*5))
-					draw_circle(Vector2.ZERO,1,color)
-			draw_set_transform(c,0,Vector2.ONE*scale_)
 	elif shape in ["branch","birch"]:
 		draw_line(Vector2(-16,16),Vector2(14,-15),color,6,true)
 		draw_line(Vector2(0,0),Vector2(-2,-16),color,4,true)

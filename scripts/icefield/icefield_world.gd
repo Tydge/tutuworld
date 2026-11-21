@@ -61,6 +61,8 @@ func setup_targets() -> void:
 		var size_:=Vector3(.82,.10,.24) if r.item=="birch" else Vector3(.52,.10,.46)
 		G.ball(visual,Vector3(0,.64 if r.item=="birch" else .55,0),size_,preload("res://scripts/icefield/winter_props.gd").mat("snow"),"SnowCap")
 func spawn_npcs() -> void:
+	var candidates:=RESIDENTS.map(func(resident): return resident.id)
+	default_atelier=preload("res://scripts/appearance/resident_atelier.gd").sample(candidates,RESIDENTS.size()+4,"icefield")
 	for d in [["farm","冬葵","beret_sage","apron_sage"],["tools","岩叔","beret_plaid_honey","vest_sage"],["clothes","绒绒","pompom_cap_berry","capelet_berry"]]:
 		var p: Vector3=scenery.get_node("Shop_"+d[0]+"/MerchantAnchor").global_position
 		var n:=spawn_npc("FrostMerchant_"+d[0],d[1],p,{"head":d[2],"body":d[3],"neck":"scarf_red"})

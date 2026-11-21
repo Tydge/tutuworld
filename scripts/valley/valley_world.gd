@@ -39,7 +39,7 @@ func random_clothes(rng: RandomNumberGenerator) -> Dictionary:
 	for slot in ["head","body","neck"]:
 		var choices: Array=[]
 		for id in DB.catalog().items:
-			if DB.item(id).get("slot","")==slot: choices.append(id)
+			if DB.item(id).get("slot","")==slot and DB.item(id).get("collection","")!="atelier": choices.append(id)
 		worn[slot]=choices[rng.randi_range(0,choices.size()-1)]
 	return worn
 func interact() -> void:

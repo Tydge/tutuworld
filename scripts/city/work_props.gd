@@ -3,6 +3,10 @@ const G=preload("res://scripts/geometry.gd")
 const Meal=preload("res://scripts/city/meal_timeline.gd")
 const Food=preload("res://scripts/city/food_visual.gd")
 const Models=preload("res://scripts/city/tool_models.gd")
+const Pour=preload("res://scripts/city/watering_pose.gd")
+var duration:=2.0
+var water_floor:=0.0
+var floor_sample:=Vector3.INF
 var bunny: CharacterBody3D
 var verb:=""
 var prop: Node3D
@@ -17,9 +21,9 @@ var strike_phase:=0.0
 func _ready() -> void:
 	effects=Node3D.new();effects.name="WorkEffects";effects.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;add_child(effects)
 	var tube:=CylinderMesh.new();tube.top_radius=1;tube.bottom_radius=1;tube.height=1;tube.radial_segments=8;tube.rings=18;tube.cap_top=false;tube.cap_bottom=false
-	for i in range(5):
+	for i in Pour.HOLES.size():
 		var m:=ShaderMaterial.new();m.shader=load("res://assets/shaders/watering_stream.gdshader")
-		m.set_shader_parameter("radius",.029 if i==0 else .016)
+		m.set_shader_parameter("radius",.008 if i%2==0 else .0095)
 		var mesh:=G.mesh(effects,tube,Vector3.ZERO,m,"WaterStream");mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;mesh.extra_cull_margin=3.0;streams.append(mesh)
 	var mm:=MultiMesh.new();mm.transform_format=MultiMesh.TRANSFORM_3D;mm.use_custom_data=true
 	var quad:=QuadMesh.new();quad.size=Vector2.ONE;mm.mesh=quad;mm.instance_count=96
@@ -30,8 +34,8 @@ func _ready() -> void:
 	var ripple:=ShaderMaterial.new();ripple.shader=load("res://assets/shaders/water_splash.gdshader")
 	splash=G.mesh(effects,plane,Vector3.ZERO,ripple,"WaterLanding");splash.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	effects.hide()
-func show_tool(kind: String,water_id: String="",item: String="") -> void:
-	verb=kind;clock=0
+func show_tool(kind: String,water_id: String="",item: String="",seconds: float=2.) -> void:
+	verb=kind;clock=0;duration=maxf(.01,seconds);floor_sample=Vector3.INF
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
 	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id)
 	elif kind=="refill": prop=Models.make("water",water_id)
@@ -100,10 +104,13 @@ func _physics_process(delta: float) -> void:
 	elif verb=="refill":
 		var basis: Basis=bunny.visual.global_basis
 		prop.global_transform=Transform3D(basis,hand-basis*prop.get_node("GripR").position)
-	elif verb in ["water","weed"]:
-		hand+=bunny.visual.global_basis*Vector3(.27,.12,.10) if verb=="water" else bunny.visual.global_basis*Vector3(.18,.06,.08)
+	elif verb=="water":
+		Pour.hold(bunny,prop,clock/duration)
+		sample_water_floor()
+	elif verb=="weed":
+		hand+=bunny.visual.global_basis*Vector3(.18,.06,.08)
 		bunny.aim_hand(bunny.right_arm,hand)
-		var basis: Basis=bunny.visual.global_basis*Basis(Vector3.RIGHT,-.03 if verb=="water" else .25)
+		var basis: Basis=bunny.visual.global_basis*Basis(Vector3.RIGHT,.25)
 		var grip: Vector3=prop.get_node("GripR").position
 		prop.global_transform=Transform3D(basis,hand-basis*grip)
 	else: prop.global_transform=Transform3D(bunny.visual.global_basis,hand+bunny.visual.global_basis*Vector3(.10,0,.10))
@@ -139,9 +146,20 @@ func pose_meal() -> void:
 		prop.global_transform=Transform3D(Basis(right,forward.cross(right),forward),hand)
 		prop.scale=Vector3(1,1,clampf(hand.distance_to(target)/.30,.55,1.65))
 	prop.get_node("Mouthful").visible=phase.loaded
+func sample_water_floor() -> void:
+	var nozzle: Node3D=prop.get_node("Outlet")
+	var axis:=Pour.velocity(nozzle.global_basis)
+	var start:=nozzle.global_position
+	var end:=Pour.landing(start,axis,Pour.flight(start.y,axis.y,target_point.y+.09))
+	if floor_sample.distance_squared_to(end)<.0016: return
+	floor_sample=end
+	var ray:=PhysicsRayQueryParameters3D.create(end+Vector3.UP,end-Vector3.UP,8)
+	var hit:=get_world_3d().direct_space_state.intersect_ray(ray)
+	water_floor=hit.position.y+.006 if hit.has("position") else target_point.y+.09
+
 func _process(_delta: float) -> void:
 	if verb=="" or not is_instance_valid(prop): return
-	var time: float=clock if warming else bunny.action_time
+	var time: float=clock if warming or verb=="water" else bunny.action_time
 	var allowed: bool=warming or time>.18
 	var fluid: bool=verb in ["water","weed"]
 	var mining: bool=verb in ["gather_stone","gather_copper","gather_wood"]
@@ -153,20 +171,46 @@ func _process(_delta: float) -> void:
 	var nozzle:=prop.get_node_or_null("Outlet")
 	var start: Vector3=nozzle.get_global_transform_interpolated().origin if is_instance_valid(nozzle) else endpoint
 	var day: float=bunny.world.ambient_day if bunny.world!=null else 1.0
-	for i in range(streams.size()):
-		var stream: MeshInstance3D=streams[i];stream.visible=verb=="water"
-		if stream.visible:
-			var offset:=Vector3(sin(i*2.4)*.12,0,cos(i*2.4)*.12) if i>0 else Vector3.ZERO
-			stream.material_override.set_shader_parameter("start",start+offset*.28)
-			stream.material_override.set_shader_parameter("finish",endpoint+offset)
-			stream.material_override.set_shader_parameter("clock",time)
+	var bend:=0.
+	var front:=1.
+	var tail:=0.
+	if verb=="water":
+		var face: Transform3D=nozzle.get_global_transform_interpolated()
+		var speed:=Pour.velocity(face.basis)
+		var flight:=Pour.flight(start.y,speed.y,water_floor)
+		endpoint=Pour.landing(start,speed,flight)
+		bend=.5*Pour.GRAVITY*flight*flight
+		if not warming:
+			front=clampf((clock-duration*.23)/maxf(.01,flight),0.,1.)
+			tail=clampf((clock-duration*.78)/maxf(.01,flight),0.,1.)
+		var offset:=endpoint-target_point
+		if not warming and (front <= tail or maxf(absf(offset.x),absf(offset.z))>.80 or speed.y>-.26):
+			effects.hide()
+			return
+		effects.global_position=endpoint
+		for i in streams.size():
+			var hole: Vector2=Pour.HOLES[i]
+			var source:=face*Vector3(hole.x,hole.y,0.)
+			var jet:=Pour.velocity(face.basis,hole)
+			var seconds:=Pour.flight(source.y,jet.y,water_floor)
+			streams[i].show()
+			var surface: ShaderMaterial=streams[i].material_override
+			surface.set_shader_parameter("start",source)
+			surface.set_shader_parameter("finish",Pour.landing(source,jet,seconds))
+			surface.set_shader_parameter("fall",.5*Pour.GRAVITY*seconds*seconds)
+			surface.set_shader_parameter("clock",clock)
+			surface.set_shader_parameter("interval",Vector2(tail,front))
+	else:
+		for stream in streams:stream.hide()
+	spray.material_override.set_shader_parameter("interval",Vector2(tail,front))
+	spray.material_override.set_shader_parameter("fall",bend)
 	spray.visible=fluid or (mining and strike_phase>=.53 and strike_phase<.86)
 	spray.material_override.set_shader_parameter("start",start)
 	spray.material_override.set_shader_parameter("finish",endpoint)
 	spray.material_override.set_shader_parameter("kind",0 if verb=="water" else (1 if verb=="weed" else 2))
 	spray.material_override.set_shader_parameter("clock",time)
 	spray.material_override.set_shader_parameter("daylight",day)
-	splash.visible=verb=="water";splash.global_position=endpoint+Vector3(0,.008,0)
+	splash.visible=verb=="water" and front>=1.;splash.global_position=endpoint+Vector3(0,.008,0)
 	splash.material_override.set_shader_parameter("clock",time);splash.material_override.set_shader_parameter("daylight",day)
 func warm_variants() -> void:
 	warming=true

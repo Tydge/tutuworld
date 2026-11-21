@@ -6,6 +6,7 @@ uniform bool patterned=false;
 uniform float pattern_strength=.78;
 uniform float pattern_scale=12.0;
 uniform int cut=0;
+uniform float metallic_value=0.0;
 uniform float roughness_value=.96;
 uniform float specular_value=.25;
 #include "res://assets/shaders/fabric_color.gdshaderinc"
@@ -19,5 +20,5 @@ void fragment(){
  if(cut==2 && v.y>0.20)discard;
  vec3 w=pow(abs(normalize(n)),vec3(4));w/=max(w.x+w.y+w.z,.0001);
  ALBEDO=fabric_color(p.zy*pattern_scale)*w.x+fabric_color(p.xz*pattern_scale)*w.y+fabric_color(p.xy*pattern_scale)*w.z;
- ROUGHNESS=roughness_value;SPECULAR=specular_value;
+ METALLIC=metallic_value;ROUGHNESS=roughness_value;SPECULAR=specular_value;
 }

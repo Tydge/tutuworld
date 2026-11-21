@@ -211,6 +211,38 @@
         "quilt": 2.0
       },
       "accent_label": "织纹色"
+    },
+    "oxford_tick": {
+      "name": "牛津双线织纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "clothing"
+      ],
+      "order": 130,
+      "texture": "res://assets/fabrics/oxford_tick.svg",
+      "scale": {
+        "clothing": 2.8
+      },
+      "accent_label": "花纹色"
+    },
+    "orchard_calico": {
+      "name": "果园碎花印纹",
+      "renderer": "fabric",
+      "families": [
+        "fabric"
+      ],
+      "uses": [
+        "clothing"
+      ],
+      "order": 131,
+      "texture": "res://assets/fabrics/orchard_calico.svg",
+      "scale": {
+        "clothing": 4.2
+      },
+      "accent_label": "花纹色"
     }
   }
 }

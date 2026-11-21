@@ -269,7 +269,7 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 	else:
 		velocity.x = move_toward(velocity.x,direction.x*target_speed,acceleration*delta)
 		velocity.z = move_toward(velocity.z,direction.z*target_speed,acceleration*delta)
-	if direction.length()>.1:
+	if direction.length()>.1 and not (action=="water" and work_align_active):
 		facing = atan2(direction.x,direction.z)
 		set_visual_heading(lerp_angle(visual_heading(),facing,1.0-exp(-delta*12.0)))
 	if not grounded: velocity.y -= 18.0*delta
