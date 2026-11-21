@@ -9,6 +9,7 @@ var experience_label: Label
 var stamina_label: Label
 var last_species:=""
 var last_equipment: Dictionary={}
+var last_designs: Dictionary={}
 var last_sleeping:=false
 func _ready() -> void:
 	custom_minimum_size=Vector2(326,108)
@@ -37,8 +38,9 @@ func refresh(state: Dictionary,maximum: float) -> void:
 	meter.set_fraction(float(state.stamina)/maximum)
 	var species: String=state.get("species","bunny")
 	var worn: Dictionary=state.equipment
-	if species!=last_species or last_equipment!=worn:
-		portrait.update_character(species,worn);last_species=species;last_equipment=worn.duplicate()
+	var designs:=preload("res://scripts/appearance/clothing_designs.gd").worn(worn,state.get("clothing_designs",{}))
+	if species!=last_species or last_equipment!=worn or designs!=last_designs:
+		portrait.update_character(species,worn,designs);last_species=species;last_equipment=worn.duplicate();last_designs=designs.duplicate(true)
 	var sleeping: bool=state.get("rest_mode","")=="sleep"
 	if sleeping!=last_sleeping:
 		portrait.actor.eyes.scale.y=.045 if sleeping else 1.0

@@ -37,8 +37,8 @@ var wall_valid: Variant=null
 var bad: StandardMaterial3D
 var pointer_key:=""
 func _ready() -> void:
-	stage=Node3D.new();stage.name="DraftingPreview";editor.city.add_child(stage)
-	halo=Node3D.new();halo.name="BuildSelectionHalo";editor.city.add_child(halo)
+	stage=Node3D.new();stage.name="DraftingPreview";editor.preview_space.add_child(stage)
+	halo=Node3D.new();halo.name="BuildSelectionHalo";editor.preview_space.add_child(halo)
 	halo_material=ShaderMaterial.new();halo_material.shader=preload("res://assets/shaders/build_selection.gdshader")
 	good=StandardMaterial3D.new();good.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;good.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;good.albedo_color=Color(.25,.75,.50,.18)
 	bad=good.duplicate();bad.albedo_color=Color(.94,.20,.12,.25)
@@ -68,7 +68,7 @@ func cancel() -> void:
 func tool_changed() -> void:
 	cancel();brush.clear();halo_key=""
 func screen_point(mouse: Vector2,height: float) -> Variant:
-	var p: Variant=Plane(Vector3.UP,height).intersects_ray(editor.city.camera.project_ray_origin(mouse),editor.city.camera.project_ray_normal(mouse))
+	var p: Variant=Plane(Vector3.UP,height+editor.build_base()).intersects_ray(editor.city.camera.project_ray_origin(mouse),editor.city.camera.project_ray_normal(mouse))
 	return Vector2(p.x,p.z) if p!=null else null
 func grid_point(p: Vector2) -> Vector2:return Vector2(snappedf(p.x,.5),snappedf(p.y,.5))
 func clone_visual(node: Node3D,parent: Node3D,material: Material=null) -> void:
@@ -238,7 +238,7 @@ func input(event: InputEvent) -> bool:
 			if C.mount(grabbed)=="wall":
 				var normal: Vector2=preload("res://scripts/building/wall_mount.gd").normal(grabbed);var plane:=Plane(Vector3(normal.x,0,normal.y),Vector3(normal.x,0,normal.y).dot(Vector3(grabbed.position[0],0,grabbed.position[1])))
 				var hit: Variant=plane.intersects_ray(editor.city.camera.project_ray_origin(event.position),editor.city.camera.project_ray_normal(event.position))
-				drag_height_offset=hit.y-height if hit!=null else float(C.OBJECTS[grabbed.kind].height)*.5
+				drag_height_offset=hit.y-height-editor.build_base() if hit!=null else float(C.OBJECTS[grabbed.kind].height)*.5
 			drag_offset=Vector2(grabbed.get("position",[0.,0.])[0],grabbed.get("position",[0.,0.])[1])-at if at!=null else Vector2.ZERO
 		return true
 	if event is InputEventMouseMotion and mode!="":

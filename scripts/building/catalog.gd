@@ -2,6 +2,11 @@ extends RefCounted
 ## X/Z offsets follow Godot's positive Y rotation (opposite Vector2 rotation).
 const CATEGORIES:=["结构","床","座椅","桌柜","厨房","照明","装饰","庭院"]
 const OBJECTS:={
+	"bread_oven":{"name":"雪绒砖烤炉","size":Vector2(2.23,1.30),"height":2.17,"category":"厨房","light":true},
+	"quilt_chest":{"name":"盖着拼布被的木箱","size":Vector2(1.70,.83),"height":.95,"category":"桌柜"},
+	"snow_lantern":{"name":"雪窗提灯","size":Vector2(.53,.53),"height":.72,"category":"照明","light":true,"outdoor":true},
+	"post_stamp":{"name":"旅行印章架","size":Vector2(.83,.65),"height":1.33,"category":"庭院","outdoor":true},
+	"clothing_rack":{"name":"裁缝试衣架","size":Vector2(1.14,.70),"height":2.16,"category":"桌柜"},
 	"bread_case":{"name":"雪绒面包柜","size":Vector2(2.72,1.12),"height":1.69,"category":"厨房"},
 	"tile_stove":{"name":"青釉蓄热炉","size":Vector2(1.55,1.16),"height":2.46,"category":"桌柜"},
 	"atlas_stand":{"name":"展开的雪境图册","size":Vector2(1.53,1.05),"height":1.72,"category":"装饰"},

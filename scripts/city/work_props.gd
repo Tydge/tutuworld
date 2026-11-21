@@ -30,7 +30,7 @@ func _ready() -> void:
 	var ripple:=ShaderMaterial.new();ripple.shader=load("res://assets/shaders/water_splash.gdshader")
 	splash=G.mesh(effects,plane,Vector3.ZERO,ripple,"WaterLanding");splash.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	effects.hide()
-func show_tool(kind: String,water_id: String="") -> void:
+func show_tool(kind: String,water_id: String="",item: String="") -> void:
 	verb=kind;clock=0
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
 	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id)
@@ -43,6 +43,15 @@ func show_tool(kind: String,water_id: String="") -> void:
 			var end:=Vector3(0,.23,.63)
 			G.capsule(prop,Vector3.ZERO,end,.018,wood,"SpoonHandle");G.ball(prop,end,Vector3(.060,.018,.085),wood,"SpoonBowl")
 		elif kind=="plant": G.box(prop,Vector3.ZERO,Vector3(.18,.23,.045),G.mat("e3b773"))
+		elif kind=="tea":
+			var glaze:=G.mat("a3bea6",.35)
+			G.cylinder(prop,Vector3(0,.065,0),.11,.14,glaze,.132,"TeaCup")
+			G.cylinder(prop,Vector3(0,.137,0),.117,.009,G.mat("b3955c"),-1.,"PineTea")
+			G.ball(prop,Vector3(.135,.06,0),Vector3(.051,.042,.030),glaze,"CupHandle")
+		elif kind=="snack" and item=="food_snow_loaf":
+			G.ball(prop,Vector3.ZERO,Vector3(.115,.081,.149),G.mat("c98143"),"WheatLoaf")
+			for z in [-.064,0.,.062]:G.ball(prop,Vector3(0,.073,z),Vector3(.070,.011,.014),G.mat("f5cf96"),"CrustScore")
+			G.box(prop,Vector3(0,-.043,.020),Vector3(.199,.075,.184),G.mat("ede0be"),"BreadWrap")
 		elif kind=="snack":
 			G.ball(prop,Vector3.ZERO,Vector3(.115,.11,.115),G.mat("ed9f39"),"Orange")
 			G.ball(prop,Vector3(-.024,.024,.078),Vector3(.064,.064,.036),G.mat("f7c06a"),"OrangeFlesh")
@@ -75,15 +84,16 @@ func _physics_process(delta: float) -> void:
 		prop.global_transform=Transform3D(bunny.visual.global_basis*basis.scaled_local(Vector3.ONE*scale_),bunny.visual.to_global(center))
 		bunny.aim_hand(bunny.right_arm,prop.get_node("GripR").global_position)
 		bunny.aim_hand(bunny.left_arm,prop.get_node("GripL").global_position,true)
-	elif verb=="snack":
-		var bite:=smoothstep(.15,.8,.5+.5*sin(bunny.action_time*4.8))*smoothstep(0,.45,bunny.action_time)
+	elif verb in ["snack","tea"]:
+		var t: float=bunny.action_time
+		var bite:=smoothstep(.15,.8,.5+.5*sin(t*4.8))*smoothstep(0,.45,t) if verb=="snack" else smoothstep(.35,1.25,t)*(1.-smoothstep(2.7,3.7,t))
 		bunny.right_arm.position=bunny.arm_rest_right+Vector3(-.10,-.17,.30)
 		var mouth: Vector3=bunny.mouth.global_position+bunny.visual.global_basis*Vector3(.12,-.035,.22)
 		var rest: Vector3=bunny.visual.to_global(bunny.right_arm.position+Vector3(-.02,-.16,.35))
 		var target: Vector3=rest.lerp(mouth,bite)
 		bunny.aim_hand(bunny.right_arm,target-bunny.visual.global_basis*Vector3(0,.015,0))
-		prop.global_transform=Transform3D(bunny.visual.global_basis,target)
-		var portion:=lerpf(1.0,.78,clampf(bunny.action_time/3.0,0,1))
+		prop.global_transform=Transform3D(bunny.visual.global_basis*Basis(Vector3.RIGHT,-.33*bite if verb=="tea" else 0.),target)
+		var portion:=1.0 if verb=="tea" else lerpf(1.0,.78,clampf(bunny.action_time/3.0,0,1))
 		prop.scale=Vector3.ONE*portion
 	elif verb=="eat":
 		pose_meal()

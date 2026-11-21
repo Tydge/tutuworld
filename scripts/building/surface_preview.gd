@@ -17,7 +17,7 @@ func clear() -> void:
 func show_layout(editor: Node,candidate: Dictionary,signature: String) -> void:
 	clear();key=signature
 	if not is_instance_valid(editor.room):return
-	holder=Node3D.new();holder.name="WallFinishPreview";editor.city.add_child(holder)
+	holder=Node3D.new();holder.name="WallFinishPreview";editor.preview_space.add_child(holder)
 	for level in range(4):
 		if not editor.roof_view and level!=editor.editing_storey and not (editor.show_roof and level<editor.editing_storey):continue
 		var before:=L.compiled(editor.layout,level);var after:=L.compiled(candidate,level);var changed: Dictionary={}

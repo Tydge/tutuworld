@@ -1,5 +1,8 @@
 extends RefCounted
-const SAMPLE_NAMES:={"single_one":"温馨小屋","two_storey":"两层楼阁"}
+const SAMPLE_NAMES:={
+	"single_one":"温馨小屋","two_storey":"两层楼阁",
+	"snow_tea_house":"松枝茶屋","snow_hearth_cabin":"炉火山舍","snow_ridge_lodge":"雪岭驿馆"
+}
 const Layout=preload("res://scripts/building/layout.gd")
 static func cottage() -> Dictionary:
 	var data:={"schema":1,"next_id":1,"elements":[]}
@@ -87,7 +90,7 @@ static func two_storey() -> Dictionary:
 
 static var _player_samples: Dictionary={}
 static func player_sample(kind: String) -> Dictionary:
-	if kind not in ["single_one","two_storey"]:return cottage()
+	if not SAMPLE_NAMES.has(kind):return cottage()
 	if not _player_samples.has(kind):
 		var raw: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/building_templates/"+kind+".json"))
 		var result:=Layout.validate(raw)

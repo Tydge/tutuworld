@@ -387,6 +387,13 @@ func animate_pose(delta: float) -> void:
 				mouth.scale=Vector3(.72,1.+phase.chew*(.35+absf(sin(t*13))*.40),1.)
 				right_arm.position=arm_rest_right+Vector3(-.045,-.075,.12)*smoothstep(0,.3,t)
 				bob=0
+			"warm":
+				var reach:=smoothstep(0.,.6,t)*(1.-smoothstep(4.2,5.,t))
+				lean=.13*reach;head_roll=sin(t*1.9)*.025
+				arm_l=Vector3(-1.35*reach,-.2*reach,-.10)
+				arm_r=Vector3(-1.42*reach,.22*reach,.10)
+				arm_l.x+=sin(t*3.8)*.065*reach
+				arm_r.x-=sin(t*3.8)*.065*reach
 			"tea":
 				arm_r.x = -1.52
 				head_roll = -.045

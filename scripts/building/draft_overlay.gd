@@ -14,7 +14,7 @@ func label_at(text_: String,p: Vector2) -> void:
 	rect.position.x=clampf(rect.position.x,6.,size.x-rect.size.x-6.);rect.position.y=clampf(rect.position.y,6.,maxf(6.,size.y-340.-rect.size.y))
 	draw_style_box(bubble,rect)
 	draw_string(FONT,rect.position+Vector2(8,extent.y+3),text_,HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("355c50"))
-func project(p: Vector2) -> Vector2:return editor.city.camera.unproject_position(Vector3(p.x,floor_y,p.y))
+func project(p: Vector2) -> Vector2:return editor.city.camera.unproject_position(Vector3(p.x,floor_y+editor.build_base(),p.y))
 func _draw() -> void:
 	if not is_instance_valid(editor) or not editor.active:return
 	if area.size!=Vector2.ZERO:

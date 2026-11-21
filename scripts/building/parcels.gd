@@ -4,17 +4,35 @@ extends RefCounted
 const PRICE:=100
 const REACH:=3.5
 const SIGN_REACH:=2.6
-const SIZE:=Vector2(24,20)
+const Winter=preload("res://scripts/icefield/building_plots.gd")
+const SIZE:=Winter.SIZE
 const IDS:=["east_nw","east_ne","east_sw","east_se"]
 const ORIGINS:=[Vector2(77,-14),Vector2(119,-14),Vector2(77,14),Vector2(119,14)]
 const NAMES:=["海风一号地","花庭二号地","林荫三号地","听潮四号地"]
+static func ids_for(map_id: String) -> Array:
+	match map_id:
+		"city":return IDS
+		"icefield":return Winter.IDS
+	return []
+static func map_for(id: String) -> String:
+	if id in IDS:return "city"
+	return "icefield" if id in Winter.IDS else ""
+static func layout_key(map_id: String) -> String:return "icefield_build_layout" if map_id=="icefield" else "build_layout"
+static func layout_for(state: Dictionary,map_id: String) -> Dictionary:
+	var key:=layout_key(map_id)
+	return state[key] if state.has(key) else load("res://scripts/building/layout.gd").empty(map_id)
+static func base_height(map_id: String) -> float:return Winter.LEVEL if map_id=="icefield" else 0.
 static func empty() -> Dictionary:return {"version":1,"plots":{}}
 static func bounds(id: String) -> Rect2:
 	var index:=IDS.find(id)
-	return Rect2(ORIGINS[index],SIZE) if index>=0 else Rect2()
+	if index>=0:return Rect2(ORIGINS[index],SIZE)
+	index=Winter.IDS.find(id)
+	return Winter.bounds(index) if index>=0 else Rect2()
 static func title(id: String) -> String:
 	var index:=IDS.find(id)
-	return NAMES[index] if index>=0 else "未知地皮"
+	if index>=0:return NAMES[index]
+	index=Winter.IDS.find(id)
+	return Winter.NAMES[index] if index>=0 else "未知地皮"
 static func includes(rect: Rect2,p: Vector2) -> bool:
 	return p.x>=rect.position.x-.001 and p.x<=rect.end.x+.001 and p.y>=rect.position.y-.001 and p.y<=rect.end.y+.001
 static func distance_to(id: String,p: Vector3) -> float:
@@ -22,28 +40,31 @@ static func distance_to(id: String,p: Vector3) -> float:
 	return q.distance_to(q.clamp(rect.position,rect.end)) if rect.size!=Vector2.ZERO else INF
 static func sign_position(id: String) -> Vector3:
 	var index:=IDS.find(id)
-	if index<0:return Vector3(INF,INF,INF)
 	var rect:=bounds(id)
+	if index<0:
+		index=Winter.IDS.find(id)
+		if index<0:return Vector3(INF,INF,INF)
+		return Vector3(rect.get_center().x,Winter.LEVEL,rect.end.y+1.25 if index<2 or index>=5 else rect.position.y-1.25)
 	return Vector3(rect.position.x+2.,0,rect.end.y+1.25 if index<2 else rect.position.y-1.25)
 static func at_sign(p: Vector3,id: String) -> bool:
 	var sign:=sign_position(id)
-	return id in IDS and absf(p.y)<1.7 and Vector2(p.x-sign.x,p.z-sign.z).length()<=SIGN_REACH
-static func nearest(p: Vector3) -> String:
+	return map_for(id)!="" and absf(p.y-sign.y)<1.7 and Vector2(p.x-sign.x,p.z-sign.z).length()<=SIGN_REACH
+static func nearest(p: Vector3,map_id: String="city") -> String:
 	var best:=REACH;var result:=""
-	for id in IDS:
+	for id in ids_for(map_id):
 		var gap:=distance_to(id,p)
 		if gap<=best:best=gap;result=id
 	return result
 static func normalize(raw: Variant) -> Dictionary:
 	var result:=empty()
 	if not raw is Dictionary or not raw.get("plots",{}) is Dictionary:return result
-	for id in IDS:
+	for id in IDS+Winter.IDS:
 		var record: Variant=raw.get("plots",{}).get(id,{})
 		if record is Dictionary and record.get("owner_id","") is String and not record.get("owner_id","").is_empty():
 			result.plots[id]={"owner_id":record.owner_id,"revision":maxi(0,int(record.get("revision",0))),"purchased_at":maxi(0,int(record.get("purchased_at",0)))}
 	return result
 static func owner(state: Dictionary,id: String) -> String:return str(state.get("land_parcels",{}).get("plots",{}).get(id,{}).get("owner_id",""))
-static func owns(state: Dictionary,id: String) -> bool:return id in IDS and owner(state,id)==str(state.get("player_id",""))
+static func owns(state: Dictionary,id: String) -> bool:return map_for(id)!="" and not owner(state,id).is_empty() and owner(state,id)==str(state.get("player_id",""))
 static func row_bounds(row: Dictionary,layout: Dictionary) -> Rect2:
 	match row.get("type",""):
 		"floor","wall","roof","railing":
@@ -62,10 +83,10 @@ static func contains_row(id: String,row: Dictionary,layout: Dictionary) -> bool:
 static func outside(layout: Dictionary,id: String) -> Array:
 	return layout.get("elements",[]).filter(func(row):return not contains_row(id,row,layout))
 static func validate_edit(state: Dictionary,id: String,candidate: Dictionary,expected_revision: int=-1) -> Dictionary:
-	if id not in IDS or not owns(state,id):return {"ok":false,"message":"只能建造自己已经购买的地皮。"}
+	if map_for(id)!=state.get("map_id","city") or not owns(state,id):return {"ok":false,"message":"只能建造自己已经购买的地皮。"}
 	var revision: int=state.land_parcels.plots[id].revision
 	if expected_revision>=0 and expected_revision!=revision:return {"ok":false,"message":"这块地皮已有更新，请重新进入建造。"}
 	# IDs can change when contiguous floor/wall runs compress. Compare the entire
 	# untouched region, not only changed IDs; public land and other parcels stay fixed.
-	if outside(state.build_layout,id)!=outside(candidate,id):return {"ok":false,"message":"本次只能修改当前地皮，不能越界建造或修改其他地皮。"}
+	if outside(layout_for(state,map_for(id)),id)!=outside(candidate,id):return {"ok":false,"message":"本次只能修改当前地皮，不能越界建造或修改其他地皮。"}
 	return {"ok":true,"revision":revision}

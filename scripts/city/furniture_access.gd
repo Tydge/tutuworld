@@ -17,7 +17,7 @@ static func closest(node: Node3D,point: Vector3) -> Vector3:
 	var p:=node.to_local(point);var area:=bounds(node);var q:=Vector2(p.x,p.z).clamp(area.position,area.end)
 	return node.to_global(Vector3(q.x,.65,q.y))
 static func distance(node: Node3D,point: Vector3) -> float:
-	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(point.y)!=int(node.get_meta("storey")):return INF
+	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(point.y-float(node.get_meta("storey_base",0.)))!=int(node.get_meta("storey")):return INF
 	if absf(point.y-node.global_position.y)>1.7:return INF
 	var q:=closest(node,point);return Vector2(point.x-q.x,point.z-q.z).length()
 static func excluded(node: Node3D,actor: CharacterBody3D) -> Array[RID]:
@@ -36,7 +36,7 @@ static func same_room(host: Node3D,node: Node3D,point: Vector3) -> bool:
 		if "plan" in room:
 			var rooms=preload("res://scripts/building/room_plan.gd")
 			if room.has_method("room_at_position"):
-				return preload("res://scripts/building/storeys.gd").at_height(node.global_position.y)==preload("res://scripts/building/storeys.gd").at_height(point.y) and room.room_at_position(node.global_position)==room.room_at_position(point)
+				return preload("res://scripts/building/storeys.gd").at_height(node.global_position.y-room.global_position.y)==preload("res://scripts/building/storeys.gd").at_height(point.y-room.global_position.y) and room.room_at_position(node.global_position)==room.room_at_position(point)
 			return rooms.room_at(room.plan,Vector2(node.global_position.x,node.global_position.z))==rooms.room_at(room.plan,Vector2(point.x,point.z))
 	return true
 static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: Vector3,accept: Callable=Callable()) -> Dictionary:
@@ -51,3 +51,11 @@ static func landing(host: Node3D,node: Node3D,actor: CharacterBody3D,preferred: 
 		var result:=Landing.find(host,p,actor,false)
 		if not result.is_empty() and (not accept.is_valid() or accept.call(result.position)):return result
 	return {}
+
+static func find_sleep_exit(host: Node3D,bed: Node3D,actor: CharacterBody3D) -> Dictionary:
+	if is_instance_valid(bed):
+		var origin:=bed.global_position
+		var accept:=func(p: Vector3) -> bool:return absf(p.y-origin.y)<1.2 and same_room(host,bed,p)
+		var landing:=Landing.find(host,origin,actor,true,accept,21)
+		if not landing.is_empty():return landing
+	return Landing.find(host,host.respawn_position(),actor)

@@ -36,16 +36,16 @@ var pending_navigation:=Rect2()
 var material_updates:=0
 var furniture_house: Dictionary={}
 var furniture_house_key:=""
-const MASK_ORIGIN:=Vector2i(120,-40)
-const MASK_SIZE:=Vector2i(200,128)
+var mask_origin:=Vector2i(120,-40)
+var mask_size:=Vector2i(200,128)
 func _ready() -> void:pass
 func configure(grid: Dictionary,prepared: Dictionary={}) -> void:
 	if grid.get("signature","")!="" and grid.signature==plan_input_signature:return
 	plan_input_signature=str(grid.get("signature",""));wall_faces=View.wall_faces(grid.walls)
 	var next_plan:=Rooms.make(grid) if prepared.is_empty() else prepared
 	if not plan.is_empty() and next_plan.signature==plan.signature:return
-	plan=next_plan;mask_key="";mask_bytes.resize(MASK_SIZE.x*MASK_SIZE.y);mask_bytes.fill(0)
-	if mask_texture==null:mask_texture=ImageTexture.create_from_image(Image.create_from_data(MASK_SIZE.x,MASK_SIZE.y,false,Image.FORMAT_R8,mask_bytes))
+	plan=next_plan;mask_key="";mask_bytes.resize(mask_size.x*mask_size.y);mask_bytes.fill(0)
+	if mask_texture==null:mask_texture=ImageTexture.create_from_image(Image.create_from_data(mask_size.x,mask_size.y,false,Image.FORMAT_R8,mask_bytes))
 func update_lighting(day: float) -> void:last_day=day
 func configure_layout(data: Dictionary,prepared: Dictionary={}) -> void:
 	layout_data=data;stair_rows=data.elements.filter(func(row):return row.type=="stairs")
@@ -59,15 +59,18 @@ func configure_layout(data: Dictionary,prepared: Dictionary={}) -> void:
 	for level in range(Storeys.MAX):wall_faces.merge(View.wall_faces(Layout.compiled(data,level).walls))
 	storey_view_key="";view_dirty=true
 func room_at_position(point_: Vector3) -> String:
+	point_.y-=global_position.y
 	var level:=Storeys.at_height(point_.y)
 	if not plans.has(level) or absf(point_.y-(Storeys.FLOOR+level*Storeys.HEIGHT))>3.9:return ""
 	return Rooms.room_at(plans[level],Vector2(point_.x,point_.z))
 func contains_position(point_: Vector3) -> bool:
 	return room_at_position(point_)!="" or stair_at(point_)
 func surface_at(point_: Vector3) -> bool:
+	point_.y-=global_position.y
 	var level:=Storeys.at_height(point_.y)
 	return plans.has(level) and plans[level].floors.has(Grid.cell(Vector2(point_.x,point_.z))) and absf(point_.y-(Storeys.FLOOR+level*Storeys.HEIGHT))<3.9
 func stair_at(point_: Vector3) -> bool:
+	point_.y-=global_position.y
 	for row in stair_rows:
 		if point_.y>=Storeys.elevation(row)-.1 and point_.y<=Storeys.elevation(row)+Storeys.HEIGHT+.4 and Stairs.bounds(row).has_point(Vector2(point_.x,point_.z)):return true
 	return false
@@ -79,6 +82,7 @@ func set_editor_view(enabled: bool,roof: bool,level: int=0,roof_view: bool=false
 func apply_storey_visibility(actor: Vector3) -> void:
 	if assembling or plans.is_empty():return
 	var in_house:=surface_at(actor) or stair_at(actor)
+	actor.y-=global_position.y
 	if editor_active:visible_storey=editing_storey
 	elif not in_house:visible_storey=Storeys.at_height(actor.y)
 	else:
@@ -138,12 +142,12 @@ func set_mask(hidden: Dictionary) -> void:
 			for x in range(-2,3):
 				var p: Vector2i=c+Vector2i(x,z)
 				if not active_cells.has(p) and plan.cell_rooms.has(p):continue
-				var image_p: Vector2i=p-MASK_ORIGIN
-				if image_p.x>=0 and image_p.y>=0 and image_p.x<MASK_SIZE.x and image_p.y<MASK_SIZE.y:mask_bytes[image_p.y*MASK_SIZE.x+image_p.x]=255
-	mask_texture.update(Image.create_from_data(MASK_SIZE.x,MASK_SIZE.y,false,Image.FORMAT_R8,mask_bytes))
+				var image_p: Vector2i=p-mask_origin
+				if image_p.x>=0 and image_p.y>=0 and image_p.x<mask_size.x and image_p.y<mask_size.y:mask_bytes[image_p.y*mask_size.x+image_p.x]=255
+	mask_texture.update(Image.create_from_data(mask_size.x,mask_size.y,false,Image.FORMAT_R8,mask_bytes))
 func hidden_at(p: Vector2) -> bool:
-	var c:=Grid.cell(p)-MASK_ORIGIN
-	return c.x>=0 and c.y>=0 and c.x<MASK_SIZE.x and c.y<MASK_SIZE.y and mask_bytes[c.y*MASK_SIZE.x+c.x]>0
+	var c:=Grid.cell(p)-mask_origin
+	return c.x>=0 and c.y>=0 and c.x<mask_size.x and c.y<mask_size.y and mask_bytes[c.y*mask_size.x+c.x]>0
 func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 	apply_storey_visibility(actor)
 	if plan.is_empty():return
@@ -183,7 +187,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 		for material in section.materials:
 			material.set_shader_parameter("opacity",section.alpha if mode_==View.OCCLUSION else 1.)
 			if not configuration_changed:continue
-			material.set_shader_parameter("building_grid_bounds",Vector4(MASK_ORIGIN.x*.5,MASK_ORIGIN.y*.5,MASK_SIZE.x*.5,MASK_SIZE.y*.5))
+			material.set_shader_parameter("building_grid_bounds",Vector4(mask_origin.x*.5,mask_origin.y*.5,mask_size.x*.5,mask_size.y*.5))
 			material.set_shader_parameter("cut_base_height",-100. if section.roof or mode_==View.OCCLUSION else global_position.y+visible_storey*Storeys.HEIGHT+floor_level+.62);material.set_shader_parameter("camera_occlusion",mode_==View.OCCLUSION)
 			# Setting even the same sampler dirties/recreates the native uniform set.
 			if material.get_shader_parameter("building_cut_mask")!=mask_texture:material.set_shader_parameter("building_cut_mask",mask_texture)
@@ -191,7 +195,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 		for visual in section.visuals:
 			if not section.glass.has(visual):View.set_visual_visible(visual,mode_!=View.OCCLUSION or section.alpha>.002,mode_==View.OCCLUSION)
 		for pane in section.glass:
-			var p: Vector3=pane.global_position;View.set_visual_visible(pane,(not hide_wall or p.y<.8) and (mode_!=View.OCCLUSION or section.alpha>.4),mode_==View.OCCLUSION)
+			var p: Vector3=pane.global_position;View.set_visual_visible(pane,(not hide_wall or p.y<global_position.y+.8) and (mode_!=View.OCCLUSION or section.alpha>.4),mode_==View.OCCLUSION)
 func _process(delta: float) -> void:
 	if assembling or not is_instance_valid(city) or not is_instance_valid(city.camera) or not is_instance_valid(city.bunny):return
 	refresh_view(city.camera.global_position,city.bunny.get_global_transform_interpolated().origin)

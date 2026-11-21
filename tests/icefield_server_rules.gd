@@ -1,6 +1,9 @@
 extends SceneTree
 const Server=preload("res://server/world_server.gd")
 const L=preload("res://scripts/icefield/icefield_layout.gd")
+const Land=preload("res://scripts/building/parcels.gd")
+const Layout=preload("res://scripts/building/layout.gd")
+const Trail=preload("res://scripts/icefield/snow_trail.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 var server: Node
 var ids: Array=[]
@@ -15,6 +18,70 @@ func request(index: int,verb: String,args: Dictionary,token: String="") -> Dicti
 	serial+=1;return server.execute_player(index+1,{"id":token if token!="" else "icefield-rule-%d"%serial},verb,args)
 func place(index: int,p: Vector3) -> void:
 	var pawn: CharacterBody3D=server.pawns[ids[index]];pawn.position=p;pawn.velocity=Vector3.ZERO;pawn.reset_network_motion();pawn.reset_physics_interpolation();server.actors[ids[index]].state.player_position=[p.x,p.y,p.z]
+func winter_playground(actor: RefCounted) -> void:
+	var host: Node3D=server.maps.icefield
+	var rack: Dictionary=host.targets.get("shop_clothing_rack",{})
+	check(not rack.is_empty(),"Snow tailor exposes its walk-up display")
+	if not rack.is_empty():
+		var design:={"pattern":"tartan","color":"719684","accent":"ebc996"}
+		var dye:={"target":"shop_clothing_rack","item":"bow_rose","design":design}
+		place(0,Vector3(40,.84,40))
+		check(not request(0,"tailor",dye).ok,"Remote dye request is rejected")
+		place(0,rack.position+Vector3(.55,.04,0))
+		check(not request(0,"tailor",dye.merged({"item":"duffle_berry"},true)).ok,"Cannot dye someone else's or an unowned garment")
+		check(request(0,"tailor",dye).ok and server.actor_packet(ids[0]).clothing_designs.get("bow_rose")==design,"Customized worn fabric is sent to other clients")
+	for id in Trail.LODGE_BEDS:
+		var bed: Node3D=host.targets.get(id,{}).get("node")
+		check(is_instance_valid(bed),"Authority recognizes lodge bed "+id)
+		if not is_instance_valid(bed):continue
+		place(0,bed.to_global(Vector3(-1.9 if bed.position.x>0. else 1.9,.035,0)))
+		var slept:=request(0,"rest",{"target":id})
+		check(slept.ok and actor.state.net_pose.get("target","")==id,"Server lies down on the inn bed "+id+" "+str(slept.message))
+		if slept.ok:check(request(0,"wake",{}).ok and not server.locks.has("icefield:"+id),"Server wakes safely and releases the inn bed")
+	var parcel:="ice_south_1";var sign:=Land.sign_position(parcel)
+	place(0,sign+Vector3(0,.035,-1.5))
+	check(not request(0,"buy_land",{"parcel_id":"east_nw"}).ok,"Rejects a city purchase while on the icefield")
+	check(request(0,"buy_land",{"parcel_id":parcel}).ok,"Purchases an ice lot at its sign")
+	var point:=Land.bounds(parcel).get_center()
+	place(2,Vector3(point.x,L.ICE_LEVEL+.04,point.y))
+	for frame in range(3):await physics_frame
+	var opening:=request(0,"build_begin",{"parcel_id":parcel})
+	check(opening.ok,"Icefield lot enters a real construction lease "+str(opening.message))
+	if opening.ok:
+		var visitor: Vector3=server.pawns[ids[2]].position
+		check(Land.distance_to(parcel,visitor)>1.,"Visitor is evacuated outside the icefield site")
+		var plan:=Layout.add(Layout.empty("icefield"),{"type":"floor","a":[point.x-3.,point.y-3.],"b":[point.x+3.,point.y+3.],"style":"wood","color":"c6a373"})
+		var published:=request(0,"build_finish",{"parcel_id":parcel,"lease":opening.lease,"expected_revision":0,"elements":plan.elements})
+		check(published.ok and server.state().icefield_build_layout.elements.size()==1 and server.state().build_layout.elements.is_empty(),"Publish keeps icefield and city layouts independent")
+		check(is_equal_approx(server.icefield_built_room.global_position.y,L.ICE_LEVEL),"Server builds using the same ice grade")
+	var stamps: Array=Trail.STAMPS.keys()
+	for mark in stamps:
+		var target: String="snow_stamp:"+mark
+		var stamp: Dictionary=host.targets.get(target,{})
+		if stamp.is_empty():check(false,"Stamp loaded: "+mark);continue
+		place(0,stamp.position+Vector3(0,.045,.6))
+		check(request(0,"stamp",{"target":target}).ok,"Server records the physical stamp "+mark)
+		check(not request(0,"stamp",{"target":target}).ok,"A stamp cannot be duplicated "+mark)
+	var facilities: Dictionary={}
+	for id in host.targets:
+		var kind: String=host.targets[id].kind
+		if str(id).begins_with("winter:") and kind in ["atlas","bakery","tea","hearth"] and (kind!="tea" or str(id).begins_with("winter:home_c:")):facilities[kind]=id
+	for kind in ["atlas","bakery","tea","hearth"]:
+		check(facilities.has(kind),"Indoor station exists on the authoritative map: "+kind)
+	if facilities.has("atlas"):
+		place(0,host.targets[facilities.atlas].position+Vector3(0,.05,.33))
+		var before: int=actor.state.coins
+		check(request(0,"claim_trail",{"target":facilities.atlas}).ok and actor.state.coins==before+36,"Atlas trades collected marks for a one-time reward")
+		check(not request(0,"claim_trail",{"target":facilities.atlas}).ok,"The trail reward cannot be farmed repeatedly")
+	if facilities.has("tea"):
+		place(0,host.targets[facilities.tea].position+Vector3(1.55,-.69,.10))
+		actor.add("branch",1)
+		var brewed:=request(0,"brew_tea",{"target":facilities.tea})
+		check(brewed.ok,"Tea can be brewed at a real tea table "+str(brewed.message))
+		if brewed.ok:
+			actor.job.duration=.02
+			server.tick_actor(ids[0],.1)
+			check(actor.state.food_effect.item==Trail.TEA and is_equal_approx(actor.multiplier("stamina_regen"),1.5),"Tea changes stamina recovery on the authority")
 func run() -> void:
 	OS.set_environment("TUTU_GAME_PORT","18947");OS.set_environment("TUTU_STATE_DIR",ProjectSettings.globalize_path("res://.qa-artifacts/icefield-authority-"+str(Time.get_ticks_usec())))
 	server=Server.new();root.add_child(server)
@@ -75,6 +142,7 @@ func run() -> void:
 	server.save_path=path.path_join("invalid")
 	check(not request(0,"dress_resident",{"target":"SnowBaker","outfit":{}}).ok and server.state().winter_outfits.SnowBaker==outfit and server.maps.icefield.targets.SnowBaker.node.get_meta("equipment").head==outfit.head,"Failed save preserves previous visible and durable outfit")
 	server.save_path=path
+	await winter_playground(actor)
 	server.broadcast_motion();check(server.actor_packet(ids[0]).map=="icefield","New map participates in motion packets")
 	place(0,Vector3(L.DOCK.x,L.DOCK_HEIGHT+.035,L.DOCK.y));var coins: int=actor.state.coins
 	check(request(0,"travel",{"destination":"city"}).ok and actor.state.coins==coins,"Authority returns for free")
@@ -83,6 +151,7 @@ func run() -> void:
 	server.save_path=original;check(server.save_world(),"Isolated server snapshot saves")
 	var saved: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(original));check(saved.characters[ids[1]].map_id=="icefield" and saved.characters[ids[2]].species=="panda","Offline records retain new map and species")
 	check(saved.world.winter_outfits.SnowBaker==outfit,"Shared outfits survive a server save")
+	check(saved.world.icefield_build_layout.elements.size()==1 and saved.characters[ids[0]].snow_trail.claimed,"Winter buildings and trail stamps survive server save")
 	server.listener.stop();server.queue_free();await process_frame
 	print("ICEFIELD_SERVER_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

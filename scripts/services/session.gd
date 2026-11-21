@@ -13,8 +13,8 @@ const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","land_parcels"]
-const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
+const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","land_parcels"]
+const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
 var test_mode:=false
@@ -36,6 +36,7 @@ var server_endpoint:=""
 var installed_build:=preload("res://scripts/services/release.gd").BUILD
 var remote: Node
 var online_joined:=false
+var online_winter_building_available:=false
 var online_building_available:=false
 var online_token:=""
 var online_username:=""
@@ -71,6 +72,9 @@ func can_adjust_time() -> bool:
 	var peer:=multiplayer.multiplayer_peer
 	return peer==null or peer is OfflineMultiplayerPeer
 func shift_effect_clock(record: Dictionary,old_time: float,new_time: float) -> void:
+	if record.has("hearth_ready_at"):
+		var remaining: float=float(record.hearth_ready_at)-old_time
+		record.hearth_ready_at=new_time+remaining if remaining>0. else 0.
 	var effect: Dictionary=record.get("food_effect",{})
 	if effect.is_empty(): return
 	var remaining: float=float(effect.get("expires_at",0))-old_time
@@ -128,7 +132,7 @@ func dispatch(verb: String,args: Dictionary={}) -> Dictionary:
 		result=authority.fail("旅程还没有保存成功，请稍后再试。" if verb=="travel" else "进度未能保存，本次操作没有生效，请稍后重试。")
 	if result.ok:
 		changed.emit()
-		if verb=="equip": equipment_changed.emit()
+		if verb in ["equip","tailor"]: equipment_changed.emit()
 	event_received.emit({"type":"notice","message":result.message,"ok":result.ok})
 	return result
 func set_player_position(position: Vector3) -> void:
@@ -285,16 +289,18 @@ func set_parcel_layout(parcel_id: String,candidate: Dictionary,expected_revision
 	if is_online():return {"ok":false,"message":"地皮建造目前只在单人模式开放。"}
 	var land=preload("res://scripts/building/parcels.gd")
 	if not job().is_empty():return {"ok":false,"message":"请先结束当前互动。"}
+	var map_id: String=state().map_id
+	var layout_key: String=land.layout_key(map_id)
 	var p: Array=state().player_position
 	if land.distance_to(parcel_id,Vector3(p[0],p[1],p[2]))>land.REACH:return {"ok":false,"message":"请靠近当前地皮后再建造。"}
-	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate)
+	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate,map_id)
 	if not checked.ok:return checked
 	var access: Dictionary=land.validate_edit(state(),parcel_id,checked.layout,expected_revision)
 	if not access.ok:return access
-	if checked.layout==state().build_layout:return checked
+	if checked.layout==state()[layout_key]:return checked
 	var before:=snapshot();var old_revision: int=authority.revision
 	var old_world:=world.duplicate(true);var old_characters:=characters.duplicate(true)
-	state().build_layout=checked.layout;state().land_parcels.plots[parcel_id].revision+=1
+	state()[layout_key]=checked.layout;state().land_parcels.plots[parcel_id].revision+=1
 	authority.revision+=1;state().revision=authority.revision
 	# Layout, parcel revision and ownership are one full-save transaction.
 	if not save_game():
@@ -304,7 +310,7 @@ func set_parcel_layout(parcel_id: String,candidate: Dictionary,expected_revision
 func set_build_layout(candidate: Dictionary) -> Dictionary:
 	if is_online():return {"ok":false,"message":"建造园目前只在单人模式开放。"}
 	if not job().is_empty():return {"ok":false,"message":"请先完成手上的工作。"}
-	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate)
+	var checked: Dictionary=preload("res://scripts/building/layout.gd").validate(candidate,"city")
 	if not checked.ok:return checked
 	if state().build_layout==checked.layout:return checked
 	var previous: Dictionary=state().build_layout;var revision_before: int=authority.revision;var state_revision_before: int=int(state().revision)
@@ -371,7 +377,8 @@ func restore_state(raw: Dictionary):
 	var restored:=Authority.new()
 	var s: Dictionary=restored.state
 	s["land_parcels"]=preload("res://scripts/building/parcels.gd").normalize(raw.get("land_parcels",{}))
-	s["build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("build_layout",{}))
+	s["build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("build_layout",{}),"city")
+	s["icefield_build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("icefield_build_layout",{}),"icefield")
 	s.player_id=str(raw.get("player_id","local_bunny")).left(80)
 	s.character_name=str(raw.get("character_name","")).strip_edges().left(12)
 	if valid_name(s.character_name)!="": s.character_name=Animals.display_name(str(raw.get("species","bunny")))
@@ -414,10 +421,13 @@ func restore_state(raw: Dictionary):
 			s.skills[key]=Stats.skill_progress(s.skill_experience[key]).level
 	s.stamina_run_elapsed=0.0 # Running is free; discard legacy fractional debt.
 	s.stamina_recovery_elapsed=clampf(float(raw.get("stamina_recovery_elapsed",0)),0,29.999999)
-	var bed_id:=str(raw.get("rest_bed",""));var bed_valid:=bed_id=="home_bed"
-	if bed_id.begins_with("build:") and s.map_id=="city":
-		var bed:=preload("res://scripts/building/layout.gd").find(s.build_layout,bed_id.trim_prefix("build:"))
+	s.clothing_designs=preload("res://scripts/appearance/clothing_designs.gd").normalize(raw.get("clothing_designs",{}),s.inventory)
+	var bed_id:=str(raw.get("rest_bed",""));var bed_valid: bool=(bed_id=="home_bed" and s.map_id in ["city","valley"]) or (s.map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS)
+	if bed_id.begins_with("build:") and s.map_id in ["city","icefield"]:
+		var bed:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(s,s.map_id),bed_id.trim_prefix("build:"))
 		bed_valid=bed.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[bed.kind].get("bed",false)
+	s.snow_trail=preload("res://scripts/icefield/snow_trail.gd").normalize(raw.get("snow_trail",{}))
+	s.hearth_ready_at=clampf(float(raw.get("hearth_ready_at",0.)),0.,float(s.time)+180.)
 	s.rest_mode="sleep" if raw.get("rest_mode","")=="sleep" and bed_valid else ""
 	s.rest_bed=bed_id if s.rest_mode=="sleep" else ""
 	restored.sleeping=s.rest_mode=="sleep"
@@ -516,14 +526,18 @@ func receive_online_snapshot(data: Dictionary) -> void:
 	if not is_online():return
 	online_building_available=int(data.get("building_protocol",0))==1
 	var previous: Dictionary=authority.state.get("equipment",{}).duplicate()
-	var layout: Dictionary=authority.state.get("build_layout",preload("res://scripts/building/layout.gd").empty())
+	var previous_designs: Dictionary=authority.state.get("clothing_designs",{})
+	online_winter_building_available=bool(data.get("winter_building",false))
+	var prior_state: Dictionary=authority.state
 	authority.state=data.state
-	if not authority.state.has("build_layout"):authority.state.build_layout=layout
+	for map_id in ["city","icefield"]:
+		var key: String=preload("res://scripts/building/parcels.gd").layout_key(map_id)
+		if not authority.state.has(key):authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)
 	authority.job=data.get("job",{}).duplicate(true)
 	online_locks=data.get("locks",{});online_care=data.get("care_history",{});online_doors=data.get("doors",{})
 	active_character_id=str(state().player_id)
 	changed.emit()
-	if previous!=state().equipment:equipment_changed.emit()
+	if previous!=state().equipment or previous_designs!=state().get("clothing_designs",{}):equipment_changed.emit()
 func request_online(verb: String,args: Dictionary={}) -> Dictionary:
 	if not is_online() or not online_joined:return {"ok":false,"message":"正在重新联系小岛，请稍等。"}
 	return await remote.request(verb,args)

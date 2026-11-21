@@ -89,7 +89,8 @@ func _ready() -> void:
 	for form in preload("res://scripts/building/stairs.gd").FORMS:add_card("stairs:"+form,preload("res://scripts/building/stairs.gd").FORMS[form],"结构/stairs")
 	for family in Structures.FORMS:
 		for form in Structures.FORMS[family]:add_card(family+":"+form,Structures.FORMS[family][form],"结构/"+family)
-	for sample in [["single_one","温馨小屋"],["two_storey","两层楼阁"]]:add_card("template:"+sample[0],sample[1],"样板房")
+	var samples: Dictionary=preload("res://scripts/building/templates.gd").SAMPLE_NAMES
+	for id in samples:add_card("template:"+id,samples[id],"样板房")
 	for id in Catalog.OBJECTS:add_card("object:"+id,Catalog.OBJECTS[id].name,Catalog.OBJECTS[id].category)
 	body.add_child(VSeparator.new())
 	var details:=UI.column(6);details.custom_minimum_size.x=360;body.add_child(details)
@@ -157,10 +158,14 @@ func refresh(row: Dictionary) -> void:
 	root_ui.find_child("ParcelTitle",true,false).text="东岸 · 建造" if editor.parcel_id=="" else preload("res://scripts/building/parcels.gd").title(editor.parcel_id)
 	updating=true
 	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.editing_layout())
-	title.text="%.0f㎡ · %d/%d物件 · %d/%d灯"%[counts.floor_area,counts.objects,preload("res://scripts/building/layout.gd").MAX_ELEMENTS,counts.lights,preload("res://scripts/building/layout.gd").MAX_LIGHTS]
+	var layouts=preload("res://scripts/building/layout.gd")
+	var capacity: int=layouts.capacity_multiplier(editor.city.map_id)
+	var max_objects: int=layouts.MAX_ELEMENTS*capacity
+	var max_lights: int=layouts.MAX_LIGHTS*capacity
+	title.text="%.0f㎡ · %d/%d物件 · %d/%d灯"%[counts.floor_area,counts.objects,max_objects,counts.lights,max_lights]
 	if editor.parcel_id!="":
 		var total: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.layout)
-		title.text="本地块 %.0f㎡ · %d物件 · 全岛余量 %d物件 / %d灯"%[counts.floor_area,counts.objects,preload("res://scripts/building/layout.gd").MAX_ELEMENTS-total.objects,preload("res://scripts/building/layout.gd").MAX_LIGHTS-total.lights]
+		title.text="本地块 %.0f㎡ · %d物件 · 全岛余量 %d物件 / %d灯"%[counts.floor_area,counts.objects,max_objects-total.objects,max_lights-total.lights]
 	root_ui.find_child("FloorDown",true,false).disabled=editor.view_level()==0;root_ui.find_child("FloorUp",true,false).disabled=editor.roof_view
 	floor_choice.text="屋顶" if editor.roof_view else "%d楼"%(editor.editing_storey+1)
 	root_ui.find_child("TopDownView",true,false).set_pressed_no_signal(editor.top_down)

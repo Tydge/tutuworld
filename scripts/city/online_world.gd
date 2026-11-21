@@ -104,17 +104,17 @@ func receive(data: Dictionary) -> void:
 	elif data.get("type","")=="chat":show_chat(data)
 func make_replica(row: Dictionary) -> void:
 	var actor=Animals.create(row.species);actor.network_replica=true;actor.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;actor.world=city;actor.name="Online_"+str(row.id);city.add_child(actor)
-	actor.position=from_array(row.position);Outfit.apply(actor,row.equipment)
+	actor.position=from_array(row.position);Outfit.apply(actor,row.equipment,row.get("clothing_designs",{}))
 	var props:=Props.new();props.bunny=actor;city.add_child(props)
 	var label:=preload("res://scripts/geometry.gd").text3d(actor,row.name,Vector3(0,actor.rig_profile.name_height,0),22,UI.CREAM)
 	label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.outline_size=6;label.outline_modulate=UI.INK
-	replicas[row.id]={"actor":actor,"props":props,"equipment":row.equipment.duplicate(),"action":""}
+	replicas[row.id]={"actor":actor,"props":props,"equipment":row.equipment.duplicate(),"clothing_designs":row.get("clothing_designs",{}),"action":""}
 func record_input(direction: Vector3,jump: bool,running: bool) -> void:
 	if direction.length_squared()>.01 and Time.get_ticks_msec()-construction_notice_at>3000:
 		var point: Vector3=city.bunny.position+direction*.95
-		if preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}),point,1.)!="":
+		if preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}),point,1.,city.map_id)!="":
 			construction_notice_at=Time.get_ticks_msec();city.hud.notify(preload("res://scripts/building/construction_sites.gd").MESSAGE)
-	if preload("res://scripts/building/construction_sites.gd").at(city.get_meta("pending_construction_sites",{}),city.bunny.position+direction*.95)!="":direction=Vector3.ZERO;jump=false
+	if preload("res://scripts/building/construction_sites.gd").at(city.get_meta("pending_construction_sites",{}),city.bunny.position+direction*.95,.55,city.map_id)!="":direction=Vector3.ZERO;jump=false
 	if session.online_joined and not city.preparing:prediction.record(city.bunny,direction,jump,running)
 func _physics_process(_delta: float) -> void:
 	if not city.preparing and is_instance_valid(city.bunny):prediction.reconcile(city.bunny)
@@ -138,11 +138,13 @@ func _process(delta: float) -> void:
 				if city.targets.has(id):apply_actor(city.targets[id].node,row,delta)
 			elif replicas.has(id):
 				var replica: Dictionary=replicas[id];apply_actor(replica.actor,row,delta);apply_replica_meal(replica,row)
-				if replica.equipment!=row.equipment:replica.equipment=row.equipment.duplicate();Outfit.apply(replica.actor,row.equipment)
+				var designs: Dictionary=row.get("clothing_designs",{})
+				if replica.equipment!=row.equipment or replica.clothing_designs!=designs:
+					replica.equipment=row.equipment.duplicate();replica.clothing_designs=designs;Outfit.apply(replica.actor,row.equipment,designs)
 				var meal_changed: bool=str(row.get("action",""))=="eat" and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
 				if replica.action!=str(row.get("action","")) or meal_changed:
 					replica.action=str(row.get("action",""));replica.props.hide_tool()
-					if replica.action!="":replica.props.show_tool(replica.action,str(row.get("watering_can","")))
+					if replica.action!="":replica.props.show_tool(replica.action,str(row.get("watering_can","")),str(row.get("job",{}).get("item","")))
 				var target: String=row.get("job",{}).get("target","")
 				if city.targets.has(target):replica.props.target_point=city.targets[target].effect_anchor.global_position if city.targets[target].has("effect_anchor") else city.target_position(target)+Vector3(0,.6,0)
 	if city.map_id=="city" and is_instance_valid(city.culinary):
@@ -189,11 +191,12 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 		actor.step_phase+=delta*rate
 	var sleeping: bool=row.get("sleeping",false) or row.get("pose",{}).get("kind","")=="sleep"
 	if sleeping:
-		if not actor.sleeping:actor.lie_in_bed(city.targets.get(row.get("pose",{}).get("target","home_bed"),{}).get("node",city.home.get_node("Furnishing/bed")))
-		if row.get("pose",{}).get("target","home_bed")=="home_bed":city.home.bed_occupant=actor
+		var bed: Node3D=city.targets.get(row.get("pose",{}).get("target","home_bed"),{}).get("node")
+		if not actor.sleeping and is_instance_valid(bed):actor.lie_in_bed(bed)
+		if is_instance_valid(city.home) and row.get("pose",{}).get("target","home_bed")=="home_bed":city.home.bed_occupant=actor
 	elif actor.sleeping:
 		actor.stand_up(target)
-		if city.home.bed_occupant==actor:city.home.bed_occupant=null
+		if is_instance_valid(city.home) and city.home.bed_occupant==actor:city.home.bed_occupant=null
 	var seated: bool=row.get("pose",{}).get("kind","") in ["sit","eat","waiting_exit"]
 	actor.seated=seated or sleeping
 	var action: String=row.get("action","")

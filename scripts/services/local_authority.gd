@@ -14,6 +14,7 @@ var facility_kinds: Dictionary={}
 var trade_access: Callable
 var facility_access: Callable
 var dining_access: Callable
+var activity_access: Callable
 var seen_commands: Dictionary = {}
 var revision := 0
 var running:=false
@@ -25,8 +26,12 @@ func _init() -> void:
 	reward_random.randomize()
 	state = {"schema":2,"player_id":"local_bunny","character_name":"兔兔","species":"bunny","map_id":"city","world_id":"peace_island_v1","time":DAY_SECONDS/3,"coins":650,"inventory":{"seed_carrot":3,"seed_lettuce":3,"seed_tomato":2,"seed_pumpkin":2},"equipment":{"head":"","body":"","neck":""},"plots":{},"resources":{},"player_position":[0,.1,9],"revision":0,"food_effect":{},"experience":0,"stamina":100.0,"attributes":Stats.defaults(),"skills":Stats.skill_defaults(),"skill_experience":Stats.skill_xp_defaults()}
 	state["winter_outfits"]={}
+	state["clothing_designs"]={}
+	state["snow_trail"]=preload("res://scripts/icefield/snow_trail.gd").normalize({})
+	state["hearth_ready_at"]=0.
 	state["land_parcels"]=preload("res://scripts/building/parcels.gd").empty()
 	state["build_layout"]=preload("res://scripts/building/layout.gd").empty()
+	state["icefield_build_layout"]=preload("res://scripts/building/layout.gd").empty("icefield")
 	for p in DB.plots(): state.plots[p.id] = empty_plot()
 	for r in DB.all_resources(): state.resources[r.id] = {"available":true,"respawn_at":0.0,"generation":0}
 	state.stamina_run_elapsed=0.0
@@ -39,8 +44,9 @@ func _init() -> void:
 		facility_kinds[id]=preload("res://scripts/city/production_facilities.gd").defaults()[id].kind
 func built_kitchen(id: String) -> Dictionary:
 	if not id.begins_with("build:"):return {}
-	var row:=preload("res://scripts/building/layout.gd").find(state.build_layout,id.trim_prefix("build:"))
+	var row:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(state,state.map_id),id.trim_prefix("build:"))
 	return row if row.get("type","")=="object" and row.get("kind","")=="cooking_counter" else {}
+func build_base() -> float:return preload("res://scripts/building/parcels.gd").base_height(state.map_id)
 func facility_position(id: String) -> Vector2:
 	var row:=built_kitchen(id)
 	if not row.is_empty():return Vector2(row.position[0],row.position[1])+preload("res://scripts/building/catalog.gd").rotate_xz(Vector2(0,1.8),row.yaw)
@@ -49,12 +55,13 @@ func facility_kind(id: String) -> String:
 	if not built_kitchen(id).is_empty():return "kitchen"
 	return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
 func near_dining(target: String,chair_id: String="") -> bool:
-	if target=="dining":return near_position(DB.facilities().dining,3.8)
-	if not target.begins_with("build:") or state.get("map_id","city")!="city":return false
-	var layout: Dictionary=state.build_layout;var dining=preload("res://scripts/building/dining.gd");var table_id:=target.trim_prefix("build:")
+	if target=="dining":return state.map_id=="city" and near_position(DB.facilities().dining,3.8)
+	if not target.begins_with("build:"):return false
+	var layout: Dictionary=preload("res://scripts/building/parcels.gd").layout_for(state,state.map_id);var dining=preload("res://scripts/building/dining.gd");var table_id:=target.trim_prefix("build:")
 	if chair_id=="" or dining.links(layout).get(chair_id,"")!=table_id:return false
 	var chair:=preload("res://scripts/building/layout.gd").find(layout,chair_id);var p: Array=state.player_position
-	if preload("res://scripts/building/storeys.gd").at_height(float(p[1]))!=int(chair.get("storey",0)) or absf(float(p[1])-(.18+preload("res://scripts/building/storeys.gd").elevation(chair)))>1.7:return false
+	var local_y:=float(p[1])-build_base()
+	if preload("res://scripts/building/storeys.gd").at_height(local_y)!=int(chair.get("storey",0)) or absf(local_y-(.18+preload("res://scripts/building/storeys.gd").elevation(chair)))>1.7:return false
 	return near_position(dining.position(chair),3.8) and (not dining_access.is_valid() or dining_access.call(target,chair_id))
 func watering_can_id() -> String:
 	for id in ["copper_watering_can","watering_can"]:
@@ -64,6 +71,8 @@ func water_left(id: String="") -> int:
 	if id=="": id=watering_can_id()
 	return clampi(int(state.get("watering_water",{}).get(id,0)),0,DB.water_capacity(id)) if count(id)>0 else 0
 func normalize_production_state() -> void:
+	state.clothing_designs=preload("res://scripts/appearance/clothing_designs.gd").normalize(state.get("clothing_designs",{}),state.inventory)
+	state.snow_trail=preload("res://scripts/icefield/snow_trail.gd").normalize(state.get("snow_trail",{}))
 	if not state.get("watering_water",{}) is Dictionary: state.watering_water={}
 	var clean: Dictionary={}
 	for id in ["watering_can","copper_watering_can"]:
@@ -180,8 +189,8 @@ func _apply(c: Dictionary) -> Dictionary:
 	var item: String = c.get("item","")
 	var map_id: String=state.get("map_id","city")
 	if verb=="buy_land":
-		var land=preload("res://scripts/building/parcels.gd");var parcel: String=c.get("parcel_id","")
-		if map_id!="city" or parcel not in land.IDS or not land.at_sign(Vector3(state.player_position[0],state.player_position[1],state.player_position[2]),parcel):return fail("请先走到想购买的地皮立板旁边。")
+		var land=preload("res://scripts/building/parcels.gd");var parcel: Variant=c.get("parcel_id","")
+		if not parcel is String or map_id!=land.map_for(parcel) or not land.at_sign(Vector3(state.player_position[0],state.player_position[1],state.player_position[2]),parcel):return fail("请先走到想购买的地皮立板旁边。")
 		if not job.is_empty() or state.get("rest_mode","")!="":return fail("请先结束当前互动。")
 		if not land.owner(state,parcel).is_empty():return fail("这块地皮已经被购买了。")
 		if state.coins<land.PRICE:return fail("购买地皮需要100贝壳币，当前余额不足。")
@@ -197,7 +206,9 @@ func _apply(c: Dictionary) -> Dictionary:
 		if state.coins<fare: return fail("船票需要 10 贝壳币。")
 		state.coins-=fare;state.map_id=destination;state.player_position=routes.arrival(destination)
 		return {"ok":true,"message":"出发，前往"+routes.title(destination)+"。"}
-	if map_id!="city" and verb in ["plant","water","weed","harvest","craft","refill","eat","rest"]: return fail("这件事要回海岛城才能做哦。")
+	if map_id!="city" and verb in ["plant","water","weed","harvest","refill"]:return fail("这件事要回海岛城才能做哦。")
+	if map_id=="valley" and verb in ["craft","eat","rest"]:return fail("这件事要回海岛城才能做哦。")
+	if map_id=="icefield" and verb in ["craft","eat"] and not str(c.get("target","")).begins_with("build:"):return fail("请找岛上可使用的料理台或餐桌。")
 	if map_id not in ["city","icefield"] and verb in ["buy","sell"]:return fail("请来到有商店的镇上。")
 	var definition := DB.item(item)
 	var quantity := int(c.get("quantity",1))
@@ -234,6 +245,17 @@ func _apply(c: Dictionary) -> Dictionary:
 		else:outfits[resident]=outfits.get(resident,{}).merged(changed,true)
 		state.winter_outfits=outfits
 		return {"ok":true,"message":"居民的搭配已保存。"}
+	if verb=="tailor":
+		if not job.is_empty() or state.get("rest_mode","")!="":return fail("先结束手上的事情吧。")
+		if not activity_access.is_valid() or not activity_access.call(str(c.get("target","")),"tailor"):return fail("请走到裁缝试衣架旁边。")
+		if definition.get("kind","")!="clothing" or count(item)<1:return fail("带一件自己的衣服来试染吧。")
+		if c.get("restore",false)==true:
+			state.clothing_designs.erase(item)
+			return {"ok":true,"message":"%s恢复原样啦。"%definition.name}
+		var design: Dictionary=preload("res://scripts/appearance/clothing_designs.gd").validate(c.get("design"))
+		if design.is_empty():return fail("请选好可用的纹样和颜色。")
+		state.clothing_designs[item]=design
+		return {"ok":true,"message":"%s染好啦。"%definition.name}
 	if verb=="equip":
 		var slot: String = c.get("slot","")
 		if slot not in ["head","body","neck"]: return fail("装饰位置不正确。")
@@ -248,23 +270,30 @@ func _apply(c: Dictionary) -> Dictionary:
 		state.rest_mode="";state.rest_bed="";sleeping=false
 		return {"ok":true,"message":""}
 	if verb=="rest":
-		var bed_id:=str(c.get("target",""));var point: Vector2=DB.facilities().home_bed if bed_id=="home_bed" else Vector2(INF,INF);var yaw:=0.;var bed_height:=.18;var bed_story:=-1
+		var bed_id:=str(c.get("target",""))
+		if map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS:
+			if not job.is_empty() or not preload("res://scripts/icefield/winter_activities.gd").reachable(self,bed_id,"bed"):return fail("请来到旅舍里，走近一张床。")
+			state.rest_mode="sleep";state.rest_bed=bed_id;sleeping=true;running=false
+			return {"ok":true,"message":""}
+		var point: Vector2=DB.facilities().home_bed if bed_id=="home_bed" and map_id=="city" else Vector2(INF,INF)
+		var yaw:=0.;var bed_height:=.18;var bed_story:=-1
 		if bed_id.begins_with("build:"):
-			var row:=preload("res://scripts/building/layout.gd").find(state.build_layout,bed_id.trim_prefix("build:"))
-			if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[row.kind].get("bed",false):point=Vector2(row.position[0],row.position[1]);yaw=float(row.yaw);bed_height=preload("res://scripts/building/storeys.gd").elevation(row)+.18;bed_story=int(row.get("storey",0))
+			var row:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(state,state.map_id),bed_id.trim_prefix("build:"))
+			if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[row.kind].get("bed",false):point=Vector2(row.position[0],row.position[1]);yaw=float(row.yaw);bed_height=preload("res://scripts/building/storeys.gd").elevation(row)+.18+build_base();bed_story=int(row.get("storey",0))
 		var player: Array=state.player_position;var local: Vector2=(Vector2(player[0],player[2])-point).rotated(deg_to_rad(yaw))
-		if not point.is_finite() or (bed_story>=0 and preload("res://scripts/building/storeys.gd").at_height(float(player[1]))!=bed_story) or absf(float(player[1])-bed_height)>1.7 or not job.is_empty() or preload("res://scripts/city/furniture_access.gd").bed_distance(local)>2.0:return fail("先来到床边，再好好睡一觉吧。")
+		if not point.is_finite() or (bed_story>=0 and preload("res://scripts/building/storeys.gd").at_height(float(player[1])-build_base())!=bed_story) or absf(float(player[1])-bed_height)>1.7 or not job.is_empty() or preload("res://scripts/city/furniture_access.gd").bed_distance(local)>2.0:return fail("先来到床边，再好好睡一觉吧。")
 		state.rest_mode="sleep";state.rest_bed=bed_id;sleeping=true;running=false
 		return {"ok":true,"message":""}
 	if state.get("rest_mode","")=="sleep": return fail("先起床，伸个懒腰吧。")
 	if not job.is_empty(): return fail("%s一次只能认真做一件事情。"%actor_name())
 	var target: String = c.get("target","")
+	if verb in ["stamp","claim_trail"] or preload("res://scripts/icefield/winter_activities.gd").JOBS.has(verb):return preload("res://scripts/icefield/winter_activities.gd").begin(self,verb,target)
 	if verb=="craft":
 		var recipe_id: String=c.get("recipe","")
 		var recipe:=DB.recipe(recipe_id)
 		if recipe.is_empty() or facility_kind(target)!=recipe.station or not near_position(facility_position(target),3.8): return fail("请来到对应的料理台或工坊工作台。")
 		var built:=built_kitchen(target)
-		if not built.is_empty() and (preload("res://scripts/building/storeys.gd").at_height(float(state.player_position[1]))!=int(built.get("storey",0)) or absf(float(state.player_position[1])-(preload("res://scripts/building/storeys.gd").elevation(built)+.18))>1.25 or (facility_access.is_valid() and not facility_access.call(target))):return fail("请来到料理台前，留出操作空间。")
+		if not built.is_empty() and (preload("res://scripts/building/storeys.gd").at_height(float(state.player_position[1])-build_base())!=int(built.get("storey",0)) or absf(float(state.player_position[1])-(preload("res://scripts/building/storeys.gd").elevation(built)+.18+build_base()))>1.25 or (facility_access.is_valid() and not facility_access.call(target))):return fail("请来到料理台前，留出操作空间。")
 		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return fail("这件工具已经拥有啦。")
 		var locked := recipe_lock_reason(recipe_id)
 		if locked!="": return fail(locked)
@@ -282,7 +311,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		job={"verb":verb,"target":target,"item":can,"elapsed":0.0,"duration":2.0}
 		return {"ok":true,"message":"正在打水，2秒后装满水壶。"}
 	if verb=="snack":
-		if definition.get("edible",{}).is_empty() or count(item)<1: return fail("口袋里没有可以吃的橘子。")
+		if definition.get("edible",{}).is_empty() or count(item)<1: return fail("口袋里没有这份路粮。")
 		if state.stamina>=stamina_max(): return fail("耐力已满，留着一会儿吃吧。")
 		job={"verb":verb,"target":"","item":item,"elapsed":0.0,"duration":float(definition.edible.seconds)}
 		return {"ok":true,"message":""}
@@ -382,6 +411,7 @@ func complete(j: Dictionary) -> Dictionary:
 	var critical := false
 	var quality_gain := false
 	var quality := 0
+	if preload("res://scripts/icefield/winter_activities.gd").JOBS.has(j.verb):return preload("res://scripts/icefield/winter_activities.gd").complete(self,j)
 	if j.verb=="craft":
 		var recipe:=DB.recipe(j.recipe)
 		if recipe.is_empty() or facility_kind(target)!=recipe.get("station","") or not near_position(facility_position(target),3.8): return rejected_work(j,"离开了工作台，材料没有消耗。")
@@ -399,11 +429,11 @@ func complete(j: Dictionary) -> Dictionary:
 		message="%s装满啦，可以浇水%d次。"%[DB.item(j.item).name,water_left(j.item)]
 	elif j.verb=="snack":
 		var edible: Dictionary=DB.item(j.item).get("edible",{})
-		if edible.is_empty() or count(j.item)<1: return rejected_work(j,"橘子已经不在口袋里了。")
+		if edible.is_empty() or count(j.item)<1: return rejected_work(j,"这份点心已经不在口袋里了。")
 		add(j.item,-1)
 		var before := float(state.stamina)
 		state.stamina=minf(stamina_max(),before+int(edible.stamina))
-		message="吃了一颗橘子，耐力 +%d"%int(state.stamina-before)
+		message="吃了%s，耐力 +%d"%[DB.item(j.item).name,int(state.stamina-before)]
 	elif j.verb=="eat":
 		if not near_dining(target,str(j.get("seat",""))) or count(j.item)<1: return rejected_work(j,"用餐已取消，食物没有消耗。")
 		add(j.item,-1)

@@ -29,8 +29,12 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 		if area.has_point(Vector2(x,z)):return true
 	# The outdoor grid samples ground near its own height. Upper storeys must
 	# never replace a street cell with the roof / highest floor above it.
-	var top:=90. if get_parent().get("map_id")=="valley" else 18.
-	if get_parent().get("map_id")=="city" and preload("res://scripts/building/site.gd").contains(Vector3(x,0,z)):
+	var map_id: String=get_parent().get("map_id")
+	var top:=90. if map_id=="valley" else 18.
+	var site=preload("res://scripts/building/site.gd")
+	if map_id=="icefield" and site.within(Vector2(x,z),map_id):
+		top=preload("res://scripts/building/parcels.gd").base_height(map_id)+.75
+	elif map_id=="city" and site.contains(Vector3(x,0,z)):
 		top=.75
 		var span: Rect2=preload("res://scripts/building/site.gd").CONNECTOR
 		if span.has_point(Vector2(x,z)):top=maxf(top,preload("res://scripts/building/garden_bridge.gd").height_at(x,span)+.4)
@@ -156,7 +160,7 @@ func reserve_stairs() -> void:
 	var editor: Variant=get_parent().get("build_mode")
 	var layout: Dictionary={}
 	if is_instance_valid(editor):layout=editor.layout
-	elif get_parent().has_method("online_players"):layout=get_parent().session.state().get("build_layout",{})
+	elif get_parent().has_method("online_players"):layout=preload("res://scripts/building/parcels.gd").layout_for(get_parent().session.state(),get_parent().map_id)
 	for row in layout.get("elements",[]):
 		if row.type=="stairs" and int(row.get("storey",0))==0:
 			for area in preload("res://scripts/building/stairs.gd").parts(row):stair_reservations.append(area.grow(.45))

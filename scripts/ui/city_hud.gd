@@ -45,6 +45,8 @@ var shop_rows: Dictionary={}
 var shop_empty: Label
 var map_draw: Control
 var panel_signature := ""
+var activity_target:=""
+var tailoring: RefCounted
 var bubble: PanelContainer
 var bubble_name: Label
 var bubble_text: Label
@@ -103,7 +105,7 @@ func _ready() -> void:
 	bar.anchor_bottom=1
 	bar.position=Vector2(-400,-88)
 	bar.custom_minimum_size=Vector2(800,62)
-	if city.map_id=="city" and city.has_building_world():bar.position.x=-460;bar.custom_minimum_size.x=920
+	if city.map_id in ["city","icefield"] and city.has_building_world():bar.position.x=-460;bar.custom_minimum_size.x=920
 	root_ui.add_child(bar)
 	var buttons:=UI.row(10)
 	bar.add_child(buttons)
@@ -111,7 +113,7 @@ func _ready() -> void:
 		var b:=UI.button(row[0],func(): open_panel(row[1]))
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
-	if city.map_id=="city" and city.has_building_world():
+	if city.map_id in ["city","icefield"] and city.has_building_world():
 		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
@@ -219,7 +221,7 @@ func _process(delta: float) -> void:
 	var inside: bool=preload("res://scripts/city/interior_view.gd").indoors(city,city.bunny.get_global_transform_interpolated().origin)
 	camera_control.update_context(inside and not photo_mode and not overlay.visible and not city.paused and not city.preparing,delta)
 	if is_instance_valid(build_button):
-		var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position)
+		var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position,city.map_id)
 		build_button.disabled=id=="" or not land.owns(session.state(),id)
 		build_button.tooltip_text="靠近已购买的地皮后，只建造该地皮" if id=="" else land.title(id)+" · 24×20米"
 	player_status.visible=not photo_mode
@@ -243,7 +245,7 @@ func _process(delta: float) -> void:
 		elif job.verb=="gather" and job.item=="orange": focus=city.target_position(job.target)+Vector3(0,3.6,0)
 		ring.position=city.camera.unproject_position(focus)-Vector2(36,36)
 		ring.queue_redraw()
-		var verb_name: String={"craft":"制造" if job.get("station","")=="workshop" else "烹饪","refill":"打水","eat":"用餐","snack":"吃橘子","water":"浇水","weed":"除草","plant":"播种","harvest":"收获","gather":"采集"}.get(job.verb,"动作")
+		var verb_name: String={"craft":"制造" if job.get("station","")=="workshop" else "烹饪","refill":"打水","eat":"用餐","snack":"吃点心","bake":"烘烤路粮","brew_tea":"煮松针茶","warm":"围炉暖爪","water":"浇水","weed":"除草","plant":"播种","harvest":"收获","gather":"采集"}.get(job.verb,"动作")
 		var dish: String=" · "+DB.item(job.item).name if job.verb in ["craft","eat"] else ""
 		prompt.text="%s%s · %.1f 秒\nEsc 取消"%[verb_name,dish,maxf(0,float(job.duration)-float(job.elapsed))]
 		prompt_card.visible=not photo_mode and not overlay.visible
@@ -274,6 +276,7 @@ func set_prompt(text: String) -> void:
 	prompt.text=text
 	prompt_card.visible=text!="" and not overlay.visible and not photo_mode
 func close_panel() -> void:
+	tailoring=null
 	mode=""
 	fitting_resident=""
 	shop_preview_overrides.clear()
@@ -308,7 +311,7 @@ func rebuild() -> void:
 		character_sheet.process_mode=Node.PROCESS_MODE_DISABLED
 	UI.clear(content)
 	var height:=620 if mode=="profile" else 680
-	var width_: float=1100 if mode=="wardrobe" or (mode=="shop" and shop=="clothes") else 960
+	var width_: float=1100 if mode in ["wardrobe","tailor"] or (mode=="shop" and shop=="clothes") else 960
 	modal.custom_minimum_size=Vector2(width_,height)
 	modal.size=Vector2(width_,height)
 	modal.position=Vector2(-width_*.5,-height*.5)
@@ -316,6 +319,9 @@ func rebuild() -> void:
 	content.add_child(head)
 	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活","land":"海风花庭 · 地皮认购"}
 	var title:=UI.label(titles.get(mode,""),28)
+	if mode=="tailor":title.text="裁缝的试衣镜"
+	if mode=="atlas":title.text="踏雪图册"
+	if mode=="land" and city.map_id=="icefield":title.text="冰原岛 · 地皮认购"
 	if mode=="travel":title.text="乘船出发 · 选择目的地"
 	if mode=="map" and city.map_id=="icefield":title.text="冰原岛 · 霜光雪镇"
 	if mode=="shop" and city.map_id=="icefield":title.text={"farm":"雪芽杂货铺","tools":"霜石工具铺","clothes":"绒雪裁缝店"}.get(shop,"商店")
@@ -333,6 +339,9 @@ func rebuild() -> void:
 		"workshop": build_workshop()
 		"dining": build_dining()
 		"map": build_map()
+		"atlas":preload("res://scripts/ui/snow_atlas.gd").build(self)
+		"tailor":
+			tailoring=preload("res://scripts/ui/tailoring.gd").new();tailoring.build(self)
 		"travel": preload("res://scripts/icefield/ferry_menu.gd").build(self)
 		"land": build_land()
 		"dialogue":
@@ -349,7 +358,7 @@ func build_profile() -> void:
 	character_sheet.process_mode=Node.PROCESS_MODE_INHERIT
 	character_sheet.portrait.process_mode=Node.PROCESS_MODE_INHERIT
 	character_sheet.show()
-	character_sheet.preview.update_character(session.state().species,session.state().equipment)
+	character_sheet.preview.update_character(session.state().species,session.state().equipment,session.state().get("clothing_designs",{}))
 	character_sheet.experience.show()
 	character_sheet.refresh()
 func ensure_character_sheet() -> void:
@@ -364,7 +373,7 @@ func build_appearance_layout(worn: Dictionary) -> Control:
 	var layout:=UI.row(20);content.add_child(layout)
 	character_sheet.portrait.reparent(layout)
 	character_sheet.portrait.process_mode=Node.PROCESS_MODE_INHERIT
-	character_sheet.preview.update_character(session.state().species,worn)
+	character_sheet.preview.update_character(session.state().species,worn,session.state().get("clothing_designs",{}))
 	character_sheet.experience.show()
 	character_sheet.refresh()
 	var right:=UI.column(10);right.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -397,7 +406,7 @@ func refresh_shop_preview() -> void:
 	# Reuse the wardrobe preview; a fitting never changes the player's equipment.
 	character_sheet.experience.visible=fitting_resident==""
 	if character_sheet.preview.equipment!=worn or character_sheet.preview.species!=species:
-		character_sheet.preview.update_character(species,worn)
+		character_sheet.preview.update_character(species,worn,session.state().get("clothing_designs",{}) if fitting_resident=="" else {})
 	if is_instance_valid(resident_apply):
 		resident_apply.disabled=shop_preview_overrides.is_empty() or shop_preview_overrides.values().any(func(id):return session.authority.count(id)<1)
 	if is_instance_valid(shop_preview_reset): shop_preview_reset.disabled=shop_preview_overrides.is_empty()
@@ -481,7 +490,7 @@ func build_inventory(clothes_only: bool) -> void:
 		elif item.has("edible"):
 			c.add_child(UI.label("恢复 %d 点耐力"%int(item.edible.stamina),14,UI.GREEN))
 			var full: bool=s.stamina>=session.authority.stamina_max()
-			var eat:=UI.button("耐力已满" if full else "吃一颗 · 3 秒",func(): close_panel(); city.begin_snack(id),true)
+			var eat:=UI.button("耐力已满" if full else "吃掉 · %g 秒"%float(item.edible.seconds),func(): close_panel(); city.begin_snack(id),true)
 			eat.disabled=full or not session.job().is_empty() or s.get("rest_mode","")!=""
 			eat.set_meta("eat_item",id)
 			c.add_child(eat)
@@ -813,7 +822,7 @@ func build_settings() -> void:
 	options.add_child(UI.button("保存并退出游戏",func(): session.save_game(); get_tree().quit()))
 func build_land() -> void:
 	var land=preload("res://scripts/building/parcels.gd");var id:=land_parcel_id
-	if id not in land.IDS or not land.at_sign(city.bunny.global_position,id) or land.owner(session.state(),id)!="":
+	if land.map_for(id)!=city.map_id or not land.at_sign(city.bunny.global_position,id) or land.owner(session.state(),id)!="":
 		content.add_child(UI.label("请走到尚未购买的地皮立板旁，按E查看。",20));return
 	modal.custom_minimum_size=Vector2(610,430);modal.size=Vector2(610,430)
 	content.add_child(UI.label(land.title(id),29))

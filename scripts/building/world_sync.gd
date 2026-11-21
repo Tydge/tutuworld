@@ -16,11 +16,11 @@ static func register(city: Node3D,layout: Dictionary,room: Node3D,comfort_enable
 			if not door.has_method("door_action_position"):continue
 			city.targets["build:"+str(door.name)]={"kind":"home_door","name":"我的小屋","node":door,"anchor":door.get_node("ActionAnchor"),"position":door.door_action_position(),"radius":3.8}
 		for module in room.get_node("Furnishing").get_children():
+			preload("res://scripts/city/room_activities.gd").register(city,"build:"+str(module.name),module)
 			if module.has_node("WorkAnchor"):
 				city.targets["build:"+str(module.name)]={"kind":"kitchen","node":module,"name":"青瓷料理台","anchor":module.get_node("ActionAnchor"),"work_anchor":module.get_node("WorkAnchor"),"effect_anchor":module.get_node("EffectAnchor"),"position":module.get_node("ActionAnchor").global_position,"radius":2.6}
 			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.global_position,"radius":1.65,"label":"坐下来休息一会"}
 			if module.has_node("SleepExit"):
 				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.global_position,"radius":1.65}
-				if comfort_enabled and not module.has_node("BedComfort"):
-					var comfort:=preload("res://scripts/building/bed_comfort.gd").new();comfort.name="BedComfort";comfort.bed=module;comfort.city=city;module.add_child(comfort)
+				if comfort_enabled:preload("res://scripts/building/bed_comfort.gd").attach(module,city,"build:"+str(module.name))
 		preload("res://scripts/city/dining_service.gd").register_world(city,layout,room)

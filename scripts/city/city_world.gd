@@ -91,11 +91,14 @@ func _ready() -> void:
 	for id in ["farm","tools","clothes","workshop"]:
 		var interior:=scenery.get_node_or_null("Workshop" if id=="workshop" else "Shop_"+id)
 		if is_instance_valid(interior) and interior.get_script()==load("res://scripts/city/seabreeze_home.gd"): interiors.append(interior)
+	preload("res://scripts/city/room_activities.gd").outfit_shop(self)
 	prepare_scenery()
 	preload("res://scripts/city/water_materials.gd").apply(scenery)
 	if map_id=="city" and has_building_world():
 		preload("res://scripts/city/town_shore.gd").ensure(scenery)
 		preload("res://scripts/building/site.gd").ensure(scenery)
+	if map_id in ["city","icefield"] and has_building_world():
+		if map_id=="icefield":preload("res://scripts/building/site.gd").build_winter(scenery)
 		refresh_land_parcels();session.changed.connect(refresh_land_parcels)
 	if map_id=="city":
 		harbor=load("res://scripts/city/coastal/harbor.gd")
@@ -176,7 +179,7 @@ func _ready() -> void:
 	bunny.world=self
 	bunny.collision_mask=15
 	# Clothing nodes are attached at runtime; bunny.tscn remains byte-for-byte intact.
-	Outfit.apply(bunny,session.state().equipment)
+	Outfit.apply(bunny,session.state().equipment,session.state().get("clothing_designs",{}))
 	camera=Camera3D.new()
 	camera.name="FollowCamera"
 	camera.cull_mask &= ~preload("res://scripts/city/interior_view.gd").REFLECTION_LAYER
@@ -224,7 +227,7 @@ func _ready() -> void:
 	add_child(life)
 	session.changed.connect(refresh_world)
 	session.time_adjusted.connect(update_lighting)
-	session.equipment_changed.connect(func(): Outfit.apply(bunny,session.state().equipment))
+	session.equipment_changed.connect(func(): Outfit.apply(bunny,session.state().equipment,session.state().get("clothing_designs",{})))
 	session.event_received.connect(on_event)
 	ambience=AudioStreamPlayer.new()
 	ambience.stream=load("res://assets/garden_ambience.wav")
@@ -237,7 +240,7 @@ func _ready() -> void:
 	AudioServer.set_bus_mute(0,not session.settings.sound)
 	session.active=true
 	refresh_world()
-	if map_id=="city" and has_building_world():
+	if map_id in ["city","icefield"] and has_building_world():
 		build_mode=preload("res://scripts/building/editor.gd").new();build_mode.name="BuildingEditor";build_mode.city=self;add_child(build_mode)
 	if session.state().get("rest_mode","")=="sleep": enter_sleep(true)
 	if not session.test_mode or OS.get_cmdline_user_args().has("--warmup-test"):
@@ -409,12 +412,14 @@ func camera_safe_position(pivot: Vector3,desired: Vector3) -> Vector3:
 func player_spawn_position(pos: Array) -> Vector3:return Vector3(pos[0],maxf(.1,pos[1]),pos[2])
 func respawn_position() -> Vector3: return Vector3(0,1,7)
 func has_building_world() -> bool:
-	return not session.has_method("is_online") or not session.is_online() or session.online_building_available
+	return not session.has_method("is_online") or not session.is_online() or (session.online_winter_building_available if map_id=="icefield" else session.online_building_available)
 func navigation_bounds() -> Rect2i:
 	return Rect2i(-52,-46,215,93) if has_building_world() else Rect2i(-52,-46,105,93)
 func can_navigate(p: Vector3) -> bool: return can_walk(p)
+func construction_at(p: Vector3) -> bool:
+	return preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}).merged(get_meta("pending_construction_sites",{})),p,.55,map_id)!=""
 func can_walk(p: Vector3) -> bool:
-	if map_id=="city" and preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}).merged(get_meta("pending_construction_sites",{})),p)!="":return false
+	if construction_at(p):return false
 	for building_ in interiors:
 		if building_.contains_position(p):return true
 	return (preload("res://scripts/city/town_shore.gd").can_walk(p) or preload("res://scripts/building/site.gd").contains(p)) if has_building_world() else Vector2(p.x,p.z/.88).length()<52
@@ -445,6 +450,7 @@ func update_target() -> void:
 		if t.kind=="dining" and t.has("node"):
 			distance=preload("res://scripts/city/dining_service.gd").proximity(self,id)
 		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue
+		if t.kind in ["tailor","atlas","hearth","tea","bakery","stamp"] and not activity_access(id,t.kind):continue
 		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
 		if t.kind in ["bed","bench"] and t.has("node"):
 			distance=FurnitureAccess.distance(t.node,bunny.global_position)
@@ -472,6 +478,7 @@ func update_target() -> void:
 			"shop": text="E   和%s聊聊"%t.name
 			"npc": text=("E   轻声看看%s · 熟睡中" if t.node.sleeping else "E   和%s聊聊天")%t.name
 			"bench": text="E   "+t.get("label","坐下来发会儿呆")
+			"tailor","atlas","hearth","tea","bakery","stamp":text="E   "+t.label
 			"bed": text="E   躺下来睡觉 · 耐力恢复 +100%"
 	quick_action=find_quick_action()
 	if not quick_action.is_empty():
@@ -574,13 +581,13 @@ func toggle_panel(kind: String) -> void:
 	else: hud.open_panel(kind)
 func refresh_land_parcels() -> void:
 	if not is_instance_valid(scenery):return
-	preload("res://scripts/building/site.gd").update_ownership(scenery,session.state())
+	preload("res://scripts/building/site.gd").update_ownership(scenery,session.state(),map_id)
 	var land=preload("res://scripts/building/parcels.gd")
-	for id in land.IDS:
+	for id in land.ids_for(map_id):
 		targets["land:"+id]={"kind":"land","parcel_id":id,"position":land.sign_position(id),"radius":land.SIGN_REACH}
 
 func open_build_mode() -> void:
-	if not is_instance_valid(build_mode):hud.notify("当前服务器暂未开放建造园。" if map_id=="city" else "请回到城镇后再进入建造园。");return
+	if not is_instance_valid(build_mode):hud.notify("这里暂未开放建造。");return
 	var result: Dictionary=await build_mode.open_nearby_parcel()
 	if not result.ok:hud.notify(result.message)
 func interact() -> void:
@@ -609,6 +616,9 @@ func interact() -> void:
 		"land":
 			if not preload("res://scripts/building/parcels.gd").at_sign(bunny.global_position,t.parcel_id):update_target();return
 			hud.land_parcel_id=t.parcel_id;hud.open_panel("land")
+		"tailor","atlas","hearth","tea","bakery","stamp":
+			if not activity_access(current_target,t.kind):update_target();return
+			interact_with_activity(current_target,t.kind)
 		"plot": hud.open_panel("plot")
 		"kitchen":
 			if t.has("node") and not facility_access(current_target):update_target();return
@@ -670,7 +680,8 @@ func wake_from_bed() -> void:
 	if session.is_online():online_stand();return
 	var bed: Node3D=get_meta("sleeping_bed",null)
 	var landing:=FurnitureAccess.landing(self,bed,bunny,sleep_exit) if is_instance_valid(bed) else {}
-	if landing.is_empty():hud.notify("床边暂时有人或有家具，请稍后起身。");return
+	if landing.is_empty():landing=FurnitureAccess.find_sleep_exit(self,bed,bunny)
+	if landing.is_empty():hud.notify("暂时找不到安全的起身位置，请稍后再试。");return
 	var previous: Array=session.state().player_position.duplicate()
 	session.set_player_position(landing.position)
 	var result: Dictionary=session.dispatch("wake")
@@ -722,6 +733,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		job_start=bunny.position
 		bunny.can_move=false
 		var animation: String=("gather_stone" if DB.recipe(item).get("station","")=="workshop" else "cook") if verb=="craft" else verb
+		if preload("res://scripts/icefield/winter_activities.gd").JOBS.has(verb):animation=preload("res://scripts/icefield/winter_activities.gd").JOBS[verb].animation
 		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
 		if verb=="craft" and targets[target].has("work_anchor"): bunny.set_visual_heading(targets[target].work_anchor.global_rotation.y+PI)
 		elif verb=="eat":bunny.set_visual_heading(preload("res://scripts/city/seating.gd").seat(dining_chair).basis.get_euler().y if is_instance_valid(dining_chair) else PI)
@@ -733,7 +745,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		session.authority.running=false
 		tools.target_point=target_position(target)+Vector3(0,(.38 if targets.get(target,{}).get("item","")=="birch" else .65) if verb=="gather" else .18,0)
 		if targets.get(target,{}).has("effect_anchor"): tools.target_point=targets[target].effect_anchor.global_position
-		tools.show_tool(animation,session.authority.watering_can_id())
+		tools.show_tool(animation,session.authority.watering_can_id(),str(session.job().get("item","")))
 	return result
 func cancel_action() -> void:
 	if session.is_online():
@@ -774,7 +786,7 @@ func on_event(event: Dictionary) -> void:
 		sparkle.position=target_position(str(event.get("target","")))+Vector3(0,.75,0)
 	if event.type in ["completed","rejected"]: finish_action(); refresh_world(); play_tone(620,.12,.10)
 func refresh_world() -> void:
-	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access");session.authority.facility_access=Callable(self,"facility_access");session.authority.dining_access=Callable(self,"dining_access")
+	if not session.is_online():session.authority.trade_access=Callable(self,"trade_access");session.authority.facility_access=Callable(self,"facility_access");session.authority.dining_access=Callable(self,"dining_access");session.authority.activity_access=Callable(self,"activity_access")
 	for id in crops:
 		var p: Dictionary=session.state().plots[id]
 		crops[id].refresh(p,session.authority.needs(p))
@@ -891,7 +903,7 @@ func online_stand() -> void:
 	if not result.get("ok",false):hud.notify(str(result.get("message","稍等一下再起身吧。")));return
 	var p: Array=session.state().player_position
 	bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])));sleep_active=false;nap_active=false
-	if home.bed_occupant==bunny:home.bed_occupant=null
+	if is_instance_valid(home) and home.bed_occupant==bunny:home.bed_occupant=null
 func online_interact(id: String) -> void:
 	if network_interaction_pending:return
 	var t: Dictionary=targets[id]
@@ -982,10 +994,46 @@ func facility_access(id: String) -> bool:
 	if target.get("kind","")!="kitchen" or not target.has("node"):return id=="kitchen"
 	var node: Node3D=target.node
 	if not is_instance_valid(node) or bunny.global_position.distance_to(target.position)>3.3:return false
-	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(bunny.position.y)!=int(node.get_meta("storey")):return false
+	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(bunny.position.y-float(node.get_meta("storey_base",0.)))!=int(node.get_meta("storey")):return false
 	if absf(bunny.position.y-node.global_position.y)>1.25:return false
 	if not FurnitureAccess.clear_segment(self,node,bunny,bunny.global_position+Vector3.UP,target.position+Vector3.UP):return false
 	return not preload("res://scripts/city/local_landing.gd").find(self,node.get_node("WorkAnchor").global_position,bunny,false).is_empty()
 
 func dining_access(id: String,chair: String) -> bool:
 	return preload("res://scripts/city/dining_service.gd").accessible(self,id,chair)
+
+func activity_access(id: String,kind: String) -> bool:
+	return activity_reachable(bunny,id,kind)
+func activity_reachable(actor: CharacterBody3D,id: String,kind: String) -> bool:
+	if kind=="bed":
+		var row: Dictionary=targets.get(id,{})
+		return row.get("kind","")=="bed" and FurnitureAccess.reachable(self,row.node,actor,2.)
+	return preload("res://scripts/city/room_activities.gd").reachable(self,actor,id,kind)
+func interact_with_activity(id: String,kind: String) -> void:
+	match kind:
+		"stamp":
+			if not id.begins_with("snow_stamp:"):
+				hud.notify("印章沾好了印泥。雪镇沿路的三枚印章才会写进踏雪图册。")
+				return
+			if await request_room_activity("stamp",id):
+				var sparkle: Node3D=preload("res://scripts/city/reward_sparkle.gd").new()
+				add_child(sparkle);sparkle.global_position=target_position(id)+Vector3.UP*.8
+				play_tone(760,.15,.12)
+		"hearth","tea","bakery":
+			var result:=begin_action({"hearth":"warm","tea":"brew_tea","bakery":"bake"}[kind],id)
+			if not result.ok and result.get("message","")!="":hud.notify(result.message)
+		_:
+			hud.activity_target=id
+			hud.open_panel(kind)
+func finish_snow_trail() -> void:
+	if await request_room_activity("claim_trail",hud.activity_target):hud.rebuild()
+func request_room_activity(verb: String,id: String) -> bool:
+	if network_interaction_pending:return false
+	if session.is_online():
+		network_interaction_pending=true
+		var result: Dictionary=await session.request_online(verb,{"target":id})
+		network_interaction_pending=false
+		hud.notify(str(result.get("message","")))
+		return result.get("ok",false)
+	session.set_player_position(bunny.global_position)
+	return session.dispatch(verb,{"target":id}).ok

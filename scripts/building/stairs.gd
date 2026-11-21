@@ -66,11 +66,12 @@ static func validate(layout: Dictionary) -> Dictionary:
 			if not floors_by_level.has(level):floors_by_level[level]=Grid.index(Storeys.subset(layout,level).elements).floors
 	for stair in stairs:
 		for cell in hole_cells(stair):floors_by_level[Storeys.of(stair)+1].erase(cell)
-	if stairs.size()>16:return {"ok":false,"message":"同一地块最多16座楼梯。"}
+	var limit:=32 if layout.get("map_id","city")=="icefield" else 16
+	if stairs.size()>limit:return {"ok":false,"message":"这张地图的楼梯达到上限（%d座）。"%limit}
 	for stair in stairs:
 		var level:=Storeys.of(stair);var data:=definition(stair.form)
 		for area in parts(stair):
-			if not Site.within(area.position) or not Site.within(area.end):return {"ok":false,"message":"楼梯连同休息平台需要留在建造地块内。"}
+			if not Site.within(area.position,layout.get("map_id","city")) or not Site.within(area.end,layout.get("map_id","city")):return {"ok":false,"message":"楼梯连同休息平台需要留在建造地块内。"}
 		for end in [[level,data.bottom],[level+1,data.top]]:
 			var floors: Dictionary=floors_by_level[end[0]]
 			if not Grid.covered(world_rect(stair,end[1]).grow(-.02),floors):return {"ok":false,"message":"请先在上下两层铺好3米宽的出入口地板；出入口不能落在另一座楼梯井里。"}
@@ -196,7 +197,7 @@ static func preview(layout: Dictionary,row: Dictionary,moving: String="") -> Dic
 	if Storeys.of(row)<0 or Storeys.of(row)>=Storeys.MAX-1:return {"ok":false,"message":"4楼已达层数上限，请在较低楼层放置连接楼梯。"}
 	var point:=Vector2(row.position[0],row.position[1]);var yaw: float=row.get("yaw",0.)
 	if not point.is_finite() or absf(point.x*2.-roundf(point.x*2.))>.001 or absf(point.y*2.-roundf(point.y*2.))>.001 or not is_finite(yaw) or absf(yaw/90.-roundf(yaw/90.))>.001:return {"ok":false,"message":"楼梯须对齐半米网格，并按90度旋转。"}
-	if not FORMS.has(row.get("form","")) or not Site.within(point):return {"ok":false,"message":"请选择有效的楼梯造型和位置。"}
+	if not FORMS.has(row.get("form","")) or not Site.within(point,layout.get("map_id","city")):return {"ok":false,"message":"请选择有效的楼梯造型和位置。"}
 	var candidate:=layout.duplicate(false);candidate.elements=layout.elements.filter(func(item):return item.id!=moving)
 	var pending:=row.duplicate(true);pending.id=moving if moving!="" else "__stair_preview";candidate.elements.append(pending)
 	return validate(candidate)

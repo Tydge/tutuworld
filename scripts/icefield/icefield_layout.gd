@@ -1,7 +1,8 @@
 extends RefCounted
 ## One surface definition for rendering, collision, resources, saves and authority.
 const RADII:=Vector2(178,158)
-const ICE_LEVEL:=.8
+const Plots=preload("res://scripts/icefield/building_plots.gd")
+const ICE_LEVEL:=Plots.LEVEL
 const DOCK:=Vector2(-104,121)
 const DOCK_HEIGHT:=1.15
 const ACCELERATION:=2.3
@@ -50,7 +51,7 @@ static func height_at(x: float,z: float) -> float:
 	h=lerpf(h,-5.,coast)
 	var harbor:=Vector2(maxf(absf(x+104.)-8.,0.),maxf(absf(z-118.)-5.,0.)).length()
 	h=lerpf(h,.92,1.-smoothstep(0.,18.,harbor))
-	return lerpf(h,-3.5,1.-smoothstep(.82,1.10,inlet(x,z)))
+	return Plots.grade(Vector2(x,z),lerpf(h,-3.5,1.-smoothstep(.82,1.10,inlet(x,z))))
 static func on_dock(p: Vector3) -> bool:return p.x> -108. and p.x< -94. and absf(p.z-DOCK.y)<2.
 static func walk_height(x: float,z: float) -> float:return DOCK_HEIGHT if on_dock(Vector3(x,0,z)) else height_at(x,z)
 static func can_walk(p: Vector3) -> bool:return on_dock(p) or (ellipse(p.x,p.z)<.967 and inlet(p.x,p.z)>1.10 and height_at(p.x,p.z)>-.20)

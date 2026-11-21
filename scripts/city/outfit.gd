@@ -16,6 +16,7 @@ static func apply(bunny: Node3D, equipment: Dictionary,looks: Dictionary={}) -> 
 		if item.is_empty() or item.get("slot","")!=slot: continue
 		if looks.has(id):
 			item=item.duplicate()
+			if looks[id].get("pattern",item.get("pattern","solid"))!=item.get("pattern","solid"):item.erase("pattern_scale")
 			for key in ["color","accent","pattern"]:
 				if looks[id].has(key): item[key]=looks[id][key]
 		var material: Material=Fabric.material(item)

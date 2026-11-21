@@ -15,14 +15,18 @@ static var walk_cache: Dictionary={}
 static var last_validation_usec:=0
 const STYLES=preload("res://scripts/building/structure_catalog.gd").STYLES
 const Structures=preload("res://scripts/building/structure_catalog.gd")
-static func empty() -> Dictionary:return {"schema":4,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
+static func capacity_multiplier(map_id: String) -> int:return 2 if map_id=="icefield" else 1
+static func empty(map_id: String="city") -> Dictionary:
+	var layout:={"schema":4,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
+	if map_id=="icefield":layout.map_id=map_id
+	return layout
 static func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
-static func point(value: Variant,grid: bool=true) -> bool:
+static func point(value: Variant,grid: bool=true,map_id: String="city") -> bool:
 	if not value is Array or value.size()!=2:return false
 	for v in value:
 		if not (v is float or v is int) or not is_finite(float(v)):return false
 		if grid and absf(v*2.-roundf(v*2.))>.001:return false
-	return Site.within(Vector2(value[0],value[1]))
+	return Site.within(Vector2(value[0],value[1]),map_id)
 static func rect(row: Dictionary) -> Rect2:
 	var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);return Rect2(a.min(b),(b-a).abs())
 static func find(layout: Dictionary,id: String) -> Dictionary:
@@ -78,13 +82,15 @@ static func snap_object(layout: Dictionary,item: Dictionary,dining_snap: bool=tr
 			if absf(delta)<best:best=absf(delta);shift=delta
 		row.position[axis]=snappedf(float(row.position[axis])+shift,.001)
 	return row
-static func validate(raw: Variant) -> Dictionary:
+static func validate(raw: Variant,scope: String="") -> Dictionary:
 	var started:=Time.get_ticks_usec()
 	if not raw is Dictionary or not (raw.get("schema",1)==1 or raw.get("schema",1)==2 or raw.get("schema",1)==3 or raw.get("schema",1)==4) or not raw.get("elements",[]) is Array:return fail("建造布局格式不正确。")
 	var migrating: bool=raw.get("schema",1)==1
 	if migrating:raw=split_legacy(raw)
 
-	var clean:=empty();clean.next_id=maxi(1,int(raw.get("next_id",1)));var ids: Dictionary={};var floors: Array=[];var objects: Array=[];var walls: Array=[];var roofs: Array=[];var holes: Array=[]
+	var map_id: String=scope if scope!="" else str(raw.get("map_id","city"))
+	var lot_capacity:=capacity_multiplier(map_id)
+	var clean:=empty(map_id);clean.next_id=maxi(1,int(raw.get("next_id",1)));var ids: Dictionary={};var floors: Array=[];var objects: Array=[];var walls: Array=[];var roofs: Array=[];var holes: Array=[]
 	for value in raw.get("elements",[]):
 		if not value is Dictionary:return fail("物件记录不完整。")
 		var id:=str(value.get("id",""));var type:=str(value.get("type",""))
@@ -119,7 +125,7 @@ static func validate(raw: Variant) -> Dictionary:
 			if not faces.is_empty():row.faces=faces
 		match type:
 			"floor","roof","wall","railing":
-				if not point(value.get("a")) or not point(value.get("b")):return fail("结构要对齐半米网格，并留在建造园地块内。")
+				if not point(value.get("a"),true,map_id) or not point(value.get("b"),true,map_id):return fail("结构要对齐半米网格，并留在建造园地块内。")
 				row.a=value.a.duplicate();row.b=value.b.duplicate()
 				var size_: Vector2=rect(row).size
 				if type in ["wall","railing"]:
@@ -132,16 +138,16 @@ static func validate(raw: Variant) -> Dictionary:
 				if not (value.get("offset") is float or value.get("offset") is int) or not is_finite(float(value.offset)):return fail("门窗位置无效。")
 				row.wall=str(value.get("wall",""));row.offset=float(value.offset)
 				if value.has("anchor"):
-					if not point(value.anchor,false) or not int(value.get("axis",-1)) in [0,1]:return fail("门窗挂点无效。")
+					if not point(value.anchor,false,map_id) or not int(value.get("axis",-1)) in [0,1]:return fail("门窗挂点无效。")
 					row.anchor=value.anchor.duplicate();row.axis=int(value.axis);row.reverse=bool(value.get("reverse",false))
 				holes.append(row)
 			"stairs":
-				if Storeys.of(row)>=Storeys.MAX-1 or not Stairs.FORMS.has(value.get("form","")) or not point(value.get("position")):return fail("楼梯需要有效造型、半米网格，并连接相邻的两层。")
+				if Storeys.of(row)>=Storeys.MAX-1 or not Stairs.FORMS.has(value.get("form","")) or not point(value.get("position"),true,map_id):return fail("楼梯需要有效造型、半米网格，并连接相邻的两层。")
 				var turn: float=float(value.get("yaw",0))
 				if not is_finite(turn) or absf(turn/90.-roundf(turn/90.))>.001:return fail("楼梯旋转须对齐90度。")
 				row.form=value.form;row.position=value.position.duplicate();row.yaw=fposmod(turn,360.)
 			"object":
-				if not Catalog.OBJECTS.has(value.get("kind","")) or not point(value.get("position"),false):return fail("请选择有效物件，并放在建造园地块内。")
+				if not Catalog.OBJECTS.has(value.get("kind","")) or not point(value.get("position"),false,map_id):return fail("请选择有效物件，并放在建造园地块内。")
 				var yaw: float=float(value.get("yaw",0))
 				if not is_finite(yaw) or absf(yaw/90.-roundf(yaw/90.))>.001:return fail("物件旋转须对齐90度。")
 				if value.has("appearance"):
@@ -172,18 +178,18 @@ static func validate(raw: Variant) -> Dictionary:
 	var retained_fires: Array=[]
 	for row in objects:
 		if row.kind=="hearth" and row.id in old_fires:retained_fires.append(row.id)
-	if not retained_fires.is_empty():clean.legacy_fireplaces=retained_fires
+	if map_id=="city" and not retained_fires.is_empty():clean.legacy_fireplaces=retained_fires
 	var counts:=usage(clean)
-	var light_limit:=MAX_LIGHTS
-	if not retained_fires.is_empty():
+	var light_limit:=MAX_LIGHTS*lot_capacity
+	if map_id=="city" and not retained_fires.is_empty():
 		var previous_limit:=int(raw.get("legacy_light_limit",counts.lights if int(raw.get("lighting_version",0))==0 else MAX_LIGHTS))
 		light_limit=maxi(MAX_LIGHTS,mini(previous_limit,MAX_LIGHTS+retained_fires.size()))
 		if mini(light_limit,int(counts.lights))>MAX_LIGHTS:clean.legacy_light_limit=mini(light_limit,int(counts.lights))
-	if counts.objects>MAX_ELEMENTS:return fail("家具和摆件最多%d件；地板、墙体另计。"%MAX_ELEMENTS)
-	if counts.lights>light_limit:return fail("实际照明灯具最多%d盏。"%MAX_LIGHTS)
+	if counts.objects>MAX_ELEMENTS*lot_capacity:return fail("家具和摆件最多%d件；地板、墙体另计。"%(MAX_ELEMENTS*lot_capacity))
+	if counts.lights>light_limit:return fail("实际照明灯具最多%d盏。"%light_limit)
 	if not grid.has("compressed_wall"):grid["compressed_wall"]=Grid.runs(grid.walls);grid["compressed_floor"]=Grid.rectangles(grid.floors)
-	if counts.wall_edges>MAX_WALL_EDGES or wall_runs>MAX_WALL_RUNS:return fail("墙体超过当前容量，请减少密集或碎片墙段。")
-	if counts.roofs>MAX_ROOFS:return fail("屋顶模块超过当前容量。")
+	if counts.wall_edges>MAX_WALL_EDGES*lot_capacity or wall_runs>MAX_WALL_RUNS*lot_capacity:return fail("墙体超过当前容量，请减少密集或碎片墙段。")
+	if counts.roofs>MAX_ROOFS*lot_capacity:return fail("屋顶模块超过当前容量。")
 	for i in range(roofs.size()):
 		for j in range(i):
 			if Storeys.of(roofs[i])==Storeys.of(roofs[j]) and rect(roofs[i]).grow(-.005).intersects(rect(roofs[j]).grow(-.005)):return fail("屋顶不能重叠。")
@@ -236,10 +242,10 @@ static func validate(raw: Variant) -> Dictionary:
 		if item.type=="object" and Catalog.mount(item)=="wall":item.support=WallMount.support(clean,item,compiled(clean,Storeys.of(item)).walls).id
 	last_validation_usec=Time.get_ticks_usec()-started
 	return {"ok":true,"layout":clean,"message":"已保存建造布局。"}
-static func normalize(raw: Variant) -> Dictionary:
-	var result:=validate(raw)
+static func normalize(raw: Variant,scope: String="") -> Dictionary:
+	var result:=validate(raw,scope)
 	if result.ok:return result.layout
-	var recovered:=empty()
+	var recovered:=empty(scope)
 	# Preserve unreadable source for recovery rather than silently erasing it on save.
 	if raw is Dictionary and not raw.is_empty():recovered["recovery_source"]=raw.duplicate(true);recovered["recovery_message"]=result.message
 	return recovered
@@ -320,7 +326,7 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 		var item: Dictionary=objects[i];var level:=Storeys.of(item)
 		if not layers.has(level):layers[level]=walkable_grid(layout,level)
 		grid=layers[level];var footprint:=Catalog.footprint(item);var mount:=Catalog.mount(item)
-		if not Site.within(footprint.position) or not Site.within(footprint.end):add_issue(issues,"plot",[item],"物件边缘超出了建造地块。")
+		if not Site.within(footprint.position,layout.get("map_id","city")) or not Site.within(footprint.end,layout.get("map_id","city")):add_issue(issues,"plot",[item],"物件边缘超出了建造地块。")
 		if mount=="floor":
 			if (Storeys.of(item)>0 or not Catalog.OBJECTS[item.kind].get("outdoor",false)) and not Grid.covered(footprint,grid.floors):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
 		elif mount!="wall":

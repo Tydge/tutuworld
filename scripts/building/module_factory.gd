@@ -36,7 +36,8 @@ static func make(layout: Dictionary,city: Node3D) -> Node3D:
 	var root:=shell(city)
 	sync(root,layout,city);root.assembling=false;return root
 static func shell(city: Node3D) -> Node3D:
-	var root:=preload("res://scripts/building/building_world.gd").new();root.name="PlayerBuiltHome";root.city=city;root.assembling=true;root.position=Site.CENTER
+	var root:=preload("res://scripts/building/building_world.gd").new();root.name="PlayerBuiltHome";root.city=city;root.assembling=true;root.position=Site.CENTER+Vector3.UP*preload("res://scripts/building/parcels.gd").base_height(city.map_id)
+	if city.map_id=="icefield":root.mask_origin=Vector2i(-144,-264);root.mask_size=Vector2i(372,528)
 	root.set_meta("buildable_reference",true);root.set_meta("module_type","player_building")
 	city.scenery.add_child(root)
 	var structure:=group(root,"Structure")
@@ -333,7 +334,7 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 	if prototype_key!="" and root.module_prototypes.size()<128:root.module_prototypes[prototype_key]=module.duplicate()
 	finish_module(root,module,row);return module
 static func finish_module(root: Node3D,module: Node3D,row: Dictionary) -> void:
-	module.set_meta("storey",Storeys.of(row));module.set_meta("module_type",row.type);module.set_meta("module_id",row.id)
+	module.set_meta("storey",Storeys.of(row));module.set_meta("storey_base",root.position.y);module.set_meta("module_type",row.type);module.set_meta("module_id",row.id)
 	if row.type not in ["floor_chunk","joint"]:module.set_meta("build_element_id",row.id)
 	if row.type=="object" and Catalog.OBJECTS[row.kind].get("bed",false):
 		for mesh in module.find_children("*","MeshInstance3D",true,false):

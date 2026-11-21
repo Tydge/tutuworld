@@ -145,6 +145,9 @@ func build_festival_tree() -> void:
 	for p in [Vector2(-71,33),Vector2(-54,32),Vector2(-64,39),Vector2(-35,9)]:
 		var bench:=place("snow_bench",at(p.x,p.y));bench.reparent(world.get_node("CentralPark"),true)
 func nature_clear(p: Vector3) -> bool:
+	if not L.Plots.clear(Vector2(p.x,p.z),2.5):return false
+	for stamp in preload("res://scripts/icefield/snow_trail.gd").STAMPS.values():
+		if Vector2(p.x,p.z).distance_to(stamp.place)<4.:return false
 	if not L.can_walk(p) or p.x>L.shore_x(p.z)-8. or L.path_distance(p.x,p.z)<4.5:return false
 	for fire: Vector2 in L.CAMPFIRES:
 		if Vector2(p.x,p.z).distance_to(fire)<8.5:return false

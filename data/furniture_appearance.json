@@ -1196,6 +1196,35 @@
         ]
       }
     ],
+    "bread_oven": [
+      {"id":"bricks","name":"耐火砖","family":"stone","colors":["b66e52","bd7759","c78361"]},
+      {"id":"base","name":"木底座与把手","family":"wood","colors":["a47a51"]},
+      {"id":"iron","name":"炉门与烟道","family":"metal","colors":["504c48"]},
+      {"id":"glow","name":"炉窗","family":"solid","colors":["a94a34"]}
+    ],
+    "quilt_chest": [
+      {"id":"boards","name":"箱身","family":"wood","colors":["7b97a1"]},
+      {"id":"trim","name":"木盖和边框","family":"wood","colors":["bf9567"]},
+      {"id":"quilt","name":"拼布被","family":"fabric","colors":["be7973"]},
+      {"id":"fringe","name":"被角流苏","family":"fabric","colors":["f1dfbc"]},
+      {"id":"latch","name":"搭扣","family":"metal","colors":["b29b67"]}
+    ],
+    "snow_lantern": [
+      {"id":"frame","name":"提灯框架","family":"metal","colors":["a98254"]},
+      {"id":"wax","name":"蜡烛","family":"solid","colors":["f3dfb3"]}
+    ],
+    "post_stamp": [
+      {"id":"post","name":"木杆与印章手柄","family":"wood","colors":["a47a51"]},
+      {"id":"shelf","name":"搁板","family":"wood","colors":["f1dfbc"]},
+      {"id":"ink","name":"印泥与印章","family":"solid","colors":["a45f59"]}
+    ],
+    "clothing_rack": [
+      {"id":"wood","name":"木底座与颈座","family":"wood","colors":["a47a51"]},
+      {"id":"form","name":"人台布面","family":"fabric","colors":["6e9991"]},
+      {"id":"hardware","name":"黄铜立柱与顶盖","family":"metal","colors":["c7a165"]},
+      {"id":"tape","name":"软皮尺","family":"solid","colors":["f1dfbc"]},
+      {"id":"thread","name":"线轴","family":"fabric","colors":["c87e76","75a092","e4b771"]}
+    ],
     "bread_case": [
       {
         "id": "frame",

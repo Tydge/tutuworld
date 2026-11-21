@@ -22,6 +22,7 @@ func prepare_scenery() -> void:
 	register_winter_rooms(true)
 	var reflection=preload("res://scripts/icefield/ice_reflections.gd").new();reflection.name="LakeReflection";reflection.city=self;add_child(reflection)
 func register_winter_rooms(render_rooms: bool) -> void:
+	preload("res://scripts/icefield/snow_trail.gd").place(self)
 	for b in IceLayout.BUILDINGS:
 		if b.kind=="shop":continue
 		var room:=scenery.get_node("Room_"+b.id) as Node3D
@@ -29,6 +30,11 @@ func register_winter_rooms(render_rooms: bool) -> void:
 		room.set_process(render_rooms)
 		interiors.append(room)
 		for obj in room.get_node("Furnishing").get_children():
+			preload("res://scripts/city/room_activities.gd").register(self,"winter:%s:%s"%[b.id,obj.name],obj)
+			if b.room=="lodge" and obj.has_node("SleepExit"):
+				var bed_id: String="winter_bed:%s:%s"%[b.id,obj.name]
+				targets[bed_id]={"kind":"bed","position":obj.global_position,"radius":1.65,"node":obj}
+				if render_rooms:preload("res://scripts/building/bed_comfort.gd").attach(obj,self,bed_id,true)
 			if not obj.has_node("SeatAnchor"):continue
 			var id: String="winter_seat:%s:%s"%[b.id,obj.name]
 			targets[id]={"kind":"bench","position":obj.global_position,"radius":2.4,"node":obj}
@@ -36,7 +42,7 @@ func register_winter_rooms(render_rooms: bool) -> void:
 func _process(delta: float) -> void:
 	super._process(delta)
 	if sun_ready:sun.quaternion=sun.quaternion.slerp(sun_target,1.-exp(-delta*6.))
-func can_walk(p: Vector3) -> bool:return IceLayout.can_walk(p)
+func can_walk(p: Vector3) -> bool:return not construction_at(p) and IceLayout.can_walk(p)
 func can_navigate(p: Vector3) -> bool:return can_walk(p) and IceLayout.normal_at(p.x,p.z).y>.86
 func navigation_bounds() -> Rect2i:return Rect2i(-175,-154,351,309)
 func respawn_position() -> Vector3:

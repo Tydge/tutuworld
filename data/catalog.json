@@ -365,6 +365,27 @@
    "color": "f1dec1",
    "description": "圆滚滚的新鲜鸡蛋，可以烘焙，也可以做蛋饼。"
   },
+  "food_snow_loaf": {
+   "name": "雪绒路粮",
+   "kind": "food",
+   "style": "rustic_wheat_bread",
+   "food_category": "baked",
+   "color": "ca8855",
+   "description": "裹在油纸里的烤麦面包，可随身食用，恢复24点耐力。",
+   "effect": {},
+   "stamina_restore": 24,
+   "edible": {"stamina": 24, "seconds": 3.0}
+  },
+  "food_pine_tea": {
+   "name": "松针热茶",
+   "kind": "food",
+   "style": "rustic_wheat_bread",
+   "food_category": "meal",
+   "color": "839965",
+   "description": "茶香留在身上10分钟，耐力恢复加快50%。",
+   "effect": {"stamina_regen": 0.5},
+   "effect_text": "耐力恢复 +50%"
+  },
   "food_honey_wheat_cake": {
    "name": "蜂蜜麦饼",
    "kind": "food",

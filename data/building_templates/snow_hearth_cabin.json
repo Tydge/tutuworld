@@ -1,0 +1,30 @@
+{
+  "schema": 4,
+  "next_id": 25,
+  "elements": [
+    {"id": "build_1", "type": "floor", "a": [103.5, 4], "b": [116.5, 16], "color": "b88d68", "style": "wood", "painted": true},
+    {"id": "build_2", "type": "wall", "a": [103.5, 16], "b": [116.5, 16], "color": "a88e7d", "style": "wood", "painted": true, "faces": {"negative": {"color": "a88e7d", "style": "wood", "painted": true}, "positive": {"color": "ebe1ce", "style": "plaster", "painted": true}}},
+    {"id": "build_3", "type": "window", "wall": "build_2", "offset": 2.5, "form": "classic", "color": "f5e9d2", "style": "wood", "painted": true},
+    {"id": "build_4", "type": "door", "wall": "build_2", "offset": 6.5, "form": "arch", "color": "6b827f", "style": "wood", "painted": true},
+    {"id": "build_5", "type": "window", "wall": "build_2", "offset": 10.5, "form": "classic", "color": "f5e9d2", "style": "wood", "painted": true},
+    {"id": "build_6", "type": "wall", "a": [103.5, 4], "b": [116.5, 4], "color": "a88e7d", "style": "wood", "painted": true, "faces": {"negative": {"color": "a88e7d", "style": "wood", "painted": true}, "positive": {"color": "ebe1ce", "style": "plaster", "painted": true}}},
+    {"id": "build_7", "type": "window", "wall": "build_6", "offset": 9.5, "form": "round", "color": "f5e9d2", "style": "wood", "painted": true},
+    {"id": "build_8", "type": "wall", "a": [103.5, 4], "b": [103.5, 16], "color": "a88e7d", "style": "wood", "painted": true, "faces": {"negative": {"color": "a88e7d", "style": "wood", "painted": true}, "positive": {"color": "ebe1ce", "style": "plaster", "painted": true}}},
+    {"id": "build_9", "type": "window", "wall": "build_8", "offset": 7.5, "form": "arch", "color": "f5e9d2", "style": "wood", "painted": true},
+    {"id": "build_10", "type": "wall", "a": [116.5, 4], "b": [116.5, 16], "color": "a88e7d", "style": "wood", "painted": true, "faces": {"negative": {"color": "a88e7d", "style": "wood", "painted": true}, "positive": {"color": "ebe1ce", "style": "plaster", "painted": true}}},
+    {"id": "build_11", "type": "window", "wall": "build_10", "offset": 3, "form": "arch", "color": "f5e9d2", "style": "wood", "painted": true},
+    {"id": "build_12", "type": "wall", "a": [111.5, 4], "b": [111.5, 10.5], "color": "ded4bd", "style": "plaster", "painted": true, "faces": {"negative": {"color": "ded4bd", "style": "plaster", "painted": true}, "positive": {"color": "c5d3c7", "style": "plaster", "painted": true}}},
+    {"id": "build_13", "type": "door", "wall": "build_12", "offset": 3.2, "form": "classic", "color": "6b827f", "style": "wood", "painted": true},
+    {"id": "build_14", "type": "roof", "a": [103.5, 4], "b": [116.5, 16], "color": "4f7174", "style": "original", "painted": true, "form": "classic", "snow": true},
+    {"id": "build_15", "type": "object", "kind": "bed", "position": [114.3, 6.6], "yaw": 0},
+    {"id": "build_16", "type": "object", "kind": "clothing_rack", "position": [115.1, 10.0], "yaw": -90},
+    {"id": "build_17", "type": "object", "kind": "quilt_chest", "position": [114.9, 14.7], "yaw": 0},
+    {"id": "build_18", "type": "object", "kind": "petal_armchair", "position": [105.8, 12.1], "yaw": 0},
+    {"id": "build_19", "type": "object", "kind": "tile_stove", "position": [106.4, 5.6], "yaw": 0},
+    {"id": "build_20", "type": "object", "kind": "forest_rug", "position": [107.6, 12.6], "yaw": 0},
+    {"id": "build_21", "type": "object", "kind": "desk", "position": [105.2, 8.35], "yaw": 90},
+    {"id": "build_22", "type": "object", "kind": "chair", "position": [107.0, 8.35], "yaw": -90},
+    {"id": "build_23", "type": "object", "kind": "snow_lantern", "position": [104.75, 14.9], "yaw": 0},
+    {"id": "build_24", "type": "object", "kind": "pendant", "position": [109.5, 11.5], "yaw": 0, "support": "ceiling:0"}
+  ]
+}

@@ -1,4 +1,5 @@
 extends Node
+const Land=preload("res://scripts/building/parcels.gd")
 const Storeys=preload("res://scripts/building/storeys.gd")
 const Stairs=preload("res://scripts/building/stairs.gd")
 const Extension=preload("res://scripts/building/storey_extension.gd")
@@ -111,14 +112,18 @@ func update_surface_preview() -> void:
 		var candidate:=preload("res://scripts/building/surface_edit.gd").paint(layout,row,marker,"__preview",ui.batch_paint.button_pressed,ui.wall_face.selected,camera)
 		surface_preview.show_layout(self,candidate,signature);surface_preview.bind_marker(marker)
 	surface_preview.paint(surface_preview_finish.color,surface_preview_finish.style)
+var preview_space: Node3D
+func build_base() -> float:return preload("res://scripts/building/parcels.gd").base_height(city.map_id)
+func saved_layout() -> Dictionary:return Land.layout_for(city.session.state(),city.map_id)
 func _ready() -> void:
-	layout=Layout.normalize(city.session.state().get("build_layout",{}))
+	preview_space=Node3D.new();preview_space.name="BuildingPreviewSpace";preview_space.position.y=build_base();city.add_child(preview_space)
+	layout=Layout.normalize(saved_layout(),city.map_id)
 	# Purchased parcels start empty; catalogue houses are placed explicitly.
 	ui=preload("res://scripts/building/editor_ui.gd").new();ui.editor=self;add_child(ui)
 	var shape:=PlaneMesh.new();shape.size=Site.PLOT.size;grid=MeshInstance3D.new();grid.mesh=shape;grid.position=Vector3(Site.PLOT.get_center().x,.205,Site.PLOT.get_center().y)
-	var material:=ShaderMaterial.new();material.shader=preload("res://assets/shaders/build_grid.gdshader");grid.material_override=material;grid.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(grid);grid.hide()
-	ghost=MeshInstance3D.new();var box:=BoxMesh.new();box.size=Vector3.ONE;ghost.mesh=box;ghost_material=StandardMaterial3D.new();ghost_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ghost_material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ghost_material.cull_mode=BaseMaterial3D.CULL_DISABLED;ghost.material_override=ghost_material;ghost.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(ghost);ghost.hide()
-	selection_outline=MeshInstance3D.new();selection_outline.name="BuildSelectionOutline";selection_outline.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;city.add_child(selection_outline)
+	var material:=ShaderMaterial.new();material.shader=preload("res://assets/shaders/build_grid.gdshader");grid.material_override=material;grid.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;preview_space.add_child(grid);grid.hide()
+	ghost=MeshInstance3D.new();var box:=BoxMesh.new();box.size=Vector3.ONE;ghost.mesh=box;ghost_material=StandardMaterial3D.new();ghost_material.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;ghost_material.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;ghost_material.cull_mode=BaseMaterial3D.CULL_DISABLED;ghost.material_override=ghost_material;ghost.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;preview_space.add_child(ghost);ghost.hide()
+	selection_outline=MeshInstance3D.new();selection_outline.name="BuildSelectionOutline";selection_outline.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;preview_space.add_child(selection_outline)
 	drafting=preload("res://scripts/building/drafting.gd").new();drafting.editor=self;add_child(drafting)
 	rebuild();set_process(false)
 	if city.session.is_online():
@@ -132,7 +137,7 @@ func editing_layout() -> Dictionary:
 func parcel_bounds() -> Rect2:
 	return preload("res://scripts/building/parcels.gd").bounds(parcel_id) if parcel_id!="" else Site.PLOT
 func open_nearby_parcel() -> Dictionary:
-	var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position)
+	var land=preload("res://scripts/building/parcels.gd");var id: String=land.nearest(city.bunny.global_position,city.map_id)
 	if id=="":return {"ok":false,"message":"请先靠近想建造的已购地皮。"}
 	if not land.owns(city.session.state(),id):return {"ok":false,"message":"请先购买身旁这块地皮，再进入建造。"}
 	if city.session.is_online():
@@ -141,7 +146,7 @@ func open_nearby_parcel() -> Dictionary:
 		var result: Dictionary=await city.session.request_online("build_begin",{"parcel_id":id})
 		online_pending=false
 		if not result.get("ok",false):return result
-		online_lease=result.lease;heartbeat_left=10.;layout=Layout.normalize(city.session.state().build_layout)
+		online_lease=result.lease;heartbeat_left=10.;layout=Layout.normalize(saved_layout(),city.map_id)
 		# Separate draft serials avoid collisions while another parcel is being edited.
 		layout.next_id=maxi(int(layout.next_id),randi_range(1000000,1000000000))
 	var result:=open_editor(id)
@@ -151,11 +156,11 @@ func open_nearby_parcel() -> Dictionary:
 # Low-level unscoped entry remains for legacy fixture/import tools; gameplay uses
 # open_nearby_parcel and always supplies a checked parcel ID.
 func open_editor(id: String="") -> Dictionary:
-	if city.map_id!="city" or (city.session.is_online() and (id=="" or online_lease=="")):return {"ok":false,"message":"请先在自己的地皮开启施工。"}
+	if city.map_id not in ["city","icefield"] or (id=="" and city.map_id!="city") or (city.session.is_online() and (id=="" or online_lease=="")):return {"ok":false,"message":"请先在自己的地皮开启施工。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
 	if id!="":
 		var land=preload("res://scripts/building/parcels.gd")
-		if not land.owns(city.session.state(),id) or land.distance_to(id,city.bunny.global_position)>land.REACH:return {"ok":false,"message":"请走到自己购买的地皮旁边再建造。"}
+		if land.map_for(id)!=city.map_id or not land.owns(city.session.state(),id) or land.distance_to(id,city.bunny.global_position)>land.REACH:return {"ok":false,"message":"请走到自己购买的地皮旁边再建造。"}
 	city.session.set_player_position(city.bunny.global_position)
 	parcel_id=id;parcel_revision=int(city.session.state().land_parcels.plots[id].revision) if id!="" else -1
 	undo_stack.clear();redo_stack.clear();selected_id="";selected_unit.clear()
@@ -163,7 +168,7 @@ func open_editor(id: String="") -> Dictionary:
 	roof_view=false
 	active=true;previous_active=city.session.active;city.session.active=false;city.paused=true;city.bunny.can_move=false;city.bunny.velocity=Vector3.ZERO;city.hud.hide();InputGuard.release_controls()
 	for npc in city.npcs:npc_modes[npc]=npc.process_mode;npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.velocity=Vector3.ZERO
-	editing_storey=Storeys.at_height(city.bunny.position.y);focus=city.bunny.position if bounds.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Vector3(bounds.get_center().x,0,bounds.get_center().y);focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
+	editing_storey=Storeys.at_height(city.bunny.position.y-build_base());focus=city.bunny.position if bounds.has_point(Vector2(city.bunny.position.x,city.bunny.position.z)) else Vector3(bounds.get_center().x,0,bounds.get_center().y);focus.y=editing_storey*Storeys.HEIGHT;grid.position.y=.205+editing_storey*Storeys.HEIGHT;grid.show();ui.show();set_process(true);choose_tool("select");set_roof_visible(false);set_night_preview(night_preview);update_camera();ui.message("从底部分类选择物品 · 点击选中查看操作 · 双击可直接移动")
 	if layout.has("recovery_message"):ui.message("旧布局需要恢复，原记录已保留，请先勿清空地块。",true)
 	return {"ok":true}
 func close_editor() -> void:
@@ -175,7 +180,7 @@ func close_editor() -> void:
 		online_pending=false
 		if not active:return
 		if not result.get("ok",false):ui.message(str(result.get("message","保存失败，请重试。")),true);return
-		online_lease="";online_pending=true;await apply_online_layout(city.session.state().build_layout);online_pending=false
+		online_lease="";online_pending=true;await apply_online_layout(saved_layout());online_pending=false
 	finish_close()
 func request_close() -> void:
 	if not city.session.is_online():close_editor();return
@@ -193,7 +198,7 @@ func discard_online() -> void:
 	online_pending=false
 	if not active:return
 	if not result.get("ok",false):ui.message(str(result.get("message","暂时无法结束施工。")),true);return
-	online_lease="";online_pending=true;await apply_online_layout(city.session.state().build_layout);online_pending=false;finish_close()
+	online_lease="";online_pending=true;await apply_online_layout(saved_layout());online_pending=false;finish_close()
 func finish_close() -> void:
 	restore_surface_preview()
 	if not active:return
@@ -272,7 +277,7 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	restore_surface_preview()
 	if online_pending:return false
 	# Editing cannot remove the support beneath the paused player or strand them upstairs.
-	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position):
+	if not preload("res://scripts/building/build_safety.gd").safe(layout,candidate,city.bunny.global_position-Vector3.UP*build_base()):
 		ui.message("角色正在使用这层地板或楼梯，请先步行离开再修改。",true);return false
 	var result: Dictionary
 	if city.session.is_online():
@@ -280,7 +285,7 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 		if history and land.outside(candidate,parcel_id)!=land.outside(layout,parcel_id):ui.message("本次只能修改当前地皮，不能越界建造。",true);return false
 		result=Layout.validate(candidate)
 		if result.ok:
-			var draft_state: Dictionary=city.session.state().duplicate();draft_state.build_layout=layout
+			var draft_state: Dictionary=city.session.state().duplicate();draft_state[Land.layout_key(city.map_id)]=layout
 			result=land.validate_edit(draft_state,parcel_id,result.layout,parcel_revision).merged({"layout":result.layout})
 	else:result=city.session.set_parcel_layout(parcel_id,candidate,parcel_revision) if parcel_id!="" else city.session.set_build_layout(candidate)
 	if not result.ok:ui.message(result.message,true);return false
@@ -407,7 +412,7 @@ func begin_move() -> void:
 			if group.has(str(module.name)):module.hide()
 func point_at(mouse: Vector2) -> Variant:
 	placement_support="";placement_level=0;placement_height=-1.;wall_hint.clear()
-	var origin: Vector3=city.camera.project_ray_origin(mouse);var direction: Vector3=city.camera.project_ray_normal(mouse)
+	var origin: Vector3=city.camera.project_ray_origin(mouse)-Vector3.UP*build_base();var direction: Vector3=city.camera.project_ray_normal(mouse)
 	var placing: String=Layout.find(layout,moving_id).get("type","") if tool=="move" else tool
 	if placing in ["door","window"]:
 		if top_down:
@@ -548,9 +553,10 @@ func pick_at(mouse: Vector2) -> String:
 		for body in room.get_node("Furnishing").find_children("*","StaticBody3D",true,false):
 			if body.collision_layer!=16:excluded.append(body.get_rid())
 	query.exclude=excluded;var hit: Dictionary=city.get_world_3d().direct_space_state.intersect_ray(query);var max_distance:=250.
+	origin.y-=build_base()
 	var picked_id:="";picked_world=null
 	if not hit.is_empty():
-		picked_id=element_id(hit.collider);picked_world=Vector2(hit.position.x,hit.position.z);max_distance=origin.distance_to(hit.position)
+		picked_id=element_id(hit.collider);picked_world=Vector2(hit.position.x,hit.position.z);max_distance=(origin+Vector3.UP*build_base()).distance_to(hit.position)
 		var node: Node=hit.collider
 		while node!=null and node!=city.scenery:
 			if node.get_meta("build_grid_type","")=="floor":
@@ -603,7 +609,7 @@ func update_ghost(point_: Vector2) -> void:
 	if result.ok and parcel_id!="":
 		# Match commit: compare against the normalized private draft. Wire snapshots
 		# may contain different numeric types or a newer version of another parcel.
-		var draft_state: Dictionary=city.session.state().duplicate();draft_state.build_layout=layout
+		var draft_state: Dictionary=city.session.state().duplicate();draft_state[Land.layout_key(city.map_id)]=layout
 		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(draft_state,parcel_id,result.get("layout",candidate_layout(row)),parcel_revision)
 		if not access.ok:result=access
 	if row.type=="template":
@@ -631,14 +637,15 @@ func update_camera() -> void:
 	if top_down:
 		city.camera.projection=Camera3D.PROJECTION_ORTHOGONAL;city.camera.size=distance_*2.*tan(deg_to_rad(city.camera.fov)*.5)
 		var shift: float=city.camera.size*minf(.19,163./get_viewport().get_visible_rect().size.y)
-		var center: Vector3=focus+Vector3.BACK*shift;city.camera.position=center+Vector3.UP*40.;city.camera.look_at(center,Vector3.FORWARD)
+		var center: Vector3=focus+Vector3.BACK*shift+Vector3.UP*build_base();city.camera.position=center+Vector3.UP*40.;city.camera.look_at(center,Vector3.FORWARD)
 		if active:apply_editor_cutaway()
 		return
 	city.camera.projection=Camera3D.PROJECTION_PERSPECTIVE
-	city.camera.position=focus+Vector3(sin(yaw)*cos(pitch),sin(pitch),cos(yaw)*cos(pitch))*distance_;city.camera.look_at(focus)
+	var pivot:=focus+Vector3.UP*build_base()
+	city.camera.position=pivot+Vector3(sin(yaw)*cos(pitch),sin(pitch),cos(yaw)*cos(pitch))*distance_;city.camera.look_at(pivot)
 	# Center the working plot in the visible area above the bottom catalog.
 	var shift:=distance_*tan(deg_to_rad(city.camera.fov)*.5)*minf(.38,326./get_viewport().get_visible_rect().size.y)
-	city.camera.look_at(focus-city.camera.global_basis.y*shift)
+	city.camera.look_at(pivot-city.camera.global_basis.y*shift)
 	if active:apply_editor_cutaway()
 func pan_camera(local_offset: Vector2) -> void:
 	focus+=Vector3(local_offset.x,0,local_offset.y).rotated(Vector3.UP,0. if top_down else yaw)
@@ -665,7 +672,7 @@ func restore_moving() -> void:
 func update_preview(row: Dictionary,valid: bool) -> void:
 	var key: String=str(row.get("kind",row.type))+":"+moving_id+":"+str(row.get("painted",false))+":"+str(row.get("color",""))+":"+str(row.get("style",""))+JSON.stringify(row.get("appearance",{}))
 	if key!=preview_key:
-		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildObjectPreview";city.add_child(preview)
+		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildObjectPreview";preview_space.add_child(preview)
 		var b:=Factory.builder(preview);b.build_item(preview,row.kind);Factory.paint(preview,row)
 		if moving_id!="":
 			var old:=Layout.find(layout,moving_id);var group:=Layout.movement_group(layout,moving_id)
@@ -688,7 +695,7 @@ func update_template_preview(p: Vector2,valid: bool) -> void:
 		for light in preview.find_children("*","Light3D",true,false):light.hide()
 	var origin:=Layout.template_origin(template_source())
 	var local_origin:=Vector3(origin.x-Site.CENTER.x,0,origin.y-Site.CENTER.z)
-	preview.rotation.y=deg_to_rad(rotation);preview.position=Vector3(p.x,0,p.y)-local_origin.rotated(Vector3.UP,preview.rotation.y);preview.show();ghost.hide()
+	preview.rotation.y=deg_to_rad(rotation);preview.position=Vector3(p.x,build_base(),p.y)-local_origin.rotated(Vector3.UP,preview.rotation.y);preview.show();ghost.hide()
 	var overlay: StandardMaterial3D=null
 	if not valid:overlay=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.95,.22,.15,.48)
 	for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.material_overlay=overlay
@@ -699,7 +706,7 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 		for field in ["offset","wall","anchor","axis","id","storey"]:geometry.erase(field)
 	var key:=JSON.stringify(geometry)+(str(valid) if not opening_preview else "")+str(show_roof)
 	if key!=preview_key:
-		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildStructurePreview";city.add_child(preview)
+		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildStructurePreview";preview_space.add_child(preview)
 		var b:=Factory.builder(preview);var area:=Rect2();var mid:=Vector2.ZERO
 		if row.type in ["floor","roof","wall","railing"]:
 			area=Layout.rect(row);mid=area.get_center();preview.position=Vector3(mid.x,Storeys.elevation(row),mid.y)
@@ -870,7 +877,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func ground_at(mouse: Vector2) -> Variant:
-	var p: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT).intersects_ray(city.camera.project_ray_origin(mouse),city.camera.project_ray_normal(mouse))
+	var p: Variant=Plane(Vector3.UP,.18+editing_storey*Storeys.HEIGHT).intersects_ray(city.camera.project_ray_origin(mouse)-Vector3.UP*build_base(),city.camera.project_ray_normal(mouse))
 	return Vector2(p.x,p.z) if p!=null else null
 func begin_demolition(mouse: Vector2) -> void:
 	demolition_pressed_id=pick_at(mouse);demolition_mouse=mouse;demolition_pointer=mouse;demolition_start=ground_at(mouse);demolition_dragging=false;demolition_candidate.clear();demolition_key=""
@@ -946,7 +953,7 @@ func update_upper_floor(p: Vector2,lock: bool=false) -> void:
 	if key!=upper_floor_key:
 		upper_floor_key=key;clear_preview();upper_floor_plan=Extension.plan(layout,editing_storey,p)
 		if upper_floor_plan.ok:
-			preview=Node3D.new();preview.name="UpperFloorPreview";city.add_child(preview);preview.position.y=upper_floor_plan.level*Storeys.HEIGHT
+			preview=Node3D.new();preview.name="UpperFloorPreview";preview_space.add_child(preview);preview.position.y=upper_floor_plan.level*Storeys.HEIGHT
 			Factory.build_floor_mesh(preview,{"cells":upper_floor_plan.cells,"neighbors":Layout.walkable_grid(upper_floor_plan.layout,upper_floor_plan.level).floors,"origin":Vector2.ZERO})
 			var overlay:=StandardMaterial3D.new();overlay.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;overlay.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;overlay.albedo_color=Color(.25,.75,.50,.25)
 			for mesh in preview.find_children("*","MeshInstance3D",true,false):mesh.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;mesh.material_overlay=overlay
@@ -964,7 +971,7 @@ func confirm_upper_floor() -> void:
 func update_stair_preview(row: Dictionary,valid: bool,plan: Dictionary={}) -> void:
 	var key: String=JSON.stringify(row)+str(valid)
 	if key!=preview_key:
-		clear_preview();preview_key=key;preview=Node3D.new();preview.name="StairPlacementPreview";city.add_child(preview)
+		clear_preview();preview_key=key;preview=Node3D.new();preview.name="StairPlacementPreview";preview_space.add_child(preview)
 		preview.position=Vector3(row.position[0],.18+Storeys.elevation(row),row.position[1]);preview.rotation.y=deg_to_rad(row.yaw)
 		var candidate: Dictionary=plan.candidate if plan.has("candidate") else Extension.place_stair(layout,row,moving_id)
 		if is_instance_valid(room):
@@ -1024,9 +1031,9 @@ func sync_online_layout() -> void:
 		preload("res://scripts/building/construction_sites.gd").sync(city,sites);visible_sites=sites.duplicate(true)
 		var site: Dictionary=sites.get(parcel_id,{})
 		if site.get("owner_id","")!=city.session.state().player_id and not online_pending:
-			online_lease="";layout=Layout.normalize(city.session.state().build_layout);rebuild();finish_close();city.hud.notify("施工状态已结束，未确认的修改没有发布。")
+			online_lease="";layout=Layout.normalize(saved_layout(),city.map_id);rebuild();finish_close();city.hud.notify("施工状态已结束，未确认的修改没有发布。")
 		return
-	var next: Dictionary=city.session.state().get("build_layout",Layout.empty())
+	var next: Dictionary=saved_layout()
 	if next!=layout and next!=applying_layout:
 		pending_layout=next.duplicate(true)
 		var closed:=visible_sites.merged(sites);city.set_meta("pending_construction_sites",closed);preload("res://scripts/building/construction_sites.gd").sync(city,closed)
@@ -1053,7 +1060,7 @@ func apply_online_layout(next: Dictionary) -> void:
 func on_online_connection(connected: bool) -> void:
 	if connected:return
 	if active:
-		online_lease="";online_pending=false;layout=Layout.normalize(city.session.state().get("build_layout",{}));rebuild();finish_close()
+		online_lease="";online_pending=false;layout=Layout.normalize(saved_layout(),city.map_id);rebuild();finish_close()
 		city.paused=true;city.bunny.can_move=false;city.hud.notify("连接已中断，本次未完成的修改没有发布。")
 func keep_online_lease() -> void:
 	var result: Dictionary=await city.session.request_online("build_ping",{"parcel_id":parcel_id,"lease":online_lease})

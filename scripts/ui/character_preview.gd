@@ -6,6 +6,7 @@ var preview_size:=Vector2i(300,410)
 var actor: CharacterBody3D
 var species:="bunny"
 var equipment: Dictionary={}
+var clothing_designs: Dictionary={}
 var viewport: SubViewport
 var stage: Node3D
 var cached_actors: Dictionary={}
@@ -42,7 +43,7 @@ func _ready() -> void:
 	sun.shadow_enabled=true
 	stage.add_child(sun)
 	if not head_only: G.cylinder(stage,Vector3(0,-.045,0),.91,.09,G.mat("dae3c9"))
-	update_character(species,equipment)
+	update_character(species,equipment,clothing_designs)
 	var camera:=Camera3D.new()
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
 	camera.size=3.55
@@ -68,10 +69,10 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 
 func update_equipment(worn: Dictionary) -> void:
-	update_character(species,worn)
-func update_character(species_id: String,worn: Dictionary) -> void:
+	update_character(species,worn,clothing_designs)
+func update_character(species_id: String,worn: Dictionary,looks: Dictionary={}) -> void:
 	species=species_id
-	equipment=worn.duplicate()
+	equipment=worn.duplicate();clothing_designs=looks.duplicate(true)
 	if not is_instance_valid(stage): return
 	if is_instance_valid(actor):
 		actor.hide()
@@ -86,19 +87,22 @@ func update_character(species_id: String,worn: Dictionary) -> void:
 	actor=cached_actors[species]
 	actor.process_mode=Node.PROCESS_MODE_INHERIT
 	actor.show()
-	if not cached_equipment.has(species) or cached_equipment[species]!=worn:
-		Outfit.apply(actor,worn)
-		cached_equipment[species]=worn.duplicate()
+	var worn_looks: Dictionary=preload("res://scripts/appearance/clothing_designs.gd").worn(worn,looks)
+	var styled: Array=[worn,worn_looks]
+	if cached_equipment.get(species,[])!=styled:
+		Outfit.apply(actor,worn,worn_looks)
+		cached_equipment[species]=styled.duplicate(true)
 	if head_only: configure_head()
 
 func warm_models() -> void:
 	var previous_species:=species
 	var previous_equipment:=equipment.duplicate()
+	var previous_designs:=clothing_designs.duplicate(true)
 	viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
 	for kind in Animals.Catalog.ids():
 		update_character(kind,{"head":"bow_rose","neck":"scarf_red","body":"vest_rose"})
 		for frame in range(2):
 			await get_tree().process_frame
 			await RenderingServer.frame_post_draw
-	update_character(previous_species,previous_equipment)
+	update_character(previous_species,previous_equipment,previous_designs)
 	viewport.render_target_update_mode=SubViewport.UPDATE_WHEN_VISIBLE

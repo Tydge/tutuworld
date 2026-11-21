@@ -125,7 +125,7 @@ func show_roster() -> void:
 	var selected: Dictionary=session.characters[selected_id]
 	portrait_name.text=selected.character_name
 	portrait_subtitle.text="%s  ·  经验 %d"%[Animals.display_name(selected.species),selected.experience]
-	preview.update_character(selected.species,selected.equipment)
+	preview.update_character(selected.species,selected.equipment,selected.get("clothing_designs",{}))
 func begin_create() -> void:
 	mode="create"
 	draft_name=""

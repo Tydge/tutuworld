@@ -8,9 +8,9 @@ const CONNECTOR:=Rect2(40,9.835,22,6.33)
 const CENTER:=Vector3(79,0,10)
 const REVISION:=5
 static func contains(point: Vector3) -> bool:return PAD.has_point(Vector2(point.x,point.z)) or CONNECTOR.has_point(Vector2(point.x,point.z))
-static func within(point: Vector2) -> bool:
-	if Land.includes(PLOT,point):return true
-	for id in Land.IDS:
+static func within(point: Vector2,map_id: String="city") -> bool:
+	if map_id=="city" and Land.includes(PLOT,point):return true
+	for id in Land.ids_for(map_id):
 		if Land.includes(Land.bounds(id),point):return true
 	return false
 static func outline(rect: Rect2,radius: float,height_: float) -> PackedVector3Array:
@@ -54,17 +54,7 @@ static func build(world: Node3D,grass: Material,paving: Material) -> void:
 	ground(root,cap(lawn),grass,"Lawn");ground(root,band(lawn,dune),sand,"WideSandBeach");ground(root,band(dune,sea),sand,"SlopingShore")
 	var commons:=preload("res://scripts/building/garden_landscape.gd").build(root,paving)
 	preload("res://scripts/building/garden_bridge.gd").build(root,CONNECTOR)
-	for index in range(Land.IDS.size()):
-		var id: String=Land.IDS[index];var rect:=Land.bounds(id);var plot:=Node3D.new();plot.name=id;root.add_child(plot);plot.set_meta("parcel_id",id)
-		var sign:=Node3D.new();sign.name="Sign";sign.position=Land.sign_position(id);plot.add_child(sign)
-		if index>=2:sign.rotation.y=PI
-		for side in [-1,1]:G.box(sign,Vector3(side*1.05,.64,0),Vector3(.12,1.28,.12),G.mat("80684e"),"OakPost")
-		G.box(sign,Vector3(0,1.42,0),Vector3(3.30,1.02,.18),G.mat("826d51"),"WoodFrame")
-		for side in [-1,1]:
-			G.box(sign,Vector3(0,1.42,side*.105),Vector3(3.13,.85,.025),G.mat("e9dfc5"),"InsetPanel")
-			var title:=G.text3d(sign,Land.title(id),Vector3(0,1.60,side*.127),26,Color("355744"));title.name="ParcelName"+("Back" if side<0 else "");title.rotation.y=PI if side<0 else 0.;title.double_sided=false
-			var label:=G.text3d(sign,"24×20米 · 100贝壳币",Vector3(0,1.22,side*.127),18,Color("59664e"));label.name="OwnershipLabel"+("Back" if side<0 else "");label.rotation.y=title.rotation.y;label.double_sided=false
-		preload("res://scripts/city/prop_collisions.gd").box(sign,"SignCollision",Vector3(0,1.3,0),Vector3(3.3,1.2,.20))
+	build_signs(root,"city")
 	for row in [[Vector3(104.4,0,10),PI*.5],[Vector3(115.6,0,10),-PI*.5],[Vector3(70,0,20),PI*.5],[Vector3(150,0,16),-PI*.5]]:bench(commons,row[0],row[1])
 	# A fixed, double-sided welcome board; no world-space text rotates separately.
 	var welcome:=Node3D.new();welcome.name="WelcomeBoard";welcome.position=Vector3(65,0,17);root.add_child(welcome)
@@ -73,6 +63,29 @@ static func build(world: Node3D,grass: Material,paving: Material) -> void:
 		var title:=G.text3d(welcome,"海风花庭",Vector3(0,1.96,side*.09),29,Color("426e5c"));title.rotation.y=PI if side<0 else 0.;title.double_sided=false
 		var hint:=G.text3d(welcome,"立板旁按E · 购买地皮",Vector3(0,1.54,side*.09),18,Color("6b8066"));hint.rotation.y=title.rotation.y;hint.double_sided=false
 	world.set_meta("building_site_revision",REVISION)
+static func build_winter(world: Node3D) -> void:
+	if world.has_node("IcefieldBuildingSite"):return
+	var root:=Node3D.new();root.name="IcefieldBuildingSite";world.add_child(root)
+	build_signs(root,"icefield")
+
+static func build_signs(root: Node3D,map_id: String) -> void:
+	var ids:=Land.ids_for(map_id)
+	for index in range(ids.size()):
+		var id: String=ids[index];var rect:=Land.bounds(id);var plot:=Node3D.new();plot.name=id;root.add_child(plot);plot.set_meta("parcel_id",id)
+		var sign:=Node3D.new();sign.name="Sign";sign.position=Land.sign_position(id);plot.add_child(sign)
+		if (map_id=="city" and index>=2) or (map_id=="icefield" and index>=2 and index<5):sign.rotation.y=PI
+		if map_id=="icefield":
+			for x in [rect.position.x,rect.end.x]:
+				for z in [rect.position.y,rect.end.y]:
+					G.box(plot,Vector3(x,sign.position.y+.23,z),Vector3(.16,.46,.16),G.mat("7c6456"),"CornerStake")
+					G.box(plot,Vector3(x,sign.position.y+.48,z),Vector3(.22,.08,.22),G.mat("ca765d"),"PaintedCap")
+		for side in [-1,1]:G.box(sign,Vector3(side*1.05,.64,0),Vector3(.12,1.28,.12),G.mat("80684e"),"OakPost")
+		G.box(sign,Vector3(0,1.42,0),Vector3(3.30,1.02,.18),G.mat("826d51"),"WoodFrame")
+		for side in [-1,1]:
+			G.box(sign,Vector3(0,1.42,side*.105),Vector3(3.13,.85,.025),G.mat("e9dfc5"),"InsetPanel")
+			var title:=G.text3d(sign,Land.title(id),Vector3(0,1.60,side*.127),26,Color("355744"));title.name="ParcelName"+("Back" if side<0 else "");title.rotation.y=PI if side<0 else 0.;title.double_sided=false
+			var label:=G.text3d(sign,"24×20米 · 100贝壳币",Vector3(0,1.22,side*.127),18,Color("59664e"));label.name="OwnershipLabel"+("Back" if side<0 else "");label.rotation.y=title.rotation.y;label.double_sided=false
+		preload("res://scripts/city/prop_collisions.gd").box(sign,"SignCollision",Vector3(0,1.3,0),Vector3(3.3,1.2,.20))
 static func ensure(world: Node3D) -> void:
 	if int(world.get_meta("building_site_revision",0))>=REVISION:return
 	var old:=world.get_node_or_null("EastBuildingSite")
@@ -83,13 +96,13 @@ static func ensure(world: Node3D) -> void:
 	if old_path==null:old_path=old.get_node("GardenCommons/WindingGardenWalk")
 	var paving: Material=old_path.material_override
 	world.remove_child(old);old.free();build(world,grass,paving)
-static func update_ownership(world: Node3D,state: Dictionary) -> void:
-	var root:=world.get_node_or_null("EastBuildingSite")
+static func update_ownership(world: Node3D,state: Dictionary,map_id: String="city") -> void:
+	var root:=world.get_node_or_null("IcefieldBuildingSite" if map_id=="icefield" else "EastBuildingSite")
 	if root==null:return
 	var key:=str(state.get("land_parcels",{}))+str(state.get("player_id",""))
 	if root.get_meta("ownership_key","")==key:return
 	root.set_meta("ownership_key",key)
-	for id in Land.IDS:
+	for id in Land.ids_for(map_id):
 		var plot:=root.get_node_or_null(id)
 		if plot==null:continue
 		var owner:=Land.owner(state,id);var mine:=Land.owns(state,id)

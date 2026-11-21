@@ -43,7 +43,7 @@ func _ready() -> void:
 	actor.position=Vector3(7.5,.1,15.5)
 	actor.scale=Vector3.ONE*1.22
 	actor.visual.rotation.y=.15
-	Outfit.apply(actor,session.state().equipment)
+	Outfit.apply(actor,session.state().equipment,session.state().get("clothing_designs",{}))
 	var camera:=Camera3D.new()
 	title_camera=camera
 	camera.current=true
