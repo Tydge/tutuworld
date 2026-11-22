@@ -32,7 +32,7 @@ func build() -> void:
 		fixture(world,"jade_sampan",draft,PI*.5+.13*sin(berth.x))
 	for h in J.HOUSES:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
-		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5])
+		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
 	if not await preload("res://scripts/jade/navigation_bake.gd").bake(self,world):push_error("Incomplete Jade navigation survey");quit(1);return
@@ -51,6 +51,7 @@ func landmesh(st: SurfaceTool,pos: Vector3,material: Material,id: String,solid: 
 	return m
 func landscape() -> void:
 	var grass:=ShaderMaterial.new();grass.shader=preload("res://assets/shaders/jade_ground.gdshader");grass.set_shader_parameter("stone",preload("res://assets/jade/masonry.png"));grass.set_shader_parameter("turf",preload("res://assets/terrain/woodland/forest_turf_v1.png"));grass.set_shader_parameter("paving",preload("res://assets/jade/courtyard_flags.png"));grass.set_shader_parameter("earth",preload("res://assets/terrain/packed_earth_path_v1.png"))
+	grass.set_shader_parameter("courts",preload("res://scripts/jade/court_ground.gd").make())
 	for z0 in range(-216,216,36):
 		for x0 in range(-252,252,36):
 			var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)

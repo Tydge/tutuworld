@@ -131,6 +131,20 @@ func capture_landmarks() -> void:
 		["residential-lots",J.point(J.LOT_ORIGINS[0].x-2.,J.LOT_ORIGINS[0].y+13.),-1.35,.23,12.,.50],
 		["teahouse-interior",tea.to_global(Vector3(1.1,tea.floor_level+.07,.55)),tea.rotation.y+.64,.37,7.3,.81],
 		["inn-upper-gallery",inn.to_global(Vector3(-1.6,inn.wall_height+.08,1.2)),inn.rotation.y-.55,.25,7.6,.55]]
+
+	# Inspect the pastry counter along its frontage as well as from underneath the public staircase.
+	var pastry_room: Node3D=game.scenery.get_node("Shop_almond")
+	var pastry_counter: Node3D=pastry_room.get_node("Front").get_children().filter(func(node):return node.get_meta("furniture_kind","")=="jade_pastry_board")[0]
+	var pastry: Vector3=pastry_counter.global_position
+	shots.append(["almond-counter-from-lane",J.point(pastry.x-1.8,pastry.z+3.8),-.02,.22,5.3,.45])
+	shots.append(["almond-counter-from-corner",J.point(pastry.x-3.3,pastry.z-2.3),-1.96,.27,5.2,.60])
+	var seed_shop: Node3D=game.scenery.get_node("Shop_farm")
+	var seeds: Node3D=seed_shop.get_node("Front").get_children().filter(func(node):return node.get_meta("furniture_kind","")=="jade_seed_bins")[0]
+	var seed_view: Vector3=seeds.to_global(Vector3(1.8,0,3.6))
+	shots.append(["grain-shop-counter",J.point(seed_view.x,seed_view.z),seed_shop.rotation.y+.12,.24,6.3,.42])
+	shots.append(["almond-counter-side",J.point(pastry.x-4.3,pastry.z+3.3),.15,.20,6.6,.47])
+	var seed_side: Vector3=seeds.to_global(Vector3(-4.15,0,3.9))
+	shots.append(["grain-bins-side",J.point(seed_side.x,seed_side.z),seed_shop.rotation.y+.24,.24,6.7,.42])
 	var bell: Node3D=game.scenery.get_node("Hall_duty")
 	if bell.shell_kind=="clocktower":
 		shots.append(["bell-gallery",bell.to_global(Vector3(-1.25,bell.wall_height+.08,1.85)),bell.rotation.y-.44,.33,7.4,.43])

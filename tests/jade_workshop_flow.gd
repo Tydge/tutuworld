@@ -50,6 +50,7 @@ func run() -> void:
 	for trade in trades:
 		var facade: Node=city.scenery.get_node("Shop_"+trade+"/Front")
 		var kinds: Array=facade.get_children().map(func(child):return child.get_meta("furniture_kind",""))
+		check(not kinds.has("jade_goods"),"Dedicated shop display has clear counter space "+trade)
 		check(kinds.has(trades[trade]) and preload("res://scripts/building/catalog.gd").OBJECTS.has(trades[trade]),"Placeable trade display "+trade)
 	var home: Dictionary=editor.layout.duplicate(true);home.elements.clear()
 	home.elements.append({"id":"build_400","type":"object","kind":"jade_cottage","position":[82,94],"yaw":0,"storey":0})

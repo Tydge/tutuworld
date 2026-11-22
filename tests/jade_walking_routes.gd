@@ -25,6 +25,7 @@ func run() -> void:
 		npc.collision_layer=0
 		npc.collision_mask=0
 	sculpture_clearance()
+	shop_display_clearance()
 	for h in J.HOUSES:
 		var room: Node3D=game.scenery.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0])
 		await doorway(room,h[0])
@@ -183,3 +184,21 @@ func processional_terrace(room: Node3D,sign_: String) -> void:
 	await stand(middle)
 	for entry in [[curb,"从御道上台基"],[outer,"从台基到门前"],[inner,"迈过门槛"],[outer,"出门"],[curb,"回到台基前沿"],[middle,"下台基回御道"]]:
 		if not await waypoint(entry[0],sign_+" "+entry[1]):return
+
+func shop_display_clearance() -> void:
+	var wanted:={"spice":"jade_steam_table","almond":"jade_pastry_board","tools":"jade_smith_rack","farm":"jade_seed_bins"}
+	var catalog:=preload("res://scripts/building/catalog.gd").OBJECTS
+	for id in wanted:
+		var front: Node=game.scenery.get_node("Shop_"+id+"/Front")
+		var goods: Array=front.get_children().filter(func(n):return n.get_meta("furniture_kind","")=="jade_goods")
+		var stalls: Array=front.get_children().filter(func(n):return n.get_meta("furniture_kind","")==wanted[id])
+		check(stalls.size()==1,id+" 专属陈列")
+		for stall in stalls:
+			var size_: Vector2=catalog[wanted[id]].size
+			var bounds:=Rect2(Vector2(stall.position.x,stall.position.z)-size_*.5,size_)
+			var clear:=true
+			for shelf in goods:
+				var extent: Vector2=catalog.jade_goods.size
+				var other:=Rect2(Vector2(shelf.position.x,shelf.position.z)-extent*.5,extent)
+				clear=clear and not bounds.intersects(other)
+			check(clear,id+" 专属货案与通用货架分离")

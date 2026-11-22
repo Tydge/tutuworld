@@ -37,6 +37,13 @@ func run() -> void:
 		check(shopkeeper.action==preload("res://scripts/jade/street_life.gd").TRADES[trade],"Authoritative profession pose "+trade)
 	for actor in [a,b]:
 		for skill in actor.state.skills:actor.state.skills[skill]=8;actor.state.skill_experience[skill]=1800
+	var public_stove: Dictionary=host.targets.jade_steamer
+	var bun_recipe:=DB.recipe("honey_wheat_cake")
+	place(0,public_stove.anchor.global_position)
+	for mat in bun_recipe.ingredients:a.add(mat,bun_recipe.ingredients[mat])
+	var bake:=request(0,"craft",{"target":"jade_steamer","recipe":"honey_wheat_cake"})
+	check(bake.ok,"Use the public steamer at the tea shop "+str(bake.message))
+	if bake.ok:finish(0)
 	for offer in [["almond","almond_biscuit"],["spice","sweet_osmanthus"]]:
 		var counter: Node3D=host.targets["JadeVendor_"+offer[0]].node
 		place(0,counter.position+Vector3(.17,0,.12))
@@ -76,7 +83,7 @@ func run() -> void:
 		var private_lease:=request(0,"build_begin",{"parcel_id":J.LOTS[0]})
 		if private_lease.ok:
 			var stations: Array=[]
-			for entry in [["build_2","jade_well_kit",79],["build_3","jade_workbench",86]]:
+			for entry in [["build_2","jade_well_kit",79],["build_3","jade_workbench",86],["build_4","jade_steam_table",74]]:
 				stations.append({"id":entry[0],"kind":entry[1],"type":"object","position":[entry[2],94],"yaw":0,"storey":0})
 			var result:=request(0,"build_finish",{"parcel_id":J.LOTS[0],"lease":private_lease.lease,"expected_revision":private_lease.parcel_revision,"elements":stations})
 			check(result.ok,"Build a working well and workbench on the same lot "+str(result.message))
@@ -90,6 +97,13 @@ func run() -> void:
 					check(job.ok,"Use private "+entry[1]+" station "+str(job.message))
 					if job.ok:finish(0)
 				check(a.count("cotton_cloth")==1,"Weave cloth at the home workbench")
+				place(0,host.targets["build:build_4"].anchor.global_position)
+				var before: int=a.count(bun_recipe.output)
+				for mat in bun_recipe.ingredients:a.add(mat,bun_recipe.ingredients[mat])
+				var steamed:=request(0,"craft",{"target":"build:build_4","recipe":"honey_wheat_cake"})
+				check(steamed.ok,"Cook a meal with a privately built steamer "+str(steamed.message))
+				if steamed.ok:finish(0)
+				check(a.count(bun_recipe.output)>before,"Home cooking reaches the backpack")
 		check(b.count("jade_chime")==0,"Other neighbour's warehouse stays personal")
 	var bench: Dictionary=host.targets.jade_workshop
 	place(0,bench.position)

@@ -28,6 +28,9 @@ func build_item(n: Node3D,kind: String) -> void:
 			if kind in preload("res://scripts/jade/prefabs.gd").KINDS:
 				preload("res://scripts/jade/prefabs.gd").prepare(shell,kind)
 		preload("res://scripts/jade/material_parts.gd").prepare(shell,kind)
+		if kind=="jade_steam_table":
+			preload("res://scripts/jade/trades.gd").cook_station(n)
+			n.remove_meta("facility_id")
 		return
 	if kind in ["tea_service", "field_journal", "pressed_leaves", "ceramic_vases", "woven_basket", "moon_mobile", "petal_armchair", "floor_lamp", "lotus_pendant", "canopy_bed", "cloud_bed", "rose_arch", "lily_pond"]:
 		preload("res://scripts/building/new_furniture.gd").build(self,n,kind)

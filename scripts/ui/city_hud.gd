@@ -326,6 +326,7 @@ func rebuild() -> void:
 		if mode=="land":title.text="玉京城 · 六里宅地"
 		if mode=="map":title.text="玉京城 · 山河坊市图"
 		if mode=="workshop":title.text="百工坊 · 制造与织造"
+		if mode=="kitchen":title.text=str(city.targets.get(city.kitchen_target,{}).get("name","玉京灶房"))+" · 食谱"
 		if mode=="shop":title.text={"farm":"南货行","tools":"百炼铺","clothes":"云锦庄","furniture":"榫卯行","spice":"桂香茶肆","almond":"杏花食店"}.get(shop,"坊市")
 	if mode=="land" and city.map_id=="icefield":title.text="冰原岛 · 地皮认购"
 	if mode=="travel":title.text="乘船出发 · 选择目的地"

@@ -39,6 +39,6 @@ static func refresh(host: Node3D,authority: RefCounted=null) -> void:
 		var row: Dictionary=host.targets[id]
 		if row.has("anchor"):
 			row.position=row.anchor.global_position
-			if authority!=null and row.kind in ["well","workshop"]:
+			if authority!=null and row.kind in ["well","workshop","kitchen"]:
 				authority.facility_positions[id]=Vector2(row.position.x,row.position.z)
 				authority.facility_kinds[id]=row.kind

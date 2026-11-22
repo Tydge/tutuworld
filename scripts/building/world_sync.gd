@@ -26,8 +26,8 @@ static func register(city: Node3D,layout: Dictionary,room: Node3D,comfort_enable
 					shell.set("city",city);shell.set_meta("player_prefab",true);shell.set_process(comfort_enabled);city.interiors.append(shell)
 			preload("res://scripts/city/room_activities.gd").register(city,"build:"+str(module.name),module)
 			if module.has_node("WorkAnchor"):
-				var fixture: Array={"jade_well_kit":["well","辘轳水井"],"jade_workbench":["workshop","百工案"]}.get(module.get_meta("furniture_kind",""),["kitchen","青瓷料理台"])
-				city.targets["build:"+str(module.name)]={"kind":fixture[0],"node":module,"name":fixture[1],"anchor":module.get_node("ActionAnchor"),"work_anchor":module.get_node("WorkAnchor"),"effect_anchor":module.get_node("EffectAnchor"),"position":module.get_node("ActionAnchor").global_position,"radius":2.6}
+				var fixture: Dictionary=preload("res://scripts/building/catalog.gd").OBJECTS[module.get_meta("furniture_kind")]
+				city.targets["build:"+str(module.name)]={"kind":fixture.facility,"node":module,"name":fixture.name,"anchor":module.get_node("ActionAnchor"),"work_anchor":module.get_node("WorkAnchor"),"effect_anchor":module.get_node("EffectAnchor"),"position":module.get_node("ActionAnchor").global_position,"radius":2.6}
 			if module.has_node("SeatAnchor") and module.has_node("ExitAnchor"):city.targets["build:"+str(module.name)]={"kind":"bench","node":module,"position":module.global_position,"radius":1.65,"label":"坐下来休息一会"}
 			if module.has_node("SleepExit"):
 				city.targets["build:"+str(module.name)]={"kind":"bed","node":module,"position":module.global_position,"radius":1.65}

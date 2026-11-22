@@ -52,15 +52,14 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 					sprays.set_normal((d*.45+Vector3.UP*.85).normalized());sprays.add_vertex(twig+axis*c.y*2.25+cross*(c.x-.5)*2.*width)
 			if far:continue # The distant crown uses the textured sprays and physical limbs.
 			for m in range(6):
-				var t: float=(m+.5)/(3. if far else 8.);var at:=elbow.lerp(end,t)
+				var t: float=(m+.5)/8.;var at:=elbow.lerp(end,t)
 				for side in [-1,1]:
 					var dir:=d.rotated(Vector3.UP,side*.82)
 					var leaf:=Color(palette[0]).lerp(Color(palette[1]),rnd.randf_range(.12,1.))
-					var sz:=1.32 if far else 1.
-					blade(greens,at,(dir*(.43 if variant!=1 else .27)+Vector3.UP*(-.32 if variant==0 else .10))*sz,.05 if variant==0 else .14*sz,Color("73835c") if variant==1 else leaf,variant==2)
+					blade(greens,at,(dir*(.43 if variant!=1 else .27)+Vector3.UP*(-.32 if variant==0 else .10)),.05 if variant==0 else .14,Color("73835c") if variant==1 else leaf,variant==2)
 					if variant==1:
 						for petal in range(5):
-							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.23,Vector3(cos(phi)*.14,.065,sin(phi)*.14)*sz,.067*sz,leaf,true)
+							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.23,Vector3(cos(phi)*.14,.065,sin(phi)*.14),.067,leaf,true)
 	wood.generate_normals();wood.index();wood.set_material(timber)
 	var result:=wood.commit()
 	if not far:greens.index();greens.set_material(leaf_material);greens.commit(result)

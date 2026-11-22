@@ -14,6 +14,10 @@ var city: Node3D
 var next_turn: Dictionary={}
 var elapsed:=0.
 var tick:=0.
+var market_period:=-1
+const CUSTOMERS=[1,2,8]
+# During the two busiest stretches, neighbours have common destinations along the same frontage.
+const MARKET_CALLS=[Vector2(-6.5,-3.3),Vector2(-3.8,-.6),Vector2(1.8,2.3),Vector2(-6.1,5.3),Vector2(-1.8,8.6)]
 static func walk_stops(index: int,origin: Vector3) -> Array[Vector3]:
 	var result: Array[Vector3]=[]
 	if STOPS.has(index):
@@ -24,11 +28,31 @@ static func walk_stops(index: int,origin: Vector3) -> Array[Vector3]:
 	return result
 func _ready() -> void:
 	for actor in city.npcs:next_turn[actor.name]=1.+posmod(str(actor.name).hash(),97)*.105
+func update_market() -> void:
+	var seconds: float=city.manager.world.state.time if city.has_method("chatting_with") else city.session.state().time
+	var hour:=fposmod(seconds,3600.)/150.
+	var period:=1 if hour>=7. and hour<11. else (2 if hour>=17. and hour<22. else 0)
+	if period==market_period:return
+	market_period=period
+	for i in CUSTOMERS:
+		var actor: CharacterBody3D=city.targets["JadeCitizen_"+str(i)].node
+		var driver: Node=actor.get_node("NeighbourWalk")
+		if period==0:
+			var home: Array=preload("res://scripts/jade/residents.gd").PEOPLE[i]
+			driver.route=walk_stops(i,J.point(home[2],home[3]))
+		else:
+			var stops: Array[Vector3]=[]
+			for spot: Vector2 in MARKET_CALLS:
+				var z: float=float(146 if period==1 else 127)+spot.y+(i%3-1)*1.1
+				stops.append(J.point(J.lane(z)+spot.x,z))
+			driver.route=stops
+		driver.recent.clear()
 func _physics_process(delta: float) -> void:
 	elapsed+=delta
 	tick+=delta
 	if tick<.40:return
 	tick=0.
+	update_market()
 	for actor in city.npcs:
 		var id:=str(actor.name)
 		if elapsed<next_turn.get(id,INF) or actor.walking or not actor.action.is_empty():continue
@@ -40,6 +64,12 @@ func _physics_process(delta: float) -> void:
 			if not driver.path.is_empty():continue
 			var index:=int(id.trim_prefix("JadeCitizen_"))
 			pose=REST[index]
+			if market_period>0 and index in CUSTOMERS:
+				var center_z:=146. if market_period==1 else 127.
+				if absf(actor.position.z-center_z)<11.:
+					pose="sort_seed" if market_period==1 else "tea"
+					var stall:=J.point(J.lane(center_z)-13.,center_z)
+					actor.visual.rotation.y=atan2(stall.x-actor.position.x,stall.z-actor.position.z)
 			duration=3.6 if pose=="tea" or pose=="read_scroll" else 2.4
 			driver.wait=maxf(driver.wait,duration+.3)
 		else:

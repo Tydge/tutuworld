@@ -11,12 +11,14 @@ func act(a,verb: String,target: String="",item: String="") -> Dictionary:
 	return a.execute({"verb":verb,"target":target,"item":item})
 func _initialize() -> void:
 	var a=Authority.new()
-	check(DB.catalog().crops.size()==5,"Five crop types")
+	check(DB.catalog().crops.size()==7 and ["carrot","lettuce","tomato","pumpkin","wheat","cotton","ramie"].all(func(k):return DB.catalog().crops.has(k)),"Five food crops and two textile crops")
 	var clothes:=0
 	for id in DB.catalog().items:
 		if DB.item(id).kind=="clothing": clothes+=1
 	check(clothes>=27 and not DB.item("vest_stripes_sage").is_empty() and not DB.item("apron_daisies_sage").is_empty(),"Original clothing and data-defined additions are available")
-	check(a.state.plots.size()==48,"48 independent plots")
+	var town_plots:=DB.plots("city");var jade_plots:=DB.plots("jade")
+	check(town_plots.size()==48 and town_plots.all(func(row):return a.state.plots.has(row.id) and not row.id.begins_with("jade_")),"All 48 original island plots survive")
+	check(jade_plots.size()==32 and jade_plots.all(func(row):return a.state.plots.has(row.id) and row.id.begins_with("jade_")) and a.state.plots.size()==80,"32 separate plots in Yujing share the world save")
 	a.state.player_position=[22,.1,-6]
 	var seed_before: int=a.count("seed_carrot")
 	check(act(a,"plant","plot_00","seed_carrot").ok,"Plant starts")

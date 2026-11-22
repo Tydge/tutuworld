@@ -2,6 +2,7 @@ extends RefCounted
 ## Timber lean-tos extend the usable shop threshold. Wool or silk hangs from bound rafter ends.
 const G=preload("res://scripts/geometry.gd")
 const J=preload("res://scripts/jade/layout.gd")
+const FRONT_GOODS={"tea":"jade_ceramics","incense":"jade_ceramics","spice":"jade_steam_table","almond":"jade_pastry_board","tools":"jade_smith_rack","clothes":"jade_silk_rack","furniture":"jade_screen","farm":"jade_seed_bins","oil":"jade_goods","basket":"jade_goods","stitch":"jade_silk_rack"}
 static var fabrics: Dictionary={}
 static func canvas(m: Node3D,width: float,depth: float,y: float,blue: bool) -> void:
 	var sheet:=SurfaceTool.new();sheet.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -40,7 +41,7 @@ static func dress(builder: SceneTree) -> void:
 		var face:=room.get_node("Front") as Node3D;var d:=J.dims(h[4])
 		var x: float=(d.x-3.17)*(-1 if int(h[3])%2 else 1)
 		if h[4]!="forge":builder.fixture(face,"jade_shop_veranda",Vector3(x,0,d.z+1.36))
-		var wares: String={"tea":"jade_ceramics","incense":"jade_ceramics","spice":"jade_steam_table","almond":"jade_pastry_board","tools":"jade_smith_rack","clothes":"jade_silk_rack","furniture":"jade_screen","farm":"jade_seed_bins","oil":"jade_goods","basket":"jade_goods","stitch":"jade_silk_rack"}.get(h[0],"")
+		var wares: String=FRONT_GOODS.get(h[0],"")
 		if wares!="":
 			var display_x:=maxf(3.85,d.x*.67)*signf(-x)
 			builder.fixture(face,wares,Vector3(display_x,0,d.z+1.04))

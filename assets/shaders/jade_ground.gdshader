@@ -1,5 +1,6 @@
 shader_type spatial;
 render_mode cull_back;
+uniform sampler2D courts:repeat_disable,filter_linear_mipmap;
 uniform sampler2D stone:source_color,repeat_enable,filter_linear_mipmap_anisotropic;
 uniform sampler2D turf:source_color,repeat_enable,filter_linear_mipmap_anisotropic;
 uniform sampler2D paving:source_color,repeat_enable,filter_linear_mipmap_anisotropic;
@@ -59,5 +60,15 @@ void fragment(){
 	vec3 apron=mix(lawn,flagstone,laid);
 	float palace_beds=(1.-smoothstep(.14,.85,abs(abs(p.x)-(20.+2.*sin(p.y*.075)))-2.85))*step(p.y,-91.);
 	apron=mix(apron,texture(earth,p/4.8).rgb*.67,palace_beds*.72*(1.-laid));
+	vec3 district=texture(courts,(p+256.)/512.).rgb;
+	vec3 normal_=normalize(cross(dFdx(pos),dFdy(pos)));
+	float level=smoothstep(.77,.95,abs(normal_.y));
+	vec2 twist=vec2(.916*p.x+.401*p.y,-.401*p.x+.916*p.y);
+	vec3 court_flags=texture(paving,twist/vec2(3.8,4.8)).rgb*vec3(.79,.80,.73);
+	float stone_edge=smoothstep(.05,.34,district.r)*(1.-smoothstep(.55,.90,district.r));
+	vec3 stone_yard=mix(court_flags,gravel*.91,stone_edge*.68);
+	apron=mix(apron,mix(dirt*.75,grain*vec3(.85,.80,.71),.62+.15*n),level*district.g*(1.-laid)*.98);
+	apron=mix(apron,stone_yard,level*district.r*(1.-laid*.90));
+	apron*=mix(vec3(1.),vec3(.61,.67,.68),district.b);
 	ALBEDO=mix(apron,gravel,garden*(1.-laid*.68));ROUGHNESS=mix(.96,.82+.12*wear,laid);
 }

@@ -46,15 +46,16 @@ func _init() -> void:
 func built_station(id: String) -> Dictionary:
 	if not id.begins_with("build:"):return {}
 	var row:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(state,state.map_id),id.trim_prefix("build:"))
-	return row if row.get("type","")=="object" and row.get("kind","") in ["cooking_counter","jade_workbench","jade_well_kit"] else {}
+	return row if row.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS.get(row.get("kind",""),{}).has("facility") else {}
 func build_base() -> float:return preload("res://scripts/building/parcels.gd").base_height(state.map_id)
 func facility_position(id: String) -> Vector2:
 	var row:=built_station(id)
 	if not row.is_empty():return Vector2(row.position[0],row.position[1])+preload("res://scripts/building/catalog.gd").rotate_xz(Vector2(0,1.8),row.yaw)
 	return facility_positions.get(id,DB.facilities().get(id,Vector2(INF,INF)))
 func facility_kind(id: String) -> String:
+	if id.begins_with("jade_") and state.map_id!="jade":return ""
 	if id.begins_with("build:"):
-		return {"cooking_counter":"kitchen","jade_workbench":"workshop","jade_well_kit":"well"}.get(built_station(id).get("kind",""),"")
+		return preload("res://scripts/building/catalog.gd").OBJECTS.get(built_station(id).get("kind",""),{}).get("facility","")
 	return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
 func near_dining(target: String,chair_id: String="") -> bool:
 	if target=="dining":return state.map_id=="city" and near_position(DB.facilities().dining,3.8)

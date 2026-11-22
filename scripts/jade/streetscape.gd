@@ -35,12 +35,13 @@ static func build(builder: SceneTree) -> void:
 			A.paint(front,bracket+Vector3(0,-.86,1.32),Vector3(.085,1.66,.95),"brocade" if h[3]>90 else "swallows")
 			var plaque:=A.box(front,bracket+Vector3(.059,-.82,1.32),Vector3(.022,1.30,.48),"efe1ba")
 			var banner:=G.text3d(front,str(h[1]).substr(0,1)+"\n"+str(h[1]).substr(1,1),plaque.position+Vector3(.025,0,0),52,Color("342d28"));banner.rotation.y=PI/2
-		if h[5] in ["shop","tailor","inn","tavern","work"]:
+		if h[5] in ["shop","tailor","inn","tavern","work"] and not preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.has(h[0]):
 			for side in [-1.,1.]:
 				var eave:=A.paint(front,Vector3(side*d.x*.66,2.65,d.z+.86),Vector3(d.x*.56,.09,1.22),"swallows" if h[5]=="tailor" else "brocade");eave.rotation.x=.14
+				if h[5]!="tailor":continue
 				for j in range(3):
 					var roll:=G.cylinder(front,Vector3(side*d.x*.66+(j-1)*.37,.78,d.z+.65),.18,1.25,A.finish("swallows" if j%2 else "brocade"));roll.rotation.x=PI/2
-		if h[5] in ["tailor","shop","work","smith","tavern"]:
+		if h[0] in ["ledger","carver","sail","pickle"]:
 			builder.fixture(front,"jade_goods",Vector3(-d.x*.70,0,d.z+.58))
 		if h[5] in ["inn","study","tailor","court"]:
 			var interior:=room.get_node("Furnishing") as Node3D

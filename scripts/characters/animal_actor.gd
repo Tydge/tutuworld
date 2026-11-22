@@ -20,6 +20,7 @@ var right_leg: Node3D
 var ears: Array[Node3D] = []
 var mood_label: Label3D
 var held_cup: Node3D
+var held_work: Node3D
 var clock := 0.0
 var step_phase := 0.0
 var gait_blend := 0.0
@@ -174,6 +175,12 @@ func play_action(kind: String, duration: float, symbol: String = "") -> void:
 	action_length = duration
 	mood_label.text = symbol
 	held_cup.visible = kind == "tea"
+	if kind in preload("res://scripts/jade/handwork.gd").POSES:
+		if is_instance_valid(held_work) and held_work.get_meta("pose")!=kind:
+			held_work.free()
+		if not is_instance_valid(held_work):
+			held_work=preload("res://scripts/jade/handwork.gd").create(right_arm,rig_profile.grip_offset,kind)
+		held_work.visible=true
 
 func sit_on(seat: Transform3D) -> void:
 	stop_emote()
@@ -539,6 +546,8 @@ func animate_pose(delta: float) -> void:
 		for ear in ears: ear.rotation.x=.30*rig_profile.ear_motion
 	if rig_profile.tail_sway>0 and has_node("Visual/Tail"):
 		$Visual/Tail.rotation.y=(sin(clock*1.4)+stride*.8)*rig_profile.tail_sway
+	if is_instance_valid(held_work):held_work.visible=action==held_work.get_meta("pose")
+	if held_cup.visible and action!="tea":held_cup.visible=false
 	if held_cup.visible:
 		var hand := right_arm.to_global(rig_profile.grip_offset)
 		held_cup.global_transform = Transform3D(visual.global_basis,hand+visual.global_basis*Vector3(0,.12,.12))

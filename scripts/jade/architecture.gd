@@ -120,6 +120,7 @@ static func roof_point(w: float,d: float,rise: float,t: float,u: float,side: int
 	return Vector3(u*lerpf(w*.61,w,t),rise*pow(1.-t,1.65)+pow(absf(u),5)*pow(t,1.6)*.98,side*t*d)
 static func roof(n: Node3D,w: float,d: float,rise: float,h: float,royal: bool) -> void:
 	var top:=group(n,"Eaves",Vector3.UP*h)
+	preload("res://scripts/jade/eave_tiles.gd").trim(top,w,d,rise,royal)
 	var tile:=finish("amber_tiles" if royal else "tiles")
 	var sheet:=SurfaceTool.new();sheet.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for side in [-1,1]:

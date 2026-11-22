@@ -24,7 +24,7 @@ func _initialize() -> void:
 		var cheapest:=100000
 		for id in DB.catalog().items:
 			var item:=DB.item(id)
-			if item.get("slot","")==slot: cheapest=mini(cheapest,item.price)
+			if item.get("slot","")==slot and item.has("price"): cheapest=mini(cheapest,item.price)
 		for id in starters:
 			if DB.item(id).slot==slot:
 				count_+=1

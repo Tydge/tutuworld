@@ -95,3 +95,6 @@ static func make(n: Node3D,kind: String) -> void:
 		steam.set_meta("appearance_effect",true);steam.mesh=card;steam.name="Steam";steam.position=Vector3(.2,2.01,.01)
 		var mist:=ShaderMaterial.new();mist.shader=preload("res://assets/shaders/jade_steam.gdshader")
 		steam.material_override=mist;steam.visibility_range_end=28.;steam.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;n.add_child(steam)
+static func cook_station(n: Node3D) -> void:
+	var facilities=preload("res://scripts/city/production_facilities.gd")
+	facilities.configure(n,{"id":"jade_steamer","name":"桂花竹笼蒸案","kind":"kitchen","anchors":{"ActionAnchor":[0,.03,1.8],"WorkAnchor":[0,.03,1.8],"EffectAnchor":[.2,1.52,0]}})

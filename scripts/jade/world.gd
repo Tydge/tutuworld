@@ -40,6 +40,9 @@ func update_ambient_lighting() -> void:
 	atmosphere.ambient_light_color=Color("929aad").lerp(Color("cddde2"),ambient_day).lerp(Color("ddc5a0"),ins*.62)
 
 func register_city(client: bool) -> void:
+	for fixture in scenery.get_node("Shop_spice/Front").get_children():
+		if fixture.get_meta("furniture_kind","")=="jade_steam_table" and not fixture.has_meta("facility_id"):
+			preload("res://scripts/jade/trades.gd").cook_station(fixture)
 	for h in J.HOUSES:
 		var room:=scenery.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
 		room.city=self;room.set_process(client);interiors.append(room)
