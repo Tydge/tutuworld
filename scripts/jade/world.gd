@@ -10,10 +10,21 @@ func player_spawn_position(pos: Array) -> Vector3:
 var lantern_pools: Array[Node]=[]
 var lit_materials: Array[ShaderMaterial]=[]
 var horizon: ShaderMaterial
+var applied_warmth:=-1.
+var applied_ambient_day:=-1.
+var applied_interior:=-1.
 func prepare_scenery() -> void:
+	# Stars and clouds are drawn to the screen. Only the broad sky gradient
+	# enters the reflection cubemap, just as it does on the harbour map.
+	var sky: Sky=scenery.get_node("Atmosphere").environment.sky
+	sky.radiance_size=Sky.RADIANCE_SIZE_64
 	register_city(true)
+	var sight:=preload("res://scripts/jade/sight_geometry.gd")
+	for room in interiors:sight.prepare_sections(room.sight_sections)
+	for rig in scenery.find_children("CanvasRig*","Node3D",true,false):sight.prepare_sections(rig.sight_sections)
 	for node in scenery.get_children():
 		if node.get_script() in [preload("res://scripts/jade/gallery_view.gd"),preload("res://scripts/jade/gate_view.gd")]:node.city=self;node.set_process(true)
+		if node.get_script()==preload("res://scripts/jade/gallery_view.gd"):sight.prepare_sections(node.sight_sections)
 	horizon=scenery.get_node("PaintedRange").material_override
 	for mesh: MeshInstance3D in scenery.find_children("*","MeshInstance3D",true,false):
 		for i in range(mesh.mesh.get_surface_count() if mesh.mesh!=null else 0):
@@ -23,18 +34,26 @@ func prepare_scenery() -> void:
 func update_lighting(override_time: float=-1) -> void:
 	super.update_lighting(override_time)
 	var warmth:=1.-smoothstep(.16,.72,ambient_day)
-	if horizon:horizon.set_shader_parameter("daylight_tint",Color("405879").lerp(Color("c6d7ce"),ambient_day))
-	for mat in lit_materials:mat.set_shader_parameter("warmth",warmth*.97)
-	for lamp in lantern_pools:
-		lamp.visible=warmth>.005;lamp.light_energy=warmth*3.8
-	atmosphere.fog_density=lerpf(.0014,.00105,ambient_day)
-	sun.light_color=Color("a9b4c7").lerp(Color("ffebcf"),ambient_day)
-	sun.light_energy=lerpf(.13,1.30,ambient_day)
-	sun.directional_shadow_max_distance=lerpf(42.,63.,ambient_day)
+	if horizon:
+		horizon.set_shader_parameter("daylight_tint",Color("49688f").lerp(Color("c6d7ce"),ambient_day))
+		horizon.set_shader_parameter("night_air",warmth)
+	if absf(warmth-applied_warmth)>.0005:
+		applied_warmth=warmth
+		for mat in lit_materials:mat.set_shader_parameter("warmth",warmth*.97)
+		for lamp in lantern_pools:
+			lamp.visible=warmth>.005;lamp.light_energy=warmth*3.8
+func fog_density_for(day: float) -> float:
+	return lerpf(.0014,.00105,day)
+func set_sunlight(day: float) -> void:
+	sun.light_color=Color("a9b4c7").lerp(Color("ffebcf"),day)
+	sun.light_energy=lerpf(.13,1.30,day)
+	sun.directional_shadow_max_distance=lerpf(42.,63.,day)
 	sun.shadow_normal_bias=.28;sun.shadow_bias=.035
-	sun.shadow_opacity=lerpf(.61,.89,ambient_day);sun.shadow_blur=1.45
+	sun.shadow_opacity=lerpf(.61,.89,day);sun.shadow_blur=1.45
 func update_ambient_lighting() -> void:
 	var ins:=interior_weight()
+	if absf(ins-applied_interior)<.0005 and absf(ambient_day-applied_ambient_day)<.0005:return
+	applied_interior=ins;applied_ambient_day=ambient_day
 	atmosphere.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
 	atmosphere.ambient_light_energy=lerpf(lerpf(.29,.45,ambient_day),.40,ins)
 	atmosphere.ambient_light_color=Color("929aad").lerp(Color("cddde2"),ambient_day).lerp(Color("ddc5a0"),ins*.62)

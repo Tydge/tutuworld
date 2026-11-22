@@ -59,6 +59,18 @@ func visit(map: String) -> void:
 		await process_frame;RenderingServer.force_draw()
 	startup_ms[map]=snappedf((Time.get_ticks_usec()-entered)/1000.,.1)
 	session.active=false
+	if map=="jade" and OS.get_cmdline_user_args().has("--sign-views"):
+		await capture_landmarks()
+		game.free();await process_frame
+		return
+	if map=="jade" and OS.get_cmdline_user_args().has("--night-repeats"):
+		session.active=true
+		for i in range(5):
+			var night: Array=views(map)[1].duplicate()
+			night[0]="lantern-market-live-"+str(i+1)
+			await sample_route(map,night)
+		session.active=false;game.free();await process_frame
+		return
 	for view in views(map):await sample_route(map,view)
 	if map=="jade":
 		if OS.get_cmdline_user_args().has("--repeat-market"):
@@ -87,11 +99,13 @@ func sample_route(map: String,view: Array) -> void:
 	while last-start<int(SAMPLE_SECONDS*1e6):
 		var secs:=(last-start)/1e6
 		game.yaw=view[4]+.12*sin(secs*PI/2.)
-		await process_frame;RenderingServer.force_draw()
+		await process_frame
+		var before_draw:=Time.get_ticks_usec()
+		RenderingServer.force_draw()
 		var now:=Time.get_ticks_usec();samples.append((now-last)/1000.);last=now
 		if samples[-1]>25.:
 			var foot: Vector3=game.bunny.position
-			slow_frames.append({"elapsed_s":snappedf((now-start)*.000001,.001),"frame_ms":snappedf(samples[-1],.01),"position":[snappedf(foot.x,.01),snappedf(foot.z,.01)],"draws":int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))})
+			slow_frames.append({"elapsed_s":snappedf((now-start)*.000001,.001),"frame_ms":snappedf(samples[-1],.01),"draw_submit_ms":snappedf((now-before_draw)*.001,.01),"position":[snappedf(foot.x,.01),snappedf(foot.z,.01)],"draws":int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME))})
 		process_ms.append(Performance.get_monitor(Performance.TIME_PROCESS)*1000.)
 		calls=maxi(calls,int(Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)))
 		primitives=maxi(primitives,int(Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME)))
@@ -125,6 +139,9 @@ func capture_landmarks() -> void:
 		["market-orbit-east",J.point(J.lane(141.)+1.2,140.5),PI*.5,.32,9.7,.42],
 		["market-orbit-west",J.point(J.lane(125.)-1.2,125.4),-PI*.5,.32,9.7,.42],
 		["night-stair-lantern",Vector3(-6.10,6.58,121.21),0.,.19,11.5,.91],
+		["night-shop-paper",J.point(J.lane(130.)-3.,130.),.98,.18,8.5,.91],
+		["moonlit-canal",J.point(1.7,-4.),-1.34,.31,8.6,.91],
+		["ginkgo-in-the-lane",J.point(J.lane(157.)-1.6,157.),.61,.11,8.3,.43],
 		["post-from-street",J.point(-45.8,36.5),.12,.19,10.5,.44],
 		["canal-from-bridge",J.point(1.7,-4.),-1.34,.42,8.6,.43],
 		["canal-stone-bank",J.point(31.,J.river_z(31.)+14.2),-.92,.33,7.2,.40],
@@ -132,6 +149,8 @@ func capture_landmarks() -> void:
 		["artisan-yard",J.point(-51.,139.),.03,.24,10.4,.42],
 		["eaves-from-street",J.point(J.lane(51.)+4.,51.),-1.22,.12,7.4,.35],
 		["forecourt-approach",J.point(-.5,-39.),-.08,.19,10.3,.41],
+		["palace-three-passages",J.point(1.,-70.),.025,.14,10.3,.41],
+		["stonework-return",J.point(-6.6,-46.2),.84,.22,8.6,.39],
 		["drum-terrace",J.point(-6.2,-57.),.91,.17,8.2,.39],
 		["baihe-terrace",J.point(6.4,-65.),-.92,.20,8.5,.40],
 		["bronze-crane-court",J.point(4.7,-135.),-.12,.19,9.,.37],
@@ -154,6 +173,17 @@ func capture_landmarks() -> void:
 	shots.append(["almond-counter-from-lane",J.point(pastry.x-1.8,pastry.z+3.8),-.02,.22,5.3,.45])
 	shots.append(["almond-counter-from-corner",J.point(pastry.x-3.3,pastry.z-2.3),-1.96,.27,5.2,.60])
 	var seed_shop: Node3D=game.scenery.get_node("Shop_farm")
+	var signs:=preload("res://scripts/jade/shop_signs.gd")
+	var emblems: Dictionary={}
+	for which: String in ["spice","tools","clothes"]:
+		var shop: Node3D=game.scenery.get_node("Shop_"+which)
+		var wanted: String=signs.FRONTAGES[which]
+		var sign_: Node3D=shop.get_node("Front").get_children().filter(func(node):return node.get_meta("furniture_kind","")==wanted)[0]
+		for side: float in [1.,-1.]:
+			var stand:=sign_.to_global(Vector3(side*1.70,0,5.40))
+			var name_:="trade-sign-"+which+("-reverse" if side<0 else "")
+			shots.append([name_,J.point(stand.x,stand.z),shop.rotation.y+side*.98,.12,6.65,.39])
+			emblems[name_]=sign_.get_node("Emblem")
 	var seeds: Node3D=seed_shop.get_node("Front").get_children().filter(func(node):return node.get_meta("furniture_kind","")=="jade_seed_bins")[0]
 	var seed_view: Vector3=seeds.to_global(Vector3(1.8,0,3.6))
 	shots.append(["grain-shop-counter",J.point(seed_view.x,seed_view.z),seed_shop.rotation.y+.12,.24,6.3,.42])
@@ -181,7 +211,9 @@ func capture_landmarks() -> void:
 		else:
 			var point: Vector3=bridge.to_global(Vector3(1.5,0.,3.6))
 			shots.append(["market-under-gallery",J.point(point.x,point.z),bridge.rotation.y-.63,.25,8.7,.64])
+	var visible_signs: Dictionary={}
 	for shot in shots:
+		if OS.get_cmdline_user_args().has("--sign-views") and not emblems.has(shot[0]):continue
 		game.bunny.global_position=shot[1]+Vector3.UP*.035
 		game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation()
 		game.camera_focus=game.bunny.position+Vector3.UP*1.35
@@ -192,6 +224,11 @@ func capture_landmarks() -> void:
 			await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_jpg(output+"/jade-"+str(shot[0])+".jpg",.90)
 		print("PLAYER_VIEW ",shot[0]," grounded=",game.bunny.is_on_floor()," position=",game.bunny.global_position)
+		if emblems.has(shot[0]):
+			var area:=visible_component_pixels(emblems[shot[0]])
+			var label_: String=str(shot[0]).trim_suffix("-reverse")
+			visible_signs[label_]=maxi(visible_signs.get(label_,0),area)
+			print("TRADE_SIGN_PIXELS ",shot[0]," pixels=",area)
 		if shot[0] in ["market-orbit-east","market-orbit-west","night-stair-lantern"]:check_visible_body(shot[0])
 		if shot[0] in ["market-facing-east-stall","market-facing-west-stall"]:check_distant_awning(shot[0])
 		if test_flights.has(shot[0]):
@@ -199,6 +236,8 @@ func capture_landmarks() -> void:
 			var pixels:=visible_component_pixels(steps)
 			print("STAIR_SURFACE ",shot[0]," grounded=",game.bunny.is_on_floor()," changed_pixels=",pixels)
 			if not game.bunny.is_on_floor() or pixels<40:failures.append("jade/"+str(shot[0])+"/supporting-flight")
+	for label_ in visible_signs:
+		if visible_signs[label_]<70:failures.append("jade/"+str(label_)+"/emblem")
 
 func capture_market_hours() -> void:
 	var original_scale:=Engine.time_scale

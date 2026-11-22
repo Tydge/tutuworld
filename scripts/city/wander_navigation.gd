@@ -50,7 +50,8 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 	query.transform=Transform3D(Basis.IDENTITY,Vector3(x,height_+1.39,z))
 	return not space.intersect_shape(query,1).is_empty()
 func supported(point: Vector3,space: PhysicsDirectSpaceState3D,margin: float=GROUND_MARGIN) -> bool:
-	for sample: Vector2 in SUPPORT_OFFSETS:
+	# At zero clearance all nine offsets collapse to the same point.
+	for sample: Vector2 in ([Vector2.ZERO] if is_zero_approx(margin) else SUPPORT_OFFSETS):
 		var offset:=Vector3(sample.x*margin,0,sample.y*margin)
 		if not get_parent().can_navigate(point+offset):return false
 		floor_query.from=point+offset+Vector3.UP*.4;floor_query.to=point+offset-Vector3.UP*.45

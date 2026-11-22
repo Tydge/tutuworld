@@ -28,8 +28,9 @@ func _process(delta: float) -> void:
 	if distant_proxy and distant_proxy.visible==detail:
 		distant_proxy.visible=not detail;using_cutaway=false
 		for part in get_children():
-			if part is Node3D and part!=distant_proxy:part.visible=detail
+			if part is Node3D and part!=distant_proxy and part!=$Furnishing:part.visible=detail
 	if not detail:
+		$Furnishing.visible=false
 		inside=false;interior_weight=0.;return
 	var p:=to_local(city.bunny.global_position)
 	inside=contains_position(city.bunny.global_position)

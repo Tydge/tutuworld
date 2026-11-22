@@ -11,6 +11,9 @@ uniform sampler2D relief:source_color,repeat_enable,filter_linear_mipmap;
 uniform sampler2D amber:source_color,repeat_enable,filter_linear_mipmap;
 uniform sampler2D timber:source_color,repeat_enable,filter_linear_mipmap;
 uniform float warmth=.0;
+#include "res://assets/shaders/jade_paper_light.gdshaderinc"
+varying vec2 street;
+void vertex(){street=(MODEL_MATRIX*vec4(VERTEX,1.)).xz;}
 void fragment(){
 	int mode=int(floor(UV2.x+.5));vec3 colour=COLOR.rgb;
 	if(mode==1)colour*=texture(plaster,UV).rgb;
@@ -21,7 +24,7 @@ void fragment(){
 	else if(mode==6)colour*=texture(screen,UV).rgb;
 	else if(mode==7)colour*=texture(crane,UV).rgb;
 	else if(mode==8)colour*=texture(relief,UV).rgb;
-	else if(mode==9){colour*=mix(vec3(.55,.405,.236),vec3(.77,.43,.14),warmth);EMISSION=vec3(.93,.46,.13)*warmth*.54;}
+	else if(mode==9){colour*=mix(vec3(.55,.405,.236),vec3(.77,.43,.14),warmth);EMISSION=jade_paper_light(UV,street,warmth);}
 	else if(mode==10){EMISSION=vec3(.68,.22,.046)*warmth;}
 	else if(mode==11)colour*=texture(amber,UV).rgb;
 	else if(mode==12)colour*=texture(timber,UV).rgb;

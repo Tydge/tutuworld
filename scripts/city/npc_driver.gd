@@ -65,20 +65,25 @@ func walkable_recovery(preferred: Vector3) -> Vector3:
 	# A clear grid cell can sit beyond an unwalkable strip between samples.
 	# Repeatedly steering straight toward it traps the actor in the same place.
 	# Check the intervening floor before choosing a short turn around the strip.
-	var best:=Vector3.ZERO
-	var best_score:=-INF
+	# Probe the preferred escape first. Ranking before tracing avoids repeating dozens
+	# of floor queries once a safe turn with the highest score has been found.
+	var turns: Array[Vector3]=[]
+	var scores:=PackedFloat32Array()
 	for i in range(16):
 		var angle:=TAU*i/16.
 		var direction:=Vector3(cos(angle),0,sin(angle))
+		turns.append(direction)
+		scores.append(direction.dot(preferred)+rng.randf_range(0,.15))
+	var order: Array=range(turns.size())
+	order.sort_custom(func(a,b):return scores[a]>scores[b])
+	for i: int in order:
 		var clear:=true
 		for distance in [.01,.04,.10]:
-			var point: Vector3=bunny.position+direction*distance
+			var point: Vector3=bunny.position+turns[i]*distance
 			if not city.can_walk(point) or not city.navigation.can_step(bunny.position,point):
 				clear=false;break
-		if not clear:continue
-		var score:=direction.dot(preferred)+rng.randf_range(0,.15)
-		if score>best_score:best=direction;best_score=score
-	return best
+		if clear:return turns[i]
+	return Vector3.ZERO
 func _physics_process(delta: float) -> void:
 	if bunny==null or city==null or not city.navigation.ready_for_paths: return
 	var chatting: bool=city.talking_npc==bunny.name

@@ -71,6 +71,7 @@ var interiors: Array[Node3D]=[]
 var sleep_active:=false
 var sleep_exit:=Vector3.ZERO
 var ambient_day:=1.0
+var last_sky_colours: Array=[]
 var fountain_glow: OmniLight3D
 var online_view: Node
 var network_action_pending:=false
@@ -803,28 +804,35 @@ func update_ambient_lighting() -> void:
 	var indoors: float=interior_weight()
 	atmosphere.ambient_light_energy=lerpf(lerpf(.28,.53,ambient_day),lerpf(.26,.34,ambient_day),indoors)
 	atmosphere.ambient_light_color=Color("7894b8").lerp(Color("d5e9ef"),ambient_day).lerp(Color("d9c6a5"),indoors*.60)
+func set_sunlight(day: float) -> void:
+	sun.light_energy=lerpf(.075,1.45,day)
+	sun.light_color=Color("91afe8").lerp(Color("fff6e6"),day)
+	sun.shadow_opacity=lerpf(.62,.86,day)
+	sun.shadow_blur=1.85
+	sun.shadow_normal_bias=.65
+func fog_density_for(day: float) -> float:
+	return lerpf(.00055,.0009,day)
 func update_lighting(override_time: float=-1) -> void:
 	var t:=override_time if override_time>=0 else fmod(float(session.state().time)/3600,1)
 	var palette: Dictionary=SkyPalette.at_time(t)
 	var day: float=palette.day
 	var night: float=palette.night
 	ambient_day=day
-	sun.light_energy=lerpf(.075,1.45,day)
-	sun.light_color=Color("91afe8").lerp(Color("fff6e6"),day)
-	sun.shadow_opacity=lerpf(.62,.86,day)
-	sun.shadow_blur=1.85
-	sun.shadow_normal_bias=.65
+	set_sunlight(day)
 	sun.rotation_degrees=Vector3(-maxf(22,palette.height*70),-80+t*160,0)
 	update_ambient_lighting()
 	for building_ in interiors: building_.update_lighting(day)
 	atmosphere.fog_light_color=palette.horizon
-	atmosphere.fog_density=lerpf(.00055,.0009,day)
+	atmosphere.fog_density=fog_density_for(day)
 	var sky: ShaderMaterial=atmosphere.sky.sky_material
-	sky.set_shader_parameter("zenith_color",palette.zenith)
-	sky.set_shader_parameter("horizon_color",palette.horizon)
-	sky.set_shader_parameter("cloud_color",palette.cloud)
-	sky.set_shader_parameter("daylight",day)
-	sky.set_shader_parameter("night_amount",night)
+	var sky_colours:=[palette.zenith,palette.horizon,palette.cloud,day,night]
+	if sky_colours!=last_sky_colours:
+		last_sky_colours=sky_colours
+		sky.set_shader_parameter("zenith_color",palette.zenith)
+		sky.set_shader_parameter("horizon_color",palette.horizon)
+		sky.set_shader_parameter("cloud_color",palette.cloud)
+		sky.set_shader_parameter("daylight",day)
+		sky.set_shader_parameter("night_amount",night)
 	# Night clouds do not need to invalidate a radiance cubemap every few frames.
 	if day>.05: sky.set_shader_parameter("drift",clock)
 	var sea: ShaderMaterial=scenery.get_node("Island").get_meta("sea_material",null)

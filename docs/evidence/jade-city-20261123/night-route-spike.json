@@ -1,0 +1,804 @@
+{
+	"actual_cap": 60,
+	"device": "Apple M1 Pro (Apple7)",
+	"driver": "metal",
+	"failures": [
+		"jade/lantern-market/frames"
+	],
+	"output_px": [
+		3024,
+		1890
+	],
+	"renderer": "forward_plus",
+	"sample_seconds": 4.0,
+	"samples": [
+		{
+			"fps": 60.0,
+			"map": "city",
+			"max_draws": 970,
+			"max_ms": 25.021,
+			"max_primitives": 3015563,
+			"moved_m": 12.96,
+			"n": 241,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 1,
+			"over50": 0,
+			"p50_ms": 16.631,
+			"p95_ms": 18.023,
+			"p99_ms": 24.01,
+			"sampled_process_monitor_p95_ms": 15.062,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 793,
+					"elapsed_s": 3.558,
+					"frame_ms": 25.02,
+					"position": [
+						-3.79,
+						-2.42
+					]
+				}
+			],
+			"view": "fountain-day"
+		},
+		{
+			"fps": 60.0,
+			"map": "city",
+			"max_draws": 1012,
+			"max_ms": 28.672,
+			"max_primitives": 2579926,
+			"moved_m": 10.2,
+			"n": 241,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.618,
+			"p95_ms": 17.535,
+			"p99_ms": 28.06,
+			"sampled_process_monitor_p95_ms": 18.999,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 968,
+					"elapsed_s": 0.695,
+					"frame_ms": 28.06,
+					"position": [
+						11.87,
+						35.92
+					]
+				},
+				{
+					"draws": 994,
+					"elapsed_s": 1.711,
+					"frame_ms": 28.67,
+					"position": [
+						11.65,
+						33.42
+					]
+				},
+				{
+					"draws": 906,
+					"elapsed_s": 2.728,
+					"frame_ms": 28.19,
+					"position": [
+						11.96,
+						32.3
+					]
+				},
+				{
+					"draws": 876,
+					"elapsed_s": 3.742,
+					"frame_ms": 27.07,
+					"position": [
+						12.32,
+						28.79
+					]
+				}
+			],
+			"view": "quay-night"
+		},
+		{
+			"fps": 60.1,
+			"map": "valley",
+			"max_draws": 836,
+			"max_ms": 28.94,
+			"max_primitives": 1182737,
+			"moved_m": 8.95,
+			"n": 241,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.851,
+			"p95_ms": 19.383,
+			"p99_ms": 26.013,
+			"sampled_process_monitor_p95_ms": 28.362,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 815,
+					"elapsed_s": 0.359,
+					"frame_ms": 28.94,
+					"position": [
+						-13.04,
+						9.0
+					]
+				},
+				{
+					"draws": 774,
+					"elapsed_s": 1.358,
+					"frame_ms": 26.01,
+					"position": [
+						-13.25,
+						6.53
+					]
+				},
+				{
+					"draws": 814,
+					"elapsed_s": 2.372,
+					"frame_ms": 25.37,
+					"position": [
+						-13.11,
+						6.32
+					]
+				},
+				{
+					"draws": 836,
+					"elapsed_s": 3.391,
+					"frame_ms": 26.19,
+					"position": [
+						-12.69,
+						3.33
+					]
+				}
+			],
+			"view": "woods-day"
+		},
+		{
+			"fps": 60.0,
+			"map": "valley",
+			"max_draws": 1179,
+			"max_ms": 27.25,
+			"max_primitives": 1525776,
+			"moved_m": 13.68,
+			"n": 241,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.642,
+			"p95_ms": 17.677,
+			"p99_ms": 26.976,
+			"sampled_process_monitor_p95_ms": 17.401,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 1137,
+					"elapsed_s": 0.526,
+					"frame_ms": 27.16,
+					"position": [
+						-16.88,
+						92.87
+					]
+				},
+				{
+					"draws": 1078,
+					"elapsed_s": 1.543,
+					"frame_ms": 26.1,
+					"position": [
+						-17.26,
+						89.35
+					]
+				},
+				{
+					"draws": 1133,
+					"elapsed_s": 2.56,
+					"frame_ms": 27.25,
+					"position": [
+						-17.24,
+						85.8
+					]
+				},
+				{
+					"draws": 1118,
+					"elapsed_s": 3.577,
+					"frame_ms": 26.98,
+					"position": [
+						-16.86,
+						82.26
+					]
+				}
+			],
+			"view": "valley-port-night"
+		},
+		{
+			"fps": 59.9,
+			"map": "icefield",
+			"max_draws": 1159,
+			"max_ms": 27.597,
+			"max_primitives": 3245704,
+			"moved_m": 13.67,
+			"n": 240,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 3,
+			"over50": 0,
+			"p50_ms": 16.666,
+			"p95_ms": 16.967,
+			"p99_ms": 25.394,
+			"sampled_process_monitor_p95_ms": 23.305,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 1144,
+					"elapsed_s": 1.977,
+					"frame_ms": 27.6,
+					"position": [
+						-79.53,
+						5.42
+					]
+				},
+				{
+					"draws": 1131,
+					"elapsed_s": 2.992,
+					"frame_ms": 26.02,
+					"position": [
+						-79.28,
+						1.87
+					]
+				},
+				{
+					"draws": 1130,
+					"elapsed_s": 4.009,
+					"frame_ms": 25.39,
+					"position": [
+						-79.0,
+						-1.67
+					]
+				}
+			],
+			"view": "shops-day"
+		},
+		{
+			"fps": 59.9,
+			"map": "icefield",
+			"max_draws": 1211,
+			"max_ms": 26.093,
+			"max_primitives": 3110767,
+			"moved_m": 3.2,
+			"n": 240,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.651,
+			"p95_ms": 17.005,
+			"p99_ms": 25.419,
+			"sampled_process_monitor_p95_ms": 17.824,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 1189,
+					"elapsed_s": 0.143,
+					"frame_ms": 26.09,
+					"position": [
+						-63.01,
+						42.8
+					]
+				},
+				{
+					"draws": 1143,
+					"elapsed_s": 1.159,
+					"frame_ms": 25.88,
+					"position": [
+						-63.32,
+						39.8
+					]
+				},
+				{
+					"draws": 1123,
+					"elapsed_s": 2.176,
+					"frame_ms": 25.42,
+					"position": [
+						-63.52,
+						39.8
+					]
+				},
+				{
+					"draws": 1134,
+					"elapsed_s": 3.196,
+					"frame_ms": 25.26,
+					"position": [
+						-63.19,
+						39.8
+					]
+				}
+			],
+			"view": "town-night"
+		},
+		{
+			"fps": 58.0,
+			"map": "jade",
+			"max_draws": 3926,
+			"max_ms": 34.369,
+			"max_primitives": 4068500,
+			"moved_m": 13.73,
+			"n": 233,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 7,
+			"over50": 0,
+			"p50_ms": 16.877,
+			"p95_ms": 17.563,
+			"p99_ms": 33.06,
+			"sampled_process_monitor_p95_ms": 33.671,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 3738,
+					"elapsed_s": 0.033,
+					"frame_ms": 33.06,
+					"position": [
+						-4.93,
+						162.98
+					]
+				},
+				{
+					"draws": 3639,
+					"elapsed_s": 0.707,
+					"frame_ms": 32.78,
+					"position": [
+						-5.19,
+						160.78
+					]
+				},
+				{
+					"draws": 3587,
+					"elapsed_s": 1.24,
+					"frame_ms": 26.74,
+					"position": [
+						-5.5,
+						158.94
+					]
+				},
+				{
+					"draws": 3585,
+					"elapsed_s": 1.273,
+					"frame_ms": 32.8,
+					"position": [
+						-5.52,
+						158.83
+					]
+				},
+				{
+					"draws": 3765,
+					"elapsed_s": 1.71,
+					"frame_ms": 33.06,
+					"position": [
+						-5.73,
+						157.33
+					]
+				},
+				{
+					"draws": 3857,
+					"elapsed_s": 2.746,
+					"frame_ms": 34.37,
+					"position": [
+						-5.78,
+						153.71
+					]
+				},
+				{
+					"draws": 3696,
+					"elapsed_s": 3.761,
+					"frame_ms": 34.04,
+					"position": [
+						-5.6,
+						150.16
+					]
+				}
+			],
+			"view": "south-market"
+		},
+		{
+			"fps": 57.4,
+			"map": "jade",
+			"max_draws": 3284,
+			"max_ms": 66.542,
+			"max_primitives": 3204328,
+			"moved_m": 13.43,
+			"n": 230,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 7,
+			"over50": 1,
+			"p50_ms": 16.959,
+			"p95_ms": 17.688,
+			"p99_ms": 34.416,
+			"sampled_process_monitor_p95_ms": 31.564,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 3263,
+					"elapsed_s": 0.77,
+					"frame_ms": 27.34,
+					"position": [
+						-6.11,
+						131.61
+					]
+				},
+				{
+					"draws": 3263,
+					"elapsed_s": 0.805,
+					"frame_ms": 34.58,
+					"position": [
+						-6.13,
+						131.43
+					]
+				},
+				{
+					"draws": 3249,
+					"elapsed_s": 0.891,
+					"frame_ms": 34.42,
+					"position": [
+						-6.17,
+						131.14
+					]
+				},
+				{
+					"draws": 3113,
+					"elapsed_s": 1.897,
+					"frame_ms": 33.83,
+					"position": [
+						-6.48,
+						127.67
+					]
+				},
+				{
+					"draws": 3016,
+					"elapsed_s": 2.879,
+					"frame_ms": 31.71,
+					"position": [
+						-6.29,
+						124.47
+					]
+				},
+				{
+					"draws": 3097,
+					"elapsed_s": 3.876,
+					"frame_ms": 66.54,
+					"position": [
+						-6.01,
+						121.51
+					]
+				},
+				{
+					"draws": 3098,
+					"elapsed_s": 3.925,
+					"frame_ms": 32.47,
+					"position": [
+						-6.01,
+						121.3
+					]
+				}
+			],
+			"view": "lantern-market"
+		},
+		{
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 1691,
+			"max_ms": 23.666,
+			"max_primitives": 1377496,
+			"moved_m": 13.66,
+			"n": 240,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 0,
+			"over50": 0,
+			"p50_ms": 16.656,
+			"p95_ms": 17.063,
+			"p99_ms": 23.487,
+			"sampled_process_monitor_p95_ms": 26.24,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [],
+			"view": "bridge"
+		},
+		{
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 1105,
+			"max_ms": 28.062,
+			"max_primitives": 1416764,
+			"moved_m": 13.22,
+			"n": 240,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 2,
+			"over50": 0,
+			"p50_ms": 16.653,
+			"p95_ms": 17.593,
+			"p99_ms": 24.708,
+			"sampled_process_monitor_p95_ms": 17.473,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 1105,
+					"elapsed_s": 1.226,
+					"frame_ms": 25.29,
+					"position": [
+						105.9,
+						-23.9
+					]
+				},
+				{
+					"draws": 881,
+					"elapsed_s": 3.262,
+					"frame_ms": 28.06,
+					"position": [
+						108.17,
+						-30.62
+					]
+				}
+			],
+			"view": "garden"
+		},
+		{
+			"fps": 59.9,
+			"map": "jade",
+			"max_draws": 1193,
+			"max_ms": 42.145,
+			"max_primitives": 1350766,
+			"moved_m": 12.94,
+			"n": 240,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 1,
+			"over50": 0,
+			"p50_ms": 16.652,
+			"p95_ms": 17.372,
+			"p99_ms": 22.24,
+			"sampled_process_monitor_p95_ms": 25.329,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 990,
+					"elapsed_s": 3.776,
+					"frame_ms": 42.15,
+					"position": [
+						1.49,
+						-147.38
+					]
+				}
+			],
+			"view": "palace"
+		},
+		{
+			"fps": 57.8,
+			"map": "jade",
+			"max_draws": 4012,
+			"max_ms": 34.931,
+			"max_primitives": 4174344,
+			"moved_m": 13.79,
+			"n": 232,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 17.042,
+			"p95_ms": 17.699,
+			"p99_ms": 33.003,
+			"sampled_process_monitor_p95_ms": 31.219,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 3945,
+					"elapsed_s": 0.617,
+					"frame_ms": 33.0,
+					"position": [
+						-5.14,
+						161.13
+					]
+				},
+				{
+					"draws": 3779,
+					"elapsed_s": 1.63,
+					"frame_ms": 33.0,
+					"position": [
+						-5.69,
+						157.62
+					]
+				},
+				{
+					"draws": 3924,
+					"elapsed_s": 2.653,
+					"frame_ms": 34.69,
+					"position": [
+						-5.79,
+						154.01
+					]
+				},
+				{
+					"draws": 3803,
+					"elapsed_s": 3.671,
+					"frame_ms": 34.93,
+					"position": [
+						-5.6,
+						150.45
+					]
+				}
+			],
+			"view": "south-market-repeat-1"
+		},
+		{
+			"fps": 57.2,
+			"map": "jade",
+			"max_draws": 4010,
+			"max_ms": 35.164,
+			"max_primitives": 4193250,
+			"moved_m": 13.67,
+			"n": 229,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 5,
+			"over50": 0,
+			"p50_ms": 17.095,
+			"p95_ms": 18.299,
+			"p99_ms": 34.569,
+			"sampled_process_monitor_p95_ms": 31.317,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 3894,
+					"elapsed_s": 0.769,
+					"frame_ms": 32.98,
+					"position": [
+						-5.22,
+						160.61
+					]
+				},
+				{
+					"draws": 3798,
+					"elapsed_s": 1.79,
+					"frame_ms": 33.28,
+					"position": [
+						-5.75,
+						157.09
+					]
+				},
+				{
+					"draws": 3907,
+					"elapsed_s": 2.808,
+					"frame_ms": 35.15,
+					"position": [
+						-5.76,
+						153.54
+					]
+				},
+				{
+					"draws": 3842,
+					"elapsed_s": 3.074,
+					"frame_ms": 35.16,
+					"position": [
+						-5.7,
+						152.61
+					]
+				},
+				{
+					"draws": 3903,
+					"elapsed_s": 3.815,
+					"frame_ms": 34.57,
+					"position": [
+						-5.64,
+						150.05
+					]
+				}
+			],
+			"view": "south-market-repeat-2"
+		},
+		{
+			"fps": 57.3,
+			"map": "jade",
+			"max_draws": 4073,
+			"max_ms": 35.022,
+			"max_primitives": 4213932,
+			"moved_m": 13.73,
+			"n": 230,
+			"output_px": [
+				3024,
+				1890
+			],
+			"over25": 5,
+			"over50": 0,
+			"p50_ms": 17.08,
+			"p95_ms": 17.762,
+			"p99_ms": 34.247,
+			"sampled_process_monitor_p95_ms": 30.267,
+			"scale_3d": 0.591552376747131,
+			"slow_frames": [
+				{
+					"draws": 3878,
+					"elapsed_s": 0.934,
+					"frame_ms": 33.25,
+					"position": [
+						-5.32,
+						160.04
+					]
+				},
+				{
+					"draws": 3860,
+					"elapsed_s": 1.232,
+					"frame_ms": 32.84,
+					"position": [
+						-5.49,
+						159.0
+					]
+				},
+				{
+					"draws": 3888,
+					"elapsed_s": 1.955,
+					"frame_ms": 34.25,
+					"position": [
+						-5.8,
+						156.45
+					]
+				},
+				{
+					"draws": 3909,
+					"elapsed_s": 2.98,
+					"frame_ms": 35.02,
+					"position": [
+						-5.72,
+						152.9
+					]
+				},
+				{
+					"draws": 3813,
+					"elapsed_s": 3.994,
+					"frame_ms": 34.31,
+					"position": [
+						-5.62,
+						149.34
+					]
+				}
+			],
+			"view": "south-market-repeat-3"
+		}
+	],
+	"scale_3d": 0.591552376747131,
+	"startup_ms": {
+		"city": 6632.9,
+		"icefield": 22932.4,
+		"jade": 3911.6,
+		"valley": 3435.3
+	},
+	"warmup_seconds": 1.8
+}

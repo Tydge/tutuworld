@@ -28,6 +28,11 @@ void fragment(){
 	side=min(side,way(p,vec2(-60,175),vec2(-40,41),2.7));side=min(side,way(p,vec2(45,171),vec2(52,22),2.8));
 	side=min(side,max(abs(p.y+123.)-3.2,abs(p.x)-84.));
 	float aisles=min(min(embankment,eastwing),min(court,min(bazaar,avenue)));
+	// The processional approach flares from the bridge towards all three palace passages.
+	float fan=1.-smoothstep(-81.,-46.,p.y);
+	float fan_width=mix(7.,18.3,fan);
+	float gate_yard=max(abs(p.x)-fan_width,abs(p.y+70.)-24.);
+	aisles=min(aisles,gate_yard);
 	float road=min(aisles,side);
 	// Tangled lanes between shops wear down to earth and river cobbles on both sides.
 	float wards=(1.-smoothstep(22.,43.,abs(p.x-lane)))*smoothstep(24.,54.,p.y)*(1.-smoothstep(181.,199.,p.y));
@@ -82,6 +87,13 @@ void fragment(){
 	float proximity=1.-smoothstep(15.,36.,length(VERTEX));
 	NORMAL=normalize(NORMAL-clamp(grad,vec3(-.38),vec3(.38))*proximity);
 	vec3 base=mix(apron,gravel,garden*(1.-laid*.68));
+	float processional=(1.-smoothstep(-.25,.55,gate_yard))*level;
+	float verge=smoothstep(fan_width-2.2,fan_width-1.9,abs(p.x));
+	float rail=1.-smoothstep(.07,.21,abs(abs(p.x)-(fan_width-1.83)));
+	float courses=1.-smoothstep(.15,.36,abs(mod(p.y+2.85,10.8)-5.4));
+	vec3 forecourt_paving=mix(flagstone*vec3(.91,.97,1.02),grain*vec3(.66,.71,.71),verge*.88);
+	forecourt_paving=mix(forecourt_paving,grain*vec3(.51,.56,.58),max(rail,courses*.77));
+	base=mix(base,forecourt_paving,processional);
 	float retaining=(1.-smoothstep(116.,128.,abs(p.x)))*(1.-smoothstep(12.8,13.9,river));
 	// Coursed granite is laid along the waterline. The lowest courses darken with the tide.
 	vec3 bank_stone=texture(stone,vec2(p.x/5.8,(pos.y+.11*river)/4.8)).rgb;

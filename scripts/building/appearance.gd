@@ -28,7 +28,8 @@ static func validate(kind: String,value: Variant) -> Dictionary:
 		var definition:=part(kind,str(id));var item: Variant=value[id]
 		if definition.is_empty() or not item is Dictionary:return {"ok":false,"message":"请选择这件家具已有的部位。"}
 		var material:=str(item.get("material","original"))
-		if not material in allowed(definition):return {"ok":false,"message":"这个部位不支持所选材质。"}
+		if not material in allowed(definition):
+			if not definition.has("legacy_family") or material not in Catalog.choices(definition.legacy_family):return {"ok":false,"message":"这个部位不支持所选材质。"}
 		var entry:={"material":material}
 		if item.has("accent") and definition.family!="fabric":return {"ok":false,"message":"只有布料花纹支持独立的花纹颜色。"}
 		for channel in ["color","accent"]:

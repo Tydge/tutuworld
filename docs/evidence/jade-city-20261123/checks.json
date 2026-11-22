@@ -1,0 +1,122 @@
+[
+  {
+    "check": "jade_city_flow",
+    "run": "20261123-044519-902158",
+    "result": "JADE_CITY_FLOW failures=0"
+  },
+  {
+    "check": "jade_workshop_flow",
+    "run": "20261123-044519-902158",
+    "result": "JADE_WORKSHOP_FLOW failures=[]"
+  },
+  {
+    "check": "jade_multiplayer_rules",
+    "run": "20261123-044519-902158",
+    "result": "JADE_MULTIPLAYER_RULES failures=0"
+  },
+  {
+    "check": "project_integrity",
+    "run": "20261123-044519-902158",
+    "result": "PROJECT_INTEGRITY_RESULT PASS checks=786 failures=[]"
+  },
+  {
+    "check": "city_rules",
+    "run": "20261123-044519-902158",
+    "result": "CITY_RULES_RESULT PASS checks=59 failures=[]"
+  },
+  {
+    "check": "character_roster_rules",
+    "run": "20261123-044519-902158",
+    "result": "CHARACTER_ROSTER_RULES_RESULT PASS checks=44 failures=[]"
+  },
+  {
+    "check": "valley_rules",
+    "run": "20261123-044519-902158",
+    "result": "VALLEY_RULES_RESULT PASS checks=215 failures=[]"
+  },
+  {
+    "check": "valley_journey",
+    "run": "20261123-044519-902158",
+    "result": "VALLEY_JOURNEY_RESULT PASS checks=18 failures=[]"
+  },
+  {
+    "check": "forest_art_structure",
+    "run": "20261123-044519-902158",
+    "result": "FOREST_ART_STRUCTURE_RESULT PASS checks=316 failures=[]"
+  },
+  {
+    "check": "appearance_rules",
+    "run": "20261123-044519-902158",
+    "result": "APPEARANCE_RULES_RESULT PASS checks=489 failures=[]"
+  },
+  {
+    "check": "material_catalog_rules",
+    "run": "20261123-031307-400262",
+    "result": "MATERIAL_CATALOG_RULES_RESULT PASS checks=487 failures=[]"
+  },
+  {
+    "check": "production_flow",
+    "run": "20261123-020815-214296",
+    "result": "PRODUCTION_FLOW_RESULT PASS checks=28 failures=[]"
+  },
+  {
+    "check": "harvest_atelier_flow",
+    "run": "20261123-020815-214296",
+    "result": "HARVEST_ATELIER_FLOW_RESULT PASS failures=[]"
+  },
+  {
+    "check": "clothing_shop_preview",
+    "run": "20261123-020815-214296",
+    "result": "CLOTHING_SHOP_PREVIEW_RESULT PASS checks=124 failures=[]"
+  },
+  {
+    "check": "winter_playground_flow",
+    "run": "20261123-020815-214296",
+    "result": "WINTER_PLAYGROUND_RESULT PASS checks=126 failures=[]"
+  },
+  {
+    "check": "icefield_rules",
+    "run": "20261123-021451-790228",
+    "result": "ICEFIELD_RULES_RESULT PASS checks=249 failures=[]"
+  },
+  {
+    "check": "icefield_server_rules",
+    "run": "20261123-023030-705173",
+    "result": "ICEFIELD_SERVER_RULES_RESULT PASS checks=112 failures=[]"
+  },
+  {
+    "check": "building_multiplayer_rules",
+    "run": "20261123-020815-214298",
+    "result": "BUILDING_MULTIPLAYER_RULES_RESULT PASS checks=59 failures=[]"
+  },
+  {
+    "check": "skills_quality_rules",
+    "run": "20261123-020815-214298",
+    "result": "SKILLS_QUALITY_RULES_RESULT PASS checks=1026 failures=[]"
+  },
+  {
+    "check": "kitchen_rules",
+    "run": "20261123-030513-488609",
+    "result": "KITCHEN_RULES_RESULT PASS checks=128 failures=[]"
+  },
+  {
+    "check": "character_restart_flow",
+    "run": "20261123-044519-902158",
+    "result": "CHARACTER_RESTART_FLOW_RESULT PASS checks=3 failures=[]"
+  },
+  {
+    "check": "home_lighting_stability",
+    "run": "20261123-044519-902158",
+    "result": "HOME_LIGHTING_STABILITY_RESULT PASS checks=22 failures=[]"
+  },
+  {
+    "check": "valley_npc_recovery",
+    "run": "20261123-044519-902158",
+    "result": "VALLEY_NPC_RECOVERY_RESULT PASS checks=7 failures=[]"
+  },
+  {
+    "check": "npc_edge_flow",
+    "run": "20261123-044519-902158",
+    "result": "NPC_EDGE_FLOW_RESULT PASS checks=15 failures=[]"
+  }
+]

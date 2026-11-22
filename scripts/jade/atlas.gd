@@ -15,6 +15,10 @@ static func build(hud: CanvasLayer) -> void:
 		for x in J.BRIDGES:map.draw_rect(Rect2(x-3.6,J.river_z(x)-14,7.2,28),Color("91795c"))
 		for path in preload("res://scripts/jade/court_ground.gd").ALLEYS:
 			map.draw_polyline(PackedVector2Array(path),Color("d6c8a5"),2.4,true)
+		for side: float in [-1.,1.]:
+			map.draw_line(Vector2(side*17.,J.PALACE_GATE_Z),Vector2(side*49.,J.PALACE_GATE_Z),Color("9c6150"),2.6,true)
+			map.draw_line(Vector2(side*7.1,J.PALACE_GATE_Z),Vector2(side*9.5,J.PALACE_GATE_Z),Color("9c6150"),2.6,true)
+			map.draw_line(Vector2(side*13.2,J.PALACE_GATE_Z-4.),Vector2(side*13.2,J.PALACE_GATE_Z+4.),Color("e7dac2"),4.,true)
 		for h in J.HOUSES:
 			draw_house(map,h)
 		map.draw_circle(Vector2(120,-40),7.,Color("87a99b"))

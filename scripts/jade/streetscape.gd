@@ -2,12 +2,19 @@ extends RefCounted
 const G=preload("res://scripts/geometry.gd")
 const J=preload("res://scripts/jade/layout.gd")
 const A=preload("res://scripts/jade/architecture.gd")
+static func lamplight(world: Node3D,wick: Vector3,colour: Color,reach: float) -> void:
+	var light:=OmniLight3D.new()
+	light.name="LanternPool";light.position=wick;light.light_color=colour
+	light.omni_range=reach;light.light_specular=.42;light.shadow_enabled=false
+	light.distance_fade_enabled=true;light.distance_fade_begin=21.;light.distance_fade_length=19.
+	light.set_meta("street_lamp",true);world.add_child(light)
 static func build(builder: SceneTree) -> void:
 	var world: Node3D=builder.world
 	# Doubled walls, dressed bases and sloped walks make the north terraces read from below.
-	for z in [-81.,-122.,-156.]:
+	for z in [J.PALACE_GATE_Z,-122.,-156.]:
 		for side in [-1.,1.]:
 			for i in range(12):
+				if z==J.PALACE_GATE_Z and i<2:continue
 				var x: float=side*(12.7+i*4.15);var p:=J.point(x,z)
 				builder.fixture(world,"jade_rail",p)
 				var plinth:=A.paint(world,p+Vector3(0,-1.15,.03),Vector3(4.2,2.30,1.),"masonry")
@@ -17,19 +24,25 @@ static func build(builder: SceneTree) -> void:
 			if z> -143 and z< -126:continue
 			var p:=J.point(side*80.,z)
 			builder.fixture(world,"jade_gallery",p,PI*.5)
-	for z in [174.,147.,123.,91.,65.,35.,-75.,-96.,-126.,-156.]:
-		var line:=J.lane(z)
-		for side in [-1,1]:
-			var p:=J.point(line+side*7.2,z)
-			var lamp:=OmniLight3D.new();lamp.name="LanternPool";lamp.position=p+Vector3.UP*2.8
-			lamp.light_color=Color("ffb267");lamp.light_energy=2.8;lamp.omni_range=7.0;lamp.omni_attenuation=1.;lamp.shadow_enabled=false
-			lamp.distance_fade_enabled=true;lamp.distance_fade_begin=21.;lamp.distance_fade_length=19.;lamp.set_meta("street_lamp",true);world.add_child(lamp)
+	# Thirteen street posts and seven shop or palace thresholds share the original light budget.
+	var door_lights: Dictionary={"ferry":-1.,"tavern":1.,"farm":-1.,"spice":1.,"tools":-1.,"tea":1.,"audience":1.}
 	for h in J.HOUSES:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
+		if door_lights.has(h[0]):
+			var size:=A.dims(h[4])
+			var wick:=A.facade_lantern(size.x,size.y,size.z,door_lights[h[0]])
+			lamplight(world,room.to_global(wick),Color("ffad69"),9.)
 		if h[3]< -80:continue
 		var d:=A.dims(h[4]);var front:=room.get_node("Front") as Node3D
 		var shop: bool=h[5] in ["tailor","shop","work","tavern","tea","smith","inn"]
-		if shop:
+		var signs:=preload("res://scripts/jade/shop_signs.gd")
+		if signs.FRONTAGES.has(h[0]):
+			var forge: bool=signs.FRONTAGES[h[0]]==signs.FORGE
+			var mount:=Vector3(d.x-2.05,0,d.z+2.39) if forge else Vector3(d.x-.85,0,d.z+1.32)
+			# The cloth pole reaches above the sewing house's lower second-floor landing.
+			if h[0]=="stitch":mount.x=-mount.x
+			builder.fixture(front,signs.FRONTAGES[h[0]],mount,.41 if forge else 0.)
+		elif shop:
 			var bracket:=Vector3(d.x-.7,3.5,d.z+.8)
 			A.beam(front,bracket,bracket+Vector3(0,0,1.85),.11,"785139")
 			A.paint(front,bracket+Vector3(0,-.86,1.32),Vector3(.085,1.66,.95),"brocade" if h[3]>90 else "swallows")

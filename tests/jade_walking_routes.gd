@@ -42,6 +42,13 @@ func run() -> void:
 	for gallery in galleries:await cross_gallery(gallery)
 	for bridge_x in J.BRIDGES:await cross_river(bridge_x)
 	await river_garden()
+	for passage: float in [-13.2,0.,13.2]:
+		var south:=J.point(passage,J.PALACE_GATE_Z+3.2)
+		var north:=J.point(passage,J.PALACE_GATE_Z-4.7)
+		await stand(J.point(0.,south.z))
+		if passage!=0.:await waypoint(south,"御道通往掖门 x="+str(passage))
+		await waypoint(north,"承天门通道北行 x="+str(passage))
+		await waypoint(south,"承天门通道南行 x="+str(passage))
 	await stand(J.point(0.,203.))
 	await waypoint(J.point(0.,192.),"南码头步行入城")
 	await stand(J.point(2.,-104.))
@@ -113,6 +120,16 @@ func upper_floor(room: Node3D,id: String) -> void:
 	await stand(start)
 	for row in [[landing,"上楼"],[cross,"平台转向"],[inside,"走进上层"],[cross,"走出上层"],[landing,"回到梯口"],[start,"下至街面"]]:
 		if not await waypoint(row[0],id+" "+row[1]):return
+		if row[1]=="走进上层" and id in ["scribe","silk"]:
+			var activity_name: String="Gallery_field_journal_2" if id=="scribe" else "Gallery_clothing_rack_0"
+			var key: String="jade:%s:%s"%[id,activity_name]
+			var activity: Dictionary=game.targets.get(key,{})
+			check(not activity.is_empty(),id+" 楼上有专属互动")
+			if not activity.is_empty():
+				var near: Vector3=room.to_global(Vector3(.65,height,.05) if id=="scribe" else Vector3(-2.7,height,-.68))
+				await stand(near)
+				check(game.activity_access(key,"read" if id=="scribe" else "tailor"),id+" 可以在楼上阅卷或试染")
+				await stand(inside)
 
 func cross_gallery(gallery: Node3D) -> void:
 	var label_:="跨街廊 z=%d "%roundi(gallery.position.z)

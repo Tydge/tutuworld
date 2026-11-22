@@ -221,6 +221,9 @@ static func lantern(n: Node3D,p: Vector3,r: float=1.) -> void:
 		var a:=k*TAU/7.;var p0:=Vector3(cos(a)*.058,-.59,sin(a)*.058)
 		beam(base,p0,p0+Vector3(.021,-.27+.025*cos(a),.012),.023,"b84229")
 static func dims(kind: String) -> Vector3:return preload("res://scripts/jade/layout.gd").dims(kind)
+static func facade_lantern(span: float,height: float,depth: float,side: float) -> Vector3:
+	return Vector3(side*(span-.5),height-1.28,depth+.74)
+const POST_LANTERN:=Vector3(.79,3.08,0)
 static func shell(n: Node3D,kind: String) -> void:
 	var d:=dims(kind);var w:=d.x;var h:=d.y;var z:=d.z;var royal:=kind in ["palace","court"]
 	var wood:=RED if royal or kind=="loft" else WOOD
@@ -292,7 +295,7 @@ static func shell(n: Node3D,kind: String) -> void:
 			if front:
 				box(m,Vector3(0,h-.6,depth+.43),Vector3(3.45,.91,.18),GOLD)
 				box(m,Vector3(0,h-.6,depth+.54),Vector3(3.30,.76,.10),"274f50")
-				for side in [-1,1]:lantern(m,Vector3(side*(span-.5),h-1.28,depth+.74),1.05))
+				for side in [-1,1]:lantern(m,facade_lantern(span,h,depth,side),1.05))
 		for side in [-1,1]:
 			var gap:=1.72 if front or (kind=="court" and face=="West") else 0.
 			P.box(section,"Wall",Vector3(side*(span+gap)*.5,h*.5,depth),Vector3(span-gap,h,.30))
@@ -314,6 +317,7 @@ static func shell(n: Node3D,kind: String) -> void:
 			G.cylinder(m,Vector3.UP*(top+6.3),.21,.68,G.mat(GOLD),.06))
 	if kind in ["forge","cloister","pavilion","store","cottage"]:preload("res://scripts/jade/joinery.gd").veranda(n,kind,w,h,z)
 static func prop(n: Node3D,kind: String) -> void:
+	if kind in preload("res://scripts/jade/shop_signs.gd").KINDS:preload("res://scripts/jade/shop_signs.gd").make(n,kind);return
 	if kind in preload("res://scripts/jade/trades.gd").KINDS:preload("res://scripts/jade/trades.gd").make(n,kind);return
 	if kind=="jade_court_terrace":preload("res://scripts/jade/processional_court.gd").make_plot_terrace(n);return
 	if kind=="jade_crane":preload("res://scripts/jade/crane.gd").make(n);return
@@ -350,7 +354,7 @@ static func prop(n: Node3D,kind: String) -> void:
 				box(m,Vector3.UP*.26,Vector3(.84,.52,.84),STONE)
 				box(m,Vector3.UP*2.,Vector3(.23,3.6,.23),RED)
 				box(m,Vector3(.38,3.82,0),Vector3(1.22,.15,.18),GOLD)
-				lantern(m,Vector3(.79,3.08,0)))
+				lantern(m,POST_LANTERN))
 			P.box(n,"Post",Vector3.UP*1.8,Vector3(.45,3.6,.45))
 		"jade_screen":
 			mesh_part(n,kind,func(m):

@@ -34,6 +34,7 @@ func build() -> void:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
 		preload("res://scripts/jade/sight_geometry.gd").bake_room(room)
 		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
+	preload("res://scripts/jade/static_colours.gd").bake(world)
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
 	if not await preload("res://scripts/jade/navigation_bake.gd").bake(self,world):push_error("Incomplete Jade navigation survey");quit(1);return
@@ -73,10 +74,15 @@ func streets() -> void:
 	var dock:=group(world,"SouthPier",Vector3(0,2.05,206.5))
 	preload("res://scripts/jade/wharf_field.gd").wharf(self,dock)
 	G.solid_box(dock,Vector3(0,-.12,0),Vector3(7,.24,13)).collision_layer=8
-	for bz in [194.,38.,-81.,-145.]:
+	for bz in [194.,38.,J.PALACE_GATE_Z,-145.]:
 		var gate:=fixture(world,"jade_gate",J.point(0,bz))
 		if bz in [38.,-145.]:gate.scale=Vector3.ONE*.86
-		var sign_:=G.text3d(gate,{194.:"南 津 渡",38.:"望 河 坊",-81.:"承 天 门",-145.:"丹 陛"}[bz],Vector3(0,6.4,.54),50,Color("f4cf88"));sign_.double_sided=false
+		if bz==J.PALACE_GATE_Z:
+			gate.scale=Vector3.ONE*1.48
+			for side in [-1.,1.]:
+				var side_gate:=fixture(world,"jade_gate",J.point(side*13.2,bz))
+				side_gate.scale=Vector3.ONE*.77
+		var sign_:=G.text3d(gate,{194.:"南 津 渡",38.:"望 河 坊",J.PALACE_GATE_Z:"承 天 门",-145.:"丹 陛"}[bz],Vector3(0,6.4,.54),50,Color("f4cf88"));sign_.double_sided=false
 	for bx in J.BRIDGES:
 		var cz:=J.river_z(bx)
 		for j in range(12):
@@ -107,7 +113,8 @@ func streets() -> void:
 					A.box(m,Vector3(0,underside+.10,z0),Vector3(.59,.22,.51),"8c8873"))
 	for z in [-132.,-106.,-91.,-66.,-38.,25.,44.,67.,91.,117.,153.,168.,188.]:
 		var side:=1. if int(z)%2==0 else -1.
-		fixture(world,"jade_lamp",J.point(side*(7.5+.6*sin(z))+J.lane(z),z))
+		var post:=fixture(world,"jade_lamp",J.point(side*(7.5+.6*sin(z))+J.lane(z),z))
+		preload("res://scripts/jade/streetscape.gd").lamplight(world,post.to_global(A.POST_LANTERN),Color("ffd098"),8.4)
 	for z in [115.5,69.]:
 		var walkway:=fixture(world,"jade_street_gallery_reverse" if z>100. else "jade_street_gallery",J.point(J.lane(z),z),.035*sin(z))
 		for side in [-1.,1.]:
@@ -119,9 +126,15 @@ func streets() -> void:
 		for side in [-1.,1.]:
 			var p:=line.to_global(Vector3(side*7.55,2.96,0))
 			A.column(world,p,.102,5.92*line.scale.y)
-	for z in [-82.,-146.]:
+	for z in [J.PALACE_GATE_Z-1.,-146.]:
 		for side in [-1,1]:
-			for i in range(11):fixture(world,"jade_palace_wall",J.point(side*(8.+4.*i),z))
+			for i in range(11):
+				if z==J.PALACE_GATE_Z-1. and i<3:continue
+				fixture(world,"jade_palace_wall",J.point(side*(8.+4.*i),z))
+			if z==J.PALACE_GATE_Z-1.:
+				for join in [[8.35,.65],[17.35,.40]]:
+					var wall:=fixture(world,"jade_palace_wall",J.point(side*join[0],J.PALACE_GATE_Z))
+					wall.scale.x=join[1]
 	for z in range(-156,-103):
 		var h:=J.height_at(0,z)
 		if absf(h-J.height_at(0,z+1))<.08:continue
@@ -182,9 +195,11 @@ func house(h: Array) -> void:
 	if h[4] in ["loft","inn","clocktower","theatre"]:
 		var rooms: Array=[["bed",-d.x*.49,-1.9,0.],["bedside",-d.x*.49+1.8,-2.8,0.],["jade_screen",-.2,-1.,1.57],["desk",2.8,-2.6,0.],["chair",2.8,-.97,0.],["forest_rug",0.,1.6,0.]] if h[5]=="inn" else [["tea_table",-2.,-1.,0.],["chair",-2.,.69,0.],["jade_screen",1.6,-2.,1.57],["jade_basin",2.9,1.,0.]]
 		if h[4]=="clocktower":rooms=[["jade_chime",0.,-2.,0.],["chair",-.3,2.1,0.]]
+		if h[0]=="scribe":rooms=[["bookshelf",-2.6,-2.6,0.],["desk",.65,-1.42,0.],["field_journal",.65,-1.42,0.,1.14],["chair",.65,.25,0.]]
+		if h[0]=="silk":rooms=[["clothing_rack",-2.7,-2.1,0.],["jade_screen",1.4,-2.1,1.57],["woven_basket",2.7,.55,0.],["chair",-1.4,1.6,.28]]
 		if h[4]=="theatre":rooms=[["jade_chime",0.,-3.,0.],["chair",-2.,.8,0.],["chair",2.,.8,0.],["jade_screen",-3.,-2.8,1.57]]
 		for i in range(rooms.size()):
-			var data: Array=rooms[i];var upper:=group(furnishing,"Gallery_"+str(data[0])+"_"+str(i),Vector3(data[1],d.y,data[2]));upper.rotation.y=data[3];furniture.build_item(upper,data[0])
+			var data: Array=rooms[i];var upper:=group(furnishing,"Gallery_"+str(data[0])+"_"+str(i),Vector3(data[1],d.y+(float(data[4]) if data.size()>4 else 0.),data[2]));upper.rotation.y=data[3];furniture.build_item(upper,data[0])
 
 	var lamp:=OmniLight3D.new();lamp.name="RoomLight";lamp.position=Vector3.UP*3.;lamp.light_color=Color("ffdfa0");lamp.omni_range=8.;lamp.distance_fade_enabled=true;lamp.distance_fade_begin=18.;lamp.distance_fade_length=8.;furnishing.add_child(lamp)
 func gardens() -> void:

@@ -1,0 +1,291 @@
+{
+  "actual_cap": 60,
+  "device": "Apple M1 Pro (Apple7)",
+  "driver": "metal",
+  "failures": [],
+  "output_px": [
+    3024,
+    1890
+  ],
+  "renderer": "forward_plus",
+  "sample_seconds": 4.0,
+  "samples": [
+    {
+      "fps": 60.0,
+      "map": "jade",
+      "max_draws": 4167,
+      "max_ms": 31.095,
+      "max_primitives": 3322998,
+      "moved_m": 13.67,
+      "n": 240,
+      "output_px": [
+        3024,
+        1890
+      ],
+      "over25": 4,
+      "over50": 0,
+      "p50_ms": 16.592,
+      "p95_ms": 17.161,
+      "p99_ms": 29.307,
+      "sampled_process_monitor_p95_ms": 89.286,
+      "scale_3d": 0.591552376747131,
+      "slow_frames": [
+        {
+          "draws": 4047,
+          "elapsed_s": 0.546,
+          "frame_ms": 29.22,
+          "position": [
+            -5.11,
+            161.36
+          ]
+        },
+        {
+          "draws": 4052,
+          "elapsed_s": 1.563,
+          "frame_ms": 29.31,
+          "position": [
+            -5.67,
+            157.85
+          ]
+        },
+        {
+          "draws": 4048,
+          "elapsed_s": 2.581,
+          "frame_ms": 30.54,
+          "position": [
+            -5.81,
+            154.35
+          ]
+        },
+        {
+          "draws": 3856,
+          "elapsed_s": 3.598,
+          "frame_ms": 31.1,
+          "position": [
+            -5.6,
+            150.8
+          ]
+        }
+      ],
+      "view": "south-market"
+    },
+    {
+      "fps": 60.0,
+      "map": "jade",
+      "max_draws": 4125,
+      "max_ms": 30.889,
+      "max_primitives": 3322998,
+      "moved_m": 13.73,
+      "n": 241,
+      "output_px": [
+        3024,
+        1890
+      ],
+      "over25": 5,
+      "over50": 0,
+      "p50_ms": 16.622,
+      "p95_ms": 17.124,
+      "p99_ms": 29.579,
+      "sampled_process_monitor_p95_ms": 28.438,
+      "scale_3d": 0.591552376747131,
+      "slow_frames": [
+        {
+          "draws": 4075,
+          "elapsed_s": 0.496,
+          "frame_ms": 29.5,
+          "position": [
+            -5.08,
+            161.59
+          ]
+        },
+        {
+          "draws": 4109,
+          "elapsed_s": 1.163,
+          "frame_ms": 29.58,
+          "position": [
+            -5.45,
+            159.29
+          ]
+        },
+        {
+          "draws": 4029,
+          "elapsed_s": 1.512,
+          "frame_ms": 29.43,
+          "position": [
+            -5.64,
+            158.08
+          ]
+        },
+        {
+          "draws": 4091,
+          "elapsed_s": 2.531,
+          "frame_ms": 30.58,
+          "position": [
+            -5.81,
+            154.53
+          ]
+        },
+        {
+          "draws": 3883,
+          "elapsed_s": 3.547,
+          "frame_ms": 30.89,
+          "position": [
+            -5.61,
+            150.98
+          ]
+        }
+      ],
+      "view": "south-market-repeat-1"
+    },
+    {
+      "fps": 60.0,
+      "map": "jade",
+      "max_draws": 4145,
+      "max_ms": 30.473,
+      "max_primitives": 3173466,
+      "moved_m": 11.74,
+      "n": 241,
+      "output_px": [
+        3024,
+        1890
+      ],
+      "over25": 5,
+      "over50": 0,
+      "p50_ms": 16.58,
+      "p95_ms": 17.631,
+      "p99_ms": 29.916,
+      "sampled_process_monitor_p95_ms": 23.834,
+      "scale_3d": 0.591552376747131,
+      "slow_frames": [
+        {
+          "draws": 3831,
+          "elapsed_s": 0.679,
+          "frame_ms": 29.13,
+          "position": [
+            -5.17,
+            160.96
+          ]
+        },
+        {
+          "draws": 4019,
+          "elapsed_s": 1.413,
+          "frame_ms": 29.92,
+          "position": [
+            -5.59,
+            158.43
+          ]
+        },
+        {
+          "draws": 4034,
+          "elapsed_s": 1.696,
+          "frame_ms": 29.51,
+          "position": [
+            -5.71,
+            157.44
+          ]
+        },
+        {
+          "draws": 4085,
+          "elapsed_s": 2.714,
+          "frame_ms": 30.45,
+          "position": [
+            -5.97,
+            155.77
+          ]
+        },
+        {
+          "draws": 3953,
+          "elapsed_s": 3.73,
+          "frame_ms": 30.47,
+          "position": [
+            -5.94,
+            152.36
+          ]
+        }
+      ],
+      "view": "south-market-repeat-2"
+    },
+    {
+      "fps": 59.8,
+      "map": "jade",
+      "max_draws": 4120,
+      "max_ms": 39.413,
+      "max_primitives": 3202332,
+      "moved_m": 13.67,
+      "n": 240,
+      "output_px": [
+        3024,
+        1890
+      ],
+      "over25": 6,
+      "over50": 0,
+      "p50_ms": 16.578,
+      "p95_ms": 17.342,
+      "p99_ms": 31.445,
+      "sampled_process_monitor_p95_ms": 34.982,
+      "scale_3d": 0.591552376747131,
+      "slow_frames": [
+        {
+          "draws": 3686,
+          "elapsed_s": 0.861,
+          "frame_ms": 28.35,
+          "position": [
+            -5.27,
+            160.32
+          ]
+        },
+        {
+          "draws": 3625,
+          "elapsed_s": 0.972,
+          "frame_ms": 39.41,
+          "position": [
+            -5.33,
+            159.98
+          ]
+        },
+        {
+          "draws": 4026,
+          "elapsed_s": 1.884,
+          "frame_ms": 29.95,
+          "position": [
+            -5.77,
+            156.8
+          ]
+        },
+        {
+          "draws": 3966,
+          "elapsed_s": 2.903,
+          "frame_ms": 31.45,
+          "position": [
+            -5.74,
+            153.25
+          ]
+        },
+        {
+          "draws": 3856,
+          "elapsed_s": 3.436,
+          "frame_ms": 31.48,
+          "position": [
+            -5.62,
+            151.38
+          ]
+        },
+        {
+          "draws": 3956,
+          "elapsed_s": 3.92,
+          "frame_ms": 30.98,
+          "position": [
+            -5.6,
+            149.69
+          ]
+        }
+      ],
+      "view": "south-market-repeat-3"
+    }
+  ],
+  "scale_3d": 0.591552376747131,
+  "startup_ms": {
+    "jade": 4949.8
+  },
+  "warmup_seconds": 1.8
+}

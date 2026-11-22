@@ -1,0 +1,1 @@
+LIVE_TRADES { &"JadeVendor_tools": "forge_strike", &"JadeVendor_furniture": "plane_wood", &"JadeVendor_clothes": "draw_thread", &"JadeVendor_almond": "cook", &"JadeVendor_farm": "sort_seed", &"JadeVendor_spice": "cook" } total_residents_and_shopkeepers=26 moving_residents=20 actors_observed_acting=15

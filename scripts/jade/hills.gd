@@ -22,6 +22,12 @@ static func build(builder: SceneTree) -> void:
 					var folds:=noise.get_noise_2d(x,z);var ridges:=1.-absf(noise.get_noise_2d(x+481.,z))
 					var peak: float=pow(ridges,3.)*48.+folds*65.+16.*sin(a*9.+t*6.)
 					var h:=(-6.+smoothstep(0.,.24,t)*(8.+11.*t+peak*.15))*(1.-.68*smoothstep(.51,.94,sin(a)))
+					# Across the river the two nearer shoulders overlap beneath the painted far peaks.
+					# Leave a saddle behind the central palace and an open horizon at the ferry.
+					var shoulder:=maxf(exp(-pow(angle_difference(a,-2.09)/.33,2.)),.80*exp(-pow(angle_difference(a,-1.06)/.25,2.)))
+					var depth:=exp(-pow((t-.29-.048*sin(6.*a))/.16,2.))
+					h+=shoulder*depth*(64.+24.*folds+14.*ridges)
 					var tint:=Color("35594e").lerp(Color("829485"),clampf(h/120.+folds*.28,0,1)).lerp(Color("77969c"),t*.57)
+					tint=tint.lerp(Color("627f80"),shoulder*depth*.45)
 					st.set_color(tint.srgb_to_linear());st.add_vertex(Vector3(x,h,z))
 		st.index();st.generate_normals();var m:=G.mesh(builder.world,st.commit(),Vector3.ZERO,stone,"FoldedMountains");m.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF

@@ -58,10 +58,18 @@ static func bake_room(room: Node3D, names: Array = ["Exterior","Front","Rear","W
 			sections[section] = [limit,pieces]
 	room.set("sight_sections",sections)
 
-func hits(begin: Vector3,end: Vector3) -> bool:
+func prepare_tree() -> void:
 	if tree == null:
 		tree = TriangleMesh.new()
 		tree.create_from_faces(triangles)
+
+static func prepare_sections(sections: Dictionary) -> void:
+	for section: Array in sections.values():
+		for piece: Array in section[1]:
+			piece[2].prepare_tree()
+
+func hits(begin: Vector3,end: Vector3) -> bool:
+	prepare_tree()
 	return not tree.intersect_segment(begin,end).is_empty()
 
 static func obscures(section: Array,head: Vector3,eye: Vector3) -> bool:

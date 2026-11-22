@@ -1,0 +1,251 @@
+PASS 沿河支巷玩家可见 1.05
+PASS 沿河支巷玩家可见 1.65
+PASS 沿河支巷玩家可见 2.1
+PASS 沿河支巷镜头近处畅通 (0.2, 0.2)
+PASS 沿河支巷镜头近处畅通 (0.5, 0.2)
+PASS 沿河支巷镜头近处畅通 (0.8, 0.2)
+PASS 沿河支巷镜头近处畅通 (0.2, 0.5)
+PASS 沿河支巷镜头近处畅通 (0.2, 0.8)
+PASS 沿河支巷镜头近处畅通 (0.34, 0.67)
+PASS 从街面回望茶棚可见屋面与门脸
+PASS 铜鹤基座露出宫墙 (-9.4, 18.1895, -141.0)
+PASS 铜鹤基座露出宫墙 (9.4, 18.1895, -141.0)
+PASS 铜鹤基座露出宫墙 (-13.0, 23.0, -158.0)
+PASS 铜鹤基座露出宫墙 (13.0, 23.0, -158.0)
+PASS 铜鹤基座露出宫墙 (123.0, 6.0, -36.0)
+PASS 铜鹤基座露出宫墙 (-116.0, 6.0, -36.0)
+PASS spice 专属陈列
+PASS spice 专属货案与通用货架分离
+PASS almond 专属陈列
+PASS almond 专属货案与通用货架分离
+PASS tools 专属陈列
+PASS tools 专属货案与通用货架分离
+PASS farm 专属陈列
+PASS farm 专属货案与通用货架分离
+PASS drum 从街面进入
+PASS drum 上楼
+PASS drum 平台转向
+PASS drum 走进上层
+PASS drum 走出上层
+PASS drum 回到梯口
+PASS drum 下至街面
+PASS 宣时鼓阁 从御道上台基
+PASS 宣时鼓阁 从台基到门前
+PASS 宣时鼓阁 迈过门槛
+PASS 宣时鼓阁 出门
+PASS 宣时鼓阁 回到台基前沿
+PASS 宣时鼓阁 下台基回御道
+PASS baihe 从街面进入
+PASS 白鹤礼馆 上梯
+PASS 白鹤礼馆 到侧廊
+PASS 白鹤礼馆 到栏杆开口
+PASS 白鹤礼馆 进上层看台
+PASS 白鹤礼馆 离开看台
+PASS 白鹤礼馆 沿廊返回
+PASS 白鹤礼馆 转回梯口
+PASS 白鹤礼馆 下至街面
+PASS 白鹤礼馆 从御道上台基
+PASS 白鹤礼馆 从台基到门前
+PASS 白鹤礼馆 迈过门槛
+PASS 白鹤礼馆 出门
+PASS 白鹤礼馆 回到台基前沿
+PASS 白鹤礼馆 下台基回御道
+PASS spice 从街面进入
+PASS spice 上楼
+PASS spice 平台转向
+PASS spice 走进上层
+PASS spice 走出上层
+PASS spice 回到梯口
+PASS spice 下至街面
+PASS oil 从街面进入
+PASS basket 从街面进入
+PASS stitch 从街面进入
+PASS stitch 上楼
+PASS stitch 平台转向
+PASS stitch 走进上层
+PASS stitch 走出上层
+PASS stitch 回到梯口
+PASS stitch 下至街面
+PASS lacquer 从街面进入
+PASS almond 从街面进入
+PASS pipa 从街面进入
+PASS pickle 从街面进入
+PASS sail 从街面进入
+PASS cot 从街面进入
+PASS cot 上楼
+PASS cot 平台转向
+PASS cot 走进上层
+PASS cot 走出上层
+PASS cot 回到梯口
+PASS cot 下至街面
+PASS weave 从街面进入
+PASS pastry 从街面进入
+PASS caligraphy 从街面进入
+PASS poetry 从街面进入
+PASS herbal 从街面进入
+PASS weir 从街面进入
+PASS duty 从街面进入
+PASS duty 上楼
+PASS duty 平台转向
+PASS duty 走进上层
+PASS duty 走出上层
+PASS duty 回到梯口
+PASS duty 下至街面
+PASS books 从街面进入
+PASS silversmith 从街面进入
+PASS dye 从街面进入
+PASS hostel 从街面进入
+PASS hostel 上楼
+PASS hostel 平台转向
+PASS hostel 走进上层
+PASS hostel 走出上层
+PASS hostel 回到梯口
+PASS hostel 下至街面
+PASS potter 从街面进入
+PASS ledger 从街面进入
+PASS noodle 从街面进入
+PASS stage 从街面进入
+PASS 枕河戏楼 上梯
+PASS 枕河戏楼 到侧廊
+PASS 枕河戏楼 到栏杆开口
+PASS 枕河戏楼 进上层看台
+PASS 枕河戏楼 离开看台
+PASS 枕河戏楼 沿廊返回
+PASS 枕河戏楼 转回梯口
+PASS 枕河戏楼 下至街面
+PASS post 从街面进入
+PASS carver 从街面进入
+PASS reading 从街面进入
+PASS fiddler 从街面进入
+PASS incense 从街面进入
+PASS tailorhome 从街面进入
+PASS ferry 从街面进入
+PASS ferry 上楼
+PASS ferry 平台转向
+PASS ferry 走进上层
+PASS ferry 走出上层
+PASS ferry 回到梯口
+PASS ferry 下至街面
+PASS tavern 从街面进入
+PASS tavern 上楼
+PASS tavern 平台转向
+PASS tavern 走进上层
+PASS tavern 走出上层
+PASS tavern 回到梯口
+PASS tavern 下至街面
+PASS farm 从街面进入
+PASS clothes 从街面进入
+PASS clothes 上楼
+PASS clothes 平台转向
+PASS clothes 走进上层
+PASS clothes 走出上层
+PASS clothes 回到梯口
+PASS clothes 下至街面
+PASS tools 从街面进入
+PASS furniture 从街面进入
+PASS furniture 上楼
+PASS furniture 平台转向
+PASS furniture 走进上层
+PASS furniture 走出上层
+PASS furniture 回到梯口
+PASS furniture 下至街面
+PASS workshop 从街面进入
+PASS tea 从街面进入
+PASS tea 上楼
+PASS tea 平台转向
+PASS tea 走进上层
+PASS tea 走出上层
+PASS tea 回到梯口
+PASS tea 下至街面
+PASS guild 从街面进入
+PASS guild 上楼
+PASS guild 平台转向
+PASS guild 走进上层
+PASS guild 走出上层
+PASS guild 回到梯口
+PASS guild 下至街面
+PASS inn 从街面进入
+PASS inn 上楼
+PASS inn 平台转向
+PASS inn 走进上层
+PASS inn 走出上层
+PASS inn 回到梯口
+PASS inn 下至街面
+PASS kiln 从街面进入
+PASS academy 从街面进入
+PASS dojo 从街面进入
+PASS paper 从街面进入
+PASS garden 从街面进入
+PASS farmhouse 从街面进入
+PASS audience 从街面进入
+PASS archive 从街面进入
+PASS music 从街面进入
+PASS banquet 从街面进入
+PASS chamber 从街面进入
+PASS scribe 从街面进入
+PASS scribe 上楼
+PASS scribe 平台转向
+PASS scribe 走进上层
+PASS scribe 楼上有专属互动
+PASS scribe 可以在楼上阅卷或试染
+PASS scribe 走出上层
+PASS scribe 回到梯口
+PASS scribe 下至街面
+PASS silk 从街面进入
+PASS silk 上楼
+PASS silk 平台转向
+PASS silk 走进上层
+PASS silk 楼上有专属互动
+PASS silk 可以在楼上阅卷或试染
+PASS silk 走出上层
+PASS silk 回到梯口
+PASS silk 下至街面
+PASS 两座跨街步廊
+PASS 跨街廊 z=116 登廊
+PASS 跨街廊 z=116 过街
+PASS 跨街廊 z=116 走下对侧
+PASS 跨街廊 z=116 登廊
+PASS 跨街廊 z=116 过街
+PASS 跨街廊 z=116 走下对侧
+PASS 跨街廊 z=116 桥底步行
+PASS 跨街廊 z=69 登廊
+PASS 跨街廊 z=69 过街
+PASS 跨街廊 z=69 走下对侧
+PASS 跨街廊 z=69 登廊
+PASS 跨街廊 z=69 过街
+PASS 跨街廊 z=69 走下对侧
+PASS 跨街廊 z=69 桥底步行
+PASS 玉带河 -108.0 向北过桥
+PASS 玉带河 -108.0 向南过桥
+PASS 玉带河 0.0 向北过桥
+PASS 玉带河 0.0 向南过桥
+PASS 玉带河 108.0 向北过桥
+PASS 玉带河 108.0 向南过桥
+PASS 藕香水榭 入园 (106.0, -22.0)
+PASS 藕香水榭 入园 (111.0, -23.0)
+PASS 藕香水榭 入园 (114.0, -26.0)
+PASS 藕香水榭 入园 (117.0, -29.0)
+PASS 藕香水榭 入园 (118.55, -30.35)
+PASS 藕香水榭 入园 (119.0, -33.0)
+PASS 藕香水榭 入园 (119.0, -37.0)
+PASS 藕香水榭 入园 (122.0, -40.0)
+PASS 藕香水榭 返程 (119.0, -37.0)
+PASS 藕香水榭 返程 (119.0, -33.0)
+PASS 藕香水榭 返程 (118.55, -30.35)
+PASS 藕香水榭 返程 (117.0, -29.0)
+PASS 藕香水榭 返程 (114.0, -26.0)
+PASS 藕香水榭 返程 (111.0, -23.0)
+PASS 藕香水榭 返程 (106.0, -22.0)
+PASS 藕香水榭 返程 (106.0, -16.0)
+PASS 御道通往掖门 x=-13.2
+PASS 承天门通道北行 x=-13.2
+PASS 承天门通道南行 x=-13.2
+PASS 承天门通道北行 x=0.0
+PASS 承天门通道南行 x=0.0
+PASS 御道通往掖门 x=13.2
+PASS 承天门通道北行 x=13.2
+PASS 承天门通道南行 x=13.2
+PASS 南码头步行入城
+PASS 宫阶北行
+PASS 宫阶南行
+JADE_WALKING_ROUTES passes=250 failures=[]

@@ -6,13 +6,24 @@ static var meshes: Dictionary={}
 static var spray_material: ShaderMaterial
 static var bark_by_species: Array[ShaderMaterial] = []
 static var leaf_material: ShaderMaterial
+const LEAF_LENGTH:=[.24,.16,.17,.25]
+const LEAF_WIDTH:=[.025,.049,.083,.070]
 static func blade(st: SurfaceTool,p: Vector3,axis: Vector3,width: float,color_: Color,fan: bool) -> void:
 	var right:=Vector3(-axis.z,.04,axis.x).normalized()*width
 	var center:=p+axis*.52+Vector3.UP*width*.22
 	var rim: Array=[p,p+axis*.36+right*.82,p+axis*.80+right*(1. if fan else .51),p+axis-right*.09,p+axis*.77-right*(1. if fan else .57),p+axis*.32-right*.78]
-	for k in range(6):
-		for v in [center,rim[k],rim[(k+1)%6]]:
+	if fan:
+		rim=[p,p+axis*.53+right*.58,p+axis*.86+right,p+axis*.99+right*.56,p+axis*.84,p+axis*.98-right*.57,p+axis*.85-right,p+axis*.52-right*.58]
+	for k in range(rim.size()):
+		for v in [center,rim[k],rim[(k+1)%rim.size()]]:
 			st.set_color(color_.lightened(.045 if v==center else 0.).srgb_to_linear());st.set_normal((Vector3.UP-axis.normalized()*.23).normalized());st.add_vertex(v)
+static func textured_spray(st: SurfaceTool,variant: int,stem: Vector3,tip: Vector3,half_width: float) -> void:
+	var axis:=tip-stem
+	var across:=Vector3(-axis.z,.06,axis.x).normalized()*half_width
+	for corner: Vector2 in [Vector2.ZERO,Vector2.DOWN,Vector2.RIGHT,Vector2.RIGHT,Vector2.DOWN,Vector2.ONE]:
+		st.set_uv((Vector2(variant%2,variant/2)+Vector2(.012+.976*corner.x,.988-.976*corner.y))*.5)
+		st.set_normal((axis.normalized()*.30+Vector3.UP).normalized())
+		st.add_vertex(stem+axis*corner.y+across*(2.*corner.x-1.))
 static func model(variant: int,far: bool) -> ArrayMesh:
 	var key:=Vector2i(variant,int(far))
 	if meshes.has(key):return meshes[key]
@@ -60,21 +71,23 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 			var end:=elbow+d*(1.+.22*(k%3))+Vector3.UP*(-1.8 if variant==0 else .38*sin(j*1.9+k))
 			Forest.tube(wood,[twig,elbow,end],[.038,.021,.006],4)
 			if not far or k%2==0:
-				var axis:=Vector3(d.x*.62,.88,d.z*.62).normalized()
-				var cross:=Vector3(-d.z,.1,d.x).normalized();var width:=1.1 if far else .88
-				for c in [Vector2(0,0),Vector2(0,1),Vector2(1,0),Vector2(1,0),Vector2(0,1),Vector2(1,1)]:
-					sprays.set_uv((Vector2(variant%2,variant/2)+Vector2(.012+.976*c.x,.988-.976*c.y))*.5)
-					sprays.set_normal((d*.45+Vector3.UP*.85).normalized());sprays.add_vertex(twig+axis*c.y*2.25+cross*(c.x-.5)*2.*width)
+				var rise: float=-1.21 if variant==0 else .68+.32*sin(j+k)
+				var crown:=elbow+d*(1.21 if far else .96)+Vector3.UP*rise
+				textured_spray(sprays,variant,twig.lerp(elbow,.67),crown,.76 if far else .52)
+				if not far:
+					var turned:=d.rotated(Vector3.UP,-.84 if (k+j)%2==0 else .91)
+					var base:=elbow.lerp(end,.53)
+					textured_spray(sprays,variant,base,base+turned*.81+Vector3.UP*(rise*.84),.46)
 			if far:continue # The distant crown uses the textured sprays and physical limbs.
 			for m in range(6):
 				var t: float=(m+.5)/8.;var at:=elbow.lerp(end,t)
 				for side in [-1,1]:
 					var dir:=d.rotated(Vector3.UP,side*.82)
 					var leaf:=Color(palette[0]).lerp(Color(palette[1]),rnd.randf_range(.12,1.))
-					blade(greens,at,(dir*(.43 if variant!=1 else .27)+Vector3.UP*(-.32 if variant==0 else .10)),.05 if variant==0 else .14,Color("73835c") if variant==1 else leaf,variant==2)
+					blade(greens,at,dir*LEAF_LENGTH[variant]+Vector3.UP*(-.13 if variant==0 else .04),LEAF_WIDTH[variant],Color("73835c") if variant==1 else leaf,variant==2)
 					if variant==1:
 						for petal in range(5):
-							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.23,Vector3(cos(phi)*.14,.065,sin(phi)*.14),.067,leaf,true)
+							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.15,Vector3(cos(phi)*.069,.032,sin(phi)*.069),.035,leaf,false)
 	wood.generate_normals();wood.index();wood.set_material(bark_by_species[variant])
 	var result:=wood.commit()
 	if not far:greens.index();greens.set_material(leaf_material);greens.commit(result)

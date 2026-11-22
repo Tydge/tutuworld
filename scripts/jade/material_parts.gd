@@ -11,6 +11,11 @@ static func family(material: Material,kind: String) -> String:
 	if kind.begins_with("jade_tree_") and material is StandardMaterial3D:return "foliage"
 	if material is StandardMaterial3D:
 		var pigment: String=material.albedo_color.to_html(false)
+		var signs:=preload("res://scripts/jade/shop_signs.gd")
+		if kind in signs.KINDS:
+			if pigment==signs.BRASS:return "gilding"
+			if pigment in [signs.CELADON,signs.IRON] or material.albedo_texture==preload("res://assets/jade/swallows.png"):return "emblem"
+			return "wood"
 		if kind=="jade_smith_rack" and pigment in ["647574","a1aeaa","6e7c79","8b9892","9d845d"]:return "iron"
 		if kind=="jade_pastry_board" and pigment in ["cc9c63","a86d46","755038"]:return "pastry"
 		if kind=="jade_steam_table":
@@ -24,7 +29,10 @@ static func family(material: Material,kind: String) -> String:
 				"masonry","lime","plaster","stone_relief","lotus_marble","soft_moss_rock_v1":return "stone"
 				"swallows","brocade","egret":return "fabric"
 				"tiles","amber_tiles":return "ceramic"
-				"quay_oak","lacquer","polychrome","cloud_beam","coffer","wood_relief","casement","crane_panel":return "wood"
+				"quay_oak":
+					# The original sampan hull slot is persisted separately from its ribs and trim.
+					return "stone" if kind=="jade_sampan" else "wood"
+				"lacquer","polychrome","cloud_beam","coffer","wood_relief","casement","crane_panel":return "wood"
 		if material.vertex_color_use_as_albedo:return "foliage"
 		if material.emission_enabled:return "silk"
 		var c: Color=material.albedo_color

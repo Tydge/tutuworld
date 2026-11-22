@@ -25,6 +25,9 @@ func run() -> void:
 		check(valid,"Every declared part maps to actual geometry with no unassigned surfaces: "+kind)
 		for preset in A.presets():check(A.validate(kind,A.preset(kind,preset)).ok,"Material-family preset validates: "+kind+" / "+preset)
 		n.free()
+	var hull:=A.part("jade_sampan","stone")
+	check("wood" in A.allowed(hull) and "stone" not in A.allowed(hull),"Sampan hull offers wood finishes in the building editor")
+	check(A.validate("jade_sampan",{"stone":{"material":"stone","color":"9c8566"}}).ok,"Earlier hull finishes still load under the original slot ID")
 	var bed:=model("bed");var other:=model("bed");var quilt:=mesh(bed,"quilt");var pillow:=mesh(bed,"pillow");var saved_quilt: Material=quilt.material_override;var saved_pillow: Material=pillow.material_override;var untouched: Material=mesh(other,"frame").material_override
 	var row:={"type":"object","kind":"bed","painted":false,"color":"b8c4a3","style":"original","appearance":{"frame":{"material":"original","color":"8d638f"}}};F.paint(bed,row)
 	check(quilt.material_override==saved_quilt and pillow.material_override==saved_pillow,"Changing the frame preserves bedding materials and patterns")

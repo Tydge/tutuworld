@@ -2528,6 +2528,84 @@
         ]
       }
     ],
+    "jade_teapot_sign": [
+      {
+        "id": "wood",
+        "name": "木架",
+        "family": "wood",
+        "colors": [
+          "795d44"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "黄铜吊件",
+        "family": "metal",
+        "colors": [
+          "ad8651"
+        ]
+      },
+      {
+        "id": "emblem",
+        "name": "青釉壶身",
+        "family": "ceramic",
+        "colors": [
+          "779c88"
+        ]
+      }
+    ],
+    "jade_hammer_sign": [
+      {
+        "id": "wood",
+        "name": "木架",
+        "family": "wood",
+        "colors": [
+          "795d44"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "黄铜吊件",
+        "family": "metal",
+        "colors": [
+          "ad8651"
+        ]
+      },
+      {
+        "id": "emblem",
+        "name": "锻铁锤钳",
+        "family": "metal",
+        "colors": [
+          "606d73"
+        ]
+      }
+    ],
+    "jade_shuttle_sign": [
+      {
+        "id": "wood",
+        "name": "木架",
+        "family": "wood",
+        "colors": [
+          "795d44"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "黄铜吊件",
+        "family": "metal",
+        "colors": [
+          "ad8651"
+        ]
+      },
+      {
+        "id": "emblem",
+        "name": "蓝染绸尾",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      }
+    ],
     "jade_signboard": [
       {
         "id": "fabric",
@@ -2985,8 +3063,9 @@
       },
       {
         "id": "stone",
-        "name": "灰石与粉壁",
-        "family": "stone",
+        "name": "船壳、坐板与桨叶",
+        "family": "wood",
+        "legacy_family": "stone",
         "colors": [
           "9c8566"
         ]

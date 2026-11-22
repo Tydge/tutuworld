@@ -5,6 +5,7 @@ const DOCK:=Vector2(0,209)
 const LIMIT:=Vector2(240,206)
 const TERRACES:=[[-1.,62.,92.],[-1.,124.,156.],[1.,78.,103.],[1.,115.,140.]]
 const FORECOURTS:=[[-21.,-59.,2.63],[20.,-69.,3.10]]
+const PALACE_GATE_Z:=-87.
 const BRIDGES:=[-108.,0.,108.]
 const LOTS:=["jade_mulberry","jade_canal","jade_swallow","jade_reed","jade_pottery","jade_lotus"]
 const LOT_NAMES:=["桑梓里","听潮里","燕归里","芦花里","青瓷里","荷香里"]
@@ -38,15 +39,15 @@ const HOUSES:=[
 	["garden","藕香水榭",106,-38,"pavilion","tea"],["farmhouse","桑农草堂",-176,95,"cottage","inn"],
 	["audience","含章殿",0,-164,"palace","court"],["archive","文渊阁",-36,-132,"court","study"],
 	["music","听韶台",36,-132,"court","music"],["banquet","琼筵殿",-62,-170,"pavilion","tea"],
-	["chamber","栖梧宫",62,-170,"court","inn"],["scribe","尚书房",-24,-100,"court","study"],
-	["silk","尚衣局",24,-100,"court","tailor"]]
+	["chamber","栖梧宫",62,-170,"court","inn"],["scribe","尚书房",-23,-103,"clocktower","study"],
+	["silk","尚衣局",24,-106,"inn","tailor"]]
 static func river_z(x: float) -> float:return 9.*sin(x*.015)
 static func lane(z: float) -> float:return 9.*sin((z-38.)*.041)*sin(clampf((z-30.)/167.,0.,1.)*PI) if z>30. else 0.
 static func door_angle(h: Array) -> float:
 	if h[0] in ["drum","baihe"]:return PI/2 if h[2]<0 else -PI/2
 	if h[0]=="weir":return PI
 	if h[3]>37 and absf(h[2])<44:return (-1. if h[2]>0 else 1.)*(PI*.50+.11*sin(h[3]))
-	return {"garden":-.3,"paper":.17,"kiln":.5,"farmhouse":-.25}.get(h[0],0.)
+	return {"garden":-.3,"paper":.17,"kiln":.5,"farmhouse":-.25,"scribe":.32,"silk":-.22,"archive":.13,"music":-.13}.get(h[0],0.)
 static func center(h: Array) -> Vector2:return Vector2(h[2]+lane(h[3]),h[3])
 static func dims(kind: String) -> Vector3:
 	return {"clocktower":Vector3(5.45,5.15,5.8),"theatre":Vector3(6.6,4.6,5.3),"palace":Vector3(12.5,8.,8.),"court":Vector3(8.5,6.3,6.5),"inn":Vector3(7.6,4.,6.),"forge":Vector3(7.2,4.6,4.),"cloister":Vector3(8.7,5.2,5.),"store":Vector3(4.6,4.8,6.3),"pavilion":Vector3(6.5,5.6,4.5),"cottage":Vector3(4.7,3.8,5.3)}.get(kind,Vector3(6.1,4.7,5.1))
@@ -98,21 +99,23 @@ static func height_at(x: float,z: float) -> float:
 static func approach_height(z: float) -> float:
 	return 6.+4.*smoothstep(-58.,-80.,z)
 static func forecourt_height(x: float,z: float,terrain: float) -> float:
-	if z < -87. or z > -41. or absf(x)>40.:return terrain
+	if z < -90. or z > -38. or absf(x)>41.:return terrain
 	for row in FORECOURTS:
 		var side:=signf(row[0])
 		var u: float=(x-row[0])*side+9.7
 		var dz:=absf(z-row[1])
-		if u < -9. or u>25. or dz>15.5:continue
+		if u < -9. or u>25. or dz>20.5:continue
 		var low:=approach_height(row[1])
 		var high: float=low+row[2]
 		var ramp:=clampf((u+5.8)/5.8,0.,1.)
 		var along:=1.-smoothstep(2.65,4.8,dz)
 		var street:=lerpf(approach_height(z),low,along)
 		# At the face, rise behind the stone wall. The middle opening carries the ramp.
-		var fill:=lerpf(street,high,smoothstep(.20,2.7,u))
+		# Leave a level strip outside the return walls. The terrace's own stone deck spans the cut.
+		var inside:=1.-smoothstep(8.2,10.8,dz)
+		var fill:=lerpf(street,high,smoothstep(.20,2.7,u)*inside)
 		var target:=lerpf(fill,lerpf(low,high,ramp),along)
-		var feather:=smoothstep(-9.,-6.2,u)*(1.-smoothstep(20.3,25.,u))*(1.-smoothstep(11.5,15.5,dz))
+		var feather:=smoothstep(-9.,-6.2,u)*(1.-smoothstep(20.3,25.,u))*(1.-smoothstep(15.6,20.5,dz))
 		terrain=lerpf(terrain,target,feather)
 	return terrain
 static func near_entrance(x: float,z: float) -> bool:

@@ -1,0 +1,1 @@
+JADE_AREA_RULES jade={ "boundary_m2": 181836, "supported_m2": 174736, "connected_m2": 174724, "palace_share": 0.31802283376229 } whole_snow_and_ice={ "boundary_m2": 79476, "supported_m2": 73292, "connected_m2": 72784, "palace_share": 0.0 } connected_ratio=2.40058254561442 pass=true

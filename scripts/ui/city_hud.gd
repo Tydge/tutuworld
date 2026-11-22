@@ -115,6 +115,7 @@ func _ready() -> void:
 		buttons.add_child(b)
 	if city.map_id in ["city","icefield","jade"] and city.has_building_world():
 		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
+	if city.map_id=="jade":preload("res://scripts/jade/travel_hud.gd").arrange(bar,buttons)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
 	prompt_card.custom_minimum_size=Vector2(470,57)

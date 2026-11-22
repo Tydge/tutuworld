@@ -1,0 +1,45 @@
+{
+  "actual_cap": 60,
+  "device": "Apple M1 Pro (Apple7)",
+  "driver": "metal",
+  "failures": [
+    "jade/south-market/frames"
+  ],
+  "output_px": [
+    3024,
+    1890
+  ],
+  "renderer": "forward_plus",
+  "sample_seconds": 4.0,
+  "samples": [
+    {
+      "fps": 59.7,
+      "map": "jade",
+      "max_draws": 4114,
+      "max_ms": 55.896,
+      "max_primitives": 3232422,
+      "moved_m": 13.73,
+      "n": 239,
+      "output_px": [
+        3024,
+        1890
+      ],
+      "over25": 5,
+      "over50": 1,
+      "p50_ms": 16.623,
+      "p95_ms": 17.004,
+      "p99_ms": 31.05,
+      "sampled_process_monitor_p95_ms": 51.355,
+      "scale_3d": 0.591552376747131,
+      "view": "south-market"
+    }
+  ],
+  "scale_3d": 0.591552376747131,
+  "startup_ms": {
+    "city": 6709.4,
+    "icefield": 23179.2,
+    "jade": 3710.1,
+    "valley": 3450.1
+  },
+  "warmup_seconds": 1.8
+}

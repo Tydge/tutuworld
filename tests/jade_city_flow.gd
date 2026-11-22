@@ -7,6 +7,27 @@ func _initialize() -> void:call_deferred("run")
 func check(value: bool,label_: String) -> void:
 	print("PASS " if value else "FAIL ",label_)
 	if not value:failures+=1
+func check_lanterns(city: Node3D) -> void:
+	var art:=preload("res://scripts/jade/architecture.gd")
+	var sources: Dictionary={}
+	for lamp: OmniLight3D in city.lantern_pools:
+		sources[lamp.global_position.snapped(Vector3.ONE*.01)]=true
+	var posts:=0
+	for node in city.scenery.get_children():
+		if node.get_meta("furniture_kind","")=="jade_lamp" and sources.has(node.to_global(art.POST_LANTERN).snapped(Vector3.ONE*.01)):
+			posts+=1
+	var facades:=0
+	for house: Array in J.HOUSES:
+		var room: Node3D=city.scenery.get_node(("Shop_" if J.shops().has(house[0]) else "Hall_")+house[0])
+		var size:=J.dims(house[4])
+		for side: float in [-1.,1.]:
+			var wick:=room.to_global(art.facade_lantern(size.x,size.y,size.z,side))
+			if sources.has(wick.snapped(Vector3.ONE*.01)):facades+=1
+	check(posts==13 and facades==7 and sources.size()==24,"Lights aligned to street wicks and shop fronts (street=%d facades=%d total=%d)"%[posts,facades,sources.size()])
+	city.update_lighting(.91)
+	check(city.lantern_pools.all(func(lamp):return lamp.visible and lamp.light_energy>0 and not lamp.shadow_enabled),"The twenty-four night lights illuminate the city without additional shadow passes")
+	city.update_lighting(.5)
+	check(city.lantern_pools.all(func(lamp):return not lamp.visible),"Street lanterns switch off in daylight")
 func check_river_banks(city: Node3D) -> void:
 	var water: ShaderMaterial=city.scenery.get_node("Island").get_meta("sea_material")
 	var atlas: Texture2D=water.get_shader_parameter("river_banks")
@@ -35,6 +56,7 @@ func run() -> void:
 	var city=load(Routes.scene("jade")).instantiate();root.add_child(city);current_scene=city
 	for i in range(15):await physics_frame
 	check_river_banks(city)
+	check_lanterns(city)
 	check(city.npcs.size()==20+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Twenty residents, all shopkeepers and all interiors")
 	var street: Node=city.get_node("StreetLife")
 	session.state().time=8.*150.
@@ -49,10 +71,18 @@ func run() -> void:
 	check(city.targets.has("jade_workshop") and city.targets.has("jade:tea:tea_service_1"),"Workshop and tea room activities")
 	for h in J.HOUSES:
 		var room: Node3D=city.scenery.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0])
+		var signs:=preload("res://scripts/jade/shop_signs.gd")
+		if signs.FRONTAGES.has(h[0]):
+			var wanted: String=signs.FRONTAGES[h[0]]
+			check(room.get_node("Front").get_children().any(func(node):return node.get_meta("furniture_kind","")==wanted and node.has_node("TimberPost")),"Street trade sign on "+str(h[1]))
 		var z: float=room.floor_size.y*.5
 		var start:=room.to_global(Vector3(0,1.,z+1.));var end:=room.to_global(Vector3(0,1.,z-1.))
 		check(city.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(start,end,5)).is_empty(),"Open entrance "+str(h[1]))
-	city.hud.open_panel("map")
+	var shortcuts: HBoxContainer=city.hud.build_button.get_parent()
+	var bar: PanelContainer=shortcuts.get_parent()
+	check(shortcuts.get_child_count()==6 and bar.size.x<=550. and bar.get_rect().end.x<=city.hud.root_ui.size.x,"All six one-click shortcuts fit into the lower-right travel strip")
+	var map_button: Button=shortcuts.get_children().filter(func(item):return item.text.begins_with("地图"))[0]
+	map_button.pressed.emit()
 	for i in range(4):await process_frame
 	check(is_instance_valid(city.hud.map_draw) and city.hud.map_draw.is_visible_in_tree(),"Open the street map from the game HUD")
 	RenderingServer.force_draw()
