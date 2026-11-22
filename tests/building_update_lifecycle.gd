@@ -2,6 +2,7 @@ extends SceneTree
 const Factory=preload("res://scripts/building/module_factory.gd")
 const L=preload("res://scripts/building/layout.gd")
 class Host extends Node3D:
+	var map_id:="city"
 	var scenery: Node3D
 	var camera: Camera3D
 	var bunny: CharacterBody3D

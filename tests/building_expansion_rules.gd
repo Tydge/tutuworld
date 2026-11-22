@@ -5,6 +5,7 @@ const C=preload("res://scripts/building/structure_catalog.gd")
 const E=preload("res://scripts/building/surface_edit.gd")
 const S=preload("res://scripts/services/session.gd")
 class Host extends Node3D:
+	var map_id:="city"
 	var scenery: Node3D
 	var camera: Camera3D
 	var bunny: CharacterBody3D
