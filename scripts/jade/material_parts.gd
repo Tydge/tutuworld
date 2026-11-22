@@ -24,7 +24,7 @@ static func family(material: Material,kind: String) -> String:
 				"masonry","lime","plaster","stone_relief","lotus_marble","soft_moss_rock_v1":return "stone"
 				"swallows","brocade","egret":return "fabric"
 				"tiles","amber_tiles":return "ceramic"
-				"lacquer","polychrome","cloud_beam","coffer","wood_relief","casement","crane_panel":return "wood"
+				"quay_oak","lacquer","polychrome","cloud_beam","coffer","wood_relief","casement","crane_panel":return "wood"
 		if material.vertex_color_use_as_albedo:return "foliage"
 		if material.emission_enabled:return "silk"
 		var c: Color=material.albedo_color

@@ -15,6 +15,9 @@ var startup_ms: Dictionary={}
 func _initialize() -> void:call_deferred("run")
 
 func run() -> void:
+	if not OS.get_cmdline_user_args().has("--test"):
+		push_error("Use tools/dev.py test or pass -- --test to isolate this run from player saves.")
+		quit(2);return
 	output=preload("res://tests/test_support.gd").output_dir()
 	RenderingServer.set_render_loop_enabled(false)
 	root.size=Vector2i(2400,1440)
@@ -121,6 +124,7 @@ func capture_landmarks() -> void:
 		["market-facing-west-stall",J.point(J.lane(122.)+3.8,122.),2.02,.23,9.7,.42],
 		["market-orbit-east",J.point(J.lane(141.)+1.2,140.5),PI*.5,.32,9.7,.42],
 		["market-orbit-west",J.point(J.lane(125.)-1.2,125.4),-PI*.5,.32,9.7,.42],
+		["night-stair-lantern",Vector3(-6.10,6.58,121.21),0.,.19,11.5,.91],
 		["post-from-street",J.point(-45.8,36.5),.12,.19,10.5,.44],
 		["canal-from-bridge",J.point(1.7,-4.),-1.34,.42,8.6,.43],
 		["canal-stone-bank",J.point(31.,J.river_z(31.)+14.2),-.92,.33,7.2,.40],
@@ -188,7 +192,7 @@ func capture_landmarks() -> void:
 			await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_jpg(output+"/jade-"+str(shot[0])+".jpg",.90)
 		print("PLAYER_VIEW ",shot[0]," grounded=",game.bunny.is_on_floor()," position=",game.bunny.global_position)
-		if shot[0] in ["market-orbit-east","market-orbit-west"]:check_visible_body(shot[0])
+		if shot[0] in ["market-orbit-east","market-orbit-west","night-stair-lantern"]:check_visible_body(shot[0])
 		if shot[0] in ["market-facing-east-stall","market-facing-west-stall"]:check_distant_awning(shot[0])
 		if test_flights.has(shot[0]):
 			var steps: Node3D=test_flights[shot[0]]
@@ -252,7 +256,7 @@ func check_visible_body(label_: String) -> void:
 	var right: Vector3=game.camera.global_basis.x
 	var feet: Vector3=game.bunny.global_position
 	var lower: Vector2=game.camera.unproject_position(feet+Vector3.UP*.035)
-	var upper: Vector2=game.camera.unproject_position(feet+Vector3.UP*1.40)
+	var upper: Vector2=game.camera.unproject_position(feet+Vector3.UP*(2.05 if label_=="night-stair-lantern" else 1.40))
 	var edge_l: Vector2=game.camera.unproject_position(feet-right*.77)
 	var edge_r: Vector2=game.camera.unproject_position(feet+right*.77)
 	var full_size:=Vector2i(480,roundi(viewport_size.y*scale_))
@@ -275,7 +279,8 @@ func check_visible_body(label_: String) -> void:
 			if color_difference(actual.get_pixel(x,y),world_only.get_pixel(x,y))>=.075:visible+=1
 	var fraction:=visible/float(maxi(1,expected))
 	print("BODY_VISIBILITY ",label_," visible=",visible," expected=",expected," ratio=",snappedf(fraction,.001))
-	if expected<40 or fraction<.85:failures.append("jade/"+label_+"/visible-body")
+	var minimum:=.955 if label_=="night-stair-lantern" else .85
+	if expected<40 or fraction<minimum:failures.append("jade/"+label_+"/visible-body")
 
 func frame_sample(size_: Vector2i) -> Image:
 	RenderingServer.force_draw()

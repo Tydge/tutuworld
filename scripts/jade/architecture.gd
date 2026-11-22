@@ -12,7 +12,9 @@ static var silk: ShaderMaterial
 static var paper: ShaderMaterial
 static func shade(id: String) -> ShaderMaterial:
 	if id=="silk":
-		if silk==null:silk=ShaderMaterial.new();silk.shader=preload("res://assets/shaders/jade_silk_lantern.gdshader")
+		if silk==null:
+			silk=ShaderMaterial.new();silk.shader=preload("res://assets/shaders/jade_silk_lantern.gdshader")
+			silk.set_shader_parameter("silk_weave",preload("res://assets/jade/brocade.png"))
 		return silk
 	if paper==null:paper=ShaderMaterial.new();paper.shader=preload("res://assets/shaders/jade_window.gdshader")
 	return paper
@@ -33,7 +35,7 @@ static func finish(id: String) -> StandardMaterial3D:
 		m.cull_mode=BaseMaterial3D.CULL_DISABLED;finishes[id]=m
 	return finishes[id]
 # Baked local light from the sill and overhanging eaves is kept on both levels of detail.
-static func eave_tint(shape: PrimitiveMesh, height: float, width: float) -> ArrayMesh:
+static func eave_tint(shape: PrimitiveMesh, height: float, width: float, upright_grain: bool=false) -> ArrayMesh:
 	var arrays:=shape.get_mesh_arrays()
 	var verts: PackedVector3Array=arrays[Mesh.ARRAY_VERTEX]
 	var colours:=PackedColorArray()
@@ -47,6 +49,11 @@ static func eave_tint(shape: PrimitiveMesh, height: float, width: float) -> Arra
 		tint=tint.lerp(Color(.77,.66,.51),base*.42)
 		colours[i]=tint.darkened(edge*overhang*.075)
 	arrays[Mesh.ARRAY_COLOR]=colours
+	if upright_grain:
+		var uv: PackedVector2Array=arrays[Mesh.ARRAY_TEX_UV]
+		for i in range(uv.size()):
+			uv[i]=Vector2(uv[i].y,uv[i].x)
+		arrays[Mesh.ARRAY_TEX_UV]=uv
 	var mesh_:=ArrayMesh.new()
 	mesh_.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 	return mesh_
@@ -62,15 +69,21 @@ static func wall_panel(n: Node3D,point: Vector3,size_: Vector3,skin: String) -> 
 	G.mesh(n,eave_tint(shape,size_.y,size_.x),point,shaded_panels[skin])
 static var carved_window: StandardMaterial3D
 static var column_finishes: Dictionary={}
+# Shopfronts, homes and study courts use rubbed or stained wood; ceremonial posts carry red lacquer.
+const TIMBER_TINTS={"ac8c63":"d7b583","736959":"887f75","718c83":"6b9e94","a1846b":"bd996e","ae9169":"c5b389"}
 static func column(n: Node3D,p: Vector3,r: float,h: float,pigment: String="b4998b") -> void:
 	if not column_finishes.has(pigment):
 		var mat:=finish("lacquer").duplicate() as StandardMaterial3D
 		mat.uv1_scale=Vector3(.45,.64,1.);mat.albedo_color=Color(pigment)
+		if TIMBER_TINTS.has(pigment):
+			mat.albedo_texture=preload("res://assets/terrain/coastal/quay_oak.png")
+			mat.albedo_color=Color(TIMBER_TINTS[pigment]);mat.roughness=.78
+			mat.uv1_scale=Vector3(1.35,.88,1.)
 		mat.vertex_color_use_as_albedo=true
 		column_finishes[pigment]=mat
 	var shape:=CylinderMesh.new()
 	shape.bottom_radius=r;shape.top_radius=r*.98;shape.height=h;shape.radial_segments=16;shape.rings=4
-	G.mesh(n,eave_tint(shape,h,r*2.),p,column_finishes[pigment])
+	G.mesh(n,eave_tint(shape,h,r*2.,TIMBER_TINTS.has(pigment)),p,column_finishes[pigment])
 	var base:=p-Vector3.UP*h*.5
 	var stone:=finish("lotus_marble")
 	G.cylinder(n,base+Vector3.UP*.15,r*1.43,.28,stone,r*1.32)

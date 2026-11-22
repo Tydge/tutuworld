@@ -11,6 +11,9 @@ var passed:=0
 func _initialize() -> void:call_deferred("run")
 
 func run() -> void:
+	if not OS.get_cmdline_user_args().has("--test"):
+		push_error("Use tools/dev.py test or pass -- --test to isolate this run from player saves.")
+		quit(2);return
 	root.size=Vector2i(1440,900)
 	var session=preload("res://scripts/services/session.gd").new()
 	session.name="Session";root.add_child(session)

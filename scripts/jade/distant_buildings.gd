@@ -2,7 +2,7 @@ extends RefCounted
 ## Bake material IDs into UV2 so each distant house draws once. Near shells retain their individual parts.
 const A=preload("res://scripts/jade/architecture.gd")
 const G=preload("res://scripts/geometry.gd")
-const SKINS={"plaster":1,"lime":1,"coffer":5,"wood_relief":2,"lacquer":2,"tiles":3,"masonry":4,"cloud_beam":5,"polychrome":5,"casement":6,"crane_panel":7,"stone_relief":8,"lotus_marble":8,"amber_tiles":11}
+const SKINS={"plaster":1,"lime":1,"coffer":5,"wood_relief":2,"lacquer":2,"tiles":3,"masonry":4,"cloud_beam":5,"polychrome":5,"casement":6,"crane_panel":7,"stone_relief":8,"lotus_marble":8,"amber_tiles":11,"quay_oak":12}
 static var distant: ShaderMaterial
 static var shells: Dictionary={}
 static func finish() -> ShaderMaterial:
@@ -10,6 +10,7 @@ static func finish() -> ShaderMaterial:
 		distant=ShaderMaterial.new();distant.shader=preload("res://assets/shaders/jade_distant_house.gdshader")
 		for pair in [["plaster","lime"],["wood","lacquer"],["tile","tiles"],["masonry","masonry"],["frieze","cloud_beam"],["screen","casement"],["crane","crane_panel"],["relief","stone_relief"],["amber","amber_tiles"]]:
 			distant.set_shader_parameter(pair[0],load("res://assets/jade/"+pair[1]+".png"))
+		distant.set_shader_parameter("timber",preload("res://assets/terrain/coastal/quay_oak.png"))
 	return distant
 static func bake(room: Node3D,kind: String) -> void:
 	if not shells.has(kind):

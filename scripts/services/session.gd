@@ -47,7 +47,9 @@ var offline_backup: Dictionary={}
 var reconnecting:=false
 var leaving_online:=false
 func _ready() -> void:
-	test_mode=OS.get_cmdline_user_args().has("--test")
+	# In this project a scripted SceneTree is a standalone test or developer preview.
+	# F5, the launcher and the exported game enter through the regular scene tree.
+	test_mode=test_mode or OS.get_cmdline_user_args().has("--test") or get_tree().get_script()!=null
 	if test_mode and not OS.get_cmdline_user_args().has("--benchmark"): Engine.max_fps=45
 	if not test_mode: load_save()
 	if not test_mode:load_preferences()
