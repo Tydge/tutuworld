@@ -1,0 +1,27 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+MULTIPLAYER_LIVE_RESULT PASS endpoint=ws://127.0.0.1:59753 checks=42 failures=[]
+Server package SHA-256 verified a40e52e52a8ea99909bcea04682ddf0ab82861de678aa27e83c58c570dff9261
+BUILDING_MULTIPLAYER_RULES_RESULT PASS checks=59 failures=[]
+ICEFIELD_SERVER_RULES_RESULT PASS checks=114 failures=[]
+Version reply {"build":11,"type":"update_required","version":"0.5.1"}
+PASS 0.5.0 receives an update prompt
+PASS register succeeds
+PASS create_character succeeds
+PASS join succeeds
+PASS register succeeds
+PASS create_character succeeds
+PASS join succeeds
+PASS Candidate snapshots contain 48 beds and icefield building capability
+PASS emote succeeds
+PASS Second client sees the emotion
+PASS Shared town NPCs wear the new bow and chain
+FINAL_CANDIDATE_NETWORK_RESULT PASS checks=11
+HTTPS SHA-256 and size verified manifest.json 1154
+HTTPS SHA-256 and size verified TutuWorld-macOS.zip 139137650
+HTTPS SHA-256 and size verified TutuWorld-Windows.zip 126878603
+Public health and signed manifest match {'ok': True, 'version': '0.5.1', 'build': 11}
+UPDATE_DOWNLOAD_RESULT PASS
+MULTIPLAYER_PUBLIC_RESULT PASS checks=4 failures=[]
+UPDATE_RULES_RESULT PASS checks=8 failures=[]
+Original 0.5.0 Mac client installed the public pack and loaded 0.5.1 gameplay resources

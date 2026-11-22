@@ -1,0 +1,40 @@
+{
+  "version": "0.5.1",
+  "build": 11,
+  "protocol": 5,
+  "macOS": {
+    "arches": [
+      "x86_64",
+      "arm64"
+    ],
+    "verified_signature": true,
+    "notarized": false
+  },
+  "windows": {
+    "file_version": "0.5.1.0",
+    "verified_D3D12": true,
+    "physical_device_tested": false
+  },
+  "artifacts": {
+    "city.pck": {
+      "bytes": 116557312,
+      "sha256": "54aee7374a9c5417ec9d74835bdafc30ee7adfb0458e1b5d872457db1194f665"
+    },
+    "TutuWorld-macOS.zip": {
+      "bytes": 139137650,
+      "sha256": "e1db43ca9fa92bb11c9257887af3914c54f194bbd054af176a95f4abc2859829"
+    },
+    "TutuWorld-Windows.zip": {
+      "bytes": 126878603,
+      "sha256": "13ca3e1ec3bbd260ca9438d90f74d9bc4512eef6e0c812ddedcfd64aef4af199"
+    },
+    "server.pck": {
+      "bytes": 97209840,
+      "sha256": "a40e52e52a8ea99909bcea04682ddf0ab82861de678aa27e83c58c570dff9261"
+    },
+    "manifest.json": {
+      "bytes": 1154,
+      "sha256": "1dbf5cd38a8dc313f83b5173af71266f3079c34c2e51024a9a3a07cd5b5b68c9"
+    }
+  }
+}

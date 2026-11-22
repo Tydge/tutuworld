@@ -1,0 +1,147 @@
+{
+  "release_suite": [
+    "project_integrity",
+    "emote_flow",
+    "valley_server_migration",
+    "valley_landscape_rules",
+    "valley_rules",
+    "valley_spawn_regression",
+    "valley_traversal_regression",
+    "valley_deck_clearance",
+    "valley_multiplayer_flow",
+    "motion_buffer_rules",
+    "building_multiplayer_rules",
+    "building_multiplayer_flow",
+    "building_update_lifecycle",
+    "release04_building_rules",
+    "character_roster_rules",
+    "save_transactions",
+    "valley_npc_recovery",
+    "curved_shadow_surface",
+    "woodland_lod_flow",
+    "woodland_lighting_flow",
+    "woodland_shadow_stability",
+    "woodland_sweep_performance"
+  ],
+  "final_results": {
+    "project_integrity": {
+      "result": "PASS",
+      "seconds": 8.1
+    },
+    "emote_flow": {
+      "result": "PASS",
+      "seconds": 9.2
+    },
+    "valley_server_migration": {
+      "result": "PASS",
+      "seconds": 1.0
+    },
+    "valley_landscape_rules": {
+      "result": "PASS",
+      "seconds": 1.0
+    },
+    "valley_rules": {
+      "result": "PASS",
+      "seconds": 0.8
+    },
+    "valley_spawn_regression": {
+      "result": "PASS",
+      "seconds": 11.1
+    },
+    "valley_traversal_regression": {
+      "result": "PASS",
+      "seconds": 42.7
+    },
+    "valley_deck_clearance": {
+      "result": "PASS",
+      "seconds": 12.7
+    },
+    "valley_multiplayer_flow": {
+      "result": "PASS",
+      "seconds": 72.8
+    },
+    "motion_buffer_rules": {
+      "result": "PASS",
+      "seconds": 0.9
+    },
+    "building_multiplayer_rules": {
+      "result": "PASS",
+      "seconds": 7.8
+    },
+    "icefield_server_rules": {
+      "result": "PASS",
+      "seconds": 45.2
+    },
+    "winter_playground_flow": {
+      "result": "PASS",
+      "seconds": 35.9
+    },
+    "harvest_atelier_flow": {
+      "result": "PASS",
+      "seconds": 40.1
+    },
+    "watering_pose_flow": {
+      "result": "PASS",
+      "seconds": 36.6
+    },
+    "building_multiplayer_flow": {
+      "result": "PASS",
+      "seconds": 71.4
+    },
+    "building_update_lifecycle": {
+      "result": "PASS",
+      "seconds": 0.8
+    },
+    "building_expansion_rules": {
+      "result": "PASS",
+      "seconds": 1.2
+    },
+    "release04_building_rules": {
+      "result": "PASS",
+      "seconds": 1.2
+    },
+    "character_roster_rules": {
+      "result": "PASS",
+      "seconds": 0.8
+    },
+    "save_transactions": {
+      "result": "PASS",
+      "seconds": 0.8
+    },
+    "valley_npc_recovery": {
+      "result": "PASS",
+      "seconds": 36.8
+    },
+    "curved_shadow_surface": {
+      "result": "PASS",
+      "seconds": 10.1
+    },
+    "woodland_lod_flow": {
+      "result": "PASS",
+      "seconds": 2.5
+    },
+    "woodland_lighting_flow": {
+      "result": "PASS",
+      "seconds": 5.2
+    },
+    "woodland_shadow_stability": {
+      "result": "PASS",
+      "seconds": 4.8
+    },
+    "woodland_sweep_performance": {
+      "result": "PASS",
+      "seconds": 20.7
+    },
+    "update_integrity": {
+      "result": "PASS",
+      "seconds": 1.0
+    }
+  },
+  "total": 28,
+  "release_total": 22,
+  "retests": [
+    "building_multiplayer_rules",
+    "building_update_lifecycle"
+  ],
+  "auth_unit_tests": 3
+}
