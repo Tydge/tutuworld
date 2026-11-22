@@ -3,6 +3,7 @@ extends RefCounted
 const RADII:=Vector2(178,158)
 const Plots=preload("res://scripts/icefield/building_plots.gd")
 const ICE_LEVEL:=Plots.LEVEL
+const SEA_LEVEL:=-.65
 const DOCK:=Vector2(-104,121)
 const DOCK_HEIGHT:=1.15
 const ACCELERATION:=2.3
@@ -52,14 +53,23 @@ static func height_at(x: float,z: float) -> float:
 	var harbor:=Vector2(maxf(absf(x+104.)-8.,0.),maxf(absf(z-118.)-5.,0.)).length()
 	h=lerpf(h,.92,1.-smoothstep(0.,18.,harbor))
 	return Plots.grade(Vector2(x,z),lerpf(h,-3.5,1.-smoothstep(.82,1.10,inlet(x,z))))
-static func on_dock(p: Vector3) -> bool:return p.x> -108. and p.x< -94. and absf(p.z-DOCK.y)<2.
+static func on_dock(p: Vector3) -> bool:return p.x> -107.6 and p.x< -94.4 and absf(p.z-DOCK.y)<1.55
 static func walk_height(x: float,z: float) -> float:return DOCK_HEIGHT if on_dock(Vector3(x,0,z)) else height_at(x,z)
-static func can_walk(p: Vector3) -> bool:return on_dock(p) or (ellipse(p.x,p.z)<.967 and inlet(p.x,p.z)>1.10 and height_at(p.x,p.z)>-.20)
+static func can_walk(p: Vector3) -> bool:
+	if on_dock(p):return true
+	var radius:=ellipse(p.x,p.z)
+	if radius>=.967 or inlet(p.x,p.z)<=1.10:return false
+	if radius<.91:return true
+	# The open southern coast drops several metres within one terrain triangle.
+	# Leave a full terrain cell before the lip so a landing cannot slide down it.
+	var south:=p.z/RADII.y/maxf(radius,.001)
+	var shore_limit:=lerpf(.967,.915,smoothstep(.48,.78,south))
+	return radius<shore_limit and height_at(p.x,p.z)>.1
 static func is_ice(p: Vector3) -> bool:
 	return contains(p.x,p.z) and p.x>shore_x(p.z)+8. and absf(p.y-ICE_LEVEL)<.24 and not on_dock(p)
 static func normal_at(x: float,z: float) -> Vector3:return Vector3(height_at(x-.3,z)-height_at(x+.3,z),.6,height_at(x,z-.3)-height_at(x,z+.3)).normalized()
 static func arrival() -> Array:return [-107.,height_at(-107,116)+.04,116.]
-static func valid_position(p: Vector3) -> bool:return p.is_finite() and ellipse(p.x,p.z)<1.04 and p.y> -8 and p.y<60
+static func valid_position(p: Vector3) -> bool:return p.is_finite() and p.y>SEA_LEVEL and p.y<60 and can_walk(p)
 static func shop_positions() -> Dictionary:
 	var out: Dictionary={}
 	for b in BUILDINGS:

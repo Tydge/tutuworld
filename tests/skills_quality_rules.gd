@@ -47,10 +47,10 @@ func run() -> void:
 		a=ControlledAuthority.new();a.state.map_id=resource.map;a.state.player_position=[resource.x,resource.get("y",0),resource.z]
 		var item: String=resource.item
 		var skill: String=Stats.work_skill("gather",item)
-		var required:=3 if item in ["birch","iron","sandstone"] else 1
+		var required:=5 if item in ["cedar","silver_ore","nephrite"] else (3 if item in ["birch","iron","sandstone"] else 1)
 		var tool: String=DB.item(item).get("tool","")
 		if tool!="": a.add(tool,1)
-		if required==3:
+		if required>1:
 			var rejected: Dictionary=command(a,"gather",resource.id)
 			check(not rejected.ok and a.state.stamina==100 and a.job.is_empty(),"Level gate before reservation "+resource.id)
 		set_level(a,skill,required)
@@ -163,6 +163,6 @@ func run() -> void:
 	check(reloaded.skill_level("planting")==5 and reloaded.state.skill_rules_version==Stats.PROGRESSION_VERSION,"New save marker prevents repeated reset")
 	session.free()
 	check(DB.starter_clothes().size()==9 and not DB.starter_clothes().has("bow_plaid_rose"),"New shop bows do not silently enlarge starter gifts")
-	check(DB.recipes_for_station("kitchen").size()==7 and DB.catalog().crops.size()==5,"Five crops and seven dishes available")
+	check(DB.recipes_for_station("kitchen").size()==7 and DB.catalog().crops.size()==7,"Seven crops and seven dishes available")
 	print("SKILLS_QUALITY_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

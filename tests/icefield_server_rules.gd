@@ -54,6 +54,7 @@ func winter_playground(actor: RefCounted) -> void:
 		var published:=request(0,"build_finish",{"parcel_id":parcel,"lease":opening.lease,"expected_revision":0,"elements":plan.elements})
 		check(published.ok and server.state().icefield_build_layout.elements.size()==1 and server.state().build_layout.elements.is_empty(),"Publish keeps icefield and city layouts independent")
 		check(is_equal_approx(server.icefield_built_room.global_position.y,L.ICE_LEVEL),"Server builds using the same ice grade")
+		check(not host.is_ice_surface(Vector3(point.x,L.ICE_LEVEL+.20,point.y)) and host.is_ice_surface(Vector3(point.x+5.,L.ICE_LEVEL+.03,point.y)),"Authority distinguishes the real ground floor from bare ice alongside it")
 	var stamps: Array=Trail.STAMPS.keys()
 	for mark in stamps:
 		var target: String="snow_stamp:"+mark
@@ -87,7 +88,7 @@ func run() -> void:
 	server=Server.new();root.add_child(server)
 	while not server.ready_for_players or not server.maps.icefield.navigation.ready_for_paths:await process_frame
 	server.set_process(false) # Fixture sockets are in-memory, not connected peers.
-	check(server.maps.size()==3 and server.maps.icefield.npcs.size()==10,"Authority loads three independent collision worlds and new residents")
+	check(server.maps.size()==4 and server.maps.icefield.npcs.size()==10,"Authority loads four independent collision worlds and new residents")
 	for i in range(3):
 		var account:="frost-account-"+str(i);var created: Dictionary=server.create_character(account,{"name":"冰原联机"+str(i),"species":["bunny","cat_teacher","panda"][i],"starter":"bow_rose"});ids.append(created.character)
 		server.peers[i+1]={"account":account,"character":"","socket":WebSocketPeer.new()}

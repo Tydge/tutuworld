@@ -113,6 +113,270 @@
       "price": 110,
       "description": "厚实椭圆金环交错相扣，顺着胸口自然垂下。",
       "collection": "atelier"
+    },
+    "reed_hat": {
+      "slot": "head",
+      "price": 68,
+      "description": "竹篾斗笠，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "indigo_wrap": {
+      "slot": "head",
+      "price": 74,
+      "description": "靛青包巾，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "peony_pin": {
+      "slot": "head",
+      "price": 150,
+      "description": "绛蕊步摇，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "lotus_crown": {
+      "slot": "head",
+      "price": 126,
+      "description": "鎏金莲冠，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "field_jacket": {
+      "slot": "body",
+      "price": 68,
+      "description": "青苎交领衫，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "ferry_coat": {
+      "slot": "body",
+      "price": 74,
+      "description": "南津短褐，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "crane_robe": {
+      "slot": "body",
+      "price": 126,
+      "description": "松鹤大袖袍，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "vermilion_skirt": {
+      "slot": "body",
+      "price": 138,
+      "description": "绛霞襦裙，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "knot_cord": {
+      "slot": "neck",
+      "price": 68,
+      "description": "平安绳结，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "herb_pouch": {
+      "slot": "neck",
+      "price": 74,
+      "description": "艾草香囊，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "folk",
+      "shop_map": "jade"
+    },
+    "jade_disc": {
+      "slot": "neck",
+      "price": 138,
+      "description": "双穗玉璧，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "cloud_collar": {
+      "slot": "neck",
+      "price": 150,
+      "description": "四合云肩，可在试衣镜调整配色和布纹。",
+      "collection": "jade",
+      "rank": "court",
+      "shop_map": "jade"
+    },
+    "night_moth": {
+      "slot": "head",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    },
+    "star_circlet": {
+      "slot": "head",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    },
+    "tide_mantle": {
+      "slot": "body",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    },
+    "aurora_coat": {
+      "slot": "body",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    },
+    "constellation": {
+      "slot": "neck",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    },
+    "lace_ruff": {
+      "slot": "neck",
+      "description": "用自己栽种的纤维织成。仅可在工坊裁制。",
+      "collection": "jade",
+      "rank": "loom",
+      "shop": ""
+    }
+  },
+  "shop_stock": {
+    "apron": {
+      "item": "apron_honey",
+      "name": "围裙"
+    },
+    "bell": {
+      "item": "bell_blue",
+      "name": "铃铛"
+    },
+    "beret": {
+      "item": "beret_honey",
+      "name": "贝雷帽"
+    },
+    "bow": {
+      "item": "bow_rose",
+      "name": "蝴蝶结"
+    },
+    "overalls": {
+      "item": "overalls_honey",
+      "name": "背带裤"
+    },
+    "scarf": {
+      "item": "scarf_red",
+      "name": "围巾"
+    },
+    "vest": {
+      "item": "vest_sage",
+      "name": "马甲"
+    },
+    "pompom_cap": {
+      "item": "pompom_cap_frost",
+      "name": "绒球针织帽"
+    },
+    "winter_rosette": {
+      "item": "winter_rosette_frost",
+      "name": "冬青耳花"
+    },
+    "loop_cowl": {
+      "item": "loop_cowl_frost",
+      "name": "双层围脖"
+    },
+    "kerchief": {
+      "item": "kerchief_frost",
+      "name": "三角领巾"
+    },
+    "duffle": {
+      "item": "duffle_frost",
+      "name": "牛角扣短袄"
+    },
+    "capelet": {
+      "item": "capelet_frost",
+      "name": "滚边斗篷"
+    },
+    "cowboy_hat": {
+      "item": "cowboy_hat_saddle",
+      "name": "牛仔帽"
+    },
+    "top_hat": {
+      "item": "top_hat_midnight",
+      "name": "礼帽"
+    },
+    "day_dress": {
+      "item": "day_dress_cornflower",
+      "name": "连身裙"
+    },
+    "oxford_shirt": {
+      "item": "oxford_shirt_tide",
+      "name": "衬衫"
+    },
+    "silk_bowtie": {
+      "item": "silk_bowtie_claret",
+      "name": "蝴蝶领结"
+    },
+    "gold_chain": {
+      "item": "gold_chain_cable",
+      "name": "金链子"
+    },
+    "reed_hat": {
+      "item": "reed_hat",
+      "name": "竹篾斗笠"
+    },
+    "indigo_wrap": {
+      "item": "indigo_wrap",
+      "name": "靛青包巾"
+    },
+    "peony_pin": {
+      "item": "peony_pin",
+      "name": "绛蕊步摇"
+    },
+    "lotus_crown": {
+      "item": "lotus_crown",
+      "name": "鎏金莲冠"
+    },
+    "field_jacket": {
+      "item": "field_jacket",
+      "name": "青苎交领衫"
+    },
+    "ferry_coat": {
+      "item": "ferry_coat",
+      "name": "南津短褐"
+    },
+    "crane_robe": {
+      "item": "crane_robe",
+      "name": "松鹤大袖袍"
+    },
+    "vermilion_skirt": {
+      "item": "vermilion_skirt",
+      "name": "绛霞襦裙"
+    },
+    "knot_cord": {
+      "item": "knot_cord",
+      "name": "平安绳结"
+    },
+    "herb_pouch": {
+      "item": "herb_pouch",
+      "name": "艾草香囊"
+    },
+    "jade_disc": {
+      "item": "jade_disc",
+      "name": "双穗玉璧"
+    },
+    "cloud_collar": {
+      "item": "cloud_collar",
+      "name": "四合云肩"
     }
   },
   "items": {
@@ -502,6 +766,144 @@
       "name": "抛光大金链子",
       "color": "e8af46",
       "accent": "ffdf8a"
+    },
+    "reed_hat": {
+      "style": "reed_hat",
+      "name": "竹篾斗笠",
+      "color": "b78e56",
+      "accent": "775638",
+      "pattern": "solid"
+    },
+    "indigo_wrap": {
+      "style": "indigo_wrap",
+      "name": "靛青包巾",
+      "color": "42667a",
+      "accent": "e1d1aa",
+      "pattern": "solid"
+    },
+    "peony_pin": {
+      "style": "peony_pin",
+      "name": "绛蕊步摇",
+      "color": "af4643",
+      "accent": "dfb965",
+      "pattern": "solid"
+    },
+    "lotus_crown": {
+      "style": "lotus_crown",
+      "name": "鎏金莲冠",
+      "color": "cba24f",
+      "accent": "498d83",
+      "pattern": "solid"
+    },
+    "field_jacket": {
+      "style": "field_jacket",
+      "name": "青苎交领衫",
+      "color": "78917b",
+      "accent": "dfd1ac",
+      "pattern": "oxford_tick",
+      "pattern_strength": 0.2,
+      "pattern_scale": 3.1
+    },
+    "ferry_coat": {
+      "style": "ferry_coat",
+      "name": "南津短褐",
+      "color": "866447",
+      "accent": "bfd0b7",
+      "pattern": "herringbone",
+      "pattern_strength": 0.15,
+      "pattern_scale": 3.1
+    },
+    "crane_robe": {
+      "style": "crane_robe",
+      "name": "松鹤大袖袍",
+      "color": "335d68",
+      "accent": "d9b86c",
+      "pattern": "sprig",
+      "pattern_strength": 0.4,
+      "pattern_scale": 2.7
+    },
+    "vermilion_skirt": {
+      "style": "vermilion_skirt",
+      "name": "绛霞襦裙",
+      "color": "9b4547",
+      "accent": "dfb990",
+      "pattern": "orchard_calico",
+      "pattern_strength": 0.35,
+      "pattern_scale": 2.6
+    },
+    "knot_cord": {
+      "style": "knot_cord",
+      "name": "平安绳结",
+      "color": "995244",
+      "accent": "cfaa68",
+      "pattern": "solid"
+    },
+    "herb_pouch": {
+      "style": "herb_pouch",
+      "name": "艾草香囊",
+      "color": "597f67",
+      "accent": "e3ca98",
+      "pattern": "solid"
+    },
+    "jade_disc": {
+      "style": "jade_disc",
+      "name": "双穗玉璧",
+      "color": "77ae96",
+      "accent": "d4ad64",
+      "pattern": "solid"
+    },
+    "cloud_collar": {
+      "style": "cloud_collar",
+      "name": "四合云肩",
+      "color": "934e5b",
+      "accent": "eac485",
+      "pattern": "solid"
+    },
+    "night_moth": {
+      "style": "night_moth",
+      "name": "月蛾触羽",
+      "color": "6b668c",
+      "accent": "e7dfb6",
+      "pattern": "solid"
+    },
+    "star_circlet": {
+      "style": "star_circlet",
+      "name": "织星额环",
+      "color": "3b526d",
+      "accent": "dbbf76",
+      "pattern": "solid"
+    },
+    "tide_mantle": {
+      "style": "tide_mantle",
+      "name": "潮汐披衣",
+      "color": "3d8392",
+      "accent": "bfdcd1",
+      "pattern": "herringbone",
+      "pattern_strength": 0.46,
+      "pattern_scale": 2.7
+    },
+    "aurora_coat": {
+      "style": "aurora_coat",
+      "name": "极夜织光袍",
+      "color": "585581",
+      "accent": "a1d2bd",
+      "pattern": "snowstar",
+      "pattern_strength": 0.42,
+      "pattern_scale": 2.3
+    },
+    "constellation": {
+      "style": "constellation",
+      "name": "星轨坠链",
+      "color": "506789",
+      "accent": "e1c683",
+      "pattern": "solid"
+    },
+    "lace_ruff": {
+      "style": "lace_ruff",
+      "name": "霜羽褶领",
+      "color": "b0c5ce",
+      "accent": "f1e9d7",
+      "pattern": "solid"
     }
   },
   "starters": [

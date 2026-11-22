@@ -89,7 +89,11 @@ func run() -> void:
 						var index: int = mirror.items.find(garment)
 						check(index>=0,"Rack discovers "+garment)
 						if index<0: continue
-						mirror.select_item(index)
+						var tile: Button=mirror.garment_buttons[index]
+						check(tile.text.is_empty() and tile.tooltip_text==DB.item(garment).name and tile.get_node("GarmentPicture") is TextureRect,"Garment tile shows its picture and names the item on hover")
+						check(tile.get_global_rect().encloses(tile.get_child(0).get_global_rect()),"Thumbnail fits its own hit target")
+						tile.pressed.emit()
+						check(mirror.chosen==garment and tile.button_pressed,"Pressing the thumbnail selects the garment for dyeing")
 						mirror.base_dye.color = Color("617893")
 						mirror.pattern_dye.color = Color("eee5ce")
 						mirror.material.select(mirror.options.find("oxford_tick"))

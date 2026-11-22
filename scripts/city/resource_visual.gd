@@ -26,7 +26,22 @@ static func fruit_cluster(tree_: Node3D) -> Node3D:
 	return cluster
 static func make(item: String) -> Node3D:
 	var visual:=Node3D.new()
-	if item=="birch":
+	if item=="cedar":
+		for j in range(3):
+			var p:=Vector3(0,.22+j*.11,(j-1)*.31)
+			var wood:=G.cylinder(visual,p,.23,1.86,G.mat("775039"),.20);wood.rotation.z=PI/2
+			for side in [-1,1]:
+				var end:=G.cylinder(visual,p+Vector3(side*.94,0,0),.19,.012,G.mat("c7975d"));end.rotation.z=PI/2
+				for k in [1,2]:
+					var ring:=TorusMesh.new();ring.inner_radius=.052*k;ring.outer_radius=.052*k+.008
+					G.mesh(visual,ring,p+Vector3(side*.952,0,0),G.mat("855635")).rotation.z=PI/2
+	elif item in ["nephrite","silver_ore"]:
+		for j in range(7):
+			var p:=Vector3(cos(j*2.4)*.35,.20,sin(j*2.4)*.32)
+			var stone:=SphereMesh.new();stone.radial_segments=7;stone.rings=3
+			G.mesh(visual,stone,p,G.mat("718475" if item=="nephrite" else "586368")).scale=Vector3(.8,.72,.74)
+			var gem:=G.cylinder(visual,p+Vector3(.07,.27,0),.16,.24,G.mat("7fb398" if item=="nephrite" else "d1d5d0",.28),.065);gem.rotation.z=.45*sin(j)
+	elif item=="birch":
 		var bark:=ShaderMaterial.new();bark.shader=load("res://assets/shaders/birch_bark.gdshader")
 		var rings:=ShaderMaterial.new();rings.shader=load("res://assets/shaders/log_rings.gdshader")
 		var log:=G.cylinder(visual,Vector3(0,.31,0),.32,2.1,bark,.28);log.rotation.z=PI*.5

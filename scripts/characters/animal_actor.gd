@@ -279,7 +279,9 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 	if not world.can_walk(global_position+Vector3(velocity.x,0,velocity.z)*delta):
 		velocity.x = 0
 		velocity.z = 0
+	var before_step:=global_position
 	move_on_ground(delta,grounded)
+	if world.has_method("guard_shore_landing"):world.guard_shore_landing(self,before_step)
 	if feedback and not was_on_floor and is_on_floor():
 		landed.emit()
 		if action=="": mood_label.text = ""
@@ -375,6 +377,23 @@ func animate_pose(delta: float) -> void:
 				arm_l.x=-.85
 				lean=.04
 				roll=sin(t*2.5)*.012
+			"forge_strike":
+				var swing:=.5+.5*cos(t*5.4)
+				arm_r.x=-.65-1.67*swing*swing
+				arm_l.x=-.63;lean=.10+.08*(1.-swing);head_roll=-.07
+			"draw_thread":
+				var pull:=.5+.5*sin(t*3.7)
+				arm_l=Vector3(-.91,.06,-.36)
+				arm_r=Vector3(-.83,.11,.18+.62*pull);head_roll=.09
+			"plane_wood","sort_seed":
+				var reach:=.5+.5*sin(t*4.4)
+				arm_l.x=-.81-.26*reach;arm_r.x=-.71-.64*reach
+				lean=.12+.08*reach
+				arm_r.z=.13 if action=="plane_wood" else .20+.22*cos(t*2.2)
+			"read_scroll","bow":
+				arm_l=Vector3(-1.05,.1,-.19);arm_r=Vector3(-1.11,-.10,.19)
+				lean=.08 if action=="read_scroll" else .08+.22*sin(minf(t/2.4,1.)*PI)
+				head_roll=.04*sin(t*2.)
 			"refill":
 				arm_r.x=-.65+sin(t*3)*.08;arm_l.x=-.25;lean=.08
 			"eat":

@@ -1,53 +1,127 @@
 extends RefCounted
 ## Distant island in local coordinates, with the mill and skiff usable independently.
+static func coast(angle: float) -> float:
+	return 1.+.10*sin(3.*angle+.4)+.055*cos(5.*angle-.7)+.035*sin(9.*angle)
+
 static func height(p: Vector2) -> float:
 	var q:=p/Vector2(45.,22.)
-	var shape:=maxf(0.,1.-q.length_squared())
-	return -1.65+pow(shape,1.32)*(12.7+3.1*sin(p.x*.09)+1.2*cos(p.y*.19+p.x*.066))
+	var r:=q.length()/coast(q.angle())
+	var shoulder:=maxf(0.,1.-r*r)
+	var ridge:=11.9+3.1*sin(p.x*.085)+1.5*cos(p.y*.17+p.x*.06)
+	var bluff:=smoothstep(.48,.74,r)*(1.-smoothstep(.76,.91,r))
+	return -1.65+pow(shoulder,1.27)*ridge+bluff*(1.8+.85*sin(q.angle()*4.))
 
 static func point(x: float,z: float) -> Vector3:
 	return Vector3(x,height(Vector2(x,z)),z)
 
 static func hill(b) -> void:
-	var rows:=15
+	var rings:=[0.,.10,.20,.30,.40,.50,.59,.67,.72,.76,.80,.84,.89,.94,1.]
 	var segments:=80
-	for j in range(rows):
+	for j in range(rings.size()-1):
 		for k in range(segments):
-			for corner in [Vector2(0,0),Vector2(0,1),Vector2(1,0),Vector2(1,0),Vector2(0,1),Vector2(1,1)]:
-				var r: float=(j+corner.y)/rows
+			for corner in [Vector2i(0,0),Vector2i(0,1),Vector2i(1,0),Vector2i(1,0),Vector2i(0,1),Vector2i(1,1)]:
+				var r: float=rings[j+corner.y]
 				var a: float=(k+corner.x)*TAU/segments
-				var x:=cos(a)*45.*r
-				var z:=sin(a)*22.*r
-				var p:=point(x,z)
-				var normal:=(point(x,z+.2)-point(x,z-.2)).cross(point(x+.2,z)-point(x-.2,z)).normalized()
-				var tone:=Color("87bc80").lerp(Color("bdd88a"),clampf(.5+.5*sin(x*.12+z*.14),0.,1.)*.52)
-				if r>.91:tone=tone.lerp(Color("bdaf85"),smoothstep(.91,1.,r))
+				var x:=cos(a)*45.*r*coast(a)
+				var z:=sin(a)*22.*r*coast(a)
+				var normal:=(point(x,z+.12)-point(x,z-.12)).cross(point(x+.12,z)-point(x-.12,z)).normalized()
+				var meadow:=Color("627955").lerp(Color("97a46c"),.5+.35*sin(x*.22+z*.32)+.15*cos(z*.71))
+				var stone:=Color("817e76").lerp(Color("b2a691"),.5+.42*sin(r*85.+cos(a*9.)))
+				var exposed:=maxf(1.-smoothstep(.67,.90,normal.y),smoothstep(.73,.81,r)*(1.-smoothstep(.86,.94,r)))
+				var tone:=meadow.lerp(stone,exposed).lerp(Color("c6b495"),smoothstep(.90,.97,r))
 				b.surface.set_normal(normal)
 				b.surface.set_color(tone.srgb_to_linear())
-				b.surface.add_vertex(p)
+				b.surface.add_vertex(point(x,z))
+	# A pale lane links the cottages; its edges follow the real slope.
+	for i in range(72):
+		var x:=-28.+i*.78
+		var z:=9.+2.6*sin(x*.11)
+		var nx:=x+.78
+		var nz:=9.+2.6*sin(nx*.11)
+		var lift:=Vector3.UP*.12
+		b.panel(point(x,z-.38)+lift,point(nx,nz-.38)+lift,point(nx,nz+.38)+lift,point(x,z+.38)+lift,Vector3.UP,"b8aa87")
+	for i in range(6):
+		var x: float=[-22.,-16.8,-11.7,10.,15.1,21.5][i]
+		var z:=9.+2.6*sin(x*.11)-2.3
+		cottage(b,point(x,z),i)
+	for row in range(4):
+		for i in range(12):
+			var x:=-9.+i*.82
+			var z:=11.+row*.78+.9*sin(x*.19)
+			var end_z:=11.+row*.78+.9*sin((x+.82)*.19)
+			b.drum(point(x,z)+Vector3.UP*.16,point(x+.82,end_z)+Vector3.UP*.16,.17,.17,["899055","a18e58"][row%2],5)
 	var rng:=RandomNumberGenerator.new()
 	rng.seed=58125
-	for i in range(55):
+	rocky_shore(b,rng)
+	for i in range(92):
 		var a:=rng.randf()*TAU
-		var r:=sqrt(rng.randf_range(.15,.92))
+		var r:=sqrt(rng.randf_range(.07,.78))
 		var p:=point(cos(a)*r*43.,sin(a)*r*20.)
-		if Vector2(p.x-4.,p.z-1.).length()<7.:continue
-		var n:=rng.randf_range(.65,1.32)
-		if i%4:
-			b.drum(p,p+Vector3.UP*2.0*n,.21*n,.14*n,"9d9673",7)
+		if Vector2(p.x-4.,p.z-1.).length()<6. or (p.z>4. and p.z<15. and absf(p.x)<28.):continue
+		var n:=rng.randf_range(.70,1.32)
+		var lean:=Vector3(.20*cos(a),0,.18*sin(a))*n
+		b.drum(p-Vector3.UP*.28,p+Vector3.UP*2.2*n+lean,.24*n,.12*n,"696352",6)
+		if i%3==0:
 			for j in range(3):
-				var angle:=a+j*TAU/3.
-				b.ellipsoid(p+Vector3(cos(angle)*.60,2.02+.32*j,sin(angle)*.50)*n,Vector3(1.16,1.48,1.13)*n,["72a776","80af79","82b87f"][i%3])
+				var foot:=p+Vector3.UP*(.75+j*.83)*n+lean
+				b.drum(foot,foot+Vector3.UP*(1.9-.17*j)*n,(1.18-.24*j)*n,.06*n,["405c53","4c6759","60795d"][j],8)
 		else:
-			b.ellipsoid(p+Vector3.UP*2.05*n,Vector3(.81,2.21,.83)*n,"609b7b")
-	for i in range(5):
-		var x: float=[-17.,-11.,13.,19.,24.][i]
-		var z: float=[10.,11.2,9.,7.5,5.6][i]
-		var p:=point(x,z)
-		b.box(p+Vector3.UP*.69,Vector3(2.75,1.60,2.03),"f5ddb1")
-		for side in [-1.,1.]:
-			b.box(p+Vector3(side*.73,1.79,0),Vector3(1.76,.15,2.33),["e59a72","89b6ac","baa0ac"][i%3],-side*.44)
-		b.box(p+Vector3(.51,.83,1.05),Vector3(.46,.66,.06),"77a89b")
+			for j in range(3):
+				var off:=Vector3(cos(a+j*2.2)*.70,1.70+.36*j,sin(a+j*2.2)*.59)*n
+				var base:=p+off+lean
+				b.ellipsoid(base,Vector3(1.02,.78+.14*j,.91)*n,["49654e","5c7653","708760"][j],.12*sin(a))
+				if j==0:b.drum(p+Vector3.UP*n,base,.12*n,.07*n,"716852",6)
+
+static func shore_point(angle: float,r: float,y: float) -> Vector3:
+	return Vector3(cos(angle)*45.*coast(angle)*r,y,sin(angle)*22.*coast(angle)*r)
+
+static func rocky_shore(b,rng: RandomNumberGenerator) -> void:
+	# Two headlands frame a pocket beach. A broken cap and tilted ledges read at play distance.
+	for span: Vector2 in [Vector2(.05,1.14),Vector2(1.95,2.87),Vector2(3.51,4.35)]:
+		var previous:=PackedVector3Array()
+		for k in range(28):
+			var t:=k/27.
+			var a:=lerpf(span.x,span.y,t)
+			var bluff:=pow(maxf(0.,sin(t*PI)),.58)
+			var protrusion:=.024*sin(a*27.)+.016*cos(a*61.)
+			var base:=shore_point(a,1.035+protrusion,-1.8)
+			var lip:=shore_point(a,.955+protrusion,1.+bluff*(2.2+.6*sin(a*18.)))
+			var cap:=shore_point(a,.83,lip.y+.32)
+			var slope:=shore_point(a,.74,0.)
+			slope.y=height(Vector2(slope.x,slope.z))+.14
+			var seam:=base.lerp(lip,.59+.06*sin(a*21.))+Vector3(cos(a),0,sin(a))*.27
+			var ledge:=seam+Vector3.UP*.27
+			var ring:=PackedVector3Array([base,seam,ledge,lip,cap,slope])
+			if k>0:
+				var out:=Vector3(cos(a),.12,sin(a))
+				for j in range(5):
+					var tone:=Color(["777a74","c1ad8e","9a917e","aea589","7f8c64"][j]).darkened(.085*(1.+sin(a*34.)))
+					b.panel(previous[j],ring[j],ring[j+1],previous[j+1],Vector3.UP if j>=3 else out,tone.to_html(false))
+			previous=ring
+		for i in range(16):
+			var a:=rng.randf_range(span.x,span.y)
+			var p:=shore_point(a,rng.randf_range(1.00,1.13),-.28)
+			var n:=rng.randf_range(.52,1.48)
+			b.ellipsoid(p,Vector3(1.48,.62,.91)*n,["84857b","9c9582","abaa97"][i%3],.20*sin(a*19.))
+
+static func cottage(b,p: Vector3,i: int) -> void:
+	var wall: String=["d6c49d","d0c6ae","d6b898"][i%3]
+	var tile: String=["a35743","516e70","ad7251"][i%3]
+	b.frame=Transform3D(Basis(Vector3.UP,[-.35,.20,.45,-.13,.26,-.48][i]),p)
+	b.box(Vector3(0,-.34,0),Vector3(3.56,1.9,2.64),"938674")
+	b.box(Vector3(0,1.,0),Vector3(3.38,1.9,2.42),wall)
+	for side in [-1.,1.]:
+		b.facet(Vector3(-1.69,1.92,side*1.21),Vector3(1.69,1.92,side*1.21),Vector3(0,3.09,side*1.21),Vector3.BACK*side,wall)
+		b.box(Vector3(side*.94,2.49,0),Vector3(2.27,.21,2.93),tile,-side*.56)
+	b.drum(Vector3(0,3.13,-1.48),Vector3(0,3.13,1.48),.105,.105,tile,8)
+	b.box(Vector3(.93,2.95,-.45),Vector3(.42,1.35,.48),"956654")
+	b.box(Vector3(.93,3.60,-.45),Vector3(.54,.15,.59),"765b4f")
+	for x in [-.86,.88]:
+		b.box(Vector3(x,1.24,1.24),Vector3(.53,.64,.07),"536e70")
+		for side in [-1.,1.]:b.box(Vector3(x+side*.38,1.24,1.26),Vector3(.19,.69,.11),"728c7e")
+		b.box(Vector3(x,.88,1.29),Vector3(.72,.10,.18),"b99d76")
+	b.box(Vector3(0,.77,1.23),Vector3(.50,1.25,.09),"7b6956")
+	b.frame=Transform3D.IDENTITY
 
 static func mill(b) -> void:
 	b.tier(0.,.35,2.55,2.48,"c2ac84")

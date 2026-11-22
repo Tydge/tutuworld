@@ -14,6 +14,8 @@ const FIELD_ICONS := {
 	"pumpkin": preload("res://assets/ui/atelier/pumpkin.png"),
 	"wheat": preload("res://assets/ui/atelier/wheat.png"),
 }
+const JADE_PORTRAITS=preload("res://assets/jade/item_portraits.png")
+static var portraits: Array=[]
 var definition: Dictionary={}
 var item_id := ""
 var icon_extent:=56
@@ -28,6 +30,13 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO,25,Color("eff0dc"))
 	var kind: String=definition.get("kind","")
 	var shape: String=definition.get("style",definition.get("icon",item_id))
+	if portraits.is_empty():portraits=JSON.parse_string(FileAccess.get_file_as_string("res://assets/jade/item_portraits.json"))
+	var portrait:=portraits.find(item_id.trim_prefix("seed_"))
+	if portrait>=0:
+		var source:=Rect2(portrait%6*144,portrait/6*144,144,144)
+		if kind=="seed":draw_style_box(_box(color),Rect2(-17,-20,34,40))
+		draw_texture_rect_region(JADE_PORTRAITS,Rect2(-18,-18,36,36) if kind=="seed" else Rect2(-26,-26,52,52),source)
+		return
 	if FIELD_ICONS.has(shape):
 		draw_texture_rect(FIELD_ICONS[shape],Rect2(-27,-27,54,54),false)
 		return
@@ -160,10 +169,10 @@ func _draw() -> void:
 		draw_circle(Vector2(-7,-5),4,Color("f6bd58"))
 		draw_line(Vector2(0,-13),Vector2(1,-20),Color("89744a"),3,true)
 		draw_colored_polygon(PackedVector2Array([Vector2(0,-16),Vector2(7,-23),Vector2(15,-19),Vector2(7,-14)]),Color("609359"))
-	elif shape in ["branch","birch"]:
+	elif shape in ["branch","birch","cedar"]:
 		draw_line(Vector2(-16,16),Vector2(14,-15),color,6,true)
 		draw_line(Vector2(0,0),Vector2(-2,-16),color,4,true)
-	elif shape in ["limestone","copper","iron","sandstone"]:
+	elif shape in ["limestone","copper","iron","sandstone","silver_ore","nephrite"]:
 		draw_colored_polygon(PackedVector2Array([Vector2(-19,12),Vector2(-17,-5),Vector2(-5,-16),Vector2(14,-11),Vector2(22,9),Vector2(7,18)]),color)
 		draw_line(Vector2(-7,-10),Vector2(0,4),color.lightened(.25),4,true)
 	else:

@@ -32,7 +32,8 @@ func _init() -> void:
 	state["land_parcels"]=preload("res://scripts/building/parcels.gd").empty()
 	state["build_layout"]=preload("res://scripts/building/layout.gd").empty()
 	state["icefield_build_layout"]=preload("res://scripts/building/layout.gd").empty("icefield")
-	for p in DB.plots(): state.plots[p.id] = empty_plot()
+	state["jade_build_layout"]=preload("res://scripts/building/layout.gd").empty("jade")
+	for p in DB.plots()+DB.plots("jade"): state.plots[p.id] = empty_plot()
 	for r in DB.all_resources(): state.resources[r.id] = {"available":true,"respawn_at":0.0,"generation":0}
 	state.stamina_run_elapsed=0.0
 	state.stamina_recovery_elapsed=0.0
@@ -42,17 +43,18 @@ func _init() -> void:
 	state.watering_water={}
 	for id in preload("res://scripts/city/production_facilities.gd").defaults():
 		facility_kinds[id]=preload("res://scripts/city/production_facilities.gd").defaults()[id].kind
-func built_kitchen(id: String) -> Dictionary:
+func built_station(id: String) -> Dictionary:
 	if not id.begins_with("build:"):return {}
 	var row:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(state,state.map_id),id.trim_prefix("build:"))
-	return row if row.get("type","")=="object" and row.get("kind","")=="cooking_counter" else {}
+	return row if row.get("type","")=="object" and row.get("kind","") in ["cooking_counter","jade_workbench","jade_well_kit"] else {}
 func build_base() -> float:return preload("res://scripts/building/parcels.gd").base_height(state.map_id)
 func facility_position(id: String) -> Vector2:
-	var row:=built_kitchen(id)
+	var row:=built_station(id)
 	if not row.is_empty():return Vector2(row.position[0],row.position[1])+preload("res://scripts/building/catalog.gd").rotate_xz(Vector2(0,1.8),row.yaw)
 	return facility_positions.get(id,DB.facilities().get(id,Vector2(INF,INF)))
 func facility_kind(id: String) -> String:
-	if not built_kitchen(id).is_empty():return "kitchen"
+	if id.begins_with("build:"):
+		return {"cooking_counter":"kitchen","jade_workbench":"workshop","jade_well_kit":"well"}.get(built_station(id).get("kind",""),"")
 	return facility_kinds.get(id,"kitchen" if id=="kitchen" else "")
 func near_dining(target: String,chair_id: String="") -> bool:
 	if target=="dining":return state.map_id=="city" and near_position(DB.facilities().dining,3.8)
@@ -169,8 +171,8 @@ func rejected_work(work: Dictionary,message: String) -> Dictionary:
 	refund_work_stamina(work)
 	return {"type":"rejected","message":message}
 func action_duration(verb: String,item: String="") -> float:
-	var kind: String=verb if verb in ["water","plant","weed","harvest"] else ({"limestone":"stone","copper":"mining","branch":"wood","orange":"harvest","birch":"wood","iron":"mining","sandstone":"stone"}.get(item,"") if verb=="gather" else "")
-	return (5.0 if item in ["birch","iron","sandstone"] else ACTION_SECONDS)/multiplier(kind)
+	var kind: String=verb if verb in ["water","plant","weed","harvest"] else ({"cedar":"wood","nephrite":"stone","silver_ore":"mining","limestone":"stone","copper":"mining","branch":"wood","orange":"harvest","birch":"wood","iron":"mining","sandstone":"stone"}.get(item,"") if verb=="gather" else "")
+	return (7. if Stats.work_tier(item)==3 else 5.0 if item in ["birch","iron","sandstone"] else ACTION_SECONDS)/multiplier(kind)
 func fail(message: String) -> Dictionary: return {"ok":false,"message":message,"revision":revision}
 func execute(command: Dictionary) -> Dictionary:
 	var token: String = command.get("id","")
@@ -188,6 +190,7 @@ func _apply(c: Dictionary) -> Dictionary:
 	var verb: String = c.get("verb","")
 	var item: String = c.get("item","")
 	var map_id: String=state.get("map_id","city")
+	if verb=="make_furniture":return preload("res://scripts/building/warehouse.gd").make(self,c)
 	if verb=="buy_land":
 		var land=preload("res://scripts/building/parcels.gd");var parcel: Variant=c.get("parcel_id","")
 		if not parcel is String or map_id!=land.map_for(parcel) or not land.at_sign(Vector3(state.player_position[0],state.player_position[1],state.player_position[2]),parcel):return fail("请先走到想购买的地皮立板旁边。")
@@ -206,10 +209,10 @@ func _apply(c: Dictionary) -> Dictionary:
 		if state.coins<fare: return fail("船票需要 10 贝壳币。")
 		state.coins-=fare;state.map_id=destination;state.player_position=routes.arrival(destination)
 		return {"ok":true,"message":"出发，前往"+routes.title(destination)+"。"}
-	if map_id!="city" and verb in ["plant","water","weed","harvest","refill"]:return fail("这件事要回海岛城才能做哦。")
+	if map_id not in ["city","jade"] and verb in ["plant","water","weed","harvest","refill"]:return fail("这件事要回海岛城才能做哦。")
 	if map_id=="valley" and verb in ["craft","eat","rest"]:return fail("这件事要回海岛城才能做哦。")
 	if map_id=="icefield" and verb in ["craft","eat"] and not str(c.get("target","")).begins_with("build:"):return fail("请找岛上可使用的料理台或餐桌。")
-	if map_id not in ["city","icefield"] and verb in ["buy","sell"]:return fail("请来到有商店的镇上。")
+	if map_id not in ["city","icefield","jade"] and verb in ["buy","sell"]:return fail("请来到有商店的镇上。")
 	var definition := DB.item(item)
 	var quantity := int(c.get("quantity",1))
 	if verb in ["buy","sell"]:
@@ -219,14 +222,17 @@ func _apply(c: Dictionary) -> Dictionary:
 		if quantity<1 or quantity>99 or definition.is_empty(): return fail("物品或数量不正确。")
 		if not job.is_empty(): return fail("先完成手上的事情吧。")
 		if verb=="buy":
-			if definition.get("shop_map",map_id)!=map_id:return fail("这件冬装在绒雪裁缝店出售。")
+			if definition.get("shop_map",map_id)!=map_id:return fail("请到玉京城的店铺购买。" if definition.shop_map=="jade" else "这件冬装在绒雪裁缝店出售。")
 			if not definition.has("price") or definition.get("shop","")!=c.get("shop",""): return fail("这家店没有这件物品。")
+			if definition.kind=="clothing":
+				if DB.Clothes.stock(definition.style).item!=item:return fail("店里按款式出售，配色可以到试衣镜调整。")
+				if DB.Clothes.shop_garment(definition.style,state.inventory)!=item:return fail("这款衣服已经拥有啦。")
 			if definition.kind in ["tool","clothing"] and (count(item)>0 or quantity!=1): return fail("这件已经拥有啦。")
 			var cost := int(definition.price)*quantity
 			if state.coins<cost: return fail("贝壳币还不够。")
 			state.coins -= cost
 			add(item,quantity)
-			return {"ok":true,"message":"买到了 %s × %d"%[definition.name,quantity]}
+			return {"ok":true,"message":"买到了 %s × %d"%[DB.Clothes.stock(definition.style).name if definition.kind=="clothing" else definition.name,quantity]}
 		if c.get("shop","")!="farm" or int(definition.get("sell",0))<=0 or count(item)<quantity: return fail("这件物品暂时不能卖出。")
 		add(item,-quantity)
 		state.coins += int(definition.sell)*quantity
@@ -271,7 +277,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		return {"ok":true,"message":""}
 	if verb=="rest":
 		var bed_id:=str(c.get("target",""))
-		if map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS:
+		if (map_id=="jade" and bed_id.begins_with("jade:")) or (map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS):
 			if not job.is_empty() or not preload("res://scripts/icefield/winter_activities.gd").reachable(self,bed_id,"bed"):return fail("请来到旅舍里，走近一张床。")
 			state.rest_mode="sleep";state.rest_bed=bed_id;sleeping=true;running=false
 			return {"ok":true,"message":""}
@@ -289,12 +295,13 @@ func _apply(c: Dictionary) -> Dictionary:
 	var target: String = c.get("target","")
 	if verb in ["stamp","claim_trail"] or preload("res://scripts/icefield/winter_activities.gd").JOBS.has(verb):return preload("res://scripts/icefield/winter_activities.gd").begin(self,verb,target)
 	if verb=="craft":
+		if not target.begins_with("build:") and target.begins_with("jade_")!=(map_id=="jade"):return fail("请走到当前地图的工作台前。")
 		var recipe_id: String=c.get("recipe","")
 		var recipe:=DB.recipe(recipe_id)
 		if recipe.is_empty() or facility_kind(target)!=recipe.station or not near_position(facility_position(target),3.8): return fail("请来到对应的料理台或工坊工作台。")
-		var built:=built_kitchen(target)
+		var built:=built_station(target)
 		if not built.is_empty() and (preload("res://scripts/building/storeys.gd").at_height(float(state.player_position[1])-build_base())!=int(built.get("storey",0)) or absf(float(state.player_position[1])-(preload("res://scripts/building/storeys.gd").elevation(built)+.18+build_base()))>1.25 or (facility_access.is_valid() and not facility_access.call(target))):return fail("请来到料理台前，留出操作空间。")
-		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return fail("这件工具已经拥有啦。")
+		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return fail("已经有这件成品了。")
 		var locked := recipe_lock_reason(recipe_id)
 		if locked!="": return fail(locked)
 		for ingredient in recipe.ingredients:
@@ -304,8 +311,10 @@ func _apply(c: Dictionary) -> Dictionary:
 		job.stamina_reserved=true
 		return {"ok":true,"message":"正在%s%s，完成后才会使用材料。"%["制造" if recipe.station=="workshop" else "烹饪",recipe.name]}
 	if verb=="refill":
+		if not target.begins_with("build:") and (target=="jade_well")!=(map_id=="jade"):return fail("请靠近本地的水井。")
 		var can:=watering_can_id()
 		if facility_kind(target)!="well" or not near_position(facility_position(target),3.0): return fail("请来到菜园水井旁打水。")
+		if target.begins_with("build:") and facility_access.is_valid() and not facility_access.call(target):return fail("请走到这口井旁的打水位置。")
 		if can=="": return fail("需要先拥有一把水壶，木水壶可以在工具店购买。")
 		if water_left(can)>=DB.water_capacity(can): return fail("水壶已经装满啦。")
 		job={"verb":verb,"target":target,"item":can,"elapsed":0.0,"duration":2.0}
@@ -328,7 +337,7 @@ func _apply(c: Dictionary) -> Dictionary:
 			if r.id==target: source=r; break
 		if source.is_empty() or source.get("map","city")!=map_id or not near_position(Vector2(source.x,source.z),3.5) or not state.resources[target].available: return fail("这里已经采集过了，过会儿再来吧。")
 		var resource_item := DB.item(source.item)
-		if count(resource_item.get("tool",""))<1 and resource_item.has("tool"): return fail("需要%s，工具店可以买到。"%DB.item(resource_item.tool).name)
+		if count(resource_item.get("tool",""))<1 and resource_item.has("tool"): return fail(("需要%s，请到工坊制造。" if resource_item.get("tier",1)==3 else "需要%s，工具店可以买到。")%DB.item(resource_item.tool).name)
 		var locked := resource_lock_reason(source.item)
 		if locked!="": return fail(locked)
 		var cost:=Stats.work_tier(source.item)
@@ -338,8 +347,8 @@ func _apply(c: Dictionary) -> Dictionary:
 		job.stamina_cost=cost
 		return {"ok":true,"message":"正在采集…"}
 	if not state.plots.has(target): return fail("这块土地不属于菜园。")
-	var position_: Vector2=Vector2.ZERO
-	for plot in DB.plots():
+	var position_:=Vector2(INF,INF)
+	for plot in DB.plots(map_id):
 		if plot.id==target: position_=Vector2(plot.x,plot.z); break
 	if not near_position(position_,3.5): return fail("请靠近这块菜地。")
 	var p: Dictionary = state.plots[target]
@@ -416,7 +425,7 @@ func complete(j: Dictionary) -> Dictionary:
 		var recipe:=DB.recipe(j.recipe)
 		if recipe.is_empty() or facility_kind(target)!=recipe.get("station","") or not near_position(facility_position(target),3.8): return rejected_work(j,"离开了工作台，材料没有消耗。")
 		if recipe_lock_reason(j.recipe)!="": return rejected_work(j,"配方等级条件发生变化。")
-		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return rejected_work(j,"已经拥有这件工具，材料没有消耗。")
+		if DB.item(recipe.output).kind in ["tool","clothing"] and count(recipe.output)>0: return rejected_work(j,"已经拥有这件成品，材料没有消耗。")
 		for ingredient in recipe.ingredients:
 			if count(ingredient)<int(recipe.ingredients[ingredient]): return rejected_work(j,"材料不足，制作已取消。")
 		for ingredient in recipe.ingredients: add(ingredient,-int(recipe.ingredients[ingredient]))

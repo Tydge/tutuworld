@@ -97,7 +97,7 @@ func _ready() -> void:
 	if map_id=="city" and has_building_world():
 		preload("res://scripts/city/town_shore.gd").ensure(scenery)
 		preload("res://scripts/building/site.gd").ensure(scenery)
-	if map_id in ["city","icefield"] and has_building_world():
+	if map_id in ["city","icefield","jade"] and has_building_world():
 		if map_id=="icefield":preload("res://scripts/building/site.gd").build_winter(scenery)
 		refresh_land_parcels();session.changed.connect(refresh_land_parcels)
 	if map_id=="city":
@@ -240,7 +240,7 @@ func _ready() -> void:
 	AudioServer.set_bus_mute(0,not session.settings.sound)
 	session.active=true
 	refresh_world()
-	if map_id in ["city","icefield"] and has_building_world():
+	if map_id in ["city","icefield","jade"] and has_building_world():
 		build_mode=preload("res://scripts/building/editor.gd").new();build_mode.name="BuildingEditor";build_mode.city=self;add_child(build_mode)
 	if session.state().get("rest_mode","")=="sleep": enter_sleep(true)
 	if not session.test_mode or OS.get_cmdline_user_args().has("--warmup-test"):
@@ -347,6 +347,10 @@ func _process(delta: float) -> void:
 	if nap_active and bunny.action=="":
 		if not leave_seat():bunny.play_action("nap",1)
 	update_camera(delta)
+	if is_instance_valid(camera) and camera.current:
+		var focus:=bunny.global_position+Vector3.UP*1.4
+		RenderingServer.global_shader_parameter_set("canopy_focus",Vector4(focus.x,focus.y,focus.z,1.))
+		RenderingServer.global_shader_parameter_set("canopy_eye",camera.global_position)
 	update_ambient_lighting()
 	update_occluders(delta)
 	if not session.is_online() and not session.job().is_empty():
@@ -445,7 +449,7 @@ func update_target() -> void:
 		if t.kind=="dining" and t.has("node"):
 			distance=preload("res://scripts/city/dining_service.gd").proximity(self,id)
 		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue
-		if t.kind in ["tailor","atlas","hearth","tea","bakery","stamp"] and not activity_access(id,t.kind):continue
+		if t.kind in ["tailor","atlas","hearth","tea","bakery","stamp","chime","read","footwork"] and not activity_access(id,t.kind):continue
 		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
 		if t.kind in ["bed","bench"] and t.has("node"):
 			distance=FurnitureAccess.distance(t.node,bunny.global_position)
@@ -466,14 +470,14 @@ func update_target() -> void:
 			"workshop": text="E   制造工作台 · 制造道具"
 			"kitchen": text="E   "+t.get("name","海风小厨房")+" · 烹饪料理"
 			"dining": text="E   入座用餐 · 选择料理"
-			"boat": text="E   坐船回海岛城 · 免费" if map_id!="city" else "E   选择航线 · 山谷 / 冰原岛 · 10 贝壳币"
+			"boat": text="E   坐船回海岛城 · 免费" if map_id!="city" else "E   选择航线 · 山谷 / 冰原岛 / 玉京城 · 10 贝壳币"
 			"resource":
 				var locked: String=session.authority.resource_lock_reason(t.item)
 				text="E   %s · %s"%[DB.item(t.item).name,locked] if locked!="" else "E   %s %s · %s 秒 · %d 耐力"%["采摘" if t.item=="orange" else "采集",DB.item(t.item).name,str(snappedf(session.authority.action_duration("gather",t.item),.1)),preload("res://scripts/services/character_stats.gd").work_tier(t.item)]
 			"shop": text="E   和%s聊聊"%t.name
 			"npc": text=("E   轻声看看%s · 熟睡中" if t.node.sleeping else "E   和%s聊聊天")%t.name
 			"bench": text="E   "+t.get("label","坐下来发会儿呆")
-			"tailor","atlas","hearth","tea","bakery","stamp":text="E   "+t.label
+			"tailor","atlas","hearth","tea","bakery","stamp","chime","read","footwork":text="E   "+t.label
 			"bed": text="E   躺下来睡觉 · 耐力恢复 +100%"
 	quick_action=find_quick_action()
 	if not quick_action.is_empty():
@@ -611,7 +615,7 @@ func interact() -> void:
 		"land":
 			if not preload("res://scripts/building/parcels.gd").at_sign(bunny.global_position,t.parcel_id):update_target();return
 			hud.land_parcel_id=t.parcel_id;hud.open_panel("land")
-		"tailor","atlas","hearth","tea","bakery","stamp":
+		"tailor","atlas","hearth","tea","bakery","stamp","chime","read","footwork":
 			if not activity_access(current_target,t.kind):update_target();return
 			interact_with_activity(current_target,t.kind)
 		"plot": hud.open_panel("plot")
@@ -700,7 +704,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 	if verb!="snack" and bunny.position.distance_to(target_position(target))>3.3: return {"ok":false,"message":"再靠近一点吧。"}
 	if verb=="gather" and targets[target].item!="orange" and bunny.position.distance_to(target_position(target))>2.0: return {"ok":false,"message":"再靠近一点，让工具够得着吧。"}
 	if targets.get(target,{}).get("kind","")=="kitchen" and targets[target].has("node") and not facility_access(target):return {"ok":false,"message":"料理台前需要留出安全的操作空间。"}
-	if targets.get(target,{}).get("kind","")=="workshop" and not targets[target].building.contains_position(bunny.global_position): return {"ok":false,"message":"先走进工坊，再使用工作台吧。"}
+	if targets.get(target,{}).get("kind","")=="workshop" and targets[target].has("building") and not targets[target].building.contains_position(bunny.global_position): return {"ok":false,"message":"先走进工坊，再使用工作台吧。"}
 	var dining_seat: Dictionary={}
 	if verb=="eat" and target!="dining":
 		if session.is_online() and network_action_approved:
@@ -729,7 +733,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		bunny.can_move=false
 		var animation: String=("gather_stone" if DB.recipe(item).get("station","")=="workshop" else "cook") if verb=="craft" else verb
 		if preload("res://scripts/icefield/winter_activities.gd").JOBS.has(verb):animation=preload("res://scripts/icefield/winter_activities.gd").JOBS[verb].animation
-		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
+		if verb=="gather": animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","cedar":"gather_wood","nephrite":"gather_stone","silver_ore":"gather_copper","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(targets[target].item,"gather_branch")
 		if verb=="craft" and targets[target].has("work_anchor"): bunny.set_visual_heading(targets[target].work_anchor.global_rotation.y+PI)
 		elif verb=="eat":bunny.set_visual_heading(preload("res://scripts/city/seating.gd").seat(dining_chair).basis.get_euler().y if is_instance_valid(dining_chair) else PI)
 		elif verb=="craft":bunny.set_visual_heading(PI)
@@ -883,6 +887,7 @@ func return_to_title() -> void:
 	session.active=false
 	get_tree().change_scene_to_file("res://scenes/title.tscn")
 func _exit_tree() -> void:
+	if is_instance_valid(camera) and camera.current:RenderingServer.global_shader_parameter_set("canopy_focus",Vector4.ZERO)
 	if is_instance_valid(session): session.authority.running=false
 	if is_instance_valid(session): session.active=false
 
@@ -989,7 +994,7 @@ func update_occluders(delta: float) -> void:
 
 func facility_access(id: String) -> bool:
 	var target: Dictionary=targets.get(id,{})
-	if target.get("kind","")!="kitchen" or not target.has("node"):return id=="kitchen"
+	if target.get("kind","") not in ["kitchen","well","workshop"] or not target.has("node"):return id=="kitchen"
 	var node: Node3D=target.node
 	if not is_instance_valid(node) or bunny.global_position.distance_to(target.position)>3.3:return false
 	if node.has_meta("storey") and preload("res://scripts/building/storeys.gd").at_height(bunny.position.y-float(node.get_meta("storey_base",0.)))!=int(node.get_meta("storey")):return false
@@ -1009,6 +1014,31 @@ func activity_reachable(actor: CharacterBody3D,id: String,kind: String) -> bool:
 	return preload("res://scripts/city/room_activities.gd").reachable(self,actor,id,kind)
 func interact_with_activity(id: String,kind: String) -> void:
 	match kind:
+		"footwork":
+			if not activity_access(id,kind):return
+			var now:=Time.get_ticks_msec()
+			var last:=int(get_meta("practice_beat",0))
+			var step:=int(get_meta("practice_step",0))
+			if last==0 or now-last>1500 or step==4:
+				step=0;hud.notify("起式。跟着四拍鼓声踏步，每拍按一次 E。")
+				for beat in range(1,5):
+					var timer:=get_tree().create_timer(beat*.65)
+					timer.timeout.connect(func():
+						if is_instance_valid(bunny) and activity_access(id,kind):play_tone(138.,.16,.37),CONNECT_ONE_SHOT)
+			elif absi(now-last-650)<230:
+				step+=1;hud.notify(["","定步 · 一","转身 · 二","收势 · 三","四拍合步，练成一轮梅花步！"][step]);play_tone(260.+step*48.,.16,.24)
+				bunny.trigger_emote("laugh")
+			else:
+				hud.notify("步子偏了，听下一拍再试。");step=0
+			set_meta("practice_step",step);set_meta("practice_beat",now)
+		"chime":
+			if not activity_access(id,kind):return
+			var index:=int(get_meta("chime_note",0));var tones: Array=[261.63,293.66,329.63,392.,440.]
+			play_tone(tones[index],.92,.18);play_tone(tones[index]*2.01,.45,.065)
+			set_meta("chime_note",(index+1)%5);hud.notify(["宫","商","角","徵","羽"][index])
+		"read":
+			var pages:=["舟子在页角画了一只鹭。顺着它的喙望去，水榭就在东桥那边。","今日织记：棉布取其柔，苎麻取其挺。合裁成衣，裙摆才撑得住绣线。","工匠随笔：先备桦木和铁料，打好工具，再进城外采香樟和青玉。"]
+			var page:=int(get_meta("journal_page",0));hud.notify(pages[page]);set_meta("journal_page",(page+1)%pages.size())
 		"stamp":
 			if not id.begins_with("snow_stamp:"):
 				hud.notify("印章沾好了印泥。雪镇沿路的三枚印章才会写进踏雪图册。")

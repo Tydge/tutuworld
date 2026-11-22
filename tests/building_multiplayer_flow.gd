@@ -161,6 +161,7 @@ func run() -> void:
 		print("FACADE_SNAPSHOT_REVISIONS ",snapshot.state.get("building_revision",-1)," ",server.state().get("building_revision",-1))
 		check(snapshot.state.build_layout==wire_layout,"Visitor receives the complete validated facade update")
 		check(JSON.stringify(server.state().build_layout.elements.filter(func(row):return Land.contains_row("east_ne",row,server.state().build_layout)))==JSON.stringify(second_rows),"Facade transaction preserves the other owner's published rows")
+	await check_separate_houses(editor)
 	client.close();client.queue_free();await session.leave_online();city.queue_free();await process_frame;server.listener.stop();server.queue_free();await process_frame
 	print("BUILDING_MULTIPLAYER_FLOW_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)
 
@@ -186,3 +187,34 @@ func check_new_doors(editor: Node) -> void:
 		check((actor.position-start).dot(normal)<-2.2,"Real actor enters a freshly built open door without toggling: "+("server visitor" if actor==pawn else "local owner"))
 	pawn.set_physics_process(true)
 	place(session.active_character_id,Land.sign_position("east_nw")+Vector3(0,.1,1.6));place(other_id,Land.sign_position("east_ne")+Vector3(0,.1,1.6))
+
+func check_separate_houses(editor: Node) -> void:
+	var parcel:="east_nw"
+	var opened: Dictionary=await editor.open_nearby_parcel()
+	check(opened.get("ok",false),"Reopen owned plot for detached-house repaint")
+	if not opened.get("ok",false):return
+	var previous: Dictionary=server.state().build_layout.duplicate(true)
+	var layout: Dictionary=editor.layout.duplicate(true)
+	layout.elements=Land.outside(layout,parcel)
+	for x: int in [80,91]:
+		layout=L.add(layout,{"type":"floor","a":[x,-10],"b":[x+5,-5]})
+		for segment in [[[x,-10],[x+5,-10]],[[x+5,-10],[x+5,-5]],[[x+5,-5],[x,-5]],[[x,-5],[x,-10]]]:
+			layout=L.add(layout,{"type":"wall","a":segment[0],"b":segment[1]})
+	check(editor.commit(layout),"Two independent houses fit in one owned lot")
+	editor.ui.batch_paint.button_pressed=true
+	editor.ui.wall_face.select(1)
+	var ground:=L.compiled(editor.layout)
+	var tile: Dictionary=ground.floors[Vector2i(161,-19)]
+	editor.selected_id=tile.id
+	editor.selected_unit=L.unit_at(editor.layout,tile.id,Vector2(80.75,-9.25))
+	editor.paint_selected(Color("829765"),"stone")
+	var wall: Dictionary=ground.walls[Vector3i(162,-20,0)]
+	editor.selected_id=wall.id
+	editor.selected_unit=L.unit_at(editor.layout,wall.id,Vector2(81.25,-10))
+	editor.paint_selected(Color("ac7867"),"brick")
+	await editor.close_editor()
+	var published: Dictionary=server.state().build_layout
+	var painted:=L.compiled(published)
+	check(not editor.active and painted.floors[Vector2i(168,-12)].style=="stone" and painted.walls[Vector3i(162,-10,0)].get("faces",{}).get("positive",{}).get("style","")=="brick","Connected ground floor and opposite exterior wall actually publish")
+	check(painted.floors[Vector2i(184,-15)].style!="stone" and painted.walls[Vector3i(184,-10,0)].get("faces",{}).is_empty(),"Detached second house keeps both finishes on the same plot")
+	check(Land.same_outside(previous,published,parcel),"Every other owner's ID and published record is preserved")

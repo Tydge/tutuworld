@@ -1,0 +1,189 @@
+extends RefCounted
+## All distances in metres. North is -Z. The palace starts at the terrace at z=-82.
+const NAVIGATION:=Rect2i(-183,-186,376,387)
+const DOCK:=Vector2(0,209)
+const LIMIT:=Vector2(240,206)
+const TERRACES:=[[-1.,62.,92.],[-1.,124.,156.],[1.,78.,103.],[1.,115.,140.]]
+const FORECOURTS:=[[-21.,-59.,2.63],[20.,-69.,3.10]]
+const BRIDGES:=[-108.,0.,108.]
+const LOTS:=["jade_mulberry","jade_canal","jade_swallow","jade_reed","jade_pottery","jade_lotus"]
+const LOT_NAMES:=["桑梓里","听潮里","燕归里","芦花里","青瓷里","荷香里"]
+const LOT_ORIGINS:=[Vector2(70,84),Vector2(103,84),Vector2(136,84),Vector2(70,117),Vector2(103,117),Vector2(136,117)]
+# id, sign, x, z, shell, interior
+const HOUSES:=[
+	["drum","宣时鼓阁",-21,-59,"clocktower","music"],["baihe","白鹤礼馆",20,-69,"theatre","study"],
+	["spice","桂香茶肆",-16,127,"loft","tea"],["oil","杏仁油坊",-17,89,"court","work"],
+	["basket","篾匠竹坊",-16,49,"store","work"],["stitch","针线小楼",16,145,"inn","tailor"],
+	["lacquer","春漆作",15,107,"store","work"],["almond","杏花食店",19,74,"cottage","tavern"],
+	["pipa","南渡琴社",18,184,"cloister","music"],
+	["pickle","东津酱坊",43,163,"store","work"],["sail","南津帆作",-49,146,"forge","tailor"],
+	["cot","归帆客舍",-40,176,"inn","inn"],["weave","织户东院",41,127,"court","tailor"],
+	["pastry","杏仁饼铺",-39,90,"store","tavern"],["caligraphy","墨池斋",51,28,"pavilion","study"],
+	["poetry","兰舟画坊",-75,25,"cloister","study"],["herbal","春和草堂",77,-25,"cottage","tea"],
+	["weir","水务公所",-18,-23,"court","study"],["duty","漕运钟楼",18,-21,"clocktower","study"],
+	["books","抄书人家",-66,-43,"cottage","study"],["silversmith","钿花局",-68,-131,"cloister","work"],
+	["dye","蓝染院",-49,112,"forge","tailor"],["hostel","旧渡驿舍",51,149,"inn","inn"],
+	["potter","陶家窑房",-63,74,"cottage","work"],["ledger","米行账房",49,86,"store","study"],
+	["noodle","桥头食铺",-25,27,"store","tavern"],["stage","枕河戏楼",24,28,"theatre","music"],
+	["post","驿路茶棚",-47,24,"cottage","tea"],["carver","刻印作",-49,-38,"forge","work"],
+	["reading","观荷书舍",79,-47,"cottage","study"],["fiddler","琴师小院",61,-44,"cloister","music"],
+	["incense","制香坊",-23,162,"store","work"],["tailorhome","绣工小筑",37,106,"cottage","tailor"],
+	["ferry","候潮驿",-14,183,"inn","inn"],["tavern","泊月酒肆",15,165,"loft","tavern"],
+	["farm","南货行",-18,146,"store","shop"],["clothes","云锦庄",15,126,"loft","tailor"],
+	["tools","百炼铺",-15,108,"forge","smith"],["furniture","榫卯行",15,90,"loft","shop"],
+	["workshop","百工坊",-15,72,"forge","work"],["tea","听雨茶楼",15,52,"loft","tea"],
+	["guild","船工会馆",-35,46,"loft","tavern"],["inn","鹭眠客栈",37,50,"inn","inn"],
+	["kiln","溪石窑",-102,67,"forge","work"],["academy","临川书院",-108,-44,"cloister","study"],
+	["dojo","观澜武馆",28,-46,"cloister","dojo"],["paper","花笺坊",-27,-44,"cottage","study"],
+	["garden","藕香水榭",106,-38,"pavilion","tea"],["farmhouse","桑农草堂",-176,95,"cottage","inn"],
+	["audience","含章殿",0,-164,"palace","court"],["archive","文渊阁",-36,-132,"court","study"],
+	["music","听韶台",36,-132,"court","music"],["banquet","琼筵殿",-62,-170,"pavilion","tea"],
+	["chamber","栖梧宫",62,-170,"court","inn"],["scribe","尚书房",-24,-100,"court","study"],
+	["silk","尚衣局",24,-100,"court","tailor"]]
+static func river_z(x: float) -> float:return 9.*sin(x*.015)
+static func lane(z: float) -> float:return 9.*sin((z-38.)*.041)*sin(clampf((z-30.)/167.,0.,1.)*PI) if z>30. else 0.
+static func door_angle(h: Array) -> float:
+	if h[0] in ["drum","baihe"]:return PI/2 if h[2]<0 else -PI/2
+	if h[0]=="weir":return PI
+	if h[3]>37 and absf(h[2])<44:return (-1. if h[2]>0 else 1.)*(PI*.50+.11*sin(h[3]))
+	return {"garden":-.3,"paper":.17,"kiln":.5,"farmhouse":-.25}.get(h[0],0.)
+static func center(h: Array) -> Vector2:return Vector2(h[2]+lane(h[3]),h[3])
+static func dims(kind: String) -> Vector3:
+	return {"clocktower":Vector3(5.45,5.15,5.8),"theatre":Vector3(6.6,4.6,5.3),"palace":Vector3(12.5,8.,8.),"court":Vector3(8.5,6.3,6.5),"inn":Vector3(7.6,4.,6.),"forge":Vector3(7.2,4.6,4.),"cloister":Vector3(8.7,5.2,5.),"store":Vector3(4.6,4.8,6.3),"pavilion":Vector3(6.5,5.6,4.5),"cottage":Vector3(4.7,3.8,5.3)}.get(kind,Vector3(6.1,4.7,5.1))
+# Only look up foundations touching this cell. Preserve the ground slope beyond the apron.
+static var foundations: Dictionary={}
+static var stair_aprons: Dictionary={}
+static func prepare_foundations() -> void:
+	if not foundations.is_empty():return
+	for house in HOUSES:
+		var c:=center(house);var angle:=door_angle(house);var d:=dims(house[4])
+		var half:=Vector2(d.x+1.8,d.z+1.8)
+		if house[4] in ["loft","inn","clocktower","cloister","forge","cottage"]:half.x+=2.2
+		var pad:=[c,angle,half,raw_height(c.x,c.y)]
+		if house[4] in ["loft","inn","clocktower","theatre"]:
+			var stair_center:=c+Vector2(d.x+1.86,-d.z-1.5).rotated(-angle)
+			var apron:=[stair_center,angle,pad[3]]
+			for sx in range(floori((stair_center.x-9.)/24.),floori((stair_center.x+9.)/24.)+1):
+				for sz in range(floori((stair_center.y-9.)/24.),floori((stair_center.y+9.)/24.)+1):
+					var key:=Vector2i(sx,sz)
+					if not stair_aprons.has(key):stair_aprons[key]=[]
+					stair_aprons[key].append(apron)
+		var reach:=half.length()+5.
+		for gx in range(floori((c.x-reach)/24.),floori((c.x+reach)/24.)+1):
+			for gz in range(floori((c.y-reach)/24.),floori((c.y+reach)/24.)+1):
+				var key:=Vector2i(gx,gz)
+				if not foundations.has(key):foundations[key]=[]
+				foundations[key].append(pad)
+static func height_at(x: float,z: float) -> float:
+	prepare_foundations()
+	var height:=raw_height(x,z);var point_:=Vector2(x,z)
+	var closest:=5.
+	for pad in foundations.get(Vector2i(floori(x/24.),floori(z/24.)),[]):
+		var local_: Vector2=(point_-pad[0]).rotated(pad[1])
+		var distance: float=(local_.abs()-pad[2]).max(Vector2.ZERO).length()
+		if distance<closest:
+			height=lerpf(pad[3],raw_height(x,z),smoothstep(.2,4.8,distance));closest=distance
+	# The triangulated ground needs two neighbouring samples outside the stair foot.
+	# Keep this landing continuous when nearby buildings sit on different terraces.
+	for apron in stair_aprons.get(Vector2i(floori(x/24.),floori(z/24.)),[]):
+		var local_: Vector2=(point_-apron[0]).rotated(apron[1])
+		var edge: float=(local_.abs()-Vector2(3.7,4.65)).max(Vector2.ZERO).length()
+		height=lerpf(float(apron[2]),height,smoothstep(0.,2.7,edge))
+	if z>36. and z<192.:
+		var blend:=smoothstep(36.,44.,z)*(1.-smoothstep(185.,192.,z))*(1.-smoothstep(6.9,9.4,absf(x-lane(z))))
+		height=lerpf(height,raw_height(x,z),blend)
+	return forecourt_height(x,z,height)
+# Cut the street-side earth below the masonry. A level landing and one crossfall-free
+# ramp serve both the rendered stairs and the route used by NPCs and the server.
+static func approach_height(z: float) -> float:
+	return 6.+4.*smoothstep(-58.,-80.,z)
+static func forecourt_height(x: float,z: float,terrain: float) -> float:
+	if z < -87. or z > -41. or absf(x)>40.:return terrain
+	for row in FORECOURTS:
+		var side:=signf(row[0])
+		var u: float=(x-row[0])*side+9.7
+		var dz:=absf(z-row[1])
+		if u < -9. or u>25. or dz>15.5:continue
+		var low:=approach_height(row[1])
+		var high: float=low+row[2]
+		var ramp:=clampf((u+5.8)/5.8,0.,1.)
+		var along:=1.-smoothstep(2.65,4.8,dz)
+		var street:=lerpf(approach_height(z),low,along)
+		# At the face, rise behind the stone wall. The middle opening carries the ramp.
+		var fill:=lerpf(street,high,smoothstep(.20,2.7,u))
+		var target:=lerpf(fill,lerpf(low,high,ramp),along)
+		var feather:=smoothstep(-9.,-6.2,u)*(1.-smoothstep(20.3,25.,u))*(1.-smoothstep(11.5,15.5,dz))
+		terrain=lerpf(terrain,target,feather)
+	return terrain
+static func near_entrance(x: float,z: float) -> bool:
+	prepare_foundations()
+	for apron in stair_aprons.get(Vector2i(floori(x/24.),floori(z/24.)),[]):
+		var relative: Vector2=(Vector2(x,z)-apron[0]).rotated(apron[1])
+		if absf(relative.x)<2.9 and absf(relative.y)<5.5:return true
+	return false
+static func raw_height(x: float,z: float) -> float:
+	var h:=2.+4.*smoothstep(60.,38.,z)+4.*smoothstep(-58.,-80.,z)+7.*smoothstep(-103.,-123.,z)+6.*smoothstep(-135.,-156.,z)
+	h+=4.*smoothstep(140.,184.,absf(x))*smoothstep(66.,28.,z)
+	# The central commercial road climbs four broad landings from the dock to the bridge.
+	# The entire street has a continuous roadbed. Shopfronts sit along shallow stone curbs.
+	var grade:=2.+.98*smoothstep(184.,164.,z)+.90*smoothstep(139.,120.,z)+.83*smoothstep(98.,82.,z)+1.15*smoothstep(62.,42.,z)
+	var bazaar: float=smoothstep(27.,43.,z)*(1.-smoothstep(190.,202.,z))*(1.-smoothstep(36.,60.,absf(x-lane(z))))
+	h=lerpf(h,grade,bazaar)
+	# A low verge marks each staggered elevated sidewalk.
+	var side:=x-lane(z)
+	for lot in TERRACES:
+		if side*lot[0]<0 or z<lot[1]-8. or z>lot[2]+8.:continue
+		var along:=smoothstep(lot[1]-4.,lot[1]+6.,z)*(1.-smoothstep(lot[2]-6.,lot[2]+4.,z))
+		var lip:=smoothstep(8.25,9.85,absf(side))
+		h+=lip*(1.-smoothstep(36.,59.,absf(side)))*along*(.32 if lot[0]<0 else .26)
+	for terrace in FORECOURTS:
+		var dx:=absf(x-terrace[0])-9.7;var dz:=absf(z-terrace[1])-9.8
+		var outside:=Vector2(maxf(0.,dx),maxf(0.,dz)).length()
+		h+=float(terrace[2])*(1.-smoothstep(0.,6.,outside))
+	var bank:=absf(z-river_z(x))
+	h=lerpf(-2.4,h,smoothstep(7.,13.,bank))
+	var edge:=minf(LIMIT.x-absf(x),LIMIT.y-absf(z))
+	return lerpf(-3.8,h,smoothstep(-6.,1.,edge))
+static func bridge(x: float,z: float) -> bool:
+	for bx in BRIDGES:
+		if absf(x-bx)<4.35 and absf(z-river_z(bx))<=18.:return true
+	return false
+static func deck(z: float,bx: float) -> float:
+	return 6.10+1.65*(1.-pow(clampf(absf(z-river_z(bx))/18.,0.,1.),2))
+static func foot(x: float,z: float) -> float:
+	if absf(x)<3.5 and z>201. and z<213.:return 2.05
+	if bridge(x,z):
+		for bx in BRIDGES:
+			if absf(x-bx)<4.35:return deck(z,bx)
+	return height_at(x,z)
+static func can_walk(p: Vector3) -> bool:
+	if absf(p.x)<3.4 and p.z>=200. and p.z<212.:return true
+	return absf(p.x)<238. and absf(p.z)<204. and (absf(p.z-river_z(p.x))>=12. or bridge(p.x,p.z))
+static func arrival() -> Array:return [0.,2.12,203.]
+static func point(x: float,z: float) -> Vector3:return Vector3(x,foot(x,z),z)
+static var merchants: Dictionary={}
+static func shops() -> Dictionary:
+	if not merchants.is_empty():return merchants
+	var out:=merchants
+	for h in HOUSES:
+		if h[0] in ["farm","tools","furniture","clothes","spice","almond"]:
+			var offset:=Vector2(.84,dims(h[4]).z-2.05) if h[0] in ["spice","almond"] else Vector2(0,-2.)
+			out[h[0]]=center(h)+offset.rotated(-door_angle(h))
+	return out
+static var field_rows: Array=[]
+static func farm() -> Array:
+	if not field_rows.is_empty():return field_rows
+	var rows:=field_rows
+	for i in range(32):
+		rows.append({"id":"jade_plot_%02d"%i,"x":-174.+(i%8)*2.25,"z":118.+floori(i/8.)*2.5,"map":"jade"})
+	return rows
+static var material_sources: Array=[]
+static func sources() -> Array:
+	if not material_sources.is_empty():return material_sources
+	var rows:=material_sources
+	for cluster in range(6):
+		var center: Vector2=[Vector2(-190,62),Vector2(185,42),Vector2(-145,-54),Vector2(181,-56),Vector2(-175,148),Vector2(168,160)][cluster]
+		for i in range(6):
+			var p:=center+Vector2(cos(i*TAU/6.),sin(i*TAU/6.))*9.
+			rows.append({"id":"jade_source_%d_%d"%[cluster,i],"item":["cedar","nephrite","silver_ore","birch","sandstone","iron"][(cluster+i)%6],"x":p.x,"z":p.y,"y":height_at(p.x,p.y),"map":"jade"})
+	return rows

@@ -1,6 +1,6 @@
 extends RefCounted
 const G=preload("res://scripts/geometry.gd")
-static func make(kind: String,water_id: String="") -> Node3D:
+static func make(kind: String,water_id: String="",item: String="") -> Node3D:
 	var root:=Node3D.new();root.name="Tool"
 	var wood:=G.mat("bd8952");var dark:=G.mat("806442");var brass:=G.mat("cfad69",.40)
 	var metal:=G.mat("a5bec0",.35)
@@ -42,10 +42,13 @@ static func make(kind: String,water_id: String="") -> Node3D:
 				for side in [-1,1]: G.capsule(head,Vector3(side*.38,.82,0),Vector3(side*.52,.64,0),.034,metal)
 			else:
 				var blade:=BoxMesh.new();blade.size=Vector3(.10,.42,.42)
-				var metal_copper:=G.mat("bc8857",.4)
+				var metal_copper:=G.mat("80949b" if item=="cedar" else "bc8857",.4)
 				var blade_mesh:=G.mesh(root,blade,Vector3(0,.84,.17),metal_copper,"CopperBlade");blade_mesh.rotation.x=-.14
 				G.capsule(root,Vector3(0,.64,.36),Vector3(0,1.04,.36),.025,G.mat("e2bc82",.35))
 				G.box(root,Vector3(0,.85,-.08),Vector3(.12,.18,.18),metal_copper)
+			if item in ["cedar","nephrite","silver_ore"]:
+				for k in range(4):G.cylinder(root,Vector3(0,.07+k*.12,0),.052,.058,G.mat("3f6865"))
+				G.cylinder(root,Vector3(0,.76,0),.089,.20,G.mat("8c9b9f",.34))
 			marker(root,"GripR",Vector3(0,-.15,0));marker(root,"GripL",Vector3(0,.15,0))
 			marker(root,"Impact",Vector3(0,.96,.33) if kind=="gather_stone" else (Vector3(0,.84,.39) if kind=="gather_wood" else Vector3(0,.64,.52)))
 	return root

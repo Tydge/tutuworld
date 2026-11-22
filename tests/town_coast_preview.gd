@@ -9,6 +9,12 @@ func run() -> void:
 	game.camera.position=Vector3(7,6,33);game.camera.look_at(Vector3(15,-.5,56))
 	await create_timer(.4).timeout;await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/城镇更新-海水远岛.png")
+	game.hud.hide()
+	game.camera.position=Vector3(35,4,-48)
+	game.camera.look_at(Vector3(57,5,-134))
+	await create_timer(.4).timeout;await RenderingServer.frame_post_draw
+	root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/海岛城-远岛村落.png")
+	game.hud.show()
 	game.camera.position=Vector3(21,9,22);game.camera.look_at(Vector3(10,2,5));await create_timer(.4).timeout;await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/城镇更新-橘子树.png")
 	print("TOWN_COAST_PREVIEW_COMPLETE");quit()

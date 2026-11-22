@@ -28,6 +28,7 @@ static func run(city: Node3D) -> void:
 	column.add_child(logo)
 	var title:=UI.label("海风正在穿过街道…",25)
 	if city.map_id=="valley": title.text="溪水正在唤醒山谷…"
+	if city.map_id=="jade":title.text="南津灯市正在开张…"
 	if city.map_id=="icefield":title.text="雪山与冰原正在迎接你…"
 	title.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(title)
@@ -43,6 +44,10 @@ static func run(city: Node3D) -> void:
 		focuses=[]
 		for point in [Vector2(-20,88),Vector2(-24,55),Vector2(0,10),Vector2(-42,-24),Vector2(44,-50),Vector2(24,-68),Vector2(-65,-61)]:
 			focuses.append(Vector3(point.x,preload("res://scripts/valley/valley_layout.gd").walk_height(point.x,point.y)+1.4,point.y))
+	if city.map_id=="jade":
+		focuses=[]
+		for p in [Vector2(0,199),Vector2(4,131),Vector2(0,4),Vector2(106,-25),Vector2(0,-146)]:
+			focuses.append(preload("res://scripts/jade/layout.gd").point(p.x,p.y)+Vector3.UP*1.4)
 	var view_steps:=0
 	if city.map_id=="icefield":
 		focuses=[]

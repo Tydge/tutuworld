@@ -71,14 +71,9 @@ static func build_winter(world: Node3D) -> void:
 static func build_signs(root: Node3D,map_id: String) -> void:
 	var ids:=Land.ids_for(map_id)
 	for index in range(ids.size()):
-		var id: String=ids[index];var rect:=Land.bounds(id);var plot:=Node3D.new();plot.name=id;root.add_child(plot);plot.set_meta("parcel_id",id)
+		var id: String=ids[index];var plot:=Node3D.new();plot.name=id;root.add_child(plot);plot.set_meta("parcel_id",id)
 		var sign:=Node3D.new();sign.name="Sign";sign.position=Land.sign_position(id);plot.add_child(sign)
 		if (map_id=="city" and index>=2) or (map_id=="icefield" and index>=2 and index<5):sign.rotation.y=PI
-		if map_id=="icefield":
-			for x in [rect.position.x,rect.end.x]:
-				for z in [rect.position.y,rect.end.y]:
-					G.box(plot,Vector3(x,sign.position.y+.23,z),Vector3(.16,.46,.16),G.mat("7c6456"),"CornerStake")
-					G.box(plot,Vector3(x,sign.position.y+.48,z),Vector3(.22,.08,.22),G.mat("ca765d"),"PaintedCap")
 		for side in [-1,1]:G.box(sign,Vector3(side*1.05,.64,0),Vector3(.12,1.28,.12),G.mat("80684e"),"OakPost")
 		G.box(sign,Vector3(0,1.42,0),Vector3(3.30,1.02,.18),G.mat("826d51"),"WoodFrame")
 		for side in [-1,1]:
@@ -97,7 +92,7 @@ static func ensure(world: Node3D) -> void:
 	var paving: Material=old_path.material_override
 	world.remove_child(old);old.free();build(world,grass,paving)
 static func update_ownership(world: Node3D,state: Dictionary,map_id: String="city") -> void:
-	var root:=world.get_node_or_null("IcefieldBuildingSite" if map_id=="icefield" else "EastBuildingSite")
+	var root:=world.get_node_or_null("JadeBuildingSite" if map_id=="jade" else "IcefieldBuildingSite" if map_id=="icefield" else "EastBuildingSite")
 	if root==null:return
 	var key:=str(state.get("land_parcels",{}))+str(state.get("player_id",""))
 	if root.get_meta("ownership_key","")==key:return

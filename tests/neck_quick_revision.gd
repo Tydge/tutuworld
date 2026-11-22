@@ -61,10 +61,12 @@ func run() -> void:
 	base.free()
 	session.authority.state.coins=2000
 	await travel(game.targets.Merchant_clothes.node.global_position+Vector3(0,0,1.2))
-	for id in DB.catalog().items:
-		if DB.item(id).has("shop_map"):continue
-		if DB.item(id).get("slot","")!="neck": continue
-		check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Buy "+id)
+	var necks: Array=DB.catalog().items.keys().filter(func(id):return DB.item(id).get("slot","")=="neck" and not DB.item(id).has("shop_map"))
+	necks.sort_custom(func(a,b):return DB.Clothes.stock(DB.item(a).style).item==a and DB.Clothes.stock(DB.item(b).style).item!=b)
+	for id in necks:
+		if DB.Clothes.stock(DB.item(id).style).item==id:
+			check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Buy "+id)
+		else:session.authority.add(id,1) # Returning player's older colorway.
 		check(session.dispatch("equip",{"slot":"neck","item":id}).ok,"Equip "+id)
 		for actor in [game.bunny,cat]:
 			Outfit.apply(actor,{"neck":id})

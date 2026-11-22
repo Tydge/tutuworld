@@ -2,6 +2,8 @@ extends Node3D
 const DB = preload("res://scripts/services/game_data.gd")
 const Parts = preload("res://scripts/appearance/model_parts.gd")
 const CROPS = {
+	"cotton":preload("res://assets/harvest/cotton.glb"),
+	"ramie":preload("res://assets/harvest/ramie.glb"),
 	"carrot": preload("res://assets/harvest/carrot.glb"),
 	"lettuce": preload("res://assets/harvest/lettuce.glb"),
 	"tomato": preload("res://assets/harvest/tomato.glb"),

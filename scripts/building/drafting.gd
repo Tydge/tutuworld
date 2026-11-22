@@ -211,7 +211,7 @@ func paint(mouse: Vector2) -> bool:
 	var unit:=L.unit_at(editor.layout,id,editor.picked_world);var face_mode:=0
 	if row.type=="wall":
 		var edit=preload("res://scripts/building/surface_edit.gd");var camera:=Vector2(editor.city.camera.position.x,editor.city.camera.position.z);var inside: String=edit.inside_side(base().plan,unit,camera);var side: String="positive" if (camera-L.rect(unit).get_center()).dot(preload("res://scripts/building/structure_catalog.gd").normal(unit))>=0 else "negative";face_mode=0 if side==inside else 1
-	if editor.commit(preload("res://scripts/building/surface_edit.gd").paint(editor.layout,unit,editor.ui.color.color,editor.ui.STYLES[editor.ui.style.selected],editor.ui.batch_paint.button_pressed,face_mode,Vector2(editor.city.camera.position.x,editor.city.camera.position.z))):editor.reselect_unit(unit);editor.refresh_ui()
+	if editor.commit(preload("res://scripts/building/surface_edit.gd").paint(editor.layout,unit,editor.ui.color.color,editor.ui.STYLES[editor.ui.style.selected],editor.ui.batch_paint.button_pressed,face_mode,Vector2(editor.city.camera.position.x,editor.city.camera.position.z),editor.parcel_id)):editor.reselect_unit(unit);editor.refresh_ui()
 	return true
 func input(event: InputEvent) -> bool:
 	if event is InputEventKey and event.pressed and not event.echo:

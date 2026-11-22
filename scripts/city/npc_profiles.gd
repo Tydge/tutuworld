@@ -556,6 +556,7 @@ const MERCHANTS := {
 	}
 }
 static func profile(id: String) -> Dictionary:
+	if id.begins_with("Jade"):return preload("res://scripts/jade/residents.gd").profile(id)
 	if id.begins_with("Snow") or id.begins_with("FrostMerchant_"):return preload("res://scripts/icefield/winter_neighbors.gd").profile(id)
 	if id.begins_with("Passerby"):
 		var index:=int(id.trim_prefix("Passerby"))

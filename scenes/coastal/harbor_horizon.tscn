@@ -15,7 +15,7 @@ mesh = ExtResource("3")
 cast_shadow = 0
 
 [node name="Mill" parent="WindmillIsland" instance=ExtResource("4")]
-position = Vector3(4, 13.13, 1)
+position = Vector3(4, 12.40, 1)
 rotation = Vector3(0, 0.26, 0)
 
 [node name="HillsBeyondTheOrchard" type="MeshInstance3D" parent="."]

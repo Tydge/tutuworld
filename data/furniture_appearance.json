@@ -1197,33 +1197,170 @@
       }
     ],
     "bread_oven": [
-      {"id":"bricks","name":"耐火砖","family":"stone","colors":["b66e52","bd7759","c78361"]},
-      {"id":"base","name":"木底座与把手","family":"wood","colors":["a47a51"]},
-      {"id":"iron","name":"炉门与烟道","family":"metal","colors":["504c48"]},
-      {"id":"glow","name":"炉窗","family":"solid","colors":["a94a34"]}
+      {
+        "id": "bricks",
+        "name": "耐火砖",
+        "family": "stone",
+        "colors": [
+          "b66e52",
+          "bd7759",
+          "c78361"
+        ]
+      },
+      {
+        "id": "base",
+        "name": "木底座与把手",
+        "family": "wood",
+        "colors": [
+          "a47a51"
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "炉门与烟道",
+        "family": "metal",
+        "colors": [
+          "504c48"
+        ]
+      },
+      {
+        "id": "glow",
+        "name": "炉窗",
+        "family": "solid",
+        "colors": [
+          "a94a34"
+        ]
+      }
     ],
     "quilt_chest": [
-      {"id":"boards","name":"箱身","family":"wood","colors":["7b97a1"]},
-      {"id":"trim","name":"木盖和边框","family":"wood","colors":["bf9567"]},
-      {"id":"quilt","name":"拼布被","family":"fabric","colors":["be7973"]},
-      {"id":"fringe","name":"被角流苏","family":"fabric","colors":["f1dfbc"]},
-      {"id":"latch","name":"搭扣","family":"metal","colors":["b29b67"]}
+      {
+        "id": "boards",
+        "name": "箱身",
+        "family": "wood",
+        "colors": [
+          "7b97a1"
+        ]
+      },
+      {
+        "id": "trim",
+        "name": "木盖和边框",
+        "family": "wood",
+        "colors": [
+          "bf9567"
+        ]
+      },
+      {
+        "id": "quilt",
+        "name": "拼布被",
+        "family": "fabric",
+        "colors": [
+          "be7973"
+        ]
+      },
+      {
+        "id": "fringe",
+        "name": "被角流苏",
+        "family": "fabric",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "latch",
+        "name": "搭扣",
+        "family": "metal",
+        "colors": [
+          "b29b67"
+        ]
+      }
     ],
     "snow_lantern": [
-      {"id":"frame","name":"提灯框架","family":"metal","colors":["a98254"]},
-      {"id":"wax","name":"蜡烛","family":"solid","colors":["f3dfb3"]}
+      {
+        "id": "frame",
+        "name": "提灯框架",
+        "family": "metal",
+        "colors": [
+          "a98254"
+        ]
+      },
+      {
+        "id": "wax",
+        "name": "蜡烛",
+        "family": "solid",
+        "colors": [
+          "f3dfb3"
+        ]
+      }
     ],
     "post_stamp": [
-      {"id":"post","name":"木杆与印章手柄","family":"wood","colors":["a47a51"]},
-      {"id":"shelf","name":"搁板","family":"wood","colors":["f1dfbc"]},
-      {"id":"ink","name":"印泥与印章","family":"solid","colors":["a45f59"]}
+      {
+        "id": "post",
+        "name": "木杆与印章手柄",
+        "family": "wood",
+        "colors": [
+          "a47a51"
+        ]
+      },
+      {
+        "id": "shelf",
+        "name": "搁板",
+        "family": "wood",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "ink",
+        "name": "印泥与印章",
+        "family": "solid",
+        "colors": [
+          "a45f59"
+        ]
+      }
     ],
     "clothing_rack": [
-      {"id":"wood","name":"木底座与颈座","family":"wood","colors":["a47a51"]},
-      {"id":"form","name":"人台布面","family":"fabric","colors":["6e9991"]},
-      {"id":"hardware","name":"黄铜立柱与顶盖","family":"metal","colors":["c7a165"]},
-      {"id":"tape","name":"软皮尺","family":"solid","colors":["f1dfbc"]},
-      {"id":"thread","name":"线轴","family":"fabric","colors":["c87e76","75a092","e4b771"]}
+      {
+        "id": "wood",
+        "name": "木底座与颈座",
+        "family": "wood",
+        "colors": [
+          "a47a51"
+        ]
+      },
+      {
+        "id": "form",
+        "name": "人台布面",
+        "family": "fabric",
+        "colors": [
+          "6e9991"
+        ]
+      },
+      {
+        "id": "hardware",
+        "name": "黄铜立柱与顶盖",
+        "family": "metal",
+        "colors": [
+          "c7a165"
+        ]
+      },
+      {
+        "id": "tape",
+        "name": "软皮尺",
+        "family": "solid",
+        "colors": [
+          "f1dfbc"
+        ]
+      },
+      {
+        "id": "thread",
+        "name": "线轴",
+        "family": "fabric",
+        "colors": [
+          "c87e76",
+          "75a092",
+          "e4b771"
+        ]
+      }
     ],
     "bread_case": [
       {
@@ -1318,6 +1455,1682 @@
         "family": "wood",
         "colors": [
           "866147"
+        ]
+      }
+    ],
+    "jade_basin": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "78965d"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "c1b49d"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "ecc6b9"
+        ]
+      }
+    ],
+    "jade_chime": [
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "ac8e53"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "623f34"
+        ]
+      }
+    ],
+    "jade_cloister": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_cottage": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_court": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "ecd1a0"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_forge": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_gallery": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "718079"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_gate": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b4998b"
+        ]
+      }
+    ],
+    "jade_hall": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_inn": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "864a37"
+        ]
+      }
+    ],
+    "jade_lamp": [
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "c1b49d"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "8d4b35"
+        ]
+      }
+    ],
+    "jade_loft": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "864a37"
+        ]
+      }
+    ],
+    "jade_market_stall": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "88a158"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "ecba8f"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "daa748"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "907057"
+        ]
+      }
+    ],
+    "jade_moon_gate": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "edeae0"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "835f40"
+        ]
+      }
+    ],
+    "jade_palace": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_pavilion": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "bc9859"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_pier": [
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "71533f"
+        ]
+      }
+    ],
+    "jade_pool": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "627748"
+        ]
+      },
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "6c9059"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "cba557"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a0a395"
+        ]
+      }
+    ],
+    "jade_quay": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      }
+    ],
+    "jade_rail": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "958671"
+        ]
+      }
+    ],
+    "jade_rockery": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a0a395"
+        ]
+      }
+    ],
+    "jade_screen": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "845c3f"
+        ]
+      }
+    ],
+    "jade_silk_stall": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b8998b"
+        ]
+      }
+    ],
+    "jade_span": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      }
+    ],
+    "jade_store": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "274f50"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b3a78c"
+        ]
+      }
+    ],
+    "jade_tree_0": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_tree_1": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_tree_2": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_tree_3": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_bamboo": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "6c9059"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "acaa75"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "8b8956"
+        ]
+      }
+    ],
+    "jade_court_wall": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "6f7165"
+        ]
+      }
+    ],
+    "jade_festoon": [
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "8d4b35"
+        ]
+      }
+    ],
+    "jade_goods": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "839b91"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "b9aa83"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "53493b"
+        ]
+      }
+    ],
+    "jade_palace_wall": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "6f7165"
+        ]
+      }
+    ],
+    "jade_practice": [
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b48a57"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "dcc69c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "946d49"
+        ]
+      }
+    ],
+    "jade_signboard": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "695039"
+        ]
+      }
+    ],
+    "jade_steps": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      }
+    ],
+    "jade_street_gallery": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "82523c"
+        ]
+      }
+    ],
+    "jade_theatre": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b4998b"
+        ]
+      }
+    ],
+    "jade_cart": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "b49d75"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "6c6148"
+        ]
+      }
+    ],
+    "jade_ceramics": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "526b81"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "dfdfce"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b8998b"
+        ]
+      }
+    ],
+    "jade_parasol": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "a1c1b1"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b99a68"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "725139"
+        ]
+      }
+    ],
+    "jade_silk_rack": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "957a53"
+        ]
+      }
+    ],
+    "jade_street_gallery_reverse": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "82523c"
+        ]
+      }
+    ],
+    "jade_well_kit": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "527f80"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "ba875e"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_workbench": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "7d9c93"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "bf8b5d"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "eee1bd"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_clocktower": [
+      {
+        "id": "ceramic",
+        "name": "釉面",
+        "family": "ceramic",
+        "colors": [
+          "b4c4bd"
+        ]
+      },
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "d8a85c"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "864a37"
+        ]
+      }
+    ],
+    "jade_iris": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "6c9059"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "625544"
+        ]
+      }
+    ],
+    "jade_peony": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "6c9059"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "625544"
+        ]
+      }
+    ],
+    "jade_crane": [
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "493e2e"
+        ]
+      }
+    ],
+    "jade_sampan": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c7a778"
+        ]
+      },
+      {
+        "id": "gilding",
+        "name": "鎏金与包边",
+        "family": "metal",
+        "colors": [
+          "b84229"
+        ]
+      },
+      {
+        "id": "silk",
+        "name": "灯纱",
+        "family": "fabric",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "9c8566"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "8d4b35"
+        ]
+      }
+    ],
+    "jade_shop_veranda": [
+      {
+        "id": "fabric",
+        "name": "织物与画芯",
+        "family": "fabric",
+        "colors": [
+          "c9c4ac"
+        ]
+      },
+      {
+        "id": "stone",
+        "name": "灰石与粉壁",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "b8998b"
+        ]
+      }
+    ],
+    "jade_tree_4": [
+      {
+        "id": "foliage",
+        "name": "枝叶",
+        "family": "foliage",
+        "colors": [
+          "89745c"
+        ]
+      },
+      {
+        "id": "wood",
+        "name": "木作与梁枋",
+        "family": "wood",
+        "colors": [
+          "89745c"
+        ]
+      }
+    ],
+    "jade_court_terrace": [
+      {
+        "id": "stone",
+        "name": "台身与石阶",
+        "family": "stone",
+        "colors": [
+          "a89e89"
+        ]
+      }
+    ],
+    "jade_pastry_board": [
+      {
+        "id": "wood",
+        "name": "案架木作",
+        "family": "wood",
+        "colors": [
+          "967252"
+        ]
+      },
+      {
+        "id": "pastry",
+        "name": "糕点与杏仁",
+        "family": "fabric",
+        "colors": [
+          "caac79"
+        ]
+      }
+    ],
+    "jade_seed_bins": [
+      {
+        "id": "wood",
+        "name": "案架木作",
+        "family": "wood",
+        "colors": [
+          "967252"
+        ]
+      },
+      {
+        "id": "harvest",
+        "name": "谷穗与种仁",
+        "family": "fabric",
+        "colors": [
+          "c3a66b"
+        ]
+      }
+    ],
+    "jade_smith_rack": [
+      {
+        "id": "wood",
+        "name": "案架木作",
+        "family": "wood",
+        "colors": [
+          "967252"
+        ]
+      },
+      {
+        "id": "iron",
+        "name": "锻铁与工具刃",
+        "family": "metal",
+        "colors": [
+          "788980"
+        ]
+      }
+    ],
+    "jade_steam_table": [
+      {
+        "id": "wood",
+        "name": "案架木作",
+        "family": "wood",
+        "colors": [
+          "967252"
+        ]
+      },
+      {
+        "id": "woven",
+        "name": "笼屉竹编",
+        "family": "wood",
+        "colors": [
+          "ad895a"
+        ]
+      },
+      {
+        "id": "pastry",
+        "name": "糕点与杏仁",
+        "family": "fabric",
+        "colors": [
+          "caac79"
         ]
       }
     ]

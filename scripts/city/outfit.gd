@@ -23,6 +23,10 @@ static func apply(bunny: Node3D, equipment: Dictionary,looks: Dictionary={}) -> 
 		var rig: Resource=bunny.rig_profile
 		var root := Node3D.new()
 		root.name="Wardrobe_"+slot
+		if item.get("collection","")=="jade":
+			bunny.get_node("Visual/Head" if slot=="head" else "Visual").add_child(root)
+			preload("res://scripts/jade/wardrobe.gd").fit(root,rig,item,material)
+			continue
 		if item.get("collection","")=="atelier":
 			preload("res://scripts/appearance/tailored_outfit.gd").fit(bunny,root,item,material)
 			continue

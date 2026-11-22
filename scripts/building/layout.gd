@@ -15,10 +15,10 @@ static var walk_cache: Dictionary={}
 static var last_validation_usec:=0
 const STYLES=preload("res://scripts/building/structure_catalog.gd").STYLES
 const Structures=preload("res://scripts/building/structure_catalog.gd")
-static func capacity_multiplier(map_id: String) -> int:return 2 if map_id=="icefield" else 1
+static func capacity_multiplier(map_id: String) -> int:return 2 if map_id in ["icefield","jade"] else 1
 static func empty(map_id: String="city") -> Dictionary:
 	var layout:={"schema":4,"next_id":1,"elements":[],"grandfathered":{},"lighting_version":1}
-	if map_id=="icefield":layout.map_id=map_id
+	if map_id in ["icefield","jade"]:layout.map_id=map_id
 	return layout
 static func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
 static func point(value: Variant,grid: bool=true,map_id: String="city") -> bool:
@@ -322,13 +322,15 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 		elif row.type=="wall":walls.append(row)
 		elif row.type=="object":objects.append(row)
 	var buckets: Dictionary={};var layers: Dictionary={}
+	var prefab=preload("res://scripts/jade/prefabs.gd")
+	var houses:=objects.filter(func(row):return row.kind in prefab.KINDS)
 	for i in range(objects.size()):
 		var item: Dictionary=objects[i];var level:=Storeys.of(item)
 		if not layers.has(level):layers[level]=walkable_grid(layout,level)
 		grid=layers[level];var footprint:=Catalog.footprint(item);var mount:=Catalog.mount(item)
 		if not Site.within(footprint.position,layout.get("map_id","city")) or not Site.within(footprint.end,layout.get("map_id","city")):add_issue(issues,"plot",[item],"物件边缘超出了建造地块。")
 		if mount=="floor":
-			if (Storeys.of(item)>0 or not Catalog.OBJECTS[item.kind].get("outdoor",false)) and not Grid.covered(footprint,grid.floors):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
+			if (Storeys.of(item)>0 or not Catalog.OBJECTS[item.kind].get("outdoor",false)) and not Grid.covered(footprint,grid.floors) and not houses.any(func(house):return prefab.contains_piece(house,item,footprint)):add_issue(issues,"floor",[item]+floors.filter(func(floor_):return rect(floor_).grow(.001).intersects(footprint)),"请先铺好能容纳这件家具的地板。")
 		elif mount!="wall":
 			var parent:=find(layout,str(item.get("support","")))
 			if parent.is_empty() and mount!="ceiling":continue
@@ -360,6 +362,7 @@ static func placement_issues(layout: Dictionary,grid: Dictionary={}) -> Dictiona
 		for j in near:
 			var other: Dictionary=objects[j]
 			if Catalog.OBJECTS[other.kind].get("overlay",false):continue
+			if prefab.contains_piece(other,item,footprint) or prefab.contains_piece(item,other,Catalog.footprint(other)):continue
 			if item.get("support","")==other.id or other.get("support","")==item.id:continue
 			var h1:=base_height(layout,item);var h2:=base_height(layout,other)
 			if minf(h1+float(Catalog.OBJECTS[item.kind].height),h2+float(Catalog.OBJECTS[other.kind].height))-maxf(h1,h2)<.025:continue

@@ -54,10 +54,13 @@ func run() -> void:
 	check(session.dispatch("buy",{"shop":"farm","item":"herbicide","quantity":5}).ok,"Buy herbicide at seed shop")
 	await travel(Vector3(DB.shops().clothes.x,.18,DB.shops().clothes.y+2.3))
 	for id in DB.catalog().items:
-		if DB.item(id).kind=="clothing": check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Buy clothing "+id)
+		var item:=DB.item(id)
+		if item.kind=="clothing" and not item.has("shop_map") and DB.Clothes.stock(item.style).item==id:
+			check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Buy clothing "+id)
 	for id in DB.catalog().items:
 		var item: Dictionary=DB.item(id)
 		if item.kind=="clothing":
+			if session.authority.count(id)==0:session.authority.add(id,1)
 			check(session.dispatch("equip",{"slot":item.slot,"item":id}).ok,"Wear clothing "+id)
 			await process_frame
 	check(b.get_node("Visual/Head").has_node("Wardrobe_head"),"Head wearable attaches without modifying original model")

@@ -10,6 +10,7 @@ const Storeys=preload("res://scripts/building/storeys.gd")
 const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
 var building=preload("res://server/building_service.gd").new()
 var built_room: Node3D
+var jade_built_room: Node3D
 var icefield_built_room: Node3D
 const Land=preload("res://scripts/building/parcels.gd")
 const BuildingFactory=preload("res://scripts/building/module_factory.gd")
@@ -57,7 +58,7 @@ func _ready() -> void:
 		host.map_id=id;host.manager=self;viewport.add_child(host);maps[id]=host
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	for map_id in ["city","icefield"]:
+	for map_id in ["city","icefield","jade"]:
 		BuildingSync.apply(maps[map_id],Land.layout_for(world.state,map_id),building_room(map_id),false)
 	apply_door_states()
 	if epoch<=0:epoch=Time.get_unix_time_from_system();world.state.time=0
@@ -82,14 +83,17 @@ func load_world() -> void:
 	epoch=float(data.epoch);records=data.get("characters",{});care_history=data.get("care_history",{});doors=data.get("doors",{})
 	clock_alignment=data.get("clock_alignment",{})
 	var resources: Dictionary=world.state.resources
+	var default_plots: Dictionary=world.state.plots
 	world.state.merge(data.world,true)
+	default_plots.merge(world.state.plots,true);world.state.plots=default_plots
 	resources.merge(world.state.resources,true)
 	world.state.resources=resources
 	world.state.build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("build_layout",{}),"city")
+	world.state.jade_build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("jade_build_layout",{}),"jade")
 	world.state.icefield_build_layout=preload("res://scripts/building/layout.gd").normalize(data.world.get("icefield_build_layout",{}),"icefield")
 	world.state.land_parcels=preload("res://scripts/building/parcels.gd").normalize(data.world.get("land_parcels",{}))
 	for record in records.values():
-		for key in ["build_layout","icefield_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
+		for key in ["build_layout","icefield_build_layout","jade_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 		for token in record.get("seen",{}).keys():
 			if record.seen[token].has("lease"):record.seen.erase(token)
 		record.rest_mode="";record.rest_bed="";record.net_pose={}
@@ -118,7 +122,7 @@ func apply_door_states() -> void:
 func character_record(id: String) -> Dictionary:
 	var a=actors[id]
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","world_id","time","net_pose","build_layout","icefield_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
+	for key in ["plots","resources","world_id","time","net_pose","build_layout","icefield_build_layout","jade_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 	record.stamina=minf(a.stamina_max(),float(record.stamina)+a.reserved_work_stamina(a.job))
 	record.rest_mode="";record.rest_bed=""
 	if pawns.has(id):record.player_position=standing_exit(id)
@@ -129,7 +133,7 @@ func character_record(id: String) -> Dictionary:
 	return record
 func save_world() -> bool:
 	for id in actors:records[id]=character_record(id)
-	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"winter_outfits":world.state.get("winter_outfits",{}),"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"icefield_build_layout":world.state.icefield_build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
+	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"winter_outfits":world.state.get("winter_outfits",{}),"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"icefield_build_layout":world.state.icefield_build_layout,"jade_build_layout":world.state.jade_build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
 	var old: Variant=JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
 	var backup_valid: bool=old is Dictionary and old.get("schema",0)==1 and old.get("world") is Dictionary
 	return preload("res://scripts/services/atomic_file.gd").write(save_path,JSON.stringify(data,"",false,true),backup_valid)
@@ -329,7 +333,7 @@ func create_character(account: String,args: Dictionary) -> Dictionary:
 	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system(),"valley_landscape_revision":preload("res://scripts/valley/valley_layout.gd").REVISION},true)
 	a.state.equipment[DB.item(starter).slot]=starter
 	var record: Dictionary=a.state.duplicate(true)
-	for key in ["plots","resources","time","world_id","build_layout","icefield_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
+	for key in ["plots","resources","time","world_id","build_layout","icefield_build_layout","jade_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 	records[id]=record
 	if not save_world():records.erase(id);return fail("角色还没有保存成功，请稍后再试。")
 	return {"ok":true,"character":id,"characters":roster(account)}
@@ -341,7 +345,7 @@ func join_world(peer_id: int,id: String) -> Dictionary:
 		if other.account==peer.account and other.character!="":return fail("这个账号已经在另一处进入岛上了。")
 	var record: Dictionary=records[id];var a=Authority.new();a.state.merge(record,true);a.normalize_production_state()
 	a.state.plots=world.state.plots;a.state.resources=world.state.resources;a.state.time=world.state.time;a.state.net_pose={}
-	a.state.build_layout=world.state.build_layout;a.state.icefield_build_layout=world.state.icefield_build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
+	a.state.build_layout=world.state.build_layout;a.state.icefield_build_layout=world.state.icefield_build_layout;a.state.jade_build_layout=world.state.jade_build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
 	peers[peer_id].building_revision_sent=-1
 	a.seen_commands=record.get("seen",{}).duplicate(true)
 	a.tick_stamina(maxf(0,Time.get_unix_time_from_system()-float(record.get("saved_at",Time.get_unix_time_from_system()))))
@@ -426,16 +430,17 @@ func finish_building_request(peer_id: int,request: Dictionary,args: Dictionary) 
 	answer(peer_id,request,result)
 
 func building_room(map_id: String) -> Node3D:
-	var room:=icefield_built_room if map_id=="icefield" else built_room
+	var room:=jade_built_room if map_id=="jade" else icefield_built_room if map_id=="icefield" else built_room
 	if is_instance_valid(room):return room
 	room=BuildingFactory.shell(maps[map_id])
 	room.set_meta("skip_mesh_baking",true)
-	if map_id=="icefield":icefield_built_room=room
+	if map_id=="jade":jade_built_room=room
+	elif map_id=="icefield":icefield_built_room=room
 	else:built_room=room
 	return room
 func built_seat(map_id: String,seat_id: String) -> Node3D:
 	# Paired chairs are registered on their dining table, not as interaction targets.
-	var room:=icefield_built_room if map_id=="icefield" else built_room
+	var room:=jade_built_room if map_id=="jade" else icefield_built_room if map_id=="icefield" else built_room
 	if seat_id=="" or not is_instance_valid(room):return null
 	return room.render_cache.get(seat_id,{}).get("node")
 func refresh_building_navigation(map_id: String,room: Node3D) -> void:
@@ -485,6 +490,10 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 			a.seen_commands[command_id]=result.duplicate(true)
 			if a.seen_commands.size()>512:a.seen_commands.erase(a.seen_commands.keys()[0])
 		return result
+	if verb=="make_furniture":
+		var site_id: String=building.owned_site(id)
+		if site_id=="" or site_id!=args.get("parcel_id","") or building.leases[site_id].get("publishing",false):return fail("请先进入自己的地皮施工。")
+		return a.execute(command_for(id,request,verb,args))
 	if building.owned_site(id)!="":return fail("请先确认完成或放弃本次施工。")
 	if verb=="buy_land":
 		if not a.state.get("net_pose",{}).is_empty():return fail("请先结束当前互动。")
@@ -575,7 +584,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		elif pawn.position.distance_to(host.targets[target].position)>4:return fail("再靠近一点吧。")
 		var reason:=lock_reason(map_id,target,id)
 		if reason!="":return fail(reason)
-		if host.targets[target].kind=="workshop" and not host.targets[target].building.contains_position(pawn.global_position): return fail("先走进工坊，再使用工作台吧。")
+		if host.targets[target].kind=="workshop" and host.targets[target].has("building") and not host.targets[target].building.contains_position(pawn.global_position): return fail("先走进工坊，再使用工作台吧。")
 		if verb in ["craft","refill","eat","rest"]:
 			var anchor: Vector3
 			if host.targets[target].has("work_anchor"): anchor=host.targets[target].work_anchor.global_position
@@ -620,7 +629,7 @@ func begin_job_pose(id: String) -> void:
 			pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform)
 			a.state.net_pose={"kind":"eat","target":"dining","exit":exit_}
 
-	elif j.verb=="gather":animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(j.item,"gather_branch")
+	elif j.verb=="gather":animation={"limestone":"gather_stone","copper":"gather_copper","branch":"gather_branch","orange":"harvest_tree","cedar":"gather_wood","nephrite":"gather_stone","silver_ore":"gather_copper","birch":"gather_wood","iron":"gather_copper","sandstone":"gather_stone"}.get(j.item,"gather_branch")
 	if host.targets.has(j.target):
 		var point: Vector3=host.targets[j.target].position
 		if j.verb not in ["craft","eat"]:pawn.visual.rotation.y=atan2(point.x-pawn.position.x,point.z-pawn.position.z)
@@ -685,7 +694,7 @@ func tick_actor(id: String,delta: float) -> void:
 	var peer: Dictionary=peers.get(int(pawn.get_meta("peer_id",0)),{})
 	if Time.get_ticks_msec()-int(peer.get("motion_at",0))>1000:pawn.network_direction=Vector3.ZERO;pawn.network_jump=false
 	a.state.time=world.state.time;a.state.plots=world.state.plots;a.state.resources=world.state.resources
-	a.state.build_layout=world.state.build_layout;a.state.icefield_build_layout=world.state.icefield_build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
+	a.state.build_layout=world.state.build_layout;a.state.icefield_build_layout=world.state.icefield_build_layout;a.state.jade_build_layout=world.state.jade_build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
 	preload("res://scripts/city/production_facilities.gd").refresh(maps[a.state.map_id],a)
 	a.state.player_position=vector_array(pawn.position);a.running=pawn.is_running;a.sleeping=pawn.sleeping
 	pawn.speed_multiplier=a.multiplier("move");pawn.run_speed_multiplier=a.multiplier("run_speed");pawn.stamina_fraction=float(a.state.stamina)/a.stamina_max()
@@ -793,11 +802,11 @@ func send_snapshot(peer_id: int) -> void:
 	if not actors.has(id):return
 	var a=actors[id];var snapshot: Dictionary=a.state.duplicate(true)
 	snapshot.erase("account_id");snapshot.erase("seen");snapshot.time=world.state.time
-	snapshot.erase("build_layout");snapshot.erase("icefield_build_layout")
+	snapshot.erase("build_layout");snapshot.erase("icefield_build_layout");snapshot.erase("jade_build_layout")
 	snapshot.land_parcels=world.state.land_parcels;snapshot.building_sites=world.state.building_sites
 	var revision: int=world.state.get("building_revision",0)
 	var map_id: String=a.state.map_id
-	if map_id in ["city","icefield"] and (int(peers[peer_id].get("building_revision_sent",-1))!=revision or peers[peer_id].get("building_map_sent","")!=map_id):
+	if map_id in ["city","icefield","jade"] and (int(peers[peer_id].get("building_revision_sent",-1))!=revision or peers[peer_id].get("building_map_sent","")!=map_id):
 		var key:=Land.layout_key(map_id);snapshot[key]=world.state[key]
 		peers[peer_id].building_revision_sent=revision;peers[peer_id].building_map_sent=map_id
 	snapshot.building_revision=revision

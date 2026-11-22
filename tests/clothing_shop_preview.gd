@@ -1,13 +1,6 @@
 extends SceneTree
 const S=preload("res://scripts/services/session.gd")
 const DB=preload("res://scripts/services/game_data.gd")
-const HUD=preload("res://scripts/ui/city_hud.gd")
-class ShopStage extends Node3D:
-	var map_id:="city"
-	var paused:=false
-	var preparing:=true
-	var talking_npc:=""
-	func end_dialogue() -> void: talking_npc=""
 var session: Node
 var hud: CanvasLayer
 var checks:=0
@@ -41,9 +34,21 @@ func run() -> void:
 		var original_worn: Dictionary=session.state().equipment.duplicate(true)
 		var original_items: Dictionary=session.state().inventory.duplicate(true)
 		var original_money: int=session.state().coins
-		var stage:=ShopStage.new();root.add_child(stage)
-		hud=HUD.new();hud.city=stage;stage.add_child(hud);hud.shop="clothes";hud.open_panel("shop")
+		var stage:=preload("res://scenes/city.tscn").instantiate()
+		root.add_child(stage)
+		while stage.preparing or not is_instance_valid(stage.hud):await process_frame
+		var merchant: Node=stage.targets.Merchant_clothes.node
+		stage.bunny.position=merchant.global_position+Vector3(0,0,1.2)
+		stage.bunny.reset_physics_interpolation()
+		session.set_player_position(stage.bunny.position)
+		hud=stage.hud;hud.shop="clothes";hud.open_panel("shop")
 		await create_timer(.4).timeout
+		var styles: Dictionary={}
+		for id in hud.shop_rows:
+			var item:=DB.item(id)
+			check(not styles.has(item.style),"Only one shop card per garment cut "+item.style)
+			styles[item.style]=true
+			check(hud.shop_rows[id].card.find_children("*","Label",true,false).any(func(label):return label.text==DB.Clothes.stock(item.style).name),"Shop title uses just the garment name "+id)
 		var preview: Control=hud.character_sheet.preview
 		var preview_id: int=preview.get_instance_id()
 		check(preview.is_visible_in_tree() and preview.actor.rig_profile.species_id==species and preview.equipment==original_worn,"Shop opens with current character and actual outfit: "+species)
@@ -57,23 +62,23 @@ func run() -> void:
 		press.pressed=false;Input.parse_input_event(press)
 		check(absf(preview.actor.visual.rotation.y-before_yaw)>.2,"Shop character rotates by dragging")
 		var yaw_: float=preview.actor.visual.rotation.y
-		await click("try_on_item","beret_plaid_rose")
+		await click("try_on_item","beret_honey")
 		await click("try_on_item","apron_honey")
 		await click("try_on_item","bell_blue")
-		check(preview.equipment=={"head":"beret_plaid_rose","body":"apron_honey","neck":"bell_blue"},"Can combine unowned clothes across all three slots")
+		check(preview.equipment=={"head":"beret_honey","body":"apron_honey","neck":"bell_blue"},"Can combine unowned clothes across all three slots")
 		check(session.state().equipment==original_worn and session.state().inventory==original_items and session.state().coins==original_money,"Trying clothes never equips, buys or charges them")
 		check(preview.actor.has_node("Visual/Head/Wardrobe_head") and preview.actor.has_node("Visual/Wardrobe_body") and preview.actor.has_node("Visual/Wardrobe_neck"),"All trial garments are actually attached to the displayed model")
 		await click("category_filter","head")
-		var trial:=button("try_on_item","beret_plaid_sage")
+		var trial:=button("try_on_item","top_hat_midnight")
 		var scroll: ScrollContainer=trial.get_parent().get_parent().get_parent().get_parent()
 		scroll.ensure_control_visible(trial);await create_timer(.12).timeout
 		var scroll_y:=scroll.scroll_vertical
-		await click("try_on_item","beret_plaid_sage")
-		check(preview.equipment.head=="beret_plaid_sage" and preview.equipment.body=="apron_honey","Same-slot trial replaces only that slot")
+		await click("try_on_item","top_hat_midnight")
+		check(preview.equipment.head=="top_hat_midnight" and preview.equipment.body=="apron_honey","Same-slot trial replaces only that slot")
 		check(scroll.scroll_vertical==scroll_y and preview.get_instance_id()==preview_id and is_equal_approx(preview.actor.visual.rotation.y,yaw_),"Trying preserves the scroll position, model instance and rotation")
-		await click("try_on_item","beret_plaid_sage")
+		await click("try_on_item","top_hat_midnight")
 		check(preview.equipment.head==original_worn.head and preview.equipment.neck=="bell_blue","Clicking a trial again restores the worn item in that slot")
-		await click("try_on_item","beret_plaid_rose")
+		await click("try_on_item","beret_honey")
 		await click("category_filter","body")
 		check(button("try_on_item","apron_honey")!=null and button("try_on_item","bow_rose")==null and preview.equipment.neck=="bell_blue","Categories filter the shop while retaining the whole trial outfit")
 		await RenderingServer.frame_post_draw
@@ -81,10 +86,11 @@ func run() -> void:
 		var price: int=DB.item("apron_honey").price
 		var purchase_scroll: ScrollContainer=hud.shop_grid.get_parent()
 		purchase_scroll.ensure_control_visible(button("buy_item","apron_honey"));await create_timer(.15).timeout
+		purchase_scroll.scroll_vertical=int(purchase_scroll.get_v_scroll_bar().max_value)
 		var purchase_position:=purchase_scroll.scroll_vertical
 		var purchase_scroll_id:=purchase_scroll.get_instance_id()
 		var purchase_button_id:=button("buy_item","apron_honey").get_instance_id()
-		check(purchase_position>20,"Clothes purchase starts genuinely scrolled down")
+		check(purchase_position>0 or not purchase_scroll.get_v_scroll_bar().visible,"Purchase exercises the scroll offset whenever filtered stock overflows")
 		await click("buy_item","apron_honey")
 		check(purchase_scroll.scroll_vertical==purchase_position and hud.shop_grid.get_parent().get_instance_id()==purchase_scroll_id,"Buying keeps the exact scroll position and scroll container")
 		check(button("buy_item","apron_honey").get_instance_id()==purchase_button_id,"Buying updates the original button instead of rebuilding its card")
@@ -96,9 +102,9 @@ func run() -> void:
 		check(preview.equipment==original_worn and hud.shop_preview_reset.disabled,"Restore returns all three slots to current clothing")
 		session.state().coins=0;session.changed.emit();await process_frame
 		await click("category_filter","head")
-		check(button("buy_item","beret_plaid_sage").disabled and not button("try_on_item","beret_plaid_sage").disabled,"Insufficient money disables buying while allowing trials")
-		await click("try_on_item","beret_plaid_sage")
-		check(preview.equipment.head=="beret_plaid_sage" and session.state().coins==0,"Trying remains free with no money")
+		check(button("buy_item","top_hat_midnight").disabled and not button("try_on_item","top_hat_midnight").disabled,"Insufficient money disables buying while allowing trials")
+		await click("try_on_item","top_hat_midnight")
+		check(preview.equipment.head=="top_hat_midnight" and session.state().coins==0,"Trying remains free with no money")
 		hud.close_panel();await process_frame
 		check(hud.shop_preview_overrides.is_empty() and not preview.is_visible_in_tree() and not preview.can_process(),"Closing discards trials and suspends the preview")
 		hud.open_panel("wardrobe");await create_timer(.15).timeout

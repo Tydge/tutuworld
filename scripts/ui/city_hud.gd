@@ -105,7 +105,7 @@ func _ready() -> void:
 	bar.anchor_bottom=1
 	bar.position=Vector2(-400,-88)
 	bar.custom_minimum_size=Vector2(800,62)
-	if city.map_id in ["city","icefield"] and city.has_building_world():bar.position.x=-460;bar.custom_minimum_size.x=920
+	if city.map_id in ["city","icefield","jade"] and city.has_building_world():bar.position.x=-460;bar.custom_minimum_size.x=920
 	root_ui.add_child(bar)
 	var buttons:=UI.row(10)
 	bar.add_child(buttons)
@@ -113,7 +113,7 @@ func _ready() -> void:
 		var b:=UI.button(row[0],func(): open_panel(row[1]))
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
-	if city.map_id in ["city","icefield"] and city.has_building_world():
+	if city.map_id in ["city","icefield","jade"] and city.has_building_world():
 		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
@@ -276,6 +276,7 @@ func set_prompt(text: String) -> void:
 	prompt.text=text
 	prompt_card.visible=text!="" and not overlay.visible and not photo_mode
 func close_panel() -> void:
+	if mode=="tailor":UI.clear(content)
 	tailoring=null
 	mode=""
 	fitting_resident=""
@@ -321,6 +322,11 @@ func rebuild() -> void:
 	var title:=UI.label(titles.get(mode,""),28)
 	if mode=="tailor":title.text="裁缝的试衣镜"
 	if mode=="atlas":title.text="踏雪图册"
+	if city.map_id=="jade":
+		if mode=="land":title.text="玉京城 · 六里宅地"
+		if mode=="map":title.text="玉京城 · 山河坊市图"
+		if mode=="workshop":title.text="百工坊 · 制造与织造"
+		if mode=="shop":title.text={"farm":"南货行","tools":"百炼铺","clothes":"云锦庄","furniture":"榫卯行","spice":"桂香茶肆","almond":"杏花食店"}.get(shop,"坊市")
 	if mode=="land" and city.map_id=="icefield":title.text="冰原岛 · 地皮认购"
 	if mode=="travel":title.text="乘船出发 · 选择目的地"
 	if mode=="map" and city.map_id=="icefield":title.text="冰原岛 · 霜光雪镇"
@@ -440,7 +446,7 @@ func scroll_grid(columns: int=3,parent: Control=null,width_: float=900) -> GridC
 	grid.add_theme_constant_override("v_separation",12)
 	scroll.add_child(grid)
 	return grid
-func item_card(id: String,grid: GridContainer) -> VBoxContainer:
+func item_card(id: String,grid: GridContainer,display_name: String="") -> VBoxContainer:
 	var card:=UI.panel(Color("f0efd9"),18,14)
 	card.set_meta("item_id",id)
 	card.custom_minimum_size=Vector2(280,150)
@@ -456,7 +462,7 @@ func item_card(id: String,grid: GridContainer) -> VBoxContainer:
 	row.add_child(icon)
 	var text:=UI.column(4)
 	row.add_child(text)
-	text.add_child(UI.label(DB.item(id).name,16))
+	text.add_child(UI.label(DB.item(id).name if display_name.is_empty() else display_name,16))
 	return c
 func build_inventory(clothes_only: bool) -> void:
 	var s: Dictionary=session.state()
@@ -530,6 +536,8 @@ func build_shop() -> void:
 		sell_tab.set_meta("shop_tab","sell");top.add_child(sell_tab)
 	else: shop_tab="buy"
 	var choices: Array=[["all","全部"],["head","头饰"],["body","身体"],["neck","脖饰"]] if shop=="clothes" else ([["all","全部"],["tool","工具"]] if shop=="tools" else [["all","全部"],["seed","种子"],["ingredient","调料"],["consumable","消耗品"],["crop","农作物"],["food","料理"],["material","材料"]])
+	if shop=="furniture":choices=[["all","成品家具"]]
+	if shop in ["spice","almond"]:choices=[["all","本店茶点"]]
 	if shop=="farm" and shop_tab=="buy": choices=[["all","全部"],["seed","种子"],["ingredient","调料"],["consumable","消耗品"]]
 	build_filters("shop_"+shop+"_"+shop_tab,choices,shop_parent)
 	shop_grid=scroll_grid(2 if clothes_shop else 3,shop_parent,650 if clothes_shop else 900)
@@ -579,6 +587,10 @@ func refresh_shop_items() -> void:
 		if shop_tab=="buy" and (item.get("shop","")!=shop or item.get("shop_map",city.map_id)!=city.map_id):continue
 		if category!="all" and DB.category(id,shop=="clothes")!=category: continue
 		if shop_tab=="sell" and (int(item.get("sell",0))<=0 or session.authority.count(id)<1): continue
+		if shop=="clothes":
+			if DB.Clothes.stock(item.style).item!=id:continue
+			wanted.append(DB.Clothes.shop_garment(item.style,session.state().inventory))
+			continue
 		wanted.append(id)
 	# Ordinary trades retain the same scroll container, cards, focus and preview.
 	for id in shop_rows.keys():
@@ -609,7 +621,7 @@ func refresh_shop_items() -> void:
 	if shop=="clothes": refresh_shop_preview()
 func build_shop_card(id: String) -> Dictionary:
 	var item:=DB.item(id)
-	var c:=item_card(id,shop_grid)
+	var c:=item_card(id,shop_grid,DB.Clothes.stock(item.style).name if shop=="clothes" else "")
 	var row: Dictionary={"card":c.get_parent()}
 	var description:=UI.label(item.description,12,UI.MUTED)
 	description.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
@@ -723,7 +735,7 @@ func build_kitchen() -> void:
 		b.set_meta("recipe",id)
 		c.add_child(b)
 func build_workshop() -> void:
-	content.add_child(UI.label("把采集的材料做成工具。完成时扣材料，取消不消耗。",15,UI.MUTED))
+	content.add_child(UI.label("锻造工具、纺纱织布或裁制衣饰。完成时扣材料，取消不消耗。",15,UI.MUTED))
 	content.add_child(UI.label("制造 Lv.%d · 速度加成 +%d%%"%[session.authority.skill_level("manufacturing"),roundi(session.authority.bonus("manufacture")*100)],17,UI.GREEN))
 	var grid:=scroll_grid(2)
 	for id in DB.catalog().recipes:
@@ -738,7 +750,7 @@ func build_workshop() -> void:
 			enough=enough and owned>=needed
 			c.add_child(UI.label("%s    %d / %d"%[DB.item(ingredient).name,owned,needed],15,UI.MUTED if owned>=needed else Color("b96c59")))
 		var locked: String=session.authority.recipe_lock_reason(id)
-		var owned: bool=session.authority.count(recipe.output)>0
+		var owned: bool=DB.item(recipe.output).kind in ["tool","clothing"] and session.authority.count(recipe.output)>0
 		var b:=UI.button("已拥有" if owned else (locked if locked!="" else ("开始制造" if enough else "材料还不够")),func(): close_panel();city.begin_manufacturing(id),true)
 		b.disabled=owned or not enough or locked!="" or online_target_busy(city.current_target)
 		b.set_meta("recipe",id);c.add_child(b)
@@ -839,6 +851,7 @@ func build_land() -> void:
 	purchase.name="Purchase_"+id;purchase.disabled=int(session.state().coins)<land.PRICE;content.add_child(purchase)
 	var cancel:=UI.button("再想一想",close_panel);cancel.name="CancelLandPurchase";content.add_child(cancel)
 func build_map() -> void:
+	if city.map_id=="jade":preload("res://scripts/jade/atlas.gd").build(self);return
 	if city.map_id=="icefield":preload("res://scripts/icefield/island_map.gd").build(self);return
 	if city.map_id=="valley": build_valley_map();return
 	var east_building: bool=city.has_building_world()

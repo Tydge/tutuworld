@@ -2,6 +2,9 @@ extends RefCounted
 ## An activity belongs to its physical model and uses the same access check in both worlds.
 const Access=preload("res://scripts/city/furniture_access.gd")
 const KINDS:={
+	"jade_practice":["footwork","踏梅花步 · 合着鼓声按 E"],
+	"jade_chime":["chime","依次轻叩五音编磬"],
+	"field_journal":["read","翻开手记，读一段见闻"],
 	"clothing_rack":["tailor","在衣架前试染衣服"],
 	"atlas_stand":["atlas","翻开踏雪图册"],
 	"tile_stove":["hearth","伸爪烤火 · 恢复耐力"],

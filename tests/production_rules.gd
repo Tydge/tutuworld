@@ -29,7 +29,7 @@ func run() -> void:
 	var a=A.new()
 	check(a.skill_level("manufacturing")==1 and a.state.skill_experience.manufacturing==0 and is_equal_approx(a.multiplier("manufacture"),1.01),"Manufacturing begins at Lv.1, zero XP, one percent speed")
 	check(DB.water_capacity("watering_can")==6 and DB.water_capacity("copper_watering_can")==12,"Wood and copper capacities are six and twelve")
-	check(DB.recipes_for_station("workshop").size()==2 and DB.recipes_for_station("kitchen").size()==7,"Two manufacturing recipes leave seven cooking recipes intact")
+	check(DB.recipes_for_station("workshop").size()==13 and DB.recipes_for_station("kitchen").size()==7,"Thirteen manufacturing recipes leave seven cooking recipes intact")
 	check(not command(a,"refill","garden_well").ok and a.job.is_empty(),"No remote refill")
 	place(a,"garden_well")
 	check(not command(a,"refill","garden_well").ok,"Cannot refill without a can")

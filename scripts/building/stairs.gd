@@ -66,7 +66,7 @@ static func validate(layout: Dictionary) -> Dictionary:
 			if not floors_by_level.has(level):floors_by_level[level]=Grid.index(Storeys.subset(layout,level).elements).floors
 	for stair in stairs:
 		for cell in hole_cells(stair):floors_by_level[Storeys.of(stair)+1].erase(cell)
-	var limit:=32 if layout.get("map_id","city")=="icefield" else 16
+	var limit:=32 if layout.get("map_id","city") in ["icefield","jade"] else 16
 	if stairs.size()>limit:return {"ok":false,"message":"这张地图的楼梯达到上限（%d座）。"%limit}
 	for stair in stairs:
 		var level:=Storeys.of(stair);var data:=definition(stair.form)

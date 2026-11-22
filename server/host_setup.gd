@@ -20,6 +20,7 @@ static func setup(host: Node3D) -> void:
 		preload("res://scripts/building/site.gd").build_winter(host.scenery)
 		host.register_winter_rooms(false)
 	preload("res://scripts/city/room_activities.gd").outfit_shop(host)
+	if host.map_id=="jade":host.register_city(false)
 	host.spawn_npcs()
 	if host.map_id=="city":
 		host.targets.home_bed={"kind":"bed","position":host.home.get_node("Furnishing/bed/ActionAnchor").global_position,"node":host.home.get_node("Furnishing/bed")}

@@ -13,7 +13,7 @@ const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","land_parcels"]
+const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","jade_build_layout","land_parcels"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
@@ -300,6 +300,10 @@ func set_parcel_layout(parcel_id: String,candidate: Dictionary,expected_revision
 	if checked.layout==state()[layout_key]:return checked
 	var before:=snapshot();var old_revision: int=authority.revision
 	var old_world:=world.duplicate(true);var old_characters:=characters.duplicate(true)
+	var stock=preload("res://scripts/building/warehouse.gd")
+	var movement: Dictionary=stock.balance(state().inventory,state()[layout_key],checked.layout)
+	if not movement.ok:return movement
+	stock.settle(authority,movement)
 	state()[layout_key]=checked.layout;state().land_parcels.plots[parcel_id].revision+=1
 	authority.revision+=1;state().revision=authority.revision
 	# Layout, parcel revision and ownership are one full-save transaction.
@@ -314,9 +318,19 @@ func set_build_layout(candidate: Dictionary) -> Dictionary:
 	if not checked.ok:return checked
 	if state().build_layout==checked.layout:return checked
 	var previous: Dictionary=state().build_layout;var revision_before: int=authority.revision;var state_revision_before: int=int(state().revision)
+	var stock=preload("res://scripts/building/warehouse.gd")
+	var movement: Dictionary=stock.balance(state().inventory,previous,checked.layout)
+	if not movement.ok:return movement
+	var before_inventory: Dictionary=state().inventory.duplicate()
+	var old_world:=world.duplicate(true);var old_characters:=characters.duplicate(true)
+	stock.settle(authority,movement)
 	state()["build_layout"]=checked.layout
 	authority.revision+=1;state().revision=authority.revision
-	if not test_mode and not preload("res://scripts/building/layout_store.gd").write(save_path,building_generation,str(state().get("world_id","local")),checked.layout):
+	var saved:=true
+	if not movement.changes.is_empty():saved=save_game()
+	elif not test_mode:saved=preload("res://scripts/building/layout_store.gd").write(save_path,building_generation,str(state().get("world_id","local")),checked.layout)
+	if not saved:
+		state().inventory=before_inventory;world=old_world;characters=old_characters
 		state().build_layout=previous;authority.revision=revision_before;state().revision=state_revision_before
 		return {"ok":false,"message":"布局保存失败，已保留修改前的房间。"}
 	changed.emit()
@@ -379,6 +393,7 @@ func restore_state(raw: Dictionary):
 	s["land_parcels"]=preload("res://scripts/building/parcels.gd").normalize(raw.get("land_parcels",{}))
 	s["build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("build_layout",{}),"city")
 	s["icefield_build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("icefield_build_layout",{}),"icefield")
+	s["jade_build_layout"]=preload("res://scripts/building/layout.gd").normalize(raw.get("jade_build_layout",{}),"jade")
 	s.player_id=str(raw.get("player_id","local_bunny")).left(80)
 	s.character_name=str(raw.get("character_name","")).strip_edges().left(12)
 	if valid_name(s.character_name)!="": s.character_name=Animals.display_name(str(raw.get("species","bunny")))
@@ -423,7 +438,8 @@ func restore_state(raw: Dictionary):
 	s.stamina_recovery_elapsed=clampf(float(raw.get("stamina_recovery_elapsed",0)),0,29.999999)
 	s.clothing_designs=preload("res://scripts/appearance/clothing_designs.gd").normalize(raw.get("clothing_designs",{}),s.inventory)
 	var bed_id:=str(raw.get("rest_bed",""));var bed_valid: bool=(bed_id=="home_bed" and s.map_id in ["city","valley"]) or (s.map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS)
-	if bed_id.begins_with("build:") and s.map_id in ["city","icefield"]:
+	if s.map_id=="jade" and bed_id in ["jade:hostel:bed_0","jade:ferry:bed_0","jade:inn:bed_0","jade:farmhouse:bed_0","jade:chamber:bed_0"]:bed_valid=true
+	if bed_id.begins_with("build:") and s.map_id in ["city","icefield","jade"]:
 		var bed:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(s,s.map_id),bed_id.trim_prefix("build:"))
 		bed_valid=bed.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[bed.kind].get("bed",false)
 	s.snow_trail=preload("res://scripts/icefield/snow_trail.gd").normalize(raw.get("snow_trail",{}))
@@ -530,7 +546,7 @@ func receive_online_snapshot(data: Dictionary) -> void:
 	online_winter_building_available=bool(data.get("winter_building",false))
 	var prior_state: Dictionary=authority.state
 	authority.state=data.state
-	for map_id in ["city","icefield"]:
+	for map_id in ["city","icefield","jade"]:
 		var key: String=preload("res://scripts/building/parcels.gd").layout_key(map_id)
 		if not authority.state.has(key):authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)
 	authority.job=data.get("job",{}).duplicate(true)

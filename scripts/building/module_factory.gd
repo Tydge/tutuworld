@@ -37,6 +37,7 @@ static func make(layout: Dictionary,city: Node3D) -> Node3D:
 	sync(root,layout,city);root.assembling=false;return root
 static func shell(city: Node3D) -> Node3D:
 	var root:=preload("res://scripts/building/building_world.gd").new();root.name="PlayerBuiltHome";root.city=city;root.assembling=true;root.position=Site.CENTER+Vector3.UP*preload("res://scripts/building/parcels.gd").base_height(city.map_id)
+	if city.map_id=="jade":root.mask_origin=Vector2i(132,152);root.mask_size=Vector2i(210,152)
 	if city.map_id=="icefield":root.mask_origin=Vector2i(-144,-264);root.mask_size=Vector2i(372,528)
 	root.set_meta("buildable_reference",true);root.set_meta("module_type","player_building")
 	city.scenery.add_child(root)
@@ -215,6 +216,8 @@ static func sync_incremental(root: Node3D,layout: Dictionary,city: Node3D,budget
 		var entry: Dictionary=root.render_cache[id];var module: Node3D=entry.node
 		mark_navigation(root,entry.row);module.hide();module.name="__retired_"+id;module.process_mode=Node.PROCESS_MODE_DISABLED
 		for body in module.find_children("*","CollisionObject3D",true,false):body.collision_layer=0;body.collision_mask=0
+		# Interaction ticks continue while old geometry is freed across frames.
+		if entry.row.type in ["door","object"] and "targets" in city:city.targets.erase("build:"+str(id))
 		retired.append(module);root.render_cache.erase(id)
 	for id in prepared:
 		var entry: Dictionary=prepared[id];entry.node.name=id;entry.node.process_mode=Node.PROCESS_MODE_INHERIT;entry.node.show();root.render_cache[id]=entry;mark_navigation(root,desired[id].row)

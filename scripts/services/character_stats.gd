@@ -56,6 +56,6 @@ static func work_skill(verb: String,item: String,station: String="") -> String:
 	if verb in ["plant","water","weed","harvest"]: return "planting"
 	if verb=="craft": return "manufacturing" if station=="workshop" else "cooking"
 	if verb!="gather": return ""
-	return {"orange":"planting","branch":"woodcutting","birch":"woodcutting","copper":"mining","iron":"mining","limestone":"quarrying","sandstone":"quarrying"}.get(item,"")
+	return {"cedar":"woodcutting","nephrite":"quarrying","silver_ore":"mining","orange":"planting","branch":"woodcutting","birch":"woodcutting","copper":"mining","iron":"mining","limestone":"quarrying","sandstone":"quarrying"}.get(item,"")
 static func work_tier(item: String) -> int:
-	return 2 if item in ["birch","iron","sandstone"] else 1
+	return 3 if item in ["cedar","nephrite","silver_ore"] else 2 if item in ["birch","iron","sandstone"] else 1

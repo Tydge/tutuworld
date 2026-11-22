@@ -8,6 +8,8 @@ const SWATCHES=["eadcc0","dfae7a","c67978","a891b4","78a7ad","719684","435e75","
 
 var hud: CanvasLayer
 var items: Array[String]=[]
+var garment_buttons: Array[Button]=[]
+var portraits: SubViewport
 var chosen: String
 var options: Array[String]
 var preview: SubViewportContainer
@@ -33,9 +35,7 @@ func build(hud_: CanvasLayer) -> void:
 	var layout:=UI.row(26);hud.content.add_child(layout)
 	preview=Preview.new();preview.preview_size=Vector2i(354,460);preview.display_size=Vector2(354,460);layout.add_child(preview)
 	var tools:=UI.column(12);tools.size_flags_horizontal=Control.SIZE_EXPAND_FILL;layout.add_child(tools)
-	var garment:=choose_field(tools,"TailorGarment")
-	for id in items:garment.add_item(DB.item(id).name)
-	garment.item_selected.connect(select_item)
+	build_garments(tools,state)
 	options=Materials.choices("fabric","clothing")
 	tools.add_child(UI.label("纹样",15,UI.MUTED));material=choose_field(tools,"TailorPattern")
 	for id in options:material.add_item(Materials.label(id))
@@ -70,7 +70,59 @@ void fragment() {
 	var selected:=0
 	for id in state.equipment.values():
 		if id in items:selected=items.find(id);break
-	garment.select(selected);select_item(selected)
+	select_item(selected)
+	var scroll:=tools.find_child("TailorGarment",true,false) as ScrollContainer
+	scroll.ensure_control_visible.call_deferred(garment_buttons[selected])
+
+func build_garments(parent: Control,state: Dictionary) -> void:
+	var frame:=UI.panel(Color("f0efd9"),12,6)
+	parent.add_child(frame)
+	var scroll:=ScrollContainer.new()
+	scroll.name="TailorGarment"
+	scroll.custom_minimum_size.y=146
+	scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus=true
+	frame.add_child(scroll)
+	var grid:=HFlowContainer.new()
+	grid.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	scroll.add_child(grid)
+	portraits=preload("res://scripts/ui/garment_thumbnails.gd").new()
+	portraits.species=state.species
+	frame.add_child(portraits)
+	var group:=ButtonGroup.new()
+	for index in range(items.size()):
+		var id:=items[index]
+		var item:=DB.item(id)
+		var button:=Button.new()
+		button.custom_minimum_size=Vector2(68,68)
+		button.toggle_mode=true
+		button.button_group=group
+		button.tooltip_text=item.name
+		button.accessibility_name=item.name
+		button.mouse_default_cursor_shape=Control.CURSOR_POINTING_HAND
+		for role in ["normal","hover","pressed","hover_pressed"]:
+			var selected: bool=role in ["pressed","hover_pressed"]
+			var style:=UI.box(Color("dcebcf") if role!="normal" else UI.CREAM,10,0)
+			style.shadow_size=0
+			style.set_border_width_all(3 if selected else 1)
+			style.border_color=UI.GREEN if selected else Color("d5d9c3")
+			button.add_theme_stylebox_override(role,style)
+		grid.add_child(button)
+		var icon:=TextureRect.new()
+		icon.name="GarmentPicture"
+		icon.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		icon.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+		button.add_child(icon)
+		icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		icon.offset_left=5
+		icon.offset_top=5
+		icon.offset_right=-5
+		icon.offset_bottom=-5
+		portraits.request(id,state.get("clothing_designs",{}).get(id,{}),icon)
+		button.pressed.connect(select_item.bind(index))
+		garment_buttons.append(button)
 
 func choose_field(parent: Control,id: String) -> OptionButton:
 	var field:=OptionButton.new()
@@ -98,6 +150,7 @@ func dye_button(parent: Control,id: String) -> ColorPickerButton:
 
 func select_item(index: int) -> void:
 	chosen=items[index]
+	garment_buttons[index].set_pressed_no_signal(true)
 	var saved: Dictionary=hud.session.state().get("clothing_designs",{}).get(chosen,{})
 	var defaults:=DB.item(chosen)
 	base_dye.color=Color(saved.get("color",defaults.get("color","eadcc0")))
@@ -135,8 +188,11 @@ func save_design(restore: bool) -> void:
 	else:
 		hud.session.set_player_position(hud.city.bunny.global_position)
 		result=hud.session.dispatch("tailor",args)
-	if not is_instance_valid(status):return
+	if not is_instance_valid(status) or not is_instance_valid(portraits) or not portraits.is_inside_tree():return
 	pending=false;status.text=str(result.get("message",""))
+	if result.ok:
+		var icon: TextureRect=garment_buttons[items.find(current)].get_node("GarmentPicture")
+		portraits.request(current,hud.session.state().get("clothing_designs",{}).get(current,{}),icon)
 	if restore and result.ok and current==chosen:select_item(items.find(current))
 	else:
 		apply.disabled=false;reset.disabled=not hud.session.state().get("clothing_designs",{}).has(chosen)

@@ -70,6 +70,7 @@ static func prepare(module: Node3D,kind: String,builder: RefCounted) -> void:
 		for mesh in groups[key].find_children("*","MeshInstance3D",true,false):
 			mesh.set_meta("appearance_part",key);mesh.set_meta("appearance_original",mesh.material_override)
 static func protected(mesh: MeshInstance3D) -> bool:
+	if mesh.get_meta("appearance_effect",false):return true
 	if str(mesh.name)=="Bulb":return true
 	var material: Material=mesh.material_override
 	if material is ShaderMaterial:
@@ -115,6 +116,7 @@ static func set_color(material: Material,color_: Color,definition: Dictionary,pr
 		if preserve and material.get_shader_parameter("vertex_tint"):
 			var old:=Color(definition.colors[0]).srgb_to_linear();var target:=color_.srgb_to_linear();material.set_shader_parameter("tint",Color(target.r/maxf(.001,old.r),target.g/maxf(.001,old.g),target.b/maxf(.001,old.b)).linear_to_srgb())
 		else:material.set_shader_parameter("tint",color_);material.set_shader_parameter("vertex_tint",false)
+	elif material.shader==preload("res://assets/shaders/jade_silk_lantern.gdshader"):material.set_shader_parameter("silk",color_)
 	elif material.shader==preload("res://assets/shaders/farm_soil.gdshader"):material.set_shader_parameter("soil_color",color_)
 	elif material.shader==preload("res://assets/shaders/forest_blossoms.gdshader"):material.set_shader_parameter("dye_multiplier",color_)
 	else:material.set_shader_parameter("dye",color_)

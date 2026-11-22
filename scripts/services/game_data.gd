@@ -32,7 +32,9 @@ static func crop_quality_max(id: String) -> int:
 	for stage in care_stages(id):
 		opportunities+=int(stage.get("water",false))+int(stage.get("weed",false))
 	return opportunities
-static func plots() -> Array:
+static func plots(map_id: String="city") -> Array:
+	if map_id=="jade":return preload("res://scripts/jade/layout.gd").farm()
+	if map_id!="city":return []
 	if not _plots.is_empty(): return _plots
 	var out: Array = []
 	for row in range(6):
@@ -40,6 +42,7 @@ static func plots() -> Array:
 	_plots=out
 	return _plots
 static func resources(map_id: String="city") -> Array:
+	if map_id=="jade":return preload("res://scripts/jade/layout.gd").sources()
 	if map_id=="valley": return valley_resources()
 	if map_id=="icefield": return icefield_resources()
 	if map_id!="city": return []
@@ -59,7 +62,7 @@ static func resources(map_id: String="city") -> Array:
 		var point: Vector2=[Vector2(-12,-7),Vector2(12,-7),Vector2(-12,6),Vector2(12,6)][i]
 		_resources.append({"id":"city_orange_%d"%i,"item":"orange","x":point.x,"z":point.y,"map":"city"})
 	return _resources
-static func all_resources() -> Array: return resources("city")+resources("valley")+resources("icefield")
+static func all_resources() -> Array: return resources("city")+resources("valley")+resources("icefield")+resources("jade")
 static func resource(id: String) -> Dictionary:
 	for source in all_resources():
 		if source.id==id: return source
@@ -69,6 +72,7 @@ static func refresh_delay(id: String,generation: int) -> float:
 	return random.randf_range(3600,7200)
 
 static func shops(map_id: String="city") -> Dictionary:
+	if map_id=="jade":return preload("res://scripts/jade/layout.gd").shops()
 	if map_id=="icefield":return preload("res://scripts/icefield/icefield_layout.gd").shop_positions()
 	return {"farm":Vector2(-18,-28.72),"tools":Vector2(-5,-28.72),"clothes":Vector2(8,-28.72)}
 

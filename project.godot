@@ -112,3 +112,23 @@ environment/defaults/default_clear_color=Color(0.6, 0.8, 0.8, 1)
 rendering_device/driver.macos="metal"
 rendering_device/driver.windows="d3d12"
 rendering_device/d3d12/agility_sdk_version=618
+
+[shader_globals]
+
+canopy_focus={
+"type": "vec4",
+"value": Vector4(0, 0, 0, 0)
+}
+canopy_eye={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}
+
+sky_lattice={
+"type": "sampler2D",
+"value": "res://assets/terrain/sky_lattice.png"
+}
+sky_stars={
+"type": "sampler2D",
+"value": "res://assets/terrain/sky_stars.png"
+}

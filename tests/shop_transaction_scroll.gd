@@ -4,8 +4,13 @@ func run() -> void:
 	session=S.new();session.name="Session";root.add_child(session);Engine.max_fps=30
 	session.create_character("逛街兔","bunny","vest_sage");session.state().coins=10000
 	var position_: Vector2=DB.shops().farm;session.set_player_position(Vector3(position_.x,.18,position_.y+2))
-	var stage:=ShopStage.new();root.add_child(stage)
-	hud=HUD.new();hud.city=stage;stage.add_child(hud);hud.shop="farm";hud.open_panel("shop")
+	var stage:=preload("res://scenes/city.tscn").instantiate()
+	root.add_child(stage)
+	while stage.preparing or not is_instance_valid(stage.hud):await process_frame
+	stage.bunny.position=stage.targets.Merchant_farm.node.global_position+Vector3(0,0,1.2)
+	stage.bunny.reset_physics_interpolation()
+	session.set_player_position(stage.bunny.position)
+	hud=stage.hud;hud.shop="farm";hud.open_panel("shop")
 	await create_timer(.35).timeout
 	var id: String=hud.shop_rows.keys().back()
 	var price: int=DB.item(id).price

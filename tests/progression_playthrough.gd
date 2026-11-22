@@ -42,6 +42,7 @@ func run() -> void:
 	for species in ["bunny","cat_teacher"]:
 		session.authority=A.new()
 		session.settings.player_species=species
+		session.state().species=species
 		session.state().coins=4000
 		game=load("res://scenes/city.tscn").instantiate()
 		root.add_child(game)
@@ -51,6 +52,8 @@ func run() -> void:
 		var detour: PackedVector3Array=game.navigation.path_between(Vector3(-5.8,0,8),Vector3(-5.8,0,13))
 		check(detour.size()>2 and Array(detour).any(func(p): return absf(p.x+5.8)>2),"Path detours around welcome sign: "+species)
 		var npc: CharacterBody3D=game.get_node("Passerby0" if species=="bunny" else "CatTeacher")
+		var merchant: Node3D=game.targets.Merchant_clothes.node
+		var counter:=merchant.position
 		var driver: Node
 		for other in game.npcs:
 			for child in other.get_children():
@@ -73,17 +76,20 @@ func run() -> void:
 		var farm: Node3D=game.get_node("Merchant_farm")
 		check(farm.get_meta("equipment").body=="apron_sage","Seed merchant wears the new apron")
 		check(game.get_node("Merchant_tools").get_meta("equipment").head=="beret_plaid_honey","One existing beret wearer uses tartan")
-		await travel(Vector3(6,.2,-20))
-		for id in DB.catalog().items:
-			if id.begins_with("beret_plaid_") or id.begins_with("apron_"):
-				check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"New clothing purchasable: "+species+" "+id)
+		merchant.position=counter
+		merchant.reset_physics_interpolation()
+		await travel(counter+Vector3(0,0,1.2))
+		for id in ["beret_honey","apron_honey"]:
+			check(session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Garment cut purchasable: "+species+" "+id)
+		# A returning wardrobe still carries its individually dyed inventory IDs.
+		for id in ["beret_plaid_rose","apron_sage","apron_rose"]:session.authority.add(id,1)
 		session.authority.add("sea_salt",3)
 		session.authority.add("carrot",2)
 		game.hud.shop="clothes"
 		game.hud.filters.shop_clothes_buy="head"
 		game.hud.open_panel("shop")
 		await create_timer(.3).timeout
-		check(shown_items().all(func(id): return DB.item(id).slot=="head") and shown_items().has("beret_plaid_rose"),"Shop category shows only headwear: "+species)
+		check(shown_items().all(func(id): return DB.item(id).slot=="head") and shown_items().has("beret_honey"),"Shop category shows only headwear: "+species)
 		game.hud.close_panel()
 		session.dispatch("equip",{"slot":"head","item":"beret_plaid_rose"})
 		session.dispatch("equip",{"slot":"body","item":"apron_sage"})
@@ -111,19 +117,23 @@ func run() -> void:
 		session.state().food_effect={"item":"food_carrot_soup","expires_at":session.state().time+1800}
 		session.changed.emit()
 		check(game.hud.buff_icon.visible and absf(game.hud.buff_icon.progress-.5)<.001,"Buff ring represents remaining duration: "+species)
-		check(game.hud.coin_label.get_parent().get_child_count()==2,"Right HUD contains time and coins, no buff text")
-		Input.warp_mouse(Vector2(60,60))
+		check(game.hud.clock_card.is_ancestor_of(game.hud.coin_label) and game.hud.clock_card.is_ancestor_of(game.hud.clock_label) and not game.hud.clock_card.is_ancestor_of(game.hud.buff_icon),"Right HUD contains time and coins, no buff text")
+		var icon_center: Vector2=game.hud.buff_icon.get_global_rect().get_center()
+		root.warp_mouse(icon_center)
 		var hover:=InputEventMouseMotion.new()
-		hover.position=Vector2(60,60)
-		root.push_input(hover)
+		hover.position=icon_center
+		hover.global_position=icon_center
+		root.push_input(hover,true)
 		await create_timer(.4).timeout
+		if not game.hud.buff_icon.details.visible:print("BUFF_HOVER target=",icon_center," mouse=",game.hud.buff_icon.get_global_mouse_position()," elapsed=",game.hud.buff_icon.hover_time)
 		check(game.hud.buff_icon.details.visible and game.hud.buff_icon.description.contains("15%"),"Hover shows the in-game buff description: "+species)
 		await capture("成长验证-"+species+"-Buff悬浮")
 		Input.warp_mouse(Vector2(1000,700))
 		# One real work action gains one XP; profile presents the actual worn model.
 		session.state().plots.plot_00={"crop":"carrot","growth":0.0,"water_stage":-1,"weed_stage":0}
 		session.authority.add("watering_can",1)
-		await travel(Vector3(22,.2,-4.5))
+		session.state().watering_water.watering_can=3
+		await travel(game.target_position("plot_00")+Vector3(0,.1,1))
 		session.active=true
 		check(game.begin_action("water","plot_00").ok,"Start real XP-bearing work: "+species)
 		await create_timer(2.2).timeout
@@ -138,7 +148,7 @@ func run() -> void:
 		game.hud.character_sheet.pages.current_tab=1
 		await create_timer(.2).timeout
 		var skills: Array=game.hud.character_sheet.find_children("*","Label",true,false).filter(func(label_): return label_.has_meta("skill"))
-		check(skills.size()==5 and skills.all(func(label_): return label_.text.begins_with("Lv.")),"Five skill levels render: "+species)
+		check(skills.size()==preload("res://scripts/services/character_stats.gd").SKILLS.size() and skills.all(func(label_): return label_.text.begins_with("Lv.")),"All skill levels render: "+species)
 		game.hud.close_panel()
 		var portrait_id: int=game.hud.character_sheet.preview.get_instance_id()
 		game.hud.open_panel("wardrobe")
@@ -183,7 +193,7 @@ func run() -> void:
 		await create_timer(.15).timeout
 		session.state().stamina=0
 		await create_timer(.25).timeout
-		check(not game.bunny.run_enabled and not game.bunny.is_running,"Exhaustion automatically returns to walking: "+species)
+		check(game.bunny.run_enabled and game.bunny.is_running and session.state().stamina==0,"Running remains available at zero stamina: "+species)
 		Input.action_release("move_down")
 		session.active=false
 		session.authority.running=false

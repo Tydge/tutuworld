@@ -80,7 +80,7 @@ static func compress(layout: Dictionary,grid: Dictionary,level: int=0) -> Dictio
 	var used: Dictionary={};var retained: Array=[];var openings: Array=[];var old_walls: Dictionary={}
 	for row in layout.elements:
 		if row.type=="wall":old_walls[row.id]=row
-		elif row.type!="floor":retained.append(row);used[row.id]=true
+		elif row.type!="floor":retained.append(row.duplicate(true));used[row.id]=true
 	for row in retained:
 		if row.type not in ["door","window"]:continue
 		if row.has("anchor"):openings.append({"row":row,"p":Vector2(row.anchor[0],row.anchor[1]),"axis":row.axis});continue

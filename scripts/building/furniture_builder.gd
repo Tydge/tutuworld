@@ -4,6 +4,31 @@ func discard(node: Node) -> void:
 	node.get_parent().remove_child(node);node.free()
 func build_item(n: Node3D,kind: String) -> void:
 	n.set_meta("furniture_kind",kind)
+	if kind in ["jade_well_kit","jade_workbench"]:
+		var production=preload("res://scripts/city/production_builder.gd")
+		var facilities=preload("res://scripts/city/production_facilities.gd")
+		if kind=="jade_well_kit":
+			var def: Dictionary=facilities.object_definitions()[0].duplicate(true);def.origin=[0,0,0];def.yaw=0.
+			var well: Node3D=production.build_well(n,def)
+			for child in well.get_children():well.remove_child(child);n.add_child(child)
+			well.free()
+		else:
+			production.build_workbench(self,n)
+			facilities.configure(n,{"id":"workbench","name":"百工案","kind":"workshop","anchors":{"ActionAnchor":[0,.10,1.8],"WorkAnchor":[0,.10,1.8],"EffectAnchor":[0,1.12,.15]}})
+			n.remove_meta("facility_id")
+		preload("res://scripts/jade/material_parts.gd").prepare(n,kind)
+		return
+	if kind.begins_with("jade_"):
+		var shell:=Node3D.new();shell.name="Carpentry";n.add_child(shell)
+		if kind=="jade_palace":shell.scale=Vector3.ONE*.77
+		if kind.begins_with("jade_tree_"):
+			preload("res://scripts/jade/grove.gd").place(shell,int(kind.trim_prefix("jade_tree_")))
+		else:
+			preload("res://scripts/jade/architecture.gd").prop(shell,kind)
+			if kind in preload("res://scripts/jade/prefabs.gd").KINDS:
+				preload("res://scripts/jade/prefabs.gd").prepare(shell,kind)
+		preload("res://scripts/jade/material_parts.gd").prepare(shell,kind)
+		return
 	if kind in ["tea_service", "field_journal", "pressed_leaves", "ceramic_vases", "woven_basket", "moon_mobile", "petal_armchair", "floor_lamp", "lotus_pendant", "canopy_bed", "cloud_bed", "rose_arch", "lily_pond"]:
 		preload("res://scripts/building/new_furniture.gd").build(self,n,kind)
 		preload("res://scripts/building/appearance.gd").prepare(n,kind,self)

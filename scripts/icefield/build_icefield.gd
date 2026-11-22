@@ -59,7 +59,7 @@ func build_environment() -> void:
 	sun.shadow_bias=.10;sun.shadow_normal_bias=.65;sun.directional_shadow_max_distance=145.;sun.directional_shadow_mode=DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS;sun.directional_shadow_split_1=.24;sun.directional_shadow_blend_splits=true;sun.directional_shadow_fade_start=.8;world.add_child(sun)
 	var island:=group(world,"Island");var sea:=ShaderMaterial.new();sea.shader=load("res://assets/shaders/polar_ocean.gdshader");sea.set_shader_parameter("sea_color",Color("284b69"));island.set_meta("sea_material",sea)
 	var plane:=PlaneMesh.new();plane.size=Vector2(3000,3000)
-	var ocean:=G.mesh(island,plane,Vector3(0,-.65,0),sea,"PolarSea");ocean.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var ocean:=G.mesh(island,plane,Vector3(0,L.SEA_LEVEL,0),sea,"PolarSea");ocean.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	group(world,"Streetlights");group(world,"CentralPark")
 func build_terrain() -> void:
 	var terrain:=group(world,"SnowAndIceTerrain")

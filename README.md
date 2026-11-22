@@ -1,5 +1,7 @@
 # 兔兔的世界
 
+**源码试玩 · 玉京城**　海岛城南码头现可前往第四张地图。登漕运钟楼、游园、买地建宅，或在郊外种棉麻并织衣。本地可双击[玉京城预览](tools/本地玉京预览.command)使用独立角色。[城市玩法](docs/玉京城.md) · [四图实拍与实走验收](docs/evidence/jade-city-20261123/README.md)。
+
 Godot 4.6.3 的 3D 生活模拟游戏。正式版 **0.5.1 / build 11** 开放海岛城、眠风山谷和冰原岛。海岛城南码头可乘船前往山谷或冰原，各收 10 贝壳币，回城免费。已有玩家可在游戏内检查更新、下载并重启。
 
 [Windows x64 下载](https://47.119.37.251/tutuworld/releases/0.5.1/TutuWorld-Windows.zip) · [Mac 通用版下载](https://47.119.37.251/tutuworld/releases/0.5.1/TutuWorld-macOS.zip) · [0.5.1 发布记录](docs/0.5.1_发布与部署记录_2026-11-22.md)

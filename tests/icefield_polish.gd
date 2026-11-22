@@ -70,6 +70,7 @@ func run() -> void:
 	check(manager.updates-updated>=14,"Reflection capture updates every displayed orbit frame")
 	check(missing==0 and max_error<6.,"Reflected object stays registered to the surface during camera motion")
 	marker.queue_free()
+	await reflected_stars(manager)
 	# Physical boundary approach: mountain faces stop the pawn before the fallback
 	# map clamp. The open coast visibly descends into water before that clamp.
 	game.bunny.can_move=true;game.bunny.network_controlled=true;game.bunny.run_enabled=true
@@ -80,5 +81,72 @@ func run() -> void:
 		var water_edge:=L.height_at(stopped.x+cos(a),stopped.z+sin(a))<.1
 		check(L.ellipse(stopped.x,stopped.z)<.963 or water_edge,"Boundary is reached at a visible mountain or water edge "+str(a))
 	game.bunny.network_direction=Vector3.ZERO
+	# Launch with full ice momentum near the south lip and then walk back inland.
+	for x in [-33.,0.,43.]:
+		var z:=L.RADII.y*sqrt(.915*.915-pow(x/L.RADII.x,2.))-.65
+		game.bunny.position=Vector3(x,L.walk_height(x,z)+.03,z)
+		game.bunny.velocity=Vector3.ZERO
+		game.bunny.reset_physics_interpolation()
+		for frame in range(6):await physics_frame
+		game.bunny.velocity.z=5.95
+		game.bunny.network_direction=Vector3.BACK
+		game.bunny.network_jump=true
+		var airborne:=false
+		for frame in range(75):
+			await physics_frame
+			airborne=airborne or not game.bunny.is_on_floor()
+		var landed: Vector3=game.bunny.position
+		check(airborne and landed.distance_to(Vector3(x,L.walk_height(x,z),z))<2. and L.can_walk(landed) and landed.y>0. and game.bunny.is_on_floor(),"Running jump lands on dry southern shore "+str(x))
+		game.bunny.network_direction=Vector3.FORWARD
+		for frame in range(75):await physics_frame
+		check(game.bunny.position.z<landed.z-.9,"Can immediately walk inland after the coastal jump "+str(x))
+		game.bunny.network_direction=Vector3.ZERO
 	print("ICEFIELD_POLISH_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	game.queue_free();await process_frame;quit(0 if failures.is_empty() else 1)
+
+func reflected_stars(manager: Node) -> void:
+	game.update_lighting(.94)
+	var origin:=Vector3(50.,3.,62.)
+	var heading:=Vector3(.08,-.43,1.).normalized()
+	game.camera.position=origin
+	game.camera.look_at(origin+heading)
+	for frame in range(5):await process_frame;RenderingServer.force_draw()
+	var image: Image=manager.viewport.get_texture().get_image()
+	var size_:=image.get_size()
+	var peaks: Array[Dictionary]=[]
+	# Observe genuine isolated stars in a clear sector of the reflected southern sky.
+	for y in range(size_.y/3,size_.y*2/3,1):
+		for x in range(size_.x/5,size_.x*4/5,1):
+			var light:=image.get_pixel(x,y).b
+			if light<.28:continue
+			var background: float=(image.get_pixel(x-5,y).b+image.get_pixel(x+5,y).b)*.5
+			if light-background<.10 or light<image.get_pixel(x-1,y).b or light<=image.get_pixel(x+1,y).b or light<image.get_pixel(x,y-1).b or light<=image.get_pixel(x,y+1).b:continue
+			var screen:=Vector2(x+.5,y+.5)
+			var direction: Vector3=manager.reflected.project_ray_normal(screen)
+			peaks.append({"direction":direction,"energy":star_energy(image,Vector2i(x,y))})
+	var stable:=0
+	var observed:=mini(peaks.size(),32)
+	var tracks: Array=[]
+	for i in range(observed):tracks.append(true)
+	for step in range(1,8):
+		game.camera.position=origin+Vector3.RIGHT*.06*step
+		game.camera.look_at(game.camera.position+heading.rotated(Vector3.UP,.00037*step))
+		await process_frame;RenderingServer.force_draw()
+		image=manager.viewport.get_texture().get_image()
+		for i in range(observed):
+			var star: Dictionary=peaks[i]
+			var xy: Vector2=manager.reflected.unproject_position(manager.reflected.global_position+star.direction*500.)
+			var energy:=star_energy(image,Vector2i(xy.floor()))
+			if absf(energy-star.energy)>maxf(.14,star.energy*.22):tracks[i]=false
+	stable=tracks.count(true)
+	print("REFLECTED_STARS stable=",stable," observed=",observed)
+	check(observed>=4 and stable>=ceili(float(observed)*.90),"Tracked stars retain reflected light across subpixel camera motion")
+	await photo("03-night-ice-moving")
+
+func star_energy(image: Image,center: Vector2i) -> float:
+	var background: float=(image.get_pixel(center.x-5,center.y).b+image.get_pixel(center.x+5,center.y).b)*.5
+	var sum:=0.
+	for y in range(center.y-3,center.y+4):
+		for x in range(center.x-3,center.x+4):
+			sum+=maxf(image.get_pixel(x,y).b-background,0.)
+	return sum

@@ -19,6 +19,16 @@ static func items() -> Dictionary:
 			_items[id]=row
 	return _items
 
+static func stock(style: String) -> Dictionary:
+	return data().shop_stock[style]
+
+static func shop_garment(style: String,inventory: Dictionary) -> String:
+	var sample: String=stock(style).item
+	if int(inventory.get(sample,0))>0:return sample
+	for id in inventory:
+		if int(inventory[id])>0 and items().get(id,{}).get("style","")==style:return id
+	return sample
+
 static func starters() -> Array[String]:
 	var result: Array[String]=[];result.assign(data().starters);return result
 
@@ -29,7 +39,7 @@ static func errors() -> Array[String]:
 		var row: Dictionary=items()[id]
 		if not data().styles.has(row.get("style","")):result.append(id+": unknown clothing style")
 		if row.get("pattern","") not in Catalog.choices("fabric","clothing"):result.append(id+": unknown clothing pattern")
-		if row.get("slot","") not in ["head","body","neck"] or int(row.get("price",-1))<0:result.append(id+": invalid slot or price")
+		if row.get("slot","") not in ["head","body","neck"] or (row.get("rank","")!="loom" and int(row.get("price",-1))<0):result.append(id+": invalid slot or price")
 		for channel in ["color","accent"]:
 			if channel=="accent" and not row.has(channel):continue
 			var color_:=str(row.get(channel,""))

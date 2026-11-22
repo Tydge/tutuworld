@@ -5,6 +5,7 @@ const PRICE:=100
 const REACH:=3.5
 const SIGN_REACH:=2.6
 const Winter=preload("res://scripts/icefield/building_plots.gd")
+const Jade=preload("res://scripts/jade/layout.gd")
 const SIZE:=Winter.SIZE
 const IDS:=["east_nw","east_ne","east_sw","east_se"]
 const ORIGINS:=[Vector2(77,-14),Vector2(119,-14),Vector2(77,14),Vector2(119,14)]
@@ -12,23 +13,27 @@ const NAMES:=["海风一号地","花庭二号地","林荫三号地","听潮四�
 static func ids_for(map_id: String) -> Array:
 	match map_id:
 		"city":return IDS
+		"jade":return Jade.LOTS
 		"icefield":return Winter.IDS
 	return []
 static func map_for(id: String) -> String:
+	if id in Jade.LOTS:return "jade"
 	if id in IDS:return "city"
 	return "icefield" if id in Winter.IDS else ""
-static func layout_key(map_id: String) -> String:return "icefield_build_layout" if map_id=="icefield" else "build_layout"
+static func layout_key(map_id: String) -> String:return "jade_build_layout" if map_id=="jade" else "icefield_build_layout" if map_id=="icefield" else "build_layout"
 static func layout_for(state: Dictionary,map_id: String) -> Dictionary:
 	var key:=layout_key(map_id)
 	return state[key] if state.has(key) else load("res://scripts/building/layout.gd").empty(map_id)
-static func base_height(map_id: String) -> float:return Winter.LEVEL if map_id=="icefield" else 0.
+static func base_height(map_id: String) -> float:return 2. if map_id=="jade" else Winter.LEVEL if map_id=="icefield" else 0.
 static func empty() -> Dictionary:return {"version":1,"plots":{}}
 static func bounds(id: String) -> Rect2:
+	if id in Jade.LOTS:return Rect2(Jade.LOT_ORIGINS[Jade.LOTS.find(id)],SIZE)
 	var index:=IDS.find(id)
 	if index>=0:return Rect2(ORIGINS[index],SIZE)
 	index=Winter.IDS.find(id)
 	return Winter.bounds(index) if index>=0 else Rect2()
 static func title(id: String) -> String:
+	if id in Jade.LOTS:return Jade.LOT_NAMES[Jade.LOTS.find(id)]
 	var index:=IDS.find(id)
 	if index>=0:return NAMES[index]
 	index=Winter.IDS.find(id)
@@ -41,6 +46,7 @@ static func distance_to(id: String,p: Vector3) -> float:
 static func sign_position(id: String) -> Vector3:
 	var index:=IDS.find(id)
 	var rect:=bounds(id)
+	if id in Jade.LOTS:return Vector3(rect.get_center().x,2.,rect.end.y+1.25)
 	if index<0:
 		index=Winter.IDS.find(id)
 		if index<0:return Vector3(INF,INF,INF)
@@ -58,7 +64,7 @@ static func nearest(p: Vector3,map_id: String="city") -> String:
 static func normalize(raw: Variant) -> Dictionary:
 	var result:=empty()
 	if not raw is Dictionary or not raw.get("plots",{}) is Dictionary:return result
-	for id in IDS+Winter.IDS:
+	for id in IDS+Winter.IDS+Jade.LOTS:
 		var record: Variant=raw.get("plots",{}).get(id,{})
 		if record is Dictionary and record.get("owner_id","") is String and not record.get("owner_id","").is_empty():
 			result.plots[id]={"owner_id":record.owner_id,"revision":maxi(0,int(record.get("revision",0))),"purchased_at":maxi(0,int(record.get("purchased_at",0)))}
@@ -82,11 +88,19 @@ static func contains_row(id: String,row: Dictionary,layout: Dictionary) -> bool:
 	return plot.size!=Vector2.ZERO and includes(plot,rect.position) and includes(plot,rect.end)
 static func outside(layout: Dictionary,id: String) -> Array:
 	return layout.get("elements",[]).filter(func(row):return not contains_row(id,row,layout))
+static func same_outside(before: Dictionary,after: Dictionary,id: String) -> bool:
+	# Packing runs may reorder records. Every foreign ID and its complete contents must survive.
+	var original: Dictionary={}
+	for row in outside(before,id):original[row.id]=row
+	for row in outside(after,id):
+		if original.get(row.id)!=row:return false
+		original.erase(row.id)
+	return original.is_empty()
 static func validate_edit(state: Dictionary,id: String,candidate: Dictionary,expected_revision: int=-1) -> Dictionary:
 	if map_for(id)!=state.get("map_id","city") or not owns(state,id):return {"ok":false,"message":"只能建造自己已经购买的地皮。"}
 	var revision: int=state.land_parcels.plots[id].revision
 	if expected_revision>=0 and expected_revision!=revision:return {"ok":false,"message":"这块地皮已有更新，请重新进入建造。"}
 	# IDs can change when contiguous floor/wall runs compress. Compare the entire
 	# untouched region, not only changed IDs; public land and other parcels stay fixed.
-	if outside(layout_for(state,map_for(id)),id)!=outside(candidate,id):return {"ok":false,"message":"本次只能修改当前地皮，不能越界建造或修改其他地皮。"}
+	if not same_outside(layout_for(state,map_for(id)),candidate,id):return {"ok":false,"message":"本次只能修改当前地皮，不能越界建造或修改其他地皮。"}
 	return {"ok":true,"revision":revision}

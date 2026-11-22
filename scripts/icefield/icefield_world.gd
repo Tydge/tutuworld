@@ -50,9 +50,26 @@ func respawn_position() -> Vector3:
 func player_spawn_position(pos: Array) -> Vector3:
 	var p:=Vector3(pos[0],pos[1],pos[2])
 	return Vector3(p.x,maxf(p.y,IceLayout.walk_height(p.x,p.z)+.035),p.z) if can_walk(p) else respawn_position()
-func is_ice_surface(p: Vector3) -> bool:return IceLayout.is_ice(p)
+func guard_shore_landing(actor: CharacterBody3D,before_step: Vector3) -> void:
+	var point:=actor.global_position
+	if point.y>IceLayout.SEA_LEVEL and IceLayout.can_walk(point):return
+	# Collision response can push an airborne actor farther than its input step.
+	if before_step.y>IceLayout.SEA_LEVEL and IceLayout.can_walk(before_step):
+		var ground:=IceLayout.walk_height(before_step.x,before_step.z)
+		actor.global_position=Vector3(before_step.x,maxf(point.y,ground+.025),before_step.z)
+	else:
+		actor.global_position=respawn_position()
+	actor.velocity=Vector3.ZERO
+	actor.ice_inertia=false
+	actor.reset_physics_interpolation()
+
+func is_ice_surface(p: Vector3) -> bool:
+	if not IceLayout.is_ice(p):return false
+	# Both prediction and the server install the same collision-backed floor plan.
+	var home_:=scenery.get_node_or_null("PlayerBuiltHome")
+	return home_==null or not (home_.surface_at(p) or home_.stair_at(p))
 func movement_acceleration(p: Vector3,moving: bool) -> float:
-	return (IceLayout.ACCELERATION if moving else IceLayout.BRAKING) if IceLayout.is_ice(p) else (20. if moving else 24.)
+	return (IceLayout.ACCELERATION if moving else IceLayout.BRAKING) if is_ice_surface(p) else (20. if moving else 24.)
 func setup_targets() -> void:
 	setup_resources();preload("res://scripts/city/interaction_targets.gd").add_benches(self)
 	for r in DB.resources("icefield"):

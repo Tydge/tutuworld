@@ -311,6 +311,14 @@
       "icefield_journey",
       "icefield_polish",
       "icefield_performance"
+    ],
+    "jade": [
+      "jade_area_rules",
+      "jade_multiplayer_rules",
+      "jade_walking_routes",
+      "jade_workshop_flow",
+      "jade_city_flow",
+      "jade_visual_acceptance"
     ]
   },
   "tests": {
@@ -581,7 +589,9 @@
       "headless": true
     },
     "town_polish_flow": {
-      "args": ["--frame-policy-test"]
+      "args": [
+        "--frame-policy-test"
+      ]
     },
     "coastal_modules_flow": {},
     "coastal_town_walk": {},
@@ -596,6 +606,21 @@
     "winter_roof_geometry": {
       "headless": true
     },
-    "winter_models_preview": {}
+    "winter_models_preview": {},
+    "jade_multiplayer_rules": {
+      "headless": true
+    },
+    "jade_area_rules": {
+      "headless": true
+    },
+    "jade_walking_routes": {
+      "headless": true,
+      "engine_args": ["--fixed-fps", "60"]
+    },
+    "jade_visual_acceptance": {
+      "args": [
+        "--benchmark"
+      ]
+    }
   }
 }

@@ -84,7 +84,7 @@ func run() -> void:
 	var buttons: Array=city.hud.content.find_children("*","Button",true,false);var recipes: Array=[]
 	for button in buttons:
 		if button.has_meta("recipe"): recipes.append(button.get_meta("recipe"))
-	check(recipes.size()==2 and recipes.has("copper_watering_can") and recipes.has("copper_axe"),"Workshop UI offers only its two manufacturing recipes")
+	check(recipes.size()==13 and recipes.has("copper_watering_can") and recipes.has("copper_axe"),"Workshop UI offers all thirteen manufacturing recipes")
 	await screenshot("铜叶工坊-制造面板")
 	city.hud.close_panel();check(city.begin_manufacturing("copper_watering_can").ok,"Manufacturing starts through real city interaction")
 	await create_timer(.65).timeout

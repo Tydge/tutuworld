@@ -22,7 +22,7 @@ func _ready() -> void:
 	var footprint:=CylinderShape3D.new();footprint.radius=.94;footprint.height=2.40
 	query.shape=footprint;query.collision_mask=5;query.collide_with_areas=false
 	floor_query.collision_mask=8
-	build.call_deferred()
+	if not has_meta("survey_only"):build.call_deferred()
 func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 	if not get_parent().can_navigate(Vector3(x,0,z)): return true
 	for area: Rect2 in stair_reservations:
@@ -30,9 +30,10 @@ func blocked(space: PhysicsDirectSpaceState3D,x: int,z: int) -> bool:
 	# The outdoor grid samples ground near its own height. Upper storeys must
 	# never replace a street cell with the roof / highest floor above it.
 	var map_id: String=get_parent().get("map_id")
-	var top:=90. if map_id=="valley" else 18.
+	var top:=90. if map_id in ["valley","jade"] else 18.
 	var site=preload("res://scripts/building/site.gd")
-	if map_id=="icefield" and site.within(Vector2(x,z),map_id):
+	if map_id=="jade":top=preload("res://scripts/jade/layout.gd").foot(x,z)+.79
+	elif map_id=="icefield" and site.within(Vector2(x,z),map_id):
 		top=preload("res://scripts/building/parcels.gd").base_height(map_id)+.75
 	elif map_id=="city" and site.contains(Vector3(x,0,z)):
 		top=.75
@@ -70,6 +71,7 @@ func build() -> void:
 	await get_tree().physics_frame
 	reserve_stairs()
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
+	if get_parent().map_id=="jade" and await restore_jade(space):return
 	var count_:=0
 	for z in range(map_bounds.position.y,map_bounds.end.y):
 		for x in range(map_bounds.position.x,map_bounds.end.x):
@@ -78,6 +80,35 @@ func build() -> void:
 	await rebuild_destinations()
 	ready_for_paths=true
 	print("WANDER_GRID_READY cells=",count_," components=",destinations.size())
+func restore_jade(space: PhysicsDirectSpaceState3D) -> bool:
+	var host: Node=get_parent()
+	var heights: PackedFloat32Array=host.scenery.get_meta("navigation_heights",PackedFloat32Array())
+	var regions: PackedInt32Array=host.scenery.get_meta("navigation_components",PackedInt32Array())
+	if heights.size()!=map_bounds.get_area() or regions.size()!=heights.size():return false
+	var land=preload("res://scripts/building/parcels.gd")
+	var state: Dictionary=host.session.state()
+	var changed: Array[Rect2]=[];var occupied:=false
+	for id in preload("res://scripts/jade/layout.gd").LOTS:
+		var bounds: Rect2=land.bounds(id).grow(2.)
+		if not state.get("building_sites",{}).is_empty() or not state.get("jade_build_layout",{}).get("elements",[]).is_empty():changed.append(bounds)
+	var i:=0;var slice:=Time.get_ticks_usec()
+	for z in range(map_bounds.position.y,map_bounds.end.y):
+		for x in range(map_bounds.position.x,map_bounds.end.x):
+			var cell:=Vector2i(x,z);var height_:=heights[i];var component:=regions[i];i+=1
+			if changed.any(func(b):return b.has_point(Vector2(x,z))):
+				var blocked_now:=blocked(space,x,z)
+				grid.set_point_solid(cell,blocked_now);occupied=true
+			else:
+				grid.set_point_solid(cell,component<0)
+				if component>=0:floor_heights[cell]=height_
+			if changed.is_empty() and component>=0:
+				component_of[cell]=component
+				if not destinations.has(component):destinations[component]=[[],[],[],[],[],[],[],[],[]]
+				destinations[component][zone(Vector3(x,0,z))].append(cell)
+		if Time.get_ticks_usec()-slice>4000:await get_tree().physics_frame;slice=Time.get_ticks_usec()
+	if occupied:await rebuild_destinations()
+	sampling_ready=true;ready_for_paths=true
+	print("WANDER_GRID_READY baked cells=",i," components=",destinations.size());return true
 static func zone(point: Vector3) -> int:
 	var column:=0 if point.x< -18 else (2 if point.x>18 else 1)
 	var row:=0 if point.z< -14 else (2 if point.z>14 else 1)

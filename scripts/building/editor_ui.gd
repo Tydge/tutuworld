@@ -30,6 +30,9 @@ var tools: Dictionary={}
 var cards: Dictionary={}
 var card_images: Dictionary={}
 var tabs: Dictionary={}
+const Stock=preload("res://scripts/building/warehouse.gd")
+var making:=false
+var empty_warehouse: Label
 var category:="结构"
 var updating:=false
 var studio: Node
@@ -79,10 +82,12 @@ func _ready() -> void:
 	commands.add_child(compact("清空地块",func():editor.clear_plot(),"ClearBuildPlot"))
 	body.add_child(VSeparator.new())
 	var catalog:=UI.column(6);catalog.size_flags_horizontal=Control.SIZE_EXPAND_FILL;body.add_child(catalog)
-	var category_row:=UI.row(5);catalog.add_child(category_row)
+	var category_row:=HFlowContainer.new();category_row.add_theme_constant_override("h_separation",4);catalog.add_child(category_row)
 	for name_ in Catalog.CATEGORIES:
 		var tab:=compact(name_,func():show_category(name_),"Category_"+name_);tab.toggle_mode=true;category_row.add_child(tab);tabs[name_]=tab
 	breadcrumb=UI.row(6);catalog.add_child(breadcrumb);breadcrumb.add_child(compact("‹ 返回结构",func():show_category("结构"),"BackToStructures"));breadcrumb_label=UI.label("",14);breadcrumb.add_child(breadcrumb_label);breadcrumb.hide()
+	empty_warehouse=UI.label("仓库还空着。去榫卯行买件家具，或在「制作」里动手做一件。",14,UI.MUTED)
+	empty_warehouse.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;catalog.add_child(empty_warehouse);empty_warehouse.hide()
 	catalog_area=ScrollContainer.new();catalog_area.name="CatalogScroll";catalog_area.size_flags_vertical=Control.SIZE_EXPAND_FILL;catalog_area.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;catalog.add_child(catalog_area)
 	item_grid=GridContainer.new();item_grid.columns=7;item_grid.size_flags_horizontal=Control.SIZE_EXPAND_FILL;item_grid.add_theme_constant_override("h_separation",7);item_grid.add_theme_constant_override("v_separation",7);catalog_area.add_child(item_grid)
 	for item in [["房间","room"],["地板","floor"],["墙壁","wall"],["窗户","window"],["房门","door"],["屋顶","roof"],["楼梯","stairs"],["护栏","railing"]]:add_card(item[1],item[0],"结构")
@@ -91,6 +96,7 @@ func _ready() -> void:
 		for form in Structures.FORMS[family]:add_card(family+":"+form,Structures.FORMS[family][form],"结构/"+family)
 	var samples: Dictionary=preload("res://scripts/building/templates.gd").SAMPLE_NAMES
 	for id in samples:add_card("template:"+id,samples[id],"样板房")
+	for id in Stock.RECIPES:add_card("make:"+id,Catalog.OBJECTS[id].name,"制作")
 	for id in Catalog.OBJECTS:add_card("object:"+id,Catalog.OBJECTS[id].name,Catalog.OBJECTS[id].category)
 	body.add_child(VSeparator.new())
 	var details:=UI.column(6);details.custom_minimum_size.x=360;body.add_child(details)
@@ -118,7 +124,7 @@ func _ready() -> void:
 	for name_ in ["内侧","外侧","双面"]:wall_face.add_item(name_)
 	wall_face.tooltip_text="内外由闭合房间识别；隔墙两侧都有房间时，朝向镜头的房间为内侧";paint_row.add_child(wall_face);wall_face.item_selected.connect(func(_index):editor.restore_surface_preview();refresh(editor.selected_row()))
 	apply_button=compact("应用外观",func():editor.paint_selected(color.color,STYLES[style.selected]),"ApplyBuildAppearance");paint_row.add_child(apply_button)
-	batch_paint=CheckButton.new();batch_paint.name="PaintMatchingRoom";batch_paint.text="整间内墙 / 整栋外墙";batch_paint.button_pressed=true;batch_paint.add_theme_font_size_override("font_size",13);batch_paint.tooltip_text="内墙：所选封闭房间全部内壁；外墙：同栋房屋各层外壁。地板：本房间同款。关闭后只改当前半米单元。";batch_paint.toggled.connect(func(_value):preview_surface());details.add_child(batch_paint)
+	batch_paint=CheckButton.new();batch_paint.name="PaintMatchingRoom";batch_paint.text="整间内墙 / 整栋外墙";batch_paint.button_pressed=true;batch_paint.add_theme_font_size_override("font_size",13);batch_paint.tooltip_text="内墙：所选封闭房间全部内壁；外墙：同栋房屋各层外壁。地板：同一房间内相连的地板。未封闭时沿相接的地板或墙段刷色。关闭后只改当前半米单元。";batch_paint.toggled.connect(func(_value):preview_surface());details.add_child(batch_paint)
 	appearance_button=compact("外观 · 选择部位",func():appearance_panel.open(editor.selected_row()),"EditFurnitureAppearance");details.add_child(appearance_button)
 	appearance_panel=preload("res://scripts/building/appearance_panel.gd").new();appearance_panel.editor=editor;root_ui.add_child(appearance_panel)
 	color.color_changed.connect(func(_value):preview_surface())
@@ -135,6 +141,15 @@ func add_card(id: String,label_: String,group: String) -> void:
 	var preview:=TextureRect.new();preview.mouse_filter=Control.MOUSE_FILTER_IGNORE;preview.custom_minimum_size.y=72;preview.size_flags_vertical=Control.SIZE_EXPAND_FILL;preview.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;preview.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED;col.add_child(preview);card_images[id]=preview
 	var caption:=UI.label(label_,13);caption.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;caption.mouse_filter=Control.MOUSE_FILTER_IGNORE;col.add_child(caption)
 func choose_card(id: String) -> void:
+	if id.begins_with("make:"):
+		if making:return
+		making=true
+		var args:={"item":id.trim_prefix("make:"),"parcel_id":editor.parcel_id}
+		var session: Node=editor.city.session
+		var result: Dictionary=await session.request_online("make_furniture",args) if session.is_online() else session.dispatch("make_furniture",args)
+		making=false;message(result.message,not result.ok)
+		if result.ok:editor.city.play_tone(622,.2,.09)
+		show_category(category);return
 	if id.begins_with("template:"):editor.place_template(id.trim_prefix("template:"));return
 	if Structures.FORMS.has(id) or id=="stairs":
 		form_family=id;breadcrumb.show();breadcrumb_label.text={"door":"房门造型","window":"窗户造型","roof":"屋顶造型","stairs":"楼梯形状"}[id]
@@ -144,17 +159,35 @@ func choose_card(id: String) -> void:
 		catalog_area.scroll_vertical=0;resize_grid();editor.choose_tool(id+(":straight" if id=="stairs" else ":classic"))
 	else:editor.choose_tool(id)
 func show_category(value: String) -> void:
-	category=value;form_family="";breadcrumb.hide()
+	category=value;form_family="";breadcrumb.hide();empty_warehouse.visible=value=="仓库"
 	for id in cards:
 		cards[id].visible=cards[id].get_meta("category")==value
-		if cards[id].visible:studio.request(id.trim_prefix("object:"))
+		if value=="仓库" and id.begins_with("object:") and Stock.RECIPES.has(id.trim_prefix("object:")):
+			var key:=str(id).trim_prefix("object:")
+			var qty:=available_stock(key)
+			cards[id].visible=qty>0
+			if qty>0:empty_warehouse.hide()
+			cards[id].get_child(0).get_child(1).text=Catalog.OBJECTS[key].name+" ×"+str(qty)
+		if cards[id].visible:studio.request(str(id).trim_prefix("object:").trim_prefix("make:"))
+		if cards[id].visible and str(id).begins_with("make:"):
+			var k:=str(id).trim_prefix("make:");var costs:=PackedStringArray()
+			for mat in Stock.RECIPES[k]:costs.append("%s %d/%d"%[preload("res://scripts/services/game_data.gd").item(mat).name,editor.city.session.authority.count(mat),Stock.RECIPES[k][mat]])
+			cards[id].tooltip_text="制作"+Catalog.OBJECTS[k].name+" · "+"，".join(costs)
 	for name_ in tabs:tabs[name_].set_pressed_no_signal(name_==value)
 	catalog_area.scroll_vertical=0;resize_grid()
+func available_stock(key: String) -> int:
+	var inventory: Dictionary=editor.city.session.state().inventory
+	var adjustment:=0
+	if editor.city.session.is_online():
+		adjustment=int(Stock.count_in(editor.saved_layout()).get(key,0))-int(Stock.count_in(editor.layout).get(key,0))
+	return int(inventory.get(key,0))+adjustment
 func set_thumbnail(id: String,texture: Texture2D) -> void:
+	if card_images.has("make:"+id):card_images["make:"+id].texture=texture
 	var tool_id: String="object:"+id if Catalog.OBJECTS.has(id) else id
 	if card_images.has(tool_id):card_images[tool_id].texture=texture
 	if selected_thumb_key==id:selected_preview.texture=texture
 func refresh(row: Dictionary) -> void:
+	if category in ["仓库","制作"]:show_category(category)
 	root_ui.find_child("ParcelTitle",true,false).text="东岸 · 建造" if editor.parcel_id=="" else preload("res://scripts/building/parcels.gd").title(editor.parcel_id)
 	updating=true
 	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.editing_layout())

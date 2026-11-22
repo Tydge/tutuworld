@@ -37,7 +37,7 @@ func _ready() -> void:
 func show_tool(kind: String,water_id: String="",item: String="",seconds: float=2.) -> void:
 	verb=kind;clock=0;duration=maxf(.01,seconds);floor_sample=Vector3.INF
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
-	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id)
+	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id,item)
 	elif kind=="refill": prop=Models.make("water",water_id)
 	elif kind=="eat":prop=eating_prop()
 	else:

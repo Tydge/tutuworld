@@ -52,6 +52,7 @@ func run() -> void:
 		var rect:=Land.bounds(id)
 		var sign:=Land.sign_position(id)
 		check(rect.size==Land.SIZE and absf(Ice.height_at(sign.x,sign.z)-sign.y)<.01 and game.targets.has("land:"+id),"Complete level plot and sign "+id)
+	check(game.scenery.get_node("IcefieldBuildingSite").find_children("CornerStake*","",true,false).is_empty(),"Winter lots retain their purchase signs without boundary posts")
 	for sample in Templates.SAMPLE_NAMES:
 		var source:=Templates.player_sample(sample)
 		if source.is_empty():
@@ -60,7 +61,7 @@ func run() -> void:
 			var map_id:=Land.map_for(id);var center:=Land.bounds(id).get_center()
 			var proposed:=Layout.validate(Layout.merge_template(Layout.empty(map_id),source,center,0),map_id)
 			check(proposed.ok and Land.outside(proposed.get("layout",{}),id).is_empty(),"Template "+sample+" fits "+id+" "+str(proposed.get("message","")))
-	var id:="snow_birch";var sign:=Land.sign_position(id)
+	var id:="ice_south_1";var sign:=Land.sign_position(id)
 	await place(sign+Vector3(0,.06,1.7))
 	check(game.current_target=="land:"+id,"Approaching the standing sign offers E purchase")
 	game.interact()
@@ -82,6 +83,13 @@ func run() -> void:
 		var saved: Dictionary=Land.layout_for(session.state(),"icefield")
 		check(not saved.elements.is_empty() and session.state().build_layout.elements.is_empty(),"Icefield layout saves independently of city")
 		check(is_instance_valid(editor.room) and is_equal_approx(editor.room.global_position.y,Ice.ICE_LEVEL),"Built room and rendering use the ice pad height")
+		var foundation: Vector2i=Layout.compiled(saved).floors.keys()[0]
+		var foot:=Vector3((foundation.x+.5)*.5,Ice.ICE_LEVEL+.20,(foundation.y+.5)*.5)
+		await place(foot)
+		check(Ice.is_ice(game.bunny.position) and not game.is_ice_surface(game.bunny.position) and not game.bunny.ice_inertia,"Standing on a built ground floor overrides the blue ice beneath")
+		var bare:=Vector3(32.,Ice.ICE_LEVEL+.035,100.)
+		await place(bare)
+		check(game.is_ice_surface(game.bunny.position) and game.bunny.ice_inertia,"Leaving the foundation restores ice inertia")
 	for bed_id in Trail.LODGE_BEDS:
 		var bed_row: Dictionary=game.targets.get(bed_id,{})
 		check(not bed_row.is_empty(),"Registered inn bed "+bed_id)
@@ -104,6 +112,10 @@ func run() -> void:
 	var tailor: Dictionary=game.targets.get("shop_clothing_rack",{})
 	check(not tailor.is_empty(),"Original clothes shop display is an interactive rack")
 	if not tailor.is_empty():
+		for garment in ["bow_sage","bow_honey","cowboy_hat_saddle","duffle_berry","apron_honey","bell_blue","top_hat_midnight","kerchief_pine","capelet_frost","day_dress_cornflower","oxford_shirt_tide","silk_bowtie_claret","gold_chain_cable"]:
+			session.authority.add(garment,1)
+		session.state().clothing_designs["bow_sage"]={"color":"12a4fe","accent":"f08d34","pattern":"dots"}
+		session.state().clothing_designs["bow_honey"]={"color":"a33049","accent":"f4d752","pattern":"tartan"}
 		await place(tailor.position+Vector3(.6,.025,0))
 		game.current_target="shop_clothing_rack";game.interact()
 		check(game.hud.mode=="tailor" and is_instance_valid(game.hud.tailoring),"E at the display opens the fitting mirror")
@@ -115,13 +127,26 @@ func run() -> void:
 				var picker: ColorPicker=button.get_picker()
 				check(picker.color_mode==ColorPicker.MODE_RGB and picker.sliders_visible and picker.hex_visible,"Fabric channel exposes free RGB and hexadecimal entry")
 			screen.base_dye.color=Color("12a4fe");screen.pattern_dye.color=Color("f08d34")
-			screen.repaint();await screenshot("03-tailoring")
+			screen.repaint()
+			await ready_portraits(screen)
+			var original:=portrait(screen,"bow_rose").texture
 			screen.apply.pressed.emit()
+			await ready_portraits(screen)
+			await screenshot("03-tailoring")
+			var tartan:=portrait(screen,"bow_rose").texture
+			var dots:=portrait(screen,"bow_sage").texture
+			var warm:=portrait(screen,"bow_honey").texture
+			check(tartan!=null and dots!=null and warm!=null,"All three owned versions have real model portraits")
+			if tartan and dots and warm and original:
+				check(tartan.get_image().get_data()!=dots.get_image().get_data(),"Identical dyes with dots and tartan yield different woven thumbnails")
+				check(tartan.get_image().get_data()!=warm.get_image().get_data(),"Same weave with different dyes yields different thumbnails")
+				check(original.get_image().get_data()!=tartan.get_image().get_data(),"Saving a dye job refreshes its portrait")
 			check(session.state().clothing_designs.get("bow_rose",{})=={"pattern":"tartan","color":"12a4fe","accent":"f08d34"},"The fitting mirror saves both dyes and the texture")
 			var restored: RefCounted=session.restore_state(session.snapshot())
 			check(restored.state.clothing_designs==session.state().clothing_designs,"Garment customization survives restoration")
 			screen.reset.pressed.emit()
-			check(session.state().clothing_designs.is_empty(),"Original texture and colors can be restored")
+			await ready_portraits(screen)
+			check(not session.state().clothing_designs.has("bow_rose") and portrait(screen,"bow_rose").texture==original,"Restore returns the original garment portrait and preserves other designs")
 			game.hud.close_panel()
 	for mark in Trail.STAMPS:
 		var target: String="snow_stamp:"+mark
@@ -153,3 +178,14 @@ func run() -> void:
 	print("WINTER_PLAYGROUND_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	game.queue_free();await process_frame
 	quit(0 if failures.is_empty() else 1)
+
+func portrait(screen: RefCounted,id: String) -> TextureRect:
+	return screen.garment_buttons[screen.items.find(id)].get_node("GarmentPicture")
+
+func ready_portraits(screen: RefCounted) -> void:
+	for frame in range(160):
+		await process_frame
+		if screen.portraits.active.is_empty() and screen.portraits.pending.is_empty():break
+	for tile in screen.garment_buttons:
+		var picture: TextureRect=tile.get_node("GarmentPicture")
+		check(tile.get_global_rect().encloses(picture.get_global_rect()) and tile.get_global_rect().get_center().distance_to(picture.get_global_rect().get_center())<.1 and picture.texture!=null,"Rendered garment is centered inside its clickable tile "+tile.tooltip_text)

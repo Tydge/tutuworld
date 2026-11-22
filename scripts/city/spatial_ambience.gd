@@ -15,7 +15,7 @@ func voice(id: String,volume: float,radius: float,reach: float) -> AudioStreamPl
 func _ready() -> void:
 	listener=AudioListener3D.new();listener.name="PlayerAudioListener";add_child(listener);listener.make_current()
 	waves=voice("ocean_waves",-13.,8.,62.);gulls=voice("seagulls",-13.,7.,48.)
-	if city.map_id=="valley":creek=voice("creek",-13.,6.,34.)
+	if city.map_id in ["valley","jade"]:creek=voice("creek",-13.,6.,34.)
 	for i in range(65):var angle:=i*TAU/64.;shore.append(Vector2(cos(angle)*52.,sin(angle)*52.*.88))
 	update_sources();update_listener()
 func update_listener() -> void:
@@ -33,6 +33,7 @@ static func nearest_on(points: PackedVector2Array,p: Vector2) -> Vector2:
 		if d<distance_:best=candidate;distance_=d
 	return best
 func ocean_point(p: Vector2) -> Vector3:
+	if city.map_id=="jade":return Vector3(clampf(p.x,-236.,236.),0.,209.)
 	if city.map_id=="icefield":return Vector3(clampf(p.x,-100.,150.),-.5,157.)
 	if city.map_id=="valley":return Vector3(-26.,-.5,108.)
 	var point:=nearest_on(shore,p)
@@ -44,6 +45,7 @@ func ocean_point(p: Vector2) -> Vector3:
 	if east.distance_squared_to(p)<point.distance_squared_to(p):point=east
 	return Vector3(point.x,-.10,point.y)
 func creek_point(p: Vector2) -> Vector3:
+	if city.map_id=="jade":return Vector3(p.x,.12,preload("res://scripts/jade/layout.gd").river_z(p.x))
 	var points:=PackedVector2Array()
 	for z in range(-92,115,4):points.append(Vector2(Valley.river_x(z),z))
 	var point:=nearest_on(points,p);return Vector3(point.x,Valley.water_level(point.y)+.12,point.y)
@@ -54,6 +56,7 @@ func update_sources() -> void:
 	var bird_time:=gulls.get_playback_position();var between_calls: bool=bird_time<5. or (bird_time>14. and bird_time<22.) or (bird_time>27. and bird_time<37.) or bird_time>42.
 	if between_calls or gulls.position==Vector3.ZERO:
 		var anchors: Array=[Vector3(-26,5,94)] if city.map_id=="valley" else [Vector3(-24,5,-35),Vector3(18,5,40),Vector3(95,5,19),Vector3(156,5,19)]
+		if city.map_id=="jade":anchors=[Vector3(-13,7,204),Vector3(18,9,195),Vector3(-106,10,-2)]
 		if city.map_id=="icefield":anchors=[Vector3(-102,8,129),Vector3(70,8,149)];gulls.volume_db=-25.
 		anchors.sort_custom(func(a,b):return Vector2(a.x,a.z).distance_squared_to(p)<Vector2(b.x,b.z).distance_squared_to(p));gulls.global_position=anchors[0]
 	var indoors: float=city.interior_weight()

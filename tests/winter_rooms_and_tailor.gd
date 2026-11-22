@@ -71,6 +71,9 @@ func run() -> void:
 	for id in DB.catalog().items:
 		var item:=DB.item(id)
 		if item.get("shop_map","")!="icefield":continue
+		if DB.Clothes.stock(item.style).item!=id:
+			check(not game.hud.shop_rows.has(id) and not session.dispatch("buy",{"shop":"clothes","item":id}).ok,"Legacy winter color is absent from stock "+id)
+			continue
 		var button: Array=game.hud.content.find_children("*","Button",true,false).filter(func(n):return n.get_meta("buy_item","")==id)
 		check(button.size()==1,"Winter variant is listed in tailor "+id)
 		if not button.is_empty():button[0].pressed.emit()
@@ -78,15 +81,15 @@ func run() -> void:
 		if not styles.has(item.style):
 			styles[item.style]=[];slots[item.slot]=slots.get(item.slot,0)+1
 		styles[item.style].append(item.pattern)
-	check(slots=={"head":2,"neck":2,"body":2} and styles.values().all(func(v):return v.size()==3 and v.has("snowstar") and v.has("herringbone") and v.has("argyle")),"Six winter cuts, each in three distinct prints")
+	check(slots=={"head":2,"neck":2,"body":2} and styles.values().all(func(v):return v.size()==1),"Six winter cuts, each sold once")
 	var chooser: OptionButton=game.hud.content.find_child("FittingSubject",true,false)
 	for i in range(chooser.item_count):
 		if chooser.get_item_metadata(i)=="SnowPanda":chooser.item_selected.emit(i);break
-	for id in ["pompom_cap_pine","kerchief_frost","duffle_berry"]:game.hud.try_on_clothing(id)
+	for id in ["pompom_cap_frost","kerchief_frost","duffle_frost"]:game.hud.try_on_clothing(id)
 	var player_worn: Dictionary=session.state().equipment.duplicate()
 	check(game.hud.character_sheet.preview.species=="panda","Tailor previews the chosen neighbor species")
 	game.hud.content.find_child("DressResident",true,false).pressed.emit()
-	check(game.targets.SnowPanda.node.get_meta("equipment")=={"head":"pompom_cap_pine","neck":"kerchief_frost","body":"duffle_berry"} and session.state().equipment==player_worn,"Resident wears the requested outfit independently")
+	check(game.targets.SnowPanda.node.get_meta("equipment")=={"head":"pompom_cap_frost","neck":"kerchief_frost","body":"duffle_frost"} and session.state().equipment==player_worn,"Resident wears the requested outfit independently")
 	check(session.restore_state(session.snapshot()).state.winter_outfits==session.state().winter_outfits,"Resident outfit survives save conversion")
 	await photo("tailor")
 	var reset: Array=game.hud.content.find_children("*","Button",true,false).filter(func(b):return b.text=="恢复原装")

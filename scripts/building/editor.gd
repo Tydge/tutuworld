@@ -109,7 +109,7 @@ func update_surface_preview() -> void:
 		var marker_value:=0x010203
 		while used.has("%06x"%marker_value):marker_value+=1
 		var marker:=Color("%06x"%marker_value)
-		var candidate:=preload("res://scripts/building/surface_edit.gd").paint(layout,row,marker,"__preview",ui.batch_paint.button_pressed,ui.wall_face.selected,camera)
+		var candidate:=preload("res://scripts/building/surface_edit.gd").paint(layout,row,marker,"__preview",ui.batch_paint.button_pressed,ui.wall_face.selected,camera,parcel_id)
 		surface_preview.show_layout(self,candidate,signature);surface_preview.bind_marker(marker)
 	surface_preview.paint(surface_preview_finish.color,surface_preview_finish.style)
 var preview_space: Node3D
@@ -156,7 +156,7 @@ func open_nearby_parcel() -> Dictionary:
 # Low-level unscoped entry remains for legacy fixture/import tools; gameplay uses
 # open_nearby_parcel and always supplies a checked parcel ID.
 func open_editor(id: String="") -> Dictionary:
-	if city.map_id not in ["city","icefield"] or (id=="" and city.map_id!="city") or (city.session.is_online() and (id=="" or online_lease=="")):return {"ok":false,"message":"请先在自己的地皮开启施工。"}
+	if city.map_id not in ["city","icefield","jade"] or (id=="" and city.map_id!="city") or (city.session.is_online() and (id=="" or online_lease=="")):return {"ok":false,"message":"请先在自己的地皮开启施工。"}
 	if city.preparing or city.paused or city.sleep_active or city.nap_active or city.talking_npc!="" or not city.session.job().is_empty():return {"ok":false,"message":"请先结束当前互动，再进入建造园。"}
 	if id!="":
 		var land=preload("res://scripts/building/parcels.gd")
@@ -282,7 +282,9 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	var result: Dictionary
 	if city.session.is_online():
 		var land=preload("res://scripts/building/parcels.gd")
-		if history and land.outside(candidate,parcel_id)!=land.outside(layout,parcel_id):ui.message("本次只能修改当前地皮，不能越界建造。",true);return false
+		if history and not land.same_outside(layout,candidate,parcel_id):ui.message("本次只能修改当前地皮，不能越界建造。",true);return false
+		var allowance:=preload("res://scripts/building/warehouse.gd").balance(city.session.state().inventory,saved_layout(),candidate)
+		if not allowance.ok:ui.message(allowance.message,true);return false
 		result=Layout.validate(candidate)
 		if result.ok:
 			var draft_state: Dictionary=city.session.state().duplicate();draft_state[Land.layout_key(city.map_id)]=layout
@@ -332,7 +334,7 @@ func paint_selected(color: Color,style: String) -> void:
 	if row.get("type","") in ["floor","wall"]:
 		if selected_unit.is_empty():row=Layout.unit_at(layout,selected_id,Layout.rect(row).get_center())
 		var camera:=Vector2(city.camera.global_position.x,city.camera.global_position.z)
-		next=preload("res://scripts/building/surface_edit.gd").paint(layout,row,color,style,ui.batch_paint.button_pressed,ui.wall_face.selected,camera)
+		next=preload("res://scripts/building/surface_edit.gd").paint(layout,row,color,style,ui.batch_paint.button_pressed,ui.wall_face.selected,camera,parcel_id)
 	else:
 		row.color=color.to_html(false);row.style=style;row.painted=true;next=Layout.replace(layout,row)
 	if commit(next):

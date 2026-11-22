@@ -56,14 +56,8 @@ func run() -> void:
 	var shop: Vector2=DB.shops().clothes;city.bunny.position=Vector3(shop.x,.18,shop.y+2.3);session.set_player_position(city.bunny.position);city.bunny.reset_physics_interpolation()
 	var hud: Node=city.hud;hud.shop="clothes";hud.open_panel("shop");await frames()
 	for id in ["vest_stripes_sage","apron_dots_rose","apron_daisies_sage"]:
-		check(hud.shop_rows.has(id) and find_button(hud.content,"try_on_item",id)!=null,"Data-defined garment is offered by the real clothing shop: "+id)
-		hud.shop_preview_overrides.clear();find_button(hud.content,"try_on_item",id).pressed.emit();await frames()
-		check(hud.character_sheet.preview.equipment.body==id and session.authority.count(id)==0,"Try-on uses the new fabric without buying or changing inventory: "+id)
-		var card: Control=hud.shop_rows[id].card
-		var ancestor: Node=card.get_parent()
-		while ancestor!=null and not ancestor is ScrollContainer:ancestor=ancestor.get_parent()
-		if ancestor is ScrollContainer:ancestor.ensure_control_visible(card)
-		await photo("shop-"+DB.item(id).pattern)
+		check(not hud.shop_rows.has(id) and find_button(hud.content,"try_on_item",id)==null,"Legacy fabric is no longer a separate SKU: "+id)
+		check(not session.dispatch("buy",{"shop":"clothes","item":id}).ok,"The shop rejects a discontinued variant: "+id)
 	var preview: Control=hud.character_sheet.preview
 	for species in ["bunny","cat_teacher","panda"]:
 		for id in ["vest_stripes_sage","apron_dots_rose","apron_daisies_sage"]:

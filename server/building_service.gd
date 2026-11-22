@@ -15,7 +15,7 @@ func public_sites() -> Dictionary:
 func sync_state() -> void:
 	manager.state().building_sites=public_sites()
 	for a in manager.actors.values():
-		a.state.build_layout=manager.state().build_layout;a.state.icefield_build_layout=manager.state().icefield_build_layout;a.state.land_parcels=manager.state().land_parcels;a.state.building_sites=manager.state().building_sites
+		a.state.build_layout=manager.state().build_layout;a.state.icefield_build_layout=manager.state().icefield_build_layout;a.state.jade_build_layout=manager.state().jade_build_layout;a.state.land_parcels=manager.state().land_parcels;a.state.building_sites=manager.state().building_sites
 func owned_site(owner: String) -> String:
 	for id in leases:
 		if leases[id].owner==owner:return id
@@ -94,6 +94,10 @@ func apply(id: String,verb: String,args: Dictionary) -> Dictionary:
 		if row.id in id_map.values() and not Land.contains_row(parcel,row,checked.layout):return fail("请将所有建筑留在当前地皮内。")
 	for other in manager.pawns:
 		if manager.actors[other].state.map_id==map_id and not Safety.safe(previous,checked.layout,manager.pawns[other].position-Vector3.UP*Land.base_height(map_id)):return fail("角色正在使用这层地板或楼梯，请先离开后再确认完成。")
+	var stock=preload("res://scripts/building/warehouse.gd")
+	var movement: Dictionary=stock.balance(a.state.inventory,previous,checked.layout)
+	if not movement.ok:return movement
+	stock.settle(a,movement)
 	manager.state()[layout_key]=checked.layout;manager.state().land_parcels.plots[parcel].revision+=1
 	manager.state().building_revision=int(manager.state().get("building_revision",0))+1
 	lease.publishing=true
@@ -122,7 +126,7 @@ func release(id: String,force: bool=false) -> void:
 	if manager.pawns.has(id):manager.pawns[id].can_move=true;manager.pawns[id].reset_network_motion()
 	sync_state()
 func refresh() -> void:
-	for map_id in ["city","icefield"]:
+	for map_id in ["city","icefield","jade"]:
 		if manager.maps.has(map_id):Sites.sync(manager.maps[map_id],public_sites())
 	for peer_id in manager.peers:
 		var id: String=manager.peers[peer_id].character

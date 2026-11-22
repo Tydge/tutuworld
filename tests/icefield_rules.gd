@@ -64,6 +64,8 @@ func run() -> void:
 	var raw: Dictionary=s.snapshot();raw.map_id="icefield";raw.player_position=[85.,.84,-37.];raw.coins=783;raw.inventory.iron=11
 	var restored=s.restore_state(raw)
 	check(restored.state.map_id=="icefield" and restored.state.player_position==raw.player_position and restored.state.coins==783 and restored.count("iron")==11,"Icefield save preserves position, identity and assets")
+	raw.player_position=[0.,-3.,155.]
+	check(s.restore_state(raw).state.player_position==L.arrival(),"A submerged test save resumes on dry ground")
 	raw.map_id="city";raw.player_position=[13,.2,39.5];raw.resources.erase("icefield_branch_00")
 	check(s.restore_state(raw).state.resources.has("icefield_branch_00"),"Old saves gain new sources without resetting old world data")
 	print("ICEFIELD_RULES_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
