@@ -433,6 +433,11 @@ func building_room(map_id: String) -> Node3D:
 	if map_id=="icefield":icefield_built_room=room
 	else:built_room=room
 	return room
+func built_seat(map_id: String,seat_id: String) -> Node3D:
+	# Paired chairs are registered on their dining table, not as interaction targets.
+	var room:=icefield_built_room if map_id=="icefield" else built_room
+	if seat_id=="" or not is_instance_valid(room):return null
+	return room.render_cache.get(seat_id,{}).get("node")
 func refresh_building_navigation(map_id: String,room: Node3D) -> void:
 	apply_door_states()
 	if room.pending_navigation.size==Vector2.ZERO:return
@@ -461,7 +466,7 @@ func restore_runtime(id: String,backup: Dictionary) -> void:
 		if is_instance_valid(host.home) and bed==host.home.get_node("Furnishing/bed"):host.home.bed_occupant=pawn
 	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(host.targets[pose.target].node,int(pose.get("slot",0))));pawn.play_action("nap",INF)
 	elif pose.get("kind","") in ["eat","waiting_exit"]:
-		var chair: Node3D=host.targets.get("build:"+str(pose.get("seat","")),{}).get("node")
+		var chair: Node3D=built_seat(a.state.map_id,str(pose.get("seat","")))
 		pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair) if chair!=null else host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
 	elif not a.job.is_empty():begin_job_pose(id)
 	pawn.position=backup.position;pawn.reset_network_motion()
@@ -552,13 +557,14 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 	if verb in ["buy","sell"] and not preload("res://scripts/city/conversation_access.gd").can_trade(host,pawn,str(args.get("shop",""))):return fail("请走进店里，来到商人面前再交易。")
 	host.bunny=pawn
 	a.facility_access=func(t):host.bunny=pawn;return host.facility_access(t)
+	var selected_chair: Node3D
 	if verb=="eat" and target.begins_with("build:"):
-		var dining=preload("res://scripts/city/dining_service.gd");var seats=preload("res://scripts/city/seating.gd");var chosen: Node3D
+		var dining=preload("res://scripts/city/dining_service.gd");var seats=preload("res://scripts/city/seating.gd")
 		for chair in dining.candidates(host,target):
 			if not dining.accessible(host,target,str(chair.name)) or not seat_clear(map_id,seats.seat(chair).origin,id,target):continue
-			if not preload("res://scripts/city/furniture_access.gd").landing(host,chair,pawn,pawn.position).is_empty():chosen=chair;break
-		if chosen==null:return fail("餐桌旁需要一张未被占用、通道畅通的餐椅。")
-		args=args.duplicate(true);args.seat=str(chosen.name)
+			if not preload("res://scripts/city/furniture_access.gd").landing(host,chair,pawn,pawn.position).is_empty():selected_chair=chair;break
+		if selected_chair==null:return fail("餐桌旁需要一张未被占用、通道畅通的餐椅。")
+		args=args.duplicate(true);args.seat=str(selected_chair.name)
 	var needs_lock:=verb in ["plant","water","weed","harvest","gather","craft","refill","eat","rest","bake","brew_tea","warm"]
 	var rest_exit: Dictionary={}
 	if not a.state.get("net_pose",{}).is_empty():return fail("先起身或结束交谈吧。")
@@ -573,7 +579,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		if verb in ["craft","refill","eat","rest"]:
 			var anchor: Vector3
 			if host.targets[target].has("work_anchor"): anchor=host.targets[target].work_anchor.global_position
-			elif verb=="eat" and target.begins_with("build:"):anchor=preload("res://scripts/city/seating.gd").seat(host.targets["build:"+args.seat].node).origin
+			elif verb=="eat" and target.begins_with("build:"):anchor=preload("res://scripts/city/seating.gd").seat(selected_chair).origin
 			elif verb=="rest":anchor=host.targets[target].node.global_position
 			else: anchor=host.scenery.get_node("Kitchen/CookAnchor").global_position if verb=="craft" else host.scenery.get_node("DiningTable/SeatAnchor").global_position
 			if not body_clear(map_id,anchor,id):return fail("操作的位置有人，稍等一下吧。")
@@ -607,7 +613,7 @@ func begin_job_pose(id: String) -> void:
 	elif j.verb=="eat":
 		var exit_: Array=vector_array(pawn.position)
 		if str(j.target).begins_with("build:"):
-			var chair: Node3D=host.targets["build:"+j.seat].node
+			var chair: Node3D=built_seat(a.state.map_id,j.seat)
 			pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair))
 			a.state.net_pose={"kind":"eat","target":j.target,"seat":j.seat,"exit":exit_,"meal_position":vector_array(preload("res://scripts/city/dining_service.gd").meal_position(host,j.target,chair))}
 		else:
@@ -648,7 +654,8 @@ func relocate(id: String,desired: Vector3,unstuck: bool) -> Dictionary:
 	return {"ok":true,"message":"找到可以落脚的地方啦。" if unstuck else ""}
 func pose_landing(id: String,desired: Vector3) -> Dictionary:
 	var a=actors[id];var host=maps[a.state.map_id];var pose: Dictionary=a.state.get("net_pose",{});var target: Dictionary=host.targets.get(str(pose.get("target","")),{})
-	if host.targets.has("build:"+str(pose.get("seat",""))):target=host.targets["build:"+str(pose.seat)]
+	var chair:=built_seat(a.state.map_id,str(pose.get("seat","")))
+	if is_instance_valid(chair):target={"kind":"bench","node":chair}
 	if pose.get("kind","")=="sleep":
 		return sleep_landing(id,target.get("node"),desired)
 	if pose.get("kind","") in ["sit","eat","waiting_exit"] and target.get("kind","") in ["bed","bench"] and is_instance_valid(target.get("node")):
