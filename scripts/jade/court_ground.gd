@@ -18,12 +18,17 @@ static func make() -> Texture2D:
 	var img:=Image.create_empty(SIZE,SIZE,false,Image.FORMAT_RGB8)
 	for h in J.HOUSES:
 		var c:=J.center(h);var ang:=J.door_angle(h);var d:=J.dims(h[4])
-		var royal: bool=h[3]<-82;var fore:=5.7 if royal else 3.2;var reach:=d.length()+fore+3.5
+		var royal: bool=h[3]<-82
+		var riverside: bool=absf(h[3]-J.river_z(c.x))<36. and absf(c.x)<118.
+		var fore:=10.5 if royal else (5.8 if riverside else 4.65)
+		var flank:=7.1 if royal else (4.2 if riverside else 2.6)
+		var back:=4.0 if royal else 2.7
+		var reach:=d.length()+maxf(fore,flank)+3.5
 		for y in range(coord(c.y-reach),coord(c.y+reach)+1):
 			for x in range(coord(c.x-reach),coord(c.x+reach)+1):
 				var p:=(Vector2(x+.5,y+.5)*.5-Vector2(HALF,HALF)-c).rotated(ang)
 				var over:=Vector2(maxf(absf(p.x)-d.x,0.),maxf(absf(p.y)-d.z,0.)).length()
-				var yard:=Vector2(absf(p.x)-d.x-(3.2 if royal else 1.7),maxf(-p.y-d.z-1.5,p.y-d.z-fore))
+				var yard:=Vector2(absf(p.x)-d.x-flank,maxf(-p.y-d.z-back,p.y-d.z-fore))
 				var apron:=1.-smoothstep(.15,1.2,yard.max(Vector2.ZERO).length())
 				var shade: float=(1.-smoothstep(.0,1.85,over))*.68
 				var col:=img.get_pixel(x,y)

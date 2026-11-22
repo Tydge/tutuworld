@@ -47,7 +47,7 @@ static func batch_fixtures(world: Node3D) -> void:
 		if fixture.get_script() in [preload("res://scripts/jade/gallery_view.gd"),preload("res://scripts/jade/gate_view.gd")]:continue
 		if not fixture.has_meta("furniture_kind") and not fixture.has_meta("grove"):continue
 		for m: MeshInstance3D in fixture.find_children("*","MeshInstance3D",true,false):
-			if m.mesh==null or m.material_override!=null:continue
+			if m.mesh==null or m.material_override!=null or m.get_parent().get_meta("camera_canopy",false):continue
 			var p:=m.global_position;var tile:=Vector2i(floori(p.x/30.),floori(p.z/30.));var key:=str(tile)+":"+str(m.mesh.get_instance_id())
 			if not cells.has(key):cells[key]=[]
 			cells[key].append(m)

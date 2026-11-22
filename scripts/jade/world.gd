@@ -81,6 +81,8 @@ func spawn_npcs() -> void:
 	for i in range(Residents.PEOPLE.size()):
 		var r: Array=Residents.PEOPLE[i];var p:=J.point(r[2],r[3])+Vector3.UP*.06
 		var id: String="JadeCitizen_"+str(i);var npc:=spawn_npc(id,r[0],p,attire(i,i>=12),["bunny","cat_teacher","bunny","panda"][i%4])
+		if i in [0,3]:
+			preload("res://scripts/jade/handwork.gd").carry(npc,i==0)
 		targets[id]={"kind":"npc","position":p,"radius":2.8,"node":npc,"name":r[0],"profile":i}
 		var driver:=Driver.new();driver.name="NeighbourWalk";driver.city=self;driver.bunny=npc
 		driver.route=preload("res://scripts/jade/street_life.gd").walk_stops(i,p)

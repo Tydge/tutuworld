@@ -16,6 +16,8 @@ var elapsed:=0.
 var tick:=0.
 var market_period:=-1
 const CUSTOMERS=[1,2,8]
+# The boat hand and carpenter pass the market while the three regulars stop at its counters.
+const DELIVERIES=[0,3]
 # During the two busiest stretches, neighbours have common destinations along the same frontage.
 const MARKET_CALLS=[Vector2(-6.5,-3.3),Vector2(-3.8,-.6),Vector2(1.8,2.3),Vector2(-6.1,5.3),Vector2(-1.8,8.6)]
 static func walk_stops(index: int,origin: Vector3) -> Array[Vector3]:
@@ -34,12 +36,20 @@ func update_market() -> void:
 	var period:=1 if hour>=7. and hour<11. else (2 if hour>=17. and hour<22. else 0)
 	if period==market_period:return
 	market_period=period
-	for i in CUSTOMERS:
+	for i in CUSTOMERS+DELIVERIES:
 		var actor: CharacterBody3D=city.targets["JadeCitizen_"+str(i)].node
 		var driver: Node=actor.get_node("NeighbourWalk")
 		if period==0:
 			var home: Array=preload("res://scripts/jade/residents.gd").PEOPLE[i]
 			driver.route=walk_stops(i,J.point(home[2],home[3]))
+		elif i in DELIVERIES:
+			var stops: Array[Vector3]=[]
+			var shop_z:=146. if period==1 else 127.
+			var direction:=1. if i==0 else -1.
+			for leg: float in [27.,18.,9.,15.,22.]:
+				var z:=shop_z+leg*direction
+				stops.append(J.point(J.lane(z)+direction*(2.5+1.8*sin(leg)),z))
+			driver.route=stops
 		else:
 			var stops: Array[Vector3]=[]
 			for spot: Vector2 in MARKET_CALLS:

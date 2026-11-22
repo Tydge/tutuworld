@@ -9,7 +9,9 @@ static func make(n: Node3D,kind: String) -> void:
 	match kind:
 		"jade_moon_gate":
 			for side in [-1,1]:P.box(n,"GardenWall",Vector3(side*3.1,1.85,0),Vector3(2.3,3.7,.54))
-		"jade_market_stall","jade_silk_stall":P.box(n,"Counter",Vector3(0,.52,0),Vector3(3.5,1.05,1.8))
+		"jade_market_stall","jade_silk_stall":
+			preload("res://scripts/jade/shopfront.gd").add_awning(n,4.06,2.73,2.91,kind=="jade_silk_stall")
+			P.box(n,"Counter",Vector3(0,.52,0),Vector3(3.5,1.05,1.8))
 		"jade_gallery":
 			for x in [-2.,2.]:
 				for z in [-1.3,1.3]:P.cylinder(n,"Post",Vector3(x,1.6,z),.14,3.2)
@@ -33,7 +35,6 @@ static func draw_model(m: Node3D,kind: String) -> void:
 			for x in [-1.55,1.55]:
 				for z in [-.82,.82]:a.box(m,Vector3(x,1.29,z),Vector3(.14,2.58,.15),"694634")
 			a.paint(m,Vector3(0,.88,0),Vector3(3.5,.19,1.8),"lacquer")
-			preload("res://scripts/jade/shopfront.gd").canvas(m,4.06,2.73,2.91,kind=="jade_silk_stall")
 			for k in range(5):
 				var x: float=(k-2)*.61
 				if kind=="jade_silk_stall":
@@ -53,7 +54,17 @@ static func draw_model(m: Node3D,kind: String) -> void:
 			a.paint(m,Vector3(0,3.18,1.32),Vector3(4.3,.32,.33),"polychrome")
 		"jade_rockery":preload("res://scripts/jade/water_garden.gd").scholar_stones(m)
 		"jade_pool":preload("res://scripts/jade/water_garden.gd").pond(m)
-		"jade_quay":a.paint(m,Vector3(0,.96,0),Vector3(4.2,1.92,.8),"masonry")
+		"jade_quay":
+			a.paint(m,Vector3(0,.86,0),Vector3(4.2,1.72,.78),"masonry")
+			a.paint(m,Vector3(0,1.73,0),Vector3(4.2,.16,.86),"stone_relief")
+			for i in range(3):
+				a.paint(m,Vector3((i-1)*1.4,1.865,0),Vector3(1.394,.11,.88),"masonry")
+			for side in [-1.,1.]:
+				var iron:=G.mat("4a544f",.65)
+				G.cylinder(m,Vector3(.70,1.35,side*.43),.095,.17,iron).rotation.x=PI/2
+				var ring:=TorusMesh.new()
+				ring.inner_radius=.115;ring.outer_radius=.16;ring.rings=14;ring.ring_segments=6
+				G.mesh(m,ring,Vector3(.70,1.23,side*.48),iron).rotation.x=PI/2
 		"jade_span":a.paint(m,Vector3.DOWN*.16,Vector3(8.9,.32,3.02),"masonry")
 		"jade_pier":
 			for j in range(8):a.box(m,Vector3(0,.04,j*.45-1.6),Vector3(4.2,.12,.44),"8d6849")
@@ -65,9 +76,15 @@ static func dress(builder: SceneTree) -> void:
 	for row in [[-1,56],[1,63],[-1,83],[1,101],[-1,125],[1,141],[-1,157],[1,177]]:
 		var z: float=row[1];var side: float=row[0];var x:=J.lane(z)+side*6.1
 		builder.fixture(builder.world,"jade_silk_stall" if int(z)%3==0 else "jade_market_stall",J.point(x,z),-side*PI*.5+sin(z)*.17)
-	for bx in J.BRIDGES:
-		for side in [-1,1]:
-			for j in range(-7,8):
-				if absi(j)<2:continue
-				var x: float=bx+j*4.1;var z: float=J.river_z(x)+side*12.5
-				builder.fixture(builder.world,"jade_quay",Vector3(x,J.height_at(x,z)-1.75,z),-.13*cos(x*.015))
+	# Wall modules follow each sweep of the navigable channel. The open reaches return to grassy banks.
+	for side in [-1.,1.]:
+		for i in range(-29,30):
+			var x:=i*4.14
+			if J.BRIDGES.any(func(bx):return absf(x-bx)<5.8):continue
+			var z: float=J.river_z(x)+side*11.6
+			var angle := -atan(.135*cos(x*.015))
+			var top := J.height_at(x,z)+.26
+			builder.fixture(builder.world,"jade_quay",Vector3(x,top-1.92,z),angle)
+			if absf(x)<96. and absf(x)>12.:
+				var low_z: float=J.river_z(x)+side*9.65
+				builder.fixture(builder.world,"jade_quay",Vector3(x,J.height_at(x,low_z)-1.51,low_z),angle)

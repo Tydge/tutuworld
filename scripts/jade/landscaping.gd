@@ -49,7 +49,8 @@ static func planting(builder: SceneTree) -> void:
 			var bank:=SurfaceTool.new();bank.begin(Mesh.PRIMITIVE_TRIANGLES)
 			for i in range(30):
 				var x:=chunk*20.+rng.randf()*20.;var z: float=J.river_z(x)+side*rng.randf_range(7.8,12.2)
-				var p:=Vector3(x,J.raw_height(x,z)+.26,z);var radius:=rng.randf_range(.28,1.34);var tall:=rng.randf_range(.21,.84)
+				if absf(x)<123.:continue
+				var p:=Vector3(x,J.raw_height(x,z)+.16,z);var radius:=rng.randf_range(.28,1.34);var tall:=rng.randf_range(.21,.84)
 				var tilt:=rng.randf();var last:=Vector3.ZERO
 				for k in range(8):
 					var a:=k*TAU/7.+tilt
@@ -58,7 +59,8 @@ static func planting(builder: SceneTree) -> void:
 						for v in [last,q,p+Vector3(radius*.14,tall,.08),last,p-Vector3.UP*.26,q]:
 							bank.set_uv(Vector2(v.x+.3*v.z,v.y+.4*v.z)*.67);bank.add_vertex(v)
 					last=q
-			bank.index();bank.generate_normals();G.mesh(builder.world,bank.commit(),Vector3.ZERO,rock,"BankShingle")
+			if absf(chunk*20.+10.)>110.:
+				bank.index();bank.generate_normals();G.mesh(builder.world,bank.commit(),Vector3.ZERO,rock,"BankShingle")
 static func quays(builder: SceneTree) -> void:
 	for row in J.TERRACES:
 		var side: float=row[0]

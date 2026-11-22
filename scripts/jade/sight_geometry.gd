@@ -32,9 +32,9 @@ static func profile(mesh: Mesh) -> Resource:
 	mesh.set_meta("jade_sight_profile",out)
 	return out
 
-static func bake_room(room: Node3D) -> void:
+static func bake_room(room: Node3D, names: Array = ["Exterior","Front","Rear","West","East"]) -> void:
 	var sections: Dictionary = {}
-	for section in ["Exterior","Front","Rear","West","East"]:
+	for section in names:
 		var part := room.get_node_or_null(section)
 		if not part:
 			continue

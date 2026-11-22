@@ -33,3 +33,22 @@ static func draw(m: Node3D,pose: String) -> void:
 				roll.rotation.x=PI*.50
 			for i in range(7):
 				A.box(m,Vector3(i*.042-.31,.009,.10),Vector3(.008,.005,.12+.04*sin(i)),"7d7157")
+
+static func carry(actor: CharacterBody3D,boat_hand: bool) -> void:
+	var grip: Vector3=actor.rig_profile.grip_offset
+	grip.x=-absf(grip.x)-.13
+	var cargo:=A.group(actor.left_arm,"Cargo",grip)
+	A.mesh_part(cargo,"BoatRope" if boat_hand else "CarpentersParcel",func(m):
+		if boat_hand:
+			for j in range(5):
+				var loop:=TorusMesh.new()
+				loop.inner_radius=.165;loop.outer_radius=.198;loop.rings=20;loop.ring_segments=5
+				var coil:=G.mesh(m,loop,Vector3(j*.021-.04,-.15,0),G.mat("99815c"))
+				coil.rotation.z=PI*.5;coil.scale.x=1.19
+			A.beam(m,Vector3(-.06,-.03,-.12),Vector3(.06,.03,-.08),.034,"5c4935")
+		else:
+			for j in range(4):
+				A.paint(m,Vector3((j%2-.5)*.12,-.30+.078*(j/2),0),Vector3(.115,.071,.67-.04*j),"wood_relief")
+			for z in [-.17,.17]:
+				A.box(m,Vector3(0,-.26,z),Vector3(.25,.16,.035),"6d593e")
+				A.beam(m,Vector3(0,-.18,z),Vector3(0,-.015,0),.024,"79684e"))

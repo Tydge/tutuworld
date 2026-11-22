@@ -19,12 +19,19 @@ static func make(n: Node3D,mirrored: bool=false) -> void:
 				A.paint(m,Vector3(x,HEIGHT+2.62,edge*1.22),Vector3(3.46,.38,.42),"cloud_beam"))
 	G.solid_box(n,Vector3(0,HEIGHT-.17,0),Vector3(2*HALF+2.3,.34,2.58)).collision_layer=8
 	for side in [-1,1]:
+		var wing: String="West" if side<0 else "East"
+		for rails in [false,true]:
+			var part:=A.group(n,wing+("Rails" if rails else "Flight"))
+			A.mesh_part(part,"Gallery"+str(part.name)+str(mirrored),flight.bind(side,hand,rails))
 		var start:=Vector3(side*HALF,.07,side*hand*(RUN+1.2));var end:=Vector3(side*HALF,HEIGHT,side*hand*2.05)
 		var landing:=Vector3(side*HALF,HEIGHT-.13,side*hand*1.53);G.solid_box(n,landing,Vector3(2.16,.26,1.70)).collision_layer=8
 		var delta:=end-start;var ramp:=G.solid_box(n,(start+end)*.5-Vector3.UP*.12,Vector3(2.16,.24,delta.length()))
 		ramp.rotation.x=-atan((end.y-start.y)/(end.z-start.z));ramp.collision_layer=8
 		for z in [-1.28,1.28]:P.cylinder(n,"GalleryPillar",Vector3(side*(HALF-1.9),2.18,z),.20,4.36)
 		P.box(n,"Balustrade",Vector3(-side*hand*.94,HEIGHT+.46,side*1.25),Vector3(2*HALF-.5,.91,.12))
+	preload("res://scripts/jade/sight_geometry.gd").bake_room(n,["WestRails","EastRails","WestFlight","EastFlight"])
+	n.set("hand",hand)
+
 static func draw(m: Node3D,hand: float) -> void:
 	for i in range(17):
 		A.paint(m,Vector3((i-8)*.95,HEIGHT-.10,0),Vector3(.946,.20,2.60),"lacquer")
@@ -44,13 +51,24 @@ static func draw(m: Node3D,hand: float) -> void:
 			A.beam(m,Vector3(x,HEIGHT-1.22,edge*1.22),Vector3(x-side*1.55,HEIGHT-.42,edge*1.22),.19,"82482f")
 		for k in [-1,1]:
 			A.lantern(m,Vector3(k*3.45,HEIGHT-1.04,edge*1.34),.72)
-	for side in [-1,1]:
-		var start:=Vector3(side*HALF,.07,side*hand*(RUN+1.2));var end:=Vector3(side*HALF,HEIGHT,side*hand*2.05)
-		A.paint(m,Vector3(side*HALF,HEIGHT-.10,side*hand*1.53),Vector3(2.16,.2,1.70),"lacquer")
-		for j in range(26):
-			var q:=start.lerp(end,(j+.5)/26.)
-			A.paint(m,q-Vector3.UP*.10,Vector3(2.16,.2,absf(end.z-start.z)/26.+.025),"lacquer")
+
+static func flight(m: Node3D,side: int,hand: float,rails: bool) -> void:
+	var start:=Vector3(side*HALF,.07,side*hand*(RUN+1.2))
+	var end:=Vector3(side*HALF,HEIGHT,side*hand*2.05)
+	if rails:
 		for edge in [-1,1]:
-			var offset:=Vector3(edge*1.02,.94,0)
-			A.beam(m,start+offset,end+offset,.105,"82523c")
-			for k in range(7):A.column(m,start.lerp(end,k/6.)+Vector3(edge*1.02,.45,0),.055,.90)
+			var line:=Vector3(edge*1.02,.94,0)
+			A.beam(m,start+line,end+line,.105,"715242")
+			A.beam(m,start+line-Vector3.UP*.45,end+line-Vector3.UP*.45,.077,"875a48")
+			for k in range(7):
+				A.column(m,start.lerp(end,k/6.)+Vector3(edge*1.02,.45,0),.055,.90)
+		return
+	A.paint(m,Vector3(side*HALF,HEIGHT-.10,side*hand*1.53),Vector3(2.16,.2,1.70),"lacquer")
+	for edge in [-1.,1.]:
+		var stringer:=Vector3(edge*.96,-.17,0)
+		A.beam(m,start+stringer,end+stringer,.23,"64433b")
+	for j in range(26):
+		var q:=start.lerp(end,(j+.5)/26.)
+		var depth:=absf(end.z-start.z)/26.
+		A.paint(m,q-Vector3.UP*.10,Vector3(2.16,.2,depth+.025),"lacquer")
+		A.box(m,q+Vector3(0,-.006,side*hand*depth*.45),Vector3(2.17,.038,.042),"a5805d")

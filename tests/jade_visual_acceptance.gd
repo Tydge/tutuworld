@@ -117,7 +117,13 @@ func capture_landmarks() -> void:
 	var field: Vector3=J.point(plots[0].x+8.,plots[0].z+7.)
 	var shots: Array=[
 		["arrival",game.respawn_position(),0.,.18,12.,.46],
+		["market-facing-east-stall",J.point(J.lane(144.)-3.8,144.),-1.05,.23,9.7,.42],
+		["market-facing-west-stall",J.point(J.lane(122.)+3.8,122.),2.02,.23,9.7,.42],
+		["market-orbit-east",J.point(J.lane(141.)+1.2,140.5),PI*.5,.32,9.7,.42],
+		["market-orbit-west",J.point(J.lane(125.)-1.2,125.4),-PI*.5,.32,9.7,.42],
 		["post-from-street",J.point(-45.8,36.5),.12,.19,10.5,.44],
+		["canal-from-bridge",J.point(1.7,-4.),-1.34,.42,8.6,.43],
+		["canal-stone-bank",J.point(31.,J.river_z(31.)+14.2),-.92,.33,7.2,.40],
 		["river-side-alley",J.point(-52.,18.),1.53,.24,10.5,.44],
 		["artisan-yard",J.point(-51.,139.),.03,.24,10.4,.42],
 		["eaves-from-street",J.point(J.lane(51.)+4.,51.),-1.22,.12,7.4,.35],
@@ -156,7 +162,14 @@ func capture_landmarks() -> void:
 	var upstairs:=inn.to_global(Vector3(-1.6,inn.wall_height+.08,1.2))
 	for angle in [1.35,2.83]:shots.append(["inn-upper-orbit-"+str(angle),upstairs,inn.rotation.y+angle,.28,7.6,.55])
 	var bridges: Array=game.scenery.get_children().filter(func(n):return n.get_meta("furniture_kind","") in ["jade_street_gallery","jade_street_gallery_reverse"])
+	var test_flights: Dictionary={}
 	for bridge in bridges:
+		var hand: float=-1. if bridge.get_meta("furniture_kind")=="jade_street_gallery_reverse" else 1.
+		var side: float=1. if bridge.position.z<90. else -1.
+		var mid: Vector3=bridge.to_global(Vector3(side*6.,2.37,side*hand*6.06))
+		var label_: String="gallery-stair-east" if side>0. else "gallery-stair-west"
+		shots.append([label_,mid,bridge.rotation.y+side*1.05,.33,7.3,.44])
+		test_flights[label_]=bridge.get_node("EastFlight" if side>0. else "WestFlight")
 		if bridge.position.z<90.:
 			var top: Vector3=bridge.to_global(Vector3(1.35,4.59,0))
 			shots.append(["market-upper-view",top,bridge.rotation.y+.45,.25,7.,.39])
@@ -175,6 +188,13 @@ func capture_landmarks() -> void:
 			await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_jpg(output+"/jade-"+str(shot[0])+".jpg",.90)
 		print("PLAYER_VIEW ",shot[0]," grounded=",game.bunny.is_on_floor()," position=",game.bunny.global_position)
+		if shot[0] in ["market-orbit-east","market-orbit-west"]:check_visible_body(shot[0])
+		if shot[0] in ["market-facing-east-stall","market-facing-west-stall"]:check_distant_awning(shot[0])
+		if test_flights.has(shot[0]):
+			var steps: Node3D=test_flights[shot[0]]
+			var pixels:=visible_component_pixels(steps)
+			print("STAIR_SURFACE ",shot[0]," grounded=",game.bunny.is_on_floor()," changed_pixels=",pixels)
+			if not game.bunny.is_on_floor() or pixels<40:failures.append("jade/"+str(shot[0])+"/supporting-flight")
 
 func capture_market_hours() -> void:
 	var original_scale:=Engine.time_scale
@@ -191,6 +211,10 @@ func capture_market_hours() -> void:
 		Engine.physics_ticks_per_second=original_ticks*4;Engine.time_scale=original_scale*4.
 		var crowd: Array=[]
 		var gathering_seen:=false
+		var deliveries: Dictionary={}
+		var departures: Dictionary={}
+		for id in [0,3]:
+			departures[id]=game.targets["JadeCitizen_"+str(id)].node.position
 		for frame in range(original_ticks*150):
 			await physics_frame
 			if frame%12!=0:continue
@@ -201,10 +225,90 @@ func capture_market_hours() -> void:
 				if absf(resident.position.x-J.lane(z)+3.)<11. and absf(resident.position.z-z)<11.:
 					crowd.append([id,resident.position,resident.action])
 					acting=acting or resident.action==event[2]
-			if crowd.size()==3 and acting:
+			for id in [0,3]:
+				if deliveries.has(id):continue
+				var courier=game.targets["JadeCitizen_"+str(id)].node
+				var cargo_name: String="BoatRope" if id==0 else "CarpentersParcel"
+				var carried:=courier.left_arm.get_node_or_null("Cargo/Joinery") as MeshInstance3D
+				var correct_cargo: bool=carried and carried.mesh==preload("res://scripts/jade/architecture.gd").baked.get(cargo_name)
+				var side: float=1. if id==0 else -1.
+				var along: float=(courier.position.z-z)*side
+				var travelled: float=courier.position.distance_to(departures[id])
+				if correct_cargo and carried.is_visible_in_tree() and courier.walking and travelled>1. and along>7. and along<30. and absf(courier.position.x-J.lane(courier.position.z))<8.:
+					deliveries[id]=[cargo_name,courier.position,snappedf(travelled,.1)]
+			if crowd.size()==3 and acting and deliveries.size()==2:
 				gathering_seen=true;break
-		if not gathering_seen:failures.append("jade/"+str(event[3])+"/customers")
+		if not gathering_seen:failures.append("jade/"+str(event[3])+"/customers-or-deliveries")
 		Engine.physics_ticks_per_second=original_ticks;Engine.time_scale=original_scale
 		for frame in range(5):await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_jpg(output+"/jade-"+str(event[3])+".jpg",.90)
-		print("MARKET_PERIOD_VIEW ",event[3]," observed=",crowd)
+		print("MARKET_PERIOD_VIEW ",event[3]," observed=",crowd," moving_couriers=",deliveries)
+
+# Compare actual player pixels with the silhouette at this exact camera and pose.
+# Holding the simulation still keeps gait, lighting and nearby residents identical.
+func check_visible_body(label_: String) -> void:
+	var viewport_size: Vector2=root.get_visible_rect().size
+	var scale_: float=480./viewport_size.x
+	var right: Vector3=game.camera.global_basis.x
+	var feet: Vector3=game.bunny.global_position
+	var lower: Vector2=game.camera.unproject_position(feet+Vector3.UP*.035)
+	var upper: Vector2=game.camera.unproject_position(feet+Vector3.UP*1.40)
+	var edge_l: Vector2=game.camera.unproject_position(feet-right*.77)
+	var edge_r: Vector2=game.camera.unproject_position(feet+right*.77)
+	var full_size:=Vector2i(480,roundi(viewport_size.y*scale_))
+	var region:=Rect2i(Vector2i(floori(edge_l.x*scale_),floori(upper.y*scale_)),Vector2i(ceili((edge_r.x-edge_l.x)*scale_),ceili((lower.y-upper.y)*scale_))).intersection(Rect2i(Vector2i.ZERO,full_size))
+	var actual:=frame_sample(full_size)
+	game.bunny.visible=false
+	var world_only:=frame_sample(full_size)
+	game.scenery.visible=false
+	var background:=frame_sample(full_size)
+	game.bunny.visible=true
+	var unobstructed:=frame_sample(full_size)
+	game.scenery.visible=true
+	RenderingServer.force_draw()
+	var expected:=0
+	var visible:=0
+	for y in range(region.position.y,region.end.y):
+		for x in range(region.position.x,region.end.x):
+			if color_difference(unobstructed.get_pixel(x,y),background.get_pixel(x,y))<.13:continue
+			expected+=1
+			if color_difference(actual.get_pixel(x,y),world_only.get_pixel(x,y))>=.075:visible+=1
+	var fraction:=visible/float(maxi(1,expected))
+	print("BODY_VISIBILITY ",label_," visible=",visible," expected=",expected," ratio=",snappedf(fraction,.001))
+	if expected<40 or fraction<.85:failures.append("jade/"+label_+"/visible-body")
+
+func frame_sample(size_: Vector2i) -> Image:
+	RenderingServer.force_draw()
+	var img:=root.get_texture().get_image()
+	img.resize(size_.x,size_.y,Image.INTERPOLATE_BILINEAR)
+	return img
+
+func color_difference(a: Color,b: Color) -> float:
+	return maxf(absf(a.r-b.r),maxf(absf(a.g-b.g),absf(a.b-b.b)))
+
+func check_distant_awning(label_: String) -> void:
+	var z:=141. if label_=="market-facing-east-stall" else 125.
+	var candidates: Array=game.scenery.get_children().filter(func(n):return n.get_meta("furniture_kind","") in ["jade_silk_stall","jade_market_stall"] and absf(n.position.z-z)<.1)
+	if candidates.size()!=1:
+		failures.append("jade/"+label_+"/stall");return
+	var stall: Node3D=candidates[0]
+	var components: Array=stall.find_children("*","Node3D",true,false).filter(func(n):return n.get_meta("camera_canopy",false))
+	if components.size()!=1:
+		failures.append("jade/"+label_+"/canopy");return
+	var cloth: Node3D=components[0]
+	var changed:=visible_component_pixels(cloth)
+	print("AWNING_FROM_STREET ",label_," changed_pixels=",changed," stall_visible=",stall.is_visible_in_tree())
+	if changed<40 or not stall.is_visible_in_tree():failures.append("jade/"+label_+"/fabric-not-visible")
+
+func visible_component_pixels(component: Node3D) -> int:
+	var size_:=Vector2i(480,300)
+	var actual:=frame_sample(size_)
+	var was_visible:=component.visible
+	component.visible=false
+	var without_component:=frame_sample(size_)
+	component.visible=was_visible;RenderingServer.force_draw()
+	var changed:=0
+	for y in range(size_.y):
+		for x in range(size_.x):
+			if color_difference(actual.get_pixel(x,y),without_component.get_pixel(x,y))>.11:changed+=1
+	return changed

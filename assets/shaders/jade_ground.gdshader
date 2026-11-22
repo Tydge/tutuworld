@@ -81,6 +81,12 @@ void fragment(){
 	vec3 grad=(t*dFdx(h)+b*dFdy(h))*sign(det)/max(abs(det),.000001);
 	float proximity=1.-smoothstep(15.,36.,length(VERTEX));
 	NORMAL=normalize(NORMAL-clamp(grad,vec3(-.38),vec3(.38))*proximity);
-	ALBEDO=mix(apron,gravel,garden*(1.-laid*.68));
+	vec3 base=mix(apron,gravel,garden*(1.-laid*.68));
+	float retaining=(1.-smoothstep(116.,128.,abs(p.x)))*(1.-smoothstep(12.8,13.9,river));
+	// Coursed granite is laid along the waterline. The lowest courses darken with the tide.
+	vec3 bank_stone=texture(stone,vec2(p.x/5.8,(pos.y+.11*river)/4.8)).rgb;
+	float tide=smoothstep(.3,2.5,pos.y);
+	vec3 embanked=bank_stone*mix(vec3(.34,.43,.39),vec3(.73,.77,.75),tide);
+	ALBEDO=mix(base,embanked,retaining);
 	ROUGHNESS=mix(.96,mix(.75,.92,wear),stone_cover);
 }

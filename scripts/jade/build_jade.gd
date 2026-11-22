@@ -37,6 +37,10 @@ func build() -> void:
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
 	if not await preload("res://scripts/jade/navigation_bake.gd").bake(self,world):push_error("Incomplete Jade navigation survey");quit(1);return
+	if not await preload("res://scripts/jade/river_reflection.gd").bake(self,world,sea):
+		push_error("Could not bake the riverbank reflections")
+		quit(1)
+		return
 	own(world,world)
 	var packed:=PackedScene.new();var error:=packed.pack(world)
 	if error==OK:
@@ -108,11 +112,13 @@ func streets() -> void:
 		var walkway:=fixture(world,"jade_street_gallery_reverse" if z>100. else "jade_street_gallery",J.point(J.lane(z),z),.035*sin(z))
 		for side in [-1.,1.]:
 			var wash:=OmniLight3D.new();wash.name="LanternPool";wash.position=walkway.to_global(Vector3(side*3.35,3.5,1.3));wash.light_color=Color("ffb76a");wash.omni_range=10.;wash.distance_fade_enabled=true;wash.distance_fade_begin=31.;wash.distance_fade_length=13.;wash.set_meta("street_lamp",true);world.add_child(wash)
-	for z in [91.,133.,161.,184.]:
-		var line:=fixture(world,"jade_festoon",J.point(J.lane(z),z),.075*sin(z))
+	for row in [[88.,-.18,1.04],[96.5,.25,1.23],[128.,-.26,1.18],[136.,.12,.98],[157.,-.10,1.03],[166.,.29,1.24],[184.,-.13,1.]]:
+		var z: float=row[0]
+		var line:=fixture(world,"jade_festoon",J.point(J.lane(z),z),row[1])
+		line.scale=Vector3(1.04,row[2],1.)
 		for side in [-1.,1.]:
 			var p:=line.to_global(Vector3(side*7.55,2.96,0))
-			A.column(world,p,.102,5.92)
+			A.column(world,p,.102,5.92*line.scale.y)
 	for z in [-82.,-146.]:
 		for side in [-1,1]:
 			for i in range(11):fixture(world,"jade_palace_wall",J.point(side*(8.+4.*i),z))

@@ -7,6 +7,23 @@ func _initialize() -> void:call_deferred("run")
 func check(value: bool,label_: String) -> void:
 	print("PASS " if value else "FAIL ",label_)
 	if not value:failures+=1
+func check_river_banks(city: Node3D) -> void:
+	var water: ShaderMaterial=city.scenery.get_node("Island").get_meta("sea_material")
+	var atlas: Texture2D=water.get_shader_parameter("river_banks")
+	check(water.shader==preload("res://assets/shaders/jade_water.gdshader") and atlas!=null,"Use the baked city banks in the actual water material")
+	if atlas==null:return
+	var pixels:=atlas.get_image()
+	for side in range(2):
+		var sky:=0
+		var buildings: Dictionary={}
+		var middle:=pixels.get_height()/2
+		for y in range(4,middle,8):
+			for x in range(4,pixels.get_width(),32):
+				var tint:=pixels.get_pixel(x,y+side*middle)
+				if tint.a<.5:sky+=1
+				else:buildings[tint.to_rgba32()]=true
+		check(sky>100 and buildings.size()>100,"Skyline and distinct bank colours on side "+str(side))
+
 func run() -> void:
 	var dir:=preload("res://tests/test_support.gd").output_dir()
 	var session:=preload("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
@@ -17,7 +34,17 @@ func run() -> void:
 	check(session.dispatch("travel",{"destination":"jade"}).ok and session.state().coins==coins-10,"Ferry charges ten shells")
 	var city=load(Routes.scene("jade")).instantiate();root.add_child(city);current_scene=city
 	for i in range(15):await physics_frame
+	check_river_banks(city)
 	check(city.npcs.size()==20+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Twenty residents, all shopkeepers and all interiors")
+	var street: Node=city.get_node("StreetLife")
+	session.state().time=8.*150.
+	street.update_market()
+	for index: int in [0,3]:
+		var courier: Node3D=city.targets["JadeCitizen_"+str(index)].node
+		var delivery: Array=courier.get_node("NeighbourWalk").route
+		check(courier.find_child("Cargo",true,false)!=null and delivery.size()==5 and absf(delivery[2].z-146.)<=9.1,"Working market delivery "+str(index))
+	session.state().time=1800.
+	street.update_market()
 	check(city.crops.size()==32 and city.targets.has("jade_well"),"Shared field and well")
 	check(city.targets.has("jade_workshop") and city.targets.has("jade:tea:tea_service_1"),"Workshop and tea room activities")
 	for h in J.HOUSES:

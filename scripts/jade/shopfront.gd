@@ -21,6 +21,15 @@ static func canvas(m: Node3D,width: float,depth: float,y: float,blue: bool) -> v
 		var mat:=StandardMaterial3D.new();mat.albedo_texture=preload("res://assets/jade/swallows.png") if blue else preload("res://assets/jade/brocade.png");mat.albedo_color=Color("c9c4ac") if blue else Color("ecba8f");mat.roughness=.94;mat.cull_mode=BaseMaterial3D.CULL_DISABLED;fabrics[blue]=mat
 	for st in [sheet,hem]:
 		st.index();st.generate_normals();G.mesh(m,st.commit(),Vector3.ZERO,fabrics[blue])
+static func add_awning(parent: Node3D,width: float,depth: float,y: float,blue: bool) -> void:
+	var art=load("res://scripts/jade/architecture.gd")
+	var rig: Node3D = art.group(parent,"CanvasRig")
+	rig.set_script(preload("res://scripts/jade/awning_view.gd"))
+	var cloth: Node3D = art.group(rig,"Canopy")
+	cloth.set_meta("camera_canopy",true)
+	art.mesh_part(cloth,"canvas_%s_%.2f" % [blue,width],canvas.bind(width,depth,y,blue))
+	preload("res://scripts/jade/sight_geometry.gd").bake_room(rig,["Canopy"])
+
 static func make(n: Node3D) -> void:
 	var a=load("res://scripts/jade/architecture.gd")
 	a.mesh_part(n,"ShopVeranda",func(m):
@@ -31,8 +40,8 @@ static func make(n: Node3D) -> void:
 			a.beam(m,Vector3(x,3.11,1.54),Vector3(x,3.62,-1.58),.14,"614c39")
 			a.beam(m,Vector3(x,2.57,1.36),Vector3(x,3.12,.73),.10,"886544")
 			a.beam(m,Vector3(x,2.71,1.36),Vector3(x-side*.64,3.11,1.36),.09,"765b40")
-		a.paint(m,Vector3(0,3.12,1.36),Vector3(5.67,.21,.23),"lacquer")
-		canvas(m,5.93,3.28,3.57,true))
+		a.paint(m,Vector3(0,3.12,1.36),Vector3(5.67,.21,.23),"lacquer"))
+	add_awning(n,5.93,3.28,3.57,true)
 	for side in [-1.,1.]:preload("res://scripts/city/prop_collisions.gd").cylinder(n,"VerandaPost",Vector3(side*2.68,1.55,1.36),.11,3.1)
 static func dress(builder: SceneTree) -> void:
 	for h in J.HOUSES:
