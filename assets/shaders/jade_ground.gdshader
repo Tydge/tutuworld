@@ -70,5 +70,17 @@ void fragment(){
 	apron=mix(apron,mix(dirt*.75,grain*vec3(.85,.80,.71),.62+.15*n),level*district.g*(1.-laid)*.98);
 	apron=mix(apron,stone_yard,level*district.r*(1.-laid*.90));
 	apron*=mix(vec3(1.),vec3(.61,.67,.68),district.b);
-	ALBEDO=mix(apron,gravel,garden*(1.-laid*.68));ROUGHNESS=mix(.96,.82+.12*wear,laid);
+	// Reuse the worn surface colours as shallow relief, measured in metres.
+	// Screen derivatives respect the slope and the rotated stone aprons without another texture fetch.
+	float stone_cover=max(laid,district.r*level);
+	vec3 stone_relief=mix(flag,court_flags,district.r*(1.-laid));
+	float h=dot(stone_relief,vec3(.28,.57,.15))*.058*stone_cover;
+	vec3 dx=dFdx(VERTEX),dy=dFdy(VERTEX);
+	vec3 t=cross(dy,NORMAL),b=cross(NORMAL,dx);
+	float det=dot(dx,t);
+	vec3 grad=(t*dFdx(h)+b*dFdy(h))*sign(det)/max(abs(det),.000001);
+	float proximity=1.-smoothstep(15.,36.,length(VERTEX));
+	NORMAL=normalize(NORMAL-clamp(grad,vec3(-.38),vec3(.38))*proximity);
+	ALBEDO=mix(apron,gravel,garden*(1.-laid*.68));
+	ROUGHNESS=mix(.96,mix(.75,.92,wear),stone_cover);
 }

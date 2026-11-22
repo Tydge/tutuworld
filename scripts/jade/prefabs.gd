@@ -22,3 +22,4 @@ static func prepare(n: Node3D,kind: String) -> void:
 			for k in range(6):
 				art.paint(m,Vector3((k-2.5)*d.x/3.,-.087,(j-2.5)*d.z/3.),Vector3(d.x/3.-.003,.17,d.z/3.-.003),"masonry"))
 	var ground:=preload("res://scripts/geometry.gd").solid_box(n,Vector3.DOWN*.09,Vector3(d.x*2.,.18,d.z*2.));ground.collision_layer=8
+	preload("res://scripts/jade/sight_geometry.gd").bake_room(n)

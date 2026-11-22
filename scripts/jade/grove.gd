@@ -4,7 +4,7 @@ const Forest=preload("res://scripts/valley/ancient_forest.gd")
 const G=preload("res://scripts/geometry.gd")
 static var meshes: Dictionary={}
 static var spray_material: ShaderMaterial
-static var timber: ShaderMaterial
+static var bark_by_species: Array[ShaderMaterial] = []
 static var leaf_material: ShaderMaterial
 static func blade(st: SurfaceTool,p: Vector3,axis: Vector3,width: float,color_: Color,fan: bool) -> void:
 	var right:=Vector3(-axis.z,.04,axis.x).normalized()*width
@@ -16,10 +16,15 @@ static func blade(st: SurfaceTool,p: Vector3,axis: Vector3,width: float,color_: 
 static func model(variant: int,far: bool) -> ArrayMesh:
 	var key:=Vector2i(variant,int(far))
 	if meshes.has(key):return meshes[key]
-	if timber==null:
-		timber=ShaderMaterial.new();timber.shader=preload("res://assets/shaders/ancient_bark.gdshader")
-		timber.set_shader_parameter("follow_game_camera",true)
-		timber.set_shader_parameter("bark_texture",preload("res://assets/terrain/warm_tree_bark_v1.png"))
+	if bark_by_species.is_empty():
+		for tint in ["716857","68564e","85725d","685f50"]:
+			var bark := ShaderMaterial.new()
+			bark.shader = preload("res://assets/shaders/ancient_bark.gdshader")
+			bark.set_shader_parameter("follow_game_camera",true)
+			bark.set_shader_parameter("use_instance_slope",false)
+			bark.set_shader_parameter("bark_color",Color(tint))
+			bark.set_shader_parameter("bark_texture",preload("res://assets/terrain/warm_tree_bark_v1.png"))
+			bark_by_species.append(bark)
 		leaf_material=ShaderMaterial.new();leaf_material.shader=preload("res://assets/shaders/jade_foliage.gdshader")
 		leaf_material.set_shader_parameter("follow_game_camera",true)
 	var wood:=SurfaceTool.new();wood.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -31,13 +36,23 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 	var greens:=SurfaceTool.new();greens.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var rnd:=RandomNumberGenerator.new();rnd.seed=1621+variant*81
 	var trunk: Array=[Vector3(0,-.12,0),Vector3(.12,1.,0),Vector3(-.19,2.2,.16),Vector3(.23,3.42,.31),Vector3(.35,4.25,.18)]
-	Forest.tube(wood,trunk,[.34,.27,.22,.14,.06],8)
+	var lean := Vector3(-.11 + .12 * variant,0,.15 * cos(variant*1.78))
+	for i in range(1,trunk.size()):
+		trunk[i] += lean * sin(i*.57)
+	Forest.tube(wood,trunk,[.45,.27,.22,.14,.06],10)
+	if not far:
+		for i in range(6):
+			var heading := Vector3(cos(i*2.4+variant),0,sin(i*2.4+variant))
+			var spread := .65 + .28*sin(i*1.7+variant)
+			Forest.tube(wood,[Vector3.UP*.43+heading*.21,heading*.36+Vector3.UP*.11,heading*spread-Vector3.UP*.12],[.15,.14,.035],6)
 	var palette: Array=[["476a44","8fac63"],["b85e72","f4c9cd"],["a58436","e7c964"],["386854","80a76c"]][variant]
 	for j in range(11):
 		var a:=j*2.39996+variant*.37;var out:=Vector3(cos(a),0,sin(a))
-		var origin: Vector3=trunk[2+j%2];var bend:=origin+out*(1.1+.2*(j%3))+Vector3.UP*(.55+.10*j)
+		var band:=1+j%3
+		var origin: Vector3=trunk[band].lerp(trunk[band+1],.22+.35*fposmod(j*.438,1.));var bend:=origin+out*(1.1+.2*(j%3))+Vector3.UP*(.55+.10*j)
 		var tip:=bend+out*(.8+.22*(j%4))+Vector3.UP*(.65+.19*(j%4))
-		Forest.tube(wood,[origin,bend,tip],[.135,.084,.021],5)
+		var turn := Vector3(-out.z,.24,out.x) * (.16 * sin(j*2.1+variant))
+		Forest.tube(wood,[origin,origin.lerp(bend,.43)+turn,bend,bend.lerp(tip,.56)-turn*.62,tip],[.137,.115,.084,.053,.021],6)
 		for k in range(6):
 			var az:=a+(k-2.5)*.69;var d:=Vector3(cos(az),0,sin(az))
 			var twig:=bend.lerp(tip,.32+k*.11)
@@ -60,7 +75,7 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 					if variant==1:
 						for petal in range(5):
 							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.23,Vector3(cos(phi)*.14,.065,sin(phi)*.14),.067,leaf,true)
-	wood.generate_normals();wood.index();wood.set_material(timber)
+	wood.generate_normals();wood.index();wood.set_material(bark_by_species[variant])
 	var result:=wood.commit()
 	if not far:greens.index();greens.set_material(leaf_material);greens.commit(result)
 	sprays.set_material(spray_material);sprays.index();sprays.commit(result)

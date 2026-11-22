@@ -1,4 +1,6 @@
 extends Node3D
+@export var sight_sections: Dictionary={}
+const Sight=preload("res://scripts/jade/sight_geometry.gd")
 @export var floor_size:=Vector2(12.2,10.2)
 @export var shell_kind: String="hall"
 @export var wall_height:=4.7
@@ -41,7 +43,7 @@ func _process(delta: float) -> void:
 	using_cutaway=cut
 	var head:=p+Vector3.UP*1.1
 	var bounds:=AABB(Vector3(-floor_size.x*.5,wall_height-.1,-floor_size.y*.5),Vector3(floor_size.x,.75,floor_size.y))
-	var cut_roof:=cut and (inside or bounds.intersects_segment(head,eye)!=null)
+	var cut_roof:=cut and (inside or bounds.intersects_segment(head,eye)!=null or section_obstructs("Exterior",head,eye))
 	if has_node("UpperFloor"):$UpperFloor.visible=not cut_roof or p.y>wall_height-1.
 	$Exterior.visible=not cut_roof;$HouseName.visible=not cut_roof
 	var w:=floor_size.x*.5;var d:=floor_size.y*.5;var full:=wall_height+(3.4 if has_node("UpperFloor") else 0.)
@@ -51,4 +53,9 @@ func _process(delta: float) -> void:
 		if cut:
 			for delta_ in [Vector3.ZERO,Vector3(.38,.62,0),Vector3(-.38,.62,0),Vector3(0,-.52,.26),Vector3(0,.70,-.31)]:
 				if box.intersects_segment(head+delta_,eye)!=null:blocked=true;break
+		if cut and not blocked:blocked=section_obstructs(str(entry[0].name),head,eye)
 		entry[0].visible=not blocked
+
+func section_obstructs(section_name: String,head: Vector3,eye: Vector3) -> bool:
+	var section: Array = sight_sections.get(section_name,[])
+	return Sight.obscures(section,head,eye) or Sight.clips_lens(section,self,eye,city.camera)

@@ -64,6 +64,7 @@ func visit(map: String) -> void:
 				market[0]+="-repeat-"+str(i+1)
 				await sample_route(map,market)
 		await capture_landmarks()
+		if OS.get_cmdline_user_args().has("--capture-market-hours"):await capture_market_hours()
 	game.free();await process_frame
 
 func sample_route(map: String,view: Array) -> void:
@@ -116,6 +117,10 @@ func capture_landmarks() -> void:
 	var field: Vector3=J.point(plots[0].x+8.,plots[0].z+7.)
 	var shots: Array=[
 		["arrival",game.respawn_position(),0.,.18,12.,.46],
+		["post-from-street",J.point(-45.8,36.5),.12,.19,10.5,.44],
+		["river-side-alley",J.point(-52.,18.),1.53,.24,10.5,.44],
+		["artisan-yard",J.point(-51.,139.),.03,.24,10.4,.42],
+		["eaves-from-street",J.point(J.lane(51.)+4.,51.),-1.22,.12,7.4,.35],
 		["forecourt-approach",J.point(-.5,-39.),-.08,.19,10.3,.41],
 		["drum-terrace",J.point(-6.2,-57.),.91,.17,8.2,.39],
 		["baihe-terrace",J.point(6.4,-65.),-.92,.20,8.5,.40],
@@ -170,3 +175,36 @@ func capture_landmarks() -> void:
 			await process_frame;RenderingServer.force_draw()
 		root.get_texture().get_image().save_jpg(output+"/jade-"+str(shot[0])+".jpg",.90)
 		print("PLAYER_VIEW ",shot[0]," grounded=",game.bunny.is_on_floor()," position=",game.bunny.global_position)
+
+func capture_market_hours() -> void:
+	var original_scale:=Engine.time_scale
+	var original_ticks:=Engine.physics_ticks_per_second
+	for event in [[8.,146.,"sort_seed","morning-customers"],[18.,127.,"tea","evening-customers"]]:
+		var hour: float=event[0]
+		var z: float=event[1]
+		var actor_point:=J.point(J.lane(z+7.)+1.2,z+7.)
+		game.bunny.global_position=actor_point;game.bunny.velocity=Vector3.ZERO
+		game.bunny.reset_physics_interpolation();game.camera_focus=actor_point+Vector3.UP*1.35
+		game.pitch=.17;game.yaw=.33;game.distance_=11.
+		session.state().time=hour*150.;game.update_lighting()
+		# All residents retain their real drivers. Advance at the same simulated physics interval.
+		Engine.physics_ticks_per_second=original_ticks*4;Engine.time_scale=original_scale*4.
+		var crowd: Array=[]
+		var gathering_seen:=false
+		for frame in range(original_ticks*150):
+			await physics_frame
+			if frame%12!=0:continue
+			crowd.clear()
+			var acting:=false
+			for id in [1,2,8]:
+				var resident=game.targets["JadeCitizen_"+str(id)].node
+				if absf(resident.position.x-J.lane(z)+3.)<11. and absf(resident.position.z-z)<11.:
+					crowd.append([id,resident.position,resident.action])
+					acting=acting or resident.action==event[2]
+			if crowd.size()==3 and acting:
+				gathering_seen=true;break
+		if not gathering_seen:failures.append("jade/"+str(event[3])+"/customers")
+		Engine.physics_ticks_per_second=original_ticks;Engine.time_scale=original_scale
+		for frame in range(5):await process_frame;RenderingServer.force_draw()
+		root.get_texture().get_image().save_jpg(output+"/jade-"+str(event[3])+".jpg",.90)
+		print("MARKET_PERIOD_VIEW ",event[3]," observed=",crowd)

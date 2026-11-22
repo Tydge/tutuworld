@@ -30,6 +30,8 @@ static func build() -> ArrayMesh:
 					needles.add_vertex(pos+heading*(cell.x-.16)*1.55+cross*(cell.y-.5)*1.29+Vector3.UP*.19*cell.x)
 	var bark:=ShaderMaterial.new();bark.shader=preload("res://assets/shaders/ancient_bark.gdshader");bark.set_shader_parameter("bark_texture",preload("res://assets/terrain/warm_tree_bark_v1.png"))
 	bark.set_shader_parameter("follow_game_camera",true)
+	bark.set_shader_parameter("use_instance_slope",false)
+	bark.set_shader_parameter("bark_color",Color("6e6151"))
 	var leaves:=ShaderMaterial.new();leaves.shader=preload("res://assets/shaders/ancient_foliage.gdshader");leaves.set_shader_parameter("foliage_atlas",preload("res://assets/terrain/woodland/foliage_atlas_v1.png"))
 	leaves.set_shader_parameter("follow_game_camera",true)
 	trunk.index();trunk.generate_normals();trunk.set_material(bark);pine=trunk.commit();needles.index();needles.set_material(leaves);needles.commit(pine);return pine

@@ -25,6 +25,12 @@ func run() -> void:
 		var z: float=room.floor_size.y*.5
 		var start:=room.to_global(Vector3(0,1.,z+1.));var end:=room.to_global(Vector3(0,1.,z-1.))
 		check(city.get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(start,end,5)).is_empty(),"Open entrance "+str(h[1]))
+	city.hud.open_panel("map")
+	for i in range(4):await process_frame
+	check(is_instance_valid(city.hud.map_draw) and city.hud.map_draw.is_visible_in_tree(),"Open the street map from the game HUD")
+	RenderingServer.force_draw()
+	root.get_texture().get_image().save_png(dir+"/玉京坊图.png")
+	city.hud.close_panel()
 	var reachable:=0;var ice:=0
 	for x in range(-240,241,2):
 		for z in range(-214,215,2):

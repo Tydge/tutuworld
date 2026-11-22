@@ -11,6 +11,7 @@ var passed:=0
 func _initialize() -> void:call_deferred("run")
 
 func run() -> void:
+	root.size=Vector2i(1440,900)
 	var session=preload("res://scripts/services/session.gd").new()
 	session.name="Session";root.add_child(session)
 	session.create_character("玉京通行检查","bunny","bow_rose")
@@ -18,6 +19,7 @@ func run() -> void:
 	game=load("res://scenes/jade.tscn").instantiate();root.add_child(game)
 	actor=game.bunny
 	for i in range(12):await physics_frame
+	await alley_camera()
 	# Keep the buildings, solids and player physics active while isolating public architecture from passing residents.
 	game.set_process(false);session.active=false
 	for npc in game.npcs:
@@ -202,3 +204,35 @@ func shop_display_clearance() -> void:
 				var other:=Rect2(Vector2(shelf.position.x,shelf.position.z)-extent*.5,extent)
 				clear=clear and not bounds.intersects(other)
 			check(clear,id+" 专属货案与通用货架分离")
+
+func alley_camera() -> void:
+	await stand(J.point(-52.,18.))
+	game.camera_focus=actor.position+Vector3.UP*1.35
+	game.yaw=1.53;game.pitch=.24;game.distance_=10.5
+	for frame in range(100):await physics_frame
+	var room:=game.scenery.get_node("Hall_post") as Node3D
+	for height: float in [1.05,1.65,2.1]:
+		var target:=actor.global_position+Vector3.UP*height
+		check(clear_sightline(room,target),"沿河支巷玩家可见 "+str(height))
+	var viewport_extent: Vector2=game.camera.get_viewport().get_visible_rect().size
+	for screen: Vector2 in [Vector2(.2,.2),Vector2(.5,.2),Vector2(.8,.2),Vector2(.2,.5),Vector2(.2,.8),Vector2(.34,.67)]:
+		var ray: Vector3=game.camera.project_ray_normal(viewport_extent*screen)
+		check(clear_sightline(room,game.camera.global_position+ray*1.5),"沿河支巷镜头近处畅通 "+str(screen))
+	await stand(J.point(-45.8,36.5))
+	game.camera_focus=actor.position+Vector3.UP*1.35
+	game.yaw=.12;game.pitch=.19;game.distance_=10.5
+	for frame in range(80):await physics_frame
+	check(room.get_node("Exterior").is_visible_in_tree() and room.get_node("Front").is_visible_in_tree(),"从街面回望茶棚可见屋面与门脸")
+
+
+func clear_sightline(room: Node3D,target: Vector3) -> bool:
+	for mesh: MeshInstance3D in room.find_children("*","MeshInstance3D",true,false):
+		if not mesh.is_visible_in_tree() or not mesh.mesh:continue
+		var start:=mesh.to_local(game.camera.global_position)
+		var end:=mesh.to_local(target)
+		if mesh.get_aabb().intersects_segment(start,end)==null:continue
+		var faces:=mesh.mesh.get_faces()
+		for index in range(0,faces.size()-2,3):
+			if Geometry3D.segment_intersects_triangle(start,end,faces[index],faces[index+1],faces[index+2])!=null:
+				print("ALLEY_VIEW_BLOCK ",mesh.get_path());return false
+	return true

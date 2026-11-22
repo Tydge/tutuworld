@@ -32,6 +32,7 @@ func build() -> void:
 		fixture(world,"jade_sampan",draft,PI*.5+.13*sin(berth.x))
 	for h in J.HOUSES:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
+		preload("res://scripts/jade/sight_geometry.gd").bake_room(room)
 		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
