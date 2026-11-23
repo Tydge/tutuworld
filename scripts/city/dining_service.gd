@@ -7,7 +7,7 @@ static func register(editor: Node) -> void:
 static func register_world(host: Node3D,layout: Dictionary,room: Node3D) -> void:
 	var pairs:=D.links(layout);var tables: Dictionary={}
 	for row in layout.elements:
-		if row.get("kind","")!="dining_table" or not room.render_cache.has(row.id):continue
+		if row.get("kind","") not in D.TABLES or not room.render_cache.has(row.id):continue
 		var node: Node3D=room.render_cache[row.id].node;tables[row.id]=node
 		node.set_meta("dining_chairs",[])
 		host.targets["build:"+row.id]={"kind":"dining","node":node,"position":node.global_position,"radius":3.3}

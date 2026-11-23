@@ -318,6 +318,7 @@
       "jade_walking_routes",
       "jade_workshop_flow",
       "jade_city_flow",
+      "jade_neighbourhood_flow",
       "jade_visual_acceptance"
     ]
   },

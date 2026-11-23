@@ -63,7 +63,7 @@ static func usage(layout: Dictionary) -> Dictionary:
 	return {"floor_cells":cells,"floor_area":cells*.25,"wall_edges":edges,"wall_length":edges*.5,"objects":objects,"lights":lights,"roofs":roofs}
 static func snap_object(layout: Dictionary,item: Dictionary,dining_snap: bool=true) -> Dictionary:
 	var row:=item.duplicate(true)
-	if dining_snap and row.get("kind","")=="dining_chair":
+	if dining_snap and row.get("kind","") in preload("res://scripts/building/dining.gd").CHAIRS:
 		var aligned:=preload("res://scripts/building/dining.gd").snap(layout,row)
 		if aligned.position!=row.position or aligned.yaw!=row.yaw:return aligned
 	if row.get("type","")!="object" or Catalog.mount(row)!="floor" or Catalog.OBJECTS[row.kind].get("outdoor",false) or Catalog.OBJECTS[row.kind].get("overlay",false):return row

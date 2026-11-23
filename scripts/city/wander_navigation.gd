@@ -10,6 +10,7 @@ var destinations: Dictionary={}
 var sampling_ready:=false
 var sampling_revision:=0
 var floor_heights: Dictionary={}
+var flat_jade_cells: Dictionary={}
 var stair_reservations: Array=[]
 const GROUND_MARGIN:=.45
 const SUPPORT_OFFSETS=[Vector2.ZERO,Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN,Vector2(.7071,.7071),Vector2(.7071,-.7071),Vector2(-.7071,.7071),Vector2(-.7071,-.7071)]
@@ -58,9 +59,35 @@ func supported(point: Vector3,space: PhysicsDirectSpaceState3D,margin: float=GRO
 		var hit:=space.intersect_ray(floor_query)
 		if hit.is_empty() or hit.normal.y<.7:return false
 	return true
-func can_step(from: Vector3,to: Vector3) -> bool:
+func flat_jade_floor(cell: Vector2i) -> float:
+	if flat_jade_cells.has(cell):return flat_jade_cells[cell]
+	var h: float=floor_heights.get(cell,INF)
+	var p:=Vector2(cell)
+	# Building lots can change at runtime. Banks, pond edges and stairs always
+	# keep the full footprint sweep, including when a neighbour is far away.
+	var jade:=preload("res://scripts/jade/layout.gd")
+	if absf(p.y-jade.river_z(p.x))<20. or absf(p.x)>jade.LIMIT.x-7. or absf(p.y)>jade.LIMIT.y-7. or Rect2(65,79,101,63).has_point(p):h=INF
+	if is_finite(h):
+		for pond: Vector2 in jade.PONDS:
+			if absf(p.x-pond.x)<8. and absf(p.y-pond.y)<7.:h=INF;break
+	if is_finite(h):
+		for dz in range(-1,2):
+			for dx in range(-1,2):
+				var adjacent:=cell+Vector2i(dx,dz)
+				if not component_of.has(adjacent) or absf(float(floor_heights.get(adjacent,INF))-h)>.07:
+					h=INF;break
+			if not is_finite(h):break
+	flat_jade_cells[cell]=h
+	return h
+func can_step(from: Vector3,to: Vector3,use_flat_survey:=false) -> bool:
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
 	var next:=Vector3(to.x,from.y,to.z)
+	if use_flat_survey and sampling_ready:
+		var height_:=flat_jade_floor(Vector2i(roundi(next.x),roundi(next.z)))
+		if absf(height_-from.y)<.20:
+			floor_query.from=next+Vector3.UP*.4;floor_query.to=next-Vector3.UP*.45
+			var support:=space.intersect_ray(floor_query)
+			if not support.is_empty() and support.normal.y>.99 and absf(support.position.y-height_)<.09:return true
 	if supported(next,space):return true
 	# A previously displaced actor can walk back toward supported ground, without teleporting.
 	if supported(from,space) or not supported(next,space,0.):return false
@@ -175,6 +202,7 @@ func path_between(from: Vector3,to: Vector3) -> PackedVector3Array:
 	for id in grid.get_id_path(a,b): path.append(Vector3(id.x,floor_heights.get(id,0.0),id.y))
 	return path
 func refresh_region(bounds: AABB) -> void:
+	flat_jade_cells.clear()
 	if not ready_for_paths: return
 	await get_tree().physics_frame;await get_tree().physics_frame
 	reserve_stairs()

@@ -27,6 +27,7 @@ func _init() -> void:
 	state = {"schema":2,"player_id":"local_bunny","character_name":"兔兔","species":"bunny","map_id":"city","world_id":"peace_island_v1","time":DAY_SECONDS/3,"coins":650,"inventory":{"seed_carrot":3,"seed_lettuce":3,"seed_tomato":2,"seed_pumpkin":2},"equipment":{"head":"","body":"","neck":""},"plots":{},"resources":{},"player_position":[0,.1,9],"revision":0,"food_effect":{},"experience":0,"stamina":100.0,"attributes":Stats.defaults(),"skills":Stats.skill_defaults(),"skill_experience":Stats.skill_xp_defaults()}
 	state["winter_outfits"]={}
 	state["clothing_designs"]={}
+	state["jade_visits"]=preload("res://scripts/jade/play_board.gd").normalize({})
 	state["snow_trail"]=preload("res://scripts/icefield/snow_trail.gd").normalize({})
 	state["hearth_ready_at"]=0.
 	state["land_parcels"]=preload("res://scripts/building/parcels.gd").empty()
@@ -75,6 +76,7 @@ func water_left(id: String="") -> int:
 	return clampi(int(state.get("watering_water",{}).get(id,0)),0,DB.water_capacity(id)) if count(id)>0 else 0
 func normalize_production_state() -> void:
 	state.clothing_designs=preload("res://scripts/appearance/clothing_designs.gd").normalize(state.get("clothing_designs",{}),state.inventory)
+	state.jade_visits=preload("res://scripts/jade/play_board.gd").normalize(state.get("jade_visits",{}))
 	state.snow_trail=preload("res://scripts/icefield/snow_trail.gd").normalize(state.get("snow_trail",{}))
 	if not state.get("watering_water",{}) is Dictionary: state.watering_water={}
 	var clean: Dictionary={}
@@ -191,6 +193,7 @@ func _apply(c: Dictionary) -> Dictionary:
 	var verb: String = c.get("verb","")
 	var item: String = c.get("item","")
 	var map_id: String=state.get("map_id","city")
+	if verb=="jade_visit":return preload("res://scripts/jade/play_board.gd").finish(self,c)
 	if verb=="make_furniture":return preload("res://scripts/building/warehouse.gd").make(self,c)
 	if verb=="buy_land":
 		var land=preload("res://scripts/building/parcels.gd");var parcel: Variant=c.get("parcel_id","")

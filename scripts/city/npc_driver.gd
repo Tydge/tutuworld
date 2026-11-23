@@ -1,6 +1,9 @@
 extends Node
 var bunny: CharacterBody3D
 var route: Array[Vector3]=[]
+var use_local_neighbours:=false
+var local_neighbours: Array=[]
+var nearby_players: Array=[]
 var wait:=0.0
 var speed:=1.45
 var city: Node3D
@@ -110,11 +113,19 @@ func _physics_process(delta: float) -> void:
 			else:
 				direction=path[path_index]-bunny.position
 				direction.y=0
+	if use_local_neighbours and not chatting and bunny.action.is_empty():
+		var aside:=give_way()
+		if aside!=Vector3.ZERO:
+			direction=aside
+			wait=0.
 	var stopped:=chatting or wait>0 or direction.length_squared()<.001
 	var separation:=Vector3.ZERO
 	if not stopped:
-		for other in city.npcs: separation+=separation_from(other)
-		separation+=separation_from(city.bunny)
+		for other in (local_neighbours if use_local_neighbours else city.npcs): separation+=separation_from(other)
+		if use_local_neighbours:
+			for visitor in nearby_players:
+				if is_instance_valid(visitor):separation+=separation_from(visitor)
+		else:separation+=separation_from(city.bunny)
 	var steering: Vector3=direction.normalized()+separation
 	var target:=Vector3.ZERO if stopped else steering.normalized()*speed
 	if not bunny.is_on_floor(): bunny.velocity.y-=18*delta
@@ -128,7 +139,7 @@ func _physics_process(delta: float) -> void:
 		bunny.velocity.x=horizontal.x;bunny.velocity.z=horizontal.y
 	var next_position:=bunny.position+Vector3(bunny.velocity.x,0,bunny.velocity.z)*delta
 	var moving:=Vector2(bunny.velocity.x,bunny.velocity.z).length_squared()>.0001
-	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position)):
+	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position,use_local_neighbours)):
 		bunny.velocity.x=0;bunny.velocity.z=0
 		var safe: Vector2i=city.navigation.closest_free(bunny.position)
 		last_normal=(Vector3(safe.x,bunny.position.y,safe.y)-bunny.position).normalized() if safe.x!=999 else -direction.normalized()
@@ -160,6 +171,21 @@ func _physics_process(delta: float) -> void:
 			if cooldown<=0 and bunny.position.distance_to(progress_origin)<.28: recover()
 			progress_clock=0
 			progress_origin=bunny.position
+# Stop short of a visitor's line, including when the visitor is another online player.
+func give_way() -> Vector3:
+	for candidate in nearby_players:
+		if not is_instance_valid(candidate):continue
+		var visitor: CharacterBody3D=candidate
+		var offset:=bunny.position-visitor.position
+		if offset.length_squared()>=4.84 or absf(offset.y)>=1.:continue
+		var approach:=Vector2(visitor.velocity.x,visitor.velocity.z)
+		if approach.length_squared()<=.16:continue
+		var forward:=approach.normalized()
+		var lateral:=Vector2(-forward.y,forward.x)
+		var gap:=Vector2(offset.x,offset.z)
+		var side:=gap.dot(lateral)
+		if gap.dot(forward)>.05 and absf(side)<1.25:return Vector3(lateral.x,0,lateral.y)*(1. if side>=0. else -1.)
+	return Vector3.ZERO
 func separation_from(other: CharacterBody3D) -> Vector3:
 	if other==bunny: return Vector3.ZERO
 	var away: Vector3=bunny.position-other.position

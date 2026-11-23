@@ -14,8 +14,12 @@ const KINDS:={
 }
 static func register(host: Node3D,id: String,node: Node3D) -> void:
 	var kind: String=str(node.get_meta("furniture_kind",""))
-	if not KINDS.has(kind):return
-	var row: Array=KINDS[kind]
+	var row: Array=KINDS.get(kind,[])
+	if node.has_meta("jade_house"):
+		var house: String=node.get_meta("jade_house")
+		row=["jade_game",preload("res://scripts/jade/house_games.gd").STATIONS[house].action]
+	elif node.has_meta("dye_station"):row=KINDS.clothing_rack
+	if row.is_empty():return
 	var anchor:=node.get_node_or_null("ActivityAnchor") as Node3D if kind!="tea_service" else null
 	host.targets[id]={"kind":row[0],"label":row[1],"node":node,"position":anchor.global_position if anchor else node.global_position,"radius":2.35}
 	if anchor:host.targets[id].anchor=anchor

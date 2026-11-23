@@ -61,3 +61,12 @@
 `tools/render_jade_icons.gd` 从真实服装、作物、工具和家具模型拍摄 34 个图标。图集内的编号顺序保存在 `item_portraits.json`。两种纺织作物的五个生长期模型由 `tools/harvest_art/fibres.py` 生成。
 
 宫北近山沿两个山肩抬高，留出宫殿后的鞍部。远景天空用 64 像素立方体记录日夜渐变，云层和星月由天空着色器按正常游戏分辨率绘制。
+
+
+## 玉京坊间与宫城织绣
+
+盘龙宝座靠背、鹤纹补子、牡丹裙门和蓝印鱼纹由 ImageGen 生成一张 2 × 2 色彩图，再按四个等分区域裁切为各 512 × 512 的 PNG。游戏复用这四份带 mipmap 的材质。人物各部位分别合并相同材质的几何，袖口保留手臂骨架的动作。远处的街屋使用离线生成的简化层级。冠瓣、襟线、袖缘、褶摆和宝座木雕的外轮廓由模型形成。物品栏取自游戏实物，重拍脚本为 `tools/render_jade_icons.gd`。
+
+生成提示词如下。
+
+> Square technical UV diffuse atlas, exactly FOUR edge-to-edge equal square quadrants in a 2x2 grid, each an orthographic swatch of original classical Chinese decorative art for a charming 3D game. Top left: single majestic sinuous Chinese gold dragon with whiskers, antlers, coiling among restrained ruyi clouds in shallow carved relief on deep cinnabar lacquer, for an imperial throne back. Top right: one large elegant white red-crowned crane in flight, wings extended diagonally, sparse cloud curls, woven on midnight teal silk, bordered with a narrow gold key fret, square Ming-style embroidered rank badge. Bottom left: large single pale-gold flowering peony sprig with leaves on vermilion silk, narrow wave border at bottom for a pleated horse-face skirt apron. Bottom right: restrained ivory-and-indigo resist-dyed cotton, repeat of large stylized fish among rolling waves, rendered as distinctive hand-cut Chinese stencils. Clearly legible at small scale, hand-painted illustrated game texture, broad quiet color fields mixed with intricate thread or carved detail; exactly equal quadrants with no gutters, flat even light, no scene or objects, no text.

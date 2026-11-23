@@ -40,7 +40,13 @@ static func bake(room: Node3D,kind: String) -> void:
 					for k in [one,two,three]:
 						combined.set_color(tint.srgb_to_linear()*(colours[k] if not colours.is_empty() else Color.WHITE));combined.set_uv2(Vector2(index,0));combined.set_uv(tex[k]*Vector2(mat.uv1_scale.x,mat.uv1_scale.y) if not tex.is_empty() and mat is StandardMaterial3D else (tex[k] if not tex.is_empty() else Vector2.ZERO))
 						combined.set_normal((normal_matrix*norms[k]).normalized() if not norms.is_empty() else Vector3.UP);combined.add_vertex(transform_*pos[k])
-		combined.index();combined.set_material(finish());shells[kind]=combined.commit()
+		combined.index()
+		# The far skyline can cover dozens of houses. Bake screen-space LODs once,
+		# keeping the full mesh and the same material IDs at nearer transitions.
+		var levels:=ImporterMesh.new()
+		levels.add_surface(Mesh.PRIMITIVE_TRIANGLES,combined.commit_to_arrays(),[],{},finish())
+		levels.generate_lods(55.,80.,[])
+		shells[kind]=levels.get_mesh()
 	var proxy:=G.mesh(room,shells[kind],Vector3.ZERO,null,"DistantShell");proxy.hide()
 static func batch_fixtures(world: Node3D) -> void:
 	var cells: Dictionary={}

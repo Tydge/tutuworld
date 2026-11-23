@@ -56,5 +56,26 @@ func run() -> void:
 	home.elements.append({"id":"build_400","type":"object","kind":"jade_cottage","position":[82,94],"yaw":0,"storey":0})
 	home.elements.append({"id":"build_401","type":"object","kind":"chair","position":[82,94],"yaw":0,"storey":0})
 	check(Layout.validate(home,"jade").ok,"Place a chair inside the buildable cottage")
+	editor.ui.show_category("玉京")
+	for kind in preload("res://scripts/jade/room_furniture.gd").SIZES:
+		var furnished:=home.duplicate(true)
+		furnished.elements[1].kind=kind
+		if kind in ["jade_censer","jade_blossom"]:
+			furnished.elements[1].kind="jade_altar_table"
+			var decoration: Dictionary={"id":"build_402","type":"object","kind":kind,"yaw":0,"storey":0}
+			var mounted:=Layout.attach_at(furnished,decoration,Vector2(82,94),"build_401")
+			check(mounted.support=="build_401","Mount "+kind+" on Chinese altar table")
+			furnished.elements.append(mounted)
+		check(editor.ui.cards.has("object:"+kind) and Layout.validate(furnished,"jade").ok,"Build catalogue and cottage placement "+kind)
+	editor.undo()
+	editor.choose_tool("object:jade_cottage")
+	check(editor.place_at(Vector2(82,94)),"Set up a cottage through F6 · "+editor.ui.status.text)
+	editor.choose_tool("object:jade_alcove_bed")
+	check(editor.place_at(Vector2(82,94)),"Furnish the new cottage with its canopy bed · "+editor.ui.status.text)
+	home.elements[1].kind="jade_altar_table"
+	var dining=preload("res://scripts/building/dining.gd")
+	var slot: Dictionary=dining.slots(home.elements[1])[0]
+	home.elements.append({"id":"build_402","type":"object","kind":"jade_moon_chair","position":[slot.position.x,slot.position.y],"yaw":slot.yaw,"storey":0})
+	check(dining.links(home).get("build_402","")=="build_401","Chinese table and chair form a dining place")
 	print("JADE_WORKSHOP_FLOW failures=",failures)
 	city.free();s.free();quit(1 if failures else 0)

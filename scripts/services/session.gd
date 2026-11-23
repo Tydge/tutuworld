@@ -14,7 +14,7 @@ const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const SAVE="user://island_city_v2.json"
 const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","jade_build_layout","land_parcels"]
-const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
+const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","jade_visits","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
 var test_mode:=false
@@ -440,10 +440,11 @@ func restore_state(raw: Dictionary):
 	s.stamina_recovery_elapsed=clampf(float(raw.get("stamina_recovery_elapsed",0)),0,29.999999)
 	s.clothing_designs=preload("res://scripts/appearance/clothing_designs.gd").normalize(raw.get("clothing_designs",{}),s.inventory)
 	var bed_id:=str(raw.get("rest_bed",""));var bed_valid: bool=(bed_id=="home_bed" and s.map_id in ["city","valley"]) or (s.map_id=="icefield" and bed_id in preload("res://scripts/icefield/snow_trail.gd").LODGE_BEDS)
-	if s.map_id=="jade" and bed_id in ["jade:hostel:bed_0","jade:ferry:bed_0","jade:inn:bed_0","jade:farmhouse:bed_0","jade:chamber:bed_0"]:bed_valid=true
+	if s.map_id=="jade" and bed_id in ["jade:cot:bed_0","jade:inn:bed_0","jade:cot:Gallery_jade_alcove_bed_0","jade:inn:Gallery_jade_alcove_bed_0"]:bed_valid=true
 	if bed_id.begins_with("build:") and s.map_id in ["city","icefield","jade"]:
 		var bed:=preload("res://scripts/building/layout.gd").find(preload("res://scripts/building/parcels.gd").layout_for(s,s.map_id),bed_id.trim_prefix("build:"))
 		bed_valid=bed.get("type","")=="object" and preload("res://scripts/building/catalog.gd").OBJECTS[bed.kind].get("bed",false)
+	s.jade_visits=preload("res://scripts/jade/play_board.gd").normalize(raw.get("jade_visits",{}))
 	s.snow_trail=preload("res://scripts/icefield/snow_trail.gd").normalize(raw.get("snow_trail",{}))
 	s.hearth_ready_at=clampf(float(raw.get("hearth_ready_at",0.)),0.,float(s.time)+180.)
 	s.rest_mode="sleep" if raw.get("rest_mode","")=="sleep" and bed_valid else ""
@@ -548,6 +549,7 @@ func receive_online_snapshot(data: Dictionary) -> void:
 	online_winter_building_available=bool(data.get("winter_building",false))
 	var prior_state: Dictionary=authority.state
 	authority.state=data.state
+	if not authority.state.has("jade_visits"):authority.state.jade_visits=preload("res://scripts/jade/play_board.gd").normalize({})
 	for map_id in ["city","icefield","jade"]:
 		var key: String=preload("res://scripts/building/parcels.gd").layout_key(map_id)
 		if not authority.state.has(key):authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)

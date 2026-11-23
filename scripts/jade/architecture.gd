@@ -317,6 +317,9 @@ static func shell(n: Node3D,kind: String) -> void:
 			G.cylinder(m,Vector3.UP*(top+6.3),.21,.68,G.mat(GOLD),.06))
 	if kind in ["forge","cloister","pavilion","store","cottage"]:preload("res://scripts/jade/joinery.gd").veranda(n,kind,w,h,z)
 static func prop(n: Node3D,kind: String) -> void:
+	if preload("res://scripts/jade/room_furniture.gd").SIZES.has(kind):
+		preload("res://scripts/jade/room_furniture.gd").make(n,kind)
+		return
 	if kind in preload("res://scripts/jade/shop_signs.gd").KINDS:preload("res://scripts/jade/shop_signs.gd").make(n,kind);return
 	if kind in preload("res://scripts/jade/trades.gd").KINDS:preload("res://scripts/jade/trades.gd").make(n,kind);return
 	if kind=="jade_court_terrace":preload("res://scripts/jade/processional_court.gd").make_plot_terrace(n);return

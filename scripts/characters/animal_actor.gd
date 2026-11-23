@@ -1,5 +1,8 @@
 extends CharacterBody3D
 signal wardrobe_changed
+# Distant neighbourhood residents still walk and interact on every physics tick.
+var distant_pose_interval:=0.
+var distant_pose_elapsed:=0.
 const Meal=preload("res://scripts/city/meal_timeline.gd")
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
 const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
@@ -202,7 +205,7 @@ func stand_up(exit_position: Vector3) -> void:
 	ice_inertia=false;animation_speed=-1.
 	sleeping=false
 	collision_layer=sleep_collision_layer
-	action="";eyes.scale.y=1;head.position=head_rest_position
+	action="";mood_label.text="";eyes.scale.y=1;head.position=head_rest_position
 	visual.rotation.x=0;visual.rotation.z=0
 	seated = false
 	can_move = true
@@ -219,6 +222,17 @@ func lie_in_bed(bed: Node3D) -> void:
 	head.position=pose.head;head.rotation=Vector3(SleepPose.HEAD_ANGLE,0,0)
 
 func _physics_process(delta: float) -> void:
+	if distant_pose_interval>0. and world==null:
+		# The town driver keeps a hidden resident walking. A neutral, offscreen
+		# rig only needs its pose clock until it becomes visible again.
+		if not visible and action.is_empty() and emote.is_empty():
+			clock+=delta
+			distant_pose_elapsed=0.
+			return
+		distant_pose_elapsed+=delta
+		if distant_pose_elapsed<distant_pose_interval and (action=="" or action_time+distant_pose_elapsed<action_length):return
+		delta=distant_pose_elapsed
+		distant_pose_elapsed=0.
 	visual.position-=presentation_applied;presentation_applied=Vector3.ZERO
 	presentation_offset*=exp(-delta*14)
 	animate_pose(delta)

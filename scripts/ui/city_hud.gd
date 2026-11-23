@@ -151,12 +151,13 @@ func _ready() -> void:
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	root_ui.add_child(overlay)
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var shade:=ColorRect.new()
+	var shade:=ColorRect.new();shade.name="Shade"
 	shade.color=Color("243f37",.42)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.add_child(shade)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	modal=UI.panel(UI.CREAM,30,26)
+	modal.set_meta("menu_paper",modal.get_theme_stylebox("panel"))
 	modal.anchor_left=.5
 	modal.anchor_right=.5
 	modal.anchor_top=.5
@@ -260,6 +261,7 @@ func _process(delta: float) -> void:
 		overlay.size=get_viewport().get_visible_rect().size
 		modal.set_anchors_preset(Control.PRESET_TOP_LEFT)
 		modal.position=(overlay.size-modal.size)*.5
+		if mode=="jade_game" and overlay.size.x>=1120:modal.position.x=overlay.size.x-modal.size.x-28.
 	if mode=="map" and is_instance_valid(map_draw): map_draw.queue_redraw()
 func gain_experience(amount: int) -> void:
 	if amount>0: gain_timer=1.2; work_gain.text="+%d ★"%amount
@@ -277,7 +279,7 @@ func set_prompt(text: String) -> void:
 	prompt.text=text
 	prompt_card.visible=text!="" and not overlay.visible and not photo_mode
 func close_panel() -> void:
-	if mode=="tailor":UI.clear(content)
+	if mode in ["tailor","jade_game"]:UI.clear(content)
 	tailoring=null
 	mode=""
 	fitting_resident=""
@@ -297,6 +299,7 @@ func open_panel(kind: String) -> void:
 	shop_preview_overrides.clear()
 	fitting_resident=""
 	mode=kind
+	if mode=="jade_game":toast_timer=0.;toast.hide()
 	panel_signature=JSON.stringify([session.state().inventory,session.state().equipment,session.state().coins,session.state().skill_experience,session.state().get("watering_water",{})])
 	overlay.show()
 	city.paused=true
@@ -314,6 +317,15 @@ func rebuild() -> void:
 	UI.clear(content)
 	var height:=620 if mode=="profile" else 680
 	var width_: float=1100 if mode in ["wardrobe","tailor"] or (mode=="shop" and shop=="clothes") else 960
+	if mode=="jade_game":
+		var paper:=UI.box(Color("f0e1be"),6,26)
+		paper.border_color=Color("855b43")
+		paper.set_border_width_all(3);paper.border_width_top=8;paper.border_width_bottom=6
+		modal.add_theme_stylebox_override("panel",paper)
+		width_=minf(760.,get_viewport().get_visible_rect().size.x-24.)
+		height=472
+	else:modal.add_theme_stylebox_override("panel",modal.get_meta("menu_paper"))
+	overlay.get_node("Shade").color=Color("243f37",.12 if mode=="jade_game" else .42)
 	modal.custom_minimum_size=Vector2(width_,height)
 	modal.size=Vector2(width_,height)
 	modal.position=Vector2(-width_*.5,-height*.5)
@@ -321,6 +333,13 @@ func rebuild() -> void:
 	content.add_child(head)
 	var titles:={"bag":session.authority.actor_name()+"的随身口袋","wardrobe":"今天穿什么？","shop":{"farm":"春芽种子商店","tools":"木木工具铺","clothes":"云朵服装店"}.get(shop,"商店"),"settings":"歇一小会儿","map":"眠风山谷" if city.map_id=="valley" else "慢慢来海岛城","dialogue":"路上遇见的邻居","plot":"照料这块小菜地","kitchen":"海风小厨房 · 今日菜谱","workshop":"铜叶工坊 · 制造道具","dining":"坐下来，好好吃一餐","profile":"我的小岛生活","land":"海风花庭 · 地皮认购"}
 	var title:=UI.label(titles.get(mode,""),28)
+	if mode=="jade_game":
+		var building_id:=activity_target.get_slice(":",1)
+		for h in preload("res://scripts/jade/layout.gd").HOUSES:
+			if h[0]==building_id:
+				head.add_child(UI.label(str(h[1]),18,Color("844931")))
+				break
+		title.text=preload("res://scripts/jade/house_games.gd").STATIONS[building_id].title
 	if mode=="tailor":title.text="裁缝的试衣镜"
 	if mode=="atlas":title.text="踏雪图册"
 	if city.map_id=="jade":
@@ -347,6 +366,9 @@ func rebuild() -> void:
 		"workshop": build_workshop()
 		"dining": build_dining()
 		"map": build_map()
+		"jade_game":
+			var table:=preload("res://scripts/jade/game_table.gd").new()
+			content.add_child(table);table.start(self,activity_target)
 		"atlas":preload("res://scripts/ui/snow_atlas.gd").build(self)
 		"tailor":
 			tailoring=preload("res://scripts/ui/tailoring.gd").new();tailoring.build(self)

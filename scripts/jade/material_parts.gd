@@ -2,6 +2,17 @@ extends RefCounted
 ## Keep each authored albedo and silhouette when a builder recolours an individual material.
 static var geometry: Dictionary={}
 static func family(material: Material,kind: String) -> String:
+	if preload("res://scripts/jade/room_furniture.gd").SIZES.has(kind):
+		if material is ShaderMaterial:return "fabric"
+		if material is StandardMaterial3D:
+			var tex:=material.albedo_texture as Texture2D
+			if tex:
+				match tex.resource_path.get_file().get_basename():
+					"dragon_relief","crane_badge":return "gilding"
+					"peony_apron","fish_resist","swallows","brocade":return "fabric"
+			if material.albedo_color.to_html(false) in ["dba754","bc8c50"]:return "gilding"
+			if material.albedo_color.to_html(false)=="458a83":return "ceramic"
+			return "wood"
 	if material is ShaderMaterial:
 		if material.shader==preload("res://assets/shaders/jade_silk_lantern.gdshader"):return "silk"
 		if material.shader in [preload("res://assets/shaders/jade_foliage.gdshader"),preload("res://assets/shaders/ancient_foliage.gdshader")]:return "foliage"

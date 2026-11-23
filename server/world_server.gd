@@ -552,7 +552,7 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 			release_all(id);pawn.reparent(maps[destination],false);pawn.world=maps[destination];pawn.position=point.position;pawn.velocity=Vector3.ZERO
 			a.state.player_position=vector_array(pawn.position);pawn.reset_network_motion();pawn.stop_emote()
 		return result
-	if verb in ["tailor","stamp","claim_trail"]:
+	if verb in ["tailor","stamp","claim_trail","jade_visit"]:
 		if not a.state.get("net_pose",{}).is_empty():return fail("先结束当前互动吧。")
 		return a.execute(command_for(id,request,verb,args))
 	if verb=="dress_resident":

@@ -217,8 +217,8 @@ func refresh(row: Dictionary) -> void:
 	elif editor.tool=="eyedropper":selection.text="吸管复制";selection_hint.text="点击家具或墙地表面，吸取同款和外观"
 	if row.is_empty() and preview_row.get("type","")=="object":selection_hint.text="点击放置 · 放置后可分部位编辑外观"
 	if preview_row.get("type","")=="object" and Catalog.mount(preview_row)=="wall":selection_hint.text="挂墙 · 自动朝向墙面 · 拖动可调整位置和高度"
-	if row.get("kind","")=="dining_table":selection_hint.text="拖动或旋转餐桌时，配套餐椅一起移动"
-	elif row.get("kind","")=="dining_chair":selection_hint.text="靠近餐桌空位自动配套 · 可单独拖动"
+	if row.get("kind","") in preload("res://scripts/building/dining.gd").TABLES:selection_hint.text="拖动或旋转餐桌时，配套餐椅一起移动"
+	elif row.get("kind","") in preload("res://scripts/building/dining.gd").CHAIRS:selection_hint.text="靠近餐桌空位自动配套 · 可单独拖动"
 	if not row.is_empty() and row.get("support","")!="":selection_hint.text=("%d楼天花板"%(editor.editing_storey+1)) if str(row.support).begins_with("ceiling:") else "依附于 "+Catalog.name_for(preload("res://scripts/building/layout.gd").find(editor.layout,row.support))
 	if row.get("type","")=="object" and Catalog.mount(row)=="wall":selection_hint.text="挂墙 · 高度%.2f米 · 拖动调整位置和高度"%preload("res://scripts/building/wall_mount.gd").height(row)
 	selected_thumb_key=studio.variant_key(preview_row) if preview_row.get("type","")=="object" else (selected_kind+":"+Structures.form(preview_row) if selected_kind in Structures.FORMS or selected_kind=="stairs" else selected_kind)

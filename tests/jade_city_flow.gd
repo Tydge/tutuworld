@@ -185,7 +185,7 @@ func run() -> void:
 	check_stair_ground(city)
 	check_lanterns(city)
 	await check_distant_light(city)
-	check(city.npcs.size()==20+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Twenty residents, all shopkeepers and all interiors")
+	check(city.npcs.size()==40+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Forty residents, all shopkeepers and all interiors")
 	var street: Node=city.get_node("StreetLife")
 	session.state().time=8.*150.
 	street.update_market()

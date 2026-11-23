@@ -1,0 +1,45 @@
+extends RefCounted
+const NATIVE := {"spice":"steamer","almond":"pastry_shop","cot":"lodging","duty":"chime","dye":"dye","reading":"read","tavern":"kitchen","farm":"seed_shop","clothes":"silk_shop","tools":"iron_shop","furniture":"carpentry_shop","workshop":"craft","tea":"tea","inn":"lodging","dojo":"footwork","music":"chime","scribe":"read","silk":"dye"}
+# The workshop, field and kitchen accept these same goods from the player's bag.
+const TAKE_HOME := {"weave":"ramie_cloth","pastry":"almond_biscuit","farmhouse":"seed_cotton","banquet":"sweet_osmanthus"}
+const STATIONS := {
+	"drum":{"game":"clock","title":"宣时打更","hint":"钟盘的短针指在卯位。外环每拨一格会带动内环。将两道刻记拨正，鼓便应时而鸣。","action":"击卯鼓","prop":"jade_gong","labels":["外环","内环"],"goal":[3,1],"end":"三通鼓过，卖炊饼的掀开了门板。"},
+	"baihe":{"game":"seats","title":"白鹤排班","hint":"鹤使先行，执幡次之，捧盒殿后。点两枚名签换位。","action":"排仪仗","prop":"jade_sandtray","labels":["鹤使","执幡","捧盒"],"goal":[2,0,1],"end":"鹤使揖了一揖，仪仗从两列廊柱间穿过。"},
+	"oil":{"game":"weights","title":"戥一壶杏油","hint":"往秤盘上加减砝码，称出七钱油。","action":"称杏油","prop":"jade_balance","labels":["二钱","三钱","五钱"],"goal":[2,3,5,7],"end":"秤杆平了。杏油落进小壶，恰好没过壶肩。"},
+	"basket":{"game":"weave","title":"压一挑一","hint":"经篾和纬篾要交错。点交叉处翻起竹篾，照样编出席心。","action":"编竹席","prop":"jade_loom","labels":[],"goal":[1,0,1,0,1,0,1,0,1],"end":"最后一根篾条藏进篮沿，搁三个梨也稳当。"},
+	"stitch":{"game":"stitch","title":"穿针引线","hint":"针脚不能跳格。沿花样从朱点起针，依次穿过五个针孔。","action":"补燕尾","prop":"jade_embroidery","labels":[],"goal":[6,3,4,1,2],"end":"破口收成了燕尾，小橹再也不用捂着袖子跑船。"},
+	"lacquer":{"game":"pigment","title":"调朱漆","hint":"朱砂、黄土、松烟各有分量。照漆样按分量添色，可洗去重调。","action":"调漆","prop":"jade_brush","labels":["朱砂","黄土","松烟"],"goal":[3,1,1],"end":"试漆干透，色和旧匣的盖子接上了。"},
+	"pipa":{"game":"melody","title":"南渡小调","hint":"听一遍船歌，再拨出这四个音。遇到相同的音也要再拨一次。","action":"试弦","prop":"jade_qin","labels":["宫","商","角","徵","羽"],"goal":[0,2,1,4],"end":"末音一落，门外轻轻接了一声船号。"},
+	"pickle":{"game":"jugs","title":"分酱卤","hint":"两只量瓮一大一小。装满、倒空、相互倾倒，给大瓮留下四勺卤。","action":"分卤","prop":"jade_vat","labels":["大瓮","小瓮"],"goal":[5,3,4],"end":"酱瓮封了泥。东津的冬菜有着落了。"},
+	"sail":{"game":"sail","title":"试帆走浅滩","hint":"推船走一格，顺风会再漂一格。避开暗滩，把小舟送到旗边。","action":"试风帆","prop":"jade_sandtray","labels":[],"goal":[0,8,4,1],"end":"帆吃住了风，小船擦着浮标进了港。"},
+	"weave":{"game":"weave","title":"织回纹","hint":"经纬起落会变出花。逐格挑梭，织出样纸上的回纹。","action":"提花","prop":"jade_loom","labels":[],"goal":[1,1,0,0,1,0,0,1,1],"end":"最末一梭合上，布边现出一圈曲尺纹。"},
+	"pastry":{"game":"press","title":"杏花饼印","hint":"饼模下压会同时压实左右两处。让三朵杏花全留下清楚的印。","action":"压饼花","prop":"jade_altar_table","labels":["左花","中花","右花"],"goal":[0,1,0],"end":"三朵杏花都立住了，杏娘把这一盘留作门面。"},
+	"caligraphy":{"game":"stitch","title":"运笔写山","hint":"从朱点落笔，沿字帖的序号连笔，隔一格须重新起笔。","action":"临帖","prop":"jade_brush","labels":[],"goal":[0,3,6,7,8],"end":"末笔收稳，砚边多了一张可以晾起来的山字帖。"},
+	"poetry":{"game":"verse","title":"兰舟题画","hint":"从散落的字笺里拣字，把画上藏的东西题出来。线索是「客舟只系一枝春」。","action":"题画","prop":"jade_brush","labels":["柳","雁","舟","系","春","桃"],"goal":[2,3,0],"end":"兰舟系柳，题字刚好落在画角的空白里。"},
+	"herbal":{"game":"weights","title":"配艾囊","hint":"小戥只认分量。用三枚砝码称出九钱艾绒。","action":"称艾绒","prop":"jade_balance","labels":["二钱","三钱","四钱"],"goal":[2,3,4,9],"end":"艾绒装进锦囊，系带一收，草香留在袖口。"},
+	"weir":{"game":"sluice","title":"引水过闸","hint":"转动三节水槽，让水从左岸一路流进右岸的田口。","action":"开分水闸","prop":"jade_sandtray","labels":[],"goal":[1,2,3],"end":"闸板一抬，水绕过石桥进了末一道田沟。"},
+	"books":{"game":"proof","title":"寻蠹补字","hint":"匆忙抄出的三行各藏一个错字。对着底本，点出抄坏的那一字。","action":"校孤本","prop":"jade_brush","labels":["白鹭眠秋渚","水浅见鱼游","小舟穿苇去"],"goal":["白鹭眼秋渚","水钱见鱼游","小舟芽苇去"],"end":"三张勘误笺贴好了，书主人终于舍得把孤本合上。"},
+	"silversmith":{"game":"forge","title":"錾银杏叶","hint":"看槌头摆动，亮点落在金线以内再收槌。三锤刻出银叶的脉。","action":"錾银叶","prop":"jade_altar_table","labels":[],"goal":[2,5,3],"end":"三道叶脉接上，银杏叶垂在钗头，走一步晃一下。"},
+	"hostel":{"game":"courier","title":"旧渡投递","hint":"把驿袋带到桥边的驿路茶棚，找桌上的信匣交信。","action":"领驿袋","prop":"jade_scrolls","labels":[],"goal":[],"end":"驿路茶棚收到了这封水脚信。"},
+	"potter":{"game":"wheel","title":"辘轳拉坯","hint":"分三段捏坯。口、腹、足的宽度分别要二、四、二格。","action":"拉碗坯","prop":"jade_wheel","labels":["口","腹","足"],"goal":[2,4,2],"end":"碗坯离盘，静静立在木板上，一点也没塌。"},
+	"ledger":{"game":"abacus","title":"合一笔米账","hint":"三担米各二十三钱，已付十五钱。拨动算盘的十位与个位，留下欠数。","action":"拨算盘","prop":"jade_abacus","labels":["十位","个位"],"goal":[5,4],"end":"五十四钱。账页的骑缝上盖了颗红戳。"},
+	"noodle":{"game":"divide","title":"分桥头面","hint":"一团面有八份。选中一团对折分开，给三桌留下四、二、二份。","action":"分面团","prop":"jade_altar_table","labels":[],"goal":[4,2,2],"end":"三桌面一起下锅，谁也不用等下一锅水。"},
+	"stage":{"game":"memory","title":"枕河锣鼓经","hint":"看台上的牌，记住出场次序。帘子落下后，照原样叫班。","action":"叫班","prop":"jade_gong","labels":["生","旦","净","丑"],"goal":[1,0,3,2],"end":"锣鼓紧收，四位角儿恰在各自那一拍亮相。"},
+	"post":{"game":"courier","title":"桥头收驿","hint":"带着旧渡驿舍的信袋来交差。这里也有回程信，能捎回旧渡。","action":"交接驿袋","prop":"jade_scrolls","labels":[],"goal":[],"end":"旧渡驿舍收到了回程的平安信。"},
+	"carver":{"game":"mirror","title":"反刻印面","hint":"石上须刻反字。看左边印蜕，在右边点出它左右翻过来的朱格。","action":"刻印","prop":"jade_brush","labels":[],"goal":[1,1,0,1,0,0,0,1,1],"end":"印面蘸朱，落纸一翻，果然端端正正。"},
+	"fiddler":{"game":"tune","title":"给老琴定弦","hint":"先听定音，再听手下这根弦。松紧一格格调，直到两声齐平。","action":"调弦","prop":"jade_qin","labels":["松弦","紧弦"],"goal":[3],"end":"两声叠成了一声，琴师把弦轸轻轻压牢。"},
+	"incense":{"game":"tower","title":"叠香篆","hint":"把三层香篆从左移到右。一回只提最上层，小环须搁在大环上。","action":"叠香篆","prop":"jade_censer","labels":["左托","中托","右托"],"goal":[],"end":"香篆一圈套一圈，细烟直直升上去。"},
+	"tailorhome":{"game":"mirror","title":"团花对样","hint":"绣绷只画了左半朵花，点出右侧相对的花瓣再绷紧。","action":"对绣样","prop":"jade_embroidery","labels":[],"goal":[0,1,0,1,1,0,1,0,0],"end":"两片对襟合拢，半朵花成了一整朵。"},
+	"ferry":{"game":"clock","title":"候潮排船","hint":"水牌记着午潮。转动潮盘，两环的刻度都对齐，给船挂牌。","action":"看潮盘","prop":"jade_clepsydra","labels":["潮盘","船牌"],"goal":[4,2],"end":"小橹朝岸上招了招爪，候潮牌翻成了开船牌。"},
+	"guild":{"game":"cross","title":"渡船分舱","hint":"带菜筐、兔崽、馋嘴鹅过河。船工每回可带一样。独留兔与菜、鹅与兔都会闯祸。","action":"排渡次","prop":"jade_sandtray","labels":["菜筐","兔崽","馋鹅","空船"],"goal":[],"end":"菜叶齐全，鹅兔无恙。船工把船系在了对岸。"},
+	"kiln":{"game":"forge","title":"守一炉青瓷","hint":"盯住火眼，火色走到记号处再封一次风口。连守三道火候。","action":"候窑火","prop":"jade_wheel","labels":[],"goal":[4,2,5],"end":"匣钵开了，釉面映得出一弯窗影。"},
+	"academy":{"game":"verse","title":"临川联句","hint":"竹影过窗，风吹书页。用三张字笺补上「风来」后的下半句。","action":"联诗","prop":"jade_brush","labels":["书","绿","竹","翻","页","雨"],"goal":[3,0,4],"end":"风来翻书页。先生蘸了朱墨，在句旁点了一个小圈。"},
+	"paper":{"game":"press","title":"透光花笺","hint":"三扇纸帘相连，一按会翻动旁边的帘。让三处花眼一齐透光。","action":"揭花笺","prop":"jade_embroidery","labels":["左帘","中帘","右帘"],"goal":[1,0,0],"end":"窗前一举，三瓣花影落在了手心里。"},
+	"garden":{"game":"seats","title":"水榭插花","hint":"矮菊在左，高梅居中，横荷垂右。点选两支互换位置。","action":"排花枝","prop":"jade_blossom","labels":["矮菊","高梅","横荷"],"goal":[1,2,0],"end":"横枝刚好探出窗框，和池里的真荷接在一起。"},
+	"farmhouse":{"game":"sluice","title":"桑田接水","hint":"转好木槽的三个弯口，把井边的水引到桑根下。","action":"接田渠","prop":"jade_sandtray","labels":[],"goal":[3,1,2],"end":"水顺着湿泥慢慢走远，最末那株桑也喝到了。"},
+	"audience":{"game":"allot","title":"含章殿听事","hint":"六签分给渡口、田渠、书院。田渠比渡口多一，书院比渡口少一，一签也别剩。","action":"批三坊用度","prop":"jade_abacus","labels":["渡口","田渠","书院"],"goal":[2,3,1],"end":"朱批出殿，码头领到了绳料，田渠也赶得上放水。"},
+	"archive":{"game":"proof","title":"校漕运旧图","hint":"比对原签与新签，找出三处写错的地名。","action":"校图签","prop":"jade_scrolls","labels":["南津渡口","玉带河桥","含章殿前"],"goal":["南律渡口","玉带何桥","合章殿前"],"end":"文渊阁挂上了新签，寻图的人不用再翻错匣子。"},
+	"banquet":{"game":"divide","title":"分御宴点心","hint":"一盒十六枚。选中一盒平分，留八、四、二、二枚，分别送往四桌。","action":"分席点心","prop":"jade_altar_table","labels":[],"goal":[8,4,2,2],"end":"四盒各归其席，最小的那桌也有两枚金丝糕。"},
+	"chamber":{"game":"stars","title":"栖梧认星","hint":"按星图标出的方位依次连起四颗星，把梧桐窗外的星宿描下来。","action":"连星图","prop":"jade_sandtray","labels":[],"goal":[0,4,2,5],"end":"星线合成一只小鸟，正好栖在窗棂的梧桐叶上。"}}
+static func type_for(house: String) -> String:
+	return STATIONS[house].game if STATIONS.has(house) else NATIVE[house]

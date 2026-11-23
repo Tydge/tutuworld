@@ -2,7 +2,6 @@ extends "res://scripts/icefield/build_icefield.gd"
 const J=preload("res://scripts/jade/layout.gd")
 const A=preload("res://scripts/jade/architecture.gd")
 const FB=preload("res://scripts/building/furniture_builder.gd")
-var furnishings: Dictionary={}
 var furniture:=FB.new()
 func build() -> void:
 	if DisplayServer.get_name()=="headless":quit(1);return
@@ -171,47 +170,45 @@ func house(h: Array) -> void:
 				A.paint(m,Vector3(x,-.15,z),Vector3(base.x/nx-.004,base.y,base.z/nz-.004),"masonry"))
 	G.solid_box(n,Vector3(0,-.15,0),base).collision_layer=8
 	var furnishing:=group(n,"Furnishing",Vector3.UP*.08)
-	var rows: Array={
-		"inn":[["bed",-3,-1.3],["jade_screen",-2.6,2.],["chair",2.8,-2.],["jade_lamp",4.,2.]],
-		"tailor":[["clothing_rack",-3.,.2],["jade_screen",3.,-2.],["woven_basket",3.,2.]],
-		"study":[["bookshelf",-3.,-3.5],["bookshelf",-1.3,-3.5],["desk",2.8,-2.6],["chair",2.8,-.7],["jade_screen",-3.3,1.5]],
-		"tea":[["tea_table",-2.,-.6],["tea_service",-2.,-.6,.76],["chair",-2.,1.],["jade_basin",3.5,2.]],
-		"shop":[["jade_screen",3.4,-2.5],["jade_basin",-3.,.5],["jade_lamp",3.,1.]],
-		"tavern":[["bread_oven",3.,-2.3],["tea_table",-2.,0.],["tea_service",-2.,0.,.76],["chair",-2.,1.4]],
-		"smith":[["tile_stove",3.,-.2],["quilt_chest",-3.,-2.]],
-		"work":[["jade_screen",3.,-2.],["quilt_chest",-3.,1.5]],
-		"dojo":[["jade_practice",0.,.1],["chair",-3.,1.],["jade_screen",3.,-2.]],
-		"court":[["jade_screen",0.,-4.],["petal_armchair",0.,-2.],["jade_chime",-4.,-1.],["jade_basin",4.,-1.]],
-		"music":[["jade_chime",0.,-1.],["jade_chime",3.,-2.],["chair",-3.,0.]]}[h[5]]
-	if h[5] in ["tea","inn","tailor","court","music"]:
-		rows=rows.duplicate()
-		rows.append(["forest_rug",1.4,.6])
-		if h[5] in ["tea","inn"]:
-			rows.append(["ceramic_vases",-3.6,-3.2]);rows.append(["jade_lamp",3.4,-3.2])
-	if h[5]=="study":rows=rows.duplicate();rows.append(["field_journal",2.8,-2.6,1.14])
-	for i in range(rows.size()):
-		var r: Array=rows[i];var kind: String=r[0];var obj: Node3D
-		if furnishings.has(kind):obj=furnishings[kind].duplicate();furnishing.add_child(obj)
-		else:
-			obj=group(furnishing,kind)
-			if kind.begins_with("jade_"):A.prop(obj,kind);obj.set_meta("furniture_kind",kind)
-			else:furniture.build_item(obj,kind)
-			furnishings[kind]=obj
-		obj.name=kind+"_"+str(i);obj.position=Vector3(r[1],r[3] if r.size()>3 else 0.,r[2])
-	if h[5]=="work":
+	var plan:=preload("res://scripts/jade/room_plan.gd")
+	var rows:=plan.ground(h[0])
+	for i in rows.size():
+		var obj:=place_furniture(furnishing,rows[i],i)
+		if i==0 and plan.Games.STATIONS.has(h[0]):
+			obj.name="Trade"
+			obj.set_meta("jade_house",h[0])
+			A.group(obj,"ActivityAnchor",Vector3(0,.07,float(prop_depth(rows[i][0]))*.5+.45))
+		if h[0] in ["dye","silk"] and i==0:mark_dye(obj)
+		if h[0] in ["cot","inn"] and i==0:obj.name="bed_0"
+		if h[0] in ["spice","tavern"] and i==0:
+			preload("res://scripts/jade/trades.gd").cook_station(obj)
+			obj.set_meta("facility_id","jade_kitchen_"+str(h[0]))
+	if h[0]=="workshop":
 		var station:=group(furnishing,"Bench",Vector3(0,0,-2.7))
 		preload("res://scripts/city/production_builder.gd").build_workbench(furniture,station)
-		preload("res://scripts/city/production_facilities.gd").configure(station,{"id":"jade_"+h[0],"name":h[1],"kind":"workshop","anchors":{"ActionAnchor":[0,.05,1.7],"WorkAnchor":[0,.05,1.7],"EffectAnchor":[0,1.2,.2]}})
+		preload("res://scripts/city/production_facilities.gd").configure(station,{"id":"jade_workshop","name":h[1],"kind":"workshop","anchors":{"ActionAnchor":[0,.05,1.7],"WorkAnchor":[0,.05,1.7],"EffectAnchor":[0,1.2,.2]}})
 	if h[4] in ["loft","inn","clocktower","theatre"]:
-		var rooms: Array=[["bed",-d.x*.49,-1.9,0.],["bedside",-d.x*.49+1.8,-2.8,0.],["jade_screen",-.2,-1.,1.57],["desk",2.8,-2.6,0.],["chair",2.8,-.97,0.],["forest_rug",0.,1.6,0.]] if h[5]=="inn" else [["tea_table",-2.,-1.,0.],["chair",-2.,.69,0.],["jade_screen",1.6,-2.,1.57],["jade_basin",2.9,1.,0.]]
-		if h[4]=="clocktower":rooms=[["jade_chime",0.,-2.,0.],["chair",-.3,2.1,0.]]
-		if h[0]=="scribe":rooms=[["bookshelf",-2.6,-2.6,0.],["desk",.65,-1.42,0.],["field_journal",.65,-1.42,0.,1.14],["chair",.65,.25,0.]]
-		if h[0]=="silk":rooms=[["clothing_rack",-2.7,-2.1,0.],["jade_screen",1.4,-2.1,1.57],["woven_basket",2.7,.55,0.],["chair",-1.4,1.6,.28]]
-		if h[4]=="theatre":rooms=[["jade_chime",0.,-3.,0.],["chair",-2.,.8,0.],["chair",2.,.8,0.],["jade_screen",-3.,-2.8,1.57]]
-		for i in range(rooms.size()):
-			var data: Array=rooms[i];var upper:=group(furnishing,"Gallery_"+str(data[0])+"_"+str(i),Vector3(data[1],d.y+(float(data[4]) if data.size()>4 else 0.),data[2]));upper.rotation.y=data[3];furniture.build_item(upper,data[0])
-
+		var upper:=plan.gallery(h[0])
+		for i in upper.size():
+			var obj:=place_furniture(furnishing,upper[i],i,d.y)
+			if h[0]=="silk" and i==0:mark_dye(obj)
 	var lamp:=OmniLight3D.new();lamp.name="RoomLight";lamp.position=Vector3.UP*3.;lamp.light_color=Color("ffdfa0");lamp.omni_range=8.;lamp.distance_fade_enabled=true;lamp.distance_fade_begin=18.;lamp.distance_fade_length=8.;furnishing.add_child(lamp)
+func prop_depth(kind: String) -> float:
+	return preload("res://scripts/building/catalog.gd").OBJECTS[kind].size.y
+func mark_dye(obj: Node3D) -> void:
+	obj.set_meta("dye_station",true)
+	A.group(obj,"ActivityAnchor",Vector3(0,.07,1.15))
+func place_furniture(parent: Node3D,row: Array,index: int,height:=0.) -> Node3D:
+	var kind:=str(row[0])
+	var obj:=group(parent,kind)
+	if kind.begins_with("jade_"):
+		A.prop(obj,kind)
+		obj.set_meta("furniture_kind",kind)
+	else:
+		furniture.build_item(obj,kind)
+	obj.name=("Gallery_" if height>0. else "")+kind+"_"+str(index)
+	obj.position=Vector3(row[1],height+(float(row[3]) if row.size()>3 else 0.),row[2])
+	return obj
 func gardens() -> void:
 	# Asymmetrical group planting draws the edge of each walled court and its river garden.
 	for p in [Vector2(-85,-151),Vector2(-76,-144),Vector2(-64,-149),Vector2(-53,-143),Vector2(-45,-155),Vector2(-40,-161),Vector2(44,-157),Vector2(53,-146),Vector2(65,-152),Vector2(71,-145),Vector2(79,-150),Vector2(-56,-110),Vector2(-51,-103),Vector2(-36,-112),Vector2(41,-111),Vector2(55,-107),Vector2(66,-97),Vector2(-80,-84),Vector2(86,-82),Vector2(123,-30),Vector2(133,-48),Vector2(127,-58),Vector2(117,-56),Vector2(96,-51),Vector2(92,-31),Vector2(90,-20),Vector2(-123,-40),Vector2(-127,-34),Vector2(-120,-58),Vector2(-92,-47),Vector2(-129,-25),Vector2(67,22),Vector2(-61,17),Vector2(-86,21),Vector2(132,23)]:

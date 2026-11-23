@@ -4,6 +4,10 @@ func discard(node: Node) -> void:
 	node.get_parent().remove_child(node);node.free()
 func build_item(n: Node3D,kind: String) -> void:
 	n.set_meta("furniture_kind",kind)
+	if preload("res://scripts/jade/room_furniture.gd").SIZES.has(kind):
+		preload("res://scripts/jade/room_furniture.gd").make(n,kind)
+		preload("res://scripts/jade/material_parts.gd").prepare(n,kind)
+		return
 	if kind in ["jade_well_kit","jade_workbench"]:
 		var production=preload("res://scripts/city/production_builder.gd")
 		var facilities=preload("res://scripts/city/production_facilities.gd")

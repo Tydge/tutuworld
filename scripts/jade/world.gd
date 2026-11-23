@@ -1,6 +1,13 @@
 extends "res://scripts/city/city_world.gd"
 const J=preload("res://scripts/jade/layout.gd")
 const Residents=preload("res://scripts/jade/residents.gd")
+var thanked: Dictionary={}
+func conversation_line(id: String) -> String:
+	var line: Array=Residents.AFTER_WORK.get(id,[])
+	if not line.is_empty() and not thanked.has(id) and line[0] in session.state().jade_visits.marks:
+		thanked[id]=true
+		return line[1]
+	return super.conversation_line(id)
 func can_walk(p: Vector3) -> bool:return J.can_walk(p) and not construction_at(p)
 func navigation_bounds() -> Rect2i:return J.NAVIGATION
 func respawn_position() -> Vector3:return Vector3(0,2.12,203)
@@ -83,6 +90,7 @@ func prepare_scenery() -> void:
 			if mat is ShaderMaterial and mat.shader in [preload("res://assets/shaders/jade_silk_lantern.gdshader"),preload("res://assets/shaders/jade_window.gdshader"),preload("res://assets/shaders/jade_distant_house.gdshader")] and mat not in lit_materials:lit_materials.append(mat)
 	lantern_pools=scenery.find_children("*","OmniLight3D",true,false).filter(func(lamp):return lamp.has_meta("street_lamp"))
 func update_lighting(override_time: float=-1) -> void:
+	update_neighbour_detail()
 	var previous_sky:=last_sky_colours
 	super.update_lighting(override_time)
 	var warmth:=1.-smoothstep(.16,.72,ambient_day)
@@ -120,6 +128,28 @@ func update_ambient_lighting() -> void:
 	atmosphere.ambient_light_energy=lerpf(lerpf(.29,.45,ambient_day),.40,ins)
 	atmosphere.ambient_light_color=Color("929aad").lerp(Color("cddde2"),ambient_day).lerp(Color("ddc5a0"),ins*.62)
 
+func update_neighbour_detail() -> void:
+	if not is_instance_valid(bunny):return
+	for npc in npcs:
+		var distance: float=npc.position.distance_squared_to(bunny.position)
+		npc.distant_pose_interval=.14 if distance>65.*65. else (.055 if distance>35.*35. else (1./30. if distance>21.*21. else 0.))
+func set_crowd_detail(actor: CharacterBody3D) -> void:
+	# Keep bodies, ears, robes and hats visible across the fields. Tiny overlapping
+	# face details and their shadow casters only contribute from closer cameras.
+	for part: MeshInstance3D in actor.find_children("*","MeshInstance3D",true,false):
+		if not part.mesh:continue
+		var box:=Transform3D(part.global_basis,Vector3.ZERO)*part.get_aabb()
+		var size_:=box.size[box.size.max_axis_index()]
+		var reach:=0.
+		if part.name=="InkOutline":reach=48.
+		elif size_<.27:reach=30.
+		elif size_<.48:reach=43.
+		if reach>0.:
+			part.visibility_range_end=reach
+			part.visibility_range_end_margin=3.
+		if size_<.18:part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	for label: Label3D in actor.find_children("*","Label3D",true,false):
+		label.visibility_range_end=38.;label.visibility_range_end_margin=3.
 func register_city(client: bool) -> void:
 	for fixture in scenery.get_node("Shop_spice/Front").get_children():
 		if fixture.get_meta("furniture_kind","")=="jade_steam_table" and not fixture.has_meta("facility_id"):
@@ -151,7 +181,6 @@ func attire(seed_: int,royal: bool) -> Dictionary:
 		for id in DB.Clothes.items():
 			var item:=DB.item(id)
 			if item.get("rank","")==("court" if royal else "folk") and item.slot==slot:pool.append(id)
-		if slot=="neck" and seed_%5==0:pool.append("bell_red")
 		if not pool.is_empty():worn[slot]=pool[rng.randi_range(0,pool.size()-1)]
 	return worn
 func spawn_npcs() -> void:
@@ -161,13 +190,31 @@ func spawn_npcs() -> void:
 		targets[id]={"kind":"shop","position":npc.position,"radius":3.3,"shop":shop,"node":npc,"name":label_}
 	for i in range(Residents.PEOPLE.size()):
 		var r: Array=Residents.PEOPLE[i];var p:=J.point(r[2],r[3])+Vector3.UP*.06
-		var id: String="JadeCitizen_"+str(i);var npc:=spawn_npc(id,r[0],p,attire(i,i>=12),["bunny","cat_teacher","bunny","panda"][i%4])
+		var id: String="JadeCitizen_"+str(i);var npc:=spawn_npc(id,r[0],p,attire(i,r[3] < -82 and absf(r[2]) < 80),["bunny","cat_teacher","bunny","panda"][i%4])
+		npc.distant_pose_elapsed=(i%8)*.016
 		if i in [0,3]:
 			preload("res://scripts/jade/handwork.gd").carry(npc,i==0)
 		targets[id]={"kind":"npc","position":p,"radius":2.8,"node":npc,"name":r[0],"profile":i}
 		var driver:=Driver.new();driver.name="NeighbourWalk";driver.city=self;driver.bunny=npc
 		driver.route=preload("res://scripts/jade/street_life.gd").walk_stops(i,p)
 		npc.add_child(driver)
+	if not has_method("chatting_with"):
+		for actor in npcs:set_crowd_detail(actor)
 	if has_method("chatting_with") or not session.is_online():
 		var life_: Node=preload("res://scripts/jade/street_life.gd").new()
 		life_.name="StreetLife";life_.city=self;add_child(life_)
+
+
+func update_camera(delta: float) -> void:
+	if not is_instance_valid(hud) or hud.mode!="jade_game" or not targets.has(hud.activity_target):
+		super.update_camera(delta)
+		return
+	var prop: Node3D=targets[hud.activity_target].node
+	var focus:=prop.global_position.lerp(bunny.global_position,.29)+Vector3.UP*1.03
+	var eye:=prop.global_basis*Vector3(4.8,2.7,-1.7)
+	var point:=camera_safe_position(focus,focus+eye)
+	var shift: float=1.22 if get_viewport().get_visible_rect().size.x>=1120 else 0.
+	var right:=Vector3.UP.cross(eye.normalized()).normalized()
+	camera_focus=camera_focus.lerp(focus+right*shift,1.-exp(-delta*12.))
+	camera.position=camera.position.lerp(point,1.-exp(-delta*12.))
+	if not camera.position.is_equal_approx(camera_focus):camera.look_at(camera_focus)

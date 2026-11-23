@@ -185,7 +185,7 @@ func upper_floor(room: Node3D,id: String) -> void:
 	for row in [[landing,"上楼"],[cross,"平台转向"],[inside,"走进上层"],[cross,"走出上层"],[landing,"回到梯口"],[start,"下至街面"]]:
 		if not await waypoint(row[0],id+" "+row[1]):return
 		if row[1]=="走进上层" and id in ["scribe","silk"]:
-			var activity_name: String="Gallery_field_journal_2" if id=="scribe" else "Gallery_clothing_rack_0"
+			var activity_name: String="Gallery_field_journal_2" if id=="scribe" else "Gallery_jade_dress_0"
 			var key: String="jade:%s:%s"%[id,activity_name]
 			var activity: Dictionary=game.targets.get(key,{})
 			check(not activity.is_empty(),id+" 楼上有专属互动")

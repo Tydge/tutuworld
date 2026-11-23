@@ -2,6 +2,8 @@ extends RefCounted
 ## Pairing is derived from placement, never a persisted support/deletion link.
 const C=preload("res://scripts/building/catalog.gd")
 const S=preload("res://scripts/building/storeys.gd")
+const TABLES=["jade_altar_table","dining_table"]
+const CHAIRS=["jade_moon_chair","dining_chair"]
 static var cache: Dictionary={}
 static func position(row: Dictionary) -> Vector2:return Vector2(row.position[0],row.position[1])
 static func slots(table: Dictionary) -> Array:
@@ -16,13 +18,13 @@ static func unobstructed(layout: Dictionary,chair: Vector2,table: Dictionary) ->
 		if Geometry2D.segment_intersects_segment(chair,position(table),Vector2(wall.a[0],wall.a[1]),Vector2(wall.b[0],wall.b[1]))!=null:return false
 	return true
 static func links(layout: Dictionary) -> Dictionary:
-	var source: Array=layout.elements.filter(func(row):return row.type=="wall" or row.get("kind","") in ["dining_table","dining_chair"])
+	var source: Array=layout.elements.filter(func(row):return row.type=="wall" or row.get("kind","") in TABLES or row.get("kind","") in CHAIRS)
 	var key:=hash(source)
 	if cache.has(key) and cache[key].source==source:return cache[key].links
 	var tables: Array=[];var chairs: Array=[];var candidates: Array=[]
 	for row in layout.elements:
-		if row.get("kind","")=="dining_table":tables.append(row)
-		elif row.get("kind","")=="dining_chair":chairs.append(row)
+		if row.get("kind","") in TABLES:tables.append(row)
+		elif row.get("kind","") in CHAIRS:chairs.append(row)
 	for table in tables:
 		var anchors:=slots(table)
 		for chair in chairs:
@@ -41,10 +43,10 @@ static func links(layout: Dictionary) -> Dictionary:
 	cache[key]={"source":source.duplicate(true),"links":out}
 	return out
 static func snap(layout: Dictionary,chair: Dictionary) -> Dictionary:
-	if chair.get("kind","")!="dining_chair":return chair
+	if chair.get("kind","") not in CHAIRS:return chair
 	var best:=.68*.68;var chosen: Dictionary={};var pairs:=links(layout)
 	for table in layout.elements:
-		if table.get("kind","")!="dining_table" or S.of(table)!=S.of(chair):continue
+		if table.get("kind","") not in TABLES or S.of(table)!=S.of(chair):continue
 		for slot in slots(table):
 			var distance:=position(chair).distance_squared_to(slot.position)
 			if distance>=best or not unobstructed(layout,slot.position,table):continue

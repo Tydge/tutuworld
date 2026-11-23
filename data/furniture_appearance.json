@@ -3212,6 +3212,370 @@
           "caac79"
         ]
       }
+    ],
+    "jade_moon_chair": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_throne": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_alcove_bed": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_altar_table": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_tea_desk": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_curio": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "ceramic",
+        "name": "青釉",
+        "family": "stone",
+        "colors": []
+      }
+    ],
+    "jade_apothecary": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_censer": [
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_scrolls": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "ceramic",
+        "name": "青釉",
+        "family": "stone",
+        "colors": []
+      }
+    ],
+    "jade_blossom": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "ceramic",
+        "name": "青釉",
+        "family": "stone",
+        "colors": []
+      }
+    ],
+    "jade_qin": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_loom": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_abacus": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_wheel": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_clepsydra": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_brush": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "ceramic",
+        "name": "青釉",
+        "family": "stone",
+        "colors": []
+      }
+    ],
+    "jade_vat": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      }
+    ],
+    "jade_embroidery": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_balance": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_sandtray": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "ceramic",
+        "name": "青釉",
+        "family": "stone",
+        "colors": []
+      }
+    ],
+    "jade_dress": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      },
+      {
+        "id": "fabric",
+        "name": "织料",
+        "family": "fabric",
+        "colors": []
+      }
+    ],
+    "jade_gong": [
+      {
+        "id": "wood",
+        "name": "器身",
+        "family": "wood",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "饰边",
+        "family": "metal",
+        "colors": []
+      }
+    ],
+    "jade_court_carpet": [
+      {
+        "id": "fabric",
+        "name": "毯面",
+        "family": "fabric",
+        "colors": []
+      },
+      {
+        "id": "gilding",
+        "name": "金线缘",
+        "family": "metal",
+        "colors": []
+      }
     ]
   },
   "presets": {
