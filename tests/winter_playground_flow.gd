@@ -83,6 +83,19 @@ func run() -> void:
 		var saved: Dictionary=Land.layout_for(session.state(),"icefield")
 		check(not saved.elements.is_empty() and session.state().build_layout.elements.is_empty(),"Icefield layout saves independently of city")
 		check(is_instance_valid(editor.room) and is_equal_approx(editor.room.global_position.y,Ice.ICE_LEVEL),"Built room and rendering use the ice pad height")
+		var doorway: Dictionary=saved.elements.filter(func(row):return row.type=="door")[0]
+		var door: Node3D=editor.room.render_cache[doorway.id].node
+		var outside: Vector3=door.global_position+Vector3.BACK*2.
+		outside.y=Ice.walk_height(outside.x,outside.z)+.04
+		await place(outside)
+		game.bunny.network_controlled=true
+		game.bunny.network_direction=Vector3.FORWARD
+		for frame in range(120):
+			await physics_frame
+			if game.bunny.position.z<door.global_position.z-.9:break
+		check(game.bunny.position.z<door.global_position.z-.9 and editor.room.surface_at(game.bunny.position),"Walk from bare ice through the seaside house door onto its floor")
+		game.bunny.network_direction=Vector3.ZERO
+		game.bunny.network_controlled=false
 		var foundation: Vector2i=Layout.compiled(saved).floors.keys()[0]
 		var foot:=Vector3((foundation.x+.5)*.5,Ice.ICE_LEVEL+.20,(foundation.y+.5)*.5)
 		await place(foot)

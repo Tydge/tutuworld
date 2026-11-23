@@ -29,6 +29,7 @@ func run() -> void:
 		npc.set_physics_process(false)
 		npc.collision_layer=0
 		npc.collision_mask=0
+	await check_shores()
 	sculpture_clearance()
 	shop_display_clearance()
 	for h in J.HOUSES:
@@ -56,6 +57,69 @@ func run() -> void:
 	await waypoint(J.point(2.,-104.),"宫阶南行")
 	print("JADE_WALKING_ROUTES passes=",passed," failures=",failures)
 	game.free();session.free();quit(int(not failures.is_empty()))
+
+func check_shores() -> void:
+	var physics:=game.get_world_3d().direct_space_state
+	var ray:=PhysicsRayQueryParameters3D.new()
+	ray.collision_mask=8
+	var checks:=0
+	var mismatches:=0
+	for x in [-204.,-170.3563,-136.,145.,178.,211.]:
+		for side in [-1.,1.]:
+			for step in range(81):
+				var z: float=J.river_z(x)+side*(6.+step*.10)
+				var p:=Vector3(x,0.,z)
+				ray.from=p+Vector3.UP*42.;ray.to=p-Vector3.UP*8.
+				var hit:=physics.intersect_ray(ray)
+				if hit.is_empty():continue
+				checks+=1
+				if (hit.position.y>J.SEA_LEVEL)!=J.can_walk(p):mismatches+=1
+	for axis in [Vector3.RIGHT,Vector3.BACK]:
+		for side in [-1.,1.]:
+			for offset in [-147.,-43.,39.,95.,137.]:
+				for step in range(101):
+					var distance_: float=(J.LIMIT.x if axis==Vector3.RIGHT else J.LIMIT.y)-2.+step*.07
+					var p: Vector3=axis*(side*distance_)+Vector3(axis.z,0.,axis.x)*offset
+					ray.from=p+Vector3.UP*50.;ray.to=p-Vector3.UP*9.
+					var hit:=physics.intersect_ray(ray)
+					if hit.is_empty():continue
+					checks+=1
+					if (hit.position.y>J.SEA_LEVEL)!=J.can_walk(p):mismatches+=1
+	check(checks==2992 and mismatches==0,"河岸与四面海岸逐点匹配实际碰撞水线 %d/%d"%[checks-mismatches,checks])
+	for center_: Vector2 in J.PONDS:
+		check(not J.can_walk(J.point(center_.x,center_.y)) and J.can_walk(J.point(center_.x+5.,center_.y)),"荷池水域与干岸 "+str(center_))
+	for location in [[Vector3(-170.3563,0.,-23.),Vector3.BACK],[Vector3(147.,0.,J.river_z(147.)+15.),Vector3.FORWARD],[Vector3(237.,0.,40.),Vector3.RIGHT],[Vector3(-237.,0.,-100.),Vector3.LEFT],[Vector3(48.,0.,-204.),Vector3.FORWARD],[Vector3(55.,0.,204.),Vector3.BACK]]:
+		var start: Vector3=location[0]
+		var direction: Vector3=location[1]
+		await stand(Vector3(start.x,J.terrain_floor(start),start.z))
+		actor.network_controlled=true;actor.network_direction=direction;actor.run_enabled=true
+		var stayed_dry:=true
+		for i in range(230):
+			if i==95 or i==160:actor.network_jump=true
+			await physics_frame
+			if not J.dry_footing(actor.position) or actor.position.distance_to(start)>45.:stayed_dry=false
+		var edge:=actor.position
+		var next:=edge+direction*.6
+		check(stayed_dry and not J.can_walk(next),"迎水跑跳能到实际水边并停住 "+str(start))
+		var tangent:=Vector3(direction.z,0.,-direction.x)
+		actor.network_direction=(tangent+direction*.17).normalized()
+		for i in range(70):
+			await physics_frame
+			if not J.dry_footing(actor.position):stayed_dry=false
+		check(stayed_dry and (actor.position-edge).dot(tangent)>1.5,"贴着岸线继续走 "+str(start))
+		edge=actor.position
+		actor.network_direction=-direction
+		for i in range(430):
+			await physics_frame
+			if (edge-actor.position).dot(direction)>3. and actor.position.y>edge.y+.2:break
+		check((edge-actor.position).dot(direction)>2. and actor.position.y>edge.y+.2,"从水线沿原岸上坡 "+str(start))
+		actor.network_direction=Vector3.ZERO;actor.network_controlled=false;actor.run_enabled=false
+	var trapped:=Vector3(-170.3563,-2.3960,-11.8178)
+	actor.position=trapped;actor.velocity=Vector3.ZERO
+	await physics_frame;await physics_frame
+	check(actor.position.distance_to(game.respawn_position())<1.,"已在水下的角色恢复到安全落脚点")
+	check(game.player_spawn_position([trapped.x,trapped.y,trapped.z])==game.respawn_position(),"旧水下存档可以重新进城")
+	await stand(J.point(0.,203.))
 
 func stand(point: Vector3) -> void:
 	Input.action_release("move_up")

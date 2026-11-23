@@ -3,6 +3,7 @@ extends RefCounted
 const Forest=preload("res://scripts/valley/ancient_forest.gd")
 const G=preload("res://scripts/geometry.gd")
 static var meshes: Dictionary={}
+static var canopy_shadows: Dictionary={}
 static var spray_material: ShaderMaterial
 static var bark_by_species: Array[ShaderMaterial] = []
 static var leaf_material: ShaderMaterial
@@ -93,10 +94,26 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 	if not far:greens.index();greens.set_material(leaf_material);greens.commit(result)
 	sprays.set_material(spray_material);sprays.index();sprays.commit(result)
 	meshes[key]=result;return result
-static func place(n: Node3D,variant: int) -> void:
+# Branches and the full textured crown cast one continuous shadow through both visual LODs.
+# Individual leaf blades are smaller than shadow-map texels outside the immediate canopy.
+static func canopy_shadow(variant: int) -> ArrayMesh:
+	if not canopy_shadows.has(variant):
+		var near_tree:=model(variant,false)
+		var shadow:=ArrayMesh.new()
+		for surface: int in [0,2]:
+			shadow.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,near_tree.surface_get_arrays(surface))
+		shadow.surface_set_material(1,spray_material)
+		canopy_shadows[variant]=shadow
+	return canopy_shadows[variant]
+
+static func place(n: Node3D,variant: int,city_grove: bool=false) -> void:
 	if variant==4:preload("res://scripts/jade/temple_pine.gd").place(n);return
 	for far in [false,true]:
 		var m:=G.mesh(n,model(variant,far),Vector3.ZERO,null,"DistantFoliage" if far else "LeafSprays")
-		if far:m.visibility_range_begin=72.;m.visibility_range_end=330.;m.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		if far or city_grove:m.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		if far:m.visibility_range_begin=72.;m.visibility_range_end=330.
 		else:m.visibility_range_end=72.
+	if city_grove:
+		var caster:=G.mesh(n,canopy_shadow(variant),Vector3.ZERO,null,"CanopyShadow")
+		caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
 	preload("res://scripts/city/prop_collisions.gd").cylinder(n,"Trunk",Vector3.UP*1.5,.29,3.)

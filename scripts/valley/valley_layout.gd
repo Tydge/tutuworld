@@ -76,7 +76,7 @@ static func can_navigate(p: Vector3) -> bool:
 	return can_walk(p) and normal_at(p.x,p.z).y>.76
 static func valid_saved_position(map_id: String,p: Vector3) -> bool:
 	if not p.is_finite():return false
-	if map_id=="jade":return p.is_finite() and p.y> -2. and p.y<80. and preload("res://scripts/jade/layout.gd").can_walk(p)
+	if map_id=="jade":return p.y<80. and preload("res://scripts/jade/layout.gd").dry_footing(p)
 	if map_id=="icefield":return preload("res://scripts/icefield/icefield_layout.gd").valid_position(p)
 	if map_id=="valley":return absf(p.x)<110 and p.z> -98 and p.z<124 and p.y> -8 and p.y<80
 	return preload("res://scripts/city/town_shore.gd").can_walk(p) or preload("res://scripts/building/site.gd").contains(p)

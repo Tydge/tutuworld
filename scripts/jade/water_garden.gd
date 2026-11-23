@@ -10,8 +10,8 @@ static func natural_stone() -> StandardMaterial3D:
 		rock=StandardMaterial3D.new();rock.albedo_texture=preload("res://assets/terrain/soft_moss_rock_v1.png");rock.albedo_color=Color("a0a395");rock.roughness=.93;rock.cull_mode=BaseMaterial3D.CULL_DISABLED
 	return rock
 static func edge(a: float) -> Vector3:
-	var rad:=2.80+.38*sin(3.*a)+.21*sin(5.*a+.6)
-	return Vector3(cos(a)*rad*1.37,.107,sin(a)*rad)
+	var rim:=preload("res://scripts/jade/layout.gd").pond_rim(a)
+	return Vector3(rim.x,.107,rim.y)
 static func flower(n: Node3D,center: Vector3,r: float) -> void:
 	var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for layer in range(3):
@@ -30,8 +30,9 @@ static func flower(n: Node3D,center: Vector3,r: float) -> void:
 static func pond(n: Node3D) -> void:
 	var liquid:=SurfaceTool.new();liquid.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var border:=SurfaceTool.new();border.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for i in range(72):
-		var a:=edge(i*TAU/72);var b:=edge((i+1)*TAU/72)
+	const segments:=preload("res://scripts/jade/layout.gd").POND_SEGMENTS
+	for i in range(segments):
+		var a:=edge(i*TAU/segments);var b:=edge((i+1)*TAU/segments)
 		for v in [Vector3(0,.106,0),a,b]:
 			liquid.set_uv(Vector2(v.x,v.z));liquid.set_uv2(Vector2(0. if v==a or v==b else 1.,0));liquid.add_vertex(v)
 		var outer:=a*Vector3(1.08,1.,1.08)+Vector3.UP*(.032+.035*sin(i*1.23));var next:=b*Vector3(1.08,1.,1.08)+Vector3.UP*(.032+.035*sin((i+1)*1.23))

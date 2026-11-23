@@ -447,6 +447,7 @@ func update_target() -> void:
 		if t.has("node") and t.kind=="npc": t.position=t.node.position
 		var distance: float=Vector2(bunny.position.x-t.position.x,bunny.position.z-t.position.z).length()
 		if t.kind not in ["bed","bench","npc","shop"] and absf(bunny.position.y-t.position.y)>1.7:continue
+		if t.kind=="boat":distance=preload("res://scripts/services/map_routes.gd").boarding_distance(map_id,bunny.position)
 		if t.kind=="dining" and t.has("node"):
 			distance=preload("res://scripts/city/dining_service.gd").proximity(self,id)
 		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue

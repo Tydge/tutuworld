@@ -7,6 +7,13 @@ static func scenery(id: String) -> String:return {"city":"res://scenes/city_map.
 static func dock(id: String) -> Vector2:
 	if id=="jade":return preload("res://scripts/jade/layout.gd").DOCK
 	return preload("res://scripts/icefield/icefield_layout.gd").DOCK if id=="icefield" else preload("res://scripts/valley/valley_layout.gd").dock(id)
+static func boarding_distance(id: String,p: Vector3) -> float:
+	if not p.is_finite():return INF
+	if id=="icefield":
+		const Ice=preload("res://scripts/icefield/icefield_layout.gd")
+		if absf(p.y-Ice.DOCK_HEIGHT)>1.7:return INF
+		if Ice.on_dock(p):return 0.
+	return Vector2(p.x,p.z).distance_to(dock(id))
 static func arrival(id: String) -> Array:
 	if id=="jade":return preload("res://scripts/jade/layout.gd").arrival()
 	return preload("res://scripts/icefield/icefield_layout.gd").arrival() if id=="icefield" else preload("res://scripts/valley/valley_layout.gd").arrival(id)

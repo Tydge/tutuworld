@@ -46,7 +46,7 @@ static func run(city: Node3D) -> void:
 			focuses.append(Vector3(point.x,preload("res://scripts/valley/valley_layout.gd").walk_height(point.x,point.y)+1.4,point.y))
 	if city.map_id=="jade":
 		focuses=[]
-		for p in [Vector2(0,199),Vector2(4,131),Vector2(0,4),Vector2(106,-25),Vector2(0,-146)]:
+		for p in [Vector2(0,199),Vector2(4,131),Vector2(0,4),Vector2(106,-25),Vector2(0,-63),Vector2(0,-146)]:
 			focuses.append(preload("res://scripts/jade/layout.gd").point(p.x,p.y)+Vector3.UP*1.4)
 	var view_steps:=0
 	if city.map_id=="icefield":

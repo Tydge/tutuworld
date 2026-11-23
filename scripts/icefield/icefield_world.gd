@@ -50,7 +50,12 @@ func respawn_position() -> Vector3:
 func player_spawn_position(pos: Array) -> Vector3:
 	var p:=Vector3(pos[0],pos[1],pos[2])
 	return Vector3(p.x,maxf(p.y,IceLayout.walk_height(p.x,p.z)+.035),p.z) if can_walk(p) else respawn_position()
-func guard_shore_landing(actor: CharacterBody3D,before_step: Vector3) -> void:
+func move_on_shore(actor: CharacterBody3D,delta: float,grounded: bool) -> void:
+	var before_step:=actor.global_position
+	var default_angle:=actor.floor_max_angle
+	actor.floor_max_angle=IceLayout.bank_floor_angle(before_step,default_angle)
+	actor.move_on_ground(delta,grounded)
+	actor.floor_max_angle=default_angle
 	var point:=actor.global_position
 	if point.y>IceLayout.SEA_LEVEL and IceLayout.can_walk(point):return
 	# Collision response can push an airborne actor farther than its input step.

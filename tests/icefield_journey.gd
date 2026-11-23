@@ -78,8 +78,29 @@ func run() -> void:
 		check(game.trade_access(d[0]),"Walk-in merchant is physically reachable "+d[0])
 	var raw: Dictionary=session.snapshot();raw.map_id="icefield";raw.player_position=[50.,.84,25.]
 	var restored=session.restore_state(raw);check(restored.state.map_id=="icefield" and restored.state.player_position==raw.player_position,"Resume remains on icefield")
-	await place(Vector3(L.DOCK.x,L.DOCK_HEIGHT+.035,L.DOCK.y));game.bunny.can_move=true
-	preload("res://scripts/valley/boat_travel.gd").go(game)
-	check(await wait_map("city") and session.state().coins==coins-10,"Icefield ferry returns to city for free")
+	# Follow the signed approach, cross the planks and board beside the hull.
+	await place(Vector3(-100,L.walk_height(-100,109)+.04,109))
+	game.bunny.can_move=true
+	for waypoint in [Vector2(-105,118),Vector2(-105,121),Vector2(-95.3,121)]:
+		for frame in range(240):
+			var offset: Vector2=waypoint-Vector2(game.bunny.position.x,game.bunny.position.z)
+			if offset.length()<.18:break
+			game.bunny.network_direction=Vector3(offset.x,0,offset.y).normalized()
+			await physics_frame
+		check(Vector2(game.bunny.position.x,game.bunny.position.z).distance_to(waypoint)<.25,"Walk from the snow road to "+str(waypoint))
+	game.bunny.network_direction=Vector3.ZERO
+	game.update_target()
+	check(game.current_target=="boat","Return prompt is available on the deck beside the boat")
+	if game.current_target=="boat":
+		game.camera.position=game.bunny.position+Vector3(-6,3.7,6)
+		game.camera.look_at(game.bunny.position+Vector3(1.,.8,0))
+		game.hud.show()
+		await process_frame
+		RenderingServer.force_draw()
+		root.get_texture().get_image().save_png(output+"/04-return-ferry.png")
+		var board:=InputEventAction.new()
+		board.action="interact";board.pressed=true
+		game._unhandled_input(board)
+		check(await wait_map("city") and session.state().coins==coins-10,"Boarding from the pier returns to city for free")
 	print("ICEFIELD_JOURNEY_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	game.queue_free();await process_frame;quit(0 if failures.is_empty() else 1)

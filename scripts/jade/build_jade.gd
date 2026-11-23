@@ -11,6 +11,9 @@ func build() -> void:
 	world.set_meta("scenery_polished",true);world.set_meta("groundcover_revision",3);world.set_meta("terrain_material_revision",1)
 	build_environment()
 	var env: Environment=world.get_node("Atmosphere").environment
+	env.fog_enabled=false
+	env.fog_density=0.
+	env.glow_bloom=0.
 	env.sky.sky_material.shader=preload("res://assets/shaders/island_sky.gdshader")
 	env.sky.sky_material.set_shader_parameter("star_focus",3.8);env.sky.sky_material.set_shader_parameter("cloud_detail",1.)
 	var sea: ShaderMaterial=world.get_node("Island").get_meta("sea_material")
@@ -36,6 +39,7 @@ func build() -> void:
 		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
 	preload("res://scripts/jade/static_colours.gd").bake(world)
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
+	preload("res://scripts/jade/static_colours.gd").bake_shadow_sections(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
 	if not await preload("res://scripts/jade/navigation_bake.gd").bake(self,world):push_error("Incomplete Jade navigation survey");quit(1);return
 	if not await preload("res://scripts/jade/river_reflection.gd").bake(self,world,sea):
@@ -66,7 +70,8 @@ func landscape() -> void:
 					for v in [Vector2(0,0),Vector2(2,0),Vector2(0,2),Vector2(2,0),Vector2(2,2),Vector2(0,2)]:
 						var px: float=x+v.x;var pz: float=z+v.y
 						st.add_vertex(Vector3(px,J.height_at(x0+px,z0+pz),pz))
-			landmesh(st,Vector3(x0,0,z0),grass,"Terrace",true)
+			var ground:=landmesh(st,Vector3(x0,0,z0),grass,"Terrace",true)
+			preload("res://scripts/jade/processional_court.gd").trim_covered_earth(ground)
 	preload("res://scripts/jade/hills.gd").build(self)
 func fixture(parent: Node3D,kind: String,p: Vector3,angle:=0.) -> Node3D:
 	var n:=group(parent,kind,p);n.rotation.y=angle;A.prop(n,kind);n.set_meta("furniture_kind",kind);return n
@@ -88,14 +93,15 @@ func streets() -> void:
 		for j in range(12):
 			var z:=cz-18.+(j+.5)*3.;var y:=J.deck(z,bx)
 			var deck_:=group(world,"BridgeSpan",Vector3(bx,y,z))
+			deck_.add_to_group("jade_bridge_spans")
 			deck_.rotation.x=-atan2(J.deck(z+1.5,bx)-J.deck(z-1.5,bx),3.)
 			A.mesh_part(deck_,"bridge_flagstones",func(m):
 				for k in range(5):
 					for t in range(2):
-						var x0: float=(k-2)*1.78;var z0: float=(t-.5)*1.52
-						A.paint(m,Vector3(x0,-.19,z0),Vector3(1.779,.38,1.519),"masonry"))
-			for x in [-4.06,4.06]:
-				A.paint(deck_,Vector3(x,.025,0),Vector3(.42,.05,3.05),"masonry")
+						var x0: float=(k-2)*1.78;var z0: float=(t-.5)*1.5
+						A.paint(m,Vector3(x0,-.19,z0),Vector3(1.779,.38,1.499),"masonry")
+				for x in [-4.06,4.06]:
+					A.paint(m,Vector3(x,.025,0),Vector3(.42,.05,2.999),"masonry"))
 			G.solid_box(deck_,Vector3.DOWN*.19,Vector3(8.9,.38,3.04)).collision_layer=8
 			for side in [-1,1]:
 				var rail:=fixture(deck_,"jade_rail",Vector3(side*4.4,0,0),PI/2)
@@ -109,8 +115,8 @@ func streets() -> void:
 					var z0: float=-18.+i*.50;var arc:=fposmod(z0+18.,12.)-6.
 					var underside:=.46+4.95*sqrt(maxf(0.,1.-pow(arc/5.37,2.)))
 					var top:=J.deck(z0,0.)-.21
-					A.paint(m,Vector3(0,(top+underside)*.5,z0),Vector3(.51,top-underside,.508),"masonry")
-					A.box(m,Vector3(0,underside+.10,z0),Vector3(.59,.22,.51),"8c8873"))
+					A.paint(m,Vector3(0,(top+underside)*.5,z0),Vector3(.51,top-underside,.50),"masonry")
+					A.box(m,Vector3(0,underside+.10,z0),Vector3(.59,.22,.50),"8c8873"))
 	for z in [-132.,-106.,-91.,-66.,-38.,25.,44.,67.,91.,117.,153.,168.,188.]:
 		var side:=1. if int(z)%2==0 else -1.
 		var post:=fixture(world,"jade_lamp",J.point(side*(7.5+.6*sin(z))+J.lane(z),z))
@@ -118,7 +124,7 @@ func streets() -> void:
 	for z in [115.5,69.]:
 		var walkway:=fixture(world,"jade_street_gallery_reverse" if z>100. else "jade_street_gallery",J.point(J.lane(z),z),.035*sin(z))
 		for side in [-1.,1.]:
-			var wash:=OmniLight3D.new();wash.name="LanternPool";wash.position=walkway.to_global(Vector3(side*3.35,3.5,1.3));wash.light_color=Color("ffb76a");wash.omni_range=10.;wash.distance_fade_enabled=true;wash.distance_fade_begin=31.;wash.distance_fade_length=13.;wash.set_meta("street_lamp",true);world.add_child(wash)
+			preload("res://scripts/jade/streetscape.gd").lamplight(world,walkway.to_global(Vector3(side*3.35,3.5,1.3)),Color("ffb76a"),10.)
 	for row in [[88.,-.18,1.04],[96.5,.25,1.23],[136.,.12,.98],[143.,-.26,1.18],[157.,-.10,1.03],[166.,.29,1.24],[184.,-.13,1.]]:
 		var z: float=row[0]
 		var line:=fixture(world,"jade_festoon",J.point(J.lane(z),z),row[1])
@@ -135,12 +141,16 @@ func streets() -> void:
 				for join in [[8.35,.65],[17.35,.40]]:
 					var wall:=fixture(world,"jade_palace_wall",J.point(side*join[0],J.PALACE_GATE_Z))
 					wall.scale.x=join[1]
-	for z in range(-156,-103):
-		var h:=J.height_at(0,z)
-		if absf(h-J.height_at(0,z+1))<.08:continue
-		var step_y:=maxf(h,J.height_at(0,z-.55))+.11
-		for i in range(6):
-			A.paint(world,Vector3((i-2.5)*2.,step_y-.34,z),Vector3(1.993,.68,1.015),"masonry")
+	# Batch the fixed stone courses in short sections for independent frustum culling.
+	for first_z in range(-156,-103,8):
+		var flight:=group(world,"ProcessionalSteps",Vector3(0,0,first_z))
+		A.mesh_part(flight,"ProcessionalSteps"+str(first_z),func(m):
+			for z in range(first_z,mini(first_z+8,-103)):
+				var h:=J.height_at(0,z)
+				if absf(h-J.height_at(0,z+1))<.08:continue
+				var step_y:=maxf(h,J.height_at(0,z-.55))+.11
+				for i in range(6):
+					A.paint(m,Vector3((i-2.5)*2.,step_y-.34,z-first_z),Vector3(1.993,.68,1.),"masonry"))
 	preload("res://scripts/jade/wharf_field.gd").steps(self)
 	preload("res://scripts/jade/wharf_field.gd").field(self)
 	var well: Dictionary=preload("res://scripts/city/production_facilities.gd").object_definitions()[0].duplicate(true)
@@ -218,4 +228,4 @@ func gardens() -> void:
 func tree_at_jade(x: float,z: float,variant: int) -> void:
 	if J.near_entrance(x,z):return
 	var t:=group(world,"Grove",J.point(x,z));t.set_meta("grove",true);t.rotation.y=rng.randf_range(0,TAU);t.scale=Vector3.ONE*rng.randf_range(.79,1.23)
-	preload("res://scripts/jade/grove.gd").place(t,variant)
+	preload("res://scripts/jade/grove.gd").place(t,variant,true)

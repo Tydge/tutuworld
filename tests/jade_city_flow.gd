@@ -24,10 +24,135 @@ func check_lanterns(city: Node3D) -> void:
 			var wick:=room.to_global(art.facade_lantern(size.x,size.y,size.z,side))
 			if sources.has(wick.snapped(Vector3.ONE*.01)):facades+=1
 	check(posts==13 and facades==7 and sources.size()==24,"Lights aligned to street wicks and shop fronts (street=%d facades=%d total=%d)"%[posts,facades,sources.size()])
+	for hour: float in [4.9,5.2,12.2,19.1]:
+		city.update_lighting(hour/24.)
+		var sky_colour: Color=city.atmosphere.sky.sky_material.get_shader_parameter("horizon_color")
+		check(not city.atmosphere.fog_enabled and city.horizon.get_shader_parameter("air_horizon")==sky_colour and city.foothills.get_shader_parameter("air_horizon")==sky_colour,"Only the mountain materials follow the horizon colour at "+str(hour))
 	city.update_lighting(.91)
 	check(city.lantern_pools.all(func(lamp):return lamp.visible and lamp.light_energy>0 and not lamp.shadow_enabled),"The twenty-four night lights illuminate the city without additional shadow passes")
+	check(city.sun.directional_shadow_max_distance>=120. and city.lantern_pools.all(func(lamp):return lamp.distance_fade_begin>=60. and lamp.distance_fade_begin+lamp.distance_fade_length>=100.),"Sun shadows and every street pool reach beyond the next block at night")
 	city.update_lighting(.5)
+	check(not city.atmosphere.fog_enabled and not city.atmosphere.glow_enabled and city.sun.directional_shadow_max_distance>=120.,"The midday city has clear air and long shadows")
 	check(city.lantern_pools.all(func(lamp):return not lamp.visible),"Street lanterns switch off in daylight")
+func check_court_steps(city: Node3D) -> void:
+	var stairs:=0
+	var samples:=0
+	var clear:=0
+	for stone in city.scenery.get_children():
+		if not stone.has_node("FrontBalustrade"):continue
+		stairs+=1
+		var mesh_: Mesh=stone.get_node("Joinery").mesh
+		var surfaces: Array[TriangleMesh]=[]
+		var caps: Array[bool]=[]
+		for i in range(mesh_.get_surface_count()):
+			var surface:=ArrayMesh.new()
+			surface.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh_.surface_get_arrays(i))
+			var tree:=TriangleMesh.new()
+			tree.create_from_faces(surface.get_faces())
+			surfaces.append(tree)
+			var mat:=mesh_.surface_get_material(i) as StandardMaterial3D
+			caps.append(mat!=null and mat.albedo_texture==preload("res://assets/jade/lotus_marble.png"))
+		for step in range(16):
+			for along: float in [.18,.57,.88]:
+				for z: float in [-2.08,-.31,1.75]:
+					var probe:=Vector3(-5.8+(step+along)*5.8/16.,1.,z)
+					var marble:=-INF
+					var other:=-INF
+					for i in range(surfaces.size()):
+						var hit:=surfaces[i].intersect_segment(probe,probe-Vector3.UP*5.)
+						if hit.is_empty():continue
+						if caps[i]:marble=maxf(marble,hit.position.y)
+						else:other=maxf(other,hit.position.y)
+					samples+=1
+					if is_finite(marble) and marble>other+.035:clear+=1
+	print("COURT_TREADS clear=",clear," sampled=",samples)
+	check(stairs==2 and samples==288 and clear==samples,"Both baked stair flights have one exposed marble tread at every sample")
+
+# Raycast the final visual ground, including the outer edges of each tread.
+# A second set just outside each flight guards against cutting a hole in the street.
+func check_stair_ground(city: Node3D) -> void:
+	var ground: Dictionary={}
+	var exposed:=0
+	var apron:=0
+	var samples:=0
+	for row in J.FORECOURTS:
+		var side:=signf(row[0])
+		var curb: float=row[0]-side*9.7
+		var origin:=Vector3(floorf(curb/36.)*36.,0.,floorf(row[1]/36.)*36.)
+		if not ground.has(origin):
+			for part in city.scenery.get_children():
+				if not part is MeshInstance3D or part.position!=origin:continue
+				var mat:=part.material_override as ShaderMaterial
+				if not mat or mat.shader!=preload("res://assets/shaders/jade_ground.gdshader"):continue
+				var tree:=TriangleMesh.new()
+				tree.create_from_faces(part.mesh.get_faces())
+				ground[origin]=tree
+				break
+		if not ground.has(origin):continue
+		var earth: TriangleMesh=ground[origin]
+		for i in range(16):
+			var top: float=J.approach_height(row[1])+row[2]*(i+1)/16.+.045
+			for along: float in [.02,.18,.4,.66,.88,.97]:
+				var x: float=curb+side*(-5.8+(i+along)*5.8/16.)
+				for across: float in [-2.30,-2.,-1.,0.,1.,2.,2.30]:
+					var ray:=Vector3(x,top+2.,row[1]+across)-origin
+					var hit:=earth.intersect_segment(ray,ray-Vector3.UP*8.)
+					samples+=1
+					if not hit.is_empty() and hit.position.y>top-.008:exposed+=1
+			for across: float in [-2.85,2.85]:
+				var x: float=curb+side*(-5.8+(i+.5)*5.8/16.)
+				var ray:=Vector3(x,top+3.,row[1]+across)-origin
+				if not earth.intersect_segment(ray,ray-Vector3.UP*9.).is_empty():apron+=1
+	check(samples==1344 and exposed==0 and apron==64,"No earth intersects the marble at %d points, and all %d adjacent street points retain ground"%[samples,apron])
+
+# Measure the real sun and street lamp on a receiver beyond both old cutoffs.
+func check_distant_light(city: Node3D) -> void:
+	var view:=SubViewport.new()
+	view.size=Vector2i(320,200);view.own_world_3d=true
+	view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+	root.add_child(view)
+	var camera:=Camera3D.new()
+	view.add_child(camera);camera.fov=12.
+	camera.look_at_from_position(Vector3(0,54,72),Vector3.ZERO)
+	var stage:=Node3D.new();view.add_child(stage)
+	const Geo=preload("res://scripts/geometry.gd")
+	Geo.box(stage,Vector3(0,-.1,0),Vector3(32.,.2,28.),Geo.mat("bcb5a6"))
+	var obstacle:=Geo.box(stage,Vector3(-1,1.5,0),Vector3(2.,3.,2.),Geo.mat("8e8270"))
+	city.update_lighting(.5)
+	var sun:=city.sun.duplicate() as DirectionalLight3D
+	view.add_child(sun);sun.rotation_degrees=Vector3(-42,-32,0)
+	var shadowed:=await light_frame(view)
+	obstacle.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var unshadowed:=await light_frame(view)
+	var sun_pixels:=brighter_pixels(unshadowed,shadowed)
+	obstacle.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	sun.directional_shadow_max_distance=63.
+	var old_range:=await light_frame(view)
+	var old_shadow_pixels:=brighter_pixels(unshadowed,old_range)
+	sun.hide();city.update_lighting(.91)
+	var lamp:=city.lantern_pools[0].duplicate() as OmniLight3D
+	view.add_child(lamp);lamp.position=Vector3(2,3,0)
+	var lit:=await light_frame(view)
+	lamp.distance_fade_begin=21.;lamp.distance_fade_length=19.
+	var dark:=await light_frame(view)
+	var lamp_pixels:=brighter_pixels(lit,dark)
+	print("JADE_DISTANT_LIGHT at_90m shadow_pixels=",sun_pixels," lamp_pixels=",lamp_pixels," old_shadow_pixels=",old_shadow_pixels)
+	check(sun_pixels>70 and old_shadow_pixels<10 and lamp_pixels>70,"Actual GPU shadow and lantern pool are visible from 90 metres")
+	view.free();city.update_lighting(.5)
+
+func light_frame(view: SubViewport) -> Image:
+	for frame in range(3):
+		await process_frame
+		await RenderingServer.frame_post_draw
+	return view.get_texture().get_image()
+
+func brighter_pixels(bright: Image,dark: Image) -> int:
+	var count:=0
+	for y in range(bright.get_height()):
+		for x in range(bright.get_width()):
+			if bright.get_pixel(x,y).r-dark.get_pixel(x,y).r>.06:count+=1
+	return count
+
 func check_river_banks(city: Node3D) -> void:
 	var water: ShaderMaterial=city.scenery.get_node("Island").get_meta("sea_material")
 	var atlas: Texture2D=water.get_shader_parameter("river_banks")
@@ -56,7 +181,10 @@ func run() -> void:
 	var city=load(Routes.scene("jade")).instantiate();root.add_child(city);current_scene=city
 	for i in range(15):await physics_frame
 	check_river_banks(city)
+	check_court_steps(city)
+	check_stair_ground(city)
 	check_lanterns(city)
+	await check_distant_light(city)
 	check(city.npcs.size()==20+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Twenty residents, all shopkeepers and all interiors")
 	var street: Node=city.get_node("StreetLife")
 	session.state().time=8.*150.
@@ -88,12 +216,13 @@ func run() -> void:
 	RenderingServer.force_draw()
 	root.get_texture().get_image().save_png(dir+"/玉京坊图.png")
 	city.hud.close_panel()
-	var reachable:=0;var ice:=0
+	# The city footprint was surveyed at 181,836 m². The connected-ground
+	# comparison with the current snow shoreline lives in jade_area_rules.
+	var cells:=0
 	for x in range(-240,241,2):
 		for z in range(-214,215,2):
-			var p:=Vector3(x,1,z)
-			reachable+=int(J.can_walk(p));ice+=int(preload("res://scripts/icefield/icefield_layout.gd").can_walk(p))
-	check(reachable>2*ice,"Walkable footprint ratio %.2f"%(float(reachable)/ice))
+			cells+=int(J.can_walk(Vector3(x,1,z)))
+	check(cells*4>=181836,"Jade retains its surveyed city footprint (%d square metres)"%(cells*4))
 	for id in J.LOTS:
 		var p:=Land.sign_position(id);session.set_player_position(p)
 		check(session.buy_land(id).ok,"Purchase "+str(id))

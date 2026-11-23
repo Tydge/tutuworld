@@ -15,18 +15,19 @@ uniform float warmth=.0;
 varying vec2 street;
 void vertex(){street=(MODEL_MATRIX*vec4(VERTEX,1.)).xz;}
 void fragment(){
+	vec2 dx=dFdx(UV),dy=dFdy(UV);
 	int mode=int(floor(UV2.x+.5));vec3 colour=COLOR.rgb;
-	if(mode==1)colour*=texture(plaster,UV).rgb;
-	else if(mode==2)colour*=texture(wood,UV).rgb;
-	else if(mode==3)colour*=texture(tile,UV).rgb;
-	else if(mode==4)colour*=texture(masonry,UV).rgb;
-	else if(mode==5)colour*=texture(frieze,UV).rgb;
-	else if(mode==6)colour*=texture(screen,UV).rgb;
-	else if(mode==7)colour*=texture(crane,UV).rgb;
-	else if(mode==8)colour*=texture(relief,UV).rgb;
+	if(mode==1)colour*=textureGrad(plaster,UV,dx,dy).rgb;
+	else if(mode==2)colour*=textureGrad(wood,UV,dx,dy).rgb;
+	else if(mode==3)colour*=textureGrad(tile,UV,dx,dy).rgb;
+	else if(mode==4)colour*=textureGrad(masonry,UV,dx,dy).rgb;
+	else if(mode==5)colour*=textureGrad(frieze,UV,dx,dy).rgb;
+	else if(mode==6)colour*=textureGrad(screen,UV,dx,dy).rgb;
+	else if(mode==7)colour*=textureGrad(crane,UV,dx,dy).rgb;
+	else if(mode==8)colour*=textureGrad(relief,UV,dx,dy).rgb;
 	else if(mode==9){colour*=mix(vec3(.55,.405,.236),vec3(.77,.43,.14),warmth);EMISSION=jade_paper_light(UV,street,warmth);}
 	else if(mode==10){EMISSION=vec3(.68,.22,.046)*warmth;}
-	else if(mode==11)colour*=texture(amber,UV).rgb;
-	else if(mode==12)colour*=texture(timber,UV).rgb;
+	else if(mode==11)colour*=textureGrad(amber,UV,dx,dy).rgb;
+	else if(mode==12)colour*=textureGrad(timber,UV,dx,dy).rgb;
 	ALBEDO=colour;ROUGHNESS=.86;
 }

@@ -22,16 +22,16 @@ static func draw(m: Node3D,id: String) -> void:
 			else:
 				a.paint(m,Vector3.UP*.42,Vector3(w,.84,.43),"lime")
 				a.paint(m,Vector3.UP*(h-.18),Vector3(w,.36,.43),"lime")
-				for side in [-1,1]:a.paint(m,Vector3(side*(w/2.-.61),h*.54,0),Vector3(1.23,h*.75,.43),"lime")
+				for side in [-1,1]:a.paint(m,Vector3(side*(w*.5-.615),(h-.36+.84)*.5,0),Vector3(1.23,h-.36-.84,.43),"lime")
 				for j in range(-4,5):
 					for sign_ in [-1,1]:
 						var lo:=Vector3(j*.28,.95,0);var hi:=lo+Vector3(sign_*.39,.83,0)
 						if absf(hi.x)<1.11:a.beam(m,lo,hi,.048,"6f766c")
 			a.paint(m,Vector3.UP*.16,Vector3(w,.32,.78 if royal else .50),"masonry")
 			for side in [-1,1]:
-				var coping:=a.paint(m,Vector3(0,h+.09,side*.19),Vector3(w+.035,.10,.53),"tiles") as MeshInstance3D
+				var coping:=a.paint(m,Vector3(0,h+.09,side*.19),Vector3(w-.004,.10,.53),"tiles") as MeshInstance3D
 				coping.rotation.x=.29*side
-			a.box(m,Vector3.UP*(h+.19),Vector3(w+.05,.14,.14),"6f7165")
+			a.box(m,Vector3.UP*(h+.19),Vector3(w-.004,.14,.14),"6f7165")
 		"jade_festoon":
 			for i in range(10):
 				var x: float=-7.5+1.5*i;var sag:=4.9+.95*pow(x/7.5,2)
@@ -39,7 +39,7 @@ static func draw(m: Node3D,id: String) -> void:
 				if i in [1,4,7,9]:a.lantern(m,Vector3(x,sag-.32,0),.39+.08*(i%3))
 		"jade_steps":
 			for i in range(4):
-				var y:=.07+i*.14;a.paint(m,Vector3(0,y-.10,i*.59-.86),Vector3(3.4,.21,.60),"masonry")
+				var y:=.07+i*.14;a.paint(m,Vector3(0,y-.10,i*.59-.86),Vector3(3.4,.21,.59),"masonry")
 		"jade_practice":
 			for i in range(5):
 				var pos:=Vector3(cos(i*TAU/5.)*.73,.052,sin(i*TAU/5.)*.73)

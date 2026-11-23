@@ -52,8 +52,10 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 	G.solid_box(upper,Vector3(0,h-.135,0),slab).collision_layer=8
 	var x:=w+1.39;var start:=Vector3(x,.08,-d-.95);var end:=Vector3(x,h+.05,d-1.60)
 	var stair:=A.group(n,"OutsideStair")
-	for j in range(24):
-		var pos:=start.lerp(end,(j+.5)/24.);A.paint(stair,pos-Vector3.UP*.11,Vector3(2.15,.23,(end.z-start.z)/24.+.04),"lacquer")
+	A.mesh_part(stair,"TheatreFlight"+str(Vector3(w,h,d)),func(m):
+		for j in range(24):
+			var pos:=start.lerp(end,(j+.5)/24.)
+			A.paint(m,pos-Vector3.UP*.11,Vector3(2.15,.23,(end.z-start.z)/24.),"lacquer"))
 	var ramp:=G.solid_box(stair,(start+end)*.5-Vector3.UP*.12,Vector3(2.15,.24,start.distance_to(end)));ramp.rotation.x=-atan2(h,end.z-start.z);ramp.collision_layer=8
 	A.beam(stair,start+Vector3(1.02,.91,0),end+Vector3(1.02,.91,0),.12,"874a30")
 	for j in range(6):A.column(stair,start.lerp(end,j/5.)+Vector3(1.02,.45,0),.055,.89)

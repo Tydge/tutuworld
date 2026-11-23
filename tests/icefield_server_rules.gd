@@ -145,7 +145,9 @@ func run() -> void:
 	server.save_path=path
 	await winter_playground(actor)
 	server.broadcast_motion();check(server.actor_packet(ids[0]).map=="icefield","New map participates in motion packets")
-	place(0,Vector3(L.DOCK.x,L.DOCK_HEIGHT+.035,L.DOCK.y));var coins: int=actor.state.coins
+	place(0,Vector3(-100,L.walk_height(-100,109)+.035,109))
+	check(not request(0,"travel",{"destination":"city"}).ok,"Authority requires reaching the pier")
+	place(0,Vector3(L.DOCK_DECK.end.x-1.,L.DOCK_HEIGHT+.035,L.DOCK.y));var coins: int=actor.state.coins
 	check(request(0,"travel",{"destination":"city"}).ok and actor.state.coins==coins,"Authority returns for free")
 	place(0,Vector3(13,.2,41.5));var original: String=server.save_path;server.save_path=original.path_join("invalid")
 	check(not request(0,"travel",{"destination":"icefield"}).ok and actor.state.map_id=="city" and actor.state.coins==coins and pawn.get_parent()==server.maps.city,"Failed durable save rolls back world transfer and fare")

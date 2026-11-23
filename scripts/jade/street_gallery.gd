@@ -70,5 +70,5 @@ static func flight(m: Node3D,side: int,hand: float,rails: bool) -> void:
 	for j in range(26):
 		var q:=start.lerp(end,(j+.5)/26.)
 		var depth:=absf(end.z-start.z)/26.
-		A.paint(m,q-Vector3.UP*.10,Vector3(2.16,.2,depth+.025),"lacquer")
+		A.paint(m,q-Vector3.UP*.10,Vector3(2.16,.2,depth),"lacquer")
 		A.box(m,q+Vector3(0,-.006,side*hand*depth*.45),Vector3(2.17,.038,.042),"a5805d")

@@ -1,4 +1,5 @@
 extends SceneTree
+const Land=preload("res://scripts/building/parcels.gd")
 const Layout=preload("res://scripts/building/layout.gd")
 var checks:=0
 var failures: Array=[]
@@ -21,30 +22,44 @@ func world(point_: Vector3) -> void:await click(root.get_final_transform()*city.
 func run() -> void:
 	var session=load("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session);session.create_character("鼠标建造兔","bunny","bow_rose")
 	city=load("res://scenes/city.tscn").instantiate();root.add_child(city);current_scene=city
-	while city.camera==null:await process_frame
+	while city.preparing or not is_instance_valid(city.build_mode):await process_frame
 	await create_timer(.7).timeout;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await create_timer(1.2).timeout;await create_timer(.2).timeout
+	var parcel:="east_nw"
+	var sign:=Land.sign_position(parcel)
+	city.bunny.position=sign+Vector3(0,.04,.9)
+	city.bunny.velocity=Vector3.ZERO
+	city.bunny.reset_physics_interpolation()
+	for frame in range(8):await physics_frame
+	session.set_player_position(city.bunny.position)
+	check(session.buy_land(parcel).ok,"Own the plot used for the construction input test")
 	# Route an actual shortcut through the game's normal unhandled-input path.
-	var key:=InputEventKey.new();key.keycode=KEY_F6;key.pressed=true;Input.parse_input_event(key);await process_frame;key.pressed=false;Input.parse_input_event(key);await process_frame
+	for down in [true,false]:
+		var key:=InputEventKey.new()
+		key.keycode=KEY_F6
+		key.pressed=down
+		Input.parse_input_event(key)
+		Input.flush_buffered_events()
+		await process_frame
 	editor=city.build_mode;check(editor.active,"F6 actually opens the in-game construction UI")
 	if not editor.active:quit(1);return
 	var actor_before: Vector3=city.bunny.position
-	await button("Tool_floor");check(editor.tool=="floor","Floor catalog click activates the floor tool");await world(Vector3(73,.18,5));await world(Vector3(85,.18,15))
+	await button("Tool_floor");check(editor.tool=="floor","Floor catalog click activates the floor tool");await world(Vector3(83,.18,-9));await world(Vector3(95,.18,1))
 	check(editor.layout.elements.size()==1 and editor.layout.elements[0].type=="floor","Two mouse clicks create the actual floor rectangle")
 	await button("Tool_wall")
-	for segment in [[Vector3(73,.18,15),Vector3(85,.18,15)],[Vector3(85,.18,5),Vector3(73,.18,5)],[Vector3(73,.18,5),Vector3(73,.18,15)],[Vector3(85,.18,15),Vector3(85,.18,5)]]:
+	for segment in [[Vector3(83,.18,1),Vector3(95,.18,1)],[Vector3(95,.18,-9),Vector3(83,.18,-9)],[Vector3(83,.18,-9),Vector3(83,.18,1)],[Vector3(95,.18,1),Vector3(95,.18,-9)]]:
 		await world(segment[0]);await world(segment[1])
 	check(editor.layout.elements.size()==5,"Mouse tool creates all four walls from scratch")
-	await button("Tool_door");await button("Tool_door_classic");await world(Vector3(79,1.6,15))
+	await button("Tool_door");await button("Tool_door_classic");await world(Vector3(89,1.6,1))
 	check(editor.layout.elements.any(func(row):return row.type=="door"),"Mouse attaches a door to a real wall")
-	await button("BackToStructures");await button("Tool_window");await button("Tool_window_classic");await world(Vector3(81,2,5))
+	await button("BackToStructures");await button("Tool_window");await button("Tool_window_classic");await world(Vector3(91,2,-9))
 	check(editor.layout.elements.any(func(row):return row.type=="window"),"Mouse attaches a window with a real wall opening")
-	await button("BackToStructures");await button("Tool_roof");await button("Tool_roof_classic");await world(Vector3(73,.18,5));await world(Vector3(85,.18,15))
+	await button("BackToStructures");await button("Tool_roof");await button("Tool_roof_classic");await world(Vector3(83,.18,-9));await world(Vector3(95,.18,1))
 	check(editor.layout.elements.any(func(row):return row.type=="roof"),"Mouse tool creates a supported gabled roof")
-	await button("Category_床");await button("Tool_object_bed");await world(Vector3(82,.18,8))
+	await button("Category_床");await button("Tool_object_bed");await world(Vector3(92,.18,-6))
 	check(editor.layout.elements.any(func(row):return row.get("kind","")=="bed"),"Furniture can be placed through the visible palette and world click")
 	check(city.bunny.position.distance_to(actor_before)<.03,"Construction clicks and shortcuts do not move the player")
 	editor.pitch=.35;editor.update_camera();await process_frame
-	await button("Tool_select");await world(Vector3(82,.8,8))
+	await button("Tool_select");await world(Vector3(92,.8,-6))
 	check(Layout.find(editor.layout,editor.selected_id).get("kind","")=="bed","Mouse ray selects furniture through a wall cutaway at a low camera angle")
 	await button("EditFurnitureAppearance");editor.ui.appearance_panel.color.color=Color("9c8bb8")
 	await button("ApplyPartAppearance")
@@ -54,7 +69,7 @@ func run() -> void:
 	await button("BuildUndo");check(editor.layout.elements.any(func(row):return row.get("kind","")=="bed"),"Undo button restores the same stable furniture ID")
 	await button("BuildRedo");check(not editor.layout.elements.any(func(row):return row.get("kind","")=="bed"),"Redo button repeats deletion")
 	await button("BuildUndo")
-	var before: int=editor.layout.elements.size();await button("Category_床");await button("Tool_object_bed");await world(Vector3(82,.18,8));check(editor.layout.elements.size()==before,"Invalid overlapping placement is rejected through the mouse UI")
+	var before: int=editor.layout.elements.size();await button("Category_床");await button("Tool_object_bed");await world(Vector3(92,.18,-6));check(editor.layout.elements.size()==before,"Invalid overlapping placement is rejected through the mouse UI")
 	editor.choose_tool("select");editor.pitch=.80;editor.distance_=30;editor.ui.message("鼠标从空地搭建：地板、四面墙、门窗、屋顶、家具与改色均已完成")
 	for i in range(15):
 		await process_frame

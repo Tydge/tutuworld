@@ -23,7 +23,7 @@ static func upper_floor(n: Node3D,w: float,h: float,d: float) -> void:
 		for i in range(-2,3):
 			var x:=w*i*.45
 			art.column(m,Vector3(x,h+1.56,d+.45),.14,3.12)
-			art.paint(m,Vector3(x,h+2.93,d+.45),Vector3(w*.46,.35,.42),"cloud_beam")
+			art.paint(m,Vector3(x,h+2.93,d+.45),Vector3(w*.45-.004,.35,.42),"cloud_beam")
 		for j in range(6):
 			var x: float=(j-2.5)*w/3.
 			art.box(m,Vector3(x,h+.87,d+.88),Vector3(w/3.,.12,.16),"835037")
@@ -42,17 +42,23 @@ static func upper_floor(n: Node3D,w: float,h: float,d: float) -> void:
 	P.box(deck,"Rail",Vector3(0,h+.50,d+.88),Vector3(w*2.,1.,.18))
 	var run:=2.*d+1.;var x:=w+1.86
 	var stair: Node3D=art.group(n,"OutsideStair");var start:=Vector3(x,.08,-d-1.)
-	for i in range(24):
-		var t: float=(i+.5)/24.;var tread:=art.box(stair,start+Vector3(0,h*t-.08,t*run),Vector3(2.35,.16,run/24.+.03),"90573c") as MeshInstance3D
-		tread.material_override=art.finish("lacquer")
 	var a:=start;var b:=start+Vector3(0,h,run)
+	art.mesh_part(stair,"OutsideFlight"+str(Vector3(w,h,d)),func(m):
+		for i in range(24):
+			var t: float=(i+.5)/24.
+			G.box(m,start+Vector3(0,h*t-.08,t*run),Vector3(2.35,.16,run/24.),art.finish("lacquer"))
+		art.beam(m,a+Vector3(1.13,.94,0),b+Vector3(1.13,.94,0),.13,"95653d")
+		for i in range(7):
+			var pos:=a.lerp(b,i/6.)+Vector3(1.13,.49,0);art.box(m,pos,Vector3(.12,.98,.12),"864a37"))
 	var slope:=G.solid_box(stair,(a+b)*.5-Vector3.UP*.13,Vector3(2.35,.25,a.distance_to(b)));slope.rotation.x=-atan2(h,run);slope.collision_layer=8
-	art.beam(stair,a+Vector3(1.13,.94,0),b+Vector3(1.13,.94,0),.13,"95653d")
-	for i in range(7):
-		var pos:=a.lerp(b,i/6.)+Vector3(1.13,.49,0);art.box(stair,pos,Vector3(.12,.98,.12),"864a37")
-	var landing:=Vector3(w+.95,h,d+.28)
-	art.box(deck,landing-Vector3.UP*.13,Vector3(3.8,.26,1.6),"8d5a3e")
-	G.solid_box(deck,landing-Vector3.UP*.13,Vector3(3.8,.26,1.6)).collision_layer=8
+	# The outer landing starts at the edge of the existing upper boards.
+	var deck_edge:=w+.6
+	var outer_edge:=w+2.85
+	var landing:=Vector3((deck_edge+outer_edge)*.5,h,d+.28)
+	art.box(deck,landing-Vector3.UP*.13,Vector3(outer_edge-deck_edge,.26,1.6),"8d5a3e")
+	# The short return beyond the deck's front edge also belongs to the landing.
+	art.box(deck,Vector3((w-.95+deck_edge)*.5,h-.13,d+1.035),Vector3(deck_edge-(w-.95),.26,.09),"8d5a3e")
+	G.solid_box(deck,Vector3(w+.95,h-.13,d+.28),Vector3(3.8,.26,1.6)).collision_layer=8
 static func veranda(n: Node3D,kind: String,w: float,h: float,d: float) -> void:
 	var art=load("res://scripts/jade/architecture.gd")
 	var frame: Node3D=art.group(n.get_node("Exterior"),"CourtGallery")

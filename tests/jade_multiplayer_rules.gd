@@ -30,6 +30,11 @@ func run() -> void:
 		check(server.join_world(i+1,record.character).ok,"Join")
 		place(i,Vector3(13,.2,41.5));check(request(i,"travel",{"destination":"jade"}).ok,"Reach Jade from harbor")
 	var host: Node3D=server.maps.jade;var a: RefCounted=server.actors[ids[0]];var b: RefCounted=server.actors[ids[1]]
+	var pawn: CharacterBody3D=server.pawns[ids[0]]
+	place(0,Vector3(-170.3563,-2.3960,-11.8178))
+	pawn.simulate_movement(1./60.,Vector3.ZERO,false,false)
+	check(pawn.position.distance_to(host.respawn_position())<.1,"Authoritative pawn recovers from the reported riverbed")
+	check(server.safe_position("jade",Vector3(0,-2.4,0),ids[0],pawn,Callable(),1).is_empty(),"The riverbed underneath a bridge is never a join position")
 	var daily:=host.get_node("StreetLife")
 	daily._physics_process(20.)
 	for trade in preload("res://scripts/jade/street_life.gd").TRADES:

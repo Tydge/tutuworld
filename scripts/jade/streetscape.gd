@@ -6,7 +6,7 @@ static func lamplight(world: Node3D,wick: Vector3,colour: Color,reach: float) ->
 	var light:=OmniLight3D.new()
 	light.name="LanternPool";light.position=wick;light.light_color=colour
 	light.omni_range=reach;light.light_specular=.42;light.shadow_enabled=false
-	light.distance_fade_enabled=true;light.distance_fade_begin=21.;light.distance_fade_length=19.
+	light.distance_fade_enabled=true;light.distance_fade_begin=64.;light.distance_fade_length=48.
 	light.set_meta("street_lamp",true);world.add_child(light)
 static func build(builder: SceneTree) -> void:
 	var world: Node3D=builder.world
@@ -17,7 +17,7 @@ static func build(builder: SceneTree) -> void:
 				if z==J.PALACE_GATE_Z and i<2:continue
 				var x: float=side*(12.7+i*4.15);var p:=J.point(x,z)
 				builder.fixture(world,"jade_rail",p)
-				var plinth:=A.paint(world,p+Vector3(0,-1.15,.03),Vector3(4.2,2.30,1.),"masonry")
+				var plinth:=A.paint(world,p+Vector3(0,-1.15,.03),Vector3(4.146,2.30,1.),"masonry")
 				plinth.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	for z in range(-184,-87,4):
 		for side in [-1,1]:

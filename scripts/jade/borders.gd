@@ -44,7 +44,7 @@ static func make(n: Node3D,iris: bool) -> void:
 		art.box(m,Vector3.UP*.30,Vector3(4.36,.12,1.51),"625544")
 		for side in [-1,1]:
 			art.paint(m,Vector3(0,.34,side*.86),Vector3(4.61,.14,.12),"lotus_marble")
-			art.paint(m,Vector3(side*2.25,.34,0),Vector3(.12,.14,1.72),"lotus_marble"))
+			art.paint(m,Vector3(side*2.25,.34,0),Vector3(.12,.14,1.60),"lotus_marble"))
 	G.mesh(n,flower_mesh(iris),Vector3.UP*.33,null,"SeasonalFlowers")
 	preload("res://scripts/city/prop_collisions.gd").box(n,"Planter",Vector3.UP*.20,Vector3(4.5,.4,1.7))
 static func dress(builder: SceneTree) -> void:

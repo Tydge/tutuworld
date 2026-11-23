@@ -205,7 +205,8 @@ func _apply(c: Dictionary) -> Dictionary:
 		if not job.is_empty() or state.get("rest_mode","")!="": return fail("先完成手上的事情，再坐船吧。")
 		var destination: String=c.get("destination","")
 		var routes=preload("res://scripts/services/map_routes.gd")
-		if not routes.allowed(map_id,destination) or not near_position(routes.dock(map_id),3.6): return fail("请来到码头，再和小船一起出发。")
+		var p: Array=state.player_position
+		if not routes.allowed(map_id,destination) or routes.boarding_distance(map_id,Vector3(p[0],p[1],p[2]))>3.6: return fail("请来到码头，再和小船一起出发。")
 		var fare:=10 if map_id=="city" else 0
 		if state.coins<fare: return fail("船票需要 10 贝壳币。")
 		state.coins-=fare;state.map_id=destination;state.player_position=routes.arrival(destination)

@@ -5,13 +5,63 @@ func can_walk(p: Vector3) -> bool:return J.can_walk(p) and not construction_at(p
 func navigation_bounds() -> Rect2i:return J.NAVIGATION
 func respawn_position() -> Vector3:return Vector3(0,2.12,203)
 func player_spawn_position(pos: Array) -> Vector3:
-	var p:=Vector3(pos[0],pos[1],pos[2]);p.y=maxf(p.y,J.foot(p.x,p.z)+.03)
-	return p if can_walk(p) else respawn_position()
+	var p:=Vector3(pos[0],pos[1],pos[2])
+	if not J.dry_footing(p) or not can_walk(p):return respawn_position()
+	var floor_y:=J.foot(p.x,p.z)
+	if J.by_water(p):floor_y=maxf(J.terrain_floor(p),J.crossing_height(p))
+	p.y=maxf(p.y,floor_y+.03)
+	return p
+
+func along_shore_velocity(p: Vector3,velocity: Vector3,delta: float) -> Vector3:
+	if not J.can_walk(p) or not J.by_water(p):return Vector3.ZERO
+	var face:=J.shore_face(p)
+	var normal:=Vector3(face.normal.x,0.,face.normal.z).normalized()
+	var along:=Vector3(velocity.x,0.,velocity.z).slide(normal)
+	var target:=J.clip_bank_step(p,p+along*delta)
+	return Vector3(target.x-p.x,0.,target.z-p.z)/delta if can_walk(target) else Vector3.ZERO
+
+func move_on_shore(actor: CharacterBody3D,delta: float,grounded: bool) -> void:
+	var before:=actor.global_position
+	var on_bank:=false
+	if J.by_water(before) and J.can_walk(before) and not is_finite(J.crossing_height(before)):
+		var face:=J.shore_face(before)
+		on_bank=face.normal.y<.96 and (grounded or absf(face.distance_to(before))<1.)
+	if on_bank:
+		# The capsule can touch the next, steeper triangle before its centre
+		# reaches that triangle. Follow the continuous bank without stair lifts.
+		var angle:=actor.floor_max_angle
+		var snap:=actor.floor_snap_length
+		var constant_speed:=actor.floor_constant_speed
+		actor.floor_max_angle=deg_to_rad(85.)
+		actor.floor_snap_length=maxf(snap,.45)
+		actor.floor_constant_speed=true
+		actor.move_and_slide()
+		actor.floor_max_angle=angle
+		actor.floor_snap_length=snap
+		actor.floor_constant_speed=constant_speed
+	else:
+		actor.move_on_ground(delta,grounded)
+	if J.dry_footing(actor.global_position):return
+	# Sliding, stepping and jump landings can cross the line after the input check.
+	if J.dry_footing(before):
+		var corrected:=J.clip_bank_step(before,actor.global_position) if on_bank else before
+		actor.global_position=Vector3(corrected.x,maxf(corrected.y,actor.global_position.y),corrected.z)
+		if on_bank:
+			var along:=along_shore_velocity(corrected,actor.velocity,delta)
+			actor.velocity=Vector3(along.x,0.,along.z)
+			return
+	else:
+		actor.global_position=respawn_position()
+	actor.velocity=Vector3.ZERO
+	actor.reset_physics_interpolation()
+
 var lantern_pools: Array[Node]=[]
 var lit_materials: Array[ShaderMaterial]=[]
 var horizon: ShaderMaterial
+var foothills: ShaderMaterial
 var applied_warmth:=-1.
 var applied_ambient_day:=-1.
+var applied_sun_day:=-1.
 var applied_interior:=-1.
 func prepare_scenery() -> void:
 	# Stars and clouds are drawn to the screen. Only the broad sky gradient
@@ -26,30 +76,42 @@ func prepare_scenery() -> void:
 		if node.get_script() in [preload("res://scripts/jade/gallery_view.gd"),preload("res://scripts/jade/gate_view.gd")]:node.city=self;node.set_process(true)
 		if node.get_script()==preload("res://scripts/jade/gallery_view.gd"):sight.prepare_sections(node.sight_sections)
 	horizon=scenery.get_node("PaintedRange").material_override
+	foothills=scenery.get_node("FoldedMountains").material_override
 	for mesh: MeshInstance3D in scenery.find_children("*","MeshInstance3D",true,false):
 		for i in range(mesh.mesh.get_surface_count() if mesh.mesh!=null else 0):
 			var mat:=mesh.get_active_material(i)
 			if mat is ShaderMaterial and mat.shader in [preload("res://assets/shaders/jade_silk_lantern.gdshader"),preload("res://assets/shaders/jade_window.gdshader"),preload("res://assets/shaders/jade_distant_house.gdshader")] and mat not in lit_materials:lit_materials.append(mat)
 	lantern_pools=scenery.find_children("*","OmniLight3D",true,false).filter(func(lamp):return lamp.has_meta("street_lamp"))
 func update_lighting(override_time: float=-1) -> void:
+	var previous_sky:=last_sky_colours
 	super.update_lighting(override_time)
 	var warmth:=1.-smoothstep(.16,.72,ambient_day)
-	if horizon:
-		horizon.set_shader_parameter("daylight_tint",Color("49688f").lerp(Color("c6d7ce"),ambient_day))
-		horizon.set_shader_parameter("night_air",warmth)
+	if horizon and (applied_warmth<0. or previous_sky!=last_sky_colours):
+		for mountain: ShaderMaterial in [horizon,foothills]:
+			mountain.set_shader_parameter("air_zenith",last_sky_colours[0])
+			mountain.set_shader_parameter("air_horizon",last_sky_colours[1])
+			mountain.set_shader_parameter("mountain_day",ambient_day)
+	if foothills:foothills.set_shader_parameter("sun_direction",sun.global_basis.z.normalized())
 	if absf(warmth-applied_warmth)>.0005:
 		applied_warmth=warmth
+		atmosphere.glow_enabled=warmth>.005
 		for mat in lit_materials:mat.set_shader_parameter("warmth",warmth*.97)
 		for lamp in lantern_pools:
 			lamp.visible=warmth>.005;lamp.light_energy=warmth*3.8
-func fog_density_for(day: float) -> float:
-	return lerpf(.0014,.00105,day)
+func fog_density_for(_day: float) -> float:
+	return 0.
 func set_sunlight(day: float) -> void:
+	if is_equal_approx(applied_sun_day,day):return
+	if applied_sun_day<0.:
+		# Keep a detailed near cascade and let the outer cascade span the district.
+		sun.directional_shadow_max_distance=132.
+		sun.directional_shadow_split_1=.15
+		sun.directional_shadow_fade_start=.76
+		sun.shadow_normal_bias=.28;sun.shadow_bias=.035;sun.shadow_blur=1.45
+	applied_sun_day=day
 	sun.light_color=Color("a9b4c7").lerp(Color("ffebcf"),day)
 	sun.light_energy=lerpf(.13,1.30,day)
-	sun.directional_shadow_max_distance=lerpf(42.,63.,day)
-	sun.shadow_normal_bias=.28;sun.shadow_bias=.035
-	sun.shadow_opacity=lerpf(.61,.89,day);sun.shadow_blur=1.45
+	sun.shadow_opacity=lerpf(.61,.89,day)
 func update_ambient_lighting() -> void:
 	var ins:=interior_weight()
 	if absf(ins-applied_interior)<.0005 and absf(ambient_day-applied_ambient_day)<.0005:return

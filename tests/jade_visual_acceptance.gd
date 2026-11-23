@@ -40,7 +40,7 @@ func views(map: String) -> Array:
 		"city":return [["fountain-day",0.,9.,.5,.26],["quay-night",12.,38.,.91,.0]]
 		"valley":return [["woods-day",-13.,10.,.5,.0],["valley-port-night",-16.8,94.4,.91,.0]]
 		"icefield":return [["shops-day",-79.,12.,.5,.0],["town-night",-63.,43.,.91,.0]]
-		_:return [["south-market",J.lane(163),163.,.48,.05],["lantern-market",J.lane(134),134.,.91,.0],["bridge",0.,11.,.40,.0],["garden",105.,-20.,.5,-.3],["palace",2.,-136.,.43,.0]]
+		_:return [["south-market",J.lane(163),163.,.48,.05],["lantern-market",J.lane(134),134.,.91,.0],["bridge",0.,11.,.40,.0],["garden",105.,-20.,.5,-.3],["palace",2.,-136.,.43,.0],["paired-stairs",.2,-72.,20.83/24.,PI],["city-overlook",83.,-115.,12.22/24.,PI-.32]]
 
 func floor_at(map: String,x: float,z: float) -> float:
 	match map:
@@ -59,7 +59,7 @@ func visit(map: String) -> void:
 		await process_frame;RenderingServer.force_draw()
 	startup_ms[map]=snappedf((Time.get_ticks_usec()-entered)/1000.,.1)
 	session.active=false
-	if map=="jade" and OS.get_cmdline_user_args().has("--sign-views"):
+	if map=="jade" and (OS.get_cmdline_user_args().has("--sign-views") or OS.get_cmdline_user_args().has("--shore-views")):
 		await capture_landmarks()
 		game.free();await process_frame
 		return
@@ -78,7 +78,7 @@ func visit(map: String) -> void:
 				var market: Array=views(map)[0].duplicate()
 				market[0]+="-repeat-"+str(i+1)
 				await sample_route(map,market)
-		await capture_landmarks()
+		if not OS.get_cmdline_user_args().has("--routes-only"):await capture_landmarks()
 		if OS.get_cmdline_user_args().has("--capture-market-hours"):await capture_market_hours()
 	game.free();await process_frame
 
@@ -92,6 +92,7 @@ func sample_route(map: String,view: Array) -> void:
 	while Time.get_ticks_usec()-warm<int(WARMUP_SECONDS*1e6):
 		await process_frame;RenderingServer.force_draw()
 	var foot_start: Vector3=game.bunny.position
+	var draws_compiled:=Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW)
 	var samples: Array[float]=[];var process_ms: Array[float]=[];var calls:=0;var primitives:=0
 	var slow_frames: Array[Dictionary]=[]
 	var start:=Time.get_ticks_usec();var last:=start
@@ -113,6 +114,7 @@ func sample_route(map: String,view: Array) -> void:
 	var displacement:=foot_start.distance_to(game.bunny.position)
 	samples.sort();process_ms.sort()
 	var row:={"map":map,"view":view[0],"n":samples.size(),"moved_m":snappedf(displacement,.01),"fps":snappedf(samples.size()*1e6/(last-start),.1),"p50_ms":quantile(samples,.5),"p95_ms":quantile(samples,.95),"p99_ms":quantile(samples,.99),"max_ms":samples[-1],"over25":samples.filter(func(t):return t>25.).size(),"over50":samples.filter(func(t):return t>50.).size(),"sampled_process_monitor_p95_ms":quantile(process_ms,.95),"output_px":[root.size.x,root.size.y],"scale_3d":root.scaling_3d_scale,"max_draws":calls,"max_primitives":primitives,"slow_frames":slow_frames}
+	row["draw_pipeline_compilations"]=int(Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW)-draws_compiled)
 	rows.append(row);print("MOTION_SAMPLE ",JSON.stringify(row))
 	# Same spike and P95 limits as the existing icefield-performance test.
 	if row.p95_ms>25. or row.over50>0:
@@ -134,6 +136,10 @@ func capture_landmarks() -> void:
 	var field: Vector3=J.point(plots[0].x+8.,plots[0].z+7.)
 	var shots: Array=[
 		["arrival",game.respawn_position(),0.,.18,12.,.46],
+		["shore-view-dawn",J.point(-174.,-43.),1.72,.13,10.,5.2/24.],
+		["shore-view-noon",J.point(-174.,-43.),1.72,.13,10.,(12.+13.5/60.)/24.],
+		["shore-view-river-night",J.point(-170.36,-23.),1.36,.13,10.,22./24.],
+		["shore-view-market-dawn",J.point(4.,146.),.12,.13,10.,5.2/24.],
 		["market-facing-east-stall",J.point(J.lane(144.)-3.8,144.),-1.05,.23,9.7,.42],
 		["market-facing-west-stall",J.point(J.lane(122.)+3.8,122.),2.02,.23,9.7,.42],
 		["market-orbit-east",J.point(J.lane(141.)+1.2,140.5),PI*.5,.32,9.7,.42],
@@ -149,6 +155,9 @@ func capture_landmarks() -> void:
 		["artisan-yard",J.point(-51.,139.),.03,.24,10.4,.42],
 		["eaves-from-street",J.point(J.lane(51.)+4.,51.),-1.22,.12,7.4,.35],
 		["forecourt-approach",J.point(-.5,-39.),-.08,.19,10.3,.41],
+		["paired-stairs-night",J.point(.2,-74.),PI,.19,8.4,20.83/24.],
+		["clear-city-overlook",J.point(83.,-115.),PI-.32,.23,10.5,12.22/24.],
+		["eastern-hill-midday",J.point(156.,-111.),PI-.93,.18,8.8,12.22/24.],
 		["palace-three-passages",J.point(1.,-70.),.025,.14,10.3,.41],
 		["stonework-return",J.point(-6.6,-46.2),.84,.22,8.6,.39],
 		["drum-terrace",J.point(-6.2,-57.),.91,.17,8.2,.39],
@@ -214,6 +223,7 @@ func capture_landmarks() -> void:
 	var visible_signs: Dictionary={}
 	for shot in shots:
 		if OS.get_cmdline_user_args().has("--sign-views") and not emblems.has(shot[0]):continue
+		if OS.get_cmdline_user_args().has("--shore-views") and not str(shot[0]).begins_with("shore-view-"):continue
 		game.bunny.global_position=shot[1]+Vector3.UP*.035
 		game.bunny.velocity=Vector3.ZERO;game.bunny.reset_physics_interpolation()
 		game.camera_focus=game.bunny.position+Vector3.UP*1.35

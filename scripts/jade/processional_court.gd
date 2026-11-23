@@ -40,6 +40,48 @@ static func stonework(builder: SceneTree, row: Array) -> void:
 	if side<0.:root.rotation.y=PI
 	carve(root,row[2])
 
+# The collision ramp remains continuous. Clip only the visible soil beneath
+# the treads and side stones so a coarse hillside triangle cannot cut across a riser.
+static func trim_covered_earth(ground: MeshInstance3D) -> void:
+	var origin:=Vector2(ground.position.x,ground.position.z)
+	var bounds:=ground.mesh.get_aabb()
+	var chunk:=Rect2(Vector2(bounds.position.x,bounds.position.z),Vector2(bounds.size.x,bounds.size.z))
+	for row in J.FORECOURTS:
+		var side:=signf(row[0])
+		var curb: float=row[0]-side*9.7
+		var foot: float=curb-side*5.82
+		var cut:=Rect2(Vector2(minf(foot,curb),row[1]-2.62)-origin,Vector2(absf(curb-foot),5.24))
+		if not chunk.intersects(cut):continue
+		var planes: Array[Plane]=[Plane(Vector3.LEFT,-cut.position.x),Plane(Vector3.RIGHT,cut.end.x),Plane(Vector3.FORWARD,-cut.position.y),Plane(Vector3.BACK,cut.end.y)]
+		var surface:=SurfaceTool.new()
+		surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var source:=ground.mesh.surface_get_arrays(0)
+		var vertices: PackedVector3Array=source[Mesh.ARRAY_VERTEX]
+		var normals: PackedVector3Array=source[Mesh.ARRAY_NORMAL]
+		var indices: PackedInt32Array=source[Mesh.ARRAY_INDEX]
+		for i in range(0,indices.size(),3):
+			var a:=vertices[indices[i]]
+			var b:=vertices[indices[i+1]]
+			var c:=vertices[indices[i+2]]
+			var triangle:=Rect2(Vector2(a.x,a.z),Vector2.ZERO).expand(Vector2(b.x,b.z)).expand(Vector2(c.x,c.z))
+			if not triangle.intersects(cut):
+				for k in range(i,i+3):
+					surface.set_normal(normals[indices[k]])
+					surface.add_vertex(vertices[indices[k]])
+				continue
+			var remaining:=PackedVector3Array([a,b,c])
+			for plane in planes:
+				var outside:=Geometry3D.clip_polygon(remaining,-plane)
+				for j in range(1,outside.size()-1):
+					for v: Vector3 in [outside[0],outside[j],outside[j+1]]:
+						var w:=Geometry3D.get_triangle_barycentric_coords(v,a,b,c)
+						surface.set_normal((normals[indices[i]]*w.x+normals[indices[i+1]]*w.y+normals[indices[i+2]]*w.z).normalized())
+						surface.add_vertex(v)
+				remaining=Geometry3D.clip_polygon(remaining,plane)
+				if remaining.size()<3:break
+		surface.index()
+		ground.mesh=surface.commit()
+
 # A smaller edition fits a residential plot and uses the same stair geometry.
 static func make_plot_terrace(module: Node3D) -> void:
 	var origin:=A.group(module,"CarvedStone",Vector3(-4.34,1.68,0))
@@ -70,8 +112,8 @@ static func carve(root: Node3D,rise: float) -> void:
 		for edge in [-1.,1.]:
 			for j in range(5):
 				var edge_z: float=edge*(3.37+j*1.81)
-				A.paint(m,Vector3(.005,-.31,edge_z),Vector3(.46,.39,1.813),"stone_relief")
-				A.paint(m,Vector3(-.045,.016,edge_z),Vector3(.65,.22,1.815),"lotus_marble")
+				A.paint(m,Vector3(.005,-.31,edge_z),Vector3(.46,.39,1.80),"stone_relief")
+				A.paint(m,Vector3(-.045,.016,edge_z),Vector3(.65,.22,1.80),"lotus_marble")
 			for panel: float in [4.85,8.42]:
 				stone_rail(m,Vector3(.055,.12,edge*panel),0.)
 			for panel: float in [2.1,5.67]:
@@ -86,11 +128,14 @@ static func carve(root: Node3D,rise: float) -> void:
 			var t:=float(i+1)/count
 			var level: float=-rise*(1.-t)+.045
 			var u: float=-length_+(i+.5)*length_/count
-			var depth: float=5.8+level
-			A.paint(m,Vector3(u,level-depth*.5,0),Vector3(length_/count+.008,depth,4.70),"masonry")
+			# The white cap owns the tread. Bury the riser top inside it.
+			var bottom:=-5.8
+			var body_top: float=level-.07
+			var run:=length_/count
+			A.paint(m,Vector3(u,(body_top+bottom)*.5,0),Vector3(run,body_top-bottom,4.70),"masonry")
 			A.paint(m,Vector3(u-.018,level-.045,0),Vector3(length_/count+.055,.09,4.77),"lotus_marble")
 			for edge in [-1.,1.]:
-				A.paint(m,Vector3(u,level-depth*.5+.18,edge*2.49),Vector3(length_/count+.01,depth+.22,.32),"stone_relief"))
+				A.paint(m,Vector3(u,(level+bottom)*.5+.18,edge*2.49),Vector3(run,level-bottom+.22,.32),"stone_relief"))
 	var platform:=G.solid_box(root,Vector3(10.05,-.12,0),Vector3(20.12,.30,23.0))
 	platform.collision_layer=8
 	var props:=preload("res://scripts/city/prop_collisions.gd")

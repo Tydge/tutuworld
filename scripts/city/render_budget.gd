@@ -15,7 +15,7 @@ static func add_control(parent: Control,session: Node) -> void:
 	var row:=HBoxContainer.new();row.add_theme_constant_override("separation",18)
 	parent.add_child(row)
 	var label_:=Label.new();label_.text="画面";label_.size_flags_horizontal=Control.SIZE_EXPAND_FILL;row.add_child(label_)
-	var choice:=OptionButton.new();choice.custom_minimum_size=Vector2(210,44)
+	var choice:=OptionButton.new();choice.name="RenderQuality";choice.custom_minimum_size=Vector2(210,44)
 	choice.mouse_default_cursor_shape=Control.CURSOR_POINTING_HAND
 	choice.tooltip_text="均衡适配高清屏幕；原生画质保留完整 3D 分辨率。"
 	choice.add_theme_stylebox_override("normal",UI.box(Color("ebefdb"),16,10))

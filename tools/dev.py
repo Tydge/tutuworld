@@ -43,6 +43,15 @@ def doctor(binary):
     return 0
 
 
+def graphics_flags(show_window=False, windowed=False):
+    if sys.platform == 'darwin' and not show_window:
+        # Godot 4.6.3's macOS embedded driver uses a GPU layer without an NSWindow.
+        # It requires an initialized debugger even when there is no editor host.
+        return ['--embedded', '--debug', '--windowed', '--resolution', '3024x1890',
+                '--audio-driver', 'Dummy']
+    return ['--windowed'] if windowed or show_window else []
+
+
 def guarded(binary, name, arguments, output, timeout):
     folder = output / name
     folder.mkdir(parents=True, exist_ok=True)
@@ -52,8 +61,10 @@ def guarded(binary, name, arguments, output, timeout):
     start = time.monotonic()
     reason = ''
     with log.open('w', encoding='utf-8') as handle:
+        if '--embedded' in arguments:
+            print('QA display: macOS embedded GPU, initial surface 3024x1890', file=handle, flush=True)
         process = subprocess.Popen([binary, '--path', str(ROOT)] + arguments,
-                                   cwd=ROOT, env=env, stdout=handle, stderr=subprocess.STDOUT)
+                                   cwd=ROOT, env=env, stdin=subprocess.DEVNULL, stdout=handle, stderr=subprocess.STDOUT)
         try:
             while process.poll() is None:
                 content = log.read_text(encoding='utf-8', errors='replace')
@@ -97,12 +108,14 @@ def main():
     test.add_argument('names', nargs='*', help='tests/<name>.gd, or a named entry in test_suites.json')
     test.add_argument('--suite', choices=SUITES['suites'], help='Run sequentially; default smoke')
     test.add_argument('--timeout', type=int, default=180)
-    test.add_argument('--windowed', action='store_true', help='Run graphical checks windowed and on top (useful on macOS)')
+    test.add_argument('--windowed', action='store_true', help='Use windowed test framing (macOS renders in the background by default)')
     test.add_argument('--allow-network', action='store_true', help='Required for the live update download test')
     test.add_argument('--game-arg', action='append', default=[])
     build = commands.add_parser('build')
     build.add_argument('map', choices=['city', 'valley', 'icefield', 'jade'])
     build.add_argument('--timeout', type=int, default=180)
+    for command in (test, build):
+        command.add_argument('--show-window', action='store_true', help='Open a visible game window for manual observation')
     args = parser.parse_args()
     binary = godot_path(args.godot)
     if args.command == 'doctor':
@@ -113,7 +126,7 @@ def main():
     if args.command == 'build':
         script = f'res://scripts/{args.map}/build_{args.map}.gd'
         return guarded(binary, 'build_' + args.map,
-                       ['--rendering-method', 'gl_compatibility', '--max-fps', '30', '--script', script],
+                       graphics_flags(args.show_window) + ['--rendering-method', 'gl_compatibility', '--max-fps', '30', '--script', script],
                        output, args.timeout)
     if args.names and args.suite:
         parser.error('Choose explicit test names or --suite, not both.')
@@ -130,9 +143,7 @@ def main():
             parser.error('update_download contacts the live update server; add --allow-network explicitly.')
         if script == 'update_integrity' and '--fixture' not in args.game_arg:
             parser.error('update_integrity requires --game-arg=--fixture --game-arg=/path/to/signed/manifest.json')
-        flags = ['--headless'] if entry.get('headless', False) else []
-        if args.windowed and not entry.get('headless', False):
-            flags += ['--windowed', '--always-on-top']
+        flags = ['--headless'] if entry.get('headless', False) else graphics_flags(args.show_window, args.windowed)
         flags += entry.get('engine_args', [])
         flags += ['--script', f'res://tests/{script}.gd', '--', '--test']
         if args.windowed and script == 'valley_performance':

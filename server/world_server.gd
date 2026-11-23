@@ -775,6 +775,7 @@ func safe_position(map_id: String,desired: Vector3,ignore: String,pawn: Characte
 			var floor_hit:=preload("res://scripts/city/local_landing.gd").floor_hit(space,floor_query)
 			if floor_hit.is_empty() or floor_hit.normal.y<.7:continue
 			p.y=float(floor_hit.position.y)+.025
+			if map_id=="jade" and not preload("res://scripts/jade/layout.gd").dry_footing(p):continue
 			if absf(p.y-desired.y)>1.2 or (filtered and not accept.call(p)):continue
 			if not body_clear(map_id,p,ignore):continue
 			query.shape=capsule;query.transform=Transform3D(Basis.IDENTITY,p+Vector3(0,.65,0))

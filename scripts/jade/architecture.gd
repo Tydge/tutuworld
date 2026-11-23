@@ -194,7 +194,7 @@ static func lattice(n: Node3D,p: Vector3,w: float,h: float) -> void:
 	for side in [-1,1]:
 		G.box(n,p+Vector3(side*w*.42,0,.077),Vector3(w*.15,h*.91,.033),carved_window)
 	for side in [-1,1]:
-		box(n,p+Vector3(side*w*.5,0,.11),Vector3(.105,h+.14,.18),WOOD)
+		box(n,p+Vector3(side*w*.5,0,.11),Vector3(.105,h-.105,.18),WOOD)
 		box(n,p+Vector3(0,side*h*.5,.11),Vector3(w+.14,.105,.18),WOOD)
 	for k in range(1,8):
 		var x: float=(k/8.-.5)*w
@@ -247,7 +247,7 @@ static func shell(n: Node3D,kind: String) -> void:
 			for side in [-1,1]:
 				var gap:=1.65 if front or (kind=="court" and face=="West") else 0.
 				wall_panel(m,Vector3(side*(span+gap)*.5,h*.45,depth),Vector3(span-gap,h*.9,.26),"lacquer" if royal else ("plaster" if kind in ["store","forge","inn","cloister","loft"] else "lime"))
-				paint(m,Vector3(side*(span+gap)*.5,.40,depth+.03),Vector3(span-gap,.80,.32),"masonry")
+				paint(m,Vector3(side*(span+gap)*.5,.40,depth+.015),Vector3(span-gap,.80,.32),"masonry")
 				var window:=Vector3(side*span*.64,h*.51,depth+.17)
 				if front and kind in ["store","forge"] and side<0:
 					preload("res://scripts/jade/shopfront.gd").display_bay(m,window,span*.47,h*.43,kind=="forge")
@@ -262,7 +262,7 @@ static func shell(n: Node3D,kind: String) -> void:
 				for k in [-1,1]:
 					box(m,Vector3(side*(span*.73+k*span*.154),h*.44,depth-.21),Vector3(.125,h*.86,.15),WOOD)
 			for field in range(4):
-				paint(m,Vector3((field-1.5)*span*.5,h*.91,depth),Vector3(span*.5+.025,.64,.48),"cloud_beam" if royal or kind in ["theatre","loft","clocktower"] else "wood_relief")
+				paint(m,Vector3((field-1.5)*span*.5,h*.91,depth),Vector3(span*.5-.004,.64,.48),"cloud_beam" if royal or kind in ["theatre","loft","clocktower"] else "wood_relief")
 			box(m,Vector3(0,h-.07,depth+.05),Vector3(span*2+.75,.16,.72),GOLD)
 			for j in range(-int(span*2),int(span*2)+1):
 				if j%2==0:

@@ -6,6 +6,10 @@ const ICE_LEVEL:=Plots.LEVEL
 const SEA_LEVEL:=-.65
 const DOCK:=Vector2(-104,121)
 const DOCK_HEIGHT:=1.15
+const DOCK_DECK:=Rect2(-108.,119.05,14.,3.9)
+const TERRAIN_STEP:=2
+const TERRAIN_RADIUS:=1.075
+static var terrain_planes: Dictionary[Vector3i,Plane]={}
 const ACCELERATION:=2.3
 const BRAKING:=.72
 const CAMPFIRES=[Vector2(-38,33),Vector2(-115,-40),Vector2(43,62)]
@@ -53,22 +57,55 @@ static func height_at(x: float,z: float) -> float:
 	var harbor:=Vector2(maxf(absf(x+104.)-8.,0.),maxf(absf(z-118.)-5.,0.)).length()
 	h=lerpf(h,.92,1.-smoothstep(0.,18.,harbor))
 	return Plots.grade(Vector2(x,z),lerpf(h,-3.5,1.-smoothstep(.82,1.10,inlet(x,z))))
-static func on_dock(p: Vector3) -> bool:return p.x> -107.6 and p.x< -94.4 and absf(p.z-DOCK.y)<1.55
-static func walk_height(x: float,z: float) -> float:return DOCK_HEIGHT if on_dock(Vector3(x,0,z)) else height_at(x,z)
+static func on_dock(p: Vector3) -> bool:return DOCK_DECK.has_point(Vector2(p.x,p.z))
+static func terrain_face(x: float,z: float) -> Plane:
+	# The visible mesh and its collider use the same two triangles per cell.
+	# Sample their plane here, including the diagonal through the harbor inlet.
+	var point:=Vector2(x,z)
+	var cell:=(point/TERRAIN_STEP).floor()
+	var corner:=cell*TERRAIN_STEP
+	var step_xz:=float(TERRAIN_STEP)
+	var uv:=(point-corner)/step_xz
+	var upper:=uv.x+uv.y>1.
+	var key:=Vector3i(int(cell.x),int(cell.y),int(upper))
+	if terrain_planes.has(key):return terrain_planes[key]
+	if upper:
+		corner+=Vector2.ONE*step_xz
+		step_xz=-step_xz
+	var base:=height_at(corner.x,corner.y)
+	var rise_x:=height_at(corner.x+step_xz,corner.y)-base
+	var rise_z:=height_at(corner.x,corner.y+step_xz)-base
+	var normal:=Vector3(-rise_x/step_xz,1.,-rise_z/step_xz).normalized()
+	var face:=Plane(normal,Vector3(corner.x,base,corner.y))
+	# The baked island is immutable. Limit the cache to its actual grid footprint.
+	if absf(x)<=RADII.x*TERRAIN_RADIUS+TERRAIN_STEP and absf(z)<=RADII.y*TERRAIN_RADIUS+TERRAIN_STEP:
+		terrain_planes[key]=face
+	return face
+static func terrain_floor(x: float,z: float) -> float:
+	var face:=terrain_face(x,z)
+	return (face.d-face.normal.x*x-face.normal.z*z)/face.normal.y
+static func is_inland(p: Vector3) -> bool:
+	return ellipse(p.x,p.z)<.90 and inlet(p.x,p.z)>1.2
+static func bank_floor_angle(p: Vector3,default_angle: float) -> float:
+	if is_inland(p) or on_dock(p):return default_angle
+	var face:=terrain_face(p.x,p.z)
+	if face.distance_to(p)>1.:return default_angle
+	# Only seaward faces need extra grip to climb back from the waterline.
+	var downhill:=Vector2(face.normal.x,face.normal.z)
+	var toward_water:=Vector2(-79.-p.x,130.-p.z) if inlet(p.x,p.z)<1.2 else Vector2(p.x,p.z)
+	if downhill.dot(toward_water)<=0.:return default_angle
+	return maxf(default_angle,minf(acos(face.normal.y)+.035,deg_to_rad(84.)))
+
+static func walk_height(x: float,z: float) -> float:return DOCK_HEIGHT if on_dock(Vector3(x,0,z)) else terrain_floor(x,z)
 static func can_walk(p: Vector3) -> bool:
 	if on_dock(p):return true
-	var radius:=ellipse(p.x,p.z)
-	if radius>=.967 or inlet(p.x,p.z)<=1.10:return false
-	if radius<.91:return true
-	# The open southern coast drops several metres within one terrain triangle.
-	# Leave a full terrain cell before the lip so a landing cannot slide down it.
-	var south:=p.z/RADII.y/maxf(radius,.001)
-	var shore_limit:=lerpf(.967,.915,smoothstep(.48,.78,south))
-	return radius<shore_limit and height_at(p.x,p.z)>.1
+	if is_inland(p):return true
+	var center:=(Vector2(p.x,p.z)/TERRAIN_STEP).floor()*TERRAIN_STEP+Vector2.ONE*(TERRAIN_STEP*.5)
+	return ellipse(center.x,center.y)<=TERRAIN_RADIUS and terrain_floor(p.x,p.z)>SEA_LEVEL
 static func is_ice(p: Vector3) -> bool:
 	return contains(p.x,p.z) and p.x>shore_x(p.z)+8. and absf(p.y-ICE_LEVEL)<.24 and not on_dock(p)
 static func normal_at(x: float,z: float) -> Vector3:return Vector3(height_at(x-.3,z)-height_at(x+.3,z),.6,height_at(x,z-.3)-height_at(x,z+.3)).normalized()
-static func arrival() -> Array:return [-107.,height_at(-107,116)+.04,116.]
+static func arrival() -> Array:return [-107.,walk_height(-107,116)+.04,116.]
 static func valid_position(p: Vector3) -> bool:return p.is_finite() and p.y>SEA_LEVEL and p.y<60 and can_walk(p)
 static func shop_positions() -> Dictionary:
 	var out: Dictionary={}

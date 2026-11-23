@@ -68,14 +68,17 @@ static func quays(builder: SceneTree) -> void:
 			var z:=iz+1.;var curb:=J.lane(z)+side*8.7
 			var h:=J.raw_height(curb+side*2.8,z);var low:=J.raw_height(curb-side*2.,z)
 			if h-low<.26 or J.HOUSES.any(func(house):return house[3]>50 and absf(house[3]-z)<2.25 and house[2]*side>0 and absf(house[2])<21.):continue
-			var base:=A.group(builder.world,"StreetRevetment",Vector3(curb,(h+low)*.5-.13,z))
-			base.rotation.y=atan((J.lane(z+1.)-J.lane(z-1.))*.5)
+			# Both ends follow the same lane samples as the neighbouring section.
+			var x0:=J.lane(z-1.)+side*8.7
+			var x1:=J.lane(z+1.)+side*8.7
+			var base:=A.group(builder.world,"StreetRevetment",Vector3((x0+x1)*.5,(h+low)*.5-.13,z))
+			base.basis=Basis(Vector3.RIGHT,Vector3.UP,Vector3((x1-x0)*.5,0,1))
 			var thickness:=h-low+.26
-			A.paint(base,Vector3.ZERO,Vector3(.54,thickness,2.08),"masonry")
-			A.paint(base,Vector3(0,thickness*.5,0),Vector3(.73,.15,2.10),"stone_relief")
+			A.paint(base,Vector3.ZERO,Vector3(.54,thickness,1.998),"masonry")
+			A.paint(base,Vector3(0,thickness*.5,0),Vector3(.73,.15,1.998),"stone_relief")
 		# Surface-matched stairs lead up from the lane at the ends of each high street.
 		for sidez in [-1,1]:
 			for j in range(7):
 				var z: float=(row[1] if sidez<0 else row[2])-sidez*(j+.5)*.95
 				var x:=J.lane(z)+side*11.7;var p:=J.point(x,z)
-				A.paint(builder.world,p-Vector3.UP*.092,Vector3(3.8,.26,.96),"masonry")
+				A.paint(builder.world,p-Vector3.UP*.092,Vector3(3.8,.26,.948),"masonry")

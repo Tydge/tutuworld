@@ -15,7 +15,7 @@ func run() -> void:
 	title.settings_card.show();await create_timer(.3).timeout
 	var options: Array=title.settings_card.find_children("*","OptionButton",true,false)
 	check(options.size()==2,"Game-style settings expose picture quality and FPS choices")
-	var choice: OptionButton=options[0]
+	var choice:=title.settings_card.find_child("RenderQuality",true,false) as OptionButton
 	var panel: Control=title.settings_card.get_child(1)
 	check(panel.get_global_rect().end.y<root.get_visible_rect().size.y,"Expanded settings card stays inside the window")
 	await RenderingServer.frame_post_draw
@@ -30,9 +30,17 @@ func run() -> void:
 	check(session.settings.render_quality=="balanced" and root.get_texture().get_size()==before,"Balanced selection preserves native-resolution UI and output")
 	title.queue_free();await process_frame;await process_frame
 	var game=load("res://scenes/city.tscn").instantiate();root.add_child(game)
-	await create_timer(.8).timeout
+	while game.preparing or not is_instance_valid(game.hud):await process_frame
 	check(root.get_node("RenderBudget")==budget,"Title and city share a single persistent renderer budget")
 	game.hud.open_panel("settings");await create_timer(.3).timeout
-	check(game.hud.content.find_children("*","OptionButton",true,false).size()==2,"In-game settings offer the same quality control")
+	var quality:=game.hud.content.find_child("RenderQuality",true,false) as OptionButton
+	var rate:=game.hud.content.find_child("FrameLimitRate",true,false) as OptionButton
+	check(is_instance_valid(quality) and is_instance_valid(rate) and rate.get_selected_id()==session.settings.fps_limit,"In-game settings offer the same quality and FPS controls")
+	if quality:
+		quality.select(1)
+		quality.item_selected.emit(1)
+		await process_frame
+		await process_frame
+		check(session.settings.render_quality=="native" and is_equal_approx(root.scaling_3d_scale,1.),"In-game quality control switches the actual viewport to native resolution")
 	print("RENDER_BUDGET_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

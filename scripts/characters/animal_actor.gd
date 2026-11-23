@@ -284,11 +284,13 @@ func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool
 		velocity.y = 7.0
 		if feedback:world.play_tone(510.0,.08,.15)
 	if not world.can_walk(global_position+Vector3(velocity.x,0,velocity.z)*delta):
-		velocity.x = 0
-		velocity.z = 0
-	var before_step:=global_position
-	move_on_ground(delta,grounded)
-	if world.has_method("guard_shore_landing"):world.guard_shore_landing(self,before_step)
+		var along: Vector3=world.along_shore_velocity(global_position,velocity,delta) if world.has_method("along_shore_velocity") else Vector3.ZERO
+		velocity.x=along.x
+		velocity.z=along.z
+	if world.has_method("move_on_shore"):
+		world.move_on_shore(self,delta,grounded)
+	else:
+		move_on_ground(delta,grounded)
 	if feedback and not was_on_floor and is_on_floor():
 		landed.emit()
 		if action=="": mood_label.text = ""

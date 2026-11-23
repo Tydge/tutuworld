@@ -25,6 +25,9 @@ func run() -> void:
 	session.active=false;game.set_process(false);game.bunny.can_move=false;game.hud.hide()
 	var weather: Node=game.get_node("WinterAtmosphere");check(weather.snow.amount<=70,"Snowfall uses a small fixed budget of fine dots")
 	weather.hide()
+	await direct_stars()
+	await falling_snow(weather.snow)
+	check_coast()
 	for npc in game.npcs:
 		for child in npc.get_children():
 			if child.get_script()==load("res://scripts/city/npc_driver.gd"):child.set_physics_process(false)
@@ -83,7 +86,17 @@ func run() -> void:
 	game.bunny.network_direction=Vector3.ZERO
 	# Launch with full ice momentum near the south lip and then walk back inland.
 	for x in [-33.,0.,43.]:
-		var z:=L.RADII.y*sqrt(.915*.915-pow(x/L.RADII.x,2.))-.65
+		# Find the edge from the baked floor faces, independently of the movement rule.
+		var edge:=120.
+		var floor_query:=PhysicsRayQueryParameters3D.new()
+		floor_query.collision_mask=8
+		while edge<158.:
+			floor_query.from=Vector3(x,20,edge)
+			floor_query.to=Vector3(x,-8,edge)
+			var hit:=game.get_world_3d().direct_space_state.intersect_ray(floor_query)
+			if hit.is_empty() or hit.position.y<=L.SEA_LEVEL:break
+			edge+=.1
+		var z:=edge-2.
 		game.bunny.position=Vector3(x,L.walk_height(x,z)+.03,z)
 		game.bunny.velocity=Vector3.ZERO
 		game.bunny.reset_physics_interpolation()
@@ -96,13 +109,107 @@ func run() -> void:
 			await physics_frame
 			airborne=airborne or not game.bunny.is_on_floor()
 		var landed: Vector3=game.bunny.position
-		check(airborne and landed.distance_to(Vector3(x,L.walk_height(x,z),z))<2. and L.can_walk(landed) and landed.y>0. and game.bunny.is_on_floor(),"Running jump lands on dry southern shore "+str(x))
+		print("SHORE_JUMP x=",x," waterline_z=",edge," landed=",landed," on_floor=",game.bunny.is_on_floor())
+		check(airborne and absf(landed.z-edge)<.65 and L.can_walk(landed) and landed.y>L.SEA_LEVEL and game.bunny.is_on_floor(),"Running jump lands on dry southern shore "+str(x))
 		game.bunny.network_direction=Vector3.FORWARD
 		for frame in range(75):await physics_frame
 		check(game.bunny.position.z<landed.z-.9,"Can immediately walk inland after the coastal jump "+str(x))
 		game.bunny.network_direction=Vector3.ZERO
 	print("ICEFIELD_POLISH_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	game.queue_free();await process_frame;quit(0 if failures.is_empty() else 1)
+
+func check_coast() -> void:
+	var ray:=PhysicsRayQueryParameters3D.new()
+	ray.collision_mask=8
+	var physics:=game.get_world_3d().direct_space_state
+	var dry:=0
+	var submerged:=0
+	var mismatches:=0
+	# Probe the actual mesh on both sides of the water, including the inlet and dock.
+	for z in range(102,160):
+		for x in range(-151,135):
+			var point:=Vector3(x+.31,0,z+.63)
+			ray.from=point+Vector3.UP*35.
+			ray.to=point+Vector3.DOWN*8.
+			var hit:=physics.intersect_ray(ray)
+			var supported: bool=not hit.is_empty() and hit.position.y>L.SEA_LEVEL
+			if supported:dry+=1
+			else:submerged+=1
+			if L.can_walk(point)!=supported:mismatches+=1
+	print("SHORE_COLLISION dry=",dry," water=",submerged," mismatches=",mismatches)
+	check(dry>1000 and submerged>1000 and mismatches==0,"Movement reaches every dry coastal sample and stops at the waterline")
+	for i in range(L.Plots.IDS.size()):
+		var rect:=L.Plots.bounds(i).grow(1.)
+		var clear:=true
+		for z in range(int(rect.position.y),int(rect.end.y)+1):
+			for x in range(int(rect.position.x),int(rect.end.x)+1):
+				if not L.can_walk(Vector3(x,0,z)):clear=false
+		check(clear,"Seaside movement permits the full lot and approach "+L.Plots.IDS[i])
+
+func direct_stars() -> void:
+	game.update_lighting(.94)
+	game.camera.position=Vector3(-79,10,39)
+	game.camera.look_at(game.camera.position+Vector3(.1,.9,-1))
+	for frame in range(4):await process_frame
+	var sky:=await photo("00-night-sky")
+	# Scan the clear sky above the aurora, away from the moon and roofs.
+	var longest:=0
+	var peaks:=0
+	for y in range(floori(sky.get_height()*.2),floori(sky.get_height()*.5)):
+		var width:=0
+		for x in range(floori(sky.get_width()*.25),floori(sky.get_width()*.75)):
+			if sky.get_pixel(x,y).r>.40:
+				width+=1
+				longest=maxi(longest,width)
+			else:
+				if width>0:peaks+=1
+				width=0
+	print("DIRECT_STARS bright_runs=",peaks," max_width_px=",longest," viewport=",sky.get_size())
+	check(peaks>=12 and longest<=4,"Directly viewed stars are visible pinpoints at gameplay resolution")
+
+	# Photograph the live flakes and stars together from a low street view.
+	var weather: Node3D=game.get_node("WinterAtmosphere")
+	game.bunny.position=Vector3(-79,L.walk_height(-79,39)+.04,39)
+	game.bunny.reset_physics_interpolation()
+	game.camera.position=game.bunny.position+Vector3(.9,2.4,4.4)
+	game.camera.look_at(game.camera.position+Vector3(.15,.10,-1))
+	weather.show()
+	weather.snow.use_fixed_seed=true
+	weather.snow.seed=23
+	weather.snow.restart(true)
+	await create_timer(.7).timeout
+	await photo("00-snow-town-night")
+	weather.hide()
+
+func falling_snow(source: GPUParticles3D) -> void:
+	# Isolate one real flake against transparency to measure its footprint and fall.
+	var view:=SubViewport.new()
+	view.size=Vector2i(512,288)
+	view.transparent_bg=true
+	view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+	view.own_world_3d=true
+	root.add_child(view)
+	var camera:=Camera3D.new()
+	view.add_child(camera)
+	camera.fov=48
+	var snow:=source.duplicate() as GPUParticles3D
+	snow.amount=1
+	snow.preprocess=0.
+	snow.process_material=source.process_material.duplicate()
+	snow.process_material.emission_box_extents=Vector3.ZERO
+	view.add_child(snow)
+	for depth in [3.,14.]:
+		snow.position=Vector3(0,.6,-depth)
+		snow.restart(true)
+		await create_timer(.2).timeout
+		await RenderingServer.frame_post_draw
+		var first:=view.get_texture().get_image().get_used_rect()
+		await create_timer(.35).timeout
+		await RenderingServer.frame_post_draw
+		var last:=view.get_texture().get_image().get_used_rect()
+		print("FALLING_SNOW depth=",depth," first=",first," last=",last)
+		check(first.has_area() and last.has_area() and first.size.x<=3 and first.size.y<=4 and last.size.x<=3 and last.size.y<=4 and last.get_center().y>first.get_center().y,"Small snow fleck moves down the screen at depth "+str(depth))
+	view.queue_free()
 
 func reflected_stars(manager: Node) -> void:
 	game.update_lighting(.94)

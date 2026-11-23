@@ -2,6 +2,13 @@ extends RefCounted
 ## All distances in metres. North is -Z. The palace starts at the terrace at z=-82.
 const NAVIGATION:=Rect2i(-183,-186,376,387)
 const DOCK:=Vector2(0,209)
+const DOCK_DECK:=Rect2(-3.5,200.,7.,13.)
+const SEA_LEVEL:=preload("res://scripts/icefield/icefield_layout.gd").SEA_LEVEL
+const PONDS:=[Vector2(123,-45),Vector2(-118,-48),Vector2(76,-149),Vector2(-44,-151)]
+const POND_SEGMENTS:=72
+static var pond_outline:=PackedVector2Array()
+static var shore_planes: Dictionary={}
+static var quay_sections: Dictionary={}
 const LIMIT:=Vector2(240,206)
 const TERRACES:=[[-1.,62.,92.],[-1.,124.,156.],[1.,78.,103.],[1.,115.,140.]]
 const FORECOURTS:=[[-21.,-59.,2.63],[20.,-69.,3.10]]
@@ -149,19 +156,112 @@ static func raw_height(x: float,z: float) -> float:
 	return lerpf(-3.8,h,smoothstep(-6.,1.,edge))
 static func bridge(x: float,z: float) -> bool:
 	for bx in BRIDGES:
-		if absf(x-bx)<4.35 and absf(z-river_z(bx))<=18.:return true
+		if absf(x-bx)<=4.45 and absf(z-river_z(bx))<=18.:return true
 	return false
 static func deck(z: float,bx: float) -> float:
 	return 6.10+1.65*(1.-pow(clampf(absf(z-river_z(bx))/18.,0.,1.),2))
 static func foot(x: float,z: float) -> float:
-	if absf(x)<3.5 and z>201. and z<213.:return 2.05
+	if DOCK_DECK.has_point(Vector2(x,z)):return 2.05
 	if bridge(x,z):
 		for bx in BRIDGES:
-			if absf(x-bx)<4.35:return deck(z,bx)
+			if absf(x-bx)<=4.45:return deck(z,bx)
 	return height_at(x,z)
+# Shore cells use the same two triangles (including the diagonal) as landscape().
+static func shore_face(p: Vector3) -> Plane:
+	var cell:=Vector2i(floori(p.x/2.),floori(p.z/2.))
+	var base:=Vector2(cell)*2.
+	var upper:=p.x-base.x+p.z-base.y>2.
+	var key:=Vector3i(cell.x,cell.y,int(upper))
+	if not shore_planes.has(key):
+		var stride:=2.
+		if upper:
+			base+=Vector2(2.,2.)
+			stride=-2.
+		var y:=height_at(base.x,base.y)
+		var dx:=(height_at(base.x+stride,base.y)-y)/stride
+		var dz:=(height_at(base.x,base.y+stride)-y)/stride
+		shore_planes[key]=Plane(Vector3(-dx,1.,-dz).normalized(),Vector3(base.x,y,base.y))
+	return shore_planes[key]
+
+static func by_water(p: Vector3) -> bool:
+	return absf(p.z-river_z(p.x))<16. or absf(p.x)>LIMIT.x-3. or absf(p.z)>LIMIT.y-3.
+
+static func terrain_floor(p: Vector3) -> float:
+	var face:=shore_face(p)
+	return (face.d-face.normal.x*p.x-face.normal.z*p.z)/face.normal.y
+
+# Remove the downhill part of a collision displacement. Preserve travel along
+# the contour, including when the capsule touches a different face from its feet.
+static func clip_bank_step(before: Vector3,proposed: Vector3) -> Vector3:
+	var p:=proposed
+	var flat_step:=Vector2(p.x-before.x,p.z-before.z).length()
+	for i in range(3):
+		var face:=shore_face(p)
+		var downhill:=Vector2(face.normal.x,face.normal.z)
+		var lift:=SEA_LEVEL+.025-terrain_floor(p)
+		if lift<=.0001:break
+		if downhill.length_squared()<.0001:return before
+		var back:=downhill*(lift*face.normal.y/downhill.length_squared())
+		p.x-=back.x;p.z-=back.y
+	if Vector2(p.x-proposed.x,p.z-proposed.z).length()>flat_step+.08 or not can_walk(p):
+		return before
+	p.y=maxf(p.y,terrain_floor(p)+.025)
+	return p
+
+static func pond_rim(a: float) -> Vector2:
+	var r:=2.80+.38*sin(3.*a)+.21*sin(5.*a+.6)
+	return Vector2(cos(a)*r*1.37,sin(a)*r)
+
+static func in_pond(p: Vector3) -> bool:
+	for center_: Vector2 in PONDS:
+		var offset:=Vector2(p.x,p.z)-center_
+		if absf(offset.x)>4.7 or absf(offset.y)>3.5:continue
+		if pond_outline.is_empty():
+			for i in range(POND_SEGMENTS):pond_outline.append(pond_rim(i*TAU/POND_SEGMENTS))
+		if Geometry2D.is_point_in_polygon(offset,pond_outline):
+			return terrain_floor(p)<height_at(center_.x,center_.y)+.106
+	return false
+
+# Each transform is centred on the walkable top of the actual quay block.
+static func quays() -> Dictionary:
+	if not quay_sections.is_empty():return quay_sections
+	for i in range(-29,30):
+		var x:=i*4.14
+		if BRIDGES.any(func(bx):return absf(x-bx)<5.8):continue
+		var basis:=Basis(Vector3.UP,-atan(.135*cos(x*.015)))
+		var section: Array[Transform3D]=[]
+		for side: float in [-1.,1.]:
+			var z:=river_z(x)+side*11.6
+			section.append(Transform3D(basis,Vector3(x,height_at(x,z)+.26,z)))
+			if absf(x)<96. and absf(x)>12.:
+				z=river_z(x)+side*9.65
+				section.append(Transform3D(basis,Vector3(x,height_at(x,z)+.41,z)))
+		quay_sections[i]=section
+	return quay_sections
+
+static func crossing_height(p: Vector3) -> float:
+	if DOCK_DECK.has_point(Vector2(p.x,p.z)):return 2.05
+	if absf(p.z-river_z(p.x))>19.:return -INF
+	if bridge(p.x,p.z):return foot(p.x,p.z)
+	if absf(p.x)<124.:
+		var cell:=roundi(p.x/4.14)
+		for i in range(cell-1,cell+2):
+			for pose: Transform3D in quays().get(i,[]):
+				var local:=pose.inverse()*p
+				if absf(local.x)<=2.1 and absf(local.z)<=.4 and pose.origin.y>SEA_LEVEL:
+					return pose.origin.y
+	return -INF
+
 static func can_walk(p: Vector3) -> bool:
-	if absf(p.x)<3.4 and p.z>=200. and p.z<212.:return true
-	return absf(p.x)<238. and absf(p.z)<204. and (absf(p.z-river_z(p.x))>=12. or bridge(p.x,p.z))
+	if not p.is_finite() or absf(p.x)>LIMIT.x+6. or absf(p.z)>LIMIT.y+7.:return false
+	if in_pond(p):return false
+	return not by_water(p) or terrain_floor(p)>SEA_LEVEL or is_finite(crossing_height(p))
+
+static func dry_footing(p: Vector3) -> bool:
+	if p.y<=SEA_LEVEL or not can_walk(p):return false
+	if not by_water(p) or terrain_floor(p)>SEA_LEVEL:return true
+	return p.y>=crossing_height(p)-.30
+
 static func arrival() -> Array:return [0.,2.12,203.]
 static func point(x: float,z: float) -> Vector3:return Vector3(x,foot(x,z),z)
 static var merchants: Dictionary={}

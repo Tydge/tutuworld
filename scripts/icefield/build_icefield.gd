@@ -63,16 +63,17 @@ func build_environment() -> void:
 	group(world,"Streetlights");group(world,"CentralPark")
 func build_terrain() -> void:
 	var terrain:=group(world,"SnowAndIceTerrain")
+	var step:=L.TERRAIN_STEP
 	var snow: ShaderMaterial=Props.mat("snow").duplicate();snow.set_shader_parameter("town_paths",true);snow.set_shader_parameter("coastal_ridges",true)
 	var ice:=ShaderMaterial.new();ice.shader=load("res://assets/shaders/polar_ice.gdshader");world.set_meta("ice_material",ice)
 	for cz in range(-176,176,24):
 		for cx in range(-192,192,24):
 			var surfaces: Array=[SurfaceTool.new(),SurfaceTool.new()];var counts: Array=[0,0]
 			for st in surfaces:st.begin(Mesh.PRIMITIVE_TRIANGLES)
-			for z in range(cz,cz+24,2):
-				for x in range(cx,cx+24,2):
-					if L.ellipse(x+1,z+1)>1.075:continue
-					for triangle in [[Vector2(x,z),Vector2(x+2,z),Vector2(x,z+2)],[Vector2(x+2,z),Vector2(x+2,z+2),Vector2(x,z+2)]]:
+			for z in range(cz,cz+24,step):
+				for x in range(cx,cx+24,step):
+					if L.ellipse(x+step*.5,z+step*.5)>L.TERRAIN_RADIUS:continue
+					for triangle in [[Vector2(x,z),Vector2(x+step,z),Vector2(x,z+step)],[Vector2(x+step,z),Vector2(x+step,z+step),Vector2(x,z+step)]]:
 						var mid: Vector2=(triangle[0]+triangle[1]+triangle[2])/3.
 						var kind:=int(mid.x>L.shore_x(mid.y)+5. and L.ellipse(mid.x,mid.y)<.915)
 						for p: Vector2 in triangle:
@@ -148,7 +149,9 @@ func nature_clear(p: Vector3) -> bool:
 	if not L.Plots.clear(Vector2(p.x,p.z),2.5):return false
 	for stamp in preload("res://scripts/icefield/snow_trail.gd").STAMPS.values():
 		if Vector2(p.x,p.z).distance_to(stamp.place)<4.:return false
-	if not L.can_walk(p) or p.x>L.shore_x(p.z)-8. or L.path_distance(p.x,p.z)<4.5:return false
+	# Keep the baked groves back from the beach and clear of the harbor road.
+	if L.ellipse(p.x,p.z)>=.967 or L.inlet(p.x,p.z)<=1.10 or p.y<=-.20:return false
+	if p.x>L.shore_x(p.z)-8. or L.path_distance(p.x,p.z)<4.5:return false
 	for fire: Vector2 in L.CAMPFIRES:
 		if Vector2(p.x,p.z).distance_to(fire)<8.5:return false
 	if p.x> -125. and p.x< -39. and p.z> -23. and p.z<9.:return false
@@ -196,7 +199,8 @@ func build_harbor() -> void:
 	for i in range(35):
 		var x: float=-108.+i*.4
 		G.box(dock,Vector3(x,L.DOCK_HEIGHT-.09,121),Vector3(.38,.18,3.9),Props.mat("wood"))
-	var floor_:=G.solid_box(dock,Vector3(-101,L.DOCK_HEIGHT-.13,121),Vector3(14.,.26,3.9));floor_.collision_layer=8;floor_.collision_mask=0
+	var center:=L.DOCK_DECK.get_center()
+	var floor_:=G.solid_box(dock,Vector3(center.x,L.DOCK_HEIGHT-.13,center.y),Vector3(L.DOCK_DECK.size.x,.26,L.DOCK_DECK.size.y));floor_.collision_layer=8;floor_.collision_mask=0
 	for x in [-106.,-102.,-98.,-94.5]:
 		for side in [-1,1]:
 			G.cylinder(dock,Vector3(x,.25,121+side*2.1),.14,3.3,Props.mat("darkwood"));G.ball(dock,Vector3(x,1.92,121+side*2.1),Vector3(.22,.12,.22),Props.mat("snow"))

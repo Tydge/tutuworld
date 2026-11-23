@@ -71,20 +71,14 @@ static func draw_model(m: Node3D,kind: String) -> void:
 			for x in [-1.97,1.97]:
 				for z in [-1.55,1.55]:G.cylinder(m,Vector3(x,-.1,z),.15,1.7,G.mat("71533f"))
 static func dress(builder: SceneTree) -> void:
-	for row in [[106,-19,"jade_moon_gate",.22],[123,-45,"jade_pool",0],[128,-44,"jade_rockery",.35],[119,-46,"jade_rockery",-.55],[114,-26,"jade_gallery",.75],[117,-29,"jade_gallery",.75],[119,-33,"jade_gallery",.23],[119,-37,"jade_gallery",-.15],[-116,-30,"jade_moon_gate",.45],[-119,-36,"jade_gallery",1.1],[-122,-38,"jade_gallery",1.1],[-118,-48,"jade_pool",0],[71,-143,"jade_moon_gate",-.4],[76,-149,"jade_pool",0],[79,-151,"jade_rockery",0],[-44,-151,"jade_pool",0],[-48,-151,"jade_rockery",0]]:
+	for row in [[106,-19,"jade_moon_gate",.22],[128,-44,"jade_rockery",.35],[119,-46,"jade_rockery",-.55],[114,-26,"jade_gallery",.75],[117,-29,"jade_gallery",.75],[119,-33,"jade_gallery",.23],[119,-37,"jade_gallery",-.15],[-116,-30,"jade_moon_gate",.45],[-119,-36,"jade_gallery",1.1],[-122,-38,"jade_gallery",1.1],[71,-143,"jade_moon_gate",-.4],[79,-151,"jade_rockery",0],[-48,-151,"jade_rockery",0]]:
 		builder.fixture(builder.world,row[2],J.point(row[0],row[1]),row[3])
 	for row in [[-1,56],[1,63],[-1,83],[1,101],[-1,125],[1,141],[-1,157],[1,177]]:
 		var z: float=row[1];var side: float=row[0];var x:=J.lane(z)+side*6.1
 		builder.fixture(builder.world,"jade_silk_stall" if int(z)%3==0 else "jade_market_stall",J.point(x,z),-side*PI*.5+sin(z)*.17)
 	# Wall modules follow each sweep of the navigable channel. The open reaches return to grassy banks.
-	for side in [-1.,1.]:
-		for i in range(-29,30):
-			var x:=i*4.14
-			if J.BRIDGES.any(func(bx):return absf(x-bx)<5.8):continue
-			var z: float=J.river_z(x)+side*11.6
-			var angle := -atan(.135*cos(x*.015))
-			var top := J.height_at(x,z)+.26
-			builder.fixture(builder.world,"jade_quay",Vector3(x,top-1.92,z),angle)
-			if absf(x)<96. and absf(x)>12.:
-				var low_z: float=J.river_z(x)+side*9.65
-				builder.fixture(builder.world,"jade_quay",Vector3(x,J.height_at(x,low_z)-1.51,low_z),angle)
+	for section: Array in J.quays().values():
+		for pose: Transform3D in section:
+			builder.fixture(builder.world,"jade_quay",pose.origin-Vector3.UP*1.92,pose.basis.get_euler().y)
+	for center_: Vector2 in J.PONDS:
+		builder.fixture(builder.world,"jade_pool",J.point(center_.x,center_.y))

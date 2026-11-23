@@ -14,14 +14,12 @@ func run() -> void:
 	while game.preparing or game.camera==null: await process_frame
 	await create_timer(.8).timeout;session.active=false;game.bunny.can_move=false
 	if OS.get_cmdline_user_args().has("--benchmark-window"):
-		# The project starts in a full-screen Space. Finish its transition before sampling a visible window.
+		# Use the same benchmark framing for visible and embedded rendering.
 		root.mode=Window.MODE_WINDOWED
 		await create_timer(1.).timeout
 		var available:=DisplayServer.screen_get_usable_rect(root.current_screen)
 		root.size=Vector2i(mini(1920,available.size.x-32),mini(1200,available.size.y-64))
 		root.position=available.position+(available.size-root.size)/2
-		root.always_on_top=true
-		root.grab_focus()
 		await create_timer(.8).timeout
 	print("BENCH_WINDOW size=",root.size," scale=",root.scaling_3d_scale," mode=",root.mode," drawable=",DisplayServer.window_can_draw()," focus=",root.has_focus())
 	var failures: Array=[]
