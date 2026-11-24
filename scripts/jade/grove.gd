@@ -70,7 +70,8 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 			var twig:=bend.lerp(tip,.32+k*.11)
 			var elbow:=twig+d*.62+Vector3.UP*.46
 			var end:=elbow+d*(1.+.22*(k%3))+Vector3.UP*(-1.8 if variant==0 else .38*sin(j*1.9+k))
-			Forest.tube(wood,[twig,elbow,end],[.038,.021,.006],4)
+			if not far:Forest.tube(wood,[twig,elbow,end],[.038,.021,.006],4)
+			elif k%2==0:Forest.tube(wood,[twig,elbow],[.038,.018],3)
 			if not far or k%2==0:
 				var rise: float=-1.21 if variant==0 else .68+.32*sin(j+k)
 				var crown:=elbow+d*(1.21 if far else .96)+Vector3.UP*rise
@@ -91,7 +92,21 @@ static func model(variant: int,far: bool) -> ArrayMesh:
 							var phi:=petal*TAU/5.+j;blade(greens,at+dir*.15,Vector3(cos(phi)*.069,.032,sin(phi)*.069),.035,leaf,false)
 	wood.generate_normals();wood.index();wood.set_material(bark_by_species[variant])
 	var result:=wood.commit()
-	if not far:greens.index();greens.set_material(leaf_material);greens.commit(result)
+	if not far:
+		greens.index()
+		var arrays:=greens.commit_to_arrays()
+		var indices: PackedInt32Array=arrays[Mesh.ARRAY_INDEX]
+		var middle:=PackedInt32Array()
+		var distant:=PackedInt32Array()
+		var fan:=8 if variant==2 else 6
+		for i in range(0,indices.size(),fan*3):
+			# Each blade is a triangle fan. Keep its length and both sides while
+			# reducing its contour once the notches project below one pixel.
+			var tip:=4 if fan==8 else 3
+			for corner in [0,2,tip,0,tip,fan-1]:middle.append(indices[i+corner*3+1])
+			for corner in [1,tip,fan-1]:distant.append(indices[i+corner*3+1])
+		result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays,[],{.027:middle,.052:distant})
+		result.surface_set_material(result.get_surface_count()-1,leaf_material)
 	sprays.set_material(spray_material);sprays.index();sprays.commit(result)
 	meshes[key]=result;return result
 # Branches and the full textured crown cast one continuous shadow through both visual LODs.
@@ -108,11 +123,21 @@ static func canopy_shadow(variant: int) -> ArrayMesh:
 
 static func place(n: Node3D,variant: int,city_grove: bool=false) -> void:
 	if variant==4:preload("res://scripts/jade/temple_pine.gd").place(n);return
+	var close_mesh:=model(variant,false)
+	var far_mesh:=model(variant,true)
+	# Range checks use the AABB centre. Both meshes (and their instance batches)
+	# need the same centre or two crowns can occupy a transition frame.
+	var bounds:=close_mesh.get_aabb().merge(far_mesh.get_aabb())
+	close_mesh.custom_aabb=bounds
+	far_mesh.custom_aabb=bounds
 	for far in [false,true]:
-		var m:=G.mesh(n,model(variant,far),Vector3.ZERO,null,"DistantFoliage" if far else "LeafSprays")
+		var m:=G.mesh(n,far_mesh if far else close_mesh,Vector3.ZERO,null,"DistantFoliage" if far else "LeafSprays")
 		if far or city_grove:m.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		if far:m.visibility_range_begin=72.;m.visibility_range_end=330.
-		else:m.visibility_range_end=72.
+		var crown_range:=86. if city_grove else 72.
+		if far:
+			m.visibility_range_begin=crown_range
+			m.visibility_range_end=640. if city_grove else 330.
+		else:m.visibility_range_end=crown_range
 	if city_grove:
 		var caster:=G.mesh(n,canopy_shadow(variant),Vector3.ZERO,null,"CanopyShadow")
 		caster.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY

@@ -2,18 +2,19 @@ extends RefCounted
 const G=preload("res://scripts/geometry.gd")
 const P=preload("res://scripts/city/prop_collisions.gd")
 const A=preload("res://scripts/jade/architecture.gd")
-static func side_wing(n: Node3D,w: float,h: float,d: float) -> void:
+static func side_wing(n: Node3D,w: float,h: float,d: float,floor_edge: float) -> void:
 	var center:=Vector3(-w-1.95,0,-d*.42+.3);var size_:=Vector3(3.95,h*.79,d*1.16)
 	var west:=n.get_node("West") as Node3D
 	var wing:=A.group(n,"SideChamber",center)
 	var shell:=A.group(west,"SideEaves")
 	shell.transform=west.transform.affine_inverse()*wing.transform
-	A.mesh_part(shell,"Annex"+str(w),func(m):
+	A.mesh_part(shell,"Annex"+str(w)+str(floor_edge),func(m):
 		A.roof(m,size_.x*.5+.54,size_.z*.5+.76,1.56,size_.y,true)
-		A.paint(m,Vector3.UP*(-.09),Vector3(size_.x,.34,size_.z),"masonry")
+		var inner: float=-w-floor_edge-center.x
+		A.paint(m,Vector3((inner-size_.x*.5)*.5,-.09,0),Vector3(inner+size_.x*.5,.34,size_.z),"masonry")
+		A.paint(m,Vector3(-size_.x*.5,size_.y*.5,0),Vector3(.24,size_.y,size_.z-.24),"lime")
 		for side in [-1,1]:
 			A.paint(m,Vector3(0,size_.y*.5,side*size_.z*.5),Vector3(size_.x,size_.y,.24),"lime")
-			A.paint(m,Vector3(-size_.x*.5,size_.y*.5,0),Vector3(.24,size_.y,size_.z),"lime")
 			A.lattice(m,Vector3(0,size_.y*.56,side*size_.z*.5+.14),2.2,1.7)
 			A.column(m,Vector3(-size_.x*.5,size_.y*.5,side*size_.z*.5),.19,size_.y))
 	for side in [-1,1]:P.box(wing,"EndWall",Vector3(0,size_.y*.5,side*size_.z*.5),Vector3(size_.x,size_.y,.24))
@@ -30,9 +31,7 @@ static func octagon(n: Node3D,w: float,h: float,d: float) -> void:
 		var parent: Node3D=walls["Front" if front else ("Rear" if i in [3,4,5] else ("East" if i<3 else "West"))]
 		var frame:=A.group(parent,"Bay",Vector3(mid.x,0,mid.y));frame.rotation.y=-(b-a).angle()
 		A.mesh_part(frame,"TeaBay"+str(i)+str(w),func(m):
-			for side in [-1,1]:
-				A.column(m,Vector3(side*width*.5,h*.5,0),.19,h)
-				G.cylinder(m,Vector3(side*width*.5,.18,0),.27,.36,G.mat("a99c81"))
+			A.column(m,Vector3(width*.5,h*.5,0),.19,h)
 			if not front:
 				A.paint(m,Vector3.UP*.57,Vector3(width,1.14,.25),"lime")
 				A.lattice(m,Vector3(0,h*.67,0),width*.80,.99)

@@ -3,3 +3,4 @@
 [node name="JadeCapital" type="Node3D"]
 script = ExtResource("1")
 map_id = "jade"
+npc_view_distance = 160.0

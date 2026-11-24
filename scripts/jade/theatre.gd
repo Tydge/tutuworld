@@ -18,7 +18,7 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 			A.mesh_part(frame,"auditorium_%d_"%level+face,func(m):
 				for j in [-1.,-.50,.50,1.]:
 					var pos:=Vector3(j*length_,h*.5,depth)
-					A.column(m,pos,.21,h);G.cylinder(m,pos-Vector3.UP*(h*.5-.21),.28,.42,G.mat("9c8f78"))
+					if absf(j)<1. or face in ["Front","Rear"]:A.column(m,pos,.21,h)
 					for sign_ in [-1,1]:A.beam(m,pos+Vector3(0,h*.5-.85,0),pos+Vector3(sign_*.74,h*.5-.25,.12),.17,"9c5d3b")
 				for j in range(4):
 					A.paint(m,Vector3((j-1.5)*length_*.5,h-.18,depth+.09),Vector3(length_*.5,.51,.50),"cloud_beam")
@@ -28,7 +28,7 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 					for j in range(-5,6):
 						if face=="East" and j>1:continue
 						A.box(m,Vector3(j*length_*.17,.56,depth),Vector3(.07,.98,.12),"8f5037")
-						A.box(m,Vector3(j*length_*.17,.99,depth),Vector3(length_*.18,.12,.16),"8e6042")
+						A.box(m,Vector3(j*length_*.17,.99,depth),Vector3(length_*.17-.002,.12,.16),"8e6042")
 				if face=="Front":
 					for edge in [-1.,1.]:A.lantern(m,Vector3(edge*length_*.8,h-.87,depth+.48),.80))
 			if face=="Rear" and level==0:P.box(frame,"Backdrop",Vector3(0,h*.43,depth),Vector3(length_*1.62,h*.86,.21))
@@ -59,5 +59,8 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 	var ramp:=G.solid_box(stair,(start+end)*.5-Vector3.UP*.12,Vector3(2.15,.24,start.distance_to(end)));ramp.rotation.x=-atan2(h,end.z-start.z);ramp.collision_layer=8
 	A.beam(stair,start+Vector3(1.02,.91,0),end+Vector3(1.02,.91,0),.12,"874a30")
 	for j in range(6):A.column(stair,start.lerp(end,j/5.)+Vector3(1.02,.45,0),.055,.89)
-	var landing:=Vector3(w+.65,h-.12,d-.23);A.paint(upper,landing,Vector3(3.25,.24,2.35),"lacquer")
+	var landing:=Vector3(w+.65,h-.12,d-.23)
+	# The existing upper slab owns the shared rectangle up to x=w+.35 and z=d+.30.
+	A.paint(upper,Vector3(w+1.3125,h-.12,d-.23),Vector3(1.925,.24,2.35),"lacquer")
+	A.paint(upper,Vector3(w-.3125,h-.12,d+.6225),Vector3(1.325,.24,.645),"lacquer")
 	G.solid_box(upper,landing,Vector3(3.25,.24,2.35)).collision_layer=8

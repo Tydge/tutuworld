@@ -30,9 +30,9 @@ func check_lanterns(city: Node3D) -> void:
 		check(not city.atmosphere.fog_enabled and city.horizon.get_shader_parameter("air_horizon")==sky_colour and city.foothills.get_shader_parameter("air_horizon")==sky_colour,"Only the mountain materials follow the horizon colour at "+str(hour))
 	city.update_lighting(.91)
 	check(city.lantern_pools.all(func(lamp):return lamp.visible and lamp.light_energy>0 and not lamp.shadow_enabled),"The twenty-four night lights illuminate the city without additional shadow passes")
-	check(city.sun.directional_shadow_max_distance>=120. and city.lantern_pools.all(func(lamp):return lamp.distance_fade_begin>=60. and lamp.distance_fade_begin+lamp.distance_fade_length>=100.),"Sun shadows and every street pool reach beyond the next block at night")
+	check(city.sun.directional_shadow_max_distance>=180. and city.lantern_pools.all(func(lamp):return lamp.distance_fade_begin>=100. and lamp.distance_fade_begin+lamp.distance_fade_length>=160.),"Sun shadows and every street pool reach beyond the next block at night")
 	city.update_lighting(.5)
-	check(not city.atmosphere.fog_enabled and not city.atmosphere.glow_enabled and city.sun.directional_shadow_max_distance>=120.,"The midday city has clear air and long shadows")
+	check(not city.atmosphere.fog_enabled and not city.atmosphere.glow_enabled and city.sun.directional_shadow_max_distance>=180.,"The midday city has clear air and long shadows")
 	check(city.lantern_pools.all(func(lamp):return not lamp.visible),"Street lanterns switch off in daylight")
 func check_court_steps(city: Node3D) -> void:
 	var stairs:=0
@@ -105,15 +105,192 @@ func check_stair_ground(city: Node3D) -> void:
 				if not earth.intersect_segment(ray,ray-Vector3.UP*9.).is_empty():apron+=1
 	check(samples==1344 and exposed==0 and apron==64,"No earth intersects the marble at %d points, and all %d adjacent street points retain ground"%[samples,apron])
 
+# Probe the saved terrain, including the corners of rotated shops and every side chamber.
+func check_house_floors(city: Node3D) -> void:
+	var terrain: Dictionary={}
+	for part in city.scenery.get_children():
+		if part is MeshInstance3D and part.material_override is ShaderMaterial and part.material_override.shader==preload("res://assets/shaders/jade_ground.gdshader"):
+			terrain[part.position]=part.mesh
+	var trees: Dictionary={}
+	var total:=0
+	var min_gap:=INF
+	var hits:=0
+	for room in city.interiors:
+		var half: Vector2=room.floor_size*.5
+		var slabs: Array=[Rect2(-half-Vector2(.325,.375),2.*half+Vector2(.65,.75))]
+		if room.shell_kind=="court":
+			var center:=Vector2(-half.x-1.95,-half.y*.42+.3)
+			var size_:=Vector2(3.95,half.y*1.16)
+			slabs.append(Rect2(center-size_*.5,size_))
+		for slab: Rect2 in slabs:
+			for j in range(17):
+				for k in range(17):
+					var local_: Vector2=slab.position+slab.size*Vector2(j,k)/16.
+					var point: Vector3=room.to_global(Vector3(local_.x,.08,local_.y))
+					var origin:=Vector3(floorf(point.x/36.)*36.,0.,floorf(point.z/36.)*36.)
+					if not trees.has(origin):
+						var tree:=TriangleMesh.new()
+						tree.create_from_faces(terrain[origin].get_faces())
+						trees[origin]=tree
+					var from:=point-origin+Vector3.UP*8.
+					var hit: Dictionary=trees[origin].intersect_segment(from,from-Vector3.UP*20.)
+					if not hit.is_empty():
+						hits+=1
+						min_gap=minf(min_gap,point.y-hit.position.y)
+					total+=1
+	check(city.interiors.size()==56 and hits==total and min_gap>=.04,"Baked terrain under all shop floors and annexes: %d probes, minimum clearance %.3f m"%[total,min_gap])
+
+# Use the published district texture and actual MultiMesh instance positions.
+func check_planted_edges(city: Node3D) -> void:
+	var mask: Image=await preload("res://scripts/jade/landscaping.gd").planting_mask(self)
+	var district: Image
+	var greenery: Array[MultiMeshInstance3D]=[]
+	for part in city.scenery.get_children():
+		if part is MeshInstance3D and not district and part.material_override is ShaderMaterial and part.material_override.shader==preload("res://assets/shaders/jade_ground.gdshader"):
+			district=part.material_override.get_shader_parameter("courts").get_image()
+		if part is MultiMeshInstance3D and part.material_override is ShaderMaterial and part.material_override.shader==preload("res://assets/shaders/woodland_grass.gdshader"):
+			greenery.append(part)
+	var total:=0
+	var on_stone:=0
+	const Paint=preload("res://scripts/jade/court_ground.gd")
+	check(mask.get_pixel(Paint.coord(108.),Paint.coord(-17.)).r<.5 and mask.get_pixel(Paint.coord(209.),Paint.coord(50.)).r>.5,"Planting mask distinguishes the garden path from open ground")
+	for plot in greenery:
+		for i in plot.multimesh.instance_count:
+			var at:=plot.to_global(plot.multimesh.get_instance_transform(i).origin)
+			var cell:=Vector2i(Paint.coord(at.x),Paint.coord(at.z))
+			var surface:=district.get_pixelv(cell)
+			if maxf(surface.a,maxf(surface.r,surface.g))>.12 or mask.get_pixelv(cell).r<.5:on_stone+=1
+			total+=1
+	check(total>0 and on_stone==0,"Baked grass outside paved courts, alleys and galleries: %d/%d"%[total-on_stone,total])
+
+# A material boundary may share a line, but never a visible patch of its end face.
+func materials_at_cap(mesh: Mesh,point: Vector3,direction: Vector3) -> int:
+	var count:=0
+	for i in mesh.get_surface_count():
+		var surface:=ArrayMesh.new()
+		surface.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,mesh.surface_get_arrays(i))
+		var tree:=TriangleMesh.new()
+		tree.create_from_faces(surface.get_faces())
+		var hit:=tree.intersect_segment(point-direction*.01,point+direction*.01)
+		if not hit.is_empty() and hit.position.distance_to(point)<.001 and absf(hit.normal.dot(direction))>.999:count+=1
+	return count
+
+func check_wall_caps(city: Node3D) -> void:
+	var art:=preload("res://scripts/jade/architecture.gd")
+	for kind in ["jade_court_wall","jade_palace_wall"]:
+		var module:=Node3D.new()
+		art.prop(module,kind)
+		var x:=2. if kind=="jade_palace_wall" else 2.325
+		var mesh: Mesh=module.get_node("Joinery").mesh
+		for side: float in [-1.,1.]:
+			check(materials_at_cap(mesh,Vector3(x*side,.19,.08),Vector3.LEFT*side)==1,"Single exposed masonry end on %s %d"%[kind,int(side)])
+		module.free()
+	var seen: Dictionary={}
+	for room in city.interiors:
+		if room.shell_kind in ["pavilion","theatre"] or seen.has(room.shell_kind):continue
+		seen[room.shell_kind]=true
+		var mesh: Mesh=room.get_node("Front/Joinery").mesh
+		for side: float in [-1.,1.]:
+			var point:=Vector3(side*1.65,.32,room.floor_size.y*.5+.04)
+			check(materials_at_cap(mesh,point,Vector3.RIGHT*side)==1,"Single exposed door jamb on %s %d"%[room.shell_kind,int(side)])
+
+func check_room_occlusion(city: Node3D) -> void:
+	var panels:=0
+	var doors:=0
+	var saved: Vector3=city.bunny.position
+	for room in city.interiors:
+		var walls:=room.get_node_or_null("OpaqueWalls") as OccluderInstance3D
+		if not walls:continue
+		var shape:=walls.occluder as ArrayOccluder3D
+		var vertices:=shape.vertices
+		var faces:=PackedVector3Array()
+		for i in shape.indices:faces.append(vertices[i])
+		var triangles:=TriangleMesh.new()
+		triangles.create_from_faces(faces)
+		var front: float=room.floor_size.y*.5
+		var from:=Vector3(0,1.4,front+2.)
+		var to:=Vector3(0,1.4,front-2.)
+		if triangles.intersect_segment(from,to).is_empty() and triangles.intersect_segment(to,from).is_empty():doors+=1
+		from.x=room.floor_size.x*.35
+		to.x=from.x
+		if not triangles.intersect_segment(from,to).is_empty() or not triangles.intersect_segment(to,from).is_empty():panels+=1
+		city.bunny.position=room.global_position
+		room._process(.016)
+		check(not walls.visible,"Room cutaway clears the wall occluder on "+str(room.name))
+	city.bunny.position=saved
+	check(panels>40 and panels==doors,"Opaque panels preserve all %d open front doors"%doors)
+
+func check_face_distance(city: Node3D) -> void:
+	var view:=SubViewport.new()
+	view.size=Vector2i(1600,900)
+	view.own_world_3d=true
+	view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+	root.add_child(view)
+	var camera:=Camera3D.new()
+	view.add_child(camera)
+	# The ordinary gameplay FOV covers the opposite block. A telephoto view also
+	# distinguishes subpixel artwork from a hard cutoff at one hundred metres.
+	var sun:=DirectionalLight3D.new()
+	view.add_child(sun)
+	sun.rotation_degrees=Vector3(-20.,-25.,0)
+	for id in ["JadeCitizen_0","JadeCitizen_1","JadeCitizen_3"]:
+		var resident: Node3D=city.targets[id].node
+		var saved: Vector3=city.bunny.position
+		city.bunny.position=resident.position+Vector3.BACK*150.
+		# Exercise the same half-second visibility update used while walking.
+		city.lighting_timer=.5
+		city._process(.016)
+		check(resident.get_node("Visual/Head/Eyes").is_visible_in_tree(),id+" whole resident present at 150 m")
+		if id=="JadeCitizen_0":
+			var online:=preload("res://scripts/city/online_world.gd").new()
+			online.city=city
+			var at:=resident.position
+			var row:={"npc":true,"id":id,"position":[at.x,at.y,at.z],"equipment":resident.get_meta("equipment",{}),"presence":0.}
+			online.apply_actor(resident,row,0.)
+			check(not resident.visible,"Online resident respects zero presence at 150 m")
+			row.presence=1.
+			online.apply_actor(resident,row,0.)
+			check(resident.get_node("Visual/Head/Eyes").is_visible_in_tree(),"Online snapshot restores the whole resident at 150 m")
+			online.free()
+		city.bunny.position=saved
+		var head:=resident.get_node("Visual/Head").duplicate() as Node3D
+		view.add_child(head)
+		head.transform=Transform3D.IDENTITY
+		for metres: float in [55.,100.]:
+			camera.fov=48. if metres==55. else 7.
+			camera.look_at_from_position(Vector3(0,0,metres),Vector3.ZERO)
+			camera.reset_physics_interpolation()
+			var crop:=Rect2i(view.size/2-Vector2i(100,100),Vector2i(200,200))
+			for feature in ["Eyes","Mouth"]:
+				var part:=head.get_node(feature) as Node3D
+				part.visible=true
+				var full: Image=(await light_frame(view)).get_region(crop)
+				part.visible=false
+				var bare: Image=(await light_frame(view)).get_region(crop)
+				var pixels:=0
+				var left:=0
+				for y in range(full.get_height()):
+					for x in range(full.get_width()):
+						var delta:=full.get_pixel(x,y)-bare.get_pixel(x,y)
+						if maxf(absf(delta.r),maxf(absf(delta.g),absf(delta.b)))>.035:
+							pixels+=1
+							if 2*x<full.get_width():left+=1
+				check(pixels>=1,"%s %s visible at %d m (%d pixels)"%[id,feature,int(metres),pixels])
+				if feature=="Eyes" and id=="JadeCitizen_0":
+					check(left>0 and left<pixels,"Both rabbit eyes sampled separately at %d m"%int(metres))
+				part.visible=true
+		head.free()
+	view.free()
+
 # Measure the real sun and street lamp on a receiver beyond both old cutoffs.
-func check_distant_light(city: Node3D) -> void:
+func check_distant_light(city: Node3D,distance_m: float) -> void:
 	var view:=SubViewport.new()
 	view.size=Vector2i(320,200);view.own_world_3d=true
 	view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
 	root.add_child(view)
 	var camera:=Camera3D.new()
-	view.add_child(camera);camera.fov=12.
-	camera.look_at_from_position(Vector3(0,54,72),Vector3.ZERO)
+	view.add_child(camera);camera.fov=7. if distance_m>100. else 12.
+	camera.look_at_from_position(Vector3(0,.6,.8)*distance_m,Vector3.ZERO)
 	var stage:=Node3D.new();view.add_child(stage)
 	const Geo=preload("res://scripts/geometry.gd")
 	Geo.box(stage,Vector3(0,-.1,0),Vector3(32.,.2,28.),Geo.mat("bcb5a6"))
@@ -126,18 +303,19 @@ func check_distant_light(city: Node3D) -> void:
 	var unshadowed:=await light_frame(view)
 	var sun_pixels:=brighter_pixels(unshadowed,shadowed)
 	obstacle.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	sun.directional_shadow_max_distance=63.
+	sun.directional_shadow_max_distance=132. if distance_m>100. else 63.
 	var old_range:=await light_frame(view)
 	var old_shadow_pixels:=brighter_pixels(unshadowed,old_range)
 	sun.hide();city.update_lighting(.91)
 	var lamp:=city.lantern_pools[0].duplicate() as OmniLight3D
 	view.add_child(lamp);lamp.position=Vector3(2,3,0)
 	var lit:=await light_frame(view)
-	lamp.distance_fade_begin=21.;lamp.distance_fade_length=19.
+	lamp.distance_fade_begin=64. if distance_m>100. else 21.
+	lamp.distance_fade_length=48. if distance_m>100. else 19.
 	var dark:=await light_frame(view)
 	var lamp_pixels:=brighter_pixels(lit,dark)
-	print("JADE_DISTANT_LIGHT at_90m shadow_pixels=",sun_pixels," lamp_pixels=",lamp_pixels," old_shadow_pixels=",old_shadow_pixels)
-	check(sun_pixels>70 and old_shadow_pixels<10 and lamp_pixels>70,"Actual GPU shadow and lantern pool are visible from 90 metres")
+	print("JADE_DISTANT_LIGHT distance_m=",distance_m," shadow_pixels=",sun_pixels," lamp_pixels=",lamp_pixels," old_shadow_pixels=",old_shadow_pixels)
+	check(sun_pixels>70 and old_shadow_pixels<10 and lamp_pixels>70,"Actual GPU shadow and lantern pool are visible from %d metres"%int(distance_m))
 	view.free();city.update_lighting(.5)
 
 func light_frame(view: SubViewport) -> Image:
@@ -184,8 +362,14 @@ func run() -> void:
 	check_river_banks(city)
 	check_court_steps(city)
 	check_stair_ground(city)
+	check_house_floors(city)
+	await check_planted_edges(city)
+	check_wall_caps(city)
+	check_room_occlusion(city)
+	await check_face_distance(city)
 	check_lanterns(city)
-	await check_distant_light(city)
+	await check_distant_light(city,90.)
+	await check_distant_light(city,150.)
 	check(city.npcs.size()==40+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Forty residents, all shopkeepers and all interiors")
 	var street: Node=city.get_node("StreetLife")
 	session.state().time=8.*150.

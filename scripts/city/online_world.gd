@@ -216,7 +216,8 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 	if row.get("npc",false):
 		var presence: float=row.get("presence",1)
 		actor.set_meta("presence",presence);actor.set_meta("interaction_available",presence>.999 and not sleeping)
-		actor.visible=presence>0 and actor.position.distance_to(city.bunny.position)<65;actor.collision_layer=2 if presence>.999 and not sleeping else 0
+		city.refresh_npc_visibility(actor)
+		actor.collision_layer=2 if presence>.999 and not sleeping else 0
 		if actor.get_meta("equipment",{})!=row.get("equipment",{}):actor.set_meta("equipment",row.equipment);Outfit.apply(actor,row.equipment)
 		if not is_equal_approx(float(actor.get_meta("last_online_presence",-1)),presence):
 			actor.set_meta("last_online_presence",presence)

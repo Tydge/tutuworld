@@ -18,11 +18,10 @@ func build() -> void:
 	var sea: ShaderMaterial=world.get_node("Island").get_meta("sea_material")
 	sea.shader=preload("res://assets/shaders/island_ocean.gdshader")
 	preload("res://scripts/city/water_materials.gd").apply(world)
-	landscape();streets();preload("res://scripts/jade/garden.gd").dress(self)
+	streets();preload("res://scripts/jade/garden.gd").dress(self)
 	for h in J.HOUSES:house(h)
 	shore_landmarks()
 	gardens();preload("res://scripts/jade/streetscape.gd").build(self)
-	preload("res://scripts/jade/landscaping.gd").planting(self)
 	preload("res://scripts/jade/landscaping.gd").quays(self)
 	preload("res://scripts/jade/market_art.gd").dress(self)
 	preload("res://scripts/jade/borders.gd").dress(self)
@@ -33,13 +32,25 @@ func build() -> void:
 	for berth in [Vector2(-88,6.2),Vector2(-128,-5.7),Vector2(20.,5.8),Vector2(69.,-6.7),Vector2(90.,6.5)]:
 		var draft:=Vector3(berth.x,-.43,J.river_z(berth.x)+berth.y)
 		fixture(world,"jade_sampan",draft,PI*.5+.13*sin(berth.x))
+	var districts:=preload("res://scripts/jade/court_ground.gd").make(world)
+	landscape(districts)
+	var planting=preload("res://scripts/jade/landscaping.gd")
+	var mask: Image=await planting.planting_mask(self)
+	if mask==null or mask.is_empty():
+		push_error("Could not bake the Jade planting mask")
+		quit(1)
+		return
+	planting.planting(self,districts,mask)
 	for h in J.HOUSES:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
 		preload("res://scripts/jade/sight_geometry.gd").bake_room(room)
-		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
+		preload("res://scripts/jade/distant_buildings.gd").bake(room)
+	preload("res://scripts/jade/distant_buildings.gd").finish_textures()
+	preload("res://scripts/jade/crowd_meshes.gd").bake(world)
 	preload("res://scripts/jade/handwork.gd").bake_tools(world)
 	preload("res://scripts/jade/static_colours.gd").bake(world)
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
+	preload("res://scripts/jade/static_colours.gd").bake_fixed_shadows(world)
 	preload("res://scripts/jade/static_colours.gd").bake_shadow_sections(world)
 	var site:=group(world,"JadeBuildingSite");preload("res://scripts/building/site.gd").build_signs(site,"jade")
 	if not await preload("res://scripts/jade/navigation_bake.gd").bake(self,world):push_error("Incomplete Jade navigation survey");quit(1);return
@@ -60,9 +71,9 @@ func landmesh(st: SurfaceTool,pos: Vector3,material: Material,id: String,solid: 
 		var body:=StaticBody3D.new();body.collision_layer=8;body.collision_mask=0;m.add_child(body)
 		var col:=CollisionShape3D.new();col.shape=mesh_.create_trimesh_shape();body.add_child(col)
 	return m
-func landscape() -> void:
+func landscape(districts: Image) -> void:
 	var grass:=ShaderMaterial.new();grass.shader=preload("res://assets/shaders/jade_ground.gdshader");grass.set_shader_parameter("stone",preload("res://assets/jade/masonry.png"));grass.set_shader_parameter("turf",preload("res://assets/terrain/woodland/forest_turf_v1.png"));grass.set_shader_parameter("paving",preload("res://assets/jade/courtyard_flags.png"));grass.set_shader_parameter("earth",preload("res://assets/terrain/packed_earth_path_v1.png"))
-	grass.set_shader_parameter("courts",preload("res://scripts/jade/court_ground.gd").make())
+	grass.set_shader_parameter("courts",ImageTexture.create_from_image(districts))
 	for z0 in range(-216,216,36):
 		for x0 in range(-252,252,36):
 			var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -74,8 +85,14 @@ func landscape() -> void:
 			var ground:=landmesh(st,Vector3(x0,0,z0),grass,"Terrace",true)
 			preload("res://scripts/jade/processional_court.gd").trim_covered_earth(ground)
 	preload("res://scripts/jade/hills.gd").build(self)
-func fixture(parent: Node3D,kind: String,p: Vector3,angle:=0.) -> Node3D:
-	var n:=group(parent,kind,p);n.rotation.y=angle;A.prop(n,kind);n.set_meta("furniture_kind",kind);return n
+func fixture(parent: Node3D,kind: String,p: Vector3,angle:=0.,bay_width:=4.62) -> Node3D:
+	var n:=group(parent,kind,p);n.rotation.y=angle
+	if kind=="jade_gallery":
+		preload("res://scripts/jade/garden.gd").make(n,kind,true,bay_width)
+		n.set_meta("veranda_paving",Rect2(-bay_width*.5,-1.55,bay_width,3.1))
+	else:A.prop(n,kind)
+	n.set_meta("furniture_kind",kind)
+	return n
 func streets() -> void:
 	var dock:=group(world,"SouthPier",Vector3(0,J.DOCK_HEIGHT,206.5))
 	preload("res://scripts/jade/wharf_field.gd").wharf(self,dock)
@@ -161,7 +178,8 @@ func house(h: Array) -> void:
 	var shop:=str(h[0]) in J.shops();var d:=A.dims(h[4])
 	var n:=group(world,("Shop_" if shop else "Hall_")+h[0],J.point(J.center(h).x,h[3]));n.rotation.y=J.door_angle(h)
 	n.set_script(preload("res://scripts/jade/room.gd"));n.shell_kind=h[4];n.floor_size=Vector2(d.x*2.,d.z*2.);n.wall_height=d.y;n.set_meta("building_definition",h[0])
-	A.shell(n,h[4])
+	A.shell(n,h[4],true)
+	n.get_node("Front").set_meta("shell_children",n.get_node("Front").get_child_count())
 	var nameplate:=G.text3d(n,h[1],Vector3(0,d.y-.60,d.z+.62),52,Color("ffdfa0"));nameplate.name="HouseName";nameplate.double_sided=false
 	var base:=Vector3(d.x*2+.65,.46,d.z*2+.75)
 	A.mesh_part(n,"RoomFloor"+h[4],func(m):
@@ -194,7 +212,7 @@ func house(h: Array) -> void:
 		for i in upper.size():
 			var obj:=place_furniture(furnishing,upper[i],i,d.y)
 			if h[0]=="silk" and i==0:mark_dye(obj)
-	var lamp:=OmniLight3D.new();lamp.name="RoomLight";lamp.position=Vector3.UP*3.;lamp.light_color=Color("ffdfa0");lamp.omni_range=8.;lamp.distance_fade_enabled=true;lamp.distance_fade_begin=18.;lamp.distance_fade_length=8.;furnishing.add_child(lamp)
+	var lamp:=OmniLight3D.new();lamp.name="RoomLight";lamp.position=Vector3.UP*3.;lamp.light_color=Color("ffdfa0");lamp.omni_range=8.;lamp.distance_fade_enabled=true;lamp.distance_fade_begin=28.;lamp.distance_fade_length=15.;furnishing.add_child(lamp)
 func prop_depth(kind: String) -> float:
 	return preload("res://scripts/building/catalog.gd").OBJECTS[kind].size.y
 func mark_dye(obj: Node3D) -> void:

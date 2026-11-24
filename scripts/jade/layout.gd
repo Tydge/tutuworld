@@ -87,8 +87,39 @@ static func prepare_foundations() -> void:
 				var key:=Vector2i(gx,gz)
 				if not foundations.has(key):foundations[key]=[]
 				foundations[key].append(pad)
+static var floor_caps: Dictionary={}
+static func prepare_floor_caps() -> void:
+	for house in HOUSES:
+		var c:=center(house)
+		var datum:=foundation_height(c.x,c.y)
+		var d:=dims(house[4])
+		var angle:=door_angle(house)
+		var floors: Array=[[c,Vector2(d.x+.325,d.z+.375)]]
+		if house[4]=="court":
+			floors.append([c+Vector2(-d.x-1.95,-d.z*.42+.3).rotated(-angle),Vector2(1.975,d.z*.58)])
+		for floor_ in floors:
+			var at: Vector2=floor_[0]
+			var half: Vector2=floor_[1]
+			var reach:=half.length()+5.6
+			for x in range(floori((at.x-reach)/24.),floori((at.x+reach)/24.)+1):
+				for z in range(floori((at.y-reach)/24.),floori((at.y+reach)/24.)+1):
+					var key:=Vector2i(x,z)
+					if not floor_caps.has(key):floor_caps[key]=[]
+					floor_caps[key].append([at,angle,half,datum])
+
 static func height_at(x: float,z: float) -> float:
 	prepare_foundations()
+	if floor_caps.is_empty():prepare_floor_caps()
+	var height:=foundation_height(x,z)
+	for cap in floor_caps.get(Vector2i(floori(x/24.),floori(z/24.)),[]):
+		if height<=cap[3]:continue
+		var local_: Vector2=(Vector2(x,z)-cap[0]).rotated(cap[1])
+		var distance: float=(local_.abs()-cap[2]).max(Vector2.ZERO).length()
+		# Every vertex of a 2 m terrain triangle touching a floor fits inside this diagonal.
+		height=lerpf(cap[3],height,smoothstep(2.83,5.3,distance))
+	return height
+
+static func foundation_height(x: float,z: float) -> float:
 	var height:=raw_height(x,z);var point_:=Vector2(x,z)
 	var closest:=5.
 	for pad in foundations.get(Vector2i(floori(x/24.),floori(z/24.)),[]):

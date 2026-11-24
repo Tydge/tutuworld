@@ -63,7 +63,7 @@ static func flight(m: Node3D,side: int,hand: float,rails: bool) -> void:
 			for k in range(7):
 				A.column(m,start.lerp(end,k/6.)+Vector3(edge*1.02,.45,0),.055,.90)
 		return
-	A.paint(m,Vector3(side*HALF,HEIGHT-.10,side*hand*1.53),Vector3(2.16,.2,1.70),"lacquer")
+	A.paint(m,Vector3(side*HALF,HEIGHT-.10,side*hand*1.84),Vector3(2.16,.2,1.08),"lacquer")
 	for edge in [-1.,1.]:
 		var stringer:=Vector3(edge*.96,-.17,0)
 		A.beam(m,start+stringer,end+stringer,.23,"64433b")

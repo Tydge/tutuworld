@@ -6,7 +6,7 @@ static func lamplight(world: Node3D,wick: Vector3,colour: Color,reach: float) ->
 	var light:=OmniLight3D.new()
 	light.name="LanternPool";light.position=wick;light.light_color=colour
 	light.omni_range=reach;light.light_specular=.42;light.shadow_enabled=false
-	light.distance_fade_enabled=true;light.distance_fade_begin=64.;light.distance_fade_length=48.
+	light.distance_fade_enabled=true;light.distance_fade_begin=104.;light.distance_fade_length=64.
 	light.set_meta("street_lamp",true);world.add_child(light)
 static func build(builder: SceneTree) -> void:
 	var world: Node3D=builder.world
@@ -15,7 +15,7 @@ static func build(builder: SceneTree) -> void:
 		for side in [-1.,1.]:
 			for i in range(12):
 				if z==J.PALACE_GATE_Z and i<2:continue
-				var x: float=side*(12.7+i*4.15);var p:=J.point(x,z)
+				var x: float=side*(12.7+i*4.15);var p:=J.point(x,z)+Vector3.UP*.06
 				builder.fixture(world,"jade_rail",p)
 				var plinth:=A.paint(world,p+Vector3(0,-1.15,.03),Vector3(4.146,2.30,1.),"masonry")
 				plinth.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_ON
@@ -23,7 +23,7 @@ static func build(builder: SceneTree) -> void:
 		for side in [-1,1]:
 			if z> -143 and z< -126:continue
 			var p:=J.point(side*80.,z)
-			builder.fixture(world,"jade_gallery",p,PI*.5)
+			builder.fixture(world,"jade_gallery",p,PI*.5,3.988)
 	# Thirteen street posts and seven shop or palace thresholds share the original light budget.
 	var door_lights: Dictionary={"ferry":-1.,"tavern":1.,"farm":-1.,"spice":1.,"tools":-1.,"tea":1.,"audience":1.}
 	for h in J.HOUSES:
@@ -75,7 +75,7 @@ static func build(builder: SceneTree) -> void:
 	# Connect the northern palace wings with garden courts, groves and real narrow covered walks.
 	for i in range(11):
 		for side in [-1.,1.]:
-			var x: float=side*(20.+i*4.2);builder.fixture(world,"jade_gallery",J.point(x,-184.))
+			var x: float=side*(20.+i*4.2);builder.fixture(world,"jade_gallery",J.point(x,-184.),0.,4.188)
 	for bz in [-159.,-136.,-109.]:
 		for side in [-1,1]:
 			builder.fixture(world,"jade_basin",J.point(side*10.,bz))

@@ -70,7 +70,18 @@ var applied_warmth:=-1.
 var applied_ambient_day:=-1.
 var applied_sun_day:=-1.
 var applied_interior:=-1.
+
+var occlusion_view: Viewport
+var previous_occlusion:=false
+
+func _exit_tree() -> void:
+	if is_instance_valid(occlusion_view):occlusion_view.use_occlusion_culling=previous_occlusion
+	super._exit_tree()
+
 func prepare_scenery() -> void:
+	occlusion_view=get_viewport()
+	previous_occlusion=occlusion_view.use_occlusion_culling
+	occlusion_view.use_occlusion_culling=true
 	# Stars and clouds are drawn to the screen. Only the broad sky gradient
 	# enters the reflection cubemap, just as it does on the harbour map.
 	var sky: Sky=scenery.get_node("Atmosphere").environment.sky
@@ -112,9 +123,9 @@ func set_sunlight(day: float) -> void:
 	if is_equal_approx(applied_sun_day,day):return
 	if applied_sun_day<0.:
 		# Keep a detailed near cascade and let the outer cascade span the district.
-		sun.directional_shadow_max_distance=132.
-		sun.directional_shadow_split_1=.15
-		sun.directional_shadow_fade_start=.76
+		sun.directional_shadow_max_distance=216.
+		sun.directional_shadow_split_1=.093
+		sun.directional_shadow_fade_start=.80
 		sun.shadow_normal_bias=.28;sun.shadow_bias=.035;sun.shadow_blur=1.45
 	applied_sun_day=day
 	sun.light_color=Color("a9b4c7").lerp(Color("ffebcf"),day)
@@ -132,24 +143,58 @@ func update_neighbour_detail() -> void:
 	if not is_instance_valid(bunny):return
 	for npc in npcs:
 		var distance: float=npc.position.distance_squared_to(bunny.position)
-		npc.distant_pose_interval=.14 if distance>65.*65. else (.055 if distance>35.*35. else (1./30. if distance>21.*21. else 0.))
+		if distance>65.*65.:
+			# Far behind the camera, only the patrol position is needed each tick.
+			# Keep advancing ongoing actions and resume the normal pose rate on approach.
+			var behind: bool=is_instance_valid(camera) and camera.is_position_behind(npc.position)
+			npc.distant_pose_interval=.35 if behind else .14
+		else:
+			npc.distant_pose_interval=.055 if distance>35.*35. else (1./30. if distance>21.*21. else 0.)
+func optimize_npc(actor: CharacterBody3D) -> void:
+	var models: Dictionary=scenery.get_meta("resident_meshes",{})
+	if models.is_empty():
+		super.optimize_npc(actor)
+	else:
+		preload("res://scripts/jade/crowd_meshes.gd").apply(actor,models)
+
+var face_inks: Dictionary={}
+
+func preserve_ink(part: MeshInstance3D,dot_eye: bool) -> void:
+	var base:=part.material_override as StandardMaterial3D
+	if not base:return
+	var key: Array=[base,dot_eye]
+	if not face_inks.has(key):
+		var ink:=ShaderMaterial.new()
+		ink.shader=preload("res://assets/shaders/jade_face_ink.gdshader")
+		ink.set_shader_parameter("ink",base.albedo_color)
+		ink.set_shader_parameter("roughness",base.roughness)
+		ink.set_shader_parameter("dot_eye",dot_eye)
+		face_inks[key]=ink
+	part.material_override=face_inks[key]
+	part.lod_bias=4.
+
 func set_crowd_detail(actor: CharacterBody3D) -> void:
-	# Keep bodies, ears, robes and hats visible across the fields. Tiny overlapping
-	# face details and their shadow casters only contribute from closer cameras.
+	var mouth:=actor.get_node_or_null("Visual/Head/Mouth/EmbroideredMouth") as MeshInstance3D
+	if mouth:preserve_ink(mouth,false)
+	var eyes:=actor.get_node("Visual/Head/Eyes")
+	if eyes.has_node("DotEye"):
+		for dot: MeshInstance3D in eyes.get_children():preserve_ink(dot,true)
+	var head:=actor.get_node("Visual/Head")
 	for part: MeshInstance3D in actor.find_children("*","MeshInstance3D",true,false):
 		if not part.mesh:continue
 		var box:=Transform3D(part.global_basis,Vector3.ZERO)*part.get_aabb()
-		var size_:=box.size[box.size.max_axis_index()]
-		var reach:=0.
-		if part.name=="InkOutline":reach=48.
-		elif size_<.27:reach=30.
-		elif size_<.48:reach=43.
-		if reach>0.:
-			part.visibility_range_end=reach
-			part.visibility_range_end_margin=3.
-		if size_<.18:part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var extent:=box.size[box.size.max_axis_index()]
+		# Painted eyes, brows, muzzle and mouth follow the head at every distance.
+		# Animated ear contours and clothing retain their own detail ranges.
+		if part.name=="InkOutline":
+			part.visibility_range_end=88.
+		elif not head.is_ancestor_of(part) and extent<.48:
+			part.visibility_range_end=75. if extent<.27 else 105.
+		part.visibility_range_end_margin=3.
+		if extent<.18:part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	for label: Label3D in actor.find_children("*","Label3D",true,false):
-		label.visibility_range_end=38.;label.visibility_range_end_margin=3.
+		label.visibility_range_end=50.;label.visibility_range_end_margin=3.
+
 func register_city(client: bool) -> void:
 	preload("res://scripts/jade/architecture.gd").baked.merge(scenery.get_meta("occupation_meshes",{}),true)
 	for fixture in scenery.get_node("Shop_spice/Front").get_children():

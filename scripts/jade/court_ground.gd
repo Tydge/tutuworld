@@ -1,5 +1,5 @@
 extends RefCounted
-## Offline district painting. Red lays stone aprons, green joins alleys, blue shelters the eaves.
+## Offline district painting. RGB encodes stone aprons, alleys and eave shade. Alpha marks masonry walks.
 const J=preload("res://scripts/jade/layout.gd")
 const SIZE=1024
 const HALF=256.
@@ -21,8 +21,22 @@ static var alleys: Array=FIELD_PATHS+[
 	[Vector2(-8,-99),Vector2(-25,-90),Vector2(-45,-96),Vector2(-55,-118),Vector2(-50,-139),Vector2(-67,-156)],
 	[Vector2(8,-99),Vector2(24,-91),Vector2(44,-96),Vector2(51,-115),Vector2(52,-138),Vector2(64,-154)]]
 static func coord(v: float) -> int:return clampi(floori((v+HALF)*2.),0,SIZE-1)
-static func make() -> Texture2D:
-	var img:=Image.create_empty(SIZE,SIZE,false,Image.FORMAT_RGB8)
+# The fourth channel lays continuous masonry under low open walkways.
+static func paving(img: Image,center: Vector2,yaw: float,size_: Vector2) -> void:
+	var reach:=size_.length()*.5+.5
+	for y in range(coord(center.y-reach),coord(center.y+reach)+1):
+		for x in range(coord(center.x-reach),coord(center.x+reach)+1):
+			var local_:=(Vector2(x+.5,y+.5)*.5-Vector2(HALF,HALF)-center).rotated(yaw)
+			var edge:=local_.abs()-size_*.5
+			var coverage:=1.-smoothstep(-.2,.2,maxf(edge.x,edge.y))
+			var colour:=img.get_pixel(x,y)
+			if coverage>colour.a:
+				colour.a=coverage
+				img.set_pixel(x,y,colour)
+
+static func make(world: Node3D) -> Image:
+	var img:=Image.create_empty(SIZE,SIZE,false,Image.FORMAT_RGBA8)
+	img.fill(Color(0,0,0,0))
 	for h in J.HOUSES:
 		var c:=J.center(h);var ang:=J.door_angle(h);var d:=J.dims(h[4])
 		var royal: bool=h[3]<-82
@@ -39,7 +53,7 @@ static func make() -> Texture2D:
 				var apron:=1.-smoothstep(.15,1.2,yard.max(Vector2.ZERO).length())
 				var shade: float=(1.-smoothstep(.0,1.85,over))*.68
 				var col:=img.get_pixel(x,y)
-				img.set_pixel(x,y,Color(maxf(apron,col.r),col.g,maxf(shade,col.b)))
+				img.set_pixel(x,y,Color(maxf(apron,col.r),col.g,maxf(shade,col.b),0.))
 	for alley in alleys:
 		var path:=Curve2D.new()
 		for i in range(alley.size()):
@@ -53,6 +67,18 @@ static func make() -> Texture2D:
 					var p:=Vector2(ix+.5,iy+.5)*.5-Vector2(HALF,HALF)
 					var wear:=1.-smoothstep(1.47,2.65,p.distance_to(pos))
 					var col:=img.get_pixel(ix,iy)
-					if wear>col.g:img.set_pixel(ix,iy,Color(col.r,wear,col.b))
+					if wear>col.g:img.set_pixel(ix,iy,Color(col.r,wear,col.b,0.))
+	for part in world.get_children():
+		if not part.has_meta("veranda_paving"):continue
+		var rect: Rect2=part.get_meta("veranda_paving")
+		var at:=rect.get_center()
+		var point: Vector3=part.to_global(Vector3(at.x,0,at.y))
+		paving(img,Vector2(point.x,point.z),part.rotation.y,rect.size*Vector2(part.scale.x,part.scale.z))
+		part.remove_meta("veranda_paving")
+	for row in J.TERRACES:
+		for end in [-1,1]:
+			for j in range(7):
+				var z: float=(row[1] if end<0 else row[2])-end*(j+.5)*.95
+				paving(img,Vector2(J.lane(z)+row[0]*11.7,z),0.,Vector2(3.8,.95))
 	img.generate_mipmaps()
-	return ImageTexture.create_from_image(img)
+	return img

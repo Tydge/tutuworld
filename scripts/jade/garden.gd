@@ -3,9 +3,10 @@ const G=preload("res://scripts/geometry.gd")
 const P=preload("res://scripts/city/prop_collisions.gd")
 const J=preload("res://scripts/jade/layout.gd")
 const NAMES={"jade_moon_gate":"粉墙月洞门","jade_market_stall":"布蓬货摊","jade_silk_stall":"锦缎布摊","jade_gallery":"园林折廊","jade_rockery":"太湖叠石","jade_pool":"曲水荷池","jade_quay":"石砌驳岸","jade_pier":"南津栈桥","jade_span":"白石桥面"}
-static func make(n: Node3D,kind: String) -> void:
+static func make(n: Node3D,kind: String,city_gallery:=false,bay_width:=4.62) -> void:
 	var a=load("res://scripts/jade/architecture.gd")
-	a.mesh_part(n,kind,draw_model.bind(kind))
+	var model: String="gallery_posts" if city_gallery else kind
+	a.mesh_part(n,model+str(bay_width) if city_gallery else kind,draw_model.bind(model,bay_width))
 	match kind:
 		"jade_moon_gate":
 			for side in [-1,1]:P.box(n,"GardenWall",Vector3(side*3.1,1.85,0),Vector3(2.3,3.7,.54))
@@ -18,13 +19,14 @@ static func make(n: Node3D,kind: String) -> void:
 			var roof: Node3D=a.group(rig,"Canopy")
 			roof.set_meta("camera_canopy",true)
 			a.mesh_part(roof,"gallery_roof",draw_model.bind("gallery_roof"))
+			roof.get_node("Joinery").scale.x=bay_width/4.62
 			preload("res://scripts/jade/sight_geometry.gd").bake_room(rig,["Canopy"])
 			for x in [-2.,2.]:
-				for z in [-1.3,1.3]:P.cylinder(n,"Post",Vector3(x,1.6,z),.14,3.2)
+				for z in [-1.3,1.3]:P.cylinder(n,"Post",Vector3(x*bay_width/4.62,1.6,z),.14,3.2)
 		"jade_rockery":P.cylinder(n,"Stone",Vector3.UP*.6,1.25,1.2)
 		"jade_quay":P.box(n,"Quay",Vector3.UP*.96,Vector3(4.2,1.92,.8))
 		"jade_span","jade_pier":G.solid_box(n,Vector3.DOWN*.09,Vector3(8.9,.2,3.02) if kind=="jade_span" else Vector3(4.2,.28,3.6)).collision_layer=8
-static func draw_model(m: Node3D,kind: String) -> void:
+static func draw_model(m: Node3D,kind: String,bay_width:=4.62) -> void:
 	var a=load("res://scripts/jade/architecture.gd")
 	match kind:
 		"jade_moon_gate":
@@ -32,7 +34,7 @@ static func draw_model(m: Node3D,kind: String) -> void:
 				for i in range(16):
 					var y: float=(i+.5)*.2375
 					var gap:=sqrt(maxf(0.,1.79*1.79-pow(y-1.65,2)))
-					a.paint(m,Vector3(side*(4.2+gap)*.5,y,0),Vector3(4.2-gap,.239,.52),"lime")
+					a.paint(m,Vector3(side*(4.2+gap)*.5,y,0),Vector3(4.2-gap,.2375,.52),"lime")
 				for k in range(17):
 					var t: float=k*PI/17.;var u: float=(k+1)*PI/17.
 					a.beam(m,Vector3(side*1.81*sin(t),1.65+1.81*cos(t),.30),Vector3(side*1.81*sin(u),1.65+1.81*cos(u),.30),.16,"8b8271")
@@ -55,10 +57,10 @@ static func draw_model(m: Node3D,kind: String) -> void:
 				for k in range(-6,7):a.beam(m,Vector3(k*.35,4.18,0),Vector3(k*.35,3.37,side*1.84),.10,"76583b")
 			a.box(m,Vector3.UP*4.34,Vector3(4.62,.14,.19),"718079")
 			a.paint(m,Vector3(0,3.18,1.32),Vector3(4.3,.32,.33),"polychrome")
-		"jade_gallery":
-			a.paint(m,Vector3(0,.055,0),Vector3(4.5,.10,3.1),"masonry")
+		"jade_gallery","gallery_posts":
+			if kind=="jade_gallery":a.paint(m,Vector3(0,.055,0),Vector3(4.5,.10,3.1),"masonry")
 			for x in [-2.,2.]:
-				for z in [-1.3,1.3]:G.cylinder(m,Vector3(x,1.7,z),.14,3.4,a.finish("lacquer"))
+				for z in [-1.3,1.3]:G.cylinder(m,Vector3(x*bay_width/4.62,1.7,z),.14,3.4,a.finish("lacquer"))
 		"jade_rockery":preload("res://scripts/jade/water_garden.gd").scholar_stones(m)
 		"jade_pool":preload("res://scripts/jade/water_garden.gd").pond(m)
 		"jade_quay":

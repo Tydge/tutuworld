@@ -18,6 +18,7 @@ const Props=preload("res://scripts/city/work_props.gd")
 const FurnitureAccess=preload("res://scripts/city/furniture_access.gd")
 const ConversationAccess=preload("res://scripts/city/conversation_access.gd")
 @export var map_id:="city"
+@export var npc_view_distance:=65.
 var preparing := false
 var session: Node
 var scenery: Node3D
@@ -330,6 +331,9 @@ func spawn_npc(id: String,label_: String,p: Vector3,equipment: Dictionary,specie
 	label.outline_modulate=Color("557963")
 	npcs.append(n)
 	return n
+func refresh_npc_visibility(actor: Node3D) -> void:
+	actor.visible=float(actor.get_meta("presence",1.))>0. and actor.position.distance_squared_to(bunny.position)<npc_view_distance*npc_view_distance
+
 func _process(delta: float) -> void:
 	if preparing: return
 	if is_instance_valid(build_mode) and build_mode.active:return
@@ -367,7 +371,7 @@ func _process(delta: float) -> void:
 	if lighting_timer>=.5:
 		lighting_timer=0
 		update_lighting()
-		for n in npcs: n.visible=float(n.get_meta("presence",1.0))>0 and n.position.distance_to(bunny.position)<65
+		for n in npcs:refresh_npc_visibility(n)
 	session.set_player_position(sleep_exit if sleep_active else bunny.position)
 	marker.visible=current_target!="" and not paused and not sleep_active and session.job().is_empty() and not hud.photo_mode
 	if marker.visible: marker.position=target_position(current_target)+Vector3(0,1.5+sin(clock*3)*.08,0)

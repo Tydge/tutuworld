@@ -224,7 +224,7 @@ static func dims(kind: String) -> Vector3:return preload("res://scripts/jade/lay
 static func facade_lantern(span: float,height: float,depth: float,side: float) -> Vector3:
 	return Vector3(side*(span-.5),height-1.28,depth+.74)
 const POST_LANTERN:=Vector3(.79,3.08,0)
-static func shell(n: Node3D,kind: String) -> void:
+static func shell(n: Node3D,kind: String,city_floor:=false) -> void:
 	var d:=dims(kind);var w:=d.x;var h:=d.y;var z:=d.z;var royal:=kind in ["palace","court"]
 	var wood:=RED if royal or kind=="loft" else WOOD
 	var pigment: String={"store":"ac8c63","forge":"736959","cloister":"718c83","inn":"a1846b","cottage":"ae9169","clocktower":"8d7066","court":"d1a085","palace":"db9880"}.get(kind,"ba9686")
@@ -246,7 +246,7 @@ static func shell(n: Node3D,kind: String) -> void:
 		mesh_part(section,kind+face,func(m):
 			for side in [-1,1]:
 				var gap:=1.65 if front or (kind=="court" and face=="West") else 0.
-				wall_panel(m,Vector3(side*(span+gap)*.5,h*.45,depth),Vector3(span-gap,h*.9,.26),"lacquer" if royal else ("plaster" if kind in ["store","forge","inn","cloister","loft"] else "lime"))
+				wall_panel(m,Vector3(side*(span+gap)*.5,(h*.9+.8)*.5,depth),Vector3(span-gap,h*.9-.8,.26),"lacquer" if royal else ("plaster" if kind in ["store","forge","inn","cloister","loft"] else "lime"))
 				paint(m,Vector3(side*(span+gap)*.5,.40,depth+.015),Vector3(span-gap,.80,.32),"masonry")
 				var window:=Vector3(side*span*.64,h*.51,depth+.17)
 				if front and kind in ["store","forge"] and side<0:
@@ -257,8 +257,8 @@ static func shell(n: Node3D,kind: String) -> void:
 				for j in [-1,1]:
 					box(interior,Vector3(j*span*.25,0,.08),Vector3(.095,h*.43,.10),WOOD)
 					box(interior,Vector3(0,j*h*.215,.08),Vector3(span*.52,.095,.12),WOOD)
-				paint(m,Vector3(side*(span+gap)*.5,.42,depth-.175),Vector3(span-gap,.76,.083),"lacquer")
-				paint(m,Vector3(side*(span+gap)*.5,h*.85,depth-.174),Vector3(span-gap,.42,.11),"cloud_beam")
+				paint(m,Vector3(side*(span+gap)*.5,.42,depth-.175),Vector3(span-gap-.035,.72,.083),"lacquer")
+				paint(m,Vector3(side*(span+gap)*.5,h*.85,depth-.174),Vector3(span-gap-.035,.42,.11),"cloud_beam")
 				for k in [-1,1]:
 					box(m,Vector3(side*(span*.73+k*span*.154),h*.44,depth-.21),Vector3(.125,h*.86,.15),WOOD)
 			for field in range(4):
@@ -299,8 +299,8 @@ static func shell(n: Node3D,kind: String) -> void:
 		for side in [-1,1]:
 			var gap:=1.72 if front or (kind=="court" and face=="West") else 0.
 			P.box(section,"Wall",Vector3(side*(span+gap)*.5,h*.5,depth),Vector3(span-gap,h,.30))
-	if kind=="court":preload("res://scripts/jade/pavilions.gd").side_wing(n,w,h,z)
-	if kind in ["loft","inn","clocktower"]:preload("res://scripts/jade/joinery.gd").upper_floor(n,w,h,z)
+	if kind=="court":preload("res://scripts/jade/pavilions.gd").side_wing(n,w,h,z,.325 if city_floor else 0.)
+	if kind in ["loft","inn","clocktower"]:preload("res://scripts/jade/joinery.gd").upper_floor(n,w,h,z,city_floor)
 	if kind=="clocktower":
 		mesh_part(exterior,"bell_turret",func(m):
 			var top:=h+4.5
@@ -315,7 +315,7 @@ static func shell(n: Node3D,kind: String) -> void:
 			for j in range(3):G.cylinder(m,Vector3(0,top+.48+j*.26,0),.94-j*.08,.11,bell)
 			roof(m,3.64,3.65,2.4,top+3.6,false)
 			G.cylinder(m,Vector3.UP*(top+6.3),.21,.68,G.mat(GOLD),.06))
-	if kind in ["forge","cloister","pavilion","store","cottage"]:preload("res://scripts/jade/joinery.gd").veranda(n,kind,w,h,z)
+	if kind in ["forge","cloister","store","cottage"]:preload("res://scripts/jade/joinery.gd").veranda(n,kind,w,h,z,city_floor)
 static func prop(n: Node3D,kind: String) -> void:
 	if preload("res://scripts/jade/room_furniture.gd").SIZES.has(kind):
 		preload("res://scripts/jade/room_furniture.gd").make(n,kind)

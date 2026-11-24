@@ -1,7 +1,7 @@
 extends RefCounted
 const G=preload("res://scripts/geometry.gd")
 const P=preload("res://scripts/city/prop_collisions.gd")
-static func upper_floor(n: Node3D,w: float,h: float,d: float) -> void:
+static func upper_floor(n: Node3D,w: float,h: float,d: float,city_floor: bool) -> void:
 	var art=load("res://scripts/jade/architecture.gd")
 	var deck: Node3D=art.group(n,"UpperFloor")
 	var roof: Node3D=art.group(n.get_node("Exterior"),"UpperRoof")
@@ -42,15 +42,23 @@ static func upper_floor(n: Node3D,w: float,h: float,d: float) -> void:
 	P.box(deck,"Rail",Vector3(0,h+.50,d+.88),Vector3(w*2.,1.,.18))
 	var run:=2.*d+1.;var x:=w+1.86
 	var stair: Node3D=art.group(n,"OutsideStair");var start:=Vector3(x,.08,-d-1.)
-	var a:=start;var b:=start+Vector3(0,h,run)
-	art.mesh_part(stair,"OutsideFlight"+str(Vector3(w,h,d)),func(m):
+	var b:=start+Vector3(0,h,run)
+	# A neighbouring terrace can sit below the house. Seat the first tread
+	# on the baked ground and keep the last one level with the upper landing.
+	if city_floor:
+		var foot:=n.to_global(start)
+		var ground: float=preload("res://scripts/jade/layout.gd").terrain_floor(foot)
+		start.y+=minf(0.,snappedf(ground-n.global_position.y,.01))
+	var a:=start
+	var rise:=b.y-a.y
+	art.mesh_part(stair,"OutsideFlight"+str(Vector3(w,rise,d)),func(m):
 		for i in range(24):
 			var t: float=(i+.5)/24.
-			G.box(m,start+Vector3(0,h*t-.08,t*run),Vector3(2.35,.16,run/24.),art.finish("lacquer"))
+			G.box(m,a.lerp(b,t)-Vector3.UP*.08,Vector3(2.35,.16,run/24.),art.finish("lacquer"))
 		art.beam(m,a+Vector3(1.13,.94,0),b+Vector3(1.13,.94,0),.13,"95653d")
 		for i in range(7):
 			var pos:=a.lerp(b,i/6.)+Vector3(1.13,.49,0);art.box(m,pos,Vector3(.12,.98,.12),"864a37"))
-	var slope:=G.solid_box(stair,(a+b)*.5-Vector3.UP*.13,Vector3(2.35,.25,a.distance_to(b)));slope.rotation.x=-atan2(h,run);slope.collision_layer=8
+	var slope:=G.solid_box(stair,(a+b)*.5-Vector3.UP*.13,Vector3(2.35,.25,a.distance_to(b)));slope.rotation.x=-atan2(rise,run);slope.collision_layer=8
 	# The outer landing starts at the edge of the existing upper boards.
 	var deck_edge:=w+.6
 	var outer_edge:=w+2.85
@@ -59,20 +67,22 @@ static func upper_floor(n: Node3D,w: float,h: float,d: float) -> void:
 	# The short return beyond the deck's front edge also belongs to the landing.
 	art.box(deck,Vector3((w-.95+deck_edge)*.5,h-.13,d+1.035),Vector3(deck_edge-(w-.95),.26,.09),"8d5a3e")
 	G.solid_box(deck,Vector3(w+.95,h-.13,d+.28),Vector3(3.8,.26,1.6)).collision_layer=8
-static func veranda(n: Node3D,kind: String,w: float,h: float,d: float) -> void:
+static func veranda(n: Node3D,kind: String,w: float,h: float,d: float,city_floor: bool) -> void:
 	var art=load("res://scripts/jade/architecture.gd")
 	var frame: Node3D=art.group(n.get_node("Exterior"),"CourtGallery")
 	var left:=kind in ["cloister","forge","cottage"];var width:=3.3 if left else w*1.8
 	var center:=Vector3(-w-1.35,0,1.6) if left else Vector3(0,0,d+1.8)
 	var depth:=d+2.2 if left else 2.
-	art.mesh_part(frame,"veranda_"+kind,func(m):
+	art.mesh_part(frame,"veranda_"+kind+str(city_floor),func(m):
 		var wing: Node3D=art.group(m,"Wing",center)
 		art.roof(wing,width*.5+.65,depth+.48,1.3,h*.76,false)
-		art.paint(wing,Vector3(0,.025,0),Vector3(width+.4,.10,2*depth),"masonry")
+		if not city_floor:
+			art.paint(wing,Vector3(0,.025,0),Vector3(width+.4,.10,2*depth),"masonry")
 		for sx in [-1,1]:
 			for sz in [-1,0,1]:
 				var p:=Vector3(sx*width*.5,h*.38,sz*depth)
 				G.cylinder(wing,p,.13,h*.76,art.finish("lacquer"))
 				G.cylinder(wing,Vector3(p.x,.16,p.z),.20,.32,G.mat("b1a38a")))
+	if city_floor:n.set_meta("veranda_paving",Rect2(Vector2(center.x-(width+.4)*.5,center.z-depth),Vector2(width+.4,2*depth)))
 	for sx in [-1,1]:
 		for sz in [-1,0,1]:P.cylinder(n,"ColonnadePost",center+Vector3(sx*width*.5,h*.37,sz*depth),.14,h*.74)

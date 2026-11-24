@@ -36,5 +36,5 @@ static func build() -> ArrayMesh:
 	leaves.set_shader_parameter("follow_game_camera",true)
 	trunk.index();trunk.generate_normals();trunk.set_material(bark);pine=trunk.commit();needles.index();needles.set_material(leaves);needles.commit(pine);return pine
 static func place(n: Node3D) -> void:
-	var shape:=G.mesh(n,build(),Vector3.ZERO,null,"SweepingPine");shape.visibility_range_end=240.
+	var shape:=G.mesh(n,build(),Vector3.ZERO,null,"SweepingPine");shape.visibility_range_end=640.
 	preload("res://scripts/city/prop_collisions.gd").cylinder(n,"PineTrunk",Vector3.UP*1.65,.47,3.3)

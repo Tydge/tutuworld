@@ -6,6 +6,7 @@ const Sight=preload("res://scripts/jade/sight_geometry.gd")
 @export var wall_height:=4.7
 const floor_level:=.08
 var city: Node3D
+@onready var wall_occluder:=get_node_or_null("OpaqueWalls") as OccluderInstance3D
 var inside:=false
 var using_cutaway:=false
 var distant_proxy: MeshInstance3D
@@ -24,21 +25,30 @@ func update_lighting(day: float) -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(city) or not is_instance_valid(city.camera):return
 	if not is_instance_valid(distant_proxy):distant_proxy=get_node_or_null("DistantShell") as MeshInstance3D
-	var radius:=40.0 if distant_proxy and distant_proxy.visible else 45.0
-	var detail: bool=not distant_proxy or city.camera.global_position.distance_squared_to(global_position)<radius*radius
+	var p:=to_local(city.bunny.global_position)
+	var near_room:=p.length_squared()<760.
+	if wall_occluder:wall_occluder.visible=not near_room
+	var eye:=to_local(city.camera.global_position)
+	var outside:=(Vector2(eye.x,eye.z).abs()-floor_size*.5).max(Vector2.ZERO)
+	var height:=maxf(0.,absf(eye.y-wall_height*.5)-wall_height*.5)
+	var distance_sq:=outside.length_squared()+height*height
+	# Solid side and rear walls fully hide furnishings from the street. Open
+	# theatres, pavilions, side courts and upper galleries can be seen from other sides.
+	var open_side:=eye.z>floor_size.y*.5 or shell_kind in ["theatre","pavilion","court","loft","clocktower","inn"]
+	var see_inside:=distance_sq<38.*38. and open_side
+	var radius:=36. if distant_proxy and distant_proxy.visible else 43.
+	var detail: bool=not distant_proxy or distance_sq<radius*radius
 	if distant_proxy and distant_proxy.visible==detail:
 		distant_proxy.visible=not detail;using_cutaway=false
 		for part in get_children():
-			if part is Node3D and part!=distant_proxy and part!=$Furnishing:part.visible=detail
+			if part is Node3D and part!=distant_proxy and part!=wall_occluder and part!=$Furnishing:part.visible=detail
 	if not detail:
-		$Furnishing.visible=false
+		$HouseName.visible=distance_sq<84.*84.
+		$Furnishing.visible=see_inside
 		inside=false;interior_weight=0.;return
-	var p:=to_local(city.bunny.global_position)
 	inside=contains_position(city.bunny.global_position)
 	interior_weight=move_toward(interior_weight,1. if inside else 0.,delta*5.)
-	var near_room:=p.length_squared()<760.
-	$Furnishing.visible=near_room
-	var eye:=to_local(city.camera.global_position)
+	$Furnishing.visible=near_room or see_inside
 	var view:=preload("res://scripts/city/interior_view.gd").mode(city)
 	var cut:=near_room and view!=1
 	if not cut and not using_cutaway:return

@@ -17,15 +17,18 @@ static func dress(builder: SceneTree) -> void:
 		var back:=tx+side*13.55
 		for i in range(4):
 			var pos:=J.point(back,tz-5.6+i*3.86)
-			builder.fixture(builder.world,"jade_gallery",pos,PI*.50)
+			builder.fixture(builder.world,"jade_gallery",pos,PI*.50,3.848)
 		var end:=tz-10.25
 		for i in range(2):
 			var pos:=J.point(tx+side*(2.2+i*4.1),end)
-			builder.fixture(builder.world,"jade_gallery",pos)
+			builder.fixture(builder.world,"jade_gallery",pos,0.,4.088)
 	for side in [-1.,1.]:
 		for j in range(5):
-			var z: float=-82.+j*4.22;var x: float=side*(39.5+2.7*sin(j*.48))
-			builder.fixture(builder.world,"jade_court_wall",J.point(x,z),PI*.47*side)
+			var a:=Vector2(side*(39.5+2.7*sin((j-.5)*.48)),-82.+(j-.5)*4.22)
+			var b:=Vector2(side*(39.5+2.7*sin((j+.5)*.48)),-82.+(j+.5)*4.22)
+			var center:=a.lerp(b,.5)
+			var wall: Node3D=builder.fixture(builder.world,"jade_court_wall",J.point(center.x,center.y),-(b-a).angle())
+			wall.scale.x=(a.distance_to(b)-.06)/4.65
 		for j in range(3):
 			var pos:=J.point(side*(32.+j*3.7),-78.+.58*j)
 			builder.fixture(builder.world,"jade_bamboo",pos)

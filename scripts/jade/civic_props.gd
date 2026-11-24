@@ -17,10 +17,10 @@ static func draw(m: Node3D,id: String) -> void:
 			var royal:=id=="jade_palace_wall";var w:=4. if royal else 4.65;var h:=3.2 if royal else 2.22
 			if royal:
 				var plaster:=a.finish("lime").duplicate() as StandardMaterial3D
-				plaster.albedo_color=Color("ac5446");G.box(m,Vector3.UP*h*.50,Vector3(w,h,.66),plaster)
+				plaster.albedo_color=Color("ac5446");G.box(m,Vector3.UP*(h+.32)*.5,Vector3(w,h-.32,.66),plaster)
 				a.paint(m,Vector3(0,h-.32,.345),Vector3(w,.24,.06),"stone_relief")
 			else:
-				a.paint(m,Vector3.UP*.42,Vector3(w,.84,.43),"lime")
+				a.paint(m,Vector3.UP*.58,Vector3(w,.52,.43),"lime")
 				a.paint(m,Vector3.UP*(h-.18),Vector3(w,.36,.43),"lime")
 				for side in [-1,1]:a.paint(m,Vector3(side*(w*.5-.615),(h-.36+.84)*.5,0),Vector3(1.23,h-.36-.84,.43),"lime")
 				for j in range(-4,5):
