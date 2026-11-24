@@ -1,8 +1,8 @@
 shader_type spatial;
 render_mode unshaded,cull_disabled;
 #include "res://assets/shaders/jade_mountain_air.gdshaderinc"
-uniform sampler2D hillside : source_color,repeat_enable,filter_linear_mipmap;
-uniform sampler2D forest : source_color,repeat_disable,filter_linear_mipmap;
+uniform sampler2D hillside : source_color,repeat_enable,filter_linear_mipmap_anisotropic;
+uniform sampler2D forest : source_color,repeat_enable,filter_linear_mipmap_anisotropic;
 uniform vec3 sun_direction = vec3(.46,.65,.60);
 varying float relief;
 varying vec3 air_tint;
@@ -19,15 +19,18 @@ void vertex() {
 }
 void fragment() {
 	vec2 slope_uv=mountain_position.xz+mountain_position.y*vec2(.35,.69);
-	float stone=dot(texture(hillside,slope_uv*.036).rgb,vec3(.24,.64,.12));
-	// A small, fully opaque patch of painted woodland gives the 3D ridges
-	// the same scale of foliage as the far mountains. Map it across the
-	// slope in metres so the texture follows the ground as the camera moves.
-	vec2 land=mat2(vec2(.87,.50),vec2(-.50,.87))*mountain_position.xz;
-	vec2 tile=land*vec2(.047,.038)-vec2(0.,mountain_position.y*.09);
-	vec2 mirrored=1.-abs(mod(tile,2.)-1.);
-	vec3 trees=texture(forest,vec2(.395,.80)+mirrored*vec2(.075,.116)).rgb;
-	vec3 ground=mix(COLOR.rgb,trees,.48)*(.89+.67*stone);
+	vec3 moss=texture(hillside,slope_uv*.036).rgb;
+	vec3 weights=abs(normalize(cross(dFdx(mountain_position),dFdy(mountain_position))));
+	weights/=max(dot(weights,vec3(1.)),.001);
+	vec3 turf=texture(forest,mountain_position.yz*.12).rgb*weights.x
+		+texture(forest,mountain_position.xz*.12).rgb*weights.y
+		+texture(forest,mountain_position.xy*.12).rgb*weights.z;
+	float clearings=smoothstep(.12,.47,dot(texture(forest,mountain_position.xz*.019).rgb,vec3(.27,.62,.11)));
+	float spur=sin(mountain_position.x*.065+mountain_position.z*.044+2.6*sin(mountain_position.z*.023));
+	float exposed=smoothstep(.03,.24,1.-weights.y)*smoothstep(-.45,.55,spur+.65*clearings);
+	vec3 ground=COLOR.rgb*.56+mix(turf*vec3(.43,.54,.48),moss*vec3(.41,.43,.36),.37);
+	ground=mix(ground,moss*vec3(.74,.76,.71),exposed*.7);
+	ground*=.78+.40*clearings+.12*spur;
 	ground*=mix(vec3(.25,.255,.28),vec3(.84,.88,.80),mountain_day)*(.78+.33*relief);
 	ALBEDO=mix(ground,air_tint,air_amount);
 }

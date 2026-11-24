@@ -42,10 +42,9 @@ static func fit(root: Node3D,rig: Resource,item: Dictionary,cloth: Material) -> 
 	else:
 		root.position=rig.body_center
 		var r: Vector3=rig.body_radii
-		var wide:=style in ["aurora_coat","tide_mantle"]
-		var cape:=style=="tide_mantle";var length_:=.33 if cape else (.91 if wide else .67)
+		var length_:=.33 if style=="tide_mantle" else .91
 		var key: String=rig.species_id+style
-		var rows: Array=[Vector3(-r.y*length_,r.x*(1.21 if wide else .91)+.02,r.z*(1.19 if wide else .91)+.02),Vector3(-r.y*.36,r.x*1.05+.02,r.z*1.05+.025),Vector3(0,r.x*1.07+.02,r.z*1.07+.03),Vector3(r.y*.42,r.x+.025,r.z+.033),Vector3(r.y*.74,r.x*.81+.02,r.z*.81+.03),Vector3(r.y*.93,r.x*.53+.02,r.z*.53+.03)]
+		var rows: Array=[Vector3(-r.y*length_,r.x*1.21+.02,r.z*1.19+.02),Vector3(-r.y*.36,r.x*1.05+.02,r.z*1.05+.025),Vector3(0,r.x*1.07+.02,r.z*1.07+.03),Vector3(r.y*.42,r.x+.025,r.z+.033),Vector3(r.y*.74,r.x*.81+.02,r.z*.81+.03),Vector3(r.y*.93,r.x*.53+.02,r.z*.53+.03)]
 		G.mesh(root,Shell.shell(key,rows),Vector3.ZERO,cloth,"CrossedRobe")
 		var hem: Vector3=rows[0];G.mesh(root,Shell.shell(key+"hem",[hem+Vector3(-.007,.004,.004),hem+Vector3(.032,.007,.007)]),Vector3.ZERO,trim)
 		for side in [-1,1]:
@@ -54,15 +53,14 @@ static func fit(root: Node3D,rig: Resource,item: Dictionary,cloth: Material) -> 
 				var t:=i/8.;var x: float=side*r.x*(.40-.69*t)
 				var y: float=r.y*(.78-.84*t)
 				var z: float=r.z*sqrt(maxf(.15,1.-pow(x/(1.09*r.x),2)-pow(y/(r.y*1.13),2)))+.065
-				var next:=Vector3(x,y,z);thread(root,last,next,.024 if wide else .016,trim);last=next
+				var next:=Vector3(x,y,z);thread(root,last,next,.024,trim);last=next
 		var sash:=rows[2] as Vector3
 		G.mesh(root,Shell.shell(key+"sash",[Vector3(-.065,sash.y+.012,sash.z+.008),Vector3(-.014,sash.y+.014,sash.z+.010)]),Vector3.ZERO,trim)
-		if wide:
-			for j in range(7):
-				var a: float=(j-3)*.34
-				var p:=Vector3(sin(a)*hem.y*.999,hem.x+.067,cos(a)*hem.z*1.02)
-				if style=="aurora_coat":G.ball(root,p,Vector3.ONE*.023,gold)
-				else:thread(root,p,p+Vector3(.054,.035,.008),.011,trim)
+		for j in range(7):
+			var a: float=(j-3)*.34
+			var p:=Vector3(sin(a)*hem.y*.999,hem.x+.067,cos(a)*hem.z*1.02)
+			if style=="aurora_coat":G.ball(root,p,Vector3.ONE*.023,gold)
+			else:thread(root,p,p+Vector3(.054,.035,.008),.011,trim)
 
 		extra_layers(root,rig,item,cloth,trim,gold)
 
@@ -79,11 +77,10 @@ static func pleated_overlay(root: Node3D,r: Vector3,cloth: Material) -> void:
 static func extra_layers(root: Node3D,rig: Resource,item: Dictionary,cloth: Material,trim: Material,gold: Material) -> void:
 	var r: Vector3=rig.body_radii;var style: String=item.style;var key: String=style+rig.species_id
 	if style=="aurora_coat":pleated_overlay(root,r,cloth)
-	if style in ["tide_mantle","aurora_coat"]:
-		var length_:=.12 if style=="aurora_coat" else .38
-		G.mesh(root,Shell.shell(key+"capelet",[Vector3(r.y*length_,r.x*1.30+.06,r.z*1.21+.045),Vector3(r.y*.57,r.x*1.06+.04,r.z*1.02+.05),Vector3(r.y*.86,r.x*.64+.026,r.z*.70+.03)]),Vector3.ZERO,cloth,"Mantle")
-		for j in range(17):
-			var angle:=j*TAU/17.
-			var p:=Vector3(sin(angle)*(r.x*1.30+.06),r.y*length_,cos(angle)*(r.z*1.21+.045))
-			var q:=p+Vector3(sin(angle)*.006,-.080-.040*cos(angle*3.),cos(angle)*.006)
-			thread(root,p,q,.009,trim);G.ball(root,q,Vector3(.011,.018,.011),gold)
+	var length_:=.12 if style=="aurora_coat" else .38
+	G.mesh(root,Shell.shell(key+"capelet",[Vector3(r.y*length_,r.x*1.30+.06,r.z*1.21+.045),Vector3(r.y*.57,r.x*1.06+.04,r.z*1.02+.05),Vector3(r.y*.86,r.x*.64+.026,r.z*.70+.03)]),Vector3.ZERO,cloth,"Mantle")
+	for j in range(17):
+		var angle:=j*TAU/17.
+		var p:=Vector3(sin(angle)*(r.x*1.30+.06),r.y*length_,cos(angle)*(r.z*1.21+.045))
+		var q:=p+Vector3(sin(angle)*.006,-.080-.040*cos(angle*3.),cos(angle)*.006)
+		thread(root,p,q,.009,trim);G.ball(root,q,Vector3(.011,.018,.011),gold)

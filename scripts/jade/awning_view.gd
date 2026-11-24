@@ -18,6 +18,9 @@ func _process(_delta: float) -> void:
 	if actor.length_squared() > 28.*28.:
 		cloth.visible = true
 		return
+	if preload("res://scripts/city/interior_view.gd").mode(city)==1:
+		cloth.visible=true
+		return
 	var eye := to_local(camera.global_position)
 	var section: Array = sight_sections.get("Canopy",[])
 	cloth.visible = not (Sight.obscures(section,actor + Vector3.UP*1.1,eye) or Sight.clips_lens(section,self,eye,camera))

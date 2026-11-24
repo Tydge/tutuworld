@@ -450,6 +450,7 @@ func update_target() -> void:
 		if t.kind=="boat":distance=preload("res://scripts/services/map_routes.gd").boarding_distance(map_id,bunny.position)
 		if t.kind=="dining" and t.has("node"):
 			distance=preload("res://scripts/city/dining_service.gd").proximity(self,id)
+		if t.kind not in ["bed","bench"] and (distance>=float(t.radius) or distance>=nearest):continue
 		if t.kind=="kitchen" and t.has("node") and not facility_access(id):continue
 		if t.kind in ["tailor","atlas","hearth","tea","bakery","stamp","chime","read","footwork","jade_game"] and not activity_access(id,t.kind):continue
 		if t.kind in ["shop","npc"] and distance<float(t.radius) and not ConversationAccess.can_talk(self,bunny,t):continue
@@ -468,7 +469,10 @@ func update_target() -> void:
 				text="E   选择种子，播种" if p.crop=="" else "E   照料 %s · %d%%"%[DB.crop(p.crop).name,int(float(p.growth)/(float(DB.crop(p.crop).days)*3600)*100)]
 			"land": text="E   查看"+preload("res://scripts/building/parcels.gd").title(t.parcel_id)+" · 100贝壳币"
 			"home_door": text="E   "+("轻轻关上门" if t.get("node",home).door_open else "推开门，走进"+t.get("name","海风小屋"))
-			"well": text="E   打水 · 2 秒 · 水量 %d/%d"%[session.authority.water_left(),DB.water_capacity(session.authority.watering_can_id())]
+			"landmark": text="E   "+t.label
+			"well":
+				var can: String=session.authority.watering_can_id()
+				text="E   打水 · 2 秒 · 水量 %d/%d"%[session.authority.water_left(),DB.water_capacity(can)] if can!="" else ("打水需水壶 · 南市百炼铺有售" if map_id=="jade" else "打水需水壶 · 工具店有售")
 			"workshop": text="E   制造工作台 · 制造道具"
 			"kitchen": text="E   "+t.get("name","海风小厨房")+" · 烹饪料理"
 			"dining": text="E   入座用餐 · 选择料理"
@@ -625,7 +629,11 @@ func interact() -> void:
 			if t.has("node") and not facility_access(current_target):update_target();return
 			kitchen_target=current_target;hud.open_panel("kitchen")
 		"workshop": hud.open_panel("workshop")
-		"well": begin_action("refill",current_target)
+		"landmark":
+			var hour:=fposmod(float(session.state().time),3600.)/150.
+			hud.notify(t.day_text if hour>=6. and hour<18. else t.night_text)
+		"well":
+			if session.authority.watering_can_id()!="":begin_action("refill",current_target)
 		"dining":
 			dining_target=current_target;hud.open_panel("dining")
 		"bed": enter_sleep()

@@ -33,7 +33,12 @@ static func nearest_on(points: PackedVector2Array,p: Vector2) -> Vector2:
 		if d<distance_:best=candidate;distance_=d
 	return best
 func ocean_point(p: Vector2) -> Vector3:
-	if city.map_id=="jade":return Vector3(clampf(p.x,-236.,236.),0.,209.)
+	if city.map_id=="jade":
+		const Jade=preload("res://scripts/jade/layout.gd")
+		var edge:=p.clamp(-Jade.LIMIT,Jade.LIMIT)
+		if Jade.LIMIT.x-absf(p.x)<Jade.LIMIT.y-absf(p.y):edge.x=Jade.LIMIT.x*signf(p.x)
+		else:edge.y=Jade.LIMIT.y*(1. if p.y>=0. else -1.)
+		return Vector3(edge.x,Jade.SEA_LEVEL,edge.y)
 	if city.map_id=="icefield":return Vector3(clampf(p.x,-100.,150.),-.5,157.)
 	if city.map_id=="valley":return Vector3(-26.,-.5,108.)
 	var point:=nearest_on(shore,p)

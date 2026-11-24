@@ -173,7 +173,8 @@ func check_river_banks(city: Node3D) -> void:
 func run() -> void:
 	var dir:=preload("res://tests/test_support.gd").output_dir()
 	var session:=preload("res://scripts/services/session.gd").new();session.name="Session";root.add_child(session)
-	session.create_character("玉京游记","bunny","bell_red");session.state().time=1800.
+	check(session.create_character("玉京游记","bunny","scarf_red").ok,"Create the island traveller before boarding")
+	session.state().time=1800.
 	session.authority.add("ferry_coat",1);session.dispatch("equip",{"slot":"body","item":"ferry_coat"})
 	session.state().player_position=[Routes.dock("city").x,.15,Routes.dock("city").y]
 	var coins: int=session.state().coins

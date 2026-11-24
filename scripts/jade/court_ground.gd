@@ -3,7 +3,14 @@ extends RefCounted
 const J=preload("res://scripts/jade/layout.gd")
 const SIZE=1024
 const HALF=256.
-const ALLEYS=[
+const FIELD_PATHS=[
+	[Vector2(108,26),Vector2(109,35),Vector2(103,51),Vector2(98,73),Vector2(98,111),Vector2(98,143)],
+	[Vector2(67,111),Vector2(98,111),Vector2(131,111),Vector2(164,111)],
+	[Vector2(109,35),Vector2(134,43),Vector2(155,42),Vector2(172,40),Vector2(189,55),Vector2(202,73)],
+	[Vector2(-67,-182),Vector2(-104,-189),Vector2(-144,-192),Vector2(-175,-194)],
+	[Vector2(-175,-194),Vector2(-103,-199),Vector2(0,-194),Vector2(88,-198),Vector2(143,-193),Vector2(198,-192)],
+	[Vector2(64,-183),Vector2(88,-198)]]
+static var alleys: Array=FIELD_PATHS+[
 	[Vector2(-7,25),Vector2(-22,19),Vector2(-43,17),Vector2(-74,19),Vector2(-108,18)],
 	[Vector2(6,27),Vector2(25,19),Vector2(48,19),Vector2(55,31),Vector2(80,39),Vector2(110,23)],
 	[Vector2(-8,-33),Vector2(-29,-32),Vector2(-49,-27),Vector2(-68,-27),Vector2(-87,-24),Vector2(-108,-24)],
@@ -33,7 +40,7 @@ static func make() -> Texture2D:
 				var shade: float=(1.-smoothstep(.0,1.85,over))*.68
 				var col:=img.get_pixel(x,y)
 				img.set_pixel(x,y,Color(maxf(apron,col.r),col.g,maxf(shade,col.b)))
-	for alley in ALLEYS:
+	for alley in alleys:
 		var path:=Curve2D.new()
 		for i in range(alley.size()):
 			var tangent:=Vector2.ZERO

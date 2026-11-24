@@ -55,6 +55,7 @@ var meal_duration:=6.0
 var seated := false
 var was_on_floor := true
 var facing := 0.0
+var walking_intent:=Vector2.ZERO
 var can_move := true
 const PLAYER_WALK_SPEED:=3.5
 var move_speed := PLAYER_WALK_SPEED
@@ -264,10 +265,11 @@ func _physics_process(delta: float) -> void:
 	if network_client_prediction:movement_predicted.emit(direction,jump,run_enabled)
 func simulate_movement(delta: float,direction: Vector3,jump: bool,feedback: bool=true,replay: bool=false) -> void:
 	is_running=false
-	if seated:velocity=Vector3.ZERO;walking=false;return
+	if seated:velocity=Vector3.ZERO;walking=false;walking_intent=Vector2.ZERO;return
 	var text_entry: bool=world.has_method("is_text_entry_active") and world.is_text_entry_active()
 	if not can_move or action!="" or (not replay and (world.paused or text_entry)):direction=Vector3.ZERO;jump=false
 	direction=direction.limit_length(1)
+	walking_intent=Vector2(direction.x,direction.z)
 	if not replay and not emote.is_empty() and (direction.length_squared()>.01 or jump):stop_emote()
 	var grounded: bool=is_on_floor() if network_restore_grounded==null else bool(network_restore_grounded)
 	network_restore_grounded=null

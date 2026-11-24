@@ -20,6 +20,7 @@ func build() -> void:
 	preload("res://scripts/city/water_materials.gd").apply(world)
 	landscape();streets();preload("res://scripts/jade/garden.gd").dress(self)
 	for h in J.HOUSES:house(h)
+	shore_landmarks()
 	gardens();preload("res://scripts/jade/streetscape.gd").build(self)
 	preload("res://scripts/jade/landscaping.gd").planting(self)
 	preload("res://scripts/jade/landscaping.gd").quays(self)
@@ -27,7 +28,7 @@ func build() -> void:
 	preload("res://scripts/jade/borders.gd").dress(self)
 	preload("res://scripts/jade/shopfront.gd").dress(self)
 	preload("res://scripts/jade/processional_court.gd").dress(self)
-	for pos in [Vector2(-9.4,-141),Vector2(9.4,-141),Vector2(-13.,-158),Vector2(13.,-158),Vector2(123,-36),Vector2(-116,-36)]:
+	for pos in [Vector2(-9.4,-141),Vector2(9.4,-141),Vector2(-13.,-158),Vector2(13.,-158),Vector2(123,-36),Vector2(-125,-53)]:
 		fixture(world,"jade_crane",J.point(pos.x,pos.y),-.85 if pos.x>0 else .85)
 	for berth in [Vector2(-88,6.2),Vector2(-128,-5.7),Vector2(20.,5.8),Vector2(69.,-6.7),Vector2(90.,6.5)]:
 		var draft:=Vector3(berth.x,-.43,J.river_z(berth.x)+berth.y)
@@ -36,6 +37,7 @@ func build() -> void:
 		var room:=world.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0]) as Node3D
 		preload("res://scripts/jade/sight_geometry.gd").bake_room(room)
 		preload("res://scripts/jade/distant_buildings.gd").bake(room,h[4]+":"+h[5]+":"+str(preload("res://scripts/jade/shopfront.gd").FRONT_GOODS.get(h[0],"")))
+	preload("res://scripts/jade/handwork.gd").bake_tools(world)
 	preload("res://scripts/jade/static_colours.gd").bake(world)
 	preload("res://scripts/jade/distant_buildings.gd").batch_fixtures(world)
 	preload("res://scripts/jade/static_colours.gd").bake_shadow_sections(world)
@@ -75,7 +77,7 @@ func landscape() -> void:
 func fixture(parent: Node3D,kind: String,p: Vector3,angle:=0.) -> Node3D:
 	var n:=group(parent,kind,p);n.rotation.y=angle;A.prop(n,kind);n.set_meta("furniture_kind",kind);return n
 func streets() -> void:
-	var dock:=group(world,"SouthPier",Vector3(0,2.05,206.5))
+	var dock:=group(world,"SouthPier",Vector3(0,J.DOCK_HEIGHT,206.5))
 	preload("res://scripts/jade/wharf_field.gd").wharf(self,dock)
 	G.solid_box(dock,Vector3(0,-.12,0),Vector3(7,.24,13)).collision_layer=8
 	for bz in [194.,38.,J.PALACE_GATE_Z,-145.]:
@@ -209,9 +211,34 @@ func place_furniture(parent: Node3D,row: Array,index: int,height:=0.) -> Node3D:
 	obj.name=("Gallery_" if height>0. else "")+kind+"_"+str(index)
 	obj.position=Vector3(row[1],height+(float(row[3]) if row.size()>3 else 0.),row[2])
 	return obj
+func shore_landmarks() -> void:
+	for id in J.LANDMARKS:
+		var mark: Dictionary=J.LANDMARKS[id]
+		var site:=group(world,"Shore_"+id,J.point(mark.at.x,mark.at.y))
+		match id:
+			"tide_stone":
+				A.paint(site,Vector3(0,.16,-.9),Vector3(2.8,.32,1.8),"masonry")
+				A.paint(site,Vector3(0,1.66,-.9),Vector3(1.7,2.8,.67),"stone_relief")
+				for i in range(3):
+					A.box(site,Vector3(-.48,1.+i*.39,-.55),Vector3(.42-i*.08,.045,.05),"694f42")
+				G.text3d(site,"水\n则",Vector3(.24,1.95,-.54),58,Color("362d28"))
+				G.solid_box(site,Vector3(0,1.45,-.9),Vector3(1.7,2.9,.67))
+			"beacon":
+				fixture(world,"jade_gallery",site.position)
+				for x in [-1.88,1.88]:fixture(site,"jade_lamp",Vector3(x,0,-1.9))
+				G.text3d(site,"听 潮",Vector3(0,2.73,1.46),51,Color("e0bf7f"))
+			"east_fork":
+				A.box(site,Vector3(.9,1.2,0),Vector3(.18,2.4,.18),"6c523e")
+				for i in range(2):
+					var y:=2.16-i*.49
+					A.paint(site,Vector3(.9,y,0),Vector3(3.05,.44,.15),"lacquer")
+					var sign_:=G.text3d(site,["六里宅地　南","东野采场　东"][i],Vector3(.9,y,.09),41,Color("f5e2b4"))
+					sign_.double_sided=false
+					var reverse:=G.text3d(site,sign_.text,Vector3(.9,y,-.09),41,Color("f5e2b4"))
+					reverse.rotation.y=PI
 func gardens() -> void:
 	# Asymmetrical group planting draws the edge of each walled court and its river garden.
-	for p in [Vector2(-85,-151),Vector2(-76,-144),Vector2(-64,-149),Vector2(-53,-143),Vector2(-45,-155),Vector2(-40,-161),Vector2(44,-157),Vector2(53,-146),Vector2(65,-152),Vector2(71,-145),Vector2(79,-150),Vector2(-56,-110),Vector2(-51,-103),Vector2(-36,-112),Vector2(41,-111),Vector2(55,-107),Vector2(66,-97),Vector2(-80,-84),Vector2(86,-82),Vector2(123,-30),Vector2(133,-48),Vector2(127,-58),Vector2(117,-56),Vector2(96,-51),Vector2(92,-31),Vector2(90,-20),Vector2(-123,-40),Vector2(-127,-34),Vector2(-120,-58),Vector2(-92,-47),Vector2(-129,-25),Vector2(67,22),Vector2(-61,17),Vector2(-86,21),Vector2(132,23)]:
+	for p in [Vector2(-85,-151),Vector2(-76,-144),Vector2(-64,-149),Vector2(-53,-143),Vector2(-45,-155),Vector2(-40,-161),Vector2(44,-157),Vector2(53,-146),Vector2(65,-152),Vector2(71,-145),Vector2(79,-150),Vector2(-56,-110),Vector2(-51,-103),Vector2(-36,-112),Vector2(41,-111),Vector2(55,-107),Vector2(66,-97),Vector2(-80,-84),Vector2(86,-82),Vector2(123,-30),Vector2(133,-48),Vector2(127,-58),Vector2(117,-56),Vector2(96,-51),Vector2(92,-31),Vector2(90,-20),Vector2(-133,-60),Vector2(-136,-29),Vector2(-120,-58),Vector2(-92,-47),Vector2(-129,-25),Vector2(67,22),Vector2(-61,17),Vector2(-86,21),Vector2(132,23)]:
 		tree_at_jade(p.x,p.y,4)
 	for i in range(460):
 		var x:=rng.randf_range(-228,228);var z:=rng.randf_range(-197,196)
@@ -223,6 +250,12 @@ func gardens() -> void:
 		for side in [-1,1]:
 			tree_at_jade(side*(18. if z<0 else 28.),z,1 if z<0 else 2)
 func tree_at_jade(x: float,z: float,variant: int) -> void:
-	if J.near_entrance(x,z):return
+	var p:=Vector2(x,z)
+	for landmark in J.LANDMARKS.values():
+		if p.distance_to(landmark.at)<7.:return
+	for path in preload("res://scripts/jade/court_ground.gd").FIELD_PATHS:
+		for i in range(1,path.size()):
+			if Geometry2D.get_closest_point_to_segment(p,path[i-1],path[i]).distance_to(p)<3.6:return
+	if Rect2(-130,-55,18,18).has_point(p) or J.near_entrance(x,z):return
 	var t:=group(world,"Grove",J.point(x,z));t.set_meta("grove",true);t.rotation.y=rng.randf_range(0,TAU);t.scale=Vector3.ONE*rng.randf_range(.79,1.23)
 	preload("res://scripts/jade/grove.gd").place(t,variant,true)

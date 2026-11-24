@@ -228,7 +228,7 @@ func _apply(c: Dictionary) -> Dictionary:
 		if not job.is_empty(): return fail("先完成手上的事情吧。")
 		if verb=="buy":
 			if definition.get("shop_map",map_id)!=map_id:return fail("请到玉京城的店铺购买。" if definition.shop_map=="jade" else "这件冬装在绒雪裁缝店出售。")
-			if not definition.has("price") or definition.get("shop","")!=c.get("shop",""): return fail("这家店没有这件物品。")
+			if not DB.sold_here(definition,shop,map_id): return fail("这家店没有这件物品。")
 			if definition.kind=="clothing":
 				if DB.Clothes.stock(definition.style).item!=item:return fail("店里按款式出售，配色可以到试衣镜调整。")
 				if DB.Clothes.shop_garment(definition.style,state.inventory)!=item:return fail("这款衣服已经拥有啦。")

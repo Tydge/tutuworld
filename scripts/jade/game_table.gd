@@ -14,6 +14,7 @@ var surface: Control
 var controls: GridContainer
 var status: Label
 var heading: Label
+var show_pattern:=false
 var listening:=false
 var submitting:=false
 var received:=false
@@ -47,6 +48,9 @@ func start(owner_hud: CanvasLayer,id: String) -> void:
 	var footer:=UI.row();add_child(footer)
 	heading=UI.label("",17);heading.size_flags_horizontal=SIZE_EXPAND_FILL;footer.add_child(heading)
 	if board.game in ["melody","memory","tune"]:footer.add_child(UI.button("再听一遍" if board.game!="memory" else "再看一次",demonstrate))
+	if board.game=="stitch":
+		var toggle:=CheckButton.new();toggle.text="显示笔顺" if board.house=="caligraphy" else "显示针序";footer.add_child(toggle)
+		toggle.toggled.connect(func(on: bool):show_pattern=on;surface.queue_redraw())
 	if board.game!="courier":footer.add_child(UI.button("重开一局",reset))
 	set_process(board.game=="forge" or (board.game=="sluice" and not hud.session.settings.reduce_motion))
 	refresh()
@@ -66,7 +70,7 @@ func touch_table(event: InputEvent) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or not event is InputEventKey or not event.pressed or event.echo or board.done:return
 	var i: int=event.keycode-KEY_1
-	if i>=0 and i<board.options().size():
+	if i>=0 and i<controls.get_child_count():
 		press(i);get_viewport().set_input_as_handled()
 func gesture() -> void:
 	var poses: Dictionary={"forge":"forge_strike","weave":"draw_thread","stitch":"draw_thread","mirror":"draw_thread","pigment":"cook","jugs":"refill","wheel":"plane_wood","proof":"read_scroll","verse":"read_scroll","clock":"bell","melody":"bell","tune":"bell","memory":"bell","weights":"sort_seed","divide":"cook","sluice":"plane_wood","allot":"read_scroll"}
@@ -102,6 +106,9 @@ func tone(hz: float) -> void:
 	hud.city.play_tone(hz,.30,.15)
 func press(i: int) -> void:
 	if listening or submitting or board.moves.size()>=Board.MAX_MOVES and not board.done:return
+	if board.game=="courier" and hud.session.state().jade_visits.letter==board.house:
+		status.text="送到桥边的驿路茶棚，舆图已圈出收信处。" if board.house=="hostel" else "送到南市旧渡驿舍，舆图已圈出收信处。"
+		return
 	if board.game=="courier" or board.done:submit();return
 	if not hud.city.activity_access(target,"jade_game"):hud.close_panel();return
 	var choice:=int(pulse) if board.game=="forge" else i
@@ -208,12 +215,14 @@ func paint() -> void:
 						circle(p,17.,JADE if i!=goal[2] else Color("886c58"))
 						word(p+Vector2(-9,6),"舟" if i==v[0] else ("旗" if i==goal[1] else ("礁" if i==goal[2] else "≈")),17,Color("214544"))
 					else:
-						circle(p,13.,GOLD if i in goal else Color("67867b"))
+						circle(p,13.,RED if board.game=="stitch" and i==goal[0] else (GOLD if i in goal else Color("67867b")))
 						word(p+Vector2(-5,6),str(i+1),15,Color("294642"))
 				if two:word(origin+Vector2(4,129),"底样" if side==0 else "手中",19)
 			if board.game in ["stitch","stars"]:
-				for i in range(1,goal.size()):stroke(base+dots(goal[i-1]),base+dots(goal[i]),GOLD if i<board.step else Color("779487"),2.)
-				word(Vector2(26,186),"起式   "+"  →  ".join(goal.map(func(n):return str(int(n)+1))),18)
+				for i in range(1,goal.size()):stroke(base+dots(goal[i-1]),base+dots(goal[i]),GOLD if i<board.step else Color("779487"),4. if i<board.step else 2.)
+				if board.game=="stars" or show_pattern:
+					word(Vector2(26,186),"起式   "+"  →  ".join(goal.map(func(n):return str(int(n)+1))),18)
+				else:word(Vector2(26,186),("从朱点起，沿字帖运笔　%d / %d" if board.house=="caligraphy" else "从朱点起，沿底样行针　%d / %d")%[board.step,goal.size()],18)
 			if board.game=="sail":word(Vector2(24,185),"北岸顺东风，向东多漂一格",18)
 		"forge":
 			hit_zones.append(Rect2(0,0,w,200))
@@ -311,7 +320,10 @@ func paint() -> void:
 						if board.game=="press":label_="花" if v[i]==1 else "○"
 						circle(p,36.,Color("906854") if board.picked==i else Color("4c7166"))
 						word(p+Vector2(-label_.length()*10.,7),label_,20)
-						if board.game in ["pigment","allot"]:word(Vector2(x-49,177),"%s　%d"%[board.recipe.labels[i],v[i]],17)
+						if board.game=="pigment":
+							circle(Vector2(x,48),10.,[Color("ca5242"),Color("d2a35c"),Color("394442")][i])
+							word(Vector2(x-50,177),"%s　%d / %d"%[board.recipe.labels[i],v[i],goal[i]],17)
+						if board.game=="allot":word(Vector2(x-49,177),"%s　%d"%[board.recipe.labels[i],v[i]],17)
 		"proof":
 			word(Vector2(45,76),"底本",18,JADE);word(Vector2(mid-100,93),board.recipe.labels[mini(board.step,2)],35)
 			word(Vector2(45,154),"抄本",18,RED);word(Vector2(mid-100,162),goal[mini(board.step,2)],35)

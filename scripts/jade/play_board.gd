@@ -50,11 +50,16 @@ func play(choice: int) -> void:
 			var weight:=0
 			for i in range(3):weight+=int(values[i])*int(goal[i])
 			done=weight==goal[3]
-		"pigment","allot":
+		"pigment":
+			if values[choice]>=goal[choice]:
+				note="%s已经够了，这一勺放回碟里。"%recipe.labels[choice]
+			else:values[choice]+=1
+			done=values==goal
+		"allot":
 			values[choice]+=1
 			if values[choice]>goal[choice]:
 				values=[0,0,0]
-				note="这钵色偏了，洗笔再调。" if game=="pigment" else "拨出的签多了，收回来重分。"
+				note="拨出的签多了，收回来重分。"
 			done=values==goal
 		"clock":
 			values[choice]=(int(values[choice])+1)%6

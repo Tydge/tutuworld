@@ -90,6 +90,9 @@ func run() -> void:
 	check(absf(driver.give_way().x)>.9,"An approaching player has walking space")
 	city.bunny.velocity=Vector3.ZERO
 	var book: Dictionary=session.state().jade_visits
+	var lacquer:=Board.new("lacquer")
+	for scoop in [1,0,1]:lacquer.play(scoop)
+	check(lacquer.values==[1,1,0] and "黄土" in lacquer.note,"An excess scoop leaves the other pigments in the bowl")
 	var kinds: Dictionary={}
 	for h in J.HOUSES:
 		var type:=Games.type_for(h[0])
@@ -131,15 +134,26 @@ func run() -> void:
 	check(not session.dispatch("jade_visit",{"target":"jade:oil:Trade","moves":SOLUTIONS.oil}).ok,"Distance checked at settlement")
 	for h in ["hostel","post","post","hostel"]:
 		var key: String="jade:%s:Trade"%h;stand(city.targets[key].position)
-		check(session.dispatch("jade_visit",{"target":key}).ok,"Courier leg "+h)
+		var returning: bool=not book.letter.is_empty()
+		var receipt: Dictionary=session.dispatch("jade_visit",{"target":key})
+		check(receipt.ok and (not returning or ("旧渡驿舍" if h=="hostel" else "驿路茶棚") in receipt.message),"Courier recipient "+h)
 	check(book.marks.size()==Games.STATIONS.size() and book.letter=="","All station seals and round trip")
 	city.hud.open_panel("map")
 	var atlas: Control=city.hud.map_draw
 	var paper_click:=InputEventMouseButton.new()
 	paper_click.button_index=MOUSE_BUTTON_LEFT;paper_click.pressed=true
 	paper_click.position=Vector2(445,233)+Vector2(0,-164)*Vector2(1.45,1.06)
+	var court: Array=J.HOUSES.filter(func(h):return h[0]=="oil")[0]
+	var wing:=J.center(court)+Vector2(-J.dims("court").x-2.,-1.).rotated(-J.door_angle(court))
+	var wing_click:=paper_click.duplicate() as InputEventMouseButton
+	wing_click.position=Vector2(445,233)+wing*Vector2(1.45,1.06)
+	atlas.gui_input.emit(wing_click)
+	check(atlas.get_meta("selected_house","")=="oil","The visible courtyard wing is selectable")
 	atlas.gui_input.emit(paper_click)
 	check(atlas.get_meta("selected_house","")=="audience" and city.hud.content.find_children("*","Label",true,false).any(func(label):return "批三坊用度" in label.text and "已钤印" in label.text),"The atlas identifies the actual palace game and personal seal")
+	city.hud.close_panel()
+	city.hud.open_panel("map")
+	check(city.hud.map_draw.get_meta("selected_house","")=="audience","Reopening the atlas retains the selected destination")
 	city.hud.close_panel()
 	check(session.authority.count("jade_lamp")==1 and session.authority.count("jade_screen")==1 and session.authority.count("jade_chime")==1,"Personal furnishing gifts")
 	for item_id in Games.TAKE_HOME.values():

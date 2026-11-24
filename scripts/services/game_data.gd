@@ -6,6 +6,11 @@ static var _resources: Array = []
 static var _valley_resources: Array=[]
 static var _icefield_resources: Array=[]
 const Valley=preload("res://scripts/valley/valley_layout.gd")
+static func sold_here(definition: Dictionary,shop: String,map_id: String) -> bool:
+	if not definition.has("price") or definition.get("shop","")!=shop:return false
+	if map_id=="jade" and shop=="clothes":return definition.get("shop_map","")=="jade"
+	return definition.get("shop_map",map_id)==map_id
+
 static func catalog() -> Dictionary:
 	if _catalog.is_empty():
 		_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://data/catalog.json"))

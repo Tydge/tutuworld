@@ -13,6 +13,12 @@ static func make(n: Node3D,kind: String) -> void:
 			preload("res://scripts/jade/shopfront.gd").add_awning(n,4.06,2.73,2.91,kind=="jade_silk_stall")
 			P.box(n,"Counter",Vector3(0,.52,0),Vector3(3.5,1.05,1.8))
 		"jade_gallery":
+			var rig: Node3D=a.group(n,"CanvasRig")
+			rig.set_script(preload("res://scripts/jade/awning_view.gd"))
+			var roof: Node3D=a.group(rig,"Canopy")
+			roof.set_meta("camera_canopy",true)
+			a.mesh_part(roof,"gallery_roof",draw_model.bind("gallery_roof"))
+			preload("res://scripts/jade/sight_geometry.gd").bake_room(rig,["Canopy"])
 			for x in [-2.,2.]:
 				for z in [-1.3,1.3]:P.cylinder(n,"Post",Vector3(x,1.6,z),.14,3.2)
 		"jade_rockery":P.cylinder(n,"Stone",Vector3.UP*.6,1.25,1.2)
@@ -42,16 +48,17 @@ static func draw_model(m: Node3D,kind: String) -> void:
 				else:
 					G.cylinder(m,Vector3(x,1.05,.02),.32,.16,G.mat("a57844"),.38)
 					for j in range(6):G.ball(m,Vector3(x+cos(j)*.18,1.19+.035*(j%2),sin(j)*.18),Vector3(.14,.13,.13),G.mat(["ca8347","b95039","88a158","daa748","907057"][k]))
-		"jade_gallery":
+		"gallery_roof":
 			for side in [-1,1]:
 				var panel:=a.paint(m,Vector3(0,3.88,side*.88),Vector3(4.61,.16,2.04),"tiles") as MeshInstance3D;panel.rotation.x=side*.43
 				var lining:=a.paint(m,Vector3(0,3.77,side*.88),Vector3(4.62,.11,2.02),"coffer") as MeshInstance3D;lining.rotation.x=side*.43
 				for k in range(-6,7):a.beam(m,Vector3(k*.35,4.18,0),Vector3(k*.35,3.37,side*1.84),.10,"76583b")
 			a.box(m,Vector3.UP*4.34,Vector3(4.62,.14,.19),"718079")
+			a.paint(m,Vector3(0,3.18,1.32),Vector3(4.3,.32,.33),"polychrome")
+		"jade_gallery":
 			a.paint(m,Vector3(0,.055,0),Vector3(4.5,.10,3.1),"masonry")
 			for x in [-2.,2.]:
 				for z in [-1.3,1.3]:G.cylinder(m,Vector3(x,1.7,z),.14,3.4,a.finish("lacquer"))
-			a.paint(m,Vector3(0,3.18,1.32),Vector3(4.3,.32,.33),"polychrome")
 		"jade_rockery":preload("res://scripts/jade/water_garden.gd").scholar_stones(m)
 		"jade_pool":preload("res://scripts/jade/water_garden.gd").pond(m)
 		"jade_quay":

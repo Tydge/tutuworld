@@ -1,5 +1,7 @@
 shader_type spatial;
-render_mode diffuse_burley,cull_back,depth_draw_never;
+// The far shadow cascade cuts a straight wedge into the open sea. Bank shade
+// and reflected architecture come from the locally baked canal elevations.
+render_mode diffuse_burley,cull_back,depth_draw_never,shadows_disabled;
 #include "res://assets/shaders/painted_water.gdshaderinc"
 uniform sampler2D river_banks:source_color,repeat_disable,filter_linear_mipmap;
 

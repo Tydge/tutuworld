@@ -151,6 +151,7 @@ func set_crowd_detail(actor: CharacterBody3D) -> void:
 	for label: Label3D in actor.find_children("*","Label3D",true,false):
 		label.visibility_range_end=38.;label.visibility_range_end_margin=3.
 func register_city(client: bool) -> void:
+	preload("res://scripts/jade/architecture.gd").baked.merge(scenery.get_meta("occupation_meshes",{}),true)
 	for fixture in scenery.get_node("Shop_spice/Front").get_children():
 		if fixture.get_meta("furniture_kind","")=="jade_steam_table" and not fixture.has_meta("facility_id"):
 			preload("res://scripts/jade/trades.gd").cook_station(fixture)
@@ -165,6 +166,10 @@ func register_city(client: bool) -> void:
 			elif obj.has_node("SleepExit"):
 				targets[id]={"kind":"bed","position":obj.global_position,"node":obj,"radius":1.65}
 				if client:preload("res://scripts/building/bed_comfort.gd").attach(obj,self,id,true)
+	for id in J.LANDMARKS:
+		var landmark: Dictionary=J.LANDMARKS[id].duplicate()
+		landmark.merge({"kind":"landmark","position":J.point(landmark.at.x,landmark.at.y),"radius":3.4})
+		targets[id]=landmark
 	for p in DB.plots("jade"):
 		targets[p.id]={"kind":"plot","position":J.point(p.x,p.z),"radius":2.1}
 		if client:
@@ -205,9 +210,28 @@ func spawn_npcs() -> void:
 		life_.name="StreetLife";life_.city=self;add_child(life_)
 
 
+# At the palace door a passing courtier can fill the lens while the player
+# is still several metres away. Only cut a nearby figure on that sightline.
+var lens_courtiers: Array[Node3D]=[]
+func clear_palace_lens() -> void:
+	var covered: Array[Node3D]=[]
+	if absf(bunny.position.x)<14. and bunny.position.z< -143. and bunny.position.z> -178. and preload("res://scripts/city/interior_view.gd").mode(self)!=1:
+		var focus:=bunny.global_position+Vector3.UP*1.35
+		for npc in npcs:
+			var head: Vector3=npc.global_position+npc.rig_profile.head_center
+			if head.distance_squared_to(camera.position)>6.25:continue
+			var nearest:=Geometry3D.get_closest_point_to_segment(head,camera.position,focus)
+			if head.distance_squared_to(nearest)<pow(npc.rig_profile.head_radii.x+.18,2):
+				covered.append(npc.visual)
+				npc.visual.visible=false
+	for visual in lens_courtiers:
+		if is_instance_valid(visual) and visual not in covered:visual.visible=true
+	lens_courtiers=covered
+
 func update_camera(delta: float) -> void:
 	if not is_instance_valid(hud) or hud.mode!="jade_game" or not targets.has(hud.activity_target):
 		super.update_camera(delta)
+		clear_palace_lens()
 		return
 	var prop: Node3D=targets[hud.activity_target].node
 	var focus:=prop.global_position.lerp(bunny.global_position,.29)+Vector3.UP*1.03
@@ -218,3 +242,4 @@ func update_camera(delta: float) -> void:
 	camera_focus=camera_focus.lerp(focus+right*shift,1.-exp(-delta*12.))
 	camera.position=camera.position.lerp(point,1.-exp(-delta*12.))
 	if not camera.position.is_equal_approx(camera_focus):camera.look_at(camera_focus)
+	clear_palace_lens()

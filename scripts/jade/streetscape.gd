@@ -98,8 +98,5 @@ static func quarters(builder: SceneTree) -> void:
 			var k:=start.lerp(end,(i+.5)/count)
 			var wall: Node3D=builder.fixture(builder.world,"jade_court_wall",J.point(k.x,k.y),-dir.angle())
 			wall.scale.x=dir.length()/(4.65*count)
-	for p in [Vector2(103,-23),Vector2(101,-25),Vector2(119,-25),Vector2(126,-51),Vector2(129,-49),Vector2(115,-53),Vector2(116,-52),Vector2(-122,-47),Vector2(-125,-45),Vector2(-123,-50),Vector2(-98,-31),Vector2(62,-146),Vector2(60,-147),Vector2(-53,-149),Vector2(-49,-147),Vector2(44,59),Vector2(-30,73),Vector2(-32,77),Vector2(52,64),Vector2(-36,120),Vector2(31,115),Vector2(-70,72),Vector2(-39,33),Vector2(40,26)]:
+	for p in [Vector2(103,-23),Vector2(101,-25),Vector2(119,-25),Vector2(126,-51),Vector2(129,-49),Vector2(115,-53),Vector2(116,-52),Vector2(-129,-58),Vector2(-132,-56),Vector2(-128,-60),Vector2(-98,-31),Vector2(62,-146),Vector2(60,-147),Vector2(-53,-149),Vector2(-49,-147),Vector2(44,59),Vector2(-30,73),Vector2(-32,77),Vector2(52,64),Vector2(-36,120),Vector2(31,115),Vector2(-70,72),Vector2(-39,33),Vector2(40,26)]:
 		builder.fixture(builder.world,"jade_bamboo",J.point(p.x,p.y),fmod(p.x*2.4,TAU))
-	for p in [Vector2(128,-51),Vector2(122,-53),Vector2(126,-55),Vector2(-124,-47),Vector2(-51,-152)]:
-		var pool: Node3D=builder.fixture(builder.world,"jade_pool",J.point(p.x,p.y),p.y*.1)
-		pool.scale=Vector3(1.42,1,1.12)

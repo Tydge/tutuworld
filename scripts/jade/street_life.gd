@@ -30,13 +30,9 @@ const DISTRICT_ROUTES={
 	37:[Vector2(3,-163),Vector2(5,-166),Vector2(6,-161),Vector2(2,-158),Vector2(-1,-165)],
 	38:[Vector2(45,-124),Vector2(41,-128),Vector2(37,-130),Vector2(36,-135),Vector2(42,-139)],
 	39:[Vector2(60,-150),Vector2(55,-142),Vector2(61,-137),Vector2(68,-141),Vector2(68,-153)]}
-const MORNING_COURT={
-	12:[Vector2(-6,-151),Vector2(-6,-158),Vector2(-3,-162),Vector2(-3,-153),Vector2(-2,-145)],
-	14:[Vector2(5,-147),Vector2(5,-158),Vector2(2,-162),Vector2(8,-153),Vector2(8,-144)],
-	34:[Vector2(-3,-143),Vector2(-3,-158),Vector2(-2,-162),Vector2(0,-153),Vector2(0,-145)],
-	35:[Vector2(6,-151),Vector2(6,-158),Vector2(3,-162),Vector2(9,-153),Vector2(9,-144)],
-	36:[Vector2(-6,-148),Vector2(-6,-158),Vector2(-3,-162),Vector2(-3,-153),Vector2(-2,-145)],
-	38:[Vector2(4,-143),Vector2(4,-158),Vector2(2,-162),Vector2(7,-153),Vector2(8,-144)]}
+# One post per officer. The usher at the steps keeps the central threshold clear.
+const MORNING_COURT={12:Vector2(-6,-150),14:Vector2(4,-164),34:Vector2(-3,-160),
+	35:Vector2(5,-161),36:Vector2(-5,-165),38:Vector2(3,-167)}
 var city: Node3D
 var next_turn: Dictionary={}
 var elapsed:=0.
@@ -48,7 +44,7 @@ const CUSTOMERS=[1,2,8]
 # The boat hand and carpenter pass the market while the three regulars stop at its counters.
 const DELIVERIES=[0,3]
 # During the two busiest stretches, neighbours have common destinations along the same frontage.
-const MARKET_CALLS=[Vector2(-6.5,-3.3),Vector2(-3.8,-.6),Vector2(1.8,2.3),Vector2(-6.1,5.3),Vector2(-1.8,8.6)]
+const MARKET_CALLS=[Vector2(-6.5,-3.3),Vector2(-3.8,-.6),Vector2(-4.4,2.3),Vector2(-6.1,5.3),Vector2(-4.0,8.6)]
 static func walk_stops(index: int,origin: Vector3) -> Array[Vector3]:
 	var result: Array[Vector3]=[]
 	if DISTRICT_ROUTES.has(index):
@@ -96,8 +92,10 @@ func update_market() -> void:
 		var route:=walk_stops(i,J.point(home[2],home[3]))
 		if period==1:
 			route.clear()
-			for spot: Vector2 in MORNING_COURT[i]:route.append(J.point(spot.x,spot.y))
-		driver.route=route;driver.recent.clear()
+			var spot: Vector2=MORNING_COURT[i]
+			route.append(J.point(spot.x,spot.y))
+		driver.route=route;driver.recent.clear();driver.path.clear()
+		driver.wait=(int(i)%7)*.72
 	for i in CUSTOMERS+DELIVERIES:
 		var actor: CharacterBody3D=city.targets["JadeCitizen_"+str(i)].node
 		var driver: Node=actor.get_node("NeighbourWalk")
@@ -126,7 +124,7 @@ func receive_court() -> void:
 		if paid_respects.has(index):continue
 		var id:="JadeCitizen_"+str(index)
 		var actor: CharacterBody3D=city.targets[id].node
-		if actor.position.z> -157. or actor.position.z< -166. or absf(actor.position.x)>6. or not actor.action.is_empty():continue
+		if actor.position.z> -159. or actor.position.z< -168. or absf(actor.position.x)>6. or absf(actor.position.x)<2. or not actor.action.is_empty():continue
 		if city.talking_npc==id or (city.has_method("chatting_with") and is_instance_valid(city.chatting_with(id))):continue
 		var driver: Node=actor.get_node("NeighbourWalk")
 		driver.wait=3.7

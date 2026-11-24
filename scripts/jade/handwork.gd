@@ -3,6 +3,19 @@ extends RefCounted
 const G=preload("res://scripts/geometry.gd")
 const A=preload("res://scripts/jade/architecture.gd")
 const POSES=["forge_strike","draw_thread","plane_wood","sort_seed","read_scroll"]
+# Serialize the five shared meshes alongside the streets. A resident starting
+# a shift only attaches a mesh, even on the first visit to the night market.
+static func bake_tools(world: Node3D) -> void:
+	var models: Dictionary={}
+	var temporary:=Node3D.new()
+	world.add_child(temporary)
+	for pose in POSES:
+		var key: String="handwork_"+pose
+		A.mesh_part(temporary,key,draw.bind(pose))
+		models[key]=A.baked[key]
+	temporary.free()
+	world.set_meta("occupation_meshes",models)
+
 static func create(grip: Node3D,offset: Vector3,pose: String) -> Node3D:
 	var hand:=A.group(grip,"OccupationTool",offset);hand.set_meta("pose",pose)
 	A.mesh_part(hand,"handwork_"+pose,draw.bind(pose))

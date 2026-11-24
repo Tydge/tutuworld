@@ -9,6 +9,10 @@ static func dock(id: String) -> Vector2:
 	return preload("res://scripts/icefield/icefield_layout.gd").DOCK if id=="icefield" else preload("res://scripts/valley/valley_layout.gd").dock(id)
 static func boarding_distance(id: String,p: Vector3) -> float:
 	if not p.is_finite():return INF
+	if id=="jade":
+		const Jade=preload("res://scripts/jade/layout.gd")
+		if absf(p.y-Jade.DOCK_HEIGHT)>1.7:return INF
+		if Jade.DOCK_DECK.has_point(Vector2(p.x,p.z)):return 0.
 	if id=="icefield":
 		const Ice=preload("res://scripts/icefield/icefield_layout.gd")
 		if absf(p.y-Ice.DOCK_HEIGHT)>1.7:return INF

@@ -1,0 +1,369 @@
+{
+	"actual_cap": 60,
+	"device": "Apple M1 Pro (Apple7)",
+	"driver": "metal",
+	"failures": [],
+	"output_px": [
+		2400,
+		1440
+	],
+	"renderer": "forward_plus",
+	"sample_seconds": 4.0,
+	"samples": [
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.7,
+			"map": "jade",
+			"max_draws": 2417,
+			"max_ms": 48.258,
+			"max_primitives": 3658314,
+			"moved_m": 13.43,
+			"n": 239,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 5,
+			"over50": 0,
+			"p50_ms": 16.738,
+			"p95_ms": 18.303,
+			"p99_ms": 31.899,
+			"sampled_process_monitor_p95_ms": 43.615,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 6.8,
+					"draws": 2376,
+					"elapsed_s": 0.775,
+					"frame_ms": 31.9,
+					"position": [
+						-6.12,
+						131.61
+					]
+				},
+				{
+					"draw_submit_ms": 6.97,
+					"draws": 2308,
+					"elapsed_s": 1.771,
+					"frame_ms": 31.72,
+					"position": [
+						-6.46,
+						128.13
+					]
+				},
+				{
+					"draw_submit_ms": 41.46,
+					"draws": 2270,
+					"elapsed_s": 2.456,
+					"frame_ms": 48.26,
+					"position": [
+						-6.43,
+						125.9
+					]
+				},
+				{
+					"draw_submit_ms": 6.22,
+					"draws": 2257,
+					"elapsed_s": 2.777,
+					"frame_ms": 29.85,
+					"position": [
+						-6.33,
+						124.83
+					]
+				},
+				{
+					"draw_submit_ms": 7.16,
+					"draws": 2243,
+					"elapsed_s": 3.775,
+					"frame_ms": 32.36,
+					"position": [
+						-6.02,
+						121.76
+					]
+				}
+			],
+			"view": "lantern-market-live-1"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.1,
+			"map": "jade",
+			"max_draws": 2403,
+			"max_ms": 31.771,
+			"max_primitives": 3604968,
+			"moved_m": 13.48,
+			"n": 241,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.786,
+			"p95_ms": 17.798,
+			"p99_ms": 31.325,
+			"sampled_process_monitor_p95_ms": 27.835,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 8.71,
+					"draws": 2344,
+					"elapsed_s": 0.918,
+					"frame_ms": 31.65,
+					"position": [
+						-6.18,
+						131.09
+					]
+				},
+				{
+					"draw_submit_ms": 9.73,
+					"draws": 2290,
+					"elapsed_s": 1.915,
+					"frame_ms": 31.77,
+					"position": [
+						-6.48,
+						127.61
+					]
+				},
+				{
+					"draw_submit_ms": 9.22,
+					"draws": 2317,
+					"elapsed_s": 2.913,
+					"frame_ms": 31.33,
+					"position": [
+						-6.28,
+						124.37
+					]
+				},
+				{
+					"draw_submit_ms": 7.0,
+					"draws": 2239,
+					"elapsed_s": 3.931,
+					"frame_ms": 31.28,
+					"position": [
+						-6.01,
+						121.25
+					]
+				}
+			],
+			"view": "lantern-market-live-2"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.7,
+			"map": "jade",
+			"max_draws": 2479,
+			"max_ms": 32.606,
+			"max_primitives": 3690416,
+			"moved_m": 13.6,
+			"n": 239,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.825,
+			"p95_ms": 18.648,
+			"p99_ms": 31.693,
+			"sampled_process_monitor_p95_ms": 28.152,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 9.48,
+					"draws": 2441,
+					"elapsed_s": 0.065,
+					"frame_ms": 32.61,
+					"position": [
+						-5.95,
+						133.94
+					]
+				},
+				{
+					"draw_submit_ms": 12.75,
+					"draws": 2439,
+					"elapsed_s": 1.079,
+					"frame_ms": 30.27,
+					"position": [
+						-6.24,
+						130.57
+					]
+				},
+				{
+					"draw_submit_ms": 12.82,
+					"draws": 2289,
+					"elapsed_s": 2.069,
+					"frame_ms": 31.69,
+					"position": [
+						-6.48,
+						127.08
+					]
+				},
+				{
+					"draw_submit_ms": 12.69,
+					"draws": 2315,
+					"elapsed_s": 3.069,
+					"frame_ms": 31.99,
+					"position": [
+						-6.22,
+						123.86
+					]
+				}
+			],
+			"view": "lantern-market-live-3"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.2,
+			"map": "jade",
+			"max_draws": 2473,
+			"max_ms": 33.113,
+			"max_primitives": 3701548,
+			"moved_m": 13.48,
+			"n": 237,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 5,
+			"over50": 0,
+			"p50_ms": 16.991,
+			"p95_ms": 18.462,
+			"p99_ms": 32.377,
+			"sampled_process_monitor_p95_ms": 29.82,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 10.69,
+					"draws": 2449,
+					"elapsed_s": 0.249,
+					"frame_ms": 32.48,
+					"position": [
+						-5.97,
+						133.46
+					]
+				},
+				{
+					"draw_submit_ms": 10.2,
+					"draws": 2443,
+					"elapsed_s": 0.649,
+					"frame_ms": 32.38,
+					"position": [
+						-6.07,
+						132.07
+					]
+				},
+				{
+					"draw_submit_ms": 9.92,
+					"draws": 2459,
+					"elapsed_s": 1.274,
+					"frame_ms": 32.01,
+					"position": [
+						-6.32,
+						129.93
+					]
+				},
+				{
+					"draw_submit_ms": 10.88,
+					"draws": 2303,
+					"elapsed_s": 2.284,
+					"frame_ms": 31.82,
+					"position": [
+						-6.46,
+						126.39
+					]
+				},
+				{
+					"draw_submit_ms": 10.84,
+					"draws": 2381,
+					"elapsed_s": 3.284,
+					"frame_ms": 33.11,
+					"position": [
+						-6.14,
+						123.25
+					]
+				}
+			],
+			"view": "lantern-market-live-4"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.4,
+			"map": "jade",
+			"max_draws": 2503,
+			"max_ms": 34.462,
+			"max_primitives": 3732738,
+			"moved_m": 13.6,
+			"n": 238,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 5,
+			"over50": 0,
+			"p50_ms": 16.948,
+			"p95_ms": 18.592,
+			"p99_ms": 32.064,
+			"sampled_process_monitor_p95_ms": 28.911,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 10.51,
+					"draws": 2469,
+					"elapsed_s": 0.5,
+					"frame_ms": 34.46,
+					"position": [
+						-6.02,
+						132.59
+					]
+				},
+				{
+					"draw_submit_ms": 10.78,
+					"draws": 2429,
+					"elapsed_s": 1.426,
+					"frame_ms": 31.98,
+					"position": [
+						-6.38,
+						129.35
+					]
+				},
+				{
+					"draw_submit_ms": 9.05,
+					"draws": 2422,
+					"elapsed_s": 1.524,
+					"frame_ms": 32.05,
+					"position": [
+						-6.41,
+						129.0
+					]
+				},
+				{
+					"draw_submit_ms": 12.76,
+					"draws": 2425,
+					"elapsed_s": 2.515,
+					"frame_ms": 32.08,
+					"position": [
+						-6.41,
+						125.6
+					]
+				},
+				{
+					"draw_submit_ms": 10.79,
+					"draws": 2283,
+					"elapsed_s": 3.512,
+					"frame_ms": 32.06,
+					"position": [
+						-6.08,
+						122.48
+					]
+				}
+			],
+			"view": "lantern-market-live-5"
+		}
+	],
+	"scale_3d": 0.760725796222687,
+	"startup_ms": {
+		"jade": 9446.8
+	},
+	"warmup_seconds": 1.8
+}

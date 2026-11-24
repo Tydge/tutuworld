@@ -11,7 +11,8 @@ func check(ok: bool,label_: String) -> void:
 	if not ok:failures.append(label_)
 func run() -> void:
 	var out:=preload("res://tests/test_support.gd").output_dir()
-	var s:=preload("res://scripts/services/session.gd").new();s.name="Session";root.add_child(s);s.create_character("檐下织工","bunny","bell_red")
+	var s:=preload("res://scripts/services/session.gd").new();s.name="Session";root.add_child(s)
+	check(s.create_character("檐下织工","bunny","scarf_green").ok,"Create a workshop visitor with a legacy green scarf")
 	s.state().map_id="jade";s.state().player_position=J.arrival()
 	var city=load("res://scenes/jade.tscn").instantiate();root.add_child(city);current_scene=city
 	while city.preparing or city.camera==null:await process_frame
@@ -22,6 +23,14 @@ func run() -> void:
 			check(group.size()==2,slot+" "+rank+" has two distinct styles")
 			for id in group:
 				if rank=="loom":check(not DB.Clothes.data().shop_stock.has(DB.item(id).style) and not DB.item(id).has("price") and DB.recipe(id).get("output","")==id,"Workshop-only "+id)
+	var vendor: Node3D=city.targets.JadeVendor_clothes.node
+	city.bunny.position=vendor.position+Vector3(0,0,1.1);s.set_player_position(city.bunny.position)
+	city.update_target();city.interact();city.interact()
+	var shelf: Array=city.hud.shop_rows.keys()
+	var jade_styles:=DB.Clothes.items().keys().filter(func(id):return DB.item(id).get("rank","") in ["folk","court"])
+	check(city.hud.mode=="shop" and shelf.size()==12 and jade_styles.all(func(id):return id in shelf),"Yunjin merchant stocks exactly the twelve Jade garments")
+	check(authority.count("scarf_green")==1 and city.hud.character_sheet.preview.equipment.neck=="scarf_green" and s.state().equipment.neck=="scarf_green","A previously owned island scarf stays worn in the Jade fitting room")
+	city.hud.close_panel()
 	for npc in city.npcs:
 		var outfit: Dictionary=npc.get_meta("equipment")
 		check(outfit.has("head") and outfit.has("body") and outfit.has("neck") and not npc.find_children("Wardrobe_body*","Node3D",true,false).is_empty(),"Worn outfit "+str(npc.name))

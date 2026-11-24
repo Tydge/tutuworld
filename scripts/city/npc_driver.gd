@@ -25,7 +25,12 @@ func _ready() -> void:
 	progress_origin=bunny.position
 func choose_destination() -> void:
 	if city==null or not city.navigation.ready_for_paths: return
-	for attempt in range(24):
+	if route.size()==1:
+		if bunny.position.distance_to(route[0])<1.2:
+			wait=1.0
+			return
+	var tried: Array[int]=[]
+	for attempt in range(1 if route.size()==1 else 24):
 		var candidate: int
 		var destination: Vector3
 		if route.is_empty():
@@ -34,11 +39,12 @@ func choose_destination() -> void:
 			candidate=choice.zone;destination=choice.position
 		else:
 			candidate=rng.randi_range(0,route.size()-1);destination=route[candidate]
-			if recent.has(candidate): continue
-		if destination.distance_to(bunny.position)<3: continue
+			if recent.has(candidate) or tried.has(candidate):continue
+			tried.append(candidate)
+		if route.size()!=1 and destination.distance_to(bunny.position)<3:continue
 		var next: PackedVector3Array=city.navigation.path_between(bunny.position,destination)
 		if next.size()<2: continue
-		recent.append(candidate)
+		if route.size()!=1:recent.append(candidate)
 		if recent.size()>4: recent.pop_front()
 		path=next
 		path_index=0
@@ -113,10 +119,11 @@ func _physics_process(delta: float) -> void:
 			else:
 				direction=path[path_index]-bunny.position
 				direction.y=0
-	if use_local_neighbours and not chatting and bunny.action.is_empty():
+	if use_local_neighbours and not chatting:
 		var aside:=give_way()
 		if aside!=Vector3.ZERO:
 			direction=aside
+			if not bunny.action.is_empty():bunny.action="";bunny.mood_label.text=""
 			wait=0.
 	var stopped:=chatting or wait>0 or direction.length_squared()<.001
 	var separation:=Vector3.ZERO
@@ -178,7 +185,8 @@ func give_way() -> Vector3:
 		var visitor: CharacterBody3D=candidate
 		var offset:=bunny.position-visitor.position
 		if offset.length_squared()>=4.84 or absf(offset.y)>=1.:continue
-		var approach:=Vector2(visitor.velocity.x,visitor.velocity.z)
+		var approach: Vector2=visitor.walking_intent
+		if approach.length_squared()<=.16:approach=Vector2(visitor.velocity.x,visitor.velocity.z)
 		if approach.length_squared()<=.16:continue
 		var forward:=approach.normalized()
 		var lateral:=Vector2(-forward.y,forward.x)

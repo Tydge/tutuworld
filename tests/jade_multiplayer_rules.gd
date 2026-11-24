@@ -42,6 +42,12 @@ func run() -> void:
 		check(shopkeeper.action==preload("res://scripts/jade/street_life.gd").TRADES[trade],"Authoritative profession pose "+trade)
 	for actor in [a,b]:
 		for skill in actor.state.skills:actor.state.skills[skill]=8;actor.state.skill_experience[skill]=1800
+	var tailor: Node3D=host.targets.JadeVendor_clothes.node
+	place(0,tailor.position+Vector3(0,0,1.1))
+	var old_item: String=DB.Clothes.stock("beret").item
+	check(DB.sold_here(DB.item(old_item),"clothes","city") and not request(0,"buy",{"shop":"clothes","item":old_item}).ok,"Legacy stock stays at the island shop")
+	var reed: String=DB.Clothes.stock("reed_hat").item
+	check(request(0,"buy",{"shop":"clothes","item":reed}).ok and a.count(reed)==1,"Buy a Jade hat from the authoritative Yunjin counter")
 	var public_stove: Dictionary=host.targets.jade_steamer
 	var bun_recipe:=DB.recipe("honey_wheat_cake")
 	place(0,public_stove.anchor.global_position)

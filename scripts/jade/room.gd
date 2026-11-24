@@ -19,11 +19,12 @@ func contains_position(point: Vector3) -> bool:
 	return bounds.has_point(Vector2(p.x,p.z))
 func update_lighting(day: float) -> void:
 	var light:=get_node_or_null("Furnishing/RoomLight") as OmniLight3D
-	if light:light.light_energy=lerpf(2.5,.85,day)
+	var energy:=lerpf(2.5,.85,day)
+	if light and not is_equal_approx(light.light_energy,energy):light.light_energy=energy
 func _process(delta: float) -> void:
 	if not is_instance_valid(city) or not is_instance_valid(city.camera):return
 	if not is_instance_valid(distant_proxy):distant_proxy=get_node_or_null("DistantShell") as MeshInstance3D
-	var radius:=45.5 if distant_proxy and distant_proxy.visible else 50.5
+	var radius:=40.0 if distant_proxy and distant_proxy.visible else 45.0
 	var detail: bool=not distant_proxy or city.camera.global_position.distance_squared_to(global_position)<radius*radius
 	if distant_proxy and distant_proxy.visible==detail:
 		distant_proxy.visible=not detail;using_cutaway=false

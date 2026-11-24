@@ -2,9 +2,14 @@ extends RefCounted
 ## All distances in metres. North is -Z. The palace starts at the terrace at z=-82.
 const NAVIGATION:=Rect2i(-183,-186,376,387)
 const DOCK:=Vector2(0,209)
+const DOCK_HEIGHT:=2.05
 const DOCK_DECK:=Rect2(-3.5,200.,7.,13.)
 const SEA_LEVEL:=preload("res://scripts/icefield/icefield_layout.gd").SEA_LEVEL
 const PONDS:=[Vector2(123,-45),Vector2(-118,-48),Vector2(76,-149),Vector2(-44,-151)]
+const LANDMARKS={
+	"tide_stone":{"name":"北岸水则碑","at":Vector2(-176,-197),"label":"辨认水则碑的潮痕","day_text":"石上三道凿痕记着旧年春汛。最低一道旁边，刻着西滩船户的姓。","night_text":"碑脚的浅槽映着天光。守堤人把夜潮最高处留给天亮来读碑的人。"},
+	"beacon":{"name":"听潮亭","at":Vector2(199,-196),"label":"倚栏听潮","day_text":"先听见礁上的碎浪，再听见北湾的回声。从这里向西，水则碑就在同一条堤上。","night_text":"檐下的灯照着北湾，黑水里传来两声船桨。旧时的船户靠这盏灯认岸。"},
+	"east_fork":{"name":"东桥路牌","at":Vector2(112,33),"label":"看东桥路牌","day_text":"向南沿土路到六里宅地，向东到采场。银矿在北坡，砂岩和铁在东岸。","night_text":"路牌上的白字映着灯光。向南到六里宅地，向东到采场，过桥往北入城。"}}
 const POND_SEGMENTS:=72
 static var pond_outline:=PackedVector2Array()
 static var shore_planes: Dictionary={}
@@ -161,7 +166,7 @@ static func bridge(x: float,z: float) -> bool:
 static func deck(z: float,bx: float) -> float:
 	return 6.10+1.65*(1.-pow(clampf(absf(z-river_z(bx))/18.,0.,1.),2))
 static func foot(x: float,z: float) -> float:
-	if DOCK_DECK.has_point(Vector2(x,z)):return 2.05
+	if DOCK_DECK.has_point(Vector2(x,z)):return DOCK_HEIGHT
 	if bridge(x,z):
 		for bx in BRIDGES:
 			if absf(x-bx)<=4.45:return deck(z,bx)
@@ -283,10 +288,18 @@ static func farm() -> Array:
 static var material_sources: Array=[]
 static func sources() -> Array:
 	if not material_sources.is_empty():return material_sources
-	var rows:=material_sources
+	# IDs retain their original material so depleted nodes and active jobs still identify the same resource.
+	var deposits:={
+		"cedar":[Vector2(-202,134),Vector2(-196,141),Vector2(-184,146),Vector2(-190,152),Vector2(-178,159),Vector2(-166,156)],
+		"birch":[Vector2(-194,49),Vector2(-188,57),Vector2(-181,62),Vector2(-185,72),Vector2(-153,-53),Vector2(-145,-59)],
+		"nephrite":[Vector2(-152,-69),Vector2(-158,-74),Vector2(-165,-70),Vector2(175,-76),Vector2(179,-82),Vector2(185,-85)],
+		"silver_ore":[Vector2(178,-61),Vector2(182,-56),Vector2(189,-52),Vector2(196,-50),Vector2(201,-43),Vector2(207,-39)],
+		"sandstone":[Vector2(172,40),Vector2(181,44),Vector2(185,51),Vector2(191,56),Vector2(166,153),Vector2(175,155)],
+		"iron":[Vector2(196,62),Vector2(201,69),Vector2(207,75),Vector2(182,161),Vector2(188,167),Vector2(195,171)]}
+	var materials:=["cedar","nephrite","silver_ore","birch","sandstone","iron"]
 	for cluster in range(6):
-		var center: Vector2=[Vector2(-190,62),Vector2(185,42),Vector2(-145,-54),Vector2(181,-56),Vector2(-175,148),Vector2(168,160)][cluster]
 		for i in range(6):
-			var p:=center+Vector2(cos(i*TAU/6.),sin(i*TAU/6.))*9.
-			rows.append({"id":"jade_source_%d_%d"%[cluster,i],"item":["cedar","nephrite","silver_ore","birch","sandstone","iron"][(cluster+i)%6],"x":p.x,"z":p.y,"y":height_at(p.x,p.y),"map":"jade"})
-	return rows
+			var item: String=materials[(cluster+i)%6]
+			var p: Vector2=deposits[item][cluster]
+			material_sources.append({"id":"jade_source_%d_%d"%[cluster,i],"item":item,"x":p.x,"z":p.y,"y":height_at(p.x,p.y),"map":"jade"})
+	return material_sources

@@ -43,6 +43,7 @@ var shop_grid: GridContainer
 var shop_balance: Label
 var shop_rows: Dictionary={}
 var shop_empty: Label
+var jade_map_target: String=""
 var map_draw: Control
 var panel_signature := ""
 var activity_target:=""
@@ -608,7 +609,7 @@ func refresh_shop_items() -> void:
 	var wanted: Array[String]=[]
 	for id in DB.catalog().items:
 		var item:=DB.item(id)
-		if shop_tab=="buy" and (item.get("shop","")!=shop or item.get("shop_map",city.map_id)!=city.map_id):continue
+		if shop_tab=="buy" and not DB.sold_here(item,shop,city.map_id):continue
 		if category!="all" and DB.category(id,shop=="clothes")!=category: continue
 		if shop_tab=="sell" and (int(item.get("sell",0))<=0 or session.authority.count(id)<1): continue
 		if shop=="clothes":

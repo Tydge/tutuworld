@@ -1,0 +1,375 @@
+{
+	"actual_cap": 60,
+	"device": "Apple M1 Pro (Apple7)",
+	"driver": "metal",
+	"failures": [],
+	"output_px": [
+		2400,
+		1440
+	],
+	"renderer": "forward_plus",
+	"sample_seconds": 4.0,
+	"samples": [
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.4,
+			"map": "jade",
+			"max_draws": 2414,
+			"max_ms": 40.909,
+			"max_primitives": 3992592,
+			"moved_m": 13.67,
+			"n": 238,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 6,
+			"over50": 0,
+			"p50_ms": 16.582,
+			"p95_ms": 18.715,
+			"p99_ms": 32.65,
+			"sampled_process_monitor_p95_ms": 32.279,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 9.26,
+					"draws": 2316,
+					"elapsed_s": 0.716,
+					"frame_ms": 29.99,
+					"position": [
+						-5.19,
+						160.84
+					]
+				},
+				{
+					"draw_submit_ms": 9.54,
+					"draws": 2236,
+					"elapsed_s": 1.713,
+					"frame_ms": 28.85,
+					"position": [
+						-5.72,
+						157.38
+					]
+				},
+				{
+					"draw_submit_ms": 11.88,
+					"draws": 2264,
+					"elapsed_s": 2.733,
+					"frame_ms": 32.65,
+					"position": [
+						-5.78,
+						153.83
+					]
+				},
+				{
+					"draw_submit_ms": 21.61,
+					"draws": 2311,
+					"elapsed_s": 3.575,
+					"frame_ms": 40.91,
+					"position": [
+						-5.6,
+						150.92
+					]
+				},
+				{
+					"draw_submit_ms": 7.88,
+					"draws": 2315,
+					"elapsed_s": 3.602,
+					"frame_ms": 26.7,
+					"position": [
+						-5.6,
+						150.8
+					]
+				},
+				{
+					"draw_submit_ms": 9.26,
+					"draws": 2286,
+					"elapsed_s": 3.75,
+					"frame_ms": 34.29,
+					"position": [
+						-5.6,
+						150.28
+					]
+				}
+			],
+			"view": "south-market"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 59.6,
+			"map": "jade",
+			"max_draws": 2396,
+			"max_ms": 35.713,
+			"max_primitives": 3652480,
+			"moved_m": 13.48,
+			"n": 239,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.808,
+			"p95_ms": 19.169,
+			"p99_ms": 31.65,
+			"sampled_process_monitor_p95_ms": 30.249,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 7.2,
+					"draws": 2357,
+					"elapsed_s": 0.88,
+					"frame_ms": 31.86,
+					"position": [
+						-6.24,
+						131.01
+					]
+				},
+				{
+					"draw_submit_ms": 10.56,
+					"draws": 2342,
+					"elapsed_s": 1.882,
+					"frame_ms": 31.65,
+					"position": [
+						-6.56,
+						127.54
+					]
+				},
+				{
+					"draw_submit_ms": 10.53,
+					"draws": 2332,
+					"elapsed_s": 2.88,
+					"frame_ms": 31.61,
+					"position": [
+						-6.37,
+						124.31
+					]
+				},
+				{
+					"draw_submit_ms": 10.38,
+					"draws": 2268,
+					"elapsed_s": 3.897,
+					"frame_ms": 35.71,
+					"position": [
+						-6.09,
+						121.19
+					]
+				}
+			],
+			"view": "lantern-market"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.1,
+			"map": "jade",
+			"max_draws": 1402,
+			"max_ms": 23.681,
+			"max_primitives": 1829198,
+			"moved_m": 13.66,
+			"n": 241,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 0,
+			"over50": 0,
+			"p50_ms": 16.627,
+			"p95_ms": 17.764,
+			"p99_ms": 22.626,
+			"sampled_process_monitor_p95_ms": 15.655,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [],
+			"view": "bridge"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 1054,
+			"max_ms": 25.731,
+			"max_primitives": 1551818,
+			"moved_m": 13.22,
+			"n": 240,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 2,
+			"over50": 0,
+			"p50_ms": 16.684,
+			"p95_ms": 17.609,
+			"p99_ms": 19.762,
+			"sampled_process_monitor_p95_ms": 18.446,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 6.78,
+					"draws": 1027,
+					"elapsed_s": 0.259,
+					"frame_ms": 25.73,
+					"position": [
+						105.22,
+						-20.59
+					]
+				},
+				{
+					"draw_submit_ms": 7.54,
+					"draws": 935,
+					"elapsed_s": 3.309,
+					"frame_ms": 25.45,
+					"position": [
+						108.24,
+						-30.78
+					]
+				}
+			],
+			"view": "garden"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 770,
+			"max_ms": 24.956,
+			"max_primitives": 1447574,
+			"moved_m": 11.97,
+			"n": 241,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 0,
+			"over50": 0,
+			"p50_ms": 16.623,
+			"p95_ms": 18.705,
+			"p99_ms": 21.706,
+			"sampled_process_monitor_p95_ms": 15.747,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [],
+			"view": "palace"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 1920,
+			"max_ms": 28.77,
+			"max_primitives": 2768974,
+			"moved_m": 13.7,
+			"n": 241,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 4,
+			"over50": 0,
+			"p50_ms": 16.603,
+			"p95_ms": 17.922,
+			"p99_ms": 27.424,
+			"sampled_process_monitor_p95_ms": 20.621,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 8.51,
+					"draws": 1857,
+					"elapsed_s": 0.709,
+					"frame_ms": 27.42,
+					"position": [
+						0.34,
+						-69.9
+					]
+				},
+				{
+					"draw_submit_ms": 10.25,
+					"draws": 1815,
+					"elapsed_s": 1.725,
+					"frame_ms": 26.84,
+					"position": [
+						0.69,
+						-66.48
+					]
+				},
+				{
+					"draw_submit_ms": 9.72,
+					"draws": 1904,
+					"elapsed_s": 2.744,
+					"frame_ms": 28.77,
+					"position": [
+						0.57,
+						-63.02
+					]
+				},
+				{
+					"draw_submit_ms": 9.42,
+					"draws": 1850,
+					"elapsed_s": 3.761,
+					"frame_ms": 28.37,
+					"position": [
+						0.21,
+						-59.52
+					]
+				}
+			],
+			"view": "paired-stairs"
+		},
+		{
+			"draw_pipeline_compilations": 0,
+			"fps": 60.0,
+			"map": "jade",
+			"max_draws": 1700,
+			"max_ms": 28.489,
+			"max_primitives": 2638818,
+			"moved_m": 12.26,
+			"n": 240,
+			"output_px": [
+				2400,
+				1440
+			],
+			"over25": 3,
+			"over50": 0,
+			"p50_ms": 16.582,
+			"p95_ms": 17.79,
+			"p99_ms": 25.866,
+			"sampled_process_monitor_p95_ms": 50.525,
+			"scale_3d": 0.760725796222687,
+			"slow_frames": [
+				{
+					"draw_submit_ms": 9.32,
+					"draws": 1529,
+					"elapsed_s": 0.908,
+					"frame_ms": 25.87,
+					"position": [
+						82.32,
+						-112.48
+					]
+				},
+				{
+					"draw_submit_ms": 10.13,
+					"draws": 1650,
+					"elapsed_s": 2.946,
+					"frame_ms": 28.49,
+					"position": [
+						80.97,
+						-106.94
+					]
+				},
+				{
+					"draw_submit_ms": 9.5,
+					"draws": 1571,
+					"elapsed_s": 3.962,
+					"frame_ms": 27.7,
+					"position": [
+						79.54,
+						-104.31
+					]
+				}
+			],
+			"view": "city-overlook"
+		}
+	],
+	"scale_3d": 0.760725796222687,
+	"startup_ms": {
+		"jade": 9404.8
+	},
+	"warmup_seconds": 1.8
+}

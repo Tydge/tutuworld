@@ -3,10 +3,11 @@ const SECTORS:=20
 const RADIAL_CELLS:=24
 const ARC_CELLS:=24
 const G=preload("res://scripts/geometry.gd")
+const J=preload("res://scripts/jade/layout.gd")
 static func build(builder: SceneTree) -> void:
 	var noise:=FastNoiseLite.new();noise.seed=6329;noise.frequency=.009;noise.fractal_octaves=3
 	var stone:=ShaderMaterial.new();stone.shader=preload("res://assets/shaders/jade_foothills.gdshader")
-	stone.set_shader_parameter("forest",preload("res://assets/jade/mountain_range.png"))
+	stone.set_shader_parameter("forest",preload("res://assets/terrain/woodland/forest_turf_v1.png"))
 	stone.set_shader_parameter("hillside",preload("res://assets/terrain/soft_moss_rock_v1.png"))
 	var horizon:=SurfaceTool.new();horizon.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in range(192):
@@ -30,19 +31,26 @@ static func build(builder: SceneTree) -> void:
 				for c in [Vector2i(0,0),Vector2i(1,0),Vector2i(0,1),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
 					var t: float=float(j+c.y)/RADIAL_CELLS
 					var a: float=(sector*ARC_CELLS+i+c.x)*TAU/(SECTORS*ARC_CELLS)
-					var radius:=292.+t*450.;var x:=cos(a)*radius;var z:=sin(a)*radius
+					# The corners of the island extend beyond the old circular foothill line.
+					# Leave a channel there before the first ridge rises above the sea.
+					var ray:=Vector2(cos(a),sin(a))
+					var shore:=minf(J.LIMIT.x/maxf(absf(ray.x),.001),J.LIMIT.y/maxf(absf(ray.y),.001))
+					var radius:=lerpf(maxf(292.,shore+68.),742.,t)
+					var x:=ray.x*radius;var z:=ray.y*radius
 					var folds:=noise.get_noise_2d(x,z);var ridges:=1.-absf(noise.get_noise_2d(x+481.,z))
 					var peak: float=pow(ridges,3.)*48.+folds*65.+16.*sin(a*9.+t*6.)
 					var h:=(-6.+smoothstep(0.,.24,t)*(8.+11.*t+peak*.15))*(1.-.68*smoothstep(.51,.94,sin(a)))
 					# Across the river the two nearer shoulders overlap beneath the painted far peaks.
 					# Leave a saddle behind the central palace and an open horizon at the ferry.
 					var shoulder:=maxf(exp(-pow(angle_difference(a,-2.09)/.33,2.)),.80*exp(-pow(angle_difference(a,-1.06)/.25,2.)))
+					# The eastern shore looks across two wooded spurs. Leave the southern ferry horizon open.
+					shoulder=maxf(shoulder,.30*exp(-pow(angle_difference(a,.61)/.26,2.))+.19*exp(-pow(angle_difference(a,.98)/.16,2.)))
 					var depth:=exp(-pow((t-.29-.048*sin(6.*a))/.16,2.))
 					var low_ridge:=exp(-pow((t-.19-.055*sin(a*5.+.6))/.115,2.))
 					var high_ridge:=exp(-pow((t-.47-.072*sin(a*3.))/.17,2.))
 					var opening:=1.-.83*smoothstep(.30,.95,sin(a))
 					h+=opening*(low_ridge*(6.+4.*folds+3.*ridges)+high_ridge*(16.+9.*folds+6.*ridges))
-					h+=shoulder*depth*(32.+12.*folds+8.*ridges)
+					h+=shoulder*depth*smoothstep(.04,.24,t)*(32.+12.*folds+8.*ridges)
 					var tint:=Color("35594e").lerp(Color("829485"),clampf(h/120.+folds*.28,0,1)).lerp(Color("77969c"),t*.57)
 					tint=tint.lerp(Color("627f80"),shoulder*depth*.45)
 					var vertex:=Vector3(x,h,z)
