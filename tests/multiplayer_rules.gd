@@ -147,9 +147,13 @@ func run() -> void:
 	result=await request(0,"emote",{"id":"dance_3"})
 	await wait(.3)
 	check(result.ok and gesture_packet.get("emote")=="dance_3" and float(gesture_packet.get("emote_age",0.))>0.,"A second client receives the dance and its elapsed time")
+	for id in ["dance_ballet","dance_street","dance_cloud"]:
+		result=await request(0,"emote",{"id":id})
+		await wait(.18)
+		check(result.ok and gesture_packet.get("emote")==id and float(gesture_packet.get("emote_age",0.))>0.,"Remote player receives "+id+" and its time")
 	var dance_revision:=int(gesture_packet.get("emote_revision",-1))
 	result=await request(0,"emote",{"id":"rest"})
-	check(not result.ok and server.pawns[ids[0]].emote=="dance_3","Gesture requests cannot trigger gameplay actions")
+	check(not result.ok and server.pawns[ids[0]].emote=="dance_cloud","Gesture requests cannot trigger gameplay actions")
 	var dancer: CharacterBody3D=server.pawns[ids[0]]
 	clients[0].send({"type":"motion","generation":dancer.network_generation,"inputs":[{"seq":dancer.network_received+1,"direction":[1,0,0],"running":false}]})
 	await wait(.3)

@@ -856,7 +856,7 @@ func build_settings() -> void:
 		var clock_control:=preload("res://scripts/ui/time_controls.gd").new()
 		clock_control.session=session;options.add_child(clock_control)
 
-	options.add_child(UI.label("C 角色 · I 背包 · Tab 换装 · M 地图\nE 互动  ·  F 快捷互动  ·  Esc 返回 / 取消动作  ·  F2 取景  ·  F12 拍照",15,UI.MUTED))
+	options.add_child(UI.label("C 角色 · I 背包 · Tab 换装 · M 地图\nE 互动  ·  F 快捷互动  ·  Esc 返回 / 取消动作  ·  F2 取景  ·  Shift+F12 拍照\nF10 芭蕾  ·  F11 街舞  ·  F12 云手团扇舞",15,UI.MUTED))
 	options.add_child(UI.button("保存并回到标题界面",func(): session.save_game(); city.return_to_title()))
 	options.add_child(UI.button("保存并退出游戏",func(): session.save_game(); get_tree().quit()))
 func build_land() -> void:

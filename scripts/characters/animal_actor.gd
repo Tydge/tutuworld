@@ -41,6 +41,8 @@ var emote_shift := Vector2.ZERO
 var emote_turn := 0.0
 var emote_stretch := 0.0
 var visual_rest_scale := Vector3.ONE
+const DanceRig := preload("res://scripts/characters/dance_rig.gd")
+var dance_rig: DanceRig
 var emote_aiming := false
 var emote_face: EmoteFace
 var emote_effects: EmoteEffects
@@ -142,7 +144,7 @@ func can_emote() -> bool:
 
 func trigger_emote(id: String) -> void:
 	if emote == id and not EmoteMotion.is_short(id):
-		if EmoteMotion.DANCES.has(id):
+		if EmoteMotion.is_dance(id):
 			stop_emote()
 		return
 	stop_emote()
@@ -153,6 +155,9 @@ func trigger_emote(id: String) -> void:
 func stop_emote() -> void:
 	if emote.is_empty():
 		return
+	if dance_rig != null:
+		dance_rig.release()
+		dance_rig = null
 	emote = ""
 	emote_age = 0.0
 	emote_revision += 1
@@ -168,7 +173,7 @@ func sync_emote(row: Dictionary) -> void:
 	network_emote_revision = revision
 	var id := str(row.get("emote", ""))
 	stop_emote()
-	if id in EmoteMotion.KEY_ORDER:
+	if EmoteMotion.is_known(id):
 		emote = id
 		emote_age = float(row.get("emote_age", 0.0))
 
@@ -349,7 +354,7 @@ func animate_pose(delta: float) -> void:
 		emote_age += delta
 		if not can_move or not action.is_empty() or seated or sleeping or (EmoteMotion.is_short(emote) and emote_age >= EmoteMotion.SHORT_TIME):
 			stop_emote()
-	if not emote.is_empty() and rig_profile.species_id == "bunny":
+	if not emote.is_empty() and rig_profile.species_id == "bunny" and not EmoteMotion.Score.DURATIONS.has(emote):
 		# The rabbit's eyes and brows keep their neutral appearance during gestures.
 		eyes.scale.y = 1.0
 		blink_time = -1.0
@@ -364,6 +369,13 @@ func animate_pose(delta: float) -> void:
 			if blink_time>=.18:
 				blink_time = -1
 				eyes.scale.y = 1
+	if not network_controlled and EmoteMotion.Score.DURATIONS.has(emote):
+		if dance_rig == null:
+			dance_rig = DanceRig.new(self)
+			mouth.scale = Vector3.ONE
+			update_emote_expression(0.)
+		dance_rig.apply(emote,emote_age)
+		return
 	var grounded:=network_grounded if network_replica else is_on_floor()
 	var moving := walking and grounded and not seated and (action=="" or work_align_active)
 	var speed := animation_speed if animation_speed>=0. else Vector2(velocity.x,velocity.z).length()

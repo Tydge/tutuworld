@@ -1,5 +1,7 @@
 extends RefCounted
 
+const Score := preload("res://scripts/characters/dance_score.gd")
+const STAGE_KEYS := {KEY_F10: Score.BALLET, KEY_F11: Score.STREET, KEY_F12: Score.CLOUD}
 const SHORT_TIME := 2.0
 const KEY_ORDER := ["laugh", "angry", "sad", "think", "lie", "sit", "point", "dance_1", "dance_2", "dance_3"]
 const DANCES := {"dance_1": 12.0, "dance_2": 12.8, "dance_3": 14.4}
@@ -28,6 +30,8 @@ static func from_key(event: InputEventKey) -> String:
 	if event.alt_pressed or event.ctrl_pressed or event.meta_pressed or event.shift_pressed:
 		return ""
 	var key := event.physical_keycode if event.physical_keycode != 0 else event.keycode
+	if STAGE_KEYS.has(key):
+		return STAGE_KEYS[key]
 	if key >= KEY_0 and key <= KEY_9:
 		return KEY_ORDER[posmod(key - KEY_1, 10)]
 	# Godot assigns the keypad digits a separate, contiguous range.
@@ -40,6 +44,12 @@ static func weight(id: String, age: float) -> float:
 	if is_short(id):
 		return in_ * (1.0 - smoothstep(1.67, SHORT_TIME, age))
 	return in_
+
+static func is_known(id: String) -> bool:
+	return id in KEY_ORDER or Score.DURATIONS.has(id)
+
+static func is_dance(id: String) -> bool:
+	return DANCES.has(id) or Score.DURATIONS.has(id)
 
 static func is_short(id: String) -> bool:
 	return id in EXPRESSIONS or id == "point"

@@ -281,7 +281,7 @@ func receive(peer_id: int,data: Dictionary) -> void:
 	answer(peer_id,data,execute_player(peer_id,data,verb,args))
 func perform_emote(id: String, args: Dictionary) -> Dictionary:
 	var gesture: Variant = args.get("id", "")
-	if not gesture is String or gesture not in EmoteMotion.KEY_ORDER:
+	if not gesture is String or not EmoteMotion.is_known(gesture):
 		return fail("这个动作暂时不能使用。")
 	var actor = actors[id]
 	var pawn = pawns[id]

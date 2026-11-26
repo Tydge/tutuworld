@@ -105,6 +105,86 @@ func test_poses() -> void:
 		actor.queue_free()
 		reference.queue_free()
 
+func rendered_tip(limb) -> Vector3:
+	# Use the skin's actual inverse bind and animated bone, not the IK target.
+	var skin = limb.skin_parts[0]
+	var mesh: MeshInstance3D = skin.instance
+	var rest_tip: Vector3 = mesh.transform.affine_inverse()*limb.end
+	var distal: Transform3D = skin.skeleton.get_bone_global_pose(1)*mesh.skin.get_bind_pose(1)
+	return mesh.to_global(distal*rest_tip)
+
+func test_stage_dances() -> void:
+	const Score := Emotes.Score
+	const Outfit := preload("res://scripts/city/outfit.gd")
+	for species in Animals.Catalog.ids():
+		var actor := Animals.create(species)
+		root.add_child(actor)
+		actor.set_physics_process(false)
+		actor.network_replica = true
+		actor.set_visual_heading(.82)
+		Outfit.apply(actor,{"body":"overalls_honey"})
+		var original := {}
+		for limb in [actor.left_arm,actor.right_arm,actor.left_leg,actor.right_leg]:
+			var mesh: MeshInstance3D = limb.get_child(0)
+			for part in [mesh,mesh.get_node("InkOutline")]:
+				original[part] = [part.mesh,part.skin,part.skeleton]
+
+		for id in Score.DURATIONS:
+			var period: float = Score.DURATIONS[id]
+			Outfit.apply(actor,{"body":"oxford_shirt_tide" if id==Score.STREET else "overalls_honey"})
+			actor.trigger_emote(id)
+			var previous := [Vector3.ZERO,Vector3.ZERO]
+			var planted := [false,false]
+			var slip := 0.
+			var floor_error := 0.
+			var worst_scale := 0.
+			var min_clearance := INF
+			var opening: Array
+			var seam_error := 0.
+			var frames := roundi(period/STEP)
+			for frame in range(frames*2+1):
+				actor.animate_pose(STEP)
+				var p := Score.sample(id,actor.emote_age)
+				var contact := [p.left_step.y<.00001 and p.flight<.00001,p.right_step.y<.00001 and p.flight<.00001]
+				for side in 2:
+					var paw := rendered_tip(actor.dance_rig.legs[side])
+					if contact[side]:
+						floor_error=maxf(floor_error,absf(paw.y-actor.rig_profile.leg_radius))
+						if planted[side]:
+							slip=maxf(slip,paw.distance_to(previous[side]))
+					planted[side]=contact[side]
+					previous[side]=paw
+				var up := Vector3(actor.visual.basis.x.y,actor.visual.basis.y.y,actor.visual.basis.z.y)
+				var bottom: float=(actor.visual.transform*actor.rig_profile.body_center).y-(up*actor.rig_profile.body_radii).length()
+				min_clearance=minf(min_clearance,bottom)
+				for limb in actor.dance_rig.arms+actor.dance_rig.legs:
+					worst_scale=maxf(worst_scale,limb.pivot.scale.distance_to(Vector3.ONE))
+				if frame==frames-1:
+					opening=rig(actor)
+				if frame==frames*2-1:
+					var closing:=rig(actor)
+					for i in opening.size():
+						seam_error=maxf(seam_error,opening[i].origin.distance_to(closing[i].origin))
+						seam_error=maxf(seam_error,opening[i].basis.get_rotation_quaternion().angle_to(closing[i].basis.get_rotation_quaternion()))
+			var clothed = actor.dance_rig.arms[0] if id==Score.STREET else actor.dance_rig.legs[0]
+			check(not clothed.clothing.is_empty(),species+" bends the worn sleeve or trouser cuff")
+			check(is_instance_valid(actor.dance_rig.fan)==(id==Score.CLOUD),species+" equips the correct dance prop")
+			check(period>=10. and seam_error<.002,species+" wraps a complete "+id+" score")
+			check(slip<.001 and floor_error<.001,species+" plants the rendered paws in "+id+" slip="+str(slip)+" floor="+str(floor_error))
+			check(worst_scale<.0001 and min_clearance>0.,species+" preserves limb size and clears the floor in "+id)
+			actor.trigger_emote(id)
+			check(actor.dance_rig==null and not actor.visual.has_node("SilkFan") and absf(angle_difference(actor.visual_heading(),.82))<.001,species+" exits "+id+" facing the original heading")
+			for part in original:
+				check([part.mesh,part.skin,part.skeleton]==original[part] and not part.has_node("DanceJoints"),species+" restores original skin and outline")
+		actor.sync_emote({"emote":Score.CLOUD,"emote_age":8.4,"emote_revision":32})
+		actor.animate_pose(STEP)
+		check(actor.dance_rig!=null and actor.emote_age>8.4,species+" joins a dance already in progress")
+		Outfit.apply(actor,{})
+		actor.trigger_emote("think")
+		actor.animate_pose(STEP)
+		check(actor.dance_rig==null and actor.emote=="think",species+" switches straight back to a legacy emote")
+		actor.free()
+
 func key(code: Key, pressed: bool = true) -> void:
 	var event := InputEventKey.new()
 	event.keycode = code
@@ -119,6 +199,7 @@ func wait_frames(count: int) -> void:
 
 func run() -> void:
 	test_poses()
+	test_stage_dances()
 	var session := preload("res://scripts/services/session.gd").new()
 	session.name = "Session"
 	root.add_child(session)
@@ -132,6 +213,17 @@ func run() -> void:
 		await wait_frames(2)
 		key(KEYS[i],false)
 		check(city.bunny.emote==Emotes.KEY_ORDER[i],"In-game number key "+str((i+1)%10))
+	for code in Emotes.STAGE_KEYS:
+		key(code)
+		await wait_frames(3)
+		key(code,false)
+		check(city.bunny.emote==Emotes.STAGE_KEYS[code] and not city.screenshot_busy,"Function key plays "+Emotes.STAGE_KEYS[code])
+	var photo := InputEventKey.new()
+	photo.physical_keycode=KEY_F12
+	photo.pressed=true
+	check(not photo.is_action_pressed("screenshot"),"Plain F12 is reserved for dance")
+	photo.shift_pressed=true
+	check(Emotes.from_key(photo)=="" and photo.is_action_pressed("screenshot"),"Shift+F12 retains photography")
 	key(KEY_5)
 	await wait_frames(2)
 	key(KEY_5,false)
