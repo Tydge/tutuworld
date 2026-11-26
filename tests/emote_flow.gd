@@ -38,6 +38,19 @@ func near_signature(a: PackedFloat32Array, b: PackedFloat32Array) -> bool:
 			return false
 	return true
 
+# The pupil spans the gap between lids. Its triangles must clear the curved
+# cheek even at their centers when the surprised cat opens its eyes wide.
+func pupil_clears_cheek(mesh: ArrayMesh, pivot: Vector3) -> bool:
+	const Surface = preload("res://scripts/characters/cat_surface.gd")
+	var indices: PackedInt32Array = mesh.surface_get_arrays(0)[Mesh.ARRAY_INDEX]
+	var target: PackedVector3Array = mesh.surface_get_blend_shape_arrays(0)[0][Mesh.ARRAY_VERTEX]
+	for i in range(0,indices.size(),3):
+		var p := pivot+(target[indices[i]]+target[indices[i+1]]+target[indices[i+2]])/3.
+		var skin := Surface.face_point(Vector2(p.x,p.y))
+		if p.z < skin.z-Surface.INK_OFFSET:
+			return false
+	return true
+
 func test_poses() -> void:
 	for id in Emotes.DANCES:
 		var period: float = Emotes.DANCES[id]
@@ -54,6 +67,9 @@ func test_poses() -> void:
 		var brows: Node3D = actor.head.get_node_or_null("FixedEyebrows")
 		var brow_transform: Transform3D = brows.transform if brows != null else Transform3D.IDENTITY
 		var eye_transform: Transform3D = actor.eyes.transform
+		var mouth_transform: Transform3D = actor.mouth.transform
+		var brush: MeshInstance3D = actor.eyes.get_node_or_null("Brushwork")
+		var neutral_ink: Mesh = brush.mesh if brush != null else null
 		tick(actor, 75)
 		var base := rig(actor)
 		for id in Emotes.KEY_ORDER + Emotes.SOCIAL:
@@ -63,7 +79,21 @@ func test_poses() -> void:
 			check(rig(actor) != base,species+" changes body pose for "+id)
 			if species == "bunny":
 				check(actor.eyes.visible and actor.eyes.transform.is_equal_approx(eye_transform) and (brows == null or brows.transform == brow_transform), "Rabbit eye and eyebrow geometry stays neutral for "+id)
-				if id in Emotes.SOCIAL:
+				if id in ["wave","thanks","love","agree"]:
+					check(actor.mouth.visible and actor.mouth.transform==mouth_transform,"Rabbit keeps its resting mouth for "+id)
+					if id=="thanks":
+						var mesh: ArrayMesh = actor.emote_face.mesh
+						var left := false
+						var right := false
+						var only_cheeks := true
+						for v: Vector3 in mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]:
+							left = left or v.x<0.
+							right = right or v.x>0.
+							only_cheeks = only_cheeks and absf(v.x)>.34 and v.y<-.14 and v.y>-.24
+						check(actor.emote_face.visible and mesh.get_surface_count()==1 and left and right and only_cheeks,"Rabbit thanks adds just two blush marks below the eyes")
+					else:
+						check(actor.emote_face==null or not actor.emote_face.visible,"Rabbit shows the untouched resting face for "+id)
+				elif id in Emotes.SOCIAL:
 					var face: AABB = actor.emote_face.mesh.get_aabb()
 					check(actor.emote_face.visible and not actor.mouth.visible and face.end.y < -.20 and face.position.y > -.53,"Only the rabbit mouth receives expression geometry for "+id)
 				else:
@@ -71,7 +101,14 @@ func test_poses() -> void:
 			if Emotes.is_expression(id):
 				check(is_instance_valid(actor.emote_effects) and actor.emote_effects.visible,species+" shows comic effect for "+id)
 				if species != "bunny":
-					check(actor.emote_face.visible and actor.emote_face.mesh.get_surface_count()>0 and not actor.eyes.visible and not actor.mouth.visible,species+" shows its expression for "+id)
+					var native_eyes: bool = (species=="cat_teacher" and id in Emotes.SOCIAL) or (species=="panda" and id=="refuse")
+					check(actor.emote_face.visible and actor.emote_face.mesh.get_surface_count()>0 and actor.eyes.visible==native_eyes and not actor.mouth.visible,species+" shows its expression for "+id)
+					if native_eyes:
+						check(actor.emote_face.mesh.get_aabb().end.y<-.14,species+" keeps extra face paint below the eyes for "+id)
+					if species=="cat_teacher" and id in Emotes.SOCIAL:
+						check(brush.mesh.get_blend_shape_count()==1 and brush.get_blend_shape_value(0)>.9 and brush.mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]==neutral_ink.surface_get_arrays(0)[Mesh.ARRAY_VERTEX],"Cat uses the original eye strokes as the neutral shape for "+id)
+						if id=="shock":
+							check(pupil_clears_cheek(brush.mesh,actor.eyes.position),"Cat surprised pupils clear the curved cheek")
 			if id=="sweat":
 				check(actor.emote_effects.particles.size()==1 and actor.emote_effects.particles[0].has_node("BigSweatDrop"),species+" shows one oversized sweat drop")
 			if id=="love":
@@ -82,6 +119,8 @@ func test_poses() -> void:
 				check(actor.visual.position.y<-.12 and actor.left_leg.transform.basis.y.dot(Vector3.UP)<.35,species+" sits at floor height with paws forward")
 			if Emotes.is_short(id):
 				tick(actor, 75)
+				if brush!=null and id in Emotes.SOCIAL:
+					check(brush.mesh==neutral_ink,"Cat restores its exact resting eye mesh after "+id)
 				check(actor.emote.is_empty() and actor.eyes.visible and actor.mouth.visible and (actor.emote_effects==null or not actor.emote_effects.visible),species+" finishes and restores neutral face after two seconds for "+id)
 			else:
 				var hold_frames := int(ceil(float(Emotes.DANCES.get(id,8.0))*2.1/STEP))
@@ -303,6 +342,7 @@ func run() -> void:
 	city.queue_free()
 	await process_frame
 	session.queue_free()
-	await process_frame
+	# Allow the audio thread to release the city ambience after scene teardown.
+	await create_timer(.2).timeout
 	print("EMOTE_FLOW_RESULT ", "PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
 	quit(0 if failures.is_empty() else 1)

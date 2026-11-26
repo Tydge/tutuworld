@@ -2,14 +2,21 @@ extends MeshInstance3D
 ## Draw temporary expression marks on the existing head surface.
 
 const CatSurface = preload("res://scripts/characters/cat_surface.gd")
+const Motion = preload("res://scripts/characters/emote_motion.gd")
 const G = preload("res://scripts/geometry.gd")
 static var faces: Dictionary = {}
 var current := ""
 
+static func uses_model_eyes(species: String, expression: String) -> bool:
+	return species == "bunny" or (species == "cat_teacher" and expression in Motion.SOCIAL) or (species == "panda" and expression == "refuse")
+
+static func uses_model_mouth(species: String, expression: String) -> bool:
+	return species == "bunny" and (expression not in Motion.SOCIAL or expression in ["wave","thanks","love","agree"])
+
 func show_expression(species: String, expression: String) -> void:
 	var key := species + "/" + expression
 	if not faces.has(key):
-		faces[key] = Painter.new(species).draw(expression)
+		faces[key] = Painter.new(species).draw(expression,uses_model_eyes(species,expression),uses_model_mouth(species,expression))
 	if current != key:
 		current = key
 		mesh = faces[key]
@@ -29,9 +36,13 @@ class Painter:
 		for surface in [ink, light, pink]:
 			surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 
-	func draw(expression: String) -> ArrayMesh:
-		if not bunny:
+	func draw(expression: String, model_eyes: bool, model_mouth: bool) -> ArrayMesh:
+		if not model_eyes:
 			draw_eyes(expression)
+		if expression == "thanks" or (expression == "love" and not bunny):
+			var cheek_y := -.19 if bunny else (-.104 if panda else -.208)
+			for side in [-1.,1.]:
+				oval(pink,Vector2(side*(.43 if bunny else .45),cheek_y),Vector2(.068,.026))
 		var y := -.342 if panda else -.357
 		match expression:
 			"laugh":
@@ -46,7 +57,8 @@ class Painter:
 				oval(ink,Vector2(.047,y),Vector2(.046,.025))
 				oval(pink,Vector2(.052,y-.006),Vector2(.025,.010),.003)
 			_:
-				social_mouth(expression,y)
+				if not model_mouth:
+					social_mouth(expression,y)
 		var combined := ArrayMesh.new()
 		for entry in [[ink,"31242c"],[light,"fdf3dd"],[pink,"e58a90"]]:
 			if not used.has(entry[0]):
@@ -98,13 +110,9 @@ class Painter:
 			"snicker":
 				curve(stroke,eye+Vector2(-.09,-side*.023),eye+Vector2(0,-.028),eye+Vector2(.09,side*.023),.019)
 				curve(ink,Vector2(x-.086,brow+.022),Vector2(x,brow+.075),Vector2(x+.082,brow-.015),.015)
-			"refuse":
-				curve(stroke,eye+Vector2(-side*.078,.062),eye+Vector2(side*.045,.008),eye+Vector2(-side*.076,-.046),.018)
 			_:
 				var arch := .13 if id in ["cheer","love"] else .071
 				curve(stroke,eye+Vector2(-.092,-.012),eye+Vector2(0,arch),eye+Vector2(.092,-.012),.018)
-				if id in ["thanks","love"]:
-					oval(pink,Vector2(side*.45,eye.y-.13),Vector2(.065,.025))
 
 	func social_mouth(id: String,y: float) -> void:
 		var center := Vector2(.012,y)

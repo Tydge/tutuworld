@@ -44,19 +44,16 @@ func ink_draw(parent: Node3D,st: SurfaceTool,color_: String) -> void:
 
 # Use one drawing plane for the entire expression. The outlines, pupils and
 # pigment share the same projection onto the cheeks, even at a grazing angle.
-func drawing_point(x: float,y: float) -> Vector2:
-	return Vector2((x-179.)*.0041,(269.-y)*.0041-.09)
-
 func eye_edge(t: float,side: float,upper: bool) -> Vector2:
-	var a:=drawing_point(216,284);var b:=drawing_point(296,273)
-	var ctrl:=drawing_point(245,226) if upper else drawing_point(255,278)
+	var a:=Surface.eye_corner(false);var b:=Surface.eye_corner(true)
+	var ctrl:=Surface.drawing_point(245,226) if upper else Surface.drawing_point(255,278)
 	var point:=a.lerp(ctrl,t).lerp(ctrl.lerp(b,t),t)
 	point.x*=side
 	return point
 
 func face() -> void:
 	var eyes:=group(cat_head,"Eyes",Vector3(0,-.118,0))
-	var mouth:=group(cat_head,"Mouth",Surface.face_point(drawing_point(180,332)))
+	var mouth:=group(cat_head,"Mouth",Surface.face_point(Surface.drawing_point(180,332)))
 	var cheeks:=group(cat_head,"CheekMarkings")
 	var eyes_st:=SurfaceTool.new();eyes_st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var mouth_st:=SurfaceTool.new();mouth_st.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -64,8 +61,8 @@ func face() -> void:
 	var red_st:=SurfaceTool.new();red_st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for side in [-1.,1.]:
 		var a:=eye_edge(0,side,true);var b:=eye_edge(1,side,true)
-		var upper:=drawing_point(245,226);upper.x*=side
-		var lower:=drawing_point(255,278);lower.x*=side
+		var upper:=Surface.drawing_point(245,226);upper.x*=side
+		var lower:=Surface.drawing_point(255,278);lower.x*=side
 		ribbon(eyes_st,eyes.position,a,upper,b,.009,.001)
 		ribbon(eyes_st,eyes.position,a,lower,b,.004,.0006)
 		for i in range(8):
@@ -76,13 +73,13 @@ func face() -> void:
 			ink_triangle(eyes_st,eyes.position,upper1,lower0,lower1)
 		# Five tapered strokes: three at the temple, two following the cheek.
 		for mark in [[308,241,309,230,316,221, .011],[311,250,321,245,326,236,.013],[312,258,324,259,329,251,.013],[270,303,283,306,297,298,.013],[274,325,288,328,297,317,.012]]:
-			var start:=drawing_point(mark[0],mark[1]);start.x*=side
-			var mid:=drawing_point(mark[2],mark[3]);mid.x*=side
-			var end:=drawing_point(mark[4],mark[5]);end.x*=side
+			var start:=Surface.drawing_point(mark[0],mark[1]);start.x*=side
+			var mid:=Surface.drawing_point(mark[2],mark[3]);mid.x*=side
+			var end:=Surface.drawing_point(mark[4],mark[5]);end.x*=side
 			ribbon(red_st,Vector3.ZERO,start,mid,end,mark[6])
 	# The lip and its outline share the same curved projection and bite pivot.
-	var left:=drawing_point(165,328);var right:=drawing_point(200,327)
-	var top:=drawing_point(181,318);var chin:=drawing_point(185,351)
+	var left:=Surface.drawing_point(165,328);var right:=Surface.drawing_point(200,327)
+	var top:=Surface.drawing_point(181,318);var chin:=Surface.drawing_point(185,351)
 	var fill_pivot:=mouth.position+Vector3.BACK*.0008
 	for i in range(16):
 		var t0:=i/16.;var t1:=(i+1)/16.
@@ -100,9 +97,9 @@ func face() -> void:
 	var nose:=group(cat_head,"Nose")
 	var nose_st:=SurfaceTool.new();nose_st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for side in [-1.,1.]:
-		var start:=drawing_point(167,302);start.x*=side
-		var mid:=drawing_point(173,305);mid.x*=side
-		ribbon(nose_st,Vector3.ZERO,start,mid,Vector2(side*.002,drawing_point(179,312).y),.0048)
+		var start:=Surface.drawing_point(167,302);start.x*=side
+		var mid:=Surface.drawing_point(173,305);mid.x*=side
+		ribbon(nose_st,Vector3.ZERO,start,mid,Vector2(side*.002,Surface.drawing_point(179,312).y),.0048)
 	ink_draw(nose,nose_st,"8e7871")
 
 func head_normal(p: Vector3) -> Vector3:

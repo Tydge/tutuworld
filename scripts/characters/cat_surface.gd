@@ -6,6 +6,12 @@ const HEIGHT_RADIUS:=.619
 const DEPTH_RADIUS:=.622
 const INK_OFFSET:=.004
 
+static func drawing_point(x: float,y: float) -> Vector2:
+	return Vector2((x-179.)*.0041,(269.-y)*.0041-.09)
+
+static func eye_corner(outer: bool) -> Vector2:
+	return drawing_point(296,273) if outer else drawing_point(216,284)
+
 static func half_width(latitude: float) -> float:
 	# A little fullness below the eyes and a gradual taper towards the temples.
 	var lower:=maxf(-latitude,0.)

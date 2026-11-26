@@ -6,6 +6,7 @@ var distant_pose_elapsed:=0.
 const Meal=preload("res://scripts/city/meal_timeline.gd")
 const SleepPose=preload("res://scripts/characters/sleep_pose.gd")
 const EmoteMotion=preload("res://scripts/characters/emote_motion.gd")
+const CatEmoteEyes = preload("res://scripts/characters/cat_emote_eyes.gd")
 const EmoteFace=preload("res://scripts/characters/emote_face.gd")
 const EmoteEffects=preload("res://scripts/characters/emote_effects.gd")
 ## Shared semantic rig: four limb pivots, head, eyes, mouth and wearable slots.
@@ -44,6 +45,7 @@ var visual_rest_scale := Vector3.ONE
 const DanceRig := preload("res://scripts/characters/dance_rig.gd")
 var dance_rig: DanceRig
 var emote_aiming := false
+var cat_eye_pose: CatEmoteEyes
 var emote_face: EmoteFace
 var emote_effects: EmoteEffects
 var walking := false
@@ -627,22 +629,27 @@ func pose_emote_paws(gesture: EmoteMotion.Pose,strength: float) -> void:
 
 func update_emote_expression(strength: float) -> void:
 	var expressive := EmoteMotion.is_expression(emote) and strength > .10
-	var bunny: bool = rig_profile.species_id == "bunny"
-	if expressive and (not bunny or emote in EmoteMotion.SOCIAL):
+	var species: String = rig_profile.species_id
+	var model_mouth := EmoteFace.uses_model_mouth(species,emote)
+	if expressive and (not model_mouth or emote=="thanks"):
 		if emote_face == null:
 			emote_face = EmoteFace.new()
 			emote_face.name = "EmoteFace"
 			emote_face.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			head.add_child(emote_face)
-		if not bunny:
-			eyes.hide()
-		mouth.hide()
-		emote_face.show_expression(rig_profile.species_id, emote)
+		eyes.visible = EmoteFace.uses_model_eyes(species,emote)
+		mouth.visible = model_mouth
+		emote_face.show_expression(species,emote)
 	elif emote_face != null and emote_face.visible:
 		emote_face.hide()
-		if not bunny:
-			eyes.show()
+		eyes.show()
 		mouth.show()
+	if expressive and species=="cat_teacher" and emote in EmoteMotion.SOCIAL:
+		if cat_eye_pose == null:
+			cat_eye_pose = CatEmoteEyes.new(eyes)
+		cat_eye_pose.pose(emote,strength)
+	elif cat_eye_pose != null:
+		cat_eye_pose.reset()
 	if expressive:
 		if emote_effects == null:
 			emote_effects = EmoteEffects.new()
