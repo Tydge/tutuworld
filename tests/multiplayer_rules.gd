@@ -147,7 +147,7 @@ func run() -> void:
 	result=await request(0,"emote",{"id":"dance_3"})
 	await wait(.3)
 	check(result.ok and gesture_packet.get("emote")=="dance_3" and float(gesture_packet.get("emote_age",0.))>0.,"A second client receives the dance and its elapsed time")
-	for id in ["dance_ballet","dance_street","dance_cloud"]:
+	for id in preload("res://scripts/characters/emote_motion.gd").SOCIAL + ["dance_ballet","dance_street","dance_cloud"]:
 		result=await request(0,"emote",{"id":id})
 		await wait(.18)
 		check(result.ok and gesture_packet.get("emote")==id and float(gesture_packet.get("emote_age",0.))>0.,"Remote player receives "+id+" and its time")

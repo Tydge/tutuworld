@@ -56,17 +56,26 @@ func test_poses() -> void:
 		var eye_transform: Transform3D = actor.eyes.transform
 		tick(actor, 75)
 		var base := rig(actor)
-		for id in Emotes.KEY_ORDER:
+		for id in Emotes.KEY_ORDER + Emotes.SOCIAL:
 			actor.trigger_emote(id)
 			tick(actor, 54)
 			check(actor.emote == id and not actor.seated and not actor.sleeping and actor.can_move,species+" performs "+id+" without gameplay locks")
 			check(rig(actor) != base,species+" changes body pose for "+id)
 			if species == "bunny":
-				check(actor.eyes.visible and actor.eyes.transform.is_equal_approx(eye_transform) and (brows == null or brows.transform == brow_transform) and actor.emote_face == null,"Rabbit eye and eyebrow geometry stays neutral for "+id)
-			if id in Emotes.EXPRESSIONS:
+				check(actor.eyes.visible and actor.eyes.transform.is_equal_approx(eye_transform) and (brows == null or brows.transform == brow_transform), "Rabbit eye and eyebrow geometry stays neutral for "+id)
+				if id in Emotes.SOCIAL:
+					var face: AABB = actor.emote_face.mesh.get_aabb()
+					check(actor.emote_face.visible and not actor.mouth.visible and face.end.y < -.20 and face.position.y > -.53,"Only the rabbit mouth receives expression geometry for "+id)
+				else:
+					check(actor.emote_face == null,"Rabbit legacy emotes keep their original face")
+			if Emotes.is_expression(id):
 				check(is_instance_valid(actor.emote_effects) and actor.emote_effects.visible,species+" shows comic effect for "+id)
 				if species != "bunny":
 					check(actor.emote_face.visible and actor.emote_face.mesh.get_surface_count()>0 and not actor.eyes.visible and not actor.mouth.visible,species+" shows its expression for "+id)
+			if id=="sweat":
+				check(actor.emote_effects.particles.size()==1 and actor.emote_effects.particles[0].has_node("BigSweatDrop"),species+" shows one oversized sweat drop")
+			if id=="love":
+				check(actor.emote_effects.particles[0].has_node("Heart"),species+" sends a shaped heart")
 			if id == "lie":
 				check(actor.visual.basis.y.dot(Vector3.UP)<.13 and actor.visual.position.y>.4,species+" lies horizontally instead of rotating into the ground")
 			if id == "sit":
@@ -80,6 +89,17 @@ func test_poses() -> void:
 				check(actor.emote == id,species+" retains or loops "+id)
 				actor.stop_emote()
 			tick(actor, 40)
+
+		actor.trigger_emote("snicker")
+		tick(actor, 36)
+		actor.trigger_emote("laugh")
+		tick(actor, 36)
+		if species == "bunny":
+			check(actor.eyes.visible and actor.mouth.visible and not actor.emote_face.visible,"Rabbit restores its own face when a legacy laugh interrupts a social emote")
+		else:
+			check(actor.emote_face.visible and actor.emote_face.current==species+"/laugh",species+" switches to its legacy laugh face")
+		actor.stop_emote()
+		tick(actor, 40)
 
 		var reference := Animals.create(species)
 		root.add_child(reference)
@@ -185,8 +205,9 @@ func test_stage_dances() -> void:
 		check(actor.dance_rig==null and actor.emote=="think",species+" switches straight back to a legacy emote")
 		actor.free()
 
-func key(code: Key, pressed: bool = true) -> void:
+func key(code: Key, pressed: bool = true, shift: bool = false) -> void:
 	var event := InputEventKey.new()
+	event.shift_pressed = shift
 	event.keycode = code
 	event.physical_keycode = code
 	event.pressed = pressed
@@ -218,6 +239,29 @@ func run() -> void:
 		await wait_frames(3)
 		key(code,false)
 		check(city.bunny.emote==Emotes.STAGE_KEYS[code] and not city.screenshot_busy,"Function key plays "+Emotes.STAGE_KEYS[code])
+	var social_ids := ["wave","cheer","thanks","love","agree","refuse","snicker","sweat","shock"]
+	for i in social_ids.size():
+		key(KEY_F1+i)
+		await wait_frames(5)
+		key(KEY_F1+i,false)
+		check(city.bunny.emote==social_ids[i] and not city.hud.photo_mode and not city.build_mode.active,"F%d starts %s alone" % [i+1,social_ids[i]])
+	key(KEY_F9)
+	await wait_frames(2)
+	key(KEY_F9,false)
+	check(city.bunny.emote=="shock" and city.bunny.emote_age<.08,"Repeating a short gesture restarts it")
+	var initial_run: bool = city.bunny.run_enabled
+	for enabled in [true,false]:
+		key(KEY_SHIFT,true,true)
+		if enabled:
+			await wait_frames(3)
+			check(city.bunny.run_enabled!=initial_run,"Plain Shift toggles running on press")
+		key(KEY_F2,true,true)
+		await wait_frames(2)
+		key(KEY_F2,false,true)
+		key(KEY_SHIFT,false)
+		await wait_frames(2)
+		check(city.bunny.run_enabled==initial_run,"A Shift shortcut preserves the previous run toggle")
+		check(city.hud.photo_mode==enabled and city.bunny.emote!="cheer","Shift+F2 toggles framing independently")
 	var photo := InputEventKey.new()
 	photo.physical_keycode=KEY_F12
 	photo.pressed=true
@@ -251,6 +295,10 @@ func run() -> void:
 	await wait_frames(2)
 	key(KEY_8,false)
 	check(city.bunny.emote.is_empty(),"Open panel does not activate number keys")
+	key(KEY_F6)
+	await wait_frames(2)
+	key(KEY_F6,false)
+	check(city.bunny.emote.is_empty() and not city.build_mode.active,"Settings ignores social and build shortcuts on plain F6")
 	city.hud.close_panel()
 	city.queue_free()
 	await process_frame

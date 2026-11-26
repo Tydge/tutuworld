@@ -2,6 +2,8 @@ extends RefCounted
 
 const Score := preload("res://scripts/characters/dance_score.gd")
 const STAGE_KEYS := {KEY_F10: Score.BALLET, KEY_F11: Score.STREET, KEY_F12: Score.CLOUD}
+# F1 through F9, in the same order as the controls shown in Settings.
+const SOCIAL := ["wave", "cheer", "thanks", "love", "agree", "refuse", "snicker", "sweat", "shock"]
 const SHORT_TIME := 2.0
 const KEY_ORDER := ["laugh", "angry", "sad", "think", "lie", "sit", "point", "dance_1", "dance_2", "dance_3"]
 const DANCES := {"dance_1": 12.0, "dance_2": 12.8, "dance_3": 14.4}
@@ -18,6 +20,7 @@ class Pose:
 	var roll := 0.0
 	var head_roll := 0.0
 	var head_pitch := 0.0
+	var head_yaw := 0.0
 	var ear_flick := 0.0
 	var paw_to_cheek := 0.0
 	var clap := 0.0
@@ -30,6 +33,8 @@ static func from_key(event: InputEventKey) -> String:
 	if event.alt_pressed or event.ctrl_pressed or event.meta_pressed or event.shift_pressed:
 		return ""
 	var key := event.physical_keycode if event.physical_keycode != 0 else event.keycode
+	if key >= KEY_F1 and key <= KEY_F9:
+		return SOCIAL[key-KEY_F1]
 	if STAGE_KEYS.has(key):
 		return STAGE_KEYS[key]
 	if key >= KEY_0 and key <= KEY_9:
@@ -46,13 +51,16 @@ static func weight(id: String, age: float) -> float:
 	return in_
 
 static func is_known(id: String) -> bool:
-	return id in KEY_ORDER or Score.DURATIONS.has(id)
+	return id in KEY_ORDER or id in SOCIAL or Score.DURATIONS.has(id)
 
 static func is_dance(id: String) -> bool:
 	return DANCES.has(id) or Score.DURATIONS.has(id)
 
 static func is_short(id: String) -> bool:
-	return id in EXPRESSIONS or id == "point"
+	return is_expression(id) or id == "point"
+
+static func is_expression(id: String) -> bool:
+	return id in EXPRESSIONS or id in SOCIAL
 
 static func sample(id: String, age: float) -> Pose:
 	var p := Pose.new()
@@ -65,6 +73,9 @@ static func sample(id: String, age: float) -> Pose:
 		return p
 
 	var t := minf(age, SHORT_TIME)
+	if id in SOCIAL:
+		social_pose(p,id,t)
+		return p
 	match id:
 		"laugh":
 			var chuckle := sin(t * TAU * 3.0)
@@ -149,6 +160,113 @@ static func sample(id: String, age: float) -> Pose:
 			p.head_roll = .10 * cue
 			p.ear_flick = .2 * cue
 	return p
+
+# A short anticipation, a readable silhouette and a smaller follow-through.
+# Paw directions are relative to the shoulder (+Z is towards the audience).
+static func paw(direction: Vector3) -> Vector3:
+	return Quaternion(Vector3.DOWN,direction.normalized()).get_euler()
+
+static func accent(t: float, begin: float, peak: float, release: float) -> float:
+	return smoothstep(begin,peak,t)*(1.-smoothstep(peak,release,t))
+
+static func hop(t: float, begin: float, end: float) -> float:
+	var f := clampf((t-begin)/(end-begin),0.,1.)
+	return 4.*f*(1.-f)
+
+static func social_pose(p: Pose,id: String,t: float) -> void:
+	match id:
+		"wave":
+			var sweep := sin((t-.31)*TAU*2.25)*(1.-smoothstep(1.25,1.52,t))
+			var encore := accent(t,1.42,1.55,1.81)
+			p.right_arm = Vector3(-.35,.06,1.92+.36*sweep+.31*encore)
+			p.left_arm = Vector3(-.28,0,-.38)
+			p.roll = .13+.035*sweep
+			p.head_roll = -.24
+			p.right_leg.x = -.31
+			p.ear_flick = .12*sweep
+		"cheer":
+			var air := hop(t,.29,.76)+.65*hop(t,.94,1.30)
+			var dip := accent(t,.05,.22,.32)+accent(t,.74,.84,.97)+.55*accent(t,1.28,1.38,1.52)
+			p.left_arm = paw(Vector3(-1.,.17+.29*air-.94*dip,.28))
+			p.right_arm = paw(Vector3(.98,.21+.26*air-.82*dip,.32))
+			p.left_leg = Vector3(-.47*air,0,-.49*air)
+			p.right_leg = Vector3(.88*air,0,.26*air)
+			p.lift = .36*air-.075*dip
+			p.lean = .19*dip-.09*air
+			p.head_pitch = -.21*air
+			p.ear_flick = -.26*air+.15*dip
+		"thanks":
+			var bow := smoothstep(.25,.67,t)*(1.-smoothstep(1.00,1.46,t))
+			p.left_arm = paw(Vector3(.54,-.22,.83))
+			p.right_arm = paw(Vector3(-.54,-.22,.83))
+			p.lean = .46*bow
+			p.head_pitch = .11*bow-.08
+			p.head_roll = -.10*smoothstep(1.15,1.55,t)
+			p.ear_flick = .26*bow
+			p.grounded_pose = true
+		"love":
+			var send := smoothstep(.57,.98,t)
+			p.left_arm = paw(Vector3(.59,-.12,.80)).lerp(Vector3(-.58,.06,-.85),send)
+			p.right_arm = paw(Vector3(-.59,-.12,.80)).lerp(Vector3(-1.23,.20,1.03),send)
+			p.roll = -.10+.22*send
+			p.lean = -.15+.33*send
+			p.head_roll = -.26
+			p.right_leg.x = .42*send
+			p.ear_flick = .20*accent(t,.63,.91,1.34)
+		"agree":
+			var nod := accent(t,.23,.42,.69)+.80*accent(t,.71,.92,1.25)
+			p.left_arm = Vector3(-.17,0,-.27)
+			p.right_arm = paw(Vector3(-.37,.02,.92))
+			p.head_pitch = -.16+.68*nod
+			p.lean = .09*nod
+			p.ear_flick = -.31*nod
+		"refuse":
+			var cross_arms := smoothstep(.22,.50,t)
+			var shake := sin((t-.35)*TAU*1.78)*smoothstep(.24,.41,t)*(1.-smoothstep(1.26,1.46,t))
+			p.left_arm = Vector3(-.45,0,-1.).lerp(paw(Vector3(.84,.06,.55)),cross_arms)
+			p.right_arm = Vector3(-.53,0,1.).lerp(paw(Vector3(-.71,.22,.67)),cross_arms)
+			p.head_yaw = .49*shake+.24*smoothstep(1.36,1.63,t)
+			p.lean = -.15
+			p.head_pitch = -.10
+			p.left_leg.z = -.16
+			p.right_leg.z = .16
+		"snicker":
+			var giggle := accent(t,.61,.70,.81)+accent(t,.84,.93,1.06)+.63*accent(t,1.09,1.16,1.31)
+			var peek := smoothstep(1.17,1.53,t)
+			p.right_arm = paw(Vector3(-.30,.28,.88)).lerp(paw(Vector3(.75,-.30,.60)),peek)
+			p.left_arm = paw(Vector3(-.28,-.87,-.40))
+			p.turn = -.43+.12*peek
+			p.head_yaw = .28+.31*peek
+			p.head_roll = -.19-.045*giggle
+			p.head_pitch = .08-.20*peek
+			p.lean = .19+.09*giggle
+			p.roll = .12
+			p.lift = .052*giggle
+			p.ear_flick = -.12*giggle
+		"sweat":
+			var sag := smoothstep(.46,1.27,t)
+			p.right_arm = paw(Vector3(.95,.18,.24)).lerp(Vector3(-.18,0,.27),sag)
+			p.left_arm = Vector3(-.18,0,-.18)
+			p.lean = .23*sag
+			p.roll = -.14*sag
+			p.head_roll = -.21*sag
+			p.head_yaw = -.28
+			p.lift = -.055*sag
+			p.ear_flick = -.36*sag
+		"shock":
+			var air := hop(t,.25,.71)
+			var flinch := accent(t,.08,.22,.34)
+			var spread := smoothstep(.22,.32,t)*(1.-smoothstep(.76,.98,t))
+			var tremble := sin(t*TAU*8.)*accent(t,.75,.87,1.29)
+			p.left_arm = Vector3(-.24,0,-.15-1.65*spread)
+			p.right_arm = Vector3(-.28,0,.15+1.65*spread)
+			p.left_leg = Vector3(-.62*air,0,-.48*air)
+			p.right_leg = Vector3(-.62*air,0,.48*air)
+			p.lift = .44*air-.06*flinch
+			p.lean = .18*flinch-.20*spread
+			p.head_pitch = -.23*spread
+			p.roll = .030*tremble
+			p.ear_flick = -.34*air+.14*tremble
 
 # Use overlapping eases for the different phrases. Every offset returns to
 # the opening pose and the pirouette ends one full revolution from its start.

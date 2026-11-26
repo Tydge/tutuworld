@@ -65,6 +65,8 @@ var speed_multiplier := 1.0
 var run_speed_multiplier := 1.0
 var stamina_fraction:=1.0
 var run_enabled:=false
+enum SprintPress { IDLE, TOGGLED, SHORTCUT }
+var sprint_press := SprintPress.IDLE
 var is_running:=false
 var leg_rest_left:=Vector3.ZERO
 var leg_rest_right:=Vector3.ZERO
@@ -139,6 +141,14 @@ func _ready() -> void:
 
 func toggle_run() -> void:
 	run_enabled=not run_enabled
+# Shift alone toggles on key-down. A framing/build/photo chord can arrive
+# either before or after the physics tick that saw that same Shift press.
+func consume_shift_shortcut() -> void:
+	if Input.is_action_pressed("sprint"):
+		if sprint_press==SprintPress.TOGGLED:
+			toggle_run()
+		sprint_press = SprintPress.SHORTCUT
+
 func can_emote() -> bool:
 	return can_move and not seated and not sleeping and action.is_empty() and is_on_floor() and not walking
 
@@ -257,7 +267,11 @@ func _physics_process(delta: float) -> void:
 		if count_==0 and network_idle>.3:simulate_movement(delta,Vector3.ZERO,false,false)
 		return
 	var text_entry: bool=world.has_method("is_text_entry_active") and world.is_text_entry_active()
-	if not network_controlled and Input.is_action_just_pressed("sprint") and can_move and action=="" and not world.paused and not text_entry:toggle_run()
+	if not network_controlled and Input.is_action_just_pressed("sprint") and sprint_press!=SprintPress.SHORTCUT and can_move and action=="" and not world.paused and not text_entry:
+		toggle_run()
+		sprint_press = SprintPress.TOGGLED
+	if not Input.is_action_pressed("sprint"):
+		sprint_press = SprintPress.IDLE
 	var axis:=Input.get_vector("move_left","move_right","move_up","move_down")
 	var yaw: float=world.yaw
 	var direction:=Vector3(cos(yaw),0,-sin(yaw))*axis.x+Vector3(sin(yaw),0,cos(yaw))*axis.y
@@ -558,6 +572,10 @@ func animate_pose(delta: float) -> void:
 			right_arm.scale = Vector3.ONE
 			emote_aiming = false
 	head.rotation.x = lerp_angle(head.rotation.x,head_pitch,blend)
+	if gesture != null or absf(head.rotation.y) > .0001:
+		head.rotation.y = lerp_angle(head.rotation.y,gesture.head_yaw*strength if gesture != null else 0.,blend)
+		if absf(head.rotation.y) < .0001:
+			head.rotation.y = 0.
 	visual.position.y = lerpf(visual.position.y,bob,blend)
 	if gesture != null or emote_shift.length_squared() > .000001:
 		emote_shift = emote_shift.lerp(gesture.shift * strength if gesture != null else Vector2.ZERO, blend)
@@ -608,19 +626,22 @@ func pose_emote_paws(gesture: EmoteMotion.Pose,strength: float) -> void:
 			aim_hand(arm,palm.lerp(target,blend),side<0)
 
 func update_emote_expression(strength: float) -> void:
-	var expressive := emote in EmoteMotion.EXPRESSIONS and strength > .10
-	if expressive and rig_profile.species_id != "bunny":
+	var expressive := EmoteMotion.is_expression(emote) and strength > .10
+	var bunny: bool = rig_profile.species_id == "bunny"
+	if expressive and (not bunny or emote in EmoteMotion.SOCIAL):
 		if emote_face == null:
 			emote_face = EmoteFace.new()
 			emote_face.name = "EmoteFace"
 			emote_face.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			head.add_child(emote_face)
-		eyes.hide()
+		if not bunny:
+			eyes.hide()
 		mouth.hide()
 		emote_face.show_expression(rig_profile.species_id, emote)
 	elif emote_face != null and emote_face.visible:
 		emote_face.hide()
-		eyes.show()
+		if not bunny:
+			eyes.show()
 		mouth.show()
 	if expressive:
 		if emote_effects == null:

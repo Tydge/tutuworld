@@ -841,7 +841,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if drafting.input(event):get_viewport().set_input_as_handled();return
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode==KEY_F6:request_close()
+		if event.is_action_pressed("build_mode",false,true):
+			city.bunny.consume_shift_shortcut()
+			request_close()
 		elif event.keycode==KEY_ESCAPE:
 			if tool!="select" or start_point!=null:choose_tool("select")
 			else:request_close()

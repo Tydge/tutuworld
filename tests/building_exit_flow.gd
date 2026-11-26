@@ -18,10 +18,10 @@ func run() -> void:
 		editor.commit(preload("res://scripts/building/templates.gd").cottage())
 		if index==0:editor.ui.root_ui.find_child("FinishBuilding",true,false).pressed.emit()
 		else:
-			var event:=InputEventKey.new();event.keycode=KEY_ESCAPE if index==1 else KEY_F6;event.pressed=true;Input.parse_input_event(event);await process_frame
-		check(not editor.active and city.bunny.can_move and not city.paused and session.active,"Finish button / Esc / F6 restores normal controls: "+str(index))
+			var event:=InputEventKey.new();event.keycode=KEY_ESCAPE if index==1 else KEY_F6;event.physical_keycode=event.keycode;event.shift_pressed=index==2;event.pressed=true;Input.parse_input_event(event);await process_frame
+		check(not editor.active and city.bunny.can_move and not city.paused and session.active,"Finish button / Esc / Shift+F6 restores normal controls: "+str(index))
 		check(city.bunny.position==position_,"Finishing preserves the exact player location: "+str(index))
 		check(session.state().player_position==[position_.x,position_.y,position_.z],"The saved player position uses the current location: "+str(index))
 		check(city.camera_focus.distance_to(position_+Vector3.UP*1.35)<.001,"The gameplay camera returns to the player at their actual location: "+str(index))
-		var released:=InputEventKey.new();released.keycode=KEY_ESCAPE if index==1 else KEY_F6;released.pressed=false;Input.parse_input_event(released);await process_frame
+		var released:=InputEventKey.new();released.keycode=KEY_ESCAPE if index==1 else KEY_F6;released.physical_keycode=released.keycode;released.shift_pressed=index==2;released.pressed=false;Input.parse_input_event(released);await process_frame
 	print("BUILDING_EXIT_FLOW_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures);quit(0 if failures.is_empty() else 1)

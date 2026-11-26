@@ -9,7 +9,7 @@ var current := ""
 func show_expression(species: String, expression: String) -> void:
 	var key := species + "/" + expression
 	if not faces.has(key):
-		faces[key] = Painter.new(species == "panda").draw(expression)
+		faces[key] = Painter.new(species).draw(expression)
 	if current != key:
 		current = key
 		mesh = faces[key]
@@ -17,16 +17,47 @@ func show_expression(species: String, expression: String) -> void:
 
 class Painter:
 	var panda: bool
+	var bunny: bool
+	var used := {}
 	var ink := SurfaceTool.new()
 	var light := SurfaceTool.new()
 	var pink := SurfaceTool.new()
 
-	func _init(is_panda: bool) -> void:
-		panda = is_panda
+	func _init(species: String) -> void:
+		panda = species == "panda"
+		bunny = species == "bunny"
 		for surface in [ink, light, pink]:
 			surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 
 	func draw(expression: String) -> ArrayMesh:
+		if not bunny:
+			draw_eyes(expression)
+		var y := -.342 if panda else -.357
+		match expression:
+			"laugh":
+				oval(ink,Vector2(0.,y-.014),Vector2(.145,.105))
+				oval(pink,Vector2(.008,y-.057),Vector2(.074,.033),.003)
+				curve(light,Vector2(-.08,y+.038),Vector2(0.,y+.057),Vector2(.080,y+.038),.009,.003)
+			"angry":
+				curve(ink,Vector2(-.138,y-.002),Vector2(0.,y+.087),Vector2(.138,y-.002),.016)
+			"sad":
+				curve(ink,Vector2(-.106,y-.016),Vector2(-.023,y+.119),Vector2(.099,y-.033),.016)
+			"think":
+				oval(ink,Vector2(.047,y),Vector2(.046,.025))
+				oval(pink,Vector2(.052,y-.006),Vector2(.025,.010),.003)
+			_:
+				social_mouth(expression,y)
+		var combined := ArrayMesh.new()
+		for entry in [[ink,"31242c"],[light,"fdf3dd"],[pink,"e58a90"]]:
+			if not used.has(entry[0]):
+				continue
+			var material := G.mat(entry[1], .89).duplicate() as StandardMaterial3D
+			material.cull_mode = BaseMaterial3D.CULL_DISABLED
+			entry[0].set_material(material)
+			entry[0].commit(combined)
+		return combined
+
+	func draw_eyes(expression: String) -> void:
 		var eye_x := .293 if panda else .298
 		var eye_y := .026 if panda else -.078
 		var brow_y := .272 if panda else .104
@@ -50,33 +81,59 @@ class Painter:
 					oval(ink, eye + Vector2(.028,.005), Vector2(.036,squint*.74), .003)
 					oval(light, eye + Vector2(.020,.023),Vector2(.010,.010),.006)
 					curve(ink,Vector2(side*.183,brow_y),Vector2(side*.30,brow_y+(.135 if side<0. else .034)),Vector2(side*.40,brow_y+.028),.015)
-		var y := -.342 if panda else -.357
-		match expression:
-			"laugh":
-				oval(ink,Vector2(0.,y-.014),Vector2(.145,.105))
-				oval(pink,Vector2(.008,y-.057),Vector2(.074,.033),.003)
-				curve(light,Vector2(-.08,y+.038),Vector2(0.,y+.057),Vector2(.080,y+.038),.009,.003)
-			"angry":
-				curve(ink,Vector2(-.138,y-.002),Vector2(0.,y+.087),Vector2(.138,y-.002),.016)
-			"sad":
-				curve(ink,Vector2(-.106,y-.016),Vector2(-.023,y+.119),Vector2(.099,y-.033),.016)
-			"think":
-				oval(ink,Vector2(.047,y),Vector2(.046,.025))
-				oval(pink,Vector2(.052,y-.006),Vector2(.025,.010),.003)
-		var combined := ArrayMesh.new()
-		var layers := [[ink, "31242c"]]
-		if panda or expression in ["laugh","think"]:
-			layers.append([light, "fdf3dd"])
-		if expression in ["laugh","think"]:
-			layers.append([pink, "e58a90"])
-		for entry in layers:
-			var material := G.mat(entry[1], .89).duplicate() as StandardMaterial3D
-			material.cull_mode = BaseMaterial3D.CULL_DISABLED
-			entry[0].set_material(material)
-			entry[0].commit(combined)
-		return combined
+				_:
+					social_eye(expression,eye,eye_stroke,side,brow_y)
+
+	func social_eye(id: String,eye: Vector2,stroke: SurfaceTool,side: float,brow: float) -> void:
+		var x := eye.x
+		match id:
+			"shock", "sweat", "wave":
+				var height := .112 if id=="shock" else .074
+				var glance := -.034 if id=="sweat" else .012
+				oval(light,eye,Vector2(.097,height))
+				oval(ink,eye+Vector2(glance,0),Vector2(.030,.047) if id=="shock" else Vector2(.044,.052),.003)
+				oval(light,eye+Vector2(glance-.01,.018),Vector2(.012,.012),.006)
+				var raise := .053 if id=="shock" else .015
+				curve(ink,Vector2(x-.09,brow+raise),Vector2(x,brow+raise+.069),Vector2(x+.09,brow+raise+.015),.014)
+			"snicker":
+				curve(stroke,eye+Vector2(-.09,-side*.023),eye+Vector2(0,-.028),eye+Vector2(.09,side*.023),.019)
+				curve(ink,Vector2(x-.086,brow+.022),Vector2(x,brow+.075),Vector2(x+.082,brow-.015),.015)
+			"refuse":
+				curve(stroke,eye+Vector2(-side*.078,.062),eye+Vector2(side*.045,.008),eye+Vector2(-side*.076,-.046),.018)
+			_:
+				var arch := .13 if id in ["cheer","love"] else .071
+				curve(stroke,eye+Vector2(-.092,-.012),eye+Vector2(0,arch),eye+Vector2(.092,-.012),.018)
+				if id in ["thanks","love"]:
+					oval(pink,Vector2(side*.45,eye.y-.13),Vector2(.065,.025))
+
+	func social_mouth(id: String,y: float) -> void:
+		var center := Vector2(.012,y)
+		match id:
+			"wave", "thanks", "agree":
+				var depth := .108 if id=="wave" else .074
+				curve(ink,center+Vector2(-.115,.029),center+Vector2(0,-depth),center+Vector2(.118,.035),.019)
+			"cheer":
+				oval(ink,center,Vector2(.137,.112))
+				oval(pink,center+Vector2(.010,-.047),Vector2(.073,.035),.003)
+			"love":
+				curve(ink,center+Vector2(-.076,.050),center+Vector2(.045,.043),center+Vector2(-.015,0),.018)
+				curve(ink,center+Vector2(-.015,0),center+Vector2(.034,-.051),center+Vector2(-.073,-.045),.018)
+			"refuse":
+				curve(ink,center+Vector2(-.105,-.015),center+Vector2(-.012,.069),center+Vector2(.115,-.012),.020)
+			"snicker":
+				curve(ink,center+Vector2(-.095,-.015),center+Vector2(.062,-.071),center+Vector2(.146,.086),.020)
+				curve(ink,center+Vector2(.119,.070),center+Vector2(.148,.080),center+Vector2(.159,.047),.012)
+			"sweat":
+				curve(ink,center+Vector2(-.116,.027),center+Vector2(-.080,-.057),center+Vector2(-.016,-.008),.017)
+				curve(ink,center+Vector2(-.016,-.008),center+Vector2(.046,.041),center+Vector2(.107,-.029),.017)
+			"shock":
+				oval(ink,center,Vector2(.084,.120))
+				oval(pink,center+Vector2(.006,-.066),Vector2(.045,.026),.003)
 
 	func project(p: Vector2) -> Vector3:
+		if bunny:
+			var z := .79*sqrt(maxf(.02,1.-pow(p.x/.84,2)-pow(p.y/.76,2)))
+			return Vector3(p.x,p.y,z+.012)
 		if not panda:
 			return CatSurface.face_point(p)
 		# Match the muzzle and radii in the baked panda head.
@@ -96,6 +153,7 @@ class Painter:
 			emit(surface,point,offset)
 
 	func curve(surface: SurfaceTool, a: Vector2, b: Vector2, c: Vector2, radius: float, offset := 0.) -> void:
+		used[surface] = true
 		var last := PackedVector2Array()
 		for index in range(19):
 			var t := float(index) / 18.
@@ -108,6 +166,7 @@ class Painter:
 			last = pair
 
 	func oval(surface: SurfaceTool, center: Vector2, radii: Vector2, offset := 0.) -> void:
+		used[surface] = true
 		for ring in range(3):
 			var inner := float(ring) / 3.
 			var outer := float(ring+1) / 3.

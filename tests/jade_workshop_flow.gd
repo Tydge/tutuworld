@@ -78,7 +78,7 @@ func run() -> void:
 		check(editor.ui.cards.has("object:"+kind) and Layout.validate(furnished,"jade").ok,"Build catalogue and cottage placement "+kind)
 	editor.undo()
 	editor.choose_tool("object:jade_cottage")
-	check(editor.place_at(Vector2(82,94)),"Set up a cottage through F6 · "+editor.ui.status.text)
+	check(editor.place_at(Vector2(82,94)),"Set up a cottage through the construction editor · "+editor.ui.status.text)
 	editor.choose_tool("object:jade_alcove_bed")
 	check(editor.place_at(Vector2(82,94)),"Furnish the new cottage with its canopy bed · "+editor.ui.status.text)
 	home.elements[1].kind="jade_altar_table"

@@ -1,9 +1,12 @@
 extends Node3D
 ## Three-dimensional comic marks. These stay outside the face on every species.
 const G = preload("res://scripts/geometry.gd")
+const SocialMarks := preload("res://scripts/characters/social_marks.gd")
+const Motion := preload("res://scripts/characters/emote_motion.gd")
 static var colors: Dictionary = {}
 
 var kind := ""
+var social := false
 var marks: Node3D
 var particles: Array[Node3D] = []
 
@@ -11,6 +14,7 @@ func show_effect(id: String) -> void:
 	if id == kind:
 		return
 	kind = id
+	social = id in Motion.SOCIAL
 	if is_instance_valid(marks):
 		remove_child(marks)
 		marks.queue_free()
@@ -50,13 +54,16 @@ func show_effect(id: String) -> void:
 				var bubble := particle()
 				G.ball(bubble,Vector3.ZERO,Vector3.ONE*(.095+i*.033),paint("ffe6a2"))
 				G.ball(bubble,Vector3(-.033,.035,.078+i*.018),Vector3.ONE*(.023+i*.004),paint("fff9df"))
+		_:
+			if social:
+				SocialMarks.build(self,id)
 	for part in marks.find_children("*","GeometryInstance3D",true,false):
 		part.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 func animate(actor: Node3D, age: float, strength: float) -> void:
 	var height: float = actor.rig_profile.mood_height
 	var right: float = actor.rig_profile.head_radii.x
-	position = Vector3(0, height - .35, 0)
+	position = actor.to_local(actor.head.global_position) if social else Vector3(0, height - .35, 0)
 	var camera := get_viewport().get_camera_3d()
 	if camera != null:
 		rotation.y = atan2(camera.global_position.x - global_position.x, camera.global_position.z - global_position.z) - actor.global_rotation.y
@@ -67,6 +74,9 @@ func animate(actor: Node3D, age: float, strength: float) -> void:
 		return
 	for index in range(particles.size()):
 		var part := particles[index]
+		if social:
+			SocialMarks.animate(part,kind,index,age,actor.rig_profile.head_radii,strength)
+			continue
 		var phase := fposmod(age * 1.8 - index * .27, 1.0)
 		var plume := sin(phase * PI)
 		var size := strength

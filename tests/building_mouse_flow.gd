@@ -35,12 +35,14 @@ func run() -> void:
 	# Route an actual shortcut through the game's normal unhandled-input path.
 	for down in [true,false]:
 		var key:=InputEventKey.new()
+		key.physical_keycode=KEY_F6
 		key.keycode=KEY_F6
+		key.shift_pressed=true
 		key.pressed=down
 		Input.parse_input_event(key)
 		Input.flush_buffered_events()
 		await process_frame
-	editor=city.build_mode;check(editor.active,"F6 actually opens the in-game construction UI")
+	editor=city.build_mode;check(editor.active,"Shift+F6 actually opens the in-game construction UI")
 	if not editor.active:quit(1);return
 	var actor_before: Vector3=city.bunny.position
 	await button("Tool_floor");check(editor.tool=="floor","Floor catalog click activates the floor tool");await world(Vector3(83,.18,-9));await world(Vector3(95,.18,1))

@@ -28,9 +28,9 @@ func run() -> void:
  key(KEY_W);await create_timer(.3).timeout
  view.open_chat();await create_timer(.5).timeout
  var start: Vector3=actor.position;var running: bool=actor.run_enabled
- for code in [KEY_I,KEY_B,KEY_C,KEY_TAB,KEY_M,KEY_E,KEY_F,KEY_R,KEY_F2]:
+ for code in [KEY_I,KEY_B,KEY_C,KEY_TAB,KEY_M,KEY_E,KEY_F,KEY_R,KEY_F2,KEY_F6,KEY_F9]:
   var event:=key(code);game._unhandled_input(event);key(code,false)
- check(not game.hud.overlay.visible and not game.hud.photo_mode,"Chat isolates inventory, profile, clothing, map, interaction and photo hotkeys")
+ check(game.bunny.emote.is_empty() and not game.build_mode.active and not game.hud.overlay.visible and not game.hud.photo_mode,"Chat isolates panel, interaction and social hotkeys")
  check(view.chat_card.visible and game.is_text_entry_active(),"Text mode remains active after Tab/focus changes")
  key(KEY_SHIFT);key(KEY_W);view.chat_input.text="中文聊天测试 🍊"
  await create_timer(.4).timeout
@@ -53,10 +53,12 @@ func run() -> void:
  check(not view.chat_card.visible and game.hud.overlay.visible,"Mouse panel action switches away from chat cleanly")
  game.hud.close_panel()
  for npc in server.maps.city.npcs:npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.collision_layer=0;npc.hide()
- var benches:=0
+ var seat_counts := {}
  for target_id in game.targets:
   if not str(target_id).begins_with("bench:"):continue
-  benches+=1;var target: Dictionary=game.targets[target_id];var remote: Dictionary=server.maps.city.targets.get(target_id,{})
+  var area := str(target_id).get_slice(":",1)
+  seat_counts[area] = int(seat_counts.get(area,0))+1
+  var target: Dictionary=game.targets[target_id];var remote: Dictionary=server.maps.city.targets.get(target_id,{})
   check(not remote.is_empty() and target.position.is_equal_approx(remote.position),"Client and server agree on the exact seat: "+target_id)
   var pawn=server.pawns[id];pawn.position=remote.node.get_node("ExitAnchor").global_position;pawn.velocity=Vector3.ZERO;pawn.reset_network_motion()
   await create_timer(.25).timeout
@@ -64,7 +66,7 @@ func run() -> void:
   check(game.nap_active and pawn.seated and server.locks.has("city:"+target_id),"E sits on nearby seat: "+target_id)
   result=await session.request_online("stand");await create_timer(.2).timeout
   check(result.get("ok",false) and not pawn.seated and not server.locks.has("city:"+target_id),"Standing releases seat: "+target_id)
- check(benches==5,"All same-name park/beach seats exercised")
+ check(seat_counts=={"CentralPark":4,"SouthBeach":1,"EastBuildingSite/GardenCommons":4},"Exercise park, beach and garden seats")
  game.queue_free();await process_frame;await session.leave_online();server.listener.stop();server.queue_free();await process_frame
  print("CHAT_SEAT_RESULT ","PASS" if failures.is_empty() else "FAIL"," checks=",checks," failures=",failures)
  quit(0 if failures.is_empty() else 1)

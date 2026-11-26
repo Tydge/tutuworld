@@ -1,6 +1,7 @@
 extends SceneTree
 const Server=preload("res://server/world_server.gd")
 const Animals=preload("res://scripts/characters/animal_factory.gd")
+const ValleyLayout=preload("res://scripts/valley/valley_layout.gd")
 var checks:=0
 var failures: Array=[]
 func _initialize() -> void:call_deferred("run")
@@ -13,13 +14,15 @@ func run() -> void:
  OS.set_environment("TUTU_STATE_DIR",ProjectSettings.globalize_path("res://.qa-artifacts/0.3.2/rules-"+str(Time.get_ticks_usec())))
  var server=Server.new();root.add_child(server)
  while not server.ready_for_players or not server.maps.valley.navigation.sampling_ready:await physics_frame
- var city=server.maps.city;var count_:=0;var positions: Array=[]
+ var city=server.maps.city;var seat_counts:={};var positions: Array=[]
  for id in city.targets:
   if not str(id).begins_with("bench:"):continue
-  count_+=1;var target: Dictionary=city.targets[id]
+  var area := str(id).get_slice(":",1)
+  seat_counts[area] = int(seat_counts.get(area,0))+1
+  var target: Dictionary=city.targets[id]
   check(target.position.is_equal_approx(target.node.global_position),"Bench target uses its own physical position")
   check(not positions.has(target.position),"Repeated names do not overwrite another seat");positions.append(target.position)
- check(count_==5,"All four park benches and the beach bench have unique targets")
+ check(seat_counts=={"CentralPark":4,"SouthBeach":1,"EastBuildingSite/GardenCommons":4},"All park, beach and garden benches have unique targets")
  for npc in city.npcs:npc.process_mode=Node.PROCESS_MODE_DISABLED;npc.collision_layer=0
  for species in Animals.Catalog.ids():
   var actor=Animals.create(species);city.add_child(actor);actor.set_physics_process(false)
@@ -40,7 +43,9 @@ func run() -> void:
     check(arrived,"Walk over shop step without jumping: "+species+"/"+shop_id+"/"+str(offset))
   actor.queue_free();await process_frame
  var valley=server.maps.valley;var panda=valley.targets.Panda.node;var routine=panda.get_node("PandaRoutine")
- for from in [Vector3(12,4.05,-29.3),Vector3(22,2.05,-17),Vector3(-18,2.05,-17)]:
+ # Cottage approach, east hillside and the opposite end of the river bridge.
+ for point: Vector2 in [Vector2(24,-58.6),Vector2(44,-35),Vector2(-16,ValleyLayout.BRIDGE_Z)]:
+  var from:=Vector3(point.x,ValleyLayout.walk_height(point.x,point.y)+.05,point.y)
   server.state().time=7*3600./24
   for i in range(4):await physics_frame
   check(not panda.sleeping,"Panda wakes with normal collision")

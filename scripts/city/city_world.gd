@@ -555,14 +555,21 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if event.keycode==KEY_V and not paused and hud.camera_control.visible:hud.camera_control.cycle();get_viewport().set_input_as_handled();return
-		if event.keycode==KEY_F6:open_build_mode();get_viewport().set_input_as_handled();return
+		if event.is_action_pressed("build_mode",false,true):
+			bunny.consume_shift_shortcut()
+			open_build_mode()
+			get_viewport().set_input_as_handled()
+			return
 		if event.keycode==KEY_C: toggle_panel("profile"); return
 		if event.keycode in [KEY_I,KEY_B]: toggle_panel("bag"); return
 		if event.keycode==KEY_TAB: toggle_panel("wardrobe"); return
 		if event.keycode==KEY_M: toggle_panel("map"); return
-	if event.is_action_pressed("photo"):
+	if event.is_action_pressed("photo",false,true):
+		bunny.consume_shift_shortcut()
 		hud.toggle_photo()
-	if event.is_action_pressed("screenshot"): take_photo()
+	if event.is_action_pressed("screenshot",false,true):
+		bunny.consume_shift_shortcut()
+		take_photo()
 	if paused: return
 	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		yaw-=event.relative.x*.006*float(session.settings.camera_speed)

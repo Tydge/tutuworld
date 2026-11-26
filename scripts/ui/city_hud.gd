@@ -116,7 +116,7 @@ func _ready() -> void:
 		b.size_flags_horizontal=Control.SIZE_EXPAND_FILL
 		buttons.add_child(b)
 	if city.map_id in ["city","icefield","jade"] and city.has_building_world():
-		build_button=UI.button("建造 F6",city.open_build_mode);build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
+		build_button=UI.button("建造",city.open_build_mode);build_button.tooltip_text="建造 · Shift+F6";build_button.name="OpenBuildingEditor";build_button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;buttons.add_child(build_button)
 	if city.map_id=="jade":preload("res://scripts/jade/travel_hud.gd").arrange(bar,buttons)
 	prompt_card=UI.panel(Color("426e5c",.96),23,16)
 	prompt_card.position=Vector2(0,0)
@@ -856,7 +856,7 @@ func build_settings() -> void:
 		var clock_control:=preload("res://scripts/ui/time_controls.gd").new()
 		clock_control.session=session;options.add_child(clock_control)
 
-	options.add_child(UI.label("C 角色 · I 背包 · Tab 换装 · M 地图\nE 互动  ·  F 快捷互动  ·  Esc 返回 / 取消动作  ·  F2 取景  ·  Shift+F12 拍照\nF10 芭蕾  ·  F11 街舞  ·  F12 云手团扇舞",15,UI.MUTED))
+	options.add_child(UI.label("C 角色 · I 背包 · Tab 换装 · M 地图\nE 互动  ·  F 快捷互动  ·  Esc 返回 / 取消动作  ·  Shift+F2 取景  ·  Shift+F12 拍照\nShift+F6 建造\nF1 打招呼  ·  F2 欢呼  ·  F3 感谢  ·  F4 爱你  ·  F5 同意\nF6 不要  ·  F7 偷偷坏笑  ·  F8 流一大滴汗  ·  F9 震惊\nF10 芭蕾  ·  F11 街舞  ·  F12 云手团扇舞",15,UI.MUTED))
 	options.add_child(UI.button("保存并回到标题界面",func(): session.save_game(); city.return_to_title()))
 	options.add_child(UI.button("保存并退出游戏",func(): session.save_game(); get_tree().quit()))
 func build_land() -> void:
@@ -868,7 +868,7 @@ func build_land() -> void:
 	content.add_child(UI.label("24 × 20 米 · 480平方米",20,UI.MUTED))
 	content.add_child(UI.label("购买这块地皮需要 100 贝壳币。",23))
 	content.add_child(UI.label("当前余额：%d 贝壳币"%session.state().coins,19,UI.MUTED))
-	content.add_child(UI.label("购入后，靠近这块地皮点击「建造」或按F6。",17,UI.MUTED))
+	content.add_child(UI.label("购入后，靠近这块地皮点击「建造」或按 Shift+F6。",17,UI.MUTED))
 	var purchase:=UI.button("确认购买 · 100贝壳币",func():
 		session.set_player_position(city.bunny.global_position)
 		var result: Dictionary=await session.request_online("buy_land",{"parcel_id":id}) if session.is_online() else session.buy_land(id)
