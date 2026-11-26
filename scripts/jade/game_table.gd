@@ -1,348 +1,324 @@
 extends VBoxContainer
-## A small playable tabletop. Controls operate the objects pictured on its felt or paper.
 const UI=preload("res://scripts/ui/ui_kit.gd")
 const Board=preload("res://scripts/jade/play_board.gd")
-const INK=Color("e9daba")
-const GOLD=Color("e5b56e")
-const RED=Color("db846a")
-const JADE=Color("8bc7b0")
+const Plate=preload("res://scripts/jade/rounds/play_surface.gd")
+const ART=preload("res://assets/jade/workshop_almanac.webp")
+const HUES=[Color("285e4a"),Color("824f46"),Color("505074"),Color("586445"),Color("385b68"),Color("835b39")]
+const MATS=[Color("294d45"),Color("4f4840"),Color("41465c"),Color("414e43"),Color("314f57"),Color("514b3e")]
 const TONES=[261.63,293.66,329.63,392.,440.]
 var hud: CanvasLayer
 var target: String
+var house: String
 var board: RefCounted
+var illustration: Control
 var surface: Control
-var controls: GridContainer
+var brief: Label
 var status: Label
-var heading: Label
-var show_pattern:=false
-var listening:=false
+var note: Label
+var receipt: Label
+var order_sheet: Label
+var controls: GridContainer
+var footer: HBoxContainer
+var undo_button: Button
+var new_button: Button
+var play_button: Button
+var last_art: Button
 var submitting:=false
 var received:=false
-var pulse:=0.
-var flow_time:=0.
-var draw_time:=0.
-var seal_time:=-1.
-var tile: StyleBoxFlat
-var hover_tile: StyleBoxFlat
-var focus_tile: StyleBoxFlat
-var embossed: StyleBoxFlat
-var hit_zones: Array[Rect2]=[]
-var flash:=-1
-var generation:=0
+var listening:=false
+var cues: Array=[]
+var cue: Dictionary={}
+var cue_time:=0.
+var phase:=0.
+var drum_cycle:=0
+var last_beat:=-2
+var album_pos:=-1
+var last_deal:=-1
+var styles: Dictionary={}
+var pending_message: String=""
+var seal_drop:=1.
+
 func start(owner_hud: CanvasLayer,id: String) -> void:
-	hud=owner_hud;target=id;board=Board.new(id.get_slice(":",1))
-	embossed=UI.box(Color("244845"),12,0)
-	tile=UI.box(Color("e5cda0"),5,9);tile.border_color=Color("aa8254");tile.set_border_width_all(1)
-	hover_tile=tile.duplicate();hover_tile.bg_color=Color("f4dca7")
-	focus_tile=tile.duplicate();focus_tile.bg_color=Color.TRANSPARENT;focus_tile.border_color=Color("83523a");focus_tile.set_border_width_all(2)
-	add_theme_constant_override("separation",10)
-	var hint:=UI.label(board.recipe.hint,21)
-	hint.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
-	add_child(hint)
-	surface=Control.new();surface.custom_minimum_size=Vector2(0,213);add_child(surface)
-	surface.draw.connect(paint)
-	surface.gui_input.connect(touch_table)
-	controls=GridContainer.new();controls.add_theme_constant_override("h_separation",8);controls.add_theme_constant_override("v_separation",5)
-	var center:=CenterContainer.new();center.add_child(controls);add_child(center)
-	status=UI.label("",17);status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;status.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;add_child(status)
-	var footer:=UI.row();add_child(footer)
-	heading=UI.label("",17);heading.size_flags_horizontal=SIZE_EXPAND_FILL;footer.add_child(heading)
-	if board.game in ["melody","memory","tune"]:footer.add_child(UI.button("再听一遍" if board.game!="memory" else "再看一次",demonstrate))
-	if board.game=="stitch":
-		var toggle:=CheckButton.new();toggle.text="显示笔顺" if board.house=="caligraphy" else "显示针序";footer.add_child(toggle)
-		toggle.toggled.connect(func(on: bool):show_pattern=on;surface.queue_redraw())
-	if board.game!="courier":footer.add_child(UI.button("重开一局",reset))
-	set_process(board.game=="forge" or (board.game=="sluice" and not hud.session.settings.reduce_motion))
-	refresh()
-	if board.game in ["melody","memory","tune"]:demonstrate.call_deferred()
-func _process(delta: float) -> void:
-	pulse=fmod(pulse+delta*4.,8.)
-	flow_time+=delta
-	if seal_time>=0.:seal_time=minf(.42,seal_time+delta)
-	draw_time+=delta
-	if draw_time<1./30.:return
-	draw_time=0.;surface.queue_redraw()
-	if seal_time>=.42 and board.done:set_process(false)
-func touch_table(event: InputEvent) -> void:
-	if not event is InputEventMouseButton or not event.pressed or event.button_index!=MOUSE_BUTTON_LEFT or board.done:return
-	for i in hit_zones.size():
-		if hit_zones[i].has_point(event.position):press(i);surface.accept_event();return
-func _unhandled_key_input(event: InputEvent) -> void:
-	if not is_visible_in_tree() or not event is InputEventKey or not event.pressed or event.echo or board.done:return
-	var i: int=event.keycode-KEY_1
-	if i>=0 and i<controls.get_child_count():
-		press(i);get_viewport().set_input_as_handled()
-func gesture() -> void:
-	var poses: Dictionary={"forge":"forge_strike","weave":"draw_thread","stitch":"draw_thread","mirror":"draw_thread","pigment":"cook","jugs":"refill","wheel":"plane_wood","proof":"read_scroll","verse":"read_scroll","clock":"bell","melody":"bell","tune":"bell","memory":"bell","weights":"sort_seed","divide":"cook","sluice":"plane_wood","allot":"read_scroll"}
-	var prop: Node3D=hud.city.targets[target].node
-	var direction: Vector3=prop.global_position-hud.city.bunny.global_position
-	hud.city.bunny.set_visual_heading(atan2(direction.x,direction.z))
-	hud.city.bunny.play_action(poses.get(board.game,"sort_seed"),.58)
-func reset() -> void:
+	hud=owner_hud;target=id;house=id.get_slice(":",1)
+	var serial:=int(hud.session.state().jade_visits.rounds.get(house,0))
+	board=Board.new(house,serial,0,int(hud.session.state().jade_visits.next_deals.get(house,serial)))
+	add_theme_constant_override("separation",8)
+	surface=Control.new();surface.custom_minimum_size.y=120;add_child(surface)
+	surface.draw.connect(paint_banner)
+	brief=UI.label("",18,Color("fff5dd"));brief.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
+	brief.vertical_alignment=VERTICAL_ALIGNMENT_CENTER;brief.mouse_filter=Control.MOUSE_FILTER_IGNORE
+	surface.add_child(brief);brief.anchor_right=.52;brief.anchor_bottom=1;brief.offset_left=18;brief.offset_right=-6;brief.offset_top=4;brief.offset_bottom=-4
+	var field:=UI.panel(MATS[board.rule.theme_index],6,10);add_child(field)
+	var row:=UI.row(12);field.add_child(row)
+	illustration=Plate.new();row.add_child(illustration)
+	illustration.pressed_object.connect(press)
+	var right:=UI.column(4);right.size_flags_horizontal=SIZE_EXPAND_FILL;row.add_child(right)
+	status=UI.label("",16,Color("f3e5bd"));status.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;right.add_child(status)
+	order_sheet=UI.label("",16,Color("d1d7ba"));order_sheet.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;right.add_child(order_sheet)
+	controls=GridContainer.new();controls.size_flags_vertical=SIZE_SHRINK_CENTER;controls.size_flags_horizontal=SIZE_EXPAND_FILL
+	controls.add_theme_constant_override("h_separation",4);controls.add_theme_constant_override("v_separation",4);right.add_child(controls)
+	note=UI.label("",16);note.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;add_child(note)
+	footer=UI.row(8);add_child(footer)
+	receipt=UI.label("",14);receipt.size_flags_horizontal=SIZE_EXPAND_FILL;footer.add_child(receipt)
+	play_button=UI.button("重听",demonstrate);footer.add_child(play_button)
+	last_art=UI.button("翻花笺册",show_keepsake);footer.add_child(last_art)
+	undo_button=UI.button("撤一步",undo);footer.add_child(undo_button)
+	new_button=UI.button("换题",next_round,true);footer.add_child(new_button)
+	for item in [play_button,last_art,undo_button,new_button]:item.custom_minimum_size.y=36
+	var fills:={"plain":Color("e9d6b0"),"on":Color("e8b776"),"dark":Color("a8b09a")}
+	for key in fills:
+		styles[key]=UI.box(fills[key],5,3);styles[key].shadow_size=0
+	styles.focus=UI.box(Color.TRANSPARENT,5,0);styles.focus.border_color=Color("a3542b");styles.focus.set_border_width_all(3);styles.focus.shadow_size=0
+	styles.hover=UI.box(Color("fff0c7"),5,3);styles.hover.shadow_size=0
+	begin()
+func paint_banner() -> void:
+	var w:=surface.size.x;var h:=surface.size.y
+	var tex:=Vector2(ART.get_size());var strip:=Vector2(tex.x/2.,tex.y/3.)
+	var index:int=board.rule.theme_index
+	var area:=Rect2(Vector2(index%2,index/2)*strip,strip)
+	# Keep the artisan fully visible. The rules occupy the painted side of the spread.
+	surface.draw_rect(Rect2(0,0,w,h),HUES[index])
+	var art_width:=minf(w,h*strip.x/strip.y*1.34)
+	surface.draw_texture_rect_region(ART,Rect2(w-art_width,0,art_width,h),area)
+	var left:=w-art_width
+	var opaque:Color=HUES[index];var clear:=Color(opaque,0)
+	var stop:=maxf(left,w*.49);var edge:=maxf(stop+2,w*.64)
+	surface.draw_rect(Rect2(left,0,stop-left,h),opaque)
+	surface.draw_polygon(PackedVector2Array([Vector2(stop,0),Vector2(edge,0),Vector2(edge,h),Vector2(stop,h)]),PackedColorArray([opaque,clear,clear,opaque]))
+	surface.draw_line(Vector2(2,1),Vector2(w-2,1),Color("d5ae70"),2)
+	if received:
+		var side:=lerpf(62.,42.,seal_drop)
+		var seal:=Rect2(Vector2(w-30,h-28)-Vector2.ONE*side*.5,Vector2.ONE*side)
+		surface.draw_rect(seal,Color("a84436"))
+		surface.draw_rect(seal.grow(-3),Color("f7d7ad"),false,1.5)
+		surface.draw_string(get_theme_default_font(),seal.position+Vector2(0,side*.70),"成",HORIZONTAL_ALIGNMENT_CENTER,side,24,Color("ffebc9"))
+func begin() -> void:
+	cues.clear();cue.clear();listening=false;received=false;submitting=false;pending_message="";album_pos=-1
+	phase=.45;drum_cycle=0;last_beat=-2;illustration.rule=board.rule;illustration.flash=-1;illustration.album=[]
+	illustration.stage_pair=[];illustration.show_faces=false
+	brief.text=board.rule.brief;last_deal=board.rule.deal
+	set_process(house=="dojo");refresh();surface.queue_redraw()
+	if house in ["pipa","stage","duty","fiddler"]:demonstrate.call_deferred()
+func next_round() -> void:
 	if submitting:return
-	received=false
-	generation+=1;listening=false;flash=-1;seal_time=-1.
-	set_process(board.game=="forge" or (board.game=="sluice" and not hud.session.settings.reduce_motion))
-	board=Board.new(board.house);refresh()
-	if board.game in ["melody","memory","tune"]:demonstrate()
-func demonstrate() -> void:
-	if listening or submitting or board.done:return
-	listening=true;var token:=generation
-	var notes: Array=board.recipe.goal if board.game!="tune" else [board.recipe.goal[0],board.values[0]]
-	for i in notes.size():
-		if not is_inside_tree() or token!=generation:return
-		flash=int(notes[i])
-		if board.game=="tune":tone(300.*pow(1.085,flash))
-		else:tone(TONES[flash])
-		status.text=("定音" if i==0 else "琴弦") if board.game=="tune" else ("看牌" if board.game=="memory" else "听弦")
-		surface.queue_redraw()
-		await get_tree().create_timer(.6).timeout
-		if not is_inside_tree() or token!=generation:return
-		flash=-1;surface.queue_redraw()
-		await get_tree().create_timer(.12).timeout
-	if not is_inside_tree() or token!=generation:return
-	listening=false;flash=-1;refresh()
-func tone(hz: float) -> void:
-	hud.city.play_tone(hz,.30,.15)
+	if board.rule.done and not received and int(hud.session.state().jade_visits.rounds.get(house,0))==board.serial:
+		submit();return
+	var number:=int(hud.session.state().jade_visits.rounds.get(house,0))
+	var base:=int(hud.session.state().jade_visits.next_deals.get(house,number))
+	var edition:=maxi(0,last_deal+1-base)%10000
+	board=Board.new(house,number,edition,base);begin()
+func undo() -> void:
+	if submitting or received or listening or board.moves.is_empty():return
+	board.undo();illustration.rule=board.rule;illustration.album=[];album_pos=-1
+	pending_message="已撤回上一步。";refresh()
+func show_keepsake() -> void:
+	if listening or submitting:return
+	var journal:Dictionary=hud.session.state().jade_visits
+	if house=="paper" and not journal.prints.is_empty():
+		album_pos=(album_pos+1)%(journal.prints.size()+1)
+		illustration.album=journal.prints[album_pos] if album_pos<journal.prints.size() else []
+		pending_message="花笺册 · 第 %d 张，落印即回到新纸。"%(album_pos+1) if not illustration.album.is_empty() else "手中这张新纸。"
+		refresh()
+	elif house=="music" and journal.song.size():play_score(journal.song)
+func _process(delta: float) -> void:
+	if listening:
+		advance_rehearsal(delta)
+	if house!="dojo" or board.rule.done:return
+	var previous:=phase;phase=fposmod(phase+delta/float(board.rule.data.tempo),1.)
+	if phase<previous:
+		drum_cycle+=1;hud.city.play_tone(155,.09,.12)
+	illustration.pulse=phase if not hud.session.settings.reduce_motion else (0. if beat_open() else .48)
+	illustration.queue_redraw()
+func beat_open() -> bool:return int(phase*8) in [0,1,6,7]
+
+func keys(group: Node,index: int,offset: int) -> void:
+	var b:=Button.new()
+	b.focus_mode=Control.FOCUS_ALL;b.mouse_default_cursor_shape=Control.CURSOR_POINTING_HAND
+	b.size_flags_horizontal=SIZE_EXPAND_FILL;b.custom_minimum_size=Vector2(0,37)
+	b.add_theme_font_size_override("font_size",16)
+	for state in ["font_color","font_hover_color","font_pressed_color","font_focus_color","font_disabled_color"]:b.add_theme_color_override(state,Color("253c36"))
+	b.add_theme_stylebox_override("focus",styles.focus);b.add_theme_stylebox_override("hover",styles.hover);b.add_theme_stylebox_override("pressed",styles.on)
+	b.pressed.connect(press.bind(index+offset));group.add_child(b)
+func refresh() -> void:
+	var r=board.rule;var journal:Dictionary=hud.session.state().jade_visits
+	var opts:Array=r.labels
+	var on_object:int=illustration.count_objects()
+	var main_count:int=opts.size()-on_object
+	controls.columns=maxi(1,mini(main_count,3 if house=="paper" else int(r.columns)))
+	if controls.get_child_count()!=main_count:
+		UI.clear(controls)
+		for i in main_count:keys(controls,i,on_object)
+	for i in range(on_object,opts.size()):
+		var b:Button=controls.get_child(i-on_object)
+		b.text=str(opts[i])
+		b.disabled=r.done or listening or submitting or not r.enabled(i)
+		var skin=styles.on if r.active(i) else styles.plain
+		b.add_theme_stylebox_override("normal",skin);b.add_theme_stylebox_override("disabled",styles.dark if not r.enabled(i) else skin)
+		b.tooltip_text=b.text
+	controls.visible=main_count>0
+	illustration.update_objects(r.done or listening or submitting)
+	order_sheet.text=order_text(r)
+	order_sheet.visible=not order_sheet.text.is_empty()
+	status.text=r.status
+	note.text=pending_message if not pending_message.is_empty() else str(r.note)
+	if note.text.is_empty():
+		note.text="纸面可直接落印 · 成品收进自己的花笺册" if house=="paper" else ("这袋信的收件处已圈在舆图上。" if house in ["hostel","post"] and journal.letter!="" else " ")
+	if board.moves.size()>=Board.MAX_MOVES and not r.done:note.text="这张题签已经写满，可以撤一步或换题。"
+	receipt.text="坊印 %d / 38　·　此处完成 %d 回"%[journal.marks.size(),journal.rounds.get(house,0)]
+	undo_button.disabled=submitting or listening or received or board.moves.is_empty()
+	new_button.text="再来一局" if received else ("再交一次" if r.done and not submitting else "换题")
+	new_button.disabled=submitting
+	play_button.visible=house in ["pipa","duty","stage","fiddler"]
+	play_button.text="重看换幕" if house=="stage" else "再听一遍"
+	play_button.disabled=received or submitting or listening
+	last_art.visible=(house=="paper" and journal.prints.size()>0) or (house=="music" and journal.song.size()>0)
+	last_art.text="翻花笺册" if house=="paper" else "听上回的曲"
+	illustration.queue_redraw()
+func order_text(r: RefCounted) -> String:
+	match house:
+		"weir":
+			var lines:Array=[]
+			for code in ["R","M","F"]:
+				lines.append({"R":"稻田","M":"桑田","F":"鱼塘"}[code]+"　"+("已通水" if r.data.map.find(code) in r.v else "待引水"))
+			return "\n".join(lines)
+		"carver":
+			var lines:Array=[]
+			for y in 3:
+				var marks:=""
+				for x in 3:marks+="朱　" if int(r.data.mask)&(1<<(y*3+x)) else "白　"
+				lines.append(marks)
+			return "纸上印蜕\n"+"\n".join(lines)
+		"basket":return "行数在左，列数在上。\n分别读每一组连续挑起的篾条。"
+		"stitch":return "灰线待缝，朱线已缝。\n直接点布面上的针孔。"
+		"chamber":return "北 ↑　　东 →\n从最后一颗已连的星接着走。"
+		"sail":return "浮标装货，再进港。\n点相邻水格，顺风多行一格。"
+		"archive":return "甲、乙是界碑。\n对照两段里程，直接点仓址。"
+		"caligraphy":return "顺序先上排，再下排。\n点空格边的字片挪动。"
+		"silversmith":return "银钉能挡珠，花心是落点。\n点直线上带圈的停靠处。"
+		"pastry":return "炭口留空，一副模占两格。\n点选起模处，再点相邻一格。"
+		"potter":return "在坯身上下拖泥，或用推泥手势。"
+		"audience":return "点奏本拨款，再点一次可收回。"
+		"hostel":return "点图上的三处驿站，依次取信。"
+		"post":
+			var routes:Array=[]
+			for i in 3:routes.append(r.DISTRICTS[i]+"　"+"、".join(r.ADDRESSES[i]))
+			return "\n".join(routes)
+		"herbal":return "验过药样，点对应的药屉。"
+		"farmhouse":return "点要开闸的田畦。"
+		"baihe":return "先点一签，再点另一签换位。"
+		"tailorhome":return "直接点最上层那股绣线。"
+		"garden":return "直接点枝梢下剪，也可剪主干。"
+		"books":return "翻页时会自动夹好勘误笺。"
+		"pipa":return "点琴弦应和。数字 1～5 也能拨弦。"
+		"music":return "直接点青磬谱曲。"
+		"stage":return "锣停后，直接点戏幕。"
+		"dojo":return "点桩落脚　·　← 左　→ 右"
+		"banquet":return "点击盘中点心，顺着转盘分席。"
+		"oil":return "直接点秤下的砝码，上秤或取下。"
+		"noodle":return "直接点砧板刻度，下刀或收刀。"
+		"incense":return "点托提起香环，再点落处。"
+	return ""
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not is_visible_in_tree() or not event is InputEventKey or not event.pressed or event.echo or board.rule.done:return
+	var idx:int=event.keycode-KEY_1
+	if house=="ledger" and event.keycode==KEY_0:idx=10
+	elif house=="ledger" and event.keycode==KEY_BACKSPACE:idx=9
+	elif house=="dojo" and event.keycode in [KEY_LEFT,KEY_RIGHT]:idx=int(event.keycode==KEY_RIGHT)
+	elif event.keycode<KEY_1 or event.keycode>KEY_9:return
+	if idx>=0 and idx<board.rule.labels.size():
+		press(idx);get_viewport().set_input_as_handled()
 func press(i: int) -> void:
-	if listening or submitting or board.moves.size()>=Board.MAX_MOVES and not board.done:return
-	if board.game=="courier" and hud.session.state().jade_visits.letter==board.house:
-		status.text="送到桥边的驿路茶棚，舆图已圈出收信处。" if board.house=="hostel" else "送到南市旧渡驿舍，舆图已圈出收信处。"
-		return
-	if board.game=="courier" or board.done:submit();return
+	if submitting or received or listening or board.rule.done or i<0 or i>=board.rule.labels.size():return
 	if not hud.city.activity_access(target,"jade_game"):hud.close_panel();return
-	var choice:=int(pulse) if board.game=="forge" else i
-	board.play(choice)
-	gesture()
-	if board.game=="tune":tone(300.*pow(1.085,board.values[0]))
-	elif board.game=="melody":tone(TONES[i])
-	else:tone(152. if not board.note.is_empty() else 330.+board.step*34.)
+	if house=="music" and i==6:
+		play_score(board.rule.v.duplicate());return
+	var beat:=drum_cycle+int(phase>=.5)
+	if house=="dojo" and beat==last_beat:
+		note.text="这一拍已踩稳，等下一声鼓。";return
+	var before:int=board.rule.step
+	var input:=i+2*int(phase*8) if house=="dojo" else i
+	if not board.play(input):return
+	if house=="dojo" and board.rule.step!=before:last_beat=beat
+	pending_message="";illustration.album=[];album_pos=-1;illustration.feedback(i,hud.session.settings.reduce_motion)
+	var prop:Node3D=hud.city.targets[target].node
+	var dir:Vector3=prop.global_position-hud.city.bunny.global_position
+	hud.city.bunny.set_visual_heading(atan2(dir.x,dir.z))
+	hud.city.bunny.play_action(["refill","draw_thread","bell","read_scroll","sort_seed","cook"][board.rule.theme_index],.44)
+	if house in ["pipa","music"] and i<5:tone(TONES[i])
+	elif house=="fiddler":tone(300.*pow(1.065,board.rule.v[mini(before,1)]))
+	else:tone(176. if not board.rule.note.is_empty() else 340.+board.rule.step*24.)
 	refresh()
-	if board.done:submit()
+	if board.rule.done:submit()
+	elif house=="duty" and board.rule.step!=before:demonstrate()
+	elif house=="fiddler" and board.rule.step!=before:demonstrate()
+func tone(hz: float,duration:=.25) -> void:hud.city.play_tone(hz,duration,.12)
+func play_score(notes: Array) -> void:
+	if listening or notes.is_empty():return
+	for n in notes:
+		cues.append({"duration":.38,"flash":n,"hz":TONES[n] if n<5 else 0.,"line":"试听曲谱"})
+	start_rehearsal()
+
+func demonstrate() -> void:
+	if not is_inside_tree() or submitting or listening or board.rule.done:return
+	var r=board.rule
+	match house:
+		"stage":
+			illustration.stage_cast=r.data.initial.duplicate()
+			cues.append({"duration":1.35,"faces":true,"line":"记住「%s」的位置。"%r.MASKS[r.data.actor]})
+			for pair in r.data.swaps:
+				cues.append({"duration":.7,"pair":pair,"line":"第 %d 幕和第 %d 幕换位。"%[pair[0]+1,pair[1]+1]})
+		"pipa":
+			for n in r.goal:
+				cues.append({"duration":.40,"flash":n,"hz":TONES[n],"line":"听弦　"+str(r.NOTES[n])})
+				cues.append({"duration":.12})
+		"duty":
+			for symbol in r.CODES[r.goal[r.step]]:
+				cues.append({"duration":.56 if symbol=="长" else .22,"flash":2,"hz":392.,"line":"听号　"+symbol})
+				cues.append({"duration":.16})
+		"fiddler":
+			cues.append({"duration":.56,"hz":300.*pow(1.065,r.goal[r.step]),"line":"定音"})
+			cues.append({"duration":.56,"hz":300.*pow(1.065,r.v[r.step]),"line":"手中这根弦"})
+	start_rehearsal()
+
+func start_rehearsal() -> void:
+	if cues.is_empty():return
+	listening=true;cue={};set_process(true);refresh();advance_rehearsal(0.)
+
+func advance_rehearsal(delta: float) -> void:
+	cue_time-=delta
+	if cue.is_empty() or cue_time<=0.:
+		if cue.has("pair"):
+			board.rule.swap(illustration.stage_cast,cue.pair[0],cue.pair[1])
+		illustration.travel=0.;illustration.stage_pair=[]
+		if cues.is_empty():
+			cue={};listening=false;illustration.flash=-1;illustration.show_faces=false
+			set_process(house=="dojo");refresh();return
+		cue=cues.pop_front();cue_time=cue.duration
+		illustration.flash=cue.get("flash",-1);illustration.show_faces=cue.get("faces",false)
+		illustration.stage_pair=cue.get("pair",[])
+		note.text=cue.get("line"," ")
+		if cue.get("hz",0.)>0.:tone(cue.hz,clampf(float(cue.duration)-.04,.12,.49))
+	if cue.has("pair") and not hud.session.settings.reduce_motion:
+		illustration.travel=smoothstep(0.,1.,1.-cue_time/float(cue.duration))
+	illustration.queue_redraw()
 func submit() -> void:
-	if submitting or not hud.city.activity_access(target,"jade_game"):return
-	submitting=true
-	var args:={"target":target,"moves":board.moves.duplicate()}
-	var result: Dictionary
+	if submitting or received or not hud.city.activity_access(target,"jade_game"):return
+	submitting=true;refresh()
+	var args:={"target":target,"round":board.serial,"variant":board.variant,"moves":board.moves.duplicate()}
+	var result:Dictionary
 	if hud.session.is_online():result=await hud.session.request_online("jade_visit",args)
 	else:
-		hud.session.set_player_position(hud.city.bunny.global_position)
-		result=hud.session.dispatch("jade_visit",args)
+		hud.session.set_player_position(hud.city.bunny.global_position);result=hud.session.dispatch("jade_visit",args)
 	if not is_inside_tree():return
-	submitting=false
-	if result.ok:
-		received=true
-		hud.city.play_tone(523.,.4,.15)
+	submitting=false;received=result.get("ok",false);pending_message=str(result.get("message",""))
+	if hud.toast_label.text==pending_message:
+		hud.toast_timer=0.;hud.toast.hide()
+	if received:
+		seal_drop=1.;surface.queue_redraw()
+		if house=="audience":hud.city.refresh_court_orders()
+		tone(523.25,.4)
 		if not hud.session.settings.reduce_motion:
-			var sparkle:=preload("res://scripts/city/reward_sparkle.gd").new()
-			hud.city.add_child(sparkle)
+			var seal_tween:=create_tween();seal_tween.tween_method(func(t:float):seal_drop=t;surface.queue_redraw(),0.,1.,.28).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			var sparkle:=preload("res://scripts/city/reward_sparkle.gd").new();hud.city.add_child(sparkle)
 			sparkle.global_position=hud.city.targets[target].node.global_position+Vector3.UP*1.25
-		board.done=true
-		if board.game=="courier":board.note=str(result.message)
-		if board.house in hud.session.state().jade_visits.marks:
-			seal_time=.42 if hud.session.settings.reduce_motion else 0.
-			set_process(true)
-		refresh()
-		status.text=result.message
-	else:
-		refresh()
-		status.text=str(result.message)
-func refresh() -> void:
-	UI.clear(controls)
-	var opts: Array=board.options()
-	if board.game=="courier":
-		var sender:=str(hud.session.state().jade_visits.letter)
-		opts=["接过驿袋" if sender=="" else ("查看送信去处" if sender==board.house else "把驿袋递过去")]
-	if board.done:opts=[] if received or submitting else ["再交一次"]
-	controls.columns=3 if grid_game() else maxi(1,mini(6,opts.size()))
-	for i in opts.size():
-		var key:=caption(i,opts[i])
-		var b:=UI.button(key,press.bind(i));b.custom_minimum_size=Vector2(90 if grid_game() else 106,39)
-		b.add_theme_stylebox_override("normal",tile)
-		b.add_theme_stylebox_override("hover",hover_tile)
-		b.add_theme_stylebox_override("focus",focus_tile)
-		b.tooltip_text="%d　%s"%[i+1,key]
-		b.add_theme_font_size_override("font_size",18);controls.add_child(b)
-	if board.done and board.game!="courier":status.text=board.recipe.end
-	else:status.text=board.note if board.moves.size()<Board.MAX_MOVES else "这一局绕得有些远了。可以重开，再换个走法。"
-	var marks: Array=hud.session.state().jade_visits.marks
-	heading.text=("已钤坊印" if board.house in marks else "初成谢礼　六贝")+("　·　玉京坊印 %d / %d"%[marks.size(),Board.Games.STATIONS.size()])
-	surface.queue_redraw()
-func grid_game() -> bool:return board.game in ["weave","stitch","mirror","stars"]
-func caption(i: int,v: Variant) -> String:
-	if board.done:return str(v)
-	if board.game in ["weave","mirror"]:return ["经","纬"][board.values[i]] if board.game=="weave" else ["白","朱"][board.values[i]]
-	if board.game in ["stitch","stars"]:return str(i+1)
-	if board.game=="seats":return board.recipe.labels[board.values[i]]
-	if board.game=="proof":return board.recipe.goal[board.step][i]
-	return str(v)
-func word(p: Vector2,s: String,size_: int=22,color:=INK) -> void:
-	surface.draw_string(get_theme_default_font(),p,s,HORIZONTAL_ALIGNMENT_LEFT,-1,size_,color)
-func circle(p: Vector2,r: float,c: Color) -> void:surface.draw_circle(p,r,c,true,-1,true)
-func stroke(a: Vector2,b: Vector2,c: Color,width:=3.) -> void:surface.draw_line(a,b,c,width,true)
-func dots(index: int) -> Vector2:return Vector2(index%3,index/3)*44.
-func paint() -> void:
-	var w:=surface.size.x;var mid:=w*.5;var paper:=surface.size
-	surface.draw_style_box(embossed,Rect2(Vector2.ZERO,paper))
-	surface.draw_rect(Rect2(Vector2(8,8),paper-Vector2(16,16)),Color("9b8866"),false,1.)
-	for x in [11.,w-11.]:
-		for y in [11.,paper.y-11.]:
-			var dx:=1. if x<mid else -1.
-			var dy:=1. if y<paper.y*.5 else -1.
-			var corner:=Vector2(x,y)
-			surface.draw_polyline(PackedVector2Array([corner+Vector2(0,27*dy),corner+Vector2(0,9*dy),corner+Vector2(16*dx,9*dy),corner+Vector2(16*dx,16*dy),corner+Vector2(9*dx,16*dy),corner+Vector2(9*dx,0),corner+Vector2(27*dx,0)]),Color("968768"),1.4,true)
-	hit_zones.clear()
-	var goal: Array=board.recipe.goal;var v: Array=board.values
-	var cy:=105.
-	match board.game:
-		"weave","mirror","stitch","stars","sail":
-			var two: bool=board.game in ["weave","mirror"]
-			var base:=Vector2(mid-(190. if two else 44.),52.)
-			for side in (2 if two else 1):
-				var origin:=base+Vector2(280*side,0.)
-				for i in 9:
-					var p:=origin+dots(i)
-					if (two and side==1) or (not two and board.game!="sail"):hit_zones.append(Rect2(p-Vector2(21,21),Vector2(42,42)))
-					if two:
-						var on: bool=bool(goal[i] if side==0 else v[i])
-						surface.draw_rect(Rect2(p-Vector2(19,19),Vector2(38,38)),RED if on else Color("dac799"))
-						if board.game=="weave":
-							for j in [-8.,0.,8.]:
-								var axis:=Vector2(16,0) if on else Vector2(0,16)
-								var at:=p+(Vector2(0,j) if on else Vector2(j,0))
-								stroke(at-axis,at+axis,Color("927554"),2.)
-					elif board.game=="sail":
-						circle(p,17.,JADE if i!=goal[2] else Color("886c58"))
-						word(p+Vector2(-9,6),"舟" if i==v[0] else ("旗" if i==goal[1] else ("礁" if i==goal[2] else "≈")),17,Color("214544"))
-					else:
-						circle(p,13.,RED if board.game=="stitch" and i==goal[0] else (GOLD if i in goal else Color("67867b")))
-						word(p+Vector2(-5,6),str(i+1),15,Color("294642"))
-				if two:word(origin+Vector2(4,129),"底样" if side==0 else "手中",19)
-			if board.game in ["stitch","stars"]:
-				for i in range(1,goal.size()):stroke(base+dots(goal[i-1]),base+dots(goal[i]),GOLD if i<board.step else Color("779487"),4. if i<board.step else 2.)
-				if board.game=="stars" or show_pattern:
-					word(Vector2(26,186),"起式   "+"  →  ".join(goal.map(func(n):return str(int(n)+1))),18)
-				else:word(Vector2(26,186),("从朱点起，沿字帖运笔　%d / %d" if board.house=="caligraphy" else "从朱点起，沿底样行针　%d / %d")%[board.step,goal.size()],18)
-			if board.game=="sail":word(Vector2(24,185),"北岸顺东风，向东多漂一格",18)
-		"forge":
-			hit_zones.append(Rect2(0,0,w,200))
-			var begin:=mid-248.
-			for i in 8:surface.draw_rect(Rect2(begin+i*62,82,58,40),GOLD if i==goal[mini(board.step,2)] else Color("526c59"))
-			circle(Vector2(begin+(pulse+.02)*62.,cy),10.,Color.WHITE)
-			word(Vector2(mid-63.,166),"%s　%d / 3"%["火候" if board.house=="kiln" else "落槌",board.step],20)
-		"melody","memory","tune":
-			var notes: Array=["宫","商","角","徵","羽"] if board.game!="memory" else board.recipe.labels
-			if board.game=="tune":
-				for j in 5:stroke(Vector2(mid-205,62+j*20),Vector2(mid+205,62+j*20),GOLD if j==2 else JADE,2.)
-				word(Vector2(mid-58,182),"弦轸　%+d"%v[0],21)
-			else:
-				for i in notes.size():
-					var p:=Vector2(mid+(i-(notes.size()-1)*.5)*78,cy)
-					hit_zones.append(Rect2(p-Vector2(32,32),Vector2(64,64)))
-					circle(p,30.,GOLD if i==flash else Color("42665c"))
-					word(p+Vector2(-12,9),str(notes[i]),24)
-				word(Vector2(24,183),"入拍　%d / %d"%[board.step,goal.size()],18)
-		"weights":
-			var mass:=0
-			for i in 3:mass+=v[i]*goal[i]
-			var tilt:=clampf((mass-goal[3])*.09,-.45,.45)
-			var beam:=Vector2.from_angle(tilt)*125.
-			var pivot:=Vector2(mid,83);stroke(pivot-Vector2(0,40),pivot+Vector2(0,77),GOLD,6.)
-			stroke(pivot-beam,pivot+beam,INK,4.)
-			for side in [-1,1]:
-				var end: Vector2=pivot+beam*side;stroke(end,end+Vector2(0,30),GOLD,2.);stroke(end+Vector2(-24,30),end+Vector2(24,30),GOLD,5.)
-			word(Vector2(mid-82,188),"%d 钱　/　%d 钱"%[mass,goal[3]],20)
-		"sluice":
-			var direction:= -1. if board.house=="weir" else 1.
-			var wet: int=board.wet_joints()
-			var first:=Vector2(mid-62,cy-direction*28)
-			var tiles: Array=[first,first+Vector2(76,0),first+Vector2(76,64*direction)]
-			var source:=first-Vector2(119,0)
-			var field: Vector2=tiles[2]+Vector2(134,0)
-			circle(source,25.,Color("5c9b95"))
-			for row in 3:
-				var y:=source.y-10.+row*9.
-				var drift:=sin(flow_time*1.7+row)*3.
-				stroke(Vector2(source.x-12+drift,y),Vector2(source.x+10+drift,y),JADE,2.)
-			for row in 3:
-				var root_: Vector2=field+Vector2(-14.+row*14.,9)
-				stroke(root_,root_+Vector2(-4,-14),JADE,2.);stroke(root_,root_+Vector2(8,-18),Color("c7ce85"),2.)
-				stroke(root_+Vector2(-6,5),root_+Vector2(6,0),Color("8b8666"),3.)
-			stroke(source+Vector2(21,0),first-Vector2(32,0),JADE,10.)
-			stroke(tiles[2]+Vector2(34,0),tiles[2]+Vector2(112,0),JADE if wet==3 else GOLD,9.)
-			for i in 3:
-				var at: Vector2=tiles[i]
-				hit_zones.append(Rect2(at-Vector2(34,30),Vector2(68,60)))
-				surface.draw_rect(Rect2(at-Vector2(34,30),Vector2(68,60)),Color("6f533d"))
-				surface.draw_rect(Rect2(at-Vector2(32,28),Vector2(64,56)),Color("b89059"),false,2.)
-				for peg in [Vector2(-26,-22),Vector2(26,22)]:circle(at+peg,2.5,Color("ceb27c"))
-				for port in board.ports(i):
-					var delta:=Vector2.from_angle((port-1)*PI/2.)*31.
-					stroke(at,at+delta,Color("382e23"),17.)
-					stroke(at,at+delta,JADE if i<wet else Color("d2b88e"),10.)
-					if i<wet:circle(at+delta*fposmod(flow_time*.72+i*.28,1.),2.2,Color("d6eee1"))
-			word(source+Vector2(-18,49),"来水",18,JADE);word(field+Vector2(-18,46),"田口",18,GOLD)
-		"jugs","wheel","tower","divide","allot","pigment","abacus","clock","seats","press","cross":
-			var count:=v.size()
-			if board.game in ["abacus","clock"]:count=2
-			for i in count:
-				var x:=mid+(i-(count-1)*.5)*minf(130.,(w-80.)/count)
-				var p:=Vector2(x,cy)
-				if board.game!="jugs":hit_zones.append(Rect2(x-38,45,76,120))
-				match board.game:
-					"jugs":
-						var frac: float=float(v[i])/goal[i];surface.draw_rect(Rect2(x-38,58,76,90),INK,false,3)
-						surface.draw_rect(Rect2(x-34,145-82*frac,68,82*frac),JADE)
-						word(Vector2(x-8,180),str(v[i]),20)
-					"tower":
-						stroke(p-Vector2(0,50),p+Vector2(0,46),GOLD,4.)
-						for j in v[i].size():
-							var radius: float=12.+9.*v[i][j]
-							stroke(p+Vector2(-radius,40-j*17),p+Vector2(radius,40-j*17),RED if i==board.picked else JADE,13.)
-					"wheel":
-						var radius: float=12.+10.*v[i]
-						for j in 4:stroke(p+Vector2(-radius,j*8),p+Vector2(radius,j*8),Color("c38961"),7.)
-						word(Vector2(x-27,176),"%s · %d"%[board.recipe.labels[i],v[i]],17)
-					"abacus":
-						stroke(p-Vector2(0,53),p+Vector2(0,53),GOLD,3.)
-						for j in 9:circle(Vector2(x,46+j*11+(15 if j>=v[i] else 0)),5.5,JADE if j<v[i] else GOLD)
-						word(Vector2(x-29,181),"%s · %d"%[board.recipe.labels[i],v[i]],18)
-					"clock":
-						surface.draw_arc(p,34,0,TAU,44,INK,2.,true)
-						var sides:=6
-						stroke(p,p+Vector2.from_angle(v[i]*TAU/sides-PI*.5)*30.,JADE,5.)
-						word(Vector2(x-32,175),"对位 %d"%goal[i],17)
-						word(p+Vector2(37,5),str(v[i]),16)
-					_:
-						var label_:=str(v[i])
-						if board.game=="seats":label_=board.recipe.labels[v[i]]
-						if board.game=="cross":label_=["菜","兔","鹅","舟"][i]+(" · 西" if v[i]==0 else " · 东")
-						if board.game=="press":label_="花" if v[i]==1 else "○"
-						circle(p,36.,Color("906854") if board.picked==i else Color("4c7166"))
-						word(p+Vector2(-label_.length()*10.,7),label_,20)
-						if board.game=="pigment":
-							circle(Vector2(x,48),10.,[Color("ca5242"),Color("d2a35c"),Color("394442")][i])
-							word(Vector2(x-50,177),"%s　%d / %d"%[board.recipe.labels[i],v[i],goal[i]],17)
-						if board.game=="allot":word(Vector2(x-49,177),"%s　%d"%[board.recipe.labels[i],v[i]],17)
-		"proof":
-			word(Vector2(45,76),"底本",18,JADE);word(Vector2(mid-100,93),board.recipe.labels[mini(board.step,2)],35)
-			word(Vector2(45,154),"抄本",18,RED);word(Vector2(mid-100,162),goal[mini(board.step,2)],35)
-		"verse":
-			var phrase: String="".join(goal.slice(0,board.step).map(func(i):return board.recipe.labels[i]))
-			word(Vector2(mid-80,120),phrase+"　".repeat(goal.size()-board.step),36)
-			stroke(Vector2(mid-115,141),Vector2(mid+115,141),GOLD,2.)
-		"courier":
-			surface.draw_rect(Rect2(mid-72,55,144,94),Color("d6bc8c"))
-			stroke(Vector2(mid-72,55),Vector2(mid,113),Color("8f7457"));stroke(Vector2(mid,113),Vector2(mid+72,55),Color("8f7457"))
-			circle(Vector2(mid,107),14.,RED)
-			var letter:=str(hud.session.state().jade_visits.letter)
-			word(Vector2(mid-88,183),"驿袋尚空" if letter=="" else ("送往驿路茶棚" if letter=="hostel" else "送往旧渡驿舍"),20)
-	if seal_time>=0.:
-		var land:=clampf(seal_time/.25,0.,1.)
-		var side:=lerpf(63.,48.,1.-pow(1.-land,3.))
-		var seal:=Rect2(Vector2(w-71.-side*.5,42.-side*.5),Vector2.ONE*side)
-		var vermilion:=Color("dd735a")
-		vermilion.a=.3+.7*land
-		surface.draw_rect(seal,vermilion,false,3.,true)
-		surface.draw_rect(seal.grow(-4.),vermilion,false,1.,true)
-		word(seal.get_center()+Vector2(-18,7),"坊印",18,vermilion)
+	refresh()

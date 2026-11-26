@@ -18,6 +18,8 @@ static func register(host: Node3D,id: String,node: Node3D) -> void:
 	if node.has_meta("jade_house"):
 		var house: String=node.get_meta("jade_house")
 		row=["jade_game",preload("res://scripts/jade/house_games.gd").STATIONS[house].action]
+	elif id.begins_with("jade:") and not row.is_empty() and row[0] in ["chime","footwork"] and preload("res://scripts/jade/house_games.gd").PERFORMANCES.has(id.get_slice(":",1)):
+		row=["jade_game",preload("res://scripts/jade/house_games.gd").entry(id.get_slice(":",1)).action]
 	elif node.has_meta("dye_station"):row=KINDS.clothing_rack
 	if row.is_empty():return
 	var anchor:=node.get_node_or_null("ActivityAnchor") as Node3D if kind!="tea_service" else null

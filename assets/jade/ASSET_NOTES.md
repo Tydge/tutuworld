@@ -70,3 +70,7 @@
 生成提示词如下。
 
 > Square technical UV diffuse atlas, exactly FOUR edge-to-edge equal square quadrants in a 2x2 grid, each an orthographic swatch of original classical Chinese decorative art for a charming 3D game. Top left: single majestic sinuous Chinese gold dragon with whiskers, antlers, coiling among restrained ruyi clouds in shallow carved relief on deep cinnabar lacquer, for an imperial throne back. Top right: one large elegant white red-crowned crane in flight, wings extended diagonally, sparse cloud curls, woven on midnight teal silk, bordered with a narrow gold key fret, square Ming-style embroidered rank badge. Bottom left: large single pale-gold flowering peony sprig with leaves on vermilion silk, narrow wave border at bottom for a pleated horse-face skirt apron. Bottom right: restrained ivory-and-indigo resist-dyed cotton, repeat of large stylized fish among rolling waves, rendered as distinctive hand-cut Chinese stencils. Clearly legible at small scale, hand-painted illustrated game texture, broad quiet color fields mixed with intricate thread or carved detail; exactly equal quadrants with no gutters, flat even light, no scene or objects, no text.
+
+## 坊间小游戏
+
+`workshop_almanac.webp` 和 `workshop_pieces.webp` 是两张 ImageGen 原创图集。六幅兔工匠横卷用于案头规则，十二件小物用于水务沙盘、舟船、砝码、杏花饼与编磬。盘面按当局状态绘制，落点和操作区域随同一组坐标缩放。

@@ -14,7 +14,7 @@ const SIDES={
 static func ground(id: String) -> Array:
 	if Games.STATIONS.has(id):
 		var job: Dictionary=Games.STATIONS[id]
-		var sides: Array=SIDES[job.game]
+		var sides: Array=SIDES[job.decor]
 		if id=="audience":return [[job.prop,-3.6,-1.4],["jade_throne",0,-4.0],["jade_screen",0,-5.6],["jade_censer",2.8,-3.5],["jade_censer",-2.8,-3.5],["jade_court_carpet",0.,-.65],["jade_gong",7.8,-4.5],["jade_curio",-7.4,-4.6],["jade_blossom",6.7,1.8],["jade_blossom",-6.7,1.8]]
 		if id=="herbal":sides=["jade_apothecary","jade_blossom"]
 		if id=="garden":sides=["jade_basin","jade_tea_desk"]

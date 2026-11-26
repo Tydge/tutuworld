@@ -23,6 +23,7 @@ func _ready() -> void:
 	camera=Camera3D.new();camera.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;camera.projection=Camera3D.PROJECTION_ORTHOGONAL;viewport.add_child(camera);camera.current=true
 func variant_key(row: Dictionary) -> String:
 	var kind: String=row.get("kind","")
+	if kind=="jade_flower_paper" and row.has("print"):return kind+"@"+JSON.stringify(row.print).sha256_text()
 	if not row.get("painted",false) and row.get("appearance",{}).is_empty():return kind
 	return kind+"@"+JSON.stringify([row.get("color",""),row.get("style","original"),row.get("painted",false),row.get("appearance",{})]).sha256_text()
 func request_variant(row: Dictionary) -> void:

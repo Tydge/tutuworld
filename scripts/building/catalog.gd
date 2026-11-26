@@ -85,6 +85,7 @@ const OBJECTS:={
 	"jade_palace":{"name":"含章重檐殿","size":Vector2(22,16),"height":17,"category":"玉京","outdoor":true},
 	"jade_rail":{"name":"望柱石栏","size":Vector2(4.25,0.6),"height":1.65,"category":"玉京","outdoor":true},
 	"jade_gate":{"name":"彩梁牌坊","size":Vector2(13.2,3.6),"height":9.5,"category":"玉京","outdoor":true},
+	"jade_flower_paper":{"name":"自印花笺","size":Vector2(1.12,.16),"offset":Vector2(0,.08),"height":1.14,"mount":"wall","mount_height":1.55,"category":"仓库"},
 	"jade_lamp":{"name":"南津纱灯","size":Vector2(1.55,1.0),"height":4.1,"category":"仓库","outdoor":true},
 	"jade_screen":{"name":"折枝花鸟屏","size":Vector2(2.72,0.75),"height":2.3,"category":"仓库","outdoor":true},
 	"jade_basin":{"name":"青釉莲鱼洗","size":Vector2(1.84,1.84),"height":0.89,"category":"仓库","outdoor":true},

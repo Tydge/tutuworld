@@ -7,14 +7,15 @@ const RECIPES={
 	"jade_lamp":{"branch":3,"copper":2,"cotton_cloth":1},
 	"jade_basin":{"nephrite":3,"sandstone":2},
 	"jade_chime":{"cedar":2,"silver_ore":3,"copper":2}}
+static func stocked(id: String) -> bool:return id=="jade_flower_paper" or RECIPES.has(id)
 static func count_in(layout: Dictionary) -> Dictionary:
 	var result: Dictionary={}
 	for row in layout.get("elements",[]):
-		if row.get("type")=="object" and RECIPES.has(row.get("kind")):result[row.kind]=int(result.get(row.kind,0))+1
+		if row.get("type")=="object" and stocked(str(row.get("kind",""))):result[row.kind]=int(result.get(row.kind,0))+1
 	return result
 static func balance(inventory: Dictionary,before: Dictionary,after: Dictionary) -> Dictionary:
 	var was:=count_in(before);var now:=count_in(after);var changes: Dictionary={}
-	for id in RECIPES:
+	for id in RECIPES.keys()+["jade_flower_paper"]:
 		var delta:=int(was.get(id,0))-int(now.get(id,0))
 		if int(inventory.get(id,0))+delta<0:return {"ok":false,"message":"仓库里没有足够的成品。"}
 		if delta!=0:changes[id]=delta

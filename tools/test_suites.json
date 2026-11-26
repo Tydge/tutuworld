@@ -313,6 +313,7 @@
       "icefield_performance"
     ],
     "jade": [
+      "jade_replay_rules",
       "jade_area_rules",
       "jade_multiplayer_rules",
       "jade_walking_routes",
@@ -609,6 +610,9 @@
     },
     "winter_models_preview": {},
     "jade_multiplayer_rules": {
+      "headless": true
+    },
+    "jade_replay_rules": {
       "headless": true
     },
     "jade_area_rules": {

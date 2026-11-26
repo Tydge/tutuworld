@@ -2,11 +2,21 @@ extends "res://scripts/city/city_world.gd"
 const J=preload("res://scripts/jade/layout.gd")
 const Residents=preload("res://scripts/jade/residents.gd")
 var thanked: Dictionary={}
+var displayed_decree:=-1
+var framed_station:=""
+var station_eye:Vector3
 func conversation_line(id: String) -> String:
 	var line: Array=Residents.AFTER_WORK.get(id,[])
 	if not line.is_empty() and not thanked.has(id) and line[0] in session.state().jade_visits.marks:
 		thanked[id]=true
 		return line[1]
+	var district:String={"JadeCitizen_0":"0","JadeVendor_farm":"1","JadeCitizen_8":"2"}.get(id,"")
+	var book:Dictionary=session.state().jade_visits
+	if book.decree.has(district):
+		var key:="%s/court/%s"%[id,book.rounds.get("audience",0)]
+		if not thanked.has(key):
+			thanked[key]=true
+			return preload("res://scripts/jade/rounds/scholars.gd").REQUESTS[int(book.decree[district])][int(district)+4]+"。多亏殿里那道朱批。"
 	return super.conversation_line(id)
 func can_walk(p: Vector3) -> bool:return J.can_walk(p) and not construction_at(p)
 func navigation_bounds() -> Rect2i:return J.NAVIGATION
@@ -100,7 +110,14 @@ func prepare_scenery() -> void:
 			var mat:=mesh.get_active_material(i)
 			if mat is ShaderMaterial and mat.shader in [preload("res://assets/shaders/jade_silk_lantern.gdshader"),preload("res://assets/shaders/jade_window.gdshader"),preload("res://assets/shaders/jade_distant_house.gdshader")] and mat not in lit_materials:lit_materials.append(mat)
 	lantern_pools=scenery.find_children("*","OmniLight3D",true,false).filter(func(lamp):return lamp.has_meta("street_lamp"))
+func refresh_court_orders() -> void:
+	var book:Dictionary=session.state().jade_visits
+	var round_:int=book.rounds.get("audience",0)
+	if displayed_decree==round_:return
+	displayed_decree=round_
+	preload("res://scripts/jade/court_orders.gd").refresh(self,book)
 func update_lighting(override_time: float=-1) -> void:
+	if is_instance_valid(hud):refresh_court_orders()
 	update_neighbour_detail()
 	var previous_sky:=last_sky_colours
 	super.update_lighting(override_time)
@@ -275,15 +292,25 @@ func clear_palace_lens() -> void:
 
 func update_camera(delta: float) -> void:
 	if not is_instance_valid(hud) or hud.mode!="jade_game" or not targets.has(hud.activity_target):
+		framed_station=""
 		super.update_camera(delta)
 		clear_palace_lens()
 		return
 	var prop: Node3D=targets[hud.activity_target].node
-	var focus:=prop.global_position.lerp(bunny.global_position,.29)+Vector3.UP*1.03
-	var eye:=prop.global_basis*Vector3(4.8,2.7,-1.7)
-	var point:=camera_safe_position(focus,focus+eye)
-	var shift: float=1.22 if get_viewport().get_visible_rect().size.x>=1120 else 0.
-	var right:=Vector3.UP.cross(eye.normalized()).normalized()
+	var focus:=prop.global_position.lerp(bunny.global_position,.3)+Vector3.UP*1.03
+	if framed_station!=hud.activity_target:
+		framed_station=hud.activity_target
+		# Choose the clear side of each workbench when entering its room.
+		var clearance:=-1.
+		for offset:Vector3 in [Vector3(4.7,2.8,5.4),Vector3(-4.7,2.8,5.4),Vector3(4.8,2.7,-1.7),Vector3(-4.8,2.7,-1.7)]:
+			var angle:Vector3=prop.global_basis.orthonormalized()*offset
+			var free_to:=camera_safe_position(focus,focus+angle)
+			var reach:=focus.distance_squared_to(free_to)
+			if reach>clearance:
+				clearance=reach;station_eye=angle
+	var point:=camera_safe_position(focus,focus+station_eye)
+	var shift:=minf(1.55,focus.distance_to(point)*.25) if get_viewport().get_visible_rect().size.x>=1120 else 0.
+	var right:=Vector3.UP.cross(station_eye.normalized()).normalized()
 	camera_focus=camera_focus.lerp(focus+right*shift,1.-exp(-delta*12.))
 	camera.position=camera.position.lerp(point,1.-exp(-delta*12.))
 	if not camera.position.is_equal_approx(camera_focus):camera.look_at(camera_focus)

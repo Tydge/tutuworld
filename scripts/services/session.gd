@@ -549,7 +549,9 @@ func receive_online_snapshot(data: Dictionary) -> void:
 	online_winter_building_available=bool(data.get("winter_building",false))
 	var prior_state: Dictionary=authority.state
 	authority.state=data.state
-	if not authority.state.has("jade_visits"):authority.state.jade_visits=preload("res://scripts/jade/play_board.gd").normalize({})
+	var journal:Variant=authority.state.get("jade_visits")
+	if not journal is Dictionary or not journal.has_all(["rounds","next_deals","decree","prints","song"]):
+		authority.state.jade_visits=preload("res://scripts/jade/play_board.gd").normalize(journal)
 	for map_id in ["city","icefield","jade"]:
 		var key: String=preload("res://scripts/building/parcels.gd").layout_key(map_id)
 		if not authority.state.has(key):authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)

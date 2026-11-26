@@ -26,7 +26,7 @@ static func build(hud: CanvasLayer) -> void:
 	var places: Dictionary={}
 	for house in J.HOUSES:
 		var id: String=house[0]
-		var info: Dictionary=Games.STATIONS.get(id,{})
+		var info: Dictionary=Games.entry(id)
 		places[id]=[house[1],info.get("action",SERVICES.get(Games.NATIVE.get(id,""),"")),J.center(house)]
 	for id in J.LANDMARKS:
 		var landmark: Dictionary=J.LANDMARKS[id]

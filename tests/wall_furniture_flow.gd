@@ -40,6 +40,25 @@ func run() -> void:
 	check(editor.commit(data),"Six new objects validate and build together");editor.set_storey(0);editor.set_roof_visible(true);await physics_frame;await physics_frame
 	editor.choose_tool("object:wall_botanical");city.camera.position=Vector3(76,3.0,8);city.camera.look_at(Vector3(76,2.4,1.14));var mouse: Vector2=city.camera.unproject_position(Vector3(80.,2.7,1.14));var point: Variant=editor.point_at(mouse);var sample: Dictionary=editor.row_at(point)
 	check(sample.get("support","")!="" and is_equal_approx(sample.mount_height,2.0),"Actual camera ray places a wall object at mouse height")
+	var album: Array=[[[0,0,0],[4,1,1]],[[2,1,0],[4,2,1],[7,0,2]]]
+	session.state().jade_visits.prints=album.duplicate(true)
+	session.authority.add("jade_flower_paper",1)
+	editor.choose_tool("object:jade_flower_paper")
+	check(editor.ui.print_picker.item_count==2 and editor.ui.print_picker.selected==1,"The build catalogue opens the latest saved sheet")
+	var latest_thumb:String=editor.ui.selected_thumb_key
+	editor.ui.print_picker.select(0);editor.ui.print_picker.item_selected.emit(0)
+	check(latest_thumb!=editor.ui.selected_thumb_key and editor.ui.studio.variants[editor.ui.selected_thumb_key].print==album[0],"Changing the album selection also changes the rendered print thumbnail")
+	editor.placement_height=1.55
+	var hung:bool=editor.place_at(Vector2(80.5,1))
+	check(hung,"Place an older sheet on a real supported wall through the build tool")
+	if hung:
+		var mounted:Dictionary=L.find(editor.layout,editor.selected_id)
+		var marks:Node=editor.room.render_cache[mounted.id].node.get_node("PrintBlocks")
+		check(mounted.print==album[0] and marks.get_meta("layers")==album[0] and marks.get_child_count()>2,"The frame renders exactly the selected physical stamps")
+		check(session.authority.count("jade_flower_paper")==0,"Hanging a signed sheet consumes one frame")
+		var saved:Dictionary=L.normalize(JSON.parse_string(JSON.stringify(editor.layout)))
+		check(L.find(saved,mounted.id).print==album[0],"Hanging composition survives a save/load")
+		editor.undo();check(session.authority.count("jade_flower_paper")==1,"Returning this sheet restores the frame")
 	editor.choose_tool("select");editor.ui.hide();editor.grid.hide()
 	var art: Dictionary=editor.layout.elements.filter(func(row):return row.get("kind","")=="wall_botanical")[0];var art_id: String=art.id;var start: Vector2=city.camera.unproject_position(Vector3(71.5,2.405,1.25));var end: Vector2=city.camera.unproject_position(Vector3(71.85,2.805,1.25))
 	await motion(start);await mouse(start,true)

@@ -590,6 +590,13 @@
       "sell": 0,
       "description": "成品存入建造仓库，可摆放或收回。"
     },
+    "jade_flower_paper": {
+      "name": "自印花笺",
+      "kind": "furniture",
+      "color": "c27564",
+      "sell": 0,
+      "description": "到花笺坊揭纸后，回家可从花笺册选印样挂上墙。"
+    },
     "jade_chime": {
       "name": "听风编磬",
       "kind": "furniture",

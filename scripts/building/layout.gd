@@ -150,6 +150,10 @@ static func validate(raw: Variant,scope: String="") -> Dictionary:
 				if not Catalog.OBJECTS.has(value.get("kind","")) or not point(value.get("position"),false,map_id):return fail("请选择有效物件，并放在建造园地块内。")
 				var yaw: float=float(value.get("yaw",0))
 				if not is_finite(yaw) or absf(yaw/90.-roundf(yaw/90.))>.001:return fail("物件旋转须对齐90度。")
+				if value.kind=="jade_flower_paper":
+					var design:=preload("res://scripts/jade/play_board.gd").clean_print(value.get("print",[]))
+					if design.is_empty():return fail("请选择花笺册里的印样。")
+					row.print=design
 				if value.has("appearance"):
 					var appearance:=preload("res://scripts/building/appearance.gd").validate(value.kind,value.appearance)
 					if not appearance.ok:return fail(appearance.message)

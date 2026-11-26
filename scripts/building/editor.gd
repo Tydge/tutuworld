@@ -52,6 +52,7 @@ var distance_:=38.
 var previous_active:=true
 var ghost_key:=""
 var brush_painted:=false
+var print_index:=0
 var npc_modes: Dictionary={}
 var hovered_id:=""
 var highlighted_key:=""
@@ -243,6 +244,7 @@ func choose_tool(id: String) -> void:
 	var parts:=id.split(":")
 	structure_form=parts[1] if parts.size()==2 and parts[0] in ["door","window","roof","stairs"] else ("straight" if parts[0]=="stairs" else "classic")
 	if parts[0] in ["door","window","roof","stairs"]:id=parts[0]
+	if id=="object:jade_flower_paper":print_index=maxi(0,city.session.state().jade_visits.prints.size()-1)
 	tool=id;start_point=null;moving_id="";moving_unit.clear();demolition_start=null;demolition_target_type="";demolition_dragging=false;demolition_candidate.clear();demolition_key="";rotation=0.;ghost_key="";ghost.hide();clear_preview()
 	if id.begins_with("object:"):ui.show_category(Catalog.OBJECTS[id.trim_prefix("object:")].category)
 	if id!="select":
@@ -478,6 +480,9 @@ func closest_wall(point_: Vector2) -> Dictionary:
 		var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var dir: Vector2=(b-a).normalized();var offset: float=clampf((point_-a).dot(dir),0,a.distance_to(b));var distance_to: float=point_.distance_to(a+dir*offset)
 		if distance_to<gap:gap=distance_to;best={"wall":row.id,"offset":snappedf(offset,.5)}
 	return best
+func selected_print() -> Array:
+	var album:Array=city.session.state().jade_visits.prints
+	return [] if album.is_empty() else album[clampi(print_index,0,album.size()-1)].duplicate(true)
 func row_at(point_: Vector2) -> Dictionary:
 	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):return {}
 	var row:={"type":tool,"storey":editing_storey+(1 if roof_view and tool=="floor" else 0),"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
@@ -506,6 +511,9 @@ func row_at(point_: Vector2) -> Dictionary:
 		else:
 			var area:=Layout.rect(row);var mid:=area.get_center();var delta:=point_-Vector2(snappedf(mid.x,.5),snappedf(mid.y,.5));row.a=[row.a[0]+delta.x,row.a[1]+delta.y];row.b=[row.b[0]+delta.x,row.b[1]+delta.y]
 	else:return {}
+	if tool=="object:jade_flower_paper":
+		row.print=selected_print()
+		if row.print.is_empty():return {}
 	row=drafting.apply_brush(row)
 	if row.type=="object" and Catalog.mount(row)=="wall":return preload("res://scripts/building/wall_mount.gd").attach(layout,row,point_,Vector2(city.camera.global_position.x,city.camera.global_position.z),placement_height)
 	if row.type=="object" and Catalog.mount(row)!="floor":return Layout.attach_at(layout,row,point_,placement_support,placement_level)
@@ -672,7 +680,7 @@ func restore_moving() -> void:
 		room.storey_view_key=""
 		if active:apply_editor_cutaway()
 func update_preview(row: Dictionary,valid: bool) -> void:
-	var key: String=str(row.get("kind",row.type))+":"+moving_id+":"+str(row.get("painted",false))+":"+str(row.get("color",""))+":"+str(row.get("style",""))+JSON.stringify(row.get("appearance",{}))
+	var key: String=str(row.get("kind",row.type))+":"+moving_id+":"+str(row.get("painted",false))+":"+str(row.get("color",""))+":"+str(row.get("style",""))+JSON.stringify(row.get("appearance",{}))+str(row.get("print",""))
 	if key!=preview_key:
 		clear_preview();preview_key=key;preview=Node3D.new();preview.name="BuildObjectPreview";preview_space.add_child(preview)
 		var b:=Factory.builder(preview);b.build_item(preview,row.kind);Factory.paint(preview,row)

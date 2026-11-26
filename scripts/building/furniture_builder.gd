@@ -22,6 +22,8 @@ func build_item(n: Node3D,kind: String) -> void:
 			n.remove_meta("facility_id")
 		preload("res://scripts/jade/material_parts.gd").prepare(n,kind)
 		return
+	if kind=="jade_flower_paper":
+		preload("res://scripts/jade/flower_paper.gd").make(n);return
 	if kind.begins_with("jade_"):
 		var shell:=Node3D.new();shell.name="Carpentry";n.add_child(shell)
 		if kind=="jade_palace":shell.scale=Vector3.ONE*.77

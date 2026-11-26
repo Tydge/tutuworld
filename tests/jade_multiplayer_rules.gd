@@ -136,20 +136,37 @@ func run() -> void:
 	if garment.ok:finish(0)
 	check(a.count("night_moth")==1 and request(0,"equip",{"item":"night_moth","slot":"head"}).ok,"Wear the newly made headpiece")
 	var oil: Dictionary=host.targets["jade:oil:Trade"]
-	var task:={"target":"jade:oil:Trade","moves":[0,2]}
+	var solutions=preload("res://tests/jade_game_solutions.gd")
+	var board=preload("res://scripts/jade/play_board.gd")
+	var task:={"target":"jade:oil:Trade","round":0,"moves":solutions.solution(board.new("oil"))}
 	var purse: int=a.state.coins
 	check(not request(0,"jade_visit",task).ok,"Oil press refuses a distant result")
 	place(0,oil.position)
-	check(not request(0,"jade_visit",{"target":task.target,"moves":[0]}).ok,"A partial weighing earns no seal")
+	check(not request(0,"jade_visit",{"target":task.target,"round":0,"moves":[]}).ok,"A partial weighing earns no seal")
 	check(request(0,"jade_visit",task,"oil-receipt").ok,"The host accepts the completed weighing")
 	request(0,"jade_visit",task,"oil-receipt");request(0,"jade_visit",task)
 	check(a.state.coins==purse+6 and a.state.jade_visits.marks==["oil"] and b.state.jade_visits.marks.is_empty(),"One personal seal and one reward after retries")
 	place(0,host.targets["jade:hostel:Trade"].position)
-	check(request(0,"jade_visit",{"target":"jade:hostel:Trade"}).ok,"Collect a letter at the inn")
-	check(not request(0,"jade_visit",{"target":"jade:hostel:Trade"}).ok,"Letters need to cross town")
+	check(request(0,"jade_visit",{"target":"jade:hostel:Trade","round":0,"moves":solutions.solution(board.new("hostel"))}).ok,"Collect a letter at the inn")
+	check(not request(0,"jade_visit",{"target":"jade:hostel:Trade","round":0,"moves":solutions.solution(board.new("hostel"))}).ok,"Letters need to cross town")
+	place(0,oil.position)
+	var repeat_task:={"target":task.target,"round":1,"variant":2,"moves":solutions.solution(board.new("oil",1,2))}
+	var balance:int=a.state.coins
+	check(request(0,"jade_visit",repeat_task).ok and a.state.coins==balance+2 and a.state.jade_visits.next_deals.oil==4,"A skipped edition advances the next deal and pays two shells")
+	check(not request(0,"jade_visit",repeat_task).ok and a.state.coins==balance+2,"Repeating the second settlement pays nothing twice")
+	for house in ["paper","audience","music"]:
+		var target:="jade:%s:Trade"%house
+		if house=="music":
+			for key: String in host.targets:
+				if key.begins_with("jade:music:") and host.targets[key].kind=="jade_game":target=key;break
+		if not host.targets.has(target):check(false,"Missing authoritative target "+house);continue
+		place(0,host.targets[target].position)
+		check(request(0,"jade_visit",{"target":target,"round":0,"moves":solutions.solution(board.new(house),house=="audience")}).ok,"Authority replays the actual work at "+house)
+	check(a.count("jade_flower_paper")==1 and a.state.jade_visits.prints.size()==1 and a.state.jade_visits.song.size()==6 and a.state.jade_visits.decree=={"0":0,"2":0},"Personal print, composition and alternative decree carry to save")
+	check(a.state.jade_visits.letter=="hostel" and b.state.jade_visits.prints.is_empty() and b.state.jade_visits.decree.is_empty(),"Work in other shops keeps an outstanding letter and stays personal")
 	check(server.save_world(),"Persist the character journal")
 	var saved: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(server.save_path))
-	check(saved.characters[ids[0]].jade_visits==a.state.jade_visits and saved.characters[ids[1]].jade_visits==b.state.jade_visits,"Saved journals keep each character's parcel and seal")
+	check(board.normalize(saved.characters[ids[0]].jade_visits)==board.normalize(a.state.jade_visits) and board.normalize(saved.characters[ids[1]].jade_visits)==board.normalize(b.state.jade_visits),"Saved journals keep each character's parcel and seal")
 	# Publishing several drafts starts asynchronous clearance updates in the host.
 	for tick in range(3):await physics_frame
 	for world in server.maps.values():

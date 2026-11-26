@@ -13,6 +13,8 @@ static func builder(root: Node3D) -> RefCounted:
 	if not root.has_meta("build_mesh_cache"):root.set_meta("build_mesh_cache",{});root.set_meta("build_material_cache",{})
 	b.rounded_cache=root.get_meta("build_mesh_cache");return b
 static func paint(module: Node3D,row: Dictionary,force: bool=false) -> void:
+	if row.get("kind")=="jade_flower_paper":
+		preload("res://scripts/jade/flower_paper.gd").apply(module,row.get("print",[]));return
 	legacy_paint(module,row,force)
 	if row.has("kind"):preload("res://scripts/building/appearance.gd").apply(module,row)
 static func legacy_paint(module: Node3D,row: Dictionary,force: bool=false) -> void:
@@ -45,6 +47,10 @@ static func shell(city: Node3D) -> Node3D:
 	for id in ["Floor","Walls","Roof","Stairs"]:group(structure,id)
 	for id in ["Furnishing","Doors","Lighting","Joints"]:group(root,id)
 	root.set_meta("structure_descriptors",{});return root
+static func object_key(row: Dictionary) -> Array:
+	var parts: Array=[row.kind,row.color,row.style,row.painted,row.get("appearance",{})]
+	if row.has("print"):parts.append(row.print)
+	return parts
 static func descriptor(path: String,row: Dictionary,geometry: Variant) -> Dictionary:
 	return {"path":path,"row":row,"signature":JSON.stringify(geometry).sha256_text()}
 static func structure_descriptors(layout: Dictionary,_grid: Dictionary,previous: Dictionary={}) -> Dictionary:
@@ -86,7 +92,7 @@ static func sync(root: Node3D,layout: Dictionary,city: Node3D,prepared_plans: Di
 	if root.get_meta("structure_key","")!=structure_key:root.set_meta("structure_descriptors",structure_descriptors(layout,grid,root.get_meta("structure_descriptors",{})));root.set_meta("structure_key",structure_key)
 	var desired: Dictionary=root.get_meta("structure_descriptors").duplicate()
 	for row in layout.elements:
-		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,[row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
+		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,object_key(row))
 	var prepared_at:=Time.get_ticks_usec();var created:=0;var removed:=0;var reused:=0;var moved:=0
 	for id in root.render_cache.keys():
 		if desired.has(id) and desired[id].signature==root.render_cache[id].signature:continue
@@ -148,7 +154,7 @@ static func sync_incremental(root: Node3D,layout: Dictionary,city: Node3D,budget
 		root.set_meta("structure_descriptors",desired.duplicate());root.set_meta("structure_key",structure_key)
 	else:desired=root.get_meta("structure_descriptors").duplicate()
 	for row in layout.elements:
-		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,[row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
+		if row.type=="object":desired[row.id]=descriptor("Furnishing",row,object_key(row))
 	var staging:=Node3D.new();staging.name="PendingBuildingModules";staging.hide();staging.process_mode=Node.PROCESS_MODE_DISABLED;root.add_child(staging)
 	var prepared: Dictionary={}
 	for id in desired:
@@ -359,7 +365,7 @@ static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 		"door","window":return row.type+":"+JSON.stringify([row.get("form","classic"),row.color,row.style,row.painted,row.get("default_open",true)])
 		"object":
 			if row.kind in ["flowerbed","fountain"]:return ""
-			return "object:"+JSON.stringify([row.kind,row.color,row.style,row.painted,row.get("appearance",{})])
+			return "object:"+JSON.stringify(object_key(row))
 		"wall":
 			var data:=wall_data(layout,row,Vector2.ZERO)
 			for opening in data.openings:opening.erase("id")

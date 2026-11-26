@@ -9,6 +9,7 @@ var city: Node3D
 var session: Node
 var root_ui: Control
 var overlay: Control
+var jade_table_script: GDScript
 var modal: PanelContainer
 var content: VBoxContainer
 var mode := ""
@@ -340,7 +341,7 @@ func rebuild() -> void:
 			if h[0]==building_id:
 				head.add_child(UI.label(str(h[1]),18,Color("844931")))
 				break
-		title.text=preload("res://scripts/jade/house_games.gd").STATIONS[building_id].title
+		title.text=preload("res://scripts/jade/house_games.gd").entry(building_id).title
 	if mode=="tailor":title.text="裁缝的试衣镜"
 	if mode=="atlas":title.text="踏雪图册"
 	if city.map_id=="jade":
@@ -368,7 +369,8 @@ func rebuild() -> void:
 		"dining": build_dining()
 		"map": build_map()
 		"jade_game":
-			var table:=preload("res://scripts/jade/game_table.gd").new()
+			if jade_table_script==null:jade_table_script=load("res://scripts/jade/game_table.gd")
+			var table:VBoxContainer=jade_table_script.new()
 			content.add_child(table);table.start(self,activity_target)
 		"atlas":preload("res://scripts/ui/snow_atlas.gd").build(self)
 		"tailor":

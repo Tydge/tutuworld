@@ -7,6 +7,7 @@ var roof_snow: CheckButton
 var floor_choice: Label
 var batch_paint: CheckButton
 var wall_face: OptionButton
+var print_picker: OptionButton
 var form_family:=""
 var breadcrumb: HBoxContainer
 var breadcrumb_label: Label
@@ -64,6 +65,9 @@ func _ready() -> void:
 	var plan_view:=compact("俯视 T",func():editor.toggle_top_down(),"TopDownView");plan_view.toggle_mode=true;plan_view.tooltip_text="正俯视平面图 / 透视 · T切换";header.add_child(plan_view)
 	title=UI.label("",12,UI.MUTED);header.add_child(title)
 
+	print_picker=OptionButton.new();print_picker.name="PrintPattern";print_picker.hide();header.add_child(print_picker)
+	print_picker.item_selected.connect(func(i:int):
+		editor.print_index=i;editor.ghost_key="";editor.clear_preview();editor.refresh_ui())
 	var spacer:=Control.new();spacer.size_flags_horizontal=Control.SIZE_EXPAND_FILL;header.add_child(spacer)
 	var night:=CheckButton.new();night.name="NightPreview";night.text="夜景预览";night.add_theme_font_size_override("font_size",14);night.toggled.connect(func(value):editor.set_night_preview(value));header.add_child(night)
 	var roofs:=CheckButton.new();roofs.name="ShowRoof";roofs.text="完整墙壁";roofs.tooltip_text="开启：显示本层及下层完整墙壁；关闭：剖切本层墙壁方便选取。始终只编辑当前层；最高层向上查看整栋和屋顶。";roofs.add_theme_font_size_override("font_size",14);roofs.toggled.connect(func(value):editor.set_roof_visible(value));header.add_child(roofs)
@@ -162,7 +166,7 @@ func show_category(value: String) -> void:
 	category=value;form_family="";breadcrumb.hide();empty_warehouse.visible=value=="仓库"
 	for id in cards:
 		cards[id].visible=cards[id].get_meta("category")==value
-		if value=="仓库" and id.begins_with("object:") and Stock.RECIPES.has(id.trim_prefix("object:")):
+		if value=="仓库" and id.begins_with("object:") and Stock.stocked(id.trim_prefix("object:")):
 			var key:=str(id).trim_prefix("object:")
 			var qty:=available_stock(key)
 			cards[id].visible=qty>0
@@ -188,6 +192,12 @@ func set_thumbnail(id: String,texture: Texture2D) -> void:
 	if selected_thumb_key==id:selected_preview.texture=texture
 func refresh(row: Dictionary) -> void:
 	if category in ["仓库","制作"]:show_category(category)
+	print_picker.visible=editor.tool=="object:jade_flower_paper"
+	if print_picker.visible:
+		var sheets:Array=editor.city.session.state().jade_visits.prints
+		print_picker.clear()
+		for i in sheets.size():print_picker.add_item("花笺册 · 第 %d 张"%(i+1))
+		if not sheets.is_empty():print_picker.select(clampi(editor.print_index,0,sheets.size()-1))
 	root_ui.find_child("ParcelTitle",true,false).text="东岸 · 建造" if editor.parcel_id=="" else preload("res://scripts/building/parcels.gd").title(editor.parcel_id)
 	updating=true
 	var counts: Dictionary=preload("res://scripts/building/layout.gd").usage(editor.editing_layout())
@@ -208,6 +218,7 @@ func refresh(row: Dictionary) -> void:
 	var preview_row:=row
 	if preview_row.is_empty() and editor.tool in ["template","room","floor","wall","window","door","roof","stairs","railing"]:preview_row={"type":editor.tool,"form":editor.structure_form}
 	if preview_row.is_empty() and editor.tool.begins_with("object:"):preview_row={"type":"object","kind":editor.tool.trim_prefix("object:")}
+	if print_picker.visible:preview_row={"type":"object","kind":"jade_flower_paper","print":editor.selected_print()}
 	roof_snow.visible=preview_row.get("type","")=="roof"
 	roof_snow.set_pressed_no_signal(bool(row.get("snow",false)) if row.get("type","")=="roof" else editor.roof_snow)
 	selected_kind=str(preview_row.get("kind",preview_row.get("type","")))
@@ -231,7 +242,7 @@ func refresh(row: Dictionary) -> void:
 	if selected_kind!="":
 		if preview_row.get("type","")=="object":studio.request_variant(preview_row)
 		else:studio.request(selected_thumb_key)
-	var furniture: bool=row.get("type","")=="object";paint_row.visible=not upper and not furniture and preview_row.get("type","")!="object";appearance_button.visible=furniture;batch_paint.visible=row.get("type","") in ["floor","wall"];wall_face.visible=row.get("type","")=="wall"
+	var furniture: bool=row.get("type","")=="object";paint_row.visible=not upper and not furniture and preview_row.get("type","")!="object";appearance_button.visible=furniture and row.kind!="jade_flower_paper";batch_paint.visible=row.get("type","") in ["floor","wall"];wall_face.visible=row.get("type","")=="wall"
 	if appearance_panel.visible:
 		if row.get("id","")==appearance_panel.target_id:appearance_panel.load_part(false)
 		else:appearance_panel.close()

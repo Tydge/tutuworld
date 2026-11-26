@@ -4,43 +4,7 @@ const Games=preload("res://scripts/jade/house_games.gd")
 const Board=preload("res://scripts/jade/play_board.gd")
 const People=preload("res://scripts/city/npc_profiles.gd")
 const Residents=preload("res://scripts/jade/residents.gd")
-const SOLUTIONS={
-	"drum":[0,0,0,1,1,1,1],
-	"baihe":[0,1,1,2],
-	"oil":[0,2],
-	"basket":[0,2,4,6,8],
-	"stitch":[6,3,4,1,2],
-	"lacquer":[0,0,0,1,2],
-	"pipa":[0,2,1,4],
-	"pickle":[0,2,5,2,0,2],
-	"sail":[1,2,2],
-	"weave":[0,1,4,7,8],
-	"pastry":[0,2],
-	"caligraphy":[0,3,6,7,8],
-	"poetry":[2,3,0],
-	"herbal":[0,1,2],
-	"weir":[0,1,1,1,2],
-	"books":[2,1,2],
-	"silversmith":[2,5,3],
-	"potter":[0,1,1,1,2],
-	"ledger":[0,0,0,0,0,1,1,1,1],
-	"noodle":[0,1],
-	"stage":[1,0,3,2],
-	"carver":[2,1,5,7,6],
-	"fiddler":[1,1,1],
-	"incense":[0,2,0,1,2,1,0,2,1,0,1,2,0,2],
-	"tailorhome":[1,5,4,8],
-	"ferry":[0,0,0,0,1,1,1,1],
-	"guild":[1,3,0,1,2,3,1],
-	"kiln":[4,2,5],
-	"academy":[3,0,4],
-	"paper":[2],
-	"garden":[0,2,1,2],
-	"farmhouse":[0,1,1],
-	"audience":[0,0,1,1,1,2],
-	"archive":[1,2,0],
-	"banquet":[0,1,2],
-	"chamber":[0,4,2,5]}
+const Solutions=preload("res://tests/jade_game_solutions.gd")
 var city: Node3D
 var session: Node
 var failures: Array=[]
@@ -61,6 +25,32 @@ func native_target(house: String,use: String) -> String:
 	for id: String in city.targets:
 		if id.begins_with("jade:"+house+":") and city.targets[id].kind==kind:return id
 	return ""
+func click_move(table: Node,choice: int) -> bool:
+	while table.listening:await process_frame
+	if table.house=="dojo":
+		while not table.beat_open() or table.drum_cycle+int(table.phase>=.5)==table.last_beat:await process_frame
+	var on_table:int=table.illustration.objects.size()
+	var b:Button=table.illustration.objects[choice] if choice<on_table else table.controls.get_child(choice-on_table)
+	if b.disabled or not b.is_visible_in_tree():return false
+	var before:int=table.board.moves.size()
+	var pos:=b.get_global_rect().get_center()
+	var motion:=InputEventMouseMotion.new();motion.position=pos;root.push_input(motion,true)
+	for down in [true,false]:
+		var event:=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.pressed=down;event.position=pos
+		root.push_input(event,true)
+	await process_frame
+	return table.board.moves.size()==before+1
+func drag_clay(surface: Control,from_band: int,to_band: int) -> void:
+	var base:Vector2=surface.global_position+surface.origin()
+	for edge in [[from_band,true],[to_band,false]]:
+		var pos:=base+Vector2(114,52+46*int(edge[0]))*float(surface.local_scale())
+		var motion:=InputEventMouseMotion.new();motion.position=pos;root.push_input(motion,true)
+		var event:=InputEventMouseButton.new();event.button_index=MOUSE_BUTTON_LEFT;event.position=pos;event.pressed=edge[1];root.push_input(event,true)
+	await process_frame
+func tap_key(code:Key) -> void:
+	for down in [true,false]:
+		var event:=InputEventKey.new();event.keycode=code;event.pressed=down;root.push_input(event,true)
+	await process_frame
 func run() -> void:
 	out=preload("res://tests/test_support.gd").output_dir()
 	root.size=Vector2i(1440,900)
@@ -90,53 +80,77 @@ func run() -> void:
 	check(absf(driver.give_way().x)>.9,"An approaching player has walking space")
 	city.bunny.velocity=Vector3.ZERO
 	var book: Dictionary=session.state().jade_visits
-	var lacquer:=Board.new("lacquer")
-	for scoop in [1,0,1]:lacquer.play(scoop)
-	check(lacquer.values==[1,1,0] and "黄土" in lacquer.note,"An excess scoop leaves the other pigments in the bowl")
 	var kinds: Dictionary={}
+	var tables: Dictionary={}
 	for h in J.HOUSES:
-		var type:=Games.type_for(h[0])
-		kinds[type]=1+int(kinds.get(type,0));check(kinds[type]<=2,"Too many "+type)
-		if not Games.STATIONS.has(h[0]):
-			var native_id:=native_target(h[0],type)
-			check(city.targets.has(native_id),"Missing working facility in "+str(h[0]))
+		var house:String=h[0]
+		var type:=Games.type_for(house)
+		kinds[type]=1+int(kinds.get(type,0))
+		if Games.entry(house).is_empty():
+			var native_id:=native_target(house,type)
+			check(city.targets.has(native_id),"Missing working facility in "+house)
 			continue
-		var id: String="jade:%s:Trade"%h[0]
+		check(not tables.has(type),"Duplicate tabletop rules "+type)
+		tables[type]=house
+		var id:="jade:%s:Trade"%house
+		if Games.PERFORMANCES.has(house):
+			for entry: String in city.targets:
+				if entry.begins_with("jade:"+house+":") and city.targets[entry].kind=="jade_game":id=entry;break
 		check(city.targets.has(id),"Missing "+id)
 		if not city.targets.has(id):continue
 		var station: Dictionary=city.targets[id]
 		stand(station.position+Vector3.UP*.01)
 		check(city.activity_access(id,"jade_game"),"Unreachable "+id)
 		city.update_target();check(city.current_target==id,"Prompt "+id+" got "+city.current_target)
-		if not SOLUTIONS.has(h[0]):continue
-		var game:=Board.new(h[0])
-		for choice in SOLUTIONS[h[0]]:game.play(choice)
-		check(game.done,"Puzzle cannot finish "+id)
-		if h[0]=="weir":
-			city.interact()
-			check(city.hud.mode=="jade_game","Waterworks opens through E")
-			var table: Node=city.hud.content.get_child(-1)
-			if table.has_method("press"):
-				table.press(0)
-				city.update_camera(2.)
-				for frame in 15:await process_frame
-				await RenderingServer.frame_post_draw
-				root.get_texture().get_image().save_png(out+"/水务公所.png")
-				for choice in SOLUTIONS.weir.slice(1):table.press(choice)
-				check("weir" in book.marks,"Water arrives through the actual controls")
-			city.hud.close_panel()
-		var result: Dictionary=session.dispatch("jade_visit",{"target":id,"moves":SOLUTIONS[h[0]]})
-		check(result.ok and h[0] in book.marks,"Receipt "+id+" "+result.message)
-		var coins: int=session.state().coins
-		result=session.dispatch("jade_visit",{"target":id,"moves":SOLUTIONS[h[0]]})
-		check(result.ok and coins==session.state().coins,"Repeat receipt "+id)
-	check(kinds.size()==39,"Thirty-nine distinct main uses")
-	check(not session.dispatch("jade_visit",{"target":"jade:oil:Trade","moves":SOLUTIONS.oil}).ok,"Distance checked at settlement")
-	for h in ["hostel","post","post","hostel"]:
-		var key: String="jade:%s:Trade"%h;stand(city.targets[key].position)
-		var returning: bool=not book.letter.is_empty()
-		var receipt: Dictionary=session.dispatch("jade_visit",{"target":key})
-		check(receipt.ok and (not returning or ("旧渡驿舍" if h=="hostel" else "驿路茶棚") in receipt.message),"Courier recipient "+h)
+		var game:=Board.new(house)
+		var moves:=Solutions.solution(game)
+		city.current_target=id;city.interact()
+		check(city.hud.mode=="jade_game","E opens "+house)
+		var table:Node=city.hud.content.get_child(-1)
+		check(table.has_method("press") and table.board.house==house,"Physical tabletop "+house)
+		city.update_camera(3.)
+		for frame in 2:await process_frame
+		if house in ["weir","paper","potter","ferry","stage","audience","dojo","herbal"]:
+			await create_timer(.25).timeout
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(out+"/"+house+".png")
+		if house=="potter":
+			var shape:Array=table.board.rule.v.duplicate()
+			await drag_clay(table.illustration,0,1)
+			check(table.board.rule.v==[shape[0]-1,shape[1]+1,shape[2]],"Dragging from the rim to the belly physically transfers one part of clay")
+			table.undo()
+		if house=="music":
+			await tap_key(KEY_3)
+			check(table.board.rule.v==[2],"Physical number key strikes a note on the real music stand")
+			table.undo()
+		for move in moves:
+			if not await click_move(table,int(move)):
+				check(false,"Unreachable action %s / %s"%[house,move]);break
+		check(table.received and int(book.rounds.get(house,0))==1,"Replay through controls "+house+" "+table.note.text)
+		if house in ["weir","paper","potter","audience"]:
+			await RenderingServer.frame_post_draw
+			root.get_texture().get_image().save_png(out+"/"+house+"-finished.png")
+		if house=="paper":
+			table.show_keepsake()
+			check(book.prints.size()==1 and book.prints[0]==table.board.rule.data.layers and table.illustration.album==book.prints[0] and session.authority.count("jade_flower_paper")==1,"Actual stamped sheet reaches both album and warehouse")
+		if house=="music":
+			check(book.song==table.board.rule.v and table.last_art.visible,"The player’s composition was saved")
+			table.show_keepsake();check(table.listening,"Saved composition plays from the actual music stand")
+		if house=="audience":
+			check(book.decree=={"0":0,"1":0} and city.targets.has("court_order_0") and city.targets.has("court_order_1") and not city.targets.has("court_order_2"),"Two funded neighbourhoods receive a delivery")
+			var delivery:Dictionary=city.targets.get("court_order_0",{})
+			check(delivery.get("day_text","")=="渡口换上了新缆。" and city.has_node("CourtConsignments/court_order_0"),"Wharf receipt matches the actual court order")
+		if house=="weir":
+			table.next_round();check(table.board.serial==1 and table.board.rule.data.name!=game.rule.data.name,"New canal from receipt")
+		city.hud.close_panel()
+		var coins:int=session.state().coins
+		check(not session.dispatch("jade_visit",{"target":id,"round":0,"moves":moves}).ok and coins==session.state().coins,"Stale receipt "+id)
+	check(tables.size()==41,"41 unique playable systems")
+	check(not session.dispatch("jade_visit",{"target":"jade:oil:Trade","round":1,"moves":[]}).ok,"Distance checked at settlement")
+	for h in ["hostel","post"]:
+		var key:="jade:%s:Trade"%h;stand(city.targets[key].position)
+		var receipt:Dictionary=session.dispatch("jade_visit",{"target":key,"round":1,"moves":Solutions.solution(Board.new(h,1))})
+		check(receipt.ok,"A second distinct postal job "+h)
 	check(book.marks.size()==Games.STATIONS.size() and book.letter=="","All station seals and round trip")
 	city.hud.open_panel("map")
 	var atlas: Control=city.hud.map_draw
@@ -182,7 +196,7 @@ func run() -> void:
 	var usher: CharacterBody3D=speaker.node
 	usher.position=J.point(-3,-160)
 	usher.action=""
-	ceremony.update_market();ceremony.receive_court()
+	ceremony.update_market();ceremony.paid_respects.erase(34);ceremony.receive_court()
 	check(usher.action=="bow" and ceremony.paid_respects.has(34),"The court usher bows on entering the morning audience")
 	var bed: Node3D=city.targets["jade:cot:bed_0"].node
 	stand(bed.to_global(Vector3(2.0,.02,0)))
