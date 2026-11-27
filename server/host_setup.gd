@@ -12,6 +12,7 @@ static func setup(host: Node3D) -> void:
 	host.home=host.scenery.get_node_or_null("ValleyHome" if host.map_id=="valley" else "SeabreezeHome")
 	host.bunny=Animals.create()
 	host.add_child(host.bunny)
+	host.bunny.set_physics_process(false)
 	host.bunny.position=Vector3(0,-50,0);host.bunny.collision_layer=0;host.bunny.collision_mask=0
 	host.set_meta("idle_bunny",host.bunny)
 	host.navigation=preload("res://scripts/city/wander_navigation.gd").new()
@@ -22,6 +23,9 @@ static func setup(host: Node3D) -> void:
 	preload("res://scripts/city/room_activities.gd").outfit_shop(host)
 	if host.map_id=="jade":host.register_city(false)
 	host.spawn_npcs()
+	for npc in host.npcs:
+		npc.server_resident = true
+	set_resident_simulation(host, false)
 	if host.map_id=="city":
 		host.targets.home_bed={"kind":"bed","position":host.home.get_node("Furnishing/bed/ActionAnchor").global_position,"node":host.home.get_node("Furnishing/bed")}
 		host.targets.home_door={"kind":"door","position":host.home.door_action_position(),"node":host.home}
@@ -37,14 +41,44 @@ static func setup(host: Node3D) -> void:
 	preload("res://scripts/city/interaction_targets.gd").add_benches(host)
 	for source in DB.resources(host.map_id):host.targets[source.id]={"kind":"resource","position":Vector3(source.x,source.get("y",0),source.z),"item":source.item}
 static func update(host: Node3D) -> void:
-	preload("res://scripts/city/production_facilities.gd").refresh(host)
-	var closest:=INF
+	var closest := INF
 	var chosen: CharacterBody3D
 	for pawn in host.manager.pawns.values():
-		if pawn.get_parent()!=host:continue
-		var distance: float=pawn.position.length_squared()
-		if distance<closest:closest=distance;chosen=pawn
-	host.bunny=chosen if chosen else host.get_meta("idle_bunny")
+		if pawn.get_parent() != host:
+			continue
+		var distance: float = pawn.position.length_squared()
+		if distance < closest:
+			closest = distance
+			chosen = pawn
+	var has_players := chosen != null
+	if has_players != bool(host.get_meta("has_visitors", false)):
+		set_resident_simulation(host, has_players)
+		host.set_meta("has_visitors", has_players)
+	host.bunny = chosen if chosen else host.get_meta("idle_bunny")
+	if not has_players:
+		return
+
+	preload("res://scripts/city/production_facilities.gd").refresh(host)
 	for id in host.targets:
-		var target: Dictionary=host.targets[id]
-		if target.get("kind","") in ["npc","shop"] and is_instance_valid(target.get("node")):target.position=target.node.position
+		var target: Dictionary = host.targets[id]
+		if target.get("kind", "") in ["npc", "shop"] and is_instance_valid(target.get("node")):
+			target.position = target.node.position
+
+static func set_resident_simulation(host: Node3D, enabled: bool) -> void:
+	# The server still keeps buildings, reservations and NPC colliders available
+	# for arrivals even when the map has no one to observe its residents.
+	var street_life := host.get_node_or_null("StreetLife")
+	if street_life != null:
+		street_life.set_physics_process(enabled)
+	for npc: CharacterBody3D in host.npcs:
+		var paused: bool = npc.has_meta("server_resident_mode")
+		if enabled and paused:
+			var previous_mode: Node.ProcessMode = npc.get_meta("server_resident_mode")
+			npc.remove_meta("server_resident_mode")
+			npc.process_mode = previous_mode
+		elif not enabled and not paused and npc.process_mode != Node.PROCESS_MODE_DISABLED:
+			npc.set_meta("server_resident_mode", npc.process_mode)
+			npc.disable_mode = CollisionObject3D.DISABLE_MODE_KEEP_ACTIVE
+			npc.velocity = Vector3.ZERO
+			npc.walking = false
+			npc.process_mode = Node.PROCESS_MODE_DISABLED

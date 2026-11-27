@@ -61,11 +61,11 @@ func run() -> void:
 	while city.preparing or not city.navigation.ready_for_paths:await process_frame
 	session.active=false;city.bunny.set_physics_process(false)
 	var nav: Node=city.navigation
-	check(not is_finite(nav.flat_jade_floor(Vector2i(0,0))) and not is_finite(nav.flat_jade_floor(Vector2i(82,94))) and not is_finite(nav.flat_jade_floor(Vector2i(123,-45))),"Water, ponds and buildable plots keep their full support checks")
+	check(not is_finite(nav.surveyed_flat_floor(Vector2i(0,0))) and not is_finite(nav.surveyed_flat_floor(Vector2i(82,94))) and not is_finite(nav.surveyed_flat_floor(Vector2i(123,-45))),"Water, ponds and buildable plots keep their full support checks")
 	var level_checks:=0
 	for z in range(130,170,3):
 		var cell:=Vector2i(roundi(J.lane(z)),z)
-		var height_: float=nav.flat_jade_floor(cell)
+		var height_: float=nav.surveyed_flat_floor(cell)
 		if not is_finite(height_):continue
 		var start:=Vector3(cell.x,height_+.05,cell.y)
 		for shift in [Vector3(.08,0,.08),Vector3(-.16,0,0)]:

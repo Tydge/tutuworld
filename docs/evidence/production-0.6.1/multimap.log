@@ -1,0 +1,13 @@
+Production Linux host, isolated copy of saved world. Each pawn submits 60
+movement commands per wall-clock second through the authoritative input queue.
+"pending" measures the largest unacknowledged count among players at the end
+of each sample. The baseline retained its natural nighttime NPC schedules.
+MULTIMAP_METRICS four maps+six players fps=4.8 hz=38.6 p95_ms=217.3 max_ms=229.4 max_buffer=152 pending=160 moving_npcs={ "city": 6, "icefield": 6, "jade": 40 } active={ "city": 9, "valley": 3, "icefield": 10, "jade": 46 }
+MULTIMAP_METRICS physics without NPC poses fps=5.6 hz=45.2 p95_ms=183.1 max_ms=222.9 max_buffer=123 pending=134 moving_npcs={ "city": 6, "icefield": 6, "jade": 40 } active={ "city": 9, "valley": 3, "icefield": 10, "jade": 46 }
+MULTIMAP_METRICS NPC poses without drivers fps=30.1 hz=60.8 p95_ms=34.9 max_ms=74.2 max_buffer=0 pending=2 moving_npcs={  } active={ "city": 9, "valley": 3, "icefield": 10, "jade": 46 }
+
+0.6.1/build 13. Residents observed during game daytime.
+MULTIMAP_METRICS city fps=30.0 hz=60.0 p95_ms=35.1 max_ms=50.7 max_buffer=0 pending=2 moving_npcs={ "city": 6 } active={ "city": 9, "valley": 0, "icefield": 0, "jade": 0 }
+MULTIMAP_METRICS city+jade fps=30.0 hz=60.0 p95_ms=35.4 max_ms=82.1 max_buffer=0 pending=2 moving_npcs={ "city": 6, "jade": 40 } active={ "city": 9, "valley": 0, "icefield": 0, "jade": 46 }
+MULTIMAP_METRICS four maps+six players fps=29.8 hz=60.0 p95_ms=37.7 max_ms=113.1 max_buffer=0 pending=2 moving_npcs={ "city": 6, "valley": 3, "icefield": 6, "jade": 40 } active={ "city": 9, "valley": 3, "icefield": 10, "jade": 46 }
+MULTIMAP_RESULT PASS

@@ -12,20 +12,6 @@ uniform float solar_visibility=1.;
 uniform sampler2D mountain_panorama : source_color,filter_linear_mipmap_anisotropic,repeat_enable;
 #include "res://assets/shaders/sky_sampling.gdshaderinc"
 float fbm(vec2 p){return noise(p)*.52+noise(p*2.03)*.26+noise(p*4.11)*.14+noise(p*8.27)*.08;}
-// The upper hemisphere maps continuously to a disk. Each occupied cell holds
-// one star fixed in the sky, filtered over the pixels of the active camera.
-float polar_starlight(vec3 direction) {
-	vec2 grid = 128.0 * direction.xz / (1.0 + abs(direction.y));
-	vec2 cell = floor(grid);
-	vec2 dx = dFdx(grid), dy = dFdy(grid);
-	float light = smoothstep(.955, 1.0, noise(cell));
-	if (light == 0.) { return 0.; }
-	vec2 center = .25 + .5 * vec2(noise(cell + vec2(37, 19)), noise(cell + vec2(11, 71)));
-	vec2 offset = fract(grid) - center;
-	float pixel_area = max(abs(dx.x * dy.y - dx.y * dy.x), 1e-10);
-	vec2 pixels = vec2(offset.x * dy.y - offset.y * dy.x, dx.x * offset.y - dx.y * offset.x) / pixel_area;
-	return .62 * light * exp(-1.65 * dot(pixels, pixels));
-}
 void sky(){
  vec3 d=normalize(EYEDIR);float h=max(0.,d.y);
  vec3 col=mix(horizon_color.rgb,zenith_color.rgb,pow(h,.46));
@@ -44,7 +30,7 @@ void sky(){
  }else{col=HALF_RES_COLOR.rgb;}
  if(!AT_CUBEMAP_PASS && !AT_HALF_RES_PASS && night_amount>0.){
   vec2 uv=vec2(atan(d.z,d.x),asin(clamp(d.y,-1.,1.)));
-  float star=polar_starlight(d);
+  float star=starlight(d);
   col+=star*night_amount*smoothstep(.03,.3,h)*vec3(.7,.8,1.);
   float moon_dist=length(d-normalize(moon_direction));
   col+=vec3(.58,.69,.84)*(1.-smoothstep(.0040,.0048,moon_dist))*night_amount*.32;

@@ -53,6 +53,7 @@ var reconnecting:=false
 var leaving_online:=false
 var background_music: Node
 func _ready() -> void:
+	preload("res://scripts/services/client_runtime_settings.gd").apply()
 	# In this project a scripted SceneTree is a standalone test or developer preview.
 	# F5, the launcher and the exported game enter through the regular scene tree.
 	test_mode=test_mode or OS.get_cmdline_user_args().has("--test") or get_tree().get_script()!=null

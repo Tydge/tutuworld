@@ -92,6 +92,7 @@ var network_client_prediction:=false
 var network_sequenced:=false
 var network_generation:=1
 var network_ack:=0
+var server_resident := false
 var network_received:=0
 var network_queue: Array=[]
 var network_budget:=0.0
@@ -194,6 +195,8 @@ func play_action(kind: String, duration: float, symbol: String = "") -> void:
 	action = kind
 	action_time = 0.0
 	action_length = duration
+	if server_resident:
+		return
 	mood_label.text = symbol
 	held_cup.visible = kind == "tea"
 	if kind in preload("res://scripts/jade/handwork.gd").POSES:
@@ -240,6 +243,14 @@ func lie_in_bed(bed: Node3D) -> void:
 	head.position=pose.head;head.rotation=Vector3(SleepPose.HEAD_ANGLE,0,0)
 
 func _physics_process(delta: float) -> void:
+	# Authority advances resident actions and collision, and sends those states.
+	# The clients animate faces, limbs and props from the replicated action.
+	if server_resident:
+		if not action.is_empty():
+			action_time += delta
+			if action_time >= action_length:
+				action = ""
+		return
 	if distant_pose_interval>0. and world==null:
 		# The town driver keeps a hidden resident walking. A neutral, offscreen
 		# rig only needs its pose clock until it becomes visible again.

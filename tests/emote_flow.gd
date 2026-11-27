@@ -278,6 +278,10 @@ func run() -> void:
 		await wait_frames(3)
 		key(code,false)
 		check(city.bunny.emote==Emotes.STAGE_KEYS[code] and not city.screenshot_busy,"Function key plays "+Emotes.STAGE_KEYS[code])
+	key(KEY_G)
+	await wait_frames(3)
+	key(KEY_G,false)
+	check(city.bunny.emote==Emotes.STAGE_KEYS[KEY_F11],"G plays street dance without an OS function key")
 	var social_ids := ["wave","cheer","thanks","love","agree","refuse","snicker","sweat","shock"]
 	for i in social_ids.size():
 		key(KEY_F1+i)

@@ -41,6 +41,7 @@ var metrics_timer:=0.0
 var metrics_frames:=0
 var metrics_max_frame:=0.0
 var metrics_elapsed:=0.0
+var metrics_last_usec:=0
 func state() -> Dictionary:return world.state
 func _ready() -> void:
 	var directory:=OS.get_environment("TUTU_STATE_DIR")
@@ -140,7 +141,14 @@ func save_world() -> bool:
 
 func _process(delta: float) -> void:
 	if not ready_for_players:return
-	metrics_timer+=delta;metrics_elapsed+=delta;metrics_frames+=1;metrics_max_frame=maxf(metrics_max_frame,delta*1000)
+	var now_usec := Time.get_ticks_usec()
+	if metrics_last_usec != 0:
+		var wall_delta := (now_usec - metrics_last_usec) / 1000000.0
+		metrics_timer += wall_delta
+		metrics_elapsed += wall_delta
+		metrics_frames += 1
+		metrics_max_frame = maxf(metrics_max_frame, wall_delta * 1000.0)
+	metrics_last_usec = now_usec
 	if metrics_timer>=30:
 		if not actors.is_empty():
 			var queued:=0
@@ -224,7 +232,8 @@ func align_clock_to_hours() -> bool:
 		if peers[peer_id].character!="":send_snapshot(peer_id)
 	return true
 func send(peer_id: int,data: Dictionary) -> void:
-	if peers.has(peer_id) and peers[peer_id].socket.get_ready_state()==WebSocketPeer.STATE_OPEN:peers[peer_id].socket.put_packet(Codec.encode(data))
+	if peers.has(peer_id) and peers[peer_id].socket.get_ready_state()==WebSocketPeer.STATE_OPEN:
+		peers[peer_id].socket.put_packet(Codec.encode(data))
 func answer(peer_id: int,request: Dictionary,result: Dictionary) -> void:
 	if peers.has(peer_id) and peers[peer_id].character!="":send_snapshot(peer_id)
 	send(peer_id,{"type":"result","id":str(request.get("id","")),"result":result})
@@ -789,14 +798,26 @@ func actor_packet(id: String) -> Dictionary:
 	return {"generation":pawn.network_generation,"ack":pawn.network_ack,"id":id,"name":a.actor_name(),"species":a.state.species,"map":a.state.map_id,"position":vector_array(pawn.position),"velocity":vector_array(pawn.velocity),"yaw":pawn.visual.rotation.y,"equipment":a.state.equipment,"clothing_designs":preload("res://scripts/appearance/clothing_designs.gd").worn(a.state.equipment,a.state.clothing_designs),"watering_can":a.watering_can_id(),"action":pawn.action,"walking":pawn.walking,"animation_speed":pawn.animation_speed,"ice_inertia":pawn.ice_inertia,"grounded":pawn.is_on_floor(),"pose":a.state.get("net_pose",{}),"job":a.job,"emote":pawn.emote,"emote_revision":pawn.emote_revision,"emote_age":pawn.emote_age}
 func broadcast_motion() -> void:
 	var batches: Dictionary={}
-	for map_id in maps:batches[map_id]=[]
-	for id in actors:batches[actors[id].state.map_id].append(actor_packet(id))
-	for map_id in maps:
+	for id in actors:
+		var map_id: String = actors[id].state.map_id
+		if not batches.has(map_id):
+			batches[map_id] = []
+		batches[map_id].append(actor_packet(id))
+	for map_id in batches:
 		for npc in maps[map_id].npcs:
 			batches[map_id].append({"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})})
+	var tick := Engine.get_physics_frames()
+	var packets: Dictionary = {}
 	for peer_id in peers:
-		var id: String=peers[peer_id].character
-		if actors.has(id):send(peer_id,{"type":"motion","tick":Engine.get_physics_frames(),"actors":batches[actors[id].state.map_id]})
+		var peer: Dictionary = peers[peer_id]
+		var id: String = peer.character
+		var socket: WebSocketPeer = peer.socket
+		if not actors.has(id) or socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+			continue
+		var map_id: String = actors[id].state.map_id
+		if not packets.has(map_id):
+			packets[map_id] = Codec.encode({"type":"motion","tick":tick,"actors":batches[map_id]})
+		socket.put_packet(packets[map_id])
 func send_snapshot(peer_id: int) -> void:
 	if not peers.has(peer_id):return
 	var id: String=peers[peer_id].character

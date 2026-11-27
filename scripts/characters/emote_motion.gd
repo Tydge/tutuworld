@@ -35,6 +35,8 @@ static func from_key(event: InputEventKey) -> String:
 	var key := event.physical_keycode if event.physical_keycode != 0 else event.keycode
 	if key >= KEY_F1 and key <= KEY_F9:
 		return SOCIAL[key-KEY_F1]
+	if key == KEY_G:
+		return Score.STREET
 	if STAGE_KEYS.has(key):
 		return STAGE_KEYS[key]
 	if key >= KEY_0 and key <= KEY_9:

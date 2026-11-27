@@ -10,11 +10,14 @@ var destinations: Dictionary={}
 var sampling_ready:=false
 var sampling_revision:=0
 var floor_heights: Dictionary={}
-var flat_jade_cells: Dictionary={}
+var flat_survey_cells: Dictionary={}
 var stair_reservations: Array=[]
+var server_host := false
+const SERVER_SLICE_USEC := 2000
 const GROUND_MARGIN:=.45
 const SUPPORT_OFFSETS=[Vector2.ZERO,Vector2.RIGHT,Vector2.LEFT,Vector2.UP,Vector2.DOWN,Vector2(.7071,.7071),Vector2(.7071,-.7071),Vector2(-.7071,.7071),Vector2(-.7071,-.7071)]
 func _ready() -> void:
+	server_host = get_parent().has_method("chatting_with")
 	if get_parent().has_method("navigation_bounds"): map_bounds=get_parent().navigation_bounds()
 	grid.region=map_bounds;grid.cell_size=Vector2.ONE
 	grid.diagonal_mode=AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
@@ -59,17 +62,21 @@ func supported(point: Vector3,space: PhysicsDirectSpaceState3D,margin: float=GRO
 		var hit:=space.intersect_ray(floor_query)
 		if hit.is_empty() or hit.normal.y<.7:return false
 	return true
-func flat_jade_floor(cell: Vector2i) -> float:
-	if flat_jade_cells.has(cell):return flat_jade_cells[cell]
+func surveyed_flat_floor(cell: Vector2i) -> float:
+	if flat_survey_cells.has(cell):return flat_survey_cells[cell]
 	var h: float=floor_heights.get(cell,INF)
 	var p:=Vector2(cell)
-	# Building lots can change at runtime. Banks, pond edges and stairs always
-	# keep the full footprint sweep, including when a neighbour is far away.
-	var jade:=preload("res://scripts/jade/layout.gd")
-	if absf(p.y-jade.river_z(p.x))<20. or absf(p.x)>jade.LIMIT.x-7. or absf(p.y)>jade.LIMIT.y-7. or Rect2(65,79,101,63).has_point(p):h=INF
-	if is_finite(h):
-		for pond: Vector2 in jade.PONDS:
-			if absf(p.x-pond.x)<8. and absf(p.y-pond.y)<7.:h=INF;break
+	# Runtime plots stay on the full footprint check. The flat shortcut is
+	# limited to nine adjacent cells with matching, pre-surveyed floors.
+	var map_id: String = get_parent().map_id
+	if map_id=="jade":
+		var jade:=preload("res://scripts/jade/layout.gd")
+		if absf(p.y-jade.river_z(p.x))<20. or absf(p.x)>jade.LIMIT.x-7. or absf(p.y)>jade.LIMIT.y-7. or Rect2(65,79,101,63).has_point(p):h=INF
+		if is_finite(h):
+			for pond: Vector2 in jade.PONDS:
+				if absf(p.x-pond.x)<8. and absf(p.y-pond.y)<7.:h=INF;break
+	elif preload("res://scripts/building/site.gd").within(p,map_id):
+		h=INF
 	if is_finite(h):
 		for dz in range(-1,2):
 			for dx in range(-1,2):
@@ -77,13 +84,13 @@ func flat_jade_floor(cell: Vector2i) -> float:
 				if not component_of.has(adjacent) or absf(float(floor_heights.get(adjacent,INF))-h)>.07:
 					h=INF;break
 			if not is_finite(h):break
-	flat_jade_cells[cell]=h
+	flat_survey_cells[cell]=h
 	return h
 func can_step(from: Vector3,to: Vector3,use_flat_survey:=false) -> bool:
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
 	var next:=Vector3(to.x,from.y,to.z)
 	if use_flat_survey and sampling_ready:
-		var height_:=flat_jade_floor(Vector2i(roundi(next.x),roundi(next.z)))
+		var height_:=surveyed_flat_floor(Vector2i(roundi(next.x),roundi(next.z)))
 		if absf(height_-from.y)<.20:
 			floor_query.from=next+Vector3.UP*.4;floor_query.to=next-Vector3.UP*.45
 			var support:=space.intersect_ray(floor_query)
@@ -101,10 +108,16 @@ func build() -> void:
 	var space: PhysicsDirectSpaceState3D=get_parent().get_world_3d().direct_space_state
 	if get_parent().map_id=="jade" and await restore_jade(space):return
 	var count_:=0
+	var slice := Time.get_ticks_usec()
 	for z in range(map_bounds.position.y,map_bounds.end.y):
 		for x in range(map_bounds.position.x,map_bounds.end.x):
 			grid.set_point_solid(Vector2i(x,z),blocked(space,x,z));count_+=1
-			if count_%600==0: await get_tree().physics_frame
+			# All four maps share the server's physics loop during startup.
+			# Complex parcels can make a fixed number of probes take far longer.
+			var yield_now := count_%16==0 and Time.get_ticks_usec()-slice>=SERVER_SLICE_USEC if server_host else count_%600==0
+			if yield_now:
+				await get_tree().physics_frame
+				slice = Time.get_ticks_usec()
 	await rebuild_destinations()
 	ready_for_paths=true
 	print("WANDER_GRID_READY cells=",count_," components=",destinations.size())
@@ -120,6 +133,7 @@ func restore_jade(space: PhysicsDirectSpaceState3D) -> bool:
 		var bounds: Rect2=land.bounds(id).grow(2.)
 		if not state.get("building_sites",{}).is_empty() or not state.get("jade_build_layout",{}).get("elements",[]).is_empty():changed.append(bounds)
 	var i:=0;var slice:=Time.get_ticks_usec()
+	var slice_limit := SERVER_SLICE_USEC if server_host else 4000
 	for z in range(map_bounds.position.y,map_bounds.end.y):
 		for x in range(map_bounds.position.x,map_bounds.end.x):
 			var cell:=Vector2i(x,z);var height_:=heights[i];var component:=regions[i];i+=1
@@ -133,7 +147,7 @@ func restore_jade(space: PhysicsDirectSpaceState3D) -> bool:
 				component_of[cell]=component
 				if not destinations.has(component):destinations[component]=[[],[],[],[],[],[],[],[],[]]
 				destinations[component][zone(Vector3(x,0,z))].append(cell)
-		if Time.get_ticks_usec()-slice>4000:await get_tree().physics_frame;slice=Time.get_ticks_usec()
+		if Time.get_ticks_usec()-slice>slice_limit:await get_tree().physics_frame;slice=Time.get_ticks_usec()
 	if occupied:await rebuild_destinations()
 	sampling_ready=true;ready_for_paths=true
 	print("WANDER_GRID_READY baked cells=",i," components=",destinations.size());return true
@@ -202,7 +216,7 @@ func path_between(from: Vector3,to: Vector3) -> PackedVector3Array:
 	for id in grid.get_id_path(a,b): path.append(Vector3(id.x,floor_heights.get(id,0.0),id.y))
 	return path
 func refresh_region(bounds: AABB) -> void:
-	flat_jade_cells.clear()
+	flat_survey_cells.clear()
 	if not ready_for_paths: return
 	await get_tree().physics_frame;await get_tree().physics_frame
 	reserve_stairs()

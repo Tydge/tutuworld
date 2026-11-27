@@ -585,6 +585,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("daydream") and bunny.action=="": bunny.play_action("confused",2.5,"?")
 func handle_emote(id: String) -> void:
 	if talking_npc != "" or network_interaction_pending or network_action_pending or not session.job().is_empty() or not bunny.can_emote():
+		if EmoteMotion.is_dance(id):
+			hud.notify("先站稳并结束当前互动，再跳舞。")
 		return
 	if session.is_online():
 		var result: Dictionary = await session.request_online("emote", {"id": id})

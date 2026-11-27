@@ -1,4 +1,6 @@
 extends Node
+
+const SERVER_STEP_INTERVAL := 3
 var bunny: CharacterBody3D
 var route: Array[Vector3]=[]
 var use_local_neighbours:=false
@@ -20,9 +22,12 @@ var last_normal:=Vector3.ZERO
 var recovery_count:=0
 var repath_count:=0
 var cooldown:=0.0
+var server_step_phase := 0
+var server_step_elapsed := 0.0
 func _ready() -> void:
 	rng.randomize()
 	progress_origin=bunny.position
+	server_step_phase = posmod(str(bunny.name).hash(), SERVER_STEP_INTERVAL)
 func choose_destination() -> void:
 	if city==null or not city.navigation.ready_for_paths: return
 	if route.size()==1:
@@ -89,12 +94,23 @@ func walkable_recovery(preferred: Vector3) -> Vector3:
 		var clear:=true
 		for distance in [.01,.04,.10]:
 			var point: Vector3=bunny.position+turns[i]*distance
-			if not city.can_walk(point) or not city.navigation.can_step(bunny.position,point):
+			if not city.can_walk(point) or not city.navigation.can_step(bunny.position,point,use_local_neighbours or bunny.server_resident):
 				clear=false;break
 		if clear:return turns[i]
 	return Vector3.ZERO
 func _physics_process(delta: float) -> void:
 	if bunny==null or city==null or not city.navigation.ready_for_paths: return
+	var step_scale := 1.0
+	if bunny.server_resident:
+		# Spread expensive clearance and collision work across physics ticks.
+		# Each server step integrates the full elapsed time. Clients still
+		# interpolate the same 10 Hz authoritative positions.
+		server_step_elapsed += delta
+		if Engine.get_physics_frames() % SERVER_STEP_INTERVAL != server_step_phase:
+			return
+		step_scale = server_step_elapsed / delta
+		delta = server_step_elapsed
+		server_step_elapsed = 0.0
 	var chatting: bool=city.talking_npc==bunny.name
 	var partner: CharacterBody3D=city.bunny
 	if city.has_method("chatting_with"):
@@ -146,12 +162,19 @@ func _physics_process(delta: float) -> void:
 		bunny.velocity.x=horizontal.x;bunny.velocity.z=horizontal.y
 	var next_position:=bunny.position+Vector3(bunny.velocity.x,0,bunny.velocity.z)*delta
 	var moving:=Vector2(bunny.velocity.x,bunny.velocity.z).length_squared()>.0001
-	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position,use_local_neighbours)):
+	if moving and (not city.can_walk(next_position) or not city.navigation.can_step(bunny.position,next_position,use_local_neighbours or bunny.server_resident)):
 		bunny.velocity.x=0;bunny.velocity.z=0
 		var safe: Vector2i=city.navigation.closest_free(bunny.position)
 		last_normal=(Vector3(safe.x,bunny.position.y,safe.y)-bunny.position).normalized() if safe.x!=999 else -direction.normalized()
 		if cooldown<=0: recover()
-	bunny.move_on_ground(delta)
+	if step_scale > 1.0:
+		# CharacterBody3D uses the engine's fixed tick. Preserve the step
+		# distance, then restore metres per second for replication/steering.
+		bunny.velocity *= step_scale
+		bunny.move_on_ground(delta)
+		bunny.velocity /= step_scale
+	else:
+		bunny.move_on_ground(delta)
 	bunny.walking=not stopped and Vector2(bunny.velocity.x,bunny.velocity.z).length()>.15
 	if chatting:
 		var face: Vector3=partner.position-bunny.position

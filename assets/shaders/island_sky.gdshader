@@ -13,10 +13,10 @@ void sky(){
  float altitude=max(d.y,0.0);
  vec3 color=mix(horizon_color.rgb,zenith_color.rgb,pow(altitude,.48));
  if(d.y>0.0 && !AT_CUBEMAP_PASS){
-  // Several scales keep small stars crisp alongside a few larger, brighter ones.
-  vec2 stars_uv=vec2(atan(d.z,d.x)/TAU+.5,asin(clamp(d.y,-1.0,1.0))/PI+.5);
-  float stars=pow(starlight(stars_uv),star_focus)/sqrt(star_focus);
-  color+=vec3(.78,.85,1.0)*stars*night_amount*smoothstep(.015,.14,d.y);
+  if(night_amount>0.0){
+   float stars=starlight(d)/sqrt(star_focus);
+   color+=vec3(.78,.85,1.0)*stars*night_amount*smoothstep(.015,.14,d.y);
+  }
   vec3 moon_direction=normalize(vec3(-.42,.38,-.82));
   float moon_distance=length(d-moon_direction);
   float glow=exp(-moon_distance*24.0)*.045;
