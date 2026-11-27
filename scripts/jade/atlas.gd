@@ -33,7 +33,7 @@ static func build(hud: CanvasLayer) -> void:
 		places[id]=[landmark.name,landmark.label,landmark.at]
 	for i in J.LOTS.size():places[J.LOTS[i]]=[J.LOT_NAMES[i],"查看地牌",Land.bounds(J.LOTS[i]).get_center()]
 	places["pier"]=["南津渡","坐船回海岛城",J.DOCK]
-	places["fields"]=["西郊公田","耕作、到田边井打水",Vector2(-167,122)]
+	places["fields"]=["西郊公田","耕作、到田边井打水",J.FIELD_BOUNDS.get_center()]
 	places["lots"]=["六里宅地","在各里的地牌前认购",Vector2(131,111)]
 	places["market"]=["南市","沿主街可达云锦庄和百炼铺",Vector2(J.lane(101),101)]
 	for i in J.BRIDGES.size():
@@ -69,6 +69,7 @@ static func build(hud: CanvasLayer) -> void:
 				select.call(house[0]);return
 		for id in captions:
 			if captions[id].has_point(event.position):select.call(id);return
+		if J.FIELD_BOUNDS.has_point(point):select.call("fields");return
 		for id in J.LOTS:
 			if Land.bounds(id).has_point(point):select.call(id);return
 		for id in places:
@@ -100,7 +101,7 @@ static func build(hud: CanvasLayer) -> void:
 		for mark in J.LANDMARKS.values():map.draw_circle(mark.at,3.,Color("72512f"))
 		map.draw_rect(Rect2(-3.5,198,7,15),Color("997351"))
 		for id in J.LOTS:map.draw_rect(Land.bounds(id),Color("87a98b") if Land.owns(hud.session.state(),id) else Color("dbca96"));map.draw_rect(Land.bounds(id),Color("8a7659"),false,1.)
-		map.draw_rect(Rect2(-177,117,21,10),Color("8d704e"))
+		map.draw_rect(J.FIELD_BOUNDS,Color("8d704e"))
 		if places.has(hud.jade_map_target):map.draw_arc(places[hud.jade_map_target][2],10.,0,TAU,32,Color("a2372a"),2.,true)
 		map.draw_set_transform(Vector2.ZERO,0,Vector2.ONE)
 		var font:=map.get_theme_default_font()

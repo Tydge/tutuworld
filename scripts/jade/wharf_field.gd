@@ -38,6 +38,7 @@ static func wharf(builder: SceneTree,dock: Node3D) -> void:
 	builder.fixture(builder.world,"jade_lamp",J.point(5.05,196))
 static func field(builder: SceneTree) -> void:
 	var earth:=ShaderMaterial.new();earth.shader=preload("res://assets/shaders/farm_soil.gdshader");earth.set_shader_parameter("soil_color",Color("9b7857"));earth.set_shader_parameter("texture_mean",Vector3(.185,.064,.0215));earth.set_shader_parameter("soil_texture",preload("res://assets/terrain/cultivated_soil_v1.png"))
+	earth.set_shader_parameter("vertex_tint",true)
 	var plough:=SurfaceTool.new();plough.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for plot in J.farm():
 		for j in range(6):
@@ -45,16 +46,25 @@ static func field(builder: SceneTree) -> void:
 				for off in [Vector2i(0,0),Vector2i(1,0),Vector2i(0,1),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
 					var u: float=(i+off.x)/12.;var v: float=(j+off.y)/6.
 					var envelope:=pow(maxf(0.,sin(PI*u)*sin(PI*v)),.34)
-					var height:=.025+envelope*(.097+.05*cos(u*TAU*3.))
+					var ridge:=cos(u*TAU*3.)
+					var height:=.025+envelope*(.097+.05*ridge)
+					var shade:=.67+envelope*(.19+.14*ridge)
+					plough.set_color(Color(shade,shade,shade))
 					plough.add_vertex(Vector3(plot.x+(u-.5)*2.20,2.+height,plot.z+(v-.5)*2.44))
 	plough.index();plough.generate_normals();G.mesh(builder.world,plough.commit(),Vector3.ZERO,earth,"Furrows")
-	for i in range(11):
-		for side in [-1,1]:
-			if i in [3,4] and side==1:continue
-			var p:=J.point(-177.3+i*2.2,121.65+side*6.1)
+	# Open ends and breaks in both rails give access from the lane and the well.
+	var fence := J.FIELD_BOUNDS.grow(1.)
+	var spans := 25
+	var spacing := fence.size.x/spans
+	for z: float in [fence.position.y,fence.end.y]:
+		for i in range(spans+1):
+			var x := fence.position.x+i*spacing
+			var p := J.point(x,z)
 			G.cylinder(builder.world,p+Vector3.UP*.54,.054,1.08,G.mat("887347"),.037)
-			if i<10 and (side==-1 or i not in [2,3,4]):
-				for y in [.41,.76]:A.beam(builder.world,p+Vector3.UP*y,p+Vector3(2.20,y-.05,0),.049,"95835c")
+			var midpoint := x+spacing*.5
+			if i==spans or absf(midpoint-J.FIELD_WELL.x)<2.5 or absf(midpoint+172.)<2.5:continue
+			for y in [.41,.76]:
+				A.beam(builder.world,p+Vector3.UP*y,p+Vector3(spacing,y-.05,0),.049,"95835c")
 	for k in range(5):builder.fixture(builder.world,"jade_bamboo",J.point(-182.6+1.5*k,113.-.62*k),k*.91)
-	builder.fixture(builder.world,"jade_goods",J.point(-149.6,118),-.5)
-	builder.fixture(builder.world,"jade_lamp",J.point(-147.6,123))
+	builder.fixture(builder.world,"jade_goods",J.point(J.FIELD_WELL.x+3.6,J.FIELD_WELL.y),-.5)
+	builder.fixture(builder.world,"jade_lamp",J.point(J.FIELD_WELL.x+5.6,J.FIELD_WELL.y+1.2))

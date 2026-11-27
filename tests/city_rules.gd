@@ -18,7 +18,17 @@ func _initialize() -> void:
 	check(clothes>=27 and not DB.item("vest_stripes_sage").is_empty() and not DB.item("apron_daisies_sage").is_empty(),"Original clothing and data-defined additions are available")
 	var town_plots:=DB.plots("city");var jade_plots:=DB.plots("jade")
 	check(town_plots.size()==48 and town_plots.all(func(row):return a.state.plots.has(row.id) and not row.id.begins_with("jade_")),"All 48 original island plots survive")
-	check(jade_plots.size()==32 and jade_plots.all(func(row):return a.state.plots.has(row.id) and row.id.begins_with("jade_")) and a.state.plots.size()==80,"32 separate plots in Yujing share the world save")
+	check(jade_plots.size()==288 and jade_plots.all(func(row):return a.state.plots.has(row.id) and row.id.begins_with("jade_")) and a.state.plots.size()==336,"288 separate plots in Yujing share the world save")
+	var sites := {}
+	for plot in jade_plots:sites[Vector2(plot.x,plot.z)]=plot.id
+	check(sites.size()==288,"Every field tile has its own position and save ID")
+	for i in 32:
+		check(sites.get(Vector2(-174.+(i%8)*2.25,118.+floori(i/8.)*2.5))=="jade_plot_%02d"%i,"Original crop stays on its own square "+str(i))
+	var old_save := {"plots":{"jade_plot_09":{"crop":"carrot","growth":180.,"water_stage":0,"weed_stage":-1,"quality":1}}}
+	var session = preload("res://scripts/services/session.gd").new()
+	var loaded = session.restore_state(old_save)
+	check(loaded.state.plots.jade_plot_09.growth==180. and loaded.state.plots.jade_plot_287.crop=="","Loading an old farm preserves growth and adds empty plots")
+	session.free()
 	a.state.player_position=[22,.1,-6]
 	var seed_before: int=a.count("seed_carrot")
 	check(act(a,"plant","plot_00","seed_carrot").ok,"Plant starts")

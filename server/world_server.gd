@@ -815,15 +815,17 @@ func send_snapshot(peer_id: int) -> void:
 func chat(peer_id: int,request: Dictionary,text: String) -> void:
 	var peer: Dictionary=peers[peer_id]
 	text=text.strip_edges()
-	if text=="" or text.length()>120:return
+	if text=="" or text.length()>120:
+		answer(peer_id,request,fail("消息需要 1～120 个字。"));return
 	if Time.get_ticks_msec()-int(peer.chat_at)<700:answer(peer_id,request,fail("慢一点说，大家才听得清。"));return
 	for c in text:
-		if c.unicode_at(0)<32:return
+		if c.unicode_at(0)<32 or c in ["\u0085","\u2028","\u2029"]:
+			answer(peer_id,request,fail("请把消息写在一段里。"));return
 	peer.chat_at=Time.get_ticks_msec()
 	var id: String=peer.character;var map_id: String=actors[id].state.map_id
 	for receiver in peers:
 		var other: String=peers[receiver].character
-		if actors.has(other) and actors[other].state.map_id==map_id:send(receiver,{"type":"chat","id":id,"name":actors[id].actor_name(),"text":text})
+		if actors.has(other):send(receiver,{"type":"chat","id":id,"name":actors[id].actor_name(),"map":map_id,"text":text})
 	answer(peer_id,request,{"ok":true})
 func leave_world(peer_id: int) -> void:
 	if not peers.has(peer_id):return

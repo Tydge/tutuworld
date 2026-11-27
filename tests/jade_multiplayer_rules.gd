@@ -62,7 +62,7 @@ func run() -> void:
 		check(sale.ok and a.count(offer[1])==1,"Buy a local refreshment at "+offer[0])
 	var shop: Vector2=J.shops().farm;place(0,J.point(shop.x,shop.y)+Vector3(0,.11,.9))
 	check(request(0,"buy",{"shop":"farm","item":"seed_cotton","quantity":1}).ok,"Buy cotton seed from real merchant")
-	var plot: Dictionary=DB.plots("jade")[0];var field:=J.point(plot.x,plot.z)
+	var plot: Dictionary=DB.plots("jade").back();var field:=J.point(plot.x,plot.z)
 	place(0,field);var plant:=request(0,"plant",{"target":plot.id,"item":"seed_cotton"});check(plant.ok,"First neighbour sows cotton")
 	if plant.ok:finish(0)
 	b.add("watering_can",1);place(1,host.targets.jade_well.position)

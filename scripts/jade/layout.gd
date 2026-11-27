@@ -309,13 +309,29 @@ static func shops() -> Dictionary:
 			var offset:=Vector2(.84,dims(h[4]).z-2.05) if h[0] in ["spice","almond"] else Vector2(0,-2.)
 			out[h[0]]=center(h)+offset.rotated(-door_angle(h))
 	return out
+const FIELD_GRID := Vector2i(24,12)
+const FIELD_SPACING := Vector2(2.25,2.5)
+const FIELD_FIRST := Vector2(-178.5,118.)
+const FIELD_BOUNDS := Rect2(FIELD_FIRST-FIELD_SPACING*.5,Vector2(FIELD_GRID)*FIELD_SPACING)
+const FIELD_WELL := Vector2(-151,112.5)
 static var field_rows: Array=[]
 static func farm() -> Array:
 	if not field_rows.is_empty():return field_rows
-	var rows:=field_rows
-	for i in range(32):
-		rows.append({"id":"jade_plot_%02d"%i,"x":-174.+(i%8)*2.25,"z":118.+floori(i/8.)*2.5,"map":"jade"})
-	return rows
+	# The original eight by four beds keep both their save IDs and their locations.
+	const ORIGINAL := Rect2i(2,0,8,4)
+	field_rows.resize(FIELD_GRID.x*FIELD_GRID.y)
+	var next_id := ORIGINAL.get_area()
+	for z in FIELD_GRID.y:
+		for x in FIELD_GRID.x:
+			var cell := Vector2i(x,z)
+			var id := next_id
+			if ORIGINAL.has_point(cell):
+				id = z*ORIGINAL.size.x+x-ORIGINAL.position.x
+			else:
+				next_id += 1
+			var p := FIELD_FIRST+Vector2(cell)*FIELD_SPACING
+			field_rows[id] = {"id":"jade_plot_%02d"%id,"x":p.x,"z":p.y,"map":"jade"}
+	return field_rows
 static var material_sources: Array=[]
 static func sources() -> Array:
 	if not material_sources.is_empty():return material_sources

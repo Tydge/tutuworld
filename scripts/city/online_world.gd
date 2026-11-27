@@ -1,4 +1,5 @@
 extends Node
+const WorldChat = preload("res://scripts/ui/world_chat.gd")
 const UI=preload("res://scripts/ui/ui_kit.gd")
 const Animals=preload("res://scripts/characters/animal_factory.gd")
 const Outfit=preload("res://scripts/city/outfit.gd")
@@ -12,6 +13,7 @@ var input_timer:=0.0
 var prediction=preload("res://scripts/services/movement_prediction.gd").new()
 var buffers: Dictionary={}
 const Buffer=preload("res://scripts/services/motion_buffer.gd")
+var chat: WorldChat
 var chat_input: LineEdit
 var chat_card: PanelContainer
 var connection_card: PanelContainer
@@ -33,14 +35,13 @@ func _ready() -> void:
 	session.changed.connect(apply_shared_state)
 	session.online_connection_changed.connect(connection_changed)
 	session.online_update_required.connect(version_changed)
-	chat_card=UI.panel(UI.CREAM,19,13);chat_card.name="ChatInput";chat_card.anchor_left=.5;chat_card.anchor_right=.5;chat_card.anchor_top=1;chat_card.anchor_bottom=1
-	chat_card.position=Vector2(-280,-153);chat_card.custom_minimum_size=Vector2(560,55);city.hud.root_ui.add_child(chat_card)
-	chat_input=LineEdit.new();chat_input.placeholder_text="和身边的朋友说句话…  Enter发送 / Esc取消";chat_input.max_length=120
-	chat_input.add_theme_stylebox_override("normal",StyleBoxEmpty.new());chat_input.add_theme_color_override("font_color",UI.INK);chat_card.add_child(chat_input)
-	var emoji:=SystemFont.new();emoji.font_names=PackedStringArray(["Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji"])
-	var font: Font=load("res://assets/fonts/NotoSansSC.ttf").duplicate();font.fallbacks=[emoji]
-	chat_input.add_theme_font_override("font",font);chat_input.text_submitted.connect(send_chat)
-	chat_card.hide()
+	chat = WorldChat.new()
+	city.hud.root_ui.add_child(chat)
+	city.hud.root_ui.move_child(chat,city.hud.overlay.get_index())
+	chat.setup(session)
+	chat_card = chat.composer
+	chat_input = chat.input
+	chat_input.text_submitted.connect(send_chat)
 	connection_card=UI.panel(UI.CREAM,24,22);connection_card.anchor_left=.5;connection_card.anchor_right=.5;connection_card.anchor_top=.5;connection_card.anchor_bottom=.5
 	connection_card.position=Vector2(-235,-45);connection_card.custom_minimum_size=Vector2(470,90);connection_card.add_child(UI.label("海风有点远，正在重新联系小岛…",19));city.hud.root_ui.add_child(connection_card);connection_card.hide()
 	apply_shared_state()
@@ -53,7 +54,7 @@ func _input(event: InputEvent) -> void:
 		if event.keycode==KEY_ESCAPE and chat_card.visible:
 			if chat_input.has_ime_text():return
 			close_chat();get_viewport().set_input_as_handled();return
-		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.overlay.visible and not city.preparing and not (is_instance_valid(city.build_mode) and city.build_mode.active):
+		if event.keycode==KEY_ENTER and not chat_card.visible and not city.hud.photo_mode and not city.hud.overlay.visible and not city.preparing and not (is_instance_valid(city.build_mode) and city.build_mode.active):
 			open_chat();get_viewport().set_input_as_handled()
 func open_chat() -> void:
 	preload("res://scripts/services/gameplay_input.gd").release_controls()
@@ -101,7 +102,7 @@ func receive(data: Dictionary) -> void:
 			if not replicas.has(id):make_replica(row)
 		for id in replicas.keys():
 			if not seen.has(id):replicas[id].actor.queue_free();replicas[id].props.queue_free();clear_replica_meal(replicas[id]);replicas.erase(id);motion.erase(id);buffers.erase(id)
-	elif data.get("type","")=="chat":show_chat(data)
+	elif data.get("type","")=="chat" and data.get("map",city.map_id)==city.map_id:show_chat(data)
 func make_replica(row: Dictionary) -> void:
 	var actor=Animals.create(row.species);actor.network_replica=true;actor.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF;actor.world=city;actor.name="Online_"+str(row.id);city.add_child(actor)
 	actor.position=from_array(row.position);Outfit.apply(actor,row.equipment,row.get("clothing_designs",{}))
@@ -233,8 +234,8 @@ func show_chat(data: Dictionary) -> void:
 	var panel:=UI.panel(UI.CREAM,18,13);panel.custom_minimum_size=Vector2(180,0);panel.mouse_filter=Control.MOUSE_FILTER_IGNORE
 	var col:=UI.column(4);panel.add_child(col);col.add_child(UI.label(str(data.name),12,UI.MUTED))
 	var label:=UI.label(str(data.text),18);label.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART;label.custom_minimum_size=Vector2(280,0)
-	var emoji:=SystemFont.new();emoji.font_names=PackedStringArray(["Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji"])
-	var font: Font=load("res://assets/fonts/NotoSansSC.ttf").duplicate();font.fallbacks=[emoji];label.add_theme_font_override("font",font)
+	label.add_theme_font_override("font",chat.font)
+	panel.hide()
 	col.add_child(label);city.hud.root_ui.add_child(panel)
 	bubbles[data.id]={"panel":panel,"remaining":clampf(3+str(data.text).length()*.08,4,10)}
 func apply_shared_state() -> void:

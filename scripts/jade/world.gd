@@ -233,6 +233,7 @@ func register_city(client: bool) -> void:
 		landmark.merge({"kind":"landmark","position":J.point(landmark.at.x,landmark.at.y),"radius":3.4})
 		targets[id]=landmark
 	for p in DB.plots("jade"):
+		if client and session.is_online() and not session.state().plots.has(p.id):continue
 		targets[p.id]={"kind":"plot","position":J.point(p.x,p.z),"radius":2.1}
 		if client:
 			var visual:=CropVisual.new();visual.position=J.point(p.x,p.z)+Vector3.UP*.17;add_child(visual);crops[p.id]=visual

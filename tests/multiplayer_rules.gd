@@ -51,7 +51,7 @@ func run() -> void:
 	for i in range(5):
 		var client=Transport.new();root.add_child(client);clients.append(client)
 		client.message_received.connect(func(message: Dictionary):
-			if message.get("type","")=="chat":chats.append(message))
+			if message.get("type","")=="chat":chats.append({"receiver":i,"text":message.text,"map":message.get("map","")}))
 		check(await client.ensure_connected("ws://127.0.0.1:18893"),"Connect "+str(i))
 		var result: Dictionary=await client.request("register",{"username":"qa_"+suffix+str(i),"password":"test-island-123"})
 		check(result.get("ok",false) and result.get("token","")!="","Register and receive session "+str(i))
@@ -225,6 +225,13 @@ func run() -> void:
 	check(parallel.get("trip_a",{}).get("ok",false) and parallel.get("trip_b",{}).get("ok",false),"Two players can travel independently")
 	check(server.actors[ids[0]].state.coins==before_coins-10,"Boat fare charged once")
 	check(server.pawns[ids[0]].position.distance_to(server.pawns[ids[1]].position)>1.65,"Shared boat arrival reserves separate points")
+	chats.clear()
+	result=await request(0,"chat",{"text":"山谷来信 🍊"})
+	await wait(.3)
+	var heard := {}
+	for message in chats:
+		if message.text=="山谷来信 🍊" and message.map=="valley":heard[message.receiver]=true
+	check(result.ok and chats.size()==5 and heard.size()==5,"Valley sender, local neighbour and three island players each receive the global message once")
 	var before_time: float=server.state().time
 	for client in clients:await client.request("leave")
 	await wait(.25)

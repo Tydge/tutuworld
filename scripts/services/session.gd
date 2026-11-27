@@ -6,6 +6,10 @@ signal characters_changed
 signal time_adjusted
 signal settings_changed(key: String)
 signal online_message(message: Dictionary)
+signal world_chat_received(entry: Dictionary)
+const CHAT_LIFETIME_MS := 15000
+const CHAT_LIMIT := 5
+var recent_chat: Array[Dictionary] = []
 signal online_connection_changed(connected: bool)
 signal online_update_required(version: String)
 const Animals=preload("res://scripts/characters/animal_catalog.gd")
@@ -496,6 +500,18 @@ func set_setting(key: String,value: Variant) -> void:
 func scene_path() -> String: return preload("res://scripts/services/map_routes.gd").scene(str(state().get("map_id","city")))
 
 func is_online() -> bool:return transport_mode=="remote_authority"
+func prune_chat(now: int) -> void:
+	while not recent_chat.is_empty() and int(recent_chat.front().expires)<=now:
+		recent_chat.pop_front()
+
+func remember_chat(message: Dictionary) -> void:
+	var now := Time.get_ticks_msec()
+	prune_chat(now)
+	var entry := {"name":str(message.name),"id":str(message.id),"text":str(message.text),"expires":now+CHAT_LIFETIME_MS}
+	if recent_chat.size()>=CHAT_LIMIT:recent_chat.pop_front()
+	recent_chat.append(entry)
+	world_chat_received.emit(entry)
+
 func ensure_remote() -> void:
 	if is_instance_valid(remote):return
 	remote=preload("res://scripts/services/remote_transport.gd").new()
@@ -504,6 +520,7 @@ func ensure_remote() -> void:
 	remote.snapshot_received.connect(receive_online_snapshot)
 	remote.message_received.connect(func(message: Dictionary):
 		if message.get("type","")=="event":event_received.emit(message.event)
+		if message.get("type","")=="chat" and is_online() and not leaving_online:remember_chat(message)
 		online_message.emit(message))
 	remote.connection_lost.connect(on_connection_lost)
 	remote.update_required.connect(func(version: String):
@@ -535,6 +552,7 @@ func create_online_character(display_name: String,species: String,starter: Strin
 	set_online_roster(result.characters)
 	return await select_online_character(str(result.character))
 func select_online_character(id: String) -> Dictionary:
+	if id!=active_character_id:recent_chat.clear()
 	active_character_id=id
 	var result: Dictionary=await remote.request("join",{"character":id})
 	if result.get("ok",false):
@@ -578,6 +596,7 @@ func leave_online() -> void:
 	leaving_online=true;reconnecting=false
 	if is_instance_valid(remote) and remote.connected and online_joined:await remote.request("leave")
 	if is_instance_valid(remote):remote.close()
+	recent_chat.clear()
 	online_joined=false;transport_mode="local_authority";server_endpoint=""
 	var preferences:=settings.duplicate()
 	if not offline_backup.is_empty():restore_checkpoint(offline_backup)

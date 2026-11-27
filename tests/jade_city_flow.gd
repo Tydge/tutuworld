@@ -7,6 +7,28 @@ func _initialize() -> void:call_deferred("run")
 func check(value: bool,label_: String) -> void:
 	print("PASS " if value else "FAIL ",label_)
 	if not value:failures+=1
+func check_field(city: Node3D) -> void:
+	var space := city.get_world_3d().direct_space_state
+	var capsule := CapsuleShape3D.new()
+	capsule.radius = .48
+	capsule.height = 2.
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = capsule
+	query.collision_mask = 1|4|8
+	var blocked := []
+	for plot in J.farm():
+		var p := J.point(plot.x,plot.z)
+		query.transform = Transform3D(Basis.IDENTITY,p+Vector3.UP*1.10)
+		if not J.dry_footing(p) or not space.intersect_shape(query,1).is_empty():
+			blocked.append(plot.id)
+	check(blocked.is_empty(),"All 288 sowing positions have dry ground and room for an animal: "+str(blocked))
+	var well: Vector3 = city.targets.jade_well.position
+	for x in [0,J.FIELD_GRID.x-1]:
+		for z in [0,J.FIELD_GRID.y-1]:
+			var corner := J.FIELD_FIRST+Vector2(x,z)*J.FIELD_SPACING
+			check(city.navigation.path_between(well,J.point(corner.x,corner.y)).size()>1,"Walk from the well entrance to field corner "+str(corner))
+	check(not J.FIELD_BOUNDS.grow(1.).has_point(Vector2(well.x,well.z)) and well.distance_to(J.point(J.FIELD_WELL.x,J.FIELD_WELL.y))<4.,"The registered water interaction is at the new field entrance")
+
 func check_lanterns(city: Node3D) -> void:
 	var art:=preload("res://scripts/jade/architecture.gd")
 	var sources: Dictionary={}
@@ -380,7 +402,8 @@ func run() -> void:
 		check(courier.find_child("Cargo",true,false)!=null and delivery.size()==5 and absf(delivery[2].z-146.)<=9.1,"Working market delivery "+str(index))
 	session.state().time=1800.
 	street.update_market()
-	check(city.crops.size()==32 and city.targets.has("jade_well"),"Shared field and well")
+	check(city.crops.size()==288 and city.targets.has("jade_well"),"Shared field and well")
+	check_field(city)
 	check(city.targets.has("jade_workshop") and city.targets.has("jade:tea:tea_service_1"),"Workshop and tea room activities")
 	for h in J.HOUSES:
 		var room: Node3D=city.scenery.get_node(("Shop_" if J.shops().has(h[0]) else "Hall_")+h[0])
@@ -400,6 +423,13 @@ func run() -> void:
 	check(is_instance_valid(city.hud.map_draw) and city.hud.map_draw.is_visible_in_tree(),"Open the street map from the game HUD")
 	RenderingServer.force_draw()
 	root.get_texture().get_image().save_png(dir+"/玉京坊图.png")
+	var field_click := InputEventMouseButton.new()
+	field_click.button_index = MOUSE_BUTTON_LEFT
+	field_click.pressed = true
+	const Atlas = preload("res://scripts/jade/atlas.gd")
+	field_click.position = Atlas.ORIGIN+(J.FIELD_BOUNDS.end-Vector2.ONE)*Atlas.SCALE
+	city.hud.map_draw.gui_input.emit(field_click)
+	check(city.hud.jade_map_target=="fields","Clicking the expanded far corner selects the public field")
 	city.hud.close_panel()
 	# The city footprint was surveyed at 181,836 m². The connected-ground
 	# comparison with the current snow shoreline lives in jade_area_rules.
@@ -413,6 +443,7 @@ func run() -> void:
 		check(session.buy_land(id).ok,"Purchase "+str(id))
 	city.set_process(false);city.hud.hide();session.active=false;city.bunny.set_physics_process(false);session.settings.interior_view_mode=1
 	for frame in [
+		["西郊公田",Vector3(-145,44,163),Vector3(-152,2,131),.43,Vector2(-151,115)],
 		["河上望阙",Vector3(48,32,61),Vector3(-2,11,-85),.48,Vector2(0,14)],
 		["南津灯市",Vector3(J.lane(144)+1.3,4.7,144),Vector3(J.lane(110),6.2,110),.813,Vector2(J.lane(136)-1.15,136)],
 		["丹陛宫阙",Vector3(-12.0,24.2,-143),Vector3(.5,32,-164),.50,Vector2(2,-143)],

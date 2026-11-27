@@ -172,7 +172,7 @@ func streets() -> void:
 	preload("res://scripts/jade/wharf_field.gd").steps(self)
 	preload("res://scripts/jade/wharf_field.gd").field(self)
 	var well: Dictionary=preload("res://scripts/city/production_facilities.gd").object_definitions()[0].duplicate(true)
-	well.id="jade_well";well.origin=[-151,2,122];well.yaw=0.
+	well.id="jade_well";well.origin=[J.FIELD_WELL.x,J.foot(J.FIELD_WELL.x,J.FIELD_WELL.y),J.FIELD_WELL.y];well.yaw=0.
 	preload("res://scripts/city/production_builder.gd").build_well(world,well)
 func house(h: Array) -> void:
 	var shop:=str(h[0]) in J.shops();var d:=A.dims(h[4])
@@ -275,5 +275,8 @@ func tree_at_jade(x: float,z: float,variant: int) -> void:
 		for i in range(1,path.size()):
 			if Geometry2D.get_closest_point_to_segment(p,path[i-1],path[i]).distance_to(p)<3.6:return
 	if Rect2(-130,-55,18,18).has_point(p) or J.near_entrance(x,z):return
-	var t:=group(world,"Grove",J.point(x,z));t.set_meta("grove",true);t.rotation.y=rng.randf_range(0,TAU);t.scale=Vector3.ONE*rng.randf_range(.79,1.23)
+	var angle := rng.randf_range(0,TAU)
+	var size_factor := rng.randf_range(.79,1.23)
+	if J.FIELD_BOUNDS.grow(3.).has_point(p) or p.distance_to(J.FIELD_WELL)<5.:return
+	var t:=group(world,"Grove",J.point(x,z));t.set_meta("grove",true);t.rotation.y=angle;t.scale=Vector3.ONE*size_factor
 	preload("res://scripts/jade/grove.gd").place(t,variant,true)

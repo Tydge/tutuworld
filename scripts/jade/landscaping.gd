@@ -59,7 +59,7 @@ static func planting(builder: SceneTree,district: Image,mask: Image) -> void:
 			if corridors.any(func(path):return Geometry2D.get_closest_point_to_segment(flat,path[0],path[1]).distance_squared_to(flat)<3.1):continue
 			if absf(p.x-J.lane(p.z))<8.4 or absf(p.z-J.river_z(p.x))<11.7 or not J.can_walk(p):continue
 			if J.HOUSES.any(func(h):return (J.center(h)-Vector2(p.x,p.z)).length_squared()<82.):continue
-			if absf(p.z-121.7)<7. and p.x< -152 and p.x> -177.:continue
+			if J.FIELD_BOUNDS.grow(.65).has_point(Vector2(p.x,p.z)):continue
 			p.y=J.terrain_floor(p)+.008
 			var key:=Vector2i(floori(p.x/18.),floori(p.z/18.))
 			if not bins.has(key):bins[key]=[]

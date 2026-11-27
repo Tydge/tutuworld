@@ -43,6 +43,29 @@ func run() -> void:
  check(not view.chat_card.visible and not Input.is_action_pressed("move_up") and not Input.is_physical_key_pressed(KEY_W) and not Input.is_action_pressed("sprint"),"Closing chat releases actions and physical keys even if key-up was swallowed")
  start=actor.position;await create_timer(.7).timeout
  check(Vector2(actor.position.x-start.x,actor.position.z-start.z).length()<.08,"No stuck movement after submitting Chinese text")
+ check(view.chat.feed.visible and view.chat.lines.get_child_count()==1 and view.chat.lines.get_child(0).get_parsed_text().ends_with("中文聊天测试 🍊"),"Own server echo appears once in the world feed")
+ var away := {"type":"chat","id":"traveller","name":"阿棠","text":"山谷的橘子熟了 🍊 [b]","map":"valley"}
+ session.remote.message_received.emit(away)
+ check(view.chat.lines.get_child(1).get_parsed_text()=="阿棠　山谷的橘子熟了 🍊 [b]" and not view.bubbles.has("traveller"),"Away-map text and emoji stay literal and do not create a local bubble")
+ var restored=preload("res://scripts/ui/world_chat.gd").new()
+ game.hud.root_ui.add_child(restored);restored.setup(session)
+ check(restored.lines.get_child_count()==2,"Changing the HUD during travel restores unexpired messages")
+ restored.free()
+ if DisplayServer.get_name()!="headless":
+  await create_timer(.2).timeout
+  await RenderingServer.frame_post_draw
+  root.get_texture().get_image().save_png(preload("res://tests/test_support.gd").output_dir()+"/世界聊天.png")
+ for i in 6:session.remote.message_received.emit(away.merged({"text":"第%d条"%i},true))
+ check(view.chat.lines.get_child_count()==5 and session.recent_chat.size()==5 and view.chat.lines.get_child(0).get_parsed_text().ends_with("第1条"),"Burst traffic keeps only the five newest messages")
+ var long_line: String="田边见".repeat(40)
+ session.remote.message_received.emit(away.merged({"text":long_line},true))
+ for i in 3:await process_frame
+ var latest: RichTextLabel=view.chat.lines.get_child(-1)
+ check(latest.visible and latest.get_parsed_text().ends_with(long_line) and latest.get_content_height()>40,"A full 120-character message wraps and stays readable")
+ await create_timer(13.6).timeout
+ check(view.chat.feed.visible and view.chat.feed.modulate.a<1.,"Chat fades before expiry")
+ await create_timer(1.7).timeout
+ check(not view.chat.feed.visible and session.recent_chat.is_empty(),"Expired chat disappears from the HUD and session memory")
  key(KEY_D);await create_timer(.3).timeout;key(KEY_D,false)
  check(Vector2(actor.position.x-start.x,actor.position.z-start.z).length()>.15,"Fresh movement press works after chat")
  view.open_chat();key(KEY_A);key(KEY_ESCAPE);await create_timer(.1).timeout;key(KEY_ESCAPE,false)
