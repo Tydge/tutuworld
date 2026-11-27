@@ -233,17 +233,18 @@ func _ready() -> void:
 	session.event_received.connect(on_event)
 	ambience=AudioStreamPlayer.new()
 	ambience.stream=load("res://assets/garden_ambience.wav")
+	ambience.bus="Environment"
 	ambience.volume_db=-24
 	add_child(ambience)
 	ambience.finished.connect(ambience.play)
 	ambience.play()
 	var spatial:=preload("res://scripts/city/spatial_ambience.gd").new();spatial.name="SpatialAmbience";spatial.city=self;add_child(spatial)
-	AudioServer.set_bus_volume_db(0,linear_to_db(maxf(.001,float(session.settings.volume))))
-	AudioServer.set_bus_mute(0,not session.settings.sound)
+	session.apply_audio_settings()
 	session.active=true
 	refresh_world()
 	if map_id in ["city","icefield","jade"] and has_building_world():
 		build_mode=preload("res://scripts/building/editor.gd").new();build_mode.name="BuildingEditor";build_mode.city=self;add_child(build_mode)
+	session.follow_background_music(self)
 	if session.state().get("rest_mode","")=="sleep": enter_sleep(true)
 	if not session.test_mode or OS.get_cmdline_user_args().has("--warmup-test"):
 		await preload("res://scripts/city/scene_preparation.gd").run(self)
@@ -893,6 +894,7 @@ func play_tone(frequency: float,length: float=.12,volume: float=.1) -> void:
 	stream.data=data
 	var player:=AudioStreamPlayer.new()
 	player.stream=stream
+	player.bus="Environment"
 	player.volume_db=linear_to_db(volume)
 	add_child(player)
 	player.finished.connect(player.queue_free)

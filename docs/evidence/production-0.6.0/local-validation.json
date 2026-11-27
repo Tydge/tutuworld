@@ -1,0 +1,14 @@
+{
+  "project_integrity": 813,
+  "background_music_flow": 41,
+  "jade_area_rules": "pass",
+  "jade_multiplayer_rules": "pass",
+  "jade_workshop_flow": "pass",
+  "jade_neighbourhood_flow": "pass",
+  "emote_flow": 509,
+  "chat_seat_rules": 46,
+  "building_multiplayer_flow": 57,
+  "linux_staging_multiplayer": 42,
+  "update_integrity": 5,
+  "macos_0_5_1_native_update": "accepted_and_booted_0.6.0"
+}

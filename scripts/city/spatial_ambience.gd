@@ -11,7 +11,7 @@ var timer:=0.
 var base_volumes: Dictionary={}
 var updates:=0
 func voice(id: String,volume: float,radius: float,reach: float) -> AudioStreamPlayer3D:
-	var player:=AudioStreamPlayer3D.new();player.name=id;player.stream=load("res://assets/audio/ambient/"+id+".ogg");player.stream.loop=true;player.volume_db=volume;player.unit_size=radius;player.max_distance=reach;player.max_db=0.;player.attenuation_model=AudioStreamPlayer3D.ATTENUATION_INVERSE_DISTANCE;player.panning_strength=.7;player.attenuation_filter_cutoff_hz=3800.;player.attenuation_filter_db=-12.;player.doppler_tracking=AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED;add_child(player);base_volumes[player]=volume;player.play();return player
+	var player:=AudioStreamPlayer3D.new();player.name=id;player.bus="Environment";player.stream=load("res://assets/audio/ambient/"+id+".ogg");player.stream.loop=true;player.volume_db=volume;player.unit_size=radius;player.max_distance=reach;player.max_db=0.;player.attenuation_model=AudioStreamPlayer3D.ATTENUATION_INVERSE_DISTANCE;player.panning_strength=.7;player.attenuation_filter_cutoff_hz=3800.;player.attenuation_filter_db=-12.;player.doppler_tracking=AudioStreamPlayer3D.DOPPLER_TRACKING_DISABLED;add_child(player);base_volumes[player]=volume;player.play();return player
 func _ready() -> void:
 	listener=AudioListener3D.new();listener.name="PlayerAudioListener";add_child(listener);listener.make_current()
 	waves=voice("ocean_waves",-13.,8.,62.);gulls=voice("seagulls",-13.,7.,48.)

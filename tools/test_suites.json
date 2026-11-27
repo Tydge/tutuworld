@@ -408,6 +408,9 @@
     "chat_seat_rules": {
       "headless": true
     },
+    "background_music_flow": {
+      "headless": true
+    },
     "production_rules": {
       "headless": true
     },

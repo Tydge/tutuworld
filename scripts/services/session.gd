@@ -16,6 +16,7 @@ const Animals=preload("res://scripts/characters/animal_catalog.gd")
 const Authority=preload("res://scripts/services/local_authority.gd")
 const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
+const BackgroundMusic=preload("res://scripts/services/background_music.gd")
 const SAVE="user://island_city_v2.json"
 const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","jade_build_layout","land_parcels"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","jade_visits","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
@@ -27,7 +28,7 @@ var sequence:=0
 var save_timer:=0.0
 var building_generation:=""
 var ui_timer:=0.0
-var settings:={"sound":true,"volume":.55,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true,"interior_view_mode":2,"interior_view_hint_seen":false,"show_other_storey_objects":true}
+var settings:={"sound":true,"volume":.55,"music_enabled":true,"music_volume":.50,"fullscreen":true,"camera_speed":1.0,"reduce_motion":false,"player_species":"bunny","render_quality":"balanced","fps_limit_enabled":true,"fps_limit":60,"background_throttle":true,"auto_update":true,"interior_view_mode":2,"interior_view_hint_seen":false,"show_other_storey_objects":true}
 var characters: Dictionary={}
 var active_character_id:=""
 var world: Dictionary={}
@@ -50,6 +51,7 @@ var online_doors: Dictionary={}
 var offline_backup: Dictionary={}
 var reconnecting:=false
 var leaving_online:=false
+var background_music: Node
 func _ready() -> void:
 	# In this project a scripted SceneTree is a standalone test or developer preview.
 	# F5, the launcher and the exported game enter through the regular scene tree.
@@ -58,6 +60,7 @@ func _ready() -> void:
 	if not test_mode: load_save()
 	if not test_mode:load_preferences()
 	normalize_view_settings()
+	apply_audio_settings()
 	if not test_mode:DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if settings.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED)
 	get_tree().auto_accept_quit=false
 	get_tree().root.close_requested.connect(func(): save_game(); get_tree().quit())
@@ -483,14 +486,36 @@ func normalize_view_settings() -> void:
 	settings.interior_view_mode=clampi(int(settings.interior_view_mode),0,2)
 	settings.interior_view_hint_seen=bool(settings.get("interior_view_hint_seen",false))
 	settings.show_other_storey_objects=bool(settings.get("show_other_storey_objects",true))
+func apply_audio_settings() -> void:
+	settings.music_enabled=bool(settings.music_enabled)
+	var volume: Variant=settings.music_volume
+	settings.music_volume=clampf(float(volume),0.0,1.0) if volume is float or volume is int else .50
+	update_audio_bus("Environment",bool(settings.sound),float(settings.volume))
+	update_audio_bus("Music",settings.music_enabled,settings.music_volume)
+
+func update_audio_bus(bus_name: String, enabled: bool, volume: float) -> void:
+	var index:=AudioServer.get_bus_index(bus_name)
+	if index<0:
+		index=AudioServer.bus_count
+		AudioServer.add_bus()
+		AudioServer.set_bus_name(index,bus_name)
+	AudioServer.set_bus_volume_db(index,linear_to_db(maxf(.0001,volume)))
+	AudioServer.set_bus_mute(index,not enabled or volume<=0.0)
+
+func follow_background_music(world_scene: Node) -> void:
+	if not is_instance_valid(background_music):
+		background_music=BackgroundMusic.new()
+		background_music.name="BackgroundMusic"
+		add_child(background_music)
+	background_music.world=world_scene
+
 func set_setting(key: String,value: Variant) -> void:
 	if not settings.has(key): return
 	if key=="interior_view_mode" and (not value is int or value<0 or value>2):return
 	if key=="fps_limit" and int(value) not in [60,90,120]: return
 	settings[key]=value
+	if key in ["volume","sound","music_enabled","music_volume"]: apply_audio_settings()
 	settings_changed.emit(key)
-	if key=="volume": AudioServer.set_bus_volume_db(0,linear_to_db(maxf(.001,float(value))))
-	if key=="sound": AudioServer.set_bus_mute(0,not bool(value))
 	if key=="fullscreen": DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if value else DisplayServer.WINDOW_MODE_WINDOWED)
 	if not test_mode:
 		var preferences:=FileAccess.open("user://preferences.json.tmp",FileAccess.WRITE)

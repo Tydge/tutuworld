@@ -212,27 +212,22 @@ func build_settings(parent: Control) -> Control:
 	var card:=UI.panel(UI.CREAM,30,30)
 	card.anchor_left=.5
 	card.anchor_right=.5
-	card.anchor_top=.5
-	card.anchor_bottom=.5
-	card.position=Vector2(-260,-270)
-	card.custom_minimum_size=Vector2(520,540)
+	card.anchor_top=.10
+	card.anchor_bottom=.90
+	card.offset_left=-260
+	card.offset_right=260
 	overlay.add_child(card)
-	var col:=UI.column(22)
-	card.add_child(col)
-	col.add_child(UI.label("把旅程调成喜欢的样子",25))
-	var sound:=CheckButton.new()
-	sound.text="环境声音"
-	sound.button_pressed=session.settings.sound
-	sound.toggled.connect(func(v): session.set_setting("sound",v))
-	col.add_child(sound)
-	col.add_child(UI.label("音量",17))
-	var slider:=HSlider.new()
-	slider.min_value=0
-	slider.max_value=1
-	slider.step=.01
-	slider.value=session.settings.volume
-	slider.value_changed.connect(func(v): session.set_setting("volume",v))
-	col.add_child(slider)
+	var body:=UI.column(16)
+	card.add_child(body)
+	body.add_child(UI.label("把旅程调成喜欢的样子",25))
+	var scroll:=ScrollContainer.new()
+	scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical=Control.SIZE_EXPAND_FILL
+	body.add_child(scroll)
+	var col:=UI.column(14)
+	col.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+	scroll.add_child(col)
+	preload("res://scripts/ui/audio_controls.gd").add_to(col,session)
 	var fullscreen:=CheckButton.new()
 	fullscreen.text="全屏显示"
 	fullscreen.button_pressed=session.settings.fullscreen
@@ -247,5 +242,5 @@ func build_settings(parent: Control) -> Control:
 	col.add_child(reduce)
 	var automatic:=CheckButton.new();automatic.text="自动下载更新并重启";automatic.button_pressed=session.settings.get("auto_update",true)
 	automatic.toggled.connect(func(value):session.set_setting("auto_update",value));col.add_child(automatic)
-	col.add_child(UI.button("准备好啦",func(): overlay.hide(),true))
+	body.add_child(UI.button("准备好啦",func(): overlay.hide(),true))
 	return overlay

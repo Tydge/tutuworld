@@ -1,0 +1,10 @@
+2026-11-27 Asia/Shanghai
+Release 0.6.0, build 12, network protocol 5, launcher 2.
+Linux isolated service: five clients registered, entered, exchanged chat, rejoined and logged out. 42 checks passed.
+Server, content, both installer ZIP files and the version manifest matched build SHA-256.
+macOS universal installer passed ad hoc codesign and started build 12.
+The original 0.5.1 native macOS launcher read a pending signed update in an isolated user directory, activated it and started build 12.
+Production services stopped for a paired world and SQLite backup. All preservation checks passed, including the production epoch and clock alignment.
+Root manifest promoted atomically. Public health returned {"ok":true,"version":"0.6.0","build":12}.
+Public WSS accepted build 12, rejected an outdated build, and refused an unauthenticated roster request. Four checks passed.
+Public HTTPS update client downloaded and verified the signed 251640096-byte content pack.

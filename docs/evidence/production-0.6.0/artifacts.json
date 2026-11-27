@@ -1,0 +1,47 @@
+{
+  "version": "0.6.0",
+  "build": 12,
+  "protocol": 5,
+  "launcher": 2,
+  "files": {
+    "city.pck": {
+      "sha256": "f3a4014e51a456a5ddc9d6c926e27cd66e04ee75c003e23481ef42ddf3f6598f",
+      "bytes": 251640096
+    },
+    "server.pck": {
+      "sha256": "bdda47018d70446ea8d41f18dbbb6c8aa09d192c62e5ee0431375fe6d0990c8e",
+      "bytes": 178902656
+    },
+    "TutuWorld-macOS.zip": {
+      "sha256": "b23066f3d70d4bfb45742495273bc7a9badcba7c3a78c2cfba0a5992c6db5f91",
+      "bytes": 271917842
+    },
+    "TutuWorld-Windows.zip": {
+      "sha256": "8febb50895ba28f243961fc78b82b7f2962557dd58ad41aba03debf83507a4e7",
+      "bytes": 259655220
+    },
+    "manifest.json": {
+      "sha256": "bcff9c9a1a7d3daedf9f7cb586a617427247ce6eb01f0ecad62330101e471fd7",
+      "bytes": 1200
+    }
+  },
+  "macos": {
+    "bundle_short_version": "0.6.0",
+    "bundle_version": "12",
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "zip_crc_verified": true
+  },
+  "windows": {
+    "files_verified": [
+      "D3D12Core.dll",
+      "LICENSE-CODE.txt",
+      "LICENSE.txt",
+      "TutuWorld.exe",
+      "TutuWorld.pck"
+    ],
+    "zip_crc_verified": true
+  }
+}

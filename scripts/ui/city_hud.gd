@@ -821,19 +821,7 @@ func build_settings() -> void:
 	var other_storeys:=CheckButton.new();other_storeys.name="ShowOtherStoreyObjects";other_storeys.text="显示其他楼层家具";other_storeys.button_pressed=session.settings.get("show_other_storey_objects",true)
 	other_storeys.tooltip_text="自由视角中显示各层家具和灯具；关闭后只裁剪当前房屋。自动俯视与建造仍按楼层剖切。"
 	other_storeys.toggled.connect(func(value):session.set_setting("show_other_storey_objects",value));options.add_child(other_storeys)
-	var sound:=CheckButton.new()
-	sound.text="环境声音"
-	sound.button_pressed=session.settings.sound
-	sound.toggled.connect(func(v): session.set_setting("sound",v))
-	options.add_child(sound)
-	options.add_child(UI.label("音量",17))
-	var volume:=HSlider.new()
-	volume.min_value=0
-	volume.max_value=1
-	volume.step=.01
-	volume.value=session.settings.volume
-	volume.value_changed.connect(func(v): session.set_setting("volume",v))
-	options.add_child(volume)
+	preload("res://scripts/ui/audio_controls.gd").add_to(options,session)
 	preload("res://scripts/ui/audio_credits.gd").add_to(options)
 	if city.map_id=="icefield":
 		var credit:=UI.label("冰原远山地形：Mapzen · Copernicus EU-DEM · USGS\n雪松与积雪素材：原创生成并制作",12,UI.MUTED);options.add_child(credit)

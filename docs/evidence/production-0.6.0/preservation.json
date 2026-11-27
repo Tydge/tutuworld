@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "checks": {
+    "accounts_and_sessions_preserved": true,
+    "characters_preserved": true,
+    "existing_buildings_and_parcels_preserved": true,
+    "wardrobe_preserved": true,
+    "clock_preserved": true,
+    "care_history_preserved": true,
+    "existing_door_state_preserved": true,
+    "existing_farm_plots_preserved": true,
+    "existing_resources_preserved": true,
+    "jade_world_initialized": true,
+    "service_updated": true
+  },
+  "accounts": 3,
+  "characters": 4,
+  "preexisting_plots": 48,
+  "preexisting_resources": 78,
+  "jade_plots": 288,
+  "jade_resources": 36,
+  "health": {
+    "ok": true,
+    "version": "0.6.0",
+    "build": 12
+  },
+  "private_snapshot": "/root/tutuworld-deploy-backups/0.6.0-20261127"
+}
