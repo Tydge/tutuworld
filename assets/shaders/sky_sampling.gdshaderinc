@@ -11,11 +11,14 @@ float starlight(vec3 direction) {
 	vec2 grid = 128.0 * direction.xz / (1.0 + abs(direction.y));
 	vec2 cell = floor(grid);
 	vec2 dx = dFdx(grid), dy = dFdy(grid);
-	float light = smoothstep(.955, 1.0, noise(cell));
-	if (light == 0.) { return 0.; }
+	float magnitude = smoothstep(.955, 1.0, noise(cell));
+	if (magnitude == 0.) { return 0.; }
 	vec2 center = .25 + .5 * vec2(noise(cell + vec2(37, 19)), noise(cell + vec2(11, 71)));
 	vec2 offset = fract(grid) - center;
 	float pixel_area = max(abs(dx.x * dy.y - dx.y * dy.x), 1e-10);
 	vec2 pixels = vec2(offset.x * dy.y - offset.y * dy.x, dx.x * offset.y - dx.y * offset.x) / pixel_area;
-	return .62 * light * exp(-1.65 * dot(pixels, pixels));
+	// Keep the faint field sharp and make only the brightest stars slightly larger.
+	float width = mix(.62, 1.06, smoothstep(.20, .96, magnitude));
+	float peak = .66 * magnitude;
+	return peak * exp(-1.65 * dot(pixels, pixels) / (width * width));
 }

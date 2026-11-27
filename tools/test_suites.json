@@ -399,6 +399,9 @@
     "movement_latency": {
       "headless": true
     },
+    "multimap_movement_cadence": {
+      "headless": true
+    },
     "motion_buffer_rules": {
       "headless": true
     },

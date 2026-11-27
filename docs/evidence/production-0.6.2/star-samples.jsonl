@@ -1,0 +1,4 @@
+{"map": "city", "sampled_stars": 71, "contrast_p10": 34.0, "contrast_p90": 150.5, "full_width_half_max_px": {"1": 7, "2": 25, "3": 38, "4": 1}}
+{"map": "valley", "sampled_stars": 83, "contrast_p10": 36.0, "contrast_p90": 148.0, "full_width_half_max_px": {"1": 8, "2": 27, "3": 46, "4": 2}}
+{"map": "icefield", "sampled_stars": 37, "contrast_p10": 17.25, "contrast_p90": 146.0, "full_width_half_max_px": {"1": 2, "2": 18, "3": 16, "4": 1}}
+{"map": "jade", "sampled_stars": 81, "contrast_p10": 24.0, "contrast_p90": 145.0, "full_width_half_max_px": {"1": 8, "2": 39, "3": 32, "4": 2}}
