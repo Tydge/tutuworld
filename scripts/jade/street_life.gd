@@ -39,6 +39,7 @@ var elapsed:=0.
 var tick:=0.
 var market_period:=-1
 var paid_respects: Dictionary={}
+var imperial_court:=preload("res://scripts/jade/imperial_court.gd").new()
 const COURT_DUTIES={14:"bow",34:"bow",35:"read_scroll",36:"bell",38:"bow"}
 const CUSTOMERS=[1,2,8]
 # The boat hand and carpenter pass the market while the three regulars stop at its counters.
@@ -135,11 +136,13 @@ func receive_court() -> void:
 		paid_respects[index]=true
 func _physics_process(delta: float) -> void:
 	elapsed+=delta
+	imperial_court.walk(city,delta)
 	tick+=delta
 	if tick<.40:return
 	tick=0.
 	refresh_neighbours()
 	update_market()
+	imperial_court.update(city,market_period==1)
 	receive_court()
 	for actor in city.npcs:
 		var id:=str(actor.name)
@@ -160,6 +163,7 @@ func _physics_process(delta: float) -> void:
 					actor.visual.rotation.y=atan2(stall.x-actor.position.x,stall.z-actor.position.z)
 			duration=3.6 if pose=="tea" or pose=="read_scroll" else 2.4
 			driver.wait=maxf(driver.wait,duration+.3)
+		elif id=="JadeEmperor":pose="read_scroll"
 		else:
 			pose=TRADES.get(id.trim_prefix("JadeVendor_"),"")
 		if pose.is_empty():continue

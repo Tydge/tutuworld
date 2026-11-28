@@ -261,6 +261,13 @@ func spawn_npcs() -> void:
 		var worn := {"head":"peony_qitou","body":"cloud_dao_robe","neck":"ruyi_lock"} if shop=="silk" else attire(id.hash(),false)
 		var npc:=spawn_npc(id,label_,J.point(p.x,p.y)+Vector3.UP*.12,worn)
 		targets[id]={"kind":"shop","position":npc.position,"radius":3.3,"shop":shop,"node":npc,"name":label_}
+	var throne: Node3D=targets["jade:audience:jade_throne_1"].node
+	throne.set_meta("rest_action","hold_court")
+	var emperor_pos:=throne.to_global(Vector3(2.65,.06,2.40))
+	var emperor_outfit:={"head":"imperial_mian","body":"imperial_dragon_robe","neck":""}
+	var emperor:=spawn_npc("JadeEmperor","景昭 · 玉京皇帝",emperor_pos,emperor_outfit,"bunny")
+	emperor.set_meta("court_post",emperor_pos)
+	targets["JadeEmperor"]={"kind":"npc","position":emperor_pos,"radius":2.8,"node":emperor,"name":Residents.EMPEROR[0]}
 	for i in range(Residents.PEOPLE.size()):
 		var r: Array=Residents.PEOPLE[i];var p:=J.point(r[2],r[3])+Vector3.UP*.06
 		var id: String="JadeCitizen_"+str(i);var npc:=spawn_npc(id,r[0],p,attire(i,r[3] < -82 and absf(r[2]) < 80),["bunny","cat_teacher","bunny","panda"][i%4])

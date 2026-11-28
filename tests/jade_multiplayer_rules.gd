@@ -55,10 +55,32 @@ func run() -> void:
 	place(1,clothier.position+Vector3(0,0,.88))
 	check(request(1,"buy",{"shop":"silk","item":palace_item}).ok and b.count(palace_item)==1,"Purchase from the palace clothier on the host")
 	check(not request(1,"buy",{"shop":"silk","item":reed}).ok,"Palace stock excludes south market goods")
+	check(request(1,"buy",{"shop":"silk","item":"imperial_mian"}).ok and host.targets.JadeEmperor.node.get_meta("equipment").head=="imperial_mian","The multiplayer emperor wears the same crown sold in the palace")
 	var upper_rack := "jade:silk:Gallery_jade_dress_0"
 	var lock_dye := {"color":"6c4563","accent":"e0bb75","pattern":"sprig"}
 	place(1,host.targets[upper_rack].position)
 	check(request(1,"tailor",{"target":upper_rack,"item":palace_item,"design":lock_dye}).ok and b.state.clothing_designs.get(palace_item)==lock_dye,"The upstairs rack saves the palace lock's custom fabric on the host")
+	var court=host.get_node("StreetLife").imperial_court
+	var throne: Node3D=host.targets[court.THRONE].node
+	var emperor: CharacterBody3D=host.targets[court.EMPEROR].node
+	court.update(host,false)
+	place(1,throne.to_global(Vector3(0,.025,1.65)))
+	check(request(1,"sit",{"target":court.THRONE}).ok,"Player reaches the throne first")
+	court.update(host,true)
+	check(not emperor.seated and emperor.get_meta("court_request")==ids[1],"Only the occupying player's ID receives the imperial summons")
+	place(0,throne.to_global(Vector3(-1.25,.025,1.65)))
+	check(not request(0,"sit",{"target":court.THRONE}).ok,"A second simultaneous seat request is rejected")
+	place(0,throne.to_global(Vector3(-3.,.025,3.)))
+	check(request(1,"stand",{}).ok,"First player can voluntarily rise")
+	place(1,throne.to_global(Vector3(3.5,.025,3.)))
+	emperor.position=throne.to_global(Vector3(2.08,.03,1.04))
+	court.update(host,true)
+	check(emperor.seated and emperor.get_meta("court_request")=="" and throne.has_meta("resident_occupant"),"Host seats the emperor after release")
+	place(1,throne.to_global(Vector3(0,.025,1.65)))
+	check(not request(1,"sit",{"target":court.THRONE}).ok,"Host prevents the player from sitting over the emperor")
+	court.update(host,false)
+	check(not emperor.seated and request(1,"sit",{"target":court.THRONE}).ok,"The same player can sit after court")
+	request(1,"stand",{})
 	var public_stove: Dictionary=host.targets.jade_steamer
 	var bun_recipe:=DB.recipe("honey_wheat_cake")
 	place(0,public_stove.anchor.global_position)

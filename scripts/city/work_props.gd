@@ -39,7 +39,11 @@ func show_tool(kind: String,water_id: String="",item: String="",seconds: float=2
 	if is_instance_valid(prop): remove_child(prop);prop.queue_free()
 	if kind in ["water","weed","gather_stone","gather_copper","gather_wood"]: prop=Models.make(kind,water_id,item)
 	elif kind=="refill": prop=Models.make("water",water_id)
-	elif kind=="eat":prop=eating_prop()
+	elif kind=="eat":prop=eating_prop(item if item!="" else bunny.meal_item)
+	elif kind=="tea":
+		prop=Food.tea_cup()
+		bunny.held_cup.hide()
+	elif kind=="snack":prop=Food.snack_piece("orange" if item=="" else item)
 	else:
 		prop=Node3D.new()
 		var wood:=G.mat("bb905c")
@@ -47,21 +51,9 @@ func show_tool(kind: String,water_id: String="",item: String="",seconds: float=2
 			var end:=Vector3(0,.23,.63)
 			G.capsule(prop,Vector3.ZERO,end,.018,wood,"SpoonHandle");G.ball(prop,end,Vector3(.060,.018,.085),wood,"SpoonBowl")
 		elif kind=="plant": G.box(prop,Vector3.ZERO,Vector3(.18,.23,.045),G.mat("e3b773"))
-		elif kind=="tea":
-			var glaze:=G.mat("a3bea6",.35)
-			G.cylinder(prop,Vector3(0,.065,0),.11,.14,glaze,.132,"TeaCup")
-			G.cylinder(prop,Vector3(0,.137,0),.117,.009,G.mat("b3955c"),-1.,"PineTea")
-			G.ball(prop,Vector3(.135,.06,0),Vector3(.051,.042,.030),glaze,"CupHandle")
-		elif kind=="snack" and item=="food_snow_loaf":
-			G.ball(prop,Vector3.ZERO,Vector3(.115,.081,.149),G.mat("c98143"),"WheatLoaf")
-			for z in [-.064,0.,.062]:G.ball(prop,Vector3(0,.073,z),Vector3(.070,.011,.014),G.mat("f5cf96"),"CrustScore")
-			G.box(prop,Vector3(0,-.043,.020),Vector3(.199,.075,.184),G.mat("ede0be"),"BreadWrap")
-		elif kind=="snack":
-			G.ball(prop,Vector3.ZERO,Vector3(.115,.11,.115),G.mat("ed9f39"),"Orange")
-			G.ball(prop,Vector3(-.024,.024,.078),Vector3(.064,.064,.036),G.mat("f7c06a"),"OrangeFlesh")
-			var leaf:=G.ball(prop,Vector3(.025,.105,.005),Vector3(.047,.009,.024),G.mat("649357"),"OrangeLeaf")
-			leaf.rotation.z=-.35
 	add_child(prop)
+	prop.set_meta("item",item)
+	if kind in ["eat","snack","tea"]:_physics_process(0.)
 func hide_tool() -> void:
 	verb=""
 	if is_instance_valid(prop): prop.hide()
@@ -94,11 +86,22 @@ func _physics_process(delta: float) -> void:
 		bunny.right_arm.position=bunny.arm_rest_right+Vector3(-.10,-.17,.30)
 		var mouth: Vector3=bunny.mouth.global_position+bunny.visual.global_basis*Vector3(.12,-.035,.22)
 		var rest: Vector3=bunny.visual.to_global(bunny.right_arm.position+Vector3(-.02,-.16,.35))
+		var basis: Basis=bunny.visual.global_basis
+		var grip_offset:=Vector3(.070,-.083,.012)
+		var pose:=basis*Basis(Vector3.RIGHT,.86-.28*bite)
+		if verb=="tea":
+			pose=basis*Basis(Vector3.RIGHT,-.33*bite)
+			var lip: Vector3=bunny.mouth.global_position+basis*Vector3(.025,-.006,.038)
+			mouth=lip-pose*Vector3(0,.128,-.081)
+			grip_offset=Vector3(.097,.048,0)
+		else:
+			# Present the decorated face above the paw while the inner edge meets the mouth.
+			mouth+=basis*Vector3(-.032,.025,-.082)
 		var target: Vector3=rest.lerp(mouth,bite)
-		bunny.aim_hand(bunny.right_arm,target-bunny.visual.global_basis*Vector3(0,.015,0))
-		prop.global_transform=Transform3D(bunny.visual.global_basis*Basis(Vector3.RIGHT,-.33*bite if verb=="tea" else 0.),target)
-		var portion:=1.0 if verb=="tea" else lerpf(1.0,.78,clampf(bunny.action_time/3.0,0,1))
-		prop.scale=Vector3.ONE*portion
+		var portion:=1.0 if verb=="tea" else lerpf(1.0,.83,clampf(bunny.action_time/duration,0,1))
+		if verb=="snack" and prop.get_meta("item","") in ["sweet_osmanthus","almond_biscuit"]:portion*=1.14
+		bunny.aim_hand(bunny.right_arm,target+basis*grip_offset*portion)
+		prop.global_transform=Transform3D(pose.scaled_local(Vector3.ONE*portion),target)
 	elif verb=="eat":
 		pose_meal()
 	elif verb=="refill":
@@ -114,10 +117,15 @@ func _physics_process(delta: float) -> void:
 		var grip: Vector3=prop.get_node("GripR").position
 		prop.global_transform=Transform3D(basis,hand-basis*grip)
 	else: prop.global_transform=Transform3D(bunny.visual.global_basis,hand+bunny.visual.global_basis*Vector3(.10,0,.10))
-func eating_prop() -> Node3D:
-	var root:=Node3D.new();root.name="EatingProp";var kind:=Meal.utensil(bunny.meal_item);root.set_meta("utensil",kind);root.set_meta("item",bunny.meal_item)
+func eating_prop(item: String) -> Node3D:
+	var root:=Node3D.new();root.name="EatingProp";var kind:=Meal.utensil(item);root.set_meta("utensil",kind)
 	var tip:=Vector3(-.19,.07,-.02) if kind=="hand" else Vector3.ZERO
-	if kind!="hand":
+	if kind=="cup":
+		tip=Vector3(-.12,.13,-.045)
+		var cup:=Food.tea_cup()
+		cup.position=tip-Vector3(0,.128,-.081)
+		root.add_child(cup)
+	elif kind!="hand":
 		tip=Vector3(0,0,.30)
 		G.capsule(root,Vector3.ZERO,tip-Vector3(0,0,.035),.010,G.mat("9f7e55"),"Handle")
 		if kind=="spoon":G.ball(root,tip,Vector3(.052,.013,.069),G.mat("bdc3b5",.35),"SpoonBowl")
@@ -125,7 +133,7 @@ func eating_prop() -> Node3D:
 			G.box(root,tip-Vector3(0,0,.035),Vector3(.065,.014,.035),G.mat("bdc3b5",.35),"ForkHead")
 			for i in range(3):G.capsule(root,tip+Vector3((i-1)*.025,0,-.025),tip+Vector3((i-1)*.025,0,.045),.005,G.mat("bdc3b5",.35),"ForkTine")
 	var contact:=Marker3D.new();contact.name="FoodContact";contact.position=tip;root.add_child(contact)
-	var mouthful:=Food.bite_model(bunny.meal_item);root.add_child(mouthful);mouthful.position=tip+Vector3(0,.013,0);mouthful.hide()
+	var mouthful:=Food.bite_model(item);root.add_child(mouthful);mouthful.position=tip+Vector3(0,.013,0);mouthful.hide()
 	return root
 func pose_meal() -> void:
 	var phase:=Meal.sample(bunny.meal_elapsed if bunny.meal_elapsed>=0 else bunny.action_time,bunny.meal_duration)
@@ -133,6 +141,14 @@ func pose_meal() -> void:
 	var basis: Basis=bunny.visual.global_basis
 	var mouth: Vector3=bunny.mouth.global_position+basis*Vector3(0,-.012,.045)
 	var plate: Vector3=bunny.meal_origin+Vector3(0,.17,0) if bunny.meal_origin.is_finite() else target_point
+	if kind=="cup":
+		var tilt:=basis*Basis(Vector3.RIGHT,-.40*float(phase.lift))
+		var rim: Vector3=(plate+basis*Vector3(.28,0,.08)).lerp(mouth,phase.lift)
+		var grip: Vector3=rim-tilt*prop.get_node("FoodContact").position
+		bunny.aim_hand(bunny.right_arm,grip)
+		prop.global_transform=Transform3D(tilt,grip)
+		prop.get_node("Mouthful").visible=phase.loaded
+		return
 	var rest: Vector3=plate+basis*Vector3(.22,.065,-.045)
 	var near_mouth: Vector3=mouth+basis*Vector3(.23,-.15,.03) if kind!="hand" else mouth-basis*Vector3(-.19,.07,-.02)
 	var goal: Vector3=rest.lerp(near_mouth,phase.lift)+Vector3.UP*sin(phase.lift*PI)*.09+basis*Vector3(.04*sin(phase.lift*PI),0,0)

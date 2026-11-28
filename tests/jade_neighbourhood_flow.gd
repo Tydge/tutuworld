@@ -208,6 +208,8 @@ func run() -> void:
 		var item: String=court_outfit[slot]
 		session.authority.add(item,1)
 		check(session.dispatch("equip",{"item":item,"slot":slot}).ok,"Wear the court outfit "+item)
+	session.state().time=12.*150.
+	ceremony.update_market();ceremony.imperial_court.update(city,false)
 	var throne: Node3D=city.scenery.get_node("Hall_audience/Furnishing/jade_throne_1")
 	stand(throne.to_global(Vector3(0,.02,1.65)));city.current_target="jade:audience:jade_throne_1";city.interact()
 	check(city.nap_active and city.bunny.seated,"Sit on the lacquer throne")

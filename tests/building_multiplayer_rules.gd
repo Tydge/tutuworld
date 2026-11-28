@@ -118,6 +118,10 @@ func furniture_checks() -> void:
 	place(1,Vector3(83.1,.2,-4.1));server.actors[ids[1]].add("food_carrot_soup",1)
 	result=request(1,"eat",{"target":targets.dining_table,"item":"food_carrot_soup","seat":"forged-chair"})
 	check(result.ok and server.actors[ids[1]].job.get("seat","")!= "forged-chair" and server.actors[ids[1]].state.net_pose.has("meal_position"),"Server chooses a real paired dining chair and meal position, ignoring a forged chair")
+	if result.ok:
+		var checkpoint: Dictionary=server.runtime_checkpoint(ids[1])
+		server.restore_runtime(ids[1],checkpoint)
+		check(server.pawns[ids[1]].action=="eat" and server.actor_packet(ids[1]).job.item=="food_carrot_soup","Restoring an active meal preserves the eating pose and food for observers")
 	request(1,"cancel")
 	check(server.actors[ids[1]].count("food_carrot_soup")==1,"Cancelling a built-table meal keeps the food")
 	var counter: Node3D=server.maps.city.targets[targets.cooking_counter].node

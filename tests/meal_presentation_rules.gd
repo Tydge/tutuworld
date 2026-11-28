@@ -16,6 +16,14 @@ func bounds(node: Node3D) -> AABB:
 	return box
 func run() -> void:
 	check(Meal.utensil("food_pumpkin_soup")=="spoon" and Meal.utensil("food_garden_salad")=="fork" and Meal.utensil("food_rustic_wheat_bread")=="hand","Soup, fork food and handheld food have distinct eating modes")
+	var dishes: Array=DB.catalog().items.keys().filter(func(id):return DB.item(id).get("kind","")=="food")
+	check(dishes.size()==Food.IDS.size() and dishes.all(func(id):return Food.IDS.has(id)),"Every catalog dish has its own presentation")
+	var first_meshes: Array=[]
+	for id in DB.catalog().items:
+		if not DB.item(id).has("edible"):continue
+		var snack:=Food.snack_piece(id)
+		check(snack.get_child_count()>0 and not first_meshes.has(snack.get_child(0).name),"Distinct handheld model for every bag snack: "+id)
+		first_meshes.append(snack.get_child(0).name);snack.free()
 	for index in range(4):
 		var elapsed: float=[0.,1.21,2.86,4.51][index]
 		check(Meal.sample(elapsed).bites==index,"Swallow advances exactly one visual portion: "+str(index))
@@ -37,7 +45,7 @@ func run() -> void:
 		a.tick(3.);a.execute({"verb":"cancel"})
 		check(a.count(id)==2,"Cancelling after visual bites preserves food: "+id)
 		a.execute({"verb":"eat","target":"dining","item":id});a.tick(6.)
-		check(a.count(id)==1 and (a.state.food_effect.get("item","")==id if not DB.item(id).get("effect",{}).is_empty() else a.state.stamina>=70.),"Existing completion consumes once and applies the original effect: "+id)
+		check(a.count(id)==1 and (a.state.food_effect.get("item","")==id if not DB.item(id).get("effect",{}).is_empty() else is_equal_approx(a.state.stamina,40.+float(DB.item(id).stamina_restore))),"Existing completion consumes once and applies the original effect: "+id)
 	var icons: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://assets/ui/food/manifest.json"))
 	check(icons.source_sha256==FileAccess.get_file_as_string("res://scripts/city/food_visual.gd").sha256_text() and icons.shader_sha256==FileAccess.get_file_as_string("res://assets/shaders/food_surface.gdshader").sha256_text(),"Baked menu thumbnails were generated from the current meal models and shader")
 	for id in Food.IDS:check(icons.icons.get(id,"")==FileAccess.get_sha256("res://assets/ui/food/"+id+".png"),"Menu thumbnail exists with matching provenance: "+id)

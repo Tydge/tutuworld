@@ -210,10 +210,9 @@ func _ready() -> void:
 	setup_occluders()
 	setup_targets()
 	preload("res://scripts/valley/boat_travel.gd").attach(self)
-	if map_id=="city":
-		culinary=Culinary.new()
-		culinary.city=self
-		add_child(culinary)
+	culinary=Culinary.new()
+	culinary.city=self
+	add_child(culinary)
 	navigation=WanderNavigation.new()
 	add_child(navigation)
 	spawn_npcs()
@@ -490,6 +489,8 @@ func update_target() -> void:
 			"bench": text="E   "+t.get("label","坐下来发会儿呆")
 			"tailor","atlas","hearth","tea","bakery","stamp","chime","read","footwork","jade_game":text="E   "+t.label
 			"bed": text="E   躺下来睡觉 · 耐力恢复 +100%"
+	if targets.get(current_target,{}).get("kind","")=="bench" and targets[current_target].node.has_meta("resident_occupant"):
+		text="景昭正在御座上听朝"
 	quick_action=find_quick_action()
 	if not quick_action.is_empty():
 		text+=("\n" if text!="" else "")+"F   "+quick_action.label+" · %.1f 秒"%session.authority.action_duration(quick_action.verb)
@@ -669,7 +670,11 @@ func interact() -> void:
 			if slot<0:hud.notify("座位已坐满，稍等一下吧。");return
 			var landing:=FurnitureAccess.landing(self,t.node,bunny,bunny.global_position)
 			if landing.is_empty():hud.notify("座位旁暂时没有起身的位置，请先留出通道。");return
-			nap_exit=landing.position;set_meta("resting_furniture",t.node);bunny.sit_on_surface(seats.seat(t.node,slot));nap_active=true;bunny.play_action("nap",6,"z z Z");update_target()
+			nap_exit=landing.position;set_meta("resting_furniture",t.node)
+			bunny.sit_on_surface(seats.seat(t.node,slot));nap_active=true
+			if t.node.has_meta("rest_action"):bunny.play_action(t.node.get_meta("rest_action"),INF)
+			else:bunny.play_action("nap",6,"z z Z")
+			update_target()
 func leave_seat() -> bool:
 	var seat: Node3D=get_meta("resting_furniture",null)
 	var landing:=FurnitureAccess.landing(self,seat,bunny,nap_exit) if is_instance_valid(seat) else {}
@@ -732,7 +737,10 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 	if verb=="eat" and target!="dining":
 		if session.is_online() and network_action_approved:
 			var seat_id: String=session.job().get("seat","")
-			if is_instance_valid(build_mode.room) and build_mode.room.render_cache.has(seat_id):dining_seat={"node":build_mode.room.render_cache[seat_id].node,"seat":seat_id,"exit":online_view.from_array(session.state().net_pose.exit)}
+			for chair in preload("res://scripts/city/dining_service.gd").chairs(self,target):
+				if is_instance_valid(chair) and str(chair.name)==seat_id:
+					dining_seat={"node":chair,"seat":seat_id,"exit":online_view.from_array(session.state().net_pose.exit)}
+					break
 		else:dining_seat=preload("res://scripts/city/dining_service.gd").choose(self,target)
 		if dining_seat.is_empty():return {"ok":false,"message":"餐桌旁需要一张朝向餐桌、未被占用且通道畅通的餐椅。"}
 	var result: Dictionary={"ok":true} if network_action_approved else session.dispatch(verb,{"target":target,"item":item,"recipe":item,"seat":dining_seat.get("seat","")})
@@ -740,7 +748,7 @@ func begin_action(verb: String,target: String,item: String="") -> Dictionary:
 		if verb=="eat":
 			dining_chair=dining_seat.get("node")
 			var seat: Transform3D=preload("res://scripts/city/seating.gd").seat(dining_chair) if is_instance_valid(dining_chair) else scenery.get_node("DiningTable/SeatAnchor").global_transform
-			if is_instance_valid(dining_chair):nap_exit=dining_seat.exit
+			nap_exit=dining_seat.exit if is_instance_valid(dining_chair) else scenery.get_node("DiningTable/ExitAnchor").global_position
 			bunny.sit_on_surface(seat)
 			dining_active=true
 			culinary.serve(item,preload("res://scripts/city/dining_service.gd").meal_position(self,target,dining_chair) if is_instance_valid(dining_chair) else Vector3.INF)
@@ -794,7 +802,7 @@ func finish_action() -> void:
 		bunny.stand_up(landing.position);session.set_player_position(landing.position);dining_chair=null
 	if dining_active:
 		var p: Array=session.state().player_position
-		bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])) if session.is_online() else scenery.get_node("DiningTable/ExitAnchor").global_position)
+		bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])) if session.is_online() else nap_exit)
 		dining_active=false
 		culinary.clear_meal()
 	bunny.action=""
@@ -951,7 +959,7 @@ func online_interact(id: String) -> void:
 	if not result.get("ok",false):hud.notify(str(result.get("message","稍等一下吧。")));return
 	if t.kind=="bed":enter_sleep(true)
 	elif t.kind=="bench":
-		var seats=preload("res://scripts/city/seating.gd");var slot:=int(session.state().get("net_pose",{}).get("slot",0));bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action("nap",INF)
+		var seats=preload("res://scripts/city/seating.gd");var slot:=int(session.state().get("net_pose",{}).get("slot",0));bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action(t.node.get_meta("rest_action","nap"),INF)
 	elif t.kind=="npc":
 		talking_npc=id
 		dialogue_text=conversation_line(id)

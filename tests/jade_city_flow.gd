@@ -392,7 +392,7 @@ func run() -> void:
 	check_lanterns(city)
 	await check_distant_light(city,90.)
 	await check_distant_light(city,150.)
-	check(city.npcs.size()==40+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Forty residents, all shopkeepers and all interiors")
+	check(city.npcs.size()==41+J.shops().size() and city.interiors.size()==J.HOUSES.size(),"Forty residents, the emperor, all shopkeepers and all interiors")
 	var street: Node=city.get_node("StreetLife")
 	session.state().time=8.*150.
 	street.update_market()

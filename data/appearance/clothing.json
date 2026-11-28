@@ -278,6 +278,24 @@
       "rank": "palace",
       "shop": "silk",
       "shop_map": "jade"
+    },
+    "imperial_mian": {
+      "slot": "head",
+      "price": 188,
+      "description": "金锦为冠，朱宝嵌额。冕板前后各垂七串金珠，珠尾停在眉上。",
+      "collection": "jade",
+      "rank": "palace",
+      "shop": "silk",
+      "shop_map": "jade"
+    },
+    "imperial_dragon_robe": {
+      "slot": "body",
+      "price": 8888,
+      "description": "赭金宽袖，胸背各绣一条逐珠盘龙，袍脚层叠海水江崖纹。",
+      "collection": "jade",
+      "rank": "palace",
+      "shop": "silk",
+      "shop_map": "jade"
     }
   },
   "shop_stock": {
@@ -416,6 +434,14 @@
     "ruyi_lock": {
       "item": "ruyi_lock",
       "name": "如意双铃长命锁"
+    },
+    "imperial_mian": {
+      "item": "imperial_mian",
+      "name": "金章垂旒冕"
+    },
+    "imperial_dragon_robe": {
+      "item": "imperial_dragon_robe",
+      "name": "衮金盘龙袍"
     }
   },
   "items": {
@@ -968,6 +994,23 @@
       "accent": "549b8a",
       "pattern": "solid",
       "pattern_strength": 0.7
+    },
+    "imperial_mian": {
+      "style": "imperial_mian",
+      "name": "金章垂旒冕",
+      "color": "d6a039",
+      "accent": "a52f42",
+      "pattern": "solid",
+      "pattern_strength": 0.55
+    },
+    "imperial_dragon_robe": {
+      "style": "imperial_dragon_robe",
+      "name": "衮金盘龙袍",
+      "color": "bc792c",
+      "accent": "ffe3a2",
+      "pattern": "herringbone",
+      "pattern_strength": 0.17,
+      "pattern_scale": 6.0
     }
   },
   "starters": [

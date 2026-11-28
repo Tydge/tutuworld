@@ -57,6 +57,8 @@ static func petal(n: Node3D,p: Vector3,size_: Vector3,a: float,m: Material) -> v
 static func head(n: Node3D,style: String,cloth: Material,trim: Material) -> void:
 	var gold:=G.mat(GOLD,.34)
 	match style:
+		"imperial_mian":
+			Palace.mian(n,cloth,trim)
 		"peony_qitou":
 			Palace.qitou(n,cloth,trim)
 		"reed_hat":
@@ -166,7 +168,7 @@ static func neck(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Mat
 				line(n,q,p+Vector3(side*.073,-.18,.02),.009,gold)
 				tassel(n,p+Vector3(side*.073,-.18,.02),.087,trim)
 static func sleeve(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Material) -> void:
-	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe"]
+	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe","imperial_dragon_robe"]
 	var w: float=rig.sleeve_radius*(1.92 if court else 1.20)+.025
 	var end: float=absf(rig.grip_offset.y)*(.92 if court else .67)
 	G.mesh(n,Shell.shell(style+rig.species_id+"market-sleeve",[Vector3(-end,w,w*.83),Vector3(-end*.61,w*.89,w*.86),Vector3(-.06,w*.79,w*.72),Vector3(.055,w*.65,w*.63)]),Vector3.ZERO,cloth)
@@ -187,7 +189,7 @@ static func panel(n: Node3D,rows: Array,material: Material) -> void:
 	st.index();G.mesh(n,st.commit(),Vector3.ZERO,material)
 static func robe(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Material) -> void:
 	var r: Vector3=rig.body_radii;var key: String=style+rig.species_id
-	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe"]
+	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe","imperial_dragon_robe"]
 	var skirt:=style=="vermilion_skirt"
 	var length_: float=r.y*(.93 if court else .58)
 	var flare := 1.31 if court else 1.07
@@ -198,6 +200,9 @@ static func robe(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Mat
 	G.mesh(n,Shell.shell(key+"market",rows),Vector3.ZERO,cloth)
 	var hem: Vector3=rows[0]
 	G.mesh(n,Shell.shell(key+"market-hem",[hem+Vector3(-.005,.005,.005),hem+Vector3(.045,.009,.009)]),Vector3.ZERO,trim)
+	if style=="imperial_dragon_robe":
+		Palace.dragon_robe(n,rig,rows,trim)
+		return
 	# Right-closing lapel: one continuous diagonal over a short glimpse of the undercollar.
 	panel(n,[Vector4(-r.x*.45,r.y*.77,.046,r.z*.81+.07),Vector4(-r.x*.22,r.y*.48,.054,r.z*1.03+.045),Vector4(r.x*.20,r.y*.16,.053,r.z*1.08+.065),Vector4(r.x*.61,-r.y*.07,.050,r.z*.98+.055)],trim)
 	panel(n,[Vector4(r.x*.40,r.y*.77,.033,r.z*.82+.07),Vector4(.0,r.y*.32,.04,r.z*1.06+.055)],trim)

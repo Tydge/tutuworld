@@ -18,7 +18,6 @@ var chat_input: LineEdit
 var chat_card: PanelContainer
 var connection_card: PanelContainer
 var changing_scene:=false
-var remote_meal:=""
 var metrics_timer:=0.0
 var construction_notice_at:=0
 func _ready() -> void:
@@ -78,6 +77,13 @@ func connection_changed(connected: bool) -> void:
 		motion.erase(session.active_character_id)
 	if connected:
 		prediction=preload("res://scripts/services/movement_prediction.gd").new()
+		if city.tools.verb in ["eat","snack","tea"]:
+			city.tools.hide_tool()
+			city.culinary.clear_meal()
+			city.dining_chair=null
+			city.bunny.meal_item=""
+			city.bunny.meal_origin=Vector3.INF
+			city.bunny.meal_elapsed=-1.
 		var p: Array=session.state().player_position
 		city.bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])));city.sleep_active=false;city.nap_active=false;city.dining_active=false
 func version_changed(_version: String) -> void:
@@ -145,7 +151,7 @@ func _process(delta: float) -> void:
 				var designs: Dictionary=row.get("clothing_designs",{})
 				if replica.equipment!=row.equipment or replica.clothing_designs!=designs:
 					replica.equipment=row.equipment.duplicate();replica.clothing_designs=designs;Outfit.apply(replica.actor,row.equipment,designs)
-				var meal_changed: bool=str(row.get("action",""))=="eat" and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
+				var meal_changed: bool=str(row.get("action","")) in ["eat","snack","tea"] and is_instance_valid(replica.props.prop) and str(replica.props.prop.get_meta("item",""))!=str(row.get("job",{}).get("item",""))
 				if replica.action!=str(row.get("action","")) or meal_changed:
 					replica.action=str(row.get("action",""));replica.props.hide_tool()
 					if replica.action!="":
@@ -155,15 +161,6 @@ func _process(delta: float) -> void:
 				var target: String=row.get("job",{}).get("target","")
 				if city.targets.has(target) and replica.action=="water":replica.props.target_point=city.target_position(target)
 				elif city.targets.has(target):replica.props.target_point=city.targets[target].effect_anchor.global_position if city.targets[target].has("effect_anchor") else city.target_position(target)+Vector3(0,.6,0)
-	if city.map_id=="city" and is_instance_valid(city.culinary):
-		var meal:=""
-		for id in replicas:
-			var row: Dictionary=motion.get(id,{})
-			if row.get("pose",{}).get("kind","")=="eat" and row.get("pose",{}).get("target","")=="dining":meal=str(row.get("job",{}).get("item",""))
-		if meal!=remote_meal:
-			remote_meal=meal
-			if meal!="":city.culinary.serve(meal)
-			elif not city.dining_active:city.culinary.clear_meal()
 	for id in bubbles.keys():
 		var bubble: Dictionary=bubbles[id];bubble.remaining-=delta
 		var actor=actor_for(id)
@@ -178,7 +175,7 @@ func apply_local(row: Dictionary,delta: float) -> void:
 		return
 	if kind=="sit":
 		if not city.nap_active and city.targets.has(pose.target):
-			actor.sit_on_surface(preload("res://scripts/city/seating.gd").seat(city.targets[pose.target].node,int(pose.get("slot",0))));actor.play_action("nap",INF);city.nap_active=true
+			actor.sit_on_surface(preload("res://scripts/city/seating.gd").seat(city.targets[pose.target].node,int(pose.get("slot",0))));actor.play_action(str(row.get("action","nap")),INF);city.nap_active=true
 		return
 	if kind not in ["sleep","sit","waiting_exit"] and (city.sleep_active or city.nap_active):
 		actor.stand_up(from_array(row.position));city.sleep_active=false;city.nap_active=false
@@ -207,14 +204,22 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 		if is_instance_valid(city.home) and city.home.bed_occupant==actor:city.home.bed_occupant=null
 	var seated: bool=row.get("pose",{}).get("kind","") in ["sit","eat","waiting_exit"]
 	actor.seated=seated or sleeping
+	if row.get("id","")=="JadeEmperor":
+		var court=preload("res://scripts/jade/imperial_court.gd")
+		var throne: Node3D=city.targets[court.THRONE].node
+		if seated:throne.set_meta("resident_occupant",court.EMPEROR)
+		elif throne.has_meta("resident_occupant"):throne.remove_meta("resident_occupant")
+		court.show_request(city,row.get("court_request",""))
 	var action: String=row.get("action","")
 	var meal_job: Dictionary=row.get("job",{})
 	if action=="eat":
-		actor.meal_item=str(meal_job.get("item",""));actor.meal_elapsed=float(meal_job.get("elapsed",0.));actor.meal_duration=float(meal_job.get("duration",6.));actor.meal_origin=from_array(row.pose.meal_position) if row.get("pose",{}).has("meal_position") else city.scenery.get_node("DiningTable/MealAnchor").global_position
+		actor.meal_item=str(meal_job.get("item",""));actor.meal_elapsed=float(meal_job.get("elapsed",0.));actor.meal_duration=float(meal_job.get("duration",6.));actor.meal_origin=meal_origin(row.get("pose",{}))
 	else:actor.meal_item="";actor.meal_elapsed=-1.;actor.meal_origin=Vector3.INF
 	if actor.action!=action:
 		if action!="":actor.play_action(action,INF)
 		else:actor.action="";actor.action_time=0
+	if action in ["snack","tea"] and meal_job.has("elapsed") and absf(actor.action_time-float(meal_job.elapsed))>.20:
+		actor.action_time=float(meal_job.elapsed)
 	if not row.get("npc",false):
 		actor.sync_emote(row)
 	if row.get("npc",false):
@@ -253,13 +258,21 @@ func apply_shared_state() -> void:
 			row.node.door_open=value.get("open",false);row.node.door_target=float(value.get("target",0));row.node.door_tweening=absf(row.node.door_angle-row.node.door_target)>.001
 func from_array(p: Array) -> Vector3:return Vector3(float(p[0]),float(p[1]),float(p[2]))
 
+func meal_origin(pose: Dictionary) -> Vector3:
+	if pose.has("meal_position"):return from_array(pose.meal_position)
+	if pose.get("target","")=="dining":
+		var anchor:=city.scenery.get_node_or_null("DiningTable/MealAnchor") as Node3D
+		if anchor!=null:return anchor.global_position
+	return Vector3.INF
+
 func clear_replica_meal(replica: Dictionary) -> void:
 	if is_instance_valid(replica.get("meal")):replica.meal.queue_free()
 	replica.meal=null;replica.meal_item=""
 func apply_replica_meal(replica: Dictionary,row: Dictionary) -> void:
-	var pose: Dictionary=row.get("pose",{});var job: Dictionary=row.get("job",{});var item: String=job.get("item","")
-	if row.get("action","")!="eat" or not pose.has("meal_position") or item=="":clear_replica_meal(replica);return
+	var job: Dictionary=row.get("job",{});var item: String=job.get("item","")
+	var origin: Vector3=replica.actor.meal_origin
+	if row.get("action","")!="eat" or not origin.is_finite() or item=="":clear_replica_meal(replica);return
 	var food=preload("res://scripts/city/food_visual.gd")
 	if replica.get("meal_item","")!=item or not is_instance_valid(replica.get("meal")):
 		clear_replica_meal(replica);replica.meal=food.make(item);replica.meal_item=item;city.add_child(replica.meal)
-	replica.meal.position=from_array(pose.meal_position);food.animate(replica.meal,float(job.get("elapsed",0)),float(job.get("duration",6)))
+	replica.meal.global_position=origin;food.animate(replica.meal,float(job.get("elapsed",0)),float(job.get("duration",6)))

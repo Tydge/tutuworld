@@ -1,14 +1,18 @@
 {
 	"icons": {
+		"almond_biscuit": "477fd0a7640664fb828fb9b062930df13f084f88b493c2c29810ec56d860efc6",
 		"food_carrot_soup": "f505e5ac3f13bfe714a8ffdb808180c4ee75ce23c4ea81fbe0f193e5a7fc633e",
 		"food_garden_salad": "c700b49213b6e1fa59a7b2a59a08bf5767042b3be704af3d722a4f082b7a0d6f",
 		"food_honey_wheat_cake": "2118cccfb8a6c170b69eabba74753597ec249634bee32d495a221cbc33414855",
+		"food_pine_tea": "5b0e1aedc8aebe7505c869f13eb207a3804deab950e50fe091a06e2aafd44c79",
 		"food_pumpkin_soup": "e19e7cf6207cf601571c649ec8b6cab6ac176e84efad0768e5ec17a5774e3720",
 		"food_rustic_wheat_bread": "71b74de9658c71ad3522377b7a9432aa2f3c562edf2fddb1f82a92de5f7fcdba",
+		"food_snow_loaf": "2056b1268c8745cc106f41a39122cf129853ed8aaf568d6b673471e1600778c3",
 		"food_tomato_stew": "32697631efe9728894e393cf4fe67757694d4ee37bb7e99c6d15728b5490292a",
-		"food_vegetable_omelette": "4a396ccb91f37ddaba02952f68c71092f7f0d3dd73f88c684ef34ea0ac4dc9cb"
+		"food_vegetable_omelette": "4a396ccb91f37ddaba02952f68c71092f7f0d3dd73f88c684ef34ea0ac4dc9cb",
+		"sweet_osmanthus": "b5c4c54318fc9ea9a955d00e1dbe8367fd10abf43e9a31e871f5814fd70540d1"
 	},
 	"shader_sha256": "4a6b94b60d76d5f8e99c29ad1a835f28e340e2a5051465ffbc300ad59c2593a2",
 	"size": 192,
-	"source_sha256": "0bccd2b45eeeeb68866864a01477fd8756bf33781844961b22bf28ff83846a56"
+	"source_sha256": "87bdec4318e02951682a94ad51404dbdd0fd000641608bcf1742911473b67cbf"
 }

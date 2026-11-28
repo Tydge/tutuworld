@@ -523,13 +523,13 @@ func build_inventory(clothes_only: bool) -> void:
 		elif item.has("edible"):
 			c.add_child(UI.label("恢复 %d 点耐力"%int(item.edible.stamina),14,UI.GREEN))
 			var full: bool=s.stamina>=session.authority.stamina_max()
-			var eat:=UI.button("耐力已满" if full else "吃掉 · %g 秒"%float(item.edible.seconds),func(): close_panel(); city.begin_snack(id),true)
+			var eat:=UI.button("耐力已满" if full else "吃掉 · %s 秒"%String.num(float(item.edible.seconds),2),func(): close_panel(); city.begin_snack(id),true)
 			eat.disabled=full or not session.job().is_empty() or s.get("rest_mode","")!=""
 			eat.set_meta("eat_item",id)
 			c.add_child(eat)
 		elif item.kind=="food":
 			c.add_child(UI.label(DB.effect_summary(id),13,UI.MUTED))
-			c.add_child(UI.label("到厨房旁的餐桌享用",13,Color("a47c48")))
+			c.add_child(UI.label("到餐桌旁入座享用",13,Color("a47c48")))
 		elif item.kind=="ingredient": c.add_child(UI.label("厨房调料 · 烹饪成功后消耗",13,UI.MUTED))
 		elif item.kind=="seed": c.add_child(UI.button("已选择播种" if selected_seed==id else "设为播种种子",func(): selected_seed=id; rebuild()))
 		elif item.kind=="tool":

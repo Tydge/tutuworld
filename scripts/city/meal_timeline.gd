@@ -5,7 +5,8 @@ const CYCLE:=1.65
 const SWALLOW:=.90
 const BITES:=3
 static func utensil(item: String) -> String:
-	if item in ["food_honey_wheat_cake","food_rustic_wheat_bread"]:return "hand"
+	if item=="food_pine_tea":return "cup"
+	if item in ["food_honey_wheat_cake","food_rustic_wheat_bread","food_snow_loaf","sweet_osmanthus","almond_biscuit"]:return "hand"
 	if item in ["food_garden_salad","food_vegetable_omelette"]:return "fork"
 	return "spoon"
 static func sample(elapsed: float,duration: float=6.) -> Dictionary:

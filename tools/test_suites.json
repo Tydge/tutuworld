@@ -202,6 +202,7 @@
     "meal_presentation": [
       "project_integrity",
       "meal_presentation_rules",
+      "regional_meals",
       "meal_presentation_flow",
       "kitchen_rules",
       "dining_rules",
@@ -548,6 +549,9 @@
       ]
     },
     "land_parcels_rules": {
+      "headless": true
+    },
+    "regional_meals": {
       "headless": true
     },
     "meal_presentation_rules": {

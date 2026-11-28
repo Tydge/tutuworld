@@ -509,10 +509,17 @@ func restore_runtime(id: String,backup: Dictionary) -> void:
 		var bed: Node3D=host.targets.get(pose.get("target","home_bed"),{}).get("node")
 		if is_instance_valid(bed):pawn.lie_in_bed(bed)
 		if is_instance_valid(host.home) and bed==host.home.get_node("Furnishing/bed"):host.home.bed_occupant=pawn
-	elif pose.get("kind","")=="sit" and host.targets.has(pose.target):pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(host.targets[pose.target].node,int(pose.get("slot",0))));pawn.play_action("nap",INF)
-	elif pose.get("kind","") in ["eat","waiting_exit"]:
+	elif pose.get("kind","") in ["sit","eat","waiting_exit"]:
 		var chair: Node3D=built_seat(a.state.map_id,str(pose.get("seat","")))
-		pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair) if chair!=null else host.scenery.get_node("DiningTable/SeatAnchor").global_transform);pawn.play_action("nap",INF)
+		if chair==null:chair=host.targets.get(pose.get("target",""),{}).get("node")
+		if is_instance_valid(chair) and chair.has_node("SeatAnchor"):
+			pawn.sit_on_surface(preload("res://scripts/city/seating.gd").seat(chair,int(pose.get("slot",0))))
+		elif pose.get("target","")=="dining" and host.scenery.has_node("DiningTable/SeatAnchor"):
+			pawn.sit_on_surface(host.scenery.get_node("DiningTable/SeatAnchor").global_transform)
+		else:
+			pawn.sit_on(Transform3D(Basis(Vector3.UP,pawn.visual_heading()),backup.position))
+		var rest: String=chair.get_meta("rest_action","nap") if is_instance_valid(chair) else "nap"
+		pawn.play_action("eat" if pose.kind=="eat" else rest,INF)
 	elif not a.job.is_empty():begin_job_pose(id)
 	pawn.position=backup.position;pawn.reset_network_motion()
 func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary) -> Dictionary:
@@ -567,13 +574,14 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		else:
 			if object_.kind!="bench":return fail("这里不是座位。")
 			var seat: Node3D=object_.node
+			if seat.has_meta("resident_occupant"):return fail("景昭正在御座上听朝。")
 			var seating=preload("res://scripts/city/seating.gd");var slot:=-1
 			for index in range(seating.capacity(seat)):
 				if lock_reason(map_id,seating.lock_target(target,index),id)!="":continue
 				if seat_clear(map_id,seating.seat(seat,index).origin,id,target):slot=index;break
 			if slot<0:return fail("座位已坐满，或旁边有人，稍等一下吧。")
 			var exit_: Array=vector_array(pawn.position)
-			pawn.sit_on_surface(seating.seat(seat,slot));pawn.play_action("nap",INF)
+			pawn.sit_on_surface(seating.seat(seat,slot));pawn.play_action(seat.get_meta("rest_action","nap"),INF)
 			a.state.net_pose={"kind":"sit","target":target,"slot":slot,"exit":exit_}
 			occupy(map_id,seating.lock_target(target,slot),id,"sit");pawn.reset_network_motion()
 		return {"ok":true,"message":""}
@@ -849,7 +857,11 @@ func broadcast_motion() -> void:
 			var rows: Array = batches[map_id].duplicate()
 			if not editing:
 				for npc in maps[map_id].npcs:
-					rows.append({"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})})
+					var resident: Dictionary={"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})}
+					if npc.name=="JadeEmperor":
+						resident.court_request=npc.get_meta("court_request","")
+						if npc.seated:resident.pose={"kind":"sit","target":preload("res://scripts/jade/imperial_court.gd").THRONE}
+					rows.append(resident)
 			packets[map_id] = Codec.encode({"type":"motion","tick":tick,"actors":rows})
 		socket.put_packet(packets[map_id])
 func send_snapshot(peer_id: int) -> void:

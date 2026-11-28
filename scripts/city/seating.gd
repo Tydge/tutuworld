@@ -19,6 +19,7 @@ static func exit_position(node: Node3D,index: int=0) -> Vector3:
 	return node.to_global(point)
 static func lock_target(target: String,index: int) -> String:return target if index==0 else target+":seat:"+str(index)
 static func local_slot(host: Node3D,node: Node3D,actor: CharacterBody3D) -> int:
+	if node.has_meta("resident_occupant"):return -1
 	for index in range(capacity(node)):
 		var point:=seat(node,index).origin;var clear:=true
 		for other in host.find_children("*","CharacterBody3D",true,false):

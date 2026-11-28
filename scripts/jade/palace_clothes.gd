@@ -1,5 +1,5 @@
 extends RefCounted
-## Rigid ornaments and embroidery for the three pieces sold at the palace silk office.
+## Rigid ornaments and embroidery for garments sold at the palace silk office.
 const G = preload("res://scripts/geometry.gd")
 const Shell = preload("res://scripts/appearance/winter_outfit.gd")
 
@@ -51,6 +51,42 @@ static func blossom(parent: Node3D, at: Vector3, radius: float, fabric: Material
 			var petal := G.ball(parent, at + offset, Vector3(size_*.57,size_*.30,size_*.22), fabric)
 			petal.rotation.z = angle
 	G.ball(parent, at + Vector3.BACK * radius * .46, Vector3.ONE * radius * .19, center)
+
+static func mian(parent: Node3D, silk: Material, jewel: Material) -> void:
+	var gold := G.mat("e8b44f", .31)
+	var bronze := G.mat("87552e", .43)
+	var pearl := G.mat("f1d59b", .32)
+	var front := .20
+	G.mesh(parent, Shell.shell("mian-body",[Vector3(-.09,.34,.26),Vector3(-.035,.38,.29),Vector3(.29,.33,.26),Vector3(.34,.32,.245)]), Vector3(0,0,front), silk)
+	for ends in [[-.055,-.012,.38,.294],[.265,.31,.34,.27]]:
+		G.mesh(parent, Shell.shell("mian-band"+str(ends[0]),[Vector3(ends[0],ends[2],ends[3]),Vector3(ends[1],ends[2],ends[3])]),Vector3(0,0,front),bronze)
+		for j in 15:
+			var angle := j * TAU / 15.
+			G.ball(parent,Vector3(sin(angle)*float(ends[2]),ends[1],front+cos(angle)*float(ends[3])),Vector3(.016,.015,.016),gold)
+	# Shallow raised corners and a woven upper surface on the horizontal board.
+	var outline := PackedVector2Array([Vector2(-.62,-.38),Vector2(-.57,-.425),Vector2(.57,-.425),Vector2(.62,-.38),Vector2(.62,.37),Vector2(.57,.42),Vector2(-.57,.42),Vector2(-.62,.37)])
+	var board := plaque(parent,Vector3(0,.347,front),outline,.025,gold)
+	board.rotation.x=PI*.5
+	var panel := plaque(parent,Vector3(0,.366,front),outline,.012,silk)
+	panel.rotation.x=PI*.5
+	panel.scale=Vector3(.952,.932,1.)
+	for end: float in [-1.,1.]:
+		for j in range(-3,4):
+			var x := j*.176
+			var top := Vector3(x,.35,front+end*.402)
+			var bottom := top+Vector3(x*.045,-.45-.19*absf(x)/.53,end*.023)
+			G.capsule(parent,top,bottom,.0065,bronze)
+			for k in range(1,8):
+				var at := top.lerp(bottom,k/7.)
+				var size_ := .025 if k==7 else .015
+				G.ball(parent,at,Vector3(size_,size_*1.22,size_),pearl if k%3==0 else gold)
+	G.ball(parent,Vector3(0,.133,front+.285),Vector3(.089,.104,.033),gold)
+	G.ball(parent,Vector3(0,.134,front+.310),Vector3(.061,.074,.030),jewel)
+	for side: float in [-1.,1.]:
+		var pin := Vector3(side*.37,.035,front)
+		G.ball(parent,pin,Vector3.ONE*.033,pearl)
+		var end := pin+Vector3(side*.17,-.47,.10)
+		G.capsule(parent,pin,end,.014,silk)
 
 static func qitou(parent: Node3D, silk: Material, petals: Material) -> void:
 	var gold := G.mat("c89b5c", .38)
@@ -167,3 +203,41 @@ static func robe_details(parent: Node3D, rig: Resource, hem: Vector3, trim: Mate
 		var end := knot+Vector3(.028+i*.044,-r.y*(.52-i*.12),.033)
 		G.capsule(parent,knot,end,.017,trim)
 		G.ball(parent,end,Vector3(.024,.031,.021),gold)
+
+static func dragon_robe(parent: Node3D, rig: Resource, rows: Array, silk_thread: StandardMaterial3D) -> void:
+	var r: Vector3 = rig.body_radii
+	var dark := G.mat("354454",.58)
+	var sea := G.mat("648e88",.55)
+	var gold := G.mat("ddae61",.40)
+	var key: String = "imperial"+rig.species_id
+	G.mesh(parent,Shell.shell(key+"collar",[Vector3(r.y*.70,r.x*.88+.04,r.z*.85+.04),Vector3(r.y*.93,r.x*.56+.03,r.z*.61+.038)]),Vector3.ZERO,dark)
+	var thread := silk_thread.duplicate() as StandardMaterial3D
+	thread.albedo_texture=preload("res://assets/jade/dragon_roundel.svg")
+	thread.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+	thread.alpha_scissor_threshold=.4
+	thread.cull_mode=BaseMaterial3D.CULL_DISABLED
+	# Wrap the embroidery directly around the tapered coat at each height.
+	for side: float in [-1.,1.]:
+		var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		for j in 10:
+			for k in 12:
+				for corner in [Vector2i(0,0),Vector2i(1,0),Vector2i(0,1),Vector2i(1,0),Vector2i(1,1),Vector2i(0,1)]:
+					var uv:=Vector2((k+corner.x)/12.,(j+corner.y)/10.)
+					var y:=lerpf(r.y*.71,-r.y*.23,uv.y)
+					var tier:=1 if y<=r.y*.24 else (2 if y<=r.y*.64 else 3)
+					var low: Vector3=rows[tier];var high: Vector3=rows[tier+1]
+					var radii:=low.lerp(high,inverse_lerp(low.x,high.x,y))
+					var angle: float=(uv.x-.5)*1.60
+					var normal:=Vector3(side*sin(angle),.12,side*cos(angle)).normalized()
+					st.set_uv(uv);st.set_normal(normal)
+					st.add_vertex(Vector3(side*sin(angle)*(radii.y+.008),y,side*cos(angle)*(radii.z+.010)))
+		st.index();G.mesh(parent,st.commit(),Vector3.ZERO,thread)
+	var hem: Vector3 = rows[0]
+	var waist: Vector3 = rows[1]
+	G.mesh(parent,Shell.shell(key+"sash",[waist+Vector3(-.035,.015,.014),waist+Vector3(.005,.007,.009)]),Vector3.ZERO,dark)
+	for i in range(48):
+		var a:=TAU*i/48.;var b:=TAU*(i+1)/48.
+		var h:=.060+.028*cos(6.*a);var next:=.060+.028*cos(6.*b)
+		G.capsule(parent,Vector3(sin(a)*hem.y*.995,hem.x+h,cos(a)*hem.z),Vector3(sin(b)*hem.y*.995,hem.x+next,cos(b)*hem.z),.012,sea)
+		if i%2==0:
+			G.capsule(parent,Vector3(sin(a)*hem.y*.99,hem.x+h+.025,cos(a)*hem.z),Vector3(sin(b)*hem.y*.985,hem.x+next+.060,cos(b)*hem.z*.99),.010,gold)

@@ -2,7 +2,8 @@ extends RefCounted
 ## Cached, opaque dish geometry; only prebuilt portion visibility changes per bite.
 const G=preload("res://scripts/geometry.gd")
 const Timeline=preload("res://scripts/city/meal_timeline.gd")
-const IDS:=["food_carrot_soup","food_garden_salad","food_tomato_stew","food_pumpkin_soup","food_honey_wheat_cake","food_rustic_wheat_bread","food_vegetable_omelette"]
+const IDS:=["food_carrot_soup","food_garden_salad","food_tomato_stew","food_pumpkin_soup","food_honey_wheat_cake","food_rustic_wheat_bread","food_vegetable_omelette",
+	"food_snow_loaf","food_pine_tea","sweet_osmanthus","almond_biscuit"]
 static var models: Dictionary={}
 static var materials: Dictionary={}
 static func material(color: String,kind: int=3) -> ShaderMaterial:
@@ -132,6 +133,80 @@ static func soup_food(parent: Node3D,id: String,bites: int) -> void:
 			if id=="food_carrot_soup":G.cylinder(parent,p,.033,.014,material("f2b36c",1),-1,"CarrotSlice")
 			else:G.ball(parent,p,Vector3(.037,.024,.031),material("dfac6c" if i%2 else "b64f39",1),"StewedVegetable")
 	garnish(parent,level+.012)
+# The same pastry geometry is plated, held from the bag, and lifted for a bite.
+static func snack_piece(id: String) -> Node3D:
+	var piece:=Node3D.new()
+	match id:
+		"sweet_osmanthus":
+			G.box(piece,Vector3.ZERO,Vector3(.205,.098,.172),material("fff1d2",5),"RiceCake")
+			G.box(piece,Vector3(0,-.018,0),Vector3(.207,.013,.174),material("cf9650",4),"OsmanthusFilling")
+			for p in [Vector3(-.05,.051,.027),Vector3(.041,.051,-.038),Vector3(.055,.051,.037)]:
+				for i in range(4):
+					var turn:=Basis(Vector3.UP,i*PI*.5+.3)
+					var petal:=G.ball(piece,p+turn*Vector3(.011,0,0),Vector3(.011,.005,.007),material("eca53b",1),"OsmanthusPetal")
+					petal.rotation.y=i*PI*.5+.3
+		"almond_biscuit":
+			G.ball(piece,Vector3.ZERO,Vector3(.126,.045,.118),material("c68849",0),"AlmondBiscuit")
+			for i in range(8):
+				var angle:=i*TAU/8.
+				G.ball(piece,Vector3(cos(angle)*.086,.003,sin(angle)*.080),Vector3(.044,.031,.042),material("d99d57",0),"FlutedEdge")
+			var almond:=G.ball(piece,Vector3(0,.041,0),Vector3(.036,.014,.069),material("a96635",0),"RoastedAlmond")
+			almond.rotation.y=.43
+			var score:=G.ball(piece,Vector3(0,.055,0),Vector3(.004,.002,.046),material("e2ba80",5),"AlmondGroove")
+			score.rotation.y=.43
+		"food_snow_loaf":
+			G.ball(piece,Vector3.ZERO,Vector3(.115,.081,.149),material("c98143",0),"WheatLoaf")
+			for z in [-.064,0.,.062]:G.ball(piece,Vector3(0,.077-absf(z)*.13,z),Vector3(.063,.011,.014),material("f5cf96",5),"CrustScore")
+			G.box(piece,Vector3(0,-.043,.020),Vector3(.199,.075,.184),material("ede0be"),"BreadWrap")
+		"orange":
+			G.ball(piece,Vector3.ZERO,Vector3(.115,.11,.115),G.mat("ed9f39"),"Orange")
+			G.ball(piece,Vector3(-.024,.024,.078),Vector3(.064,.064,.036),G.mat("f7c06a"),"OrangeFlesh")
+			var stem:=G.ball(piece,Vector3(.025,.105,.005),Vector3(.047,.009,.024),G.mat("649357"),"OrangeLeaf")
+			stem.rotation.z=-.35
+	return piece
+
+static func plate_pastries(stage: Node3D,id: String,bites: int) -> void:
+	for i in range(3-bites):
+		var piece:=snack_piece(id)
+		var angle:=i*TAU/3.+.4
+		var placement:=Transform3D(Basis(Vector3.UP,angle),Vector3(cos(angle)*.165,.12 if id=="food_snow_loaf" else .09,sin(angle)*.165))
+		for part in piece.get_children():
+			piece.remove_child(part)
+			stage.add_child(part)
+			part.transform=placement*part.transform
+		piece.free()
+
+static func tea_cup() -> Node3D:
+	var cup:=Node3D.new()
+	var glaze:=material("a3bea6")
+	G.mesh(cup,lathe([Vector2(0,0),Vector2(.065,0),Vector2(.103,.126),Vector2(.096,.131),Vector2(.069,.025),Vector2(0,.025)]),Vector3.ZERO,glaze,"TeaCup")
+	var handle:=TorusMesh.new()
+	handle.inner_radius=.027
+	handle.outer_radius=.041
+	var loop:=G.mesh(cup,handle,Vector3(.107,.073,0),glaze,"CupHandle")
+	loop.rotation.x=PI*.5
+	G.cylinder(cup,Vector3(0,.110,0),.090,.004,material("a7a353",4),-1,"PineTea")
+	return cup
+
+static func tea_pot(root: Node3D) -> void:
+	var glaze:=G.mat("7ea791",.35)
+	G.mesh(root,lathe([Vector2(0,.049),Vector2(.123,.049),Vector2(.202,.110),Vector2(.189,.216),Vector2(.151,.250),Vector2(.142,.244),Vector2(.176,.188),Vector2(.112,.067),Vector2(0,.067)]),Vector3.ZERO,glaze,"TeaPot")
+	var spout:=G.cylinder(root,Vector3(-.218,.177,0),.057,.165,glaze,.034,"Spout")
+	spout.rotation.z=.83
+	var hoop:=TorusMesh.new()
+	hoop.inner_radius=.072
+	hoop.outer_radius=.095
+	var handle:=G.mesh(root,hoop,Vector3(.195,.157,0),glaze,"PotHandle")
+	handle.rotation.x=PI*.5
+
+static func pine_tea(stage: Node3D,bites: int) -> void:
+	var level: float=[.227,.171,.105][bites]
+	var radius: float=[.154,.167,.140][bites]
+	G.cylinder(stage,Vector3(0,level,0),radius,.005,material("a7a353",4),-1,"Tea")
+	for i in range(3-bites):
+		var tip:=Vector3(-.066+i*.031,level+.004,.022+i*.01)
+		G.capsule(stage,tip,tip+Vector3(.059,.001,-.037),.003,material("59784f",2),"PineNeedle")
+
 static func build(id: String) -> Node3D:
 	var root:=Node3D.new();root.name="Meal";root.set_meta("item",id);root.set_meta("utensil",Timeline.utensil(id));root.set_meta("portion",0)
 	var plate:=lathe([Vector2(0,.035),Vector2(.24,.035),Vector2(.33,.052),Vector2(.38,.068),Vector2(.40,.062),Vector2(.38,.045),Vector2(.25,.015),Vector2(0,.015)])
@@ -139,6 +214,7 @@ static func build(id: String) -> Node3D:
 	var rim:=TorusMesh.new();rim.inner_radius=.353;rim.outer_radius=.383;rim.rings=48;rim.ring_segments=8;G.mesh(root,rim,Vector3(0,.060,0),material("638e82"),"PaintedRim")
 	if soup(id):G.mesh(root,bowl_mesh(),Vector3.ZERO,material("f2e4c6"),"SoupBowl")
 	batch(root)
+	if id=="food_pine_tea":tea_pot(root)
 	var food:=Node3D.new();food.name="Food";root.add_child(food)
 	for bites in range(4):
 		var stage:=Node3D.new();stage.name="Portion%d"%bites;food.add_child(stage);stage.visible=bites==0
@@ -147,9 +223,11 @@ static func build(id: String) -> Node3D:
 		elif id=="food_garden_salad":salad(stage,bites)
 		elif id=="food_rustic_wheat_bread":bread(stage,bites)
 		elif id=="food_vegetable_omelette":omelette(stage,bites)
-		else:pancakes(stage,bites)
+		elif id=="food_honey_wheat_cake":pancakes(stage,bites)
+		elif id=="food_pine_tea":pine_tea(stage,bites)
+		else:plate_pastries(stage,id,bites)
 		batch(stage)
-	if soup(id):
+	if soup(id) or id=="food_pine_tea":
 		var steam:=MultiMeshInstance3D.new();steam.name="MealSteam";var mm:=MultiMesh.new();mm.transform_format=MultiMesh.TRANSFORM_3D;var puff:=SphereMesh.new();puff.radius=1.;puff.height=2.;puff.radial_segments=8;puff.rings=4;mm.mesh=puff;mm.instance_count=5;steam.multimesh=mm
 		var m:=G.mat("f0e5ce").duplicate();m.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;m.albedo_color=Color("f5ead6",.13);m.shading_mode=BaseMaterial3D.SHADING_MODE_UNSHADED;steam.material_override=m;steam.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF;root.add_child(steam)
 	for part in root.find_children("*","GeometryInstance3D",true,false):part.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -169,8 +247,16 @@ static func animate(meal: Node3D,elapsed: float,duration: float=6.) -> void:
 		var t:=fposmod(elapsed*.32+i*.21,1.);var size_:=sin(t*PI)*.022
 		steam.multimesh.set_instance_transform(i,Transform3D(Basis.IDENTITY.scaled(Vector3(size_,size_*1.8,size_)),Vector3(sin(t*4+i)*.055,.24+t*.32,cos(t*3+i)*.05)))
 static func bite_model(id: String) -> Node3D:
+	if id in ["food_snow_loaf","sweet_osmanthus","almond_biscuit"]:
+		var crumb:=snack_piece(id)
+		crumb.name="Mouthful"
+		crumb.scale=Vector3.ONE*.74
+		batch(crumb)
+		return crumb
 	var root:=Node3D.new();root.name="Mouthful"
-	if id=="food_garden_salad":leaf(root,Vector3.ZERO,Vector2(.095,.05),.4,"7da653");G.ball(root,Vector3(.025,.01,0),Vector3(.024,.016,.020),material("d16a4d",1))
+	if id=="food_pine_tea":
+		G.ball(root,Vector3.ZERO,Vector3(.018,.005,.011),material("a7a353",4),"Sip")
+	elif id=="food_garden_salad":leaf(root,Vector3.ZERO,Vector2(.095,.05),.4,"7da653");G.ball(root,Vector3(.025,.01,0),Vector3(.024,.016,.020),material("d16a4d",1))
 	elif id=="food_vegetable_omelette":G.ball(root,Vector3.ZERO,Vector3(.055,.024,.038),material("e8bd64",1))
 	elif id in ["food_honey_wheat_cake","food_rustic_wheat_bread"]:
 		G.ball(root,Vector3.ZERO,Vector3(.075,.040,.052),material("c59150",0));G.ball(root,Vector3(0,.013,-.025),Vector3(.063,.023,.027),material("ecd1a0",5))

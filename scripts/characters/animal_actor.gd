@@ -498,6 +498,10 @@ func animate_pose(delta: float) -> void:
 				arm_l.x = -.25
 				mouth.scale = Vector3(.68,1.15+absf(sin(t*9))*.65,1)
 				head_roll = sin(t*3)*.028
+			"hold_court":
+				leg_l.x=-1.15;leg_r.x=-1.15
+				arm_l=Vector3(-.66,.13,-.12);arm_r=Vector3(-.66,-.13,.12)
+				bob=0.
 			"nap":
 				leg_l.x = -1.22
 				leg_r.x = -1.22
