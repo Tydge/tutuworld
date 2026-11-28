@@ -251,6 +251,33 @@
       "collection": "jade",
       "rank": "loom",
       "shop": ""
+    },
+    "peony_qitou": {
+      "slot": "head",
+      "price": 156,
+      "description": "乌缎双翼横展，侧簪绒花，三串珍珠从翼尖垂落。",
+      "collection": "jade",
+      "rank": "palace",
+      "shop": "silk",
+      "shop_map": "jade"
+    },
+    "cloud_dao_robe": {
+      "slot": "body",
+      "price": 148,
+      "description": "霁青宽袖配素领，腰侧系双带，背心绣一方太极。",
+      "collection": "jade",
+      "rank": "palace",
+      "shop": "silk",
+      "shop_map": "jade"
+    },
+    "ruyi_lock": {
+      "slot": "neck",
+      "price": 116,
+      "description": "朱绳系着如意银锁，锁面嵌梅，锁脚各悬一枚银铃。",
+      "collection": "jade",
+      "rank": "palace",
+      "shop": "silk",
+      "shop_map": "jade"
     }
   },
   "shop_stock": {
@@ -377,6 +404,18 @@
     "cloud_collar": {
       "item": "cloud_collar",
       "name": "四合云肩"
+    },
+    "peony_qitou": {
+      "item": "peony_qitou",
+      "name": "绒花钿珠旗头"
+    },
+    "cloud_dao_robe": {
+      "item": "cloud_dao_robe",
+      "name": "云水太极道袍"
+    },
+    "ruyi_lock": {
+      "item": "ruyi_lock",
+      "name": "如意双铃长命锁"
     }
   },
   "items": {
@@ -904,6 +943,31 @@
       "color": "b0c5ce",
       "accent": "f1e9d7",
       "pattern": "solid"
+    },
+    "peony_qitou": {
+      "style": "peony_qitou",
+      "name": "绒花钿珠旗头",
+      "color": "302942",
+      "accent": "ce526e",
+      "pattern": "solid",
+      "pattern_strength": 0.7
+    },
+    "cloud_dao_robe": {
+      "style": "cloud_dao_robe",
+      "name": "云水太极道袍",
+      "color": "365c79",
+      "accent": "b6cfc3",
+      "pattern": "herringbone",
+      "pattern_strength": 0.24,
+      "pattern_scale": 6.0
+    },
+    "ruyi_lock": {
+      "style": "ruyi_lock",
+      "name": "如意双铃长命锁",
+      "color": "ae4051",
+      "accent": "549b8a",
+      "pattern": "solid",
+      "pattern_strength": 0.7
     }
   },
   "starters": [

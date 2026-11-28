@@ -6,13 +6,14 @@ func _initialize() -> void:call_deferred("run")
 func run() -> void:
 	var ids: Array=[]
 	for id in DB.Clothes.items():
-		if DB.item(id).get("rank","") in ["folk","court","loom"]:ids.append(id)
+		if DB.item(id).get("rank","") in ["folk","court","loom","palace"]:ids.append(id)
 	ids.sort()
 	ids.append_array(["cedar","silver_ore","nephrite","forged_axe","forged_pick","forged_hammer","cotton","ramie","cotton_cloth","ramie_cloth","jade_screen","jade_lamp","jade_basin","jade_chime","jade_parasol","jade_ceramics"])
 	var sheet:=Image.create_empty(6*144,ceili(ids.size()/6.)*144,false,Image.FORMAT_RGBA8)
 	var garments:=preload("res://scripts/ui/garment_thumbnails.gd").new();garments.species="bunny";root.add_child(garments)
 	var view:=SubViewport.new();view.own_world_3d=true;view.size=Vector2i(192,192);view.transparent_bg=true;view.msaa_3d=Viewport.MSAA_4X;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
 	var camera:=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL
+	camera.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
 	var env:=Environment.new();env.background_mode=Environment.BG_COLOR;env.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR;env.ambient_light_color=Color("fff3dd");env.ambient_light_energy=.81;camera.environment=env;view.add_child(camera)
 	var sun:=DirectionalLight3D.new();sun.rotation_degrees=Vector3(-48,-28,0);sun.light_energy=1.2;view.add_child(sun)
 	for i in range(ids.size()):

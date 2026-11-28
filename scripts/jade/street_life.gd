@@ -1,7 +1,7 @@
 extends Node
 ## Shared by solo play and the authoritative town. Online visitors see the resulting actor poses.
 const J=preload("res://scripts/jade/layout.gd")
-const TRADES={"spice":"cook","almond":"cook","tools":"forge_strike","farm":"sort_seed","furniture":"plane_wood","clothes":"draw_thread"}
+const TRADES={"spice":"cook","almond":"cook","tools":"forge_strike","farm":"sort_seed","furniture":"plane_wood","clothes":"draw_thread","silk":"draw_thread"}
 const STOPS={
 	1:[Vector2(-6,146),Vector2(-7,130),Vector2(2,139),Vector2(2,154),Vector2(-6,165)],
 	2:[Vector2(-5,128),Vector2(2,124),Vector2(5,111),Vector2(-2,116),Vector2(4,134)],

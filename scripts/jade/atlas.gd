@@ -5,7 +5,7 @@ const UI=preload("res://scripts/ui/ui_kit.gd")
 const ORIGIN:=Vector2(445,233)
 const SCALE:=Vector2(1.45,1.06)
 const Games=preload("res://scripts/jade/house_games.gd")
-const LABELS={"tide_stone":"水则碑","beacon":"听潮亭","audience":"含章殿","academy":"临川书院","garden":"藕香水榭","bridge_0":"西桥","bridge_1":"中桥","bridge_2":"东桥","fields":"公田","lots":"六里宅地","clothes":"云锦庄","market":"南市","pier":"南津渡"}
+const LABELS={"tide_stone":"水则碑","beacon":"听潮亭","audience":"含章殿","academy":"临川书院","garden":"藕香水榭","bridge_0":"西桥","bridge_1":"中桥","bridge_2":"东桥","fields":"公田","lots":"六里宅地","clothes":"云锦庄","silk":"尚衣局","market":"南市","pier":"南津渡"}
 const SERVICES={"seed_shop":"买种子、卖收成","pastry_shop":"买杏仁酥","steamer":"买桂花糕、蒸点心","silk_shop":"挑玉京新衣","iron_shop":"选购工具","carpentry_shop":"挑家具","craft":"织布、打造工具","lodging":"上榻歇息","read":"翻阅手记","kitchen":"备料做饭","tea":"煮茶","chime":"击磬听五音","footwork":"踏梅花步","dye":"试染衣裳"}
 static func build(hud: CanvasLayer) -> void:
 	var journal: Dictionary=hud.session.state().jade_visits
@@ -28,6 +28,7 @@ static func build(hud: CanvasLayer) -> void:
 		var id: String=house[0]
 		var info: Dictionary=Games.entry(id)
 		places[id]=[house[1],info.get("action",SERVICES.get(Games.NATIVE.get(id,""),"")),J.center(house)]
+	places["silk"][1]="楼下向绣筠试穿选购，楼上衣架可试染"
 	for id in J.LANDMARKS:
 		var landmark: Dictionary=J.LANDMARKS[id]
 		places[id]=[landmark.name,landmark.label,landmark.at]

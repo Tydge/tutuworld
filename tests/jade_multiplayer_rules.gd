@@ -48,6 +48,17 @@ func run() -> void:
 	check(DB.sold_here(DB.item(old_item),"clothes","city") and not request(0,"buy",{"shop":"clothes","item":old_item}).ok,"Legacy stock stays at the island shop")
 	var reed: String=DB.Clothes.stock("reed_hat").item
 	check(request(0,"buy",{"shop":"clothes","item":reed}).ok and a.count(reed)==1,"Buy a Jade hat from the authoritative Yunjin counter")
+	var palace_item := "ruyi_lock"
+	place(1,tailor.position+Vector3(0,0,1.1))
+	check(not request(1,"buy",{"shop":"clothes","item":palace_item}).ok and not request(1,"buy",{"shop":"silk","item":palace_item}).ok,"The south market cannot sell or remotely order palace stock")
+	var clothier: Node3D=host.targets.JadeVendor_silk.node
+	place(1,clothier.position+Vector3(0,0,.88))
+	check(request(1,"buy",{"shop":"silk","item":palace_item}).ok and b.count(palace_item)==1,"Purchase from the palace clothier on the host")
+	check(not request(1,"buy",{"shop":"silk","item":reed}).ok,"Palace stock excludes south market goods")
+	var upper_rack := "jade:silk:Gallery_jade_dress_0"
+	var lock_dye := {"color":"6c4563","accent":"e0bb75","pattern":"sprig"}
+	place(1,host.targets[upper_rack].position)
+	check(request(1,"tailor",{"target":upper_rack,"item":palace_item,"design":lock_dye}).ok and b.state.clothing_designs.get(palace_item)==lock_dye,"The upstairs rack saves the palace lock's custom fabric on the host")
 	var public_stove: Dictionary=host.targets.jade_steamer
 	var bun_recipe:=DB.recipe("honey_wheat_cake")
 	place(0,public_stove.anchor.global_position)
@@ -166,6 +177,7 @@ func run() -> void:
 	check(a.state.jade_visits.letter=="hostel" and b.state.jade_visits.prints.is_empty() and b.state.jade_visits.decree.is_empty(),"Work in other shops keeps an outstanding letter and stays personal")
 	check(server.save_world(),"Persist the character journal")
 	var saved: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(server.save_path))
+	check(saved.characters[ids[1]].clothing_designs.get(palace_item)==lock_dye,"Palace dye survives the authoritative save")
 	check(board.normalize(saved.characters[ids[0]].jade_visits)==board.normalize(a.state.jade_visits) and board.normalize(saved.characters[ids[1]].jade_visits)==board.normalize(b.state.jade_visits),"Saved journals keep each character's parcel and seal")
 	# Publishing several drafts starts asynchronous clearance updates in the host.
 	for tick in range(3):await physics_frame

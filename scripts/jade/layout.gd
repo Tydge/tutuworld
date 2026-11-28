@@ -305,8 +305,9 @@ static func shops() -> Dictionary:
 	if not merchants.is_empty():return merchants
 	var out:=merchants
 	for h in HOUSES:
-		if h[0] in ["farm","tools","furniture","clothes","spice","almond"]:
+		if h[0] in ["farm","tools","furniture","clothes","spice","almond","silk"]:
 			var offset:=Vector2(.84,dims(h[4]).z-2.05) if h[0] in ["spice","almond"] else Vector2(0,-2.)
+			if h[0]=="silk":offset=Vector2(.6,-2.15)
 			out[h[0]]=center(h)+offset.rotated(-door_angle(h))
 	return out
 const FIELD_GRID := Vector2i(24,12)

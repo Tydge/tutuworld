@@ -23,6 +23,8 @@ func _ready() -> void:
 	env.ambient_light_color=Color.WHITE
 	env.ambient_light_energy=.70
 	camera=Camera3D.new()
+	# A catalog photo jumps between items with very different bounds.
+	camera.physics_interpolation_mode=Node.PHYSICS_INTERPOLATION_MODE_OFF
 	camera.environment=env
 	camera.projection=Camera3D.PROJECTION_ORTHOGONAL
 	add_child(camera)

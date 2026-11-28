@@ -213,6 +213,10 @@ func set_crowd_detail(actor: CharacterBody3D) -> void:
 		label.visibility_range_end=50.;label.visibility_range_end_margin=3.
 
 func register_city(client: bool) -> void:
+	# A trader can occupy an existing hall in an already baked city.
+	for shop: String in J.shops():
+		var hall := scenery.get_node_or_null("Hall_" + shop)
+		if hall: hall.name = "Shop_" + shop
 	preload("res://scripts/jade/architecture.gd").baked.merge(scenery.get_meta("occupation_meshes",{}),true)
 	for fixture in scenery.get_node("Shop_spice/Front").get_children():
 		if fixture.get_meta("furniture_kind","")=="jade_steam_table" and not fixture.has_meta("facility_id"):
@@ -254,7 +258,8 @@ func attire(seed_: int,royal: bool) -> Dictionary:
 func spawn_npcs() -> void:
 	for shop in J.shops():
 		var p: Vector2=J.shops()[shop];var id: String="JadeVendor_"+shop;var label_: String=Residents.SHOPS[shop][0]
-		var npc:=spawn_npc(id,label_,J.point(p.x,p.y)+Vector3.UP*.12,attire(id.hash(),false))
+		var worn := {"head":"peony_qitou","body":"cloud_dao_robe","neck":"ruyi_lock"} if shop=="silk" else attire(id.hash(),false)
+		var npc:=spawn_npc(id,label_,J.point(p.x,p.y)+Vector3.UP*.12,worn)
 		targets[id]={"kind":"shop","position":npc.position,"radius":3.3,"shop":shop,"node":npc,"name":label_}
 	for i in range(Residents.PEOPLE.size()):
 		var r: Array=Residents.PEOPLE[i];var p:=J.point(r[2],r[3])+Vector3.UP*.06

@@ -8,7 +8,7 @@ static func flower(n: Node3D,p: Vector3,rad: float,cloth: Material,heart: Materi
 		petal.rotation.z=a
 	G.ball(n,p+Vector3.BACK*rad*.18,Vector3.ONE*rad*.23,heart)
 static func fit(root: Node3D,rig: Resource,item: Dictionary,cloth: Material) -> void:
-	if item.get("rank","") in ["folk","court"]:
+	if item.get("rank","") in ["folk","court","palace"]:
 		preload("res://scripts/jade/market_clothes.gd").fit(root,rig,item,cloth)
 		return
 	var trim:=G.mat(item.accent,.52);var gold:=G.mat("d8ac65",.34);var style: String=item.style

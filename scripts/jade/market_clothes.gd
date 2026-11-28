@@ -3,6 +3,7 @@ extends RefCounted
 const G=preload("res://scripts/geometry.gd")
 const Shell=preload("res://scripts/appearance/winter_outfit.gd")
 const Art=preload("res://scripts/jade/architecture.gd")
+const Palace = preload("res://scripts/jade/palace_clothes.gd")
 static var pieces: Dictionary={}
 const GOLD="d5a856"
 static func fit(root: Node3D,rig: Resource,item: Dictionary,cloth: Material) -> void:
@@ -56,6 +57,8 @@ static func petal(n: Node3D,p: Vector3,size_: Vector3,a: float,m: Material) -> v
 static func head(n: Node3D,style: String,cloth: Material,trim: Material) -> void:
 	var gold:=G.mat(GOLD,.34)
 	match style:
+		"peony_qitou":
+			Palace.qitou(n,cloth,trim)
 		"reed_hat":
 			var brim: Array=[Vector3(-.12,.78,.68),Vector3(-.085,.80,.70),Vector3(.055,.57,.48),Vector3(.26,.27,.22),Vector3(.36,.085,.07),Vector3(.36,.001,.001)]
 			G.mesh(n,Shell.shell("market-reed",brim),Vector3.ZERO,cloth)
@@ -108,6 +111,9 @@ static func neck(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Mat
 	var gold:=G.mat(GOLD,.32)
 	var front:=maxf(r.y+.07,rig.body_radii.z+.08)
 	var p:=Vector3(0,-.10,front)
+	if style=="ruyi_lock":
+		Palace.longevity_lock(n,rig,cloth,trim)
+		return
 	if style=="cloud_collar":
 		var brocatelle:=cloth.duplicate() as ShaderMaterial
 		brocatelle.shader=preload("res://assets/shaders/fabric_double_sided.gdshader")
@@ -160,7 +166,7 @@ static func neck(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Mat
 				line(n,q,p+Vector3(side*.073,-.18,.02),.009,gold)
 				tassel(n,p+Vector3(side*.073,-.18,.02),.087,trim)
 static func sleeve(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Material) -> void:
-	var court:=style in ["crane_robe","vermilion_skirt"]
+	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe"]
 	var w: float=rig.sleeve_radius*(1.92 if court else 1.20)+.025
 	var end: float=absf(rig.grip_offset.y)*(.92 if court else .67)
 	G.mesh(n,Shell.shell(style+rig.species_id+"market-sleeve",[Vector3(-end,w,w*.83),Vector3(-end*.61,w*.89,w*.86),Vector3(-.06,w*.79,w*.72),Vector3(.055,w*.65,w*.63)]),Vector3.ZERO,cloth)
@@ -181,10 +187,14 @@ static func panel(n: Node3D,rows: Array,material: Material) -> void:
 	st.index();G.mesh(n,st.commit(),Vector3.ZERO,material)
 static func robe(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Material) -> void:
 	var r: Vector3=rig.body_radii;var key: String=style+rig.species_id
-	var court:=style in ["crane_robe","vermilion_skirt"]
+	var court:=style in ["crane_robe","vermilion_skirt","cloud_dao_robe"]
 	var skirt:=style=="vermilion_skirt"
 	var length_: float=r.y*(.93 if court else .58)
-	var rows: Array=[Vector3(-length_,r.x*(1.31 if court else 1.07)+.04,r.z*(1.21 if court else 1.05)+.035),Vector3(-r.y*.26,r.x*1.11+.03,r.z*1.10+.04),Vector3(r.y*.24,r.x*1.06+.036,r.z*1.05+.04),Vector3(r.y*.64,r.x*.92+.033,r.z*.94+.03),Vector3(r.y*.91,r.x*.56+.02,r.z*.61+.03)]
+	var flare := 1.31 if court else 1.07
+	if style=="cloud_dao_robe":
+		length_ = r.y*1.10
+		flare = 1.18
+	var rows: Array=[Vector3(-length_,r.x*flare+.04,r.z*(1.21 if court else 1.05)+.035),Vector3(-r.y*.26,r.x*1.11+.03,r.z*1.10+.04),Vector3(r.y*.24,r.x*1.06+.036,r.z*1.05+.04),Vector3(r.y*.64,r.x*.92+.033,r.z*.94+.03),Vector3(r.y*.91,r.x*.56+.02,r.z*.61+.03)]
 	G.mesh(n,Shell.shell(key+"market",rows),Vector3.ZERO,cloth)
 	var hem: Vector3=rows[0]
 	G.mesh(n,Shell.shell(key+"market-hem",[hem+Vector3(-.005,.005,.005),hem+Vector3(.045,.009,.009)]),Vector3.ZERO,trim)
@@ -194,6 +204,8 @@ static func robe(n: Node3D,rig: Resource,style: String,cloth: Material,trim: Mat
 	var waist:=r.y*(.21 if skirt else -.13)
 	G.mesh(n,Shell.shell(key+"market-belt",[Vector3(waist-.04,r.x*1.12+.039,r.z*1.11+.044),Vector3(waist+.033,r.x*1.12+.04,r.z*1.11+.046)]),Vector3.ZERO,trim)
 	match style:
+		"cloud_dao_robe":
+			Palace.robe_details(n,rig,hem,trim)
 		"crane_robe":
 			panel(n,[Vector4(0,r.y*.22,r.x*.64,r.z*1.11+.075),Vector4(0,-r.y*.23,r.x*.64,r.z*1.14+.083),Vector4(0,-r.y*.70,r.x*.64,r.z*1.21+.082)],Art.finish("crane_badge"))
 		"vermilion_skirt":

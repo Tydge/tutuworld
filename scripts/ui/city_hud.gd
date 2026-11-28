@@ -318,7 +318,7 @@ func rebuild() -> void:
 		character_sheet.process_mode=Node.PROCESS_MODE_DISABLED
 	UI.clear(content)
 	var height:=620 if mode=="profile" else 680
-	var width_: float=1100 if mode in ["wardrobe","tailor"] or (mode=="shop" and shop=="clothes") else 960
+	var width_: float=1100 if mode in ["wardrobe","tailor"] or (mode=="shop" and is_clothing_shop()) else 960
 	if mode=="jade_game":
 		var paper:=UI.box(Color("f0e1be"),6,26)
 		paper.border_color=Color("855b43")
@@ -349,7 +349,7 @@ func rebuild() -> void:
 		if mode=="map":title.text="玉京城 · 山河坊市图"
 		if mode=="workshop":title.text="百工坊 · 制造与织造"
 		if mode=="kitchen":title.text=str(city.targets.get(city.kitchen_target,{}).get("name","玉京灶房"))+" · 食谱"
-		if mode=="shop":title.text={"farm":"南货行","tools":"百炼铺","clothes":"云锦庄","furniture":"榫卯行","spice":"桂香茶肆","almond":"杏花食店"}.get(shop,"坊市")
+		if mode=="shop":title.text={"farm":"南货行","tools":"百炼铺","clothes":"云锦庄","silk":"尚衣局","furniture":"榫卯行","spice":"桂香茶肆","almond":"杏花食店"}.get(shop,"坊市")
 	if mode=="land" and city.map_id=="icefield":title.text="冰原岛 · 地皮认购"
 	if mode=="travel":title.text="乘船出发 · 选择目的地"
 	if mode=="map" and city.map_id=="icefield":title.text="冰原岛 · 霜光雪镇"
@@ -418,9 +418,9 @@ func shop_preview_equipment() -> Dictionary:
 	worn.merge(shop_preview_overrides,true)
 	return worn
 func try_on_clothing(id: String) -> void:
-	if mode!="shop" or shop!="clothes": return
+	if mode!="shop" or not is_clothing_shop(): return
 	var item:=DB.item(id)
-	if item.get("kind","")!="clothing" or item.get("shop","")!="clothes": return
+	if item.get("kind","")!="clothing" or not DB.sold_here(item,shop,city.map_id): return
 	var slot: String=item.slot
 	if shop_preview_overrides.get(slot,"")==id: shop_preview_overrides.erase(slot)
 	else: shop_preview_overrides[slot]=id
@@ -429,7 +429,7 @@ func reset_shop_preview() -> void:
 	shop_preview_overrides.clear()
 	refresh_shop_preview()
 func refresh_shop_preview() -> void:
-	if mode!="shop" or shop!="clothes" or not is_instance_valid(character_sheet): return
+	if mode!="shop" or not is_clothing_shop() or not is_instance_valid(character_sheet): return
 	var worn:=shop_preview_equipment()
 	var species: String=session.state().species
 	if fitting_resident!="":
@@ -541,8 +541,11 @@ func build_inventory(clothes_only: bool) -> void:
 			var text:=UI.label("永久工具" if item.kind=="tool" else ("成功使用后消耗" if item.kind=="consumable" else "出售 / 留作材料"),13,UI.MUTED)
 			c.add_child(text)
 	if not found: grid.add_child(UI.label("这一格口袋还是空的。",19,UI.MUTED))
+func is_clothing_shop() -> bool:
+	return shop in ["clothes","silk"]
+
 func build_shop() -> void:
-	var clothes_shop: bool=shop=="clothes"
+	var clothes_shop: bool=is_clothing_shop()
 	var shop_parent: Control=build_appearance_layout(shop_preview_equipment()) if clothes_shop else content
 	var top:=UI.row()
 	shop_parent.add_child(top)
@@ -562,7 +565,7 @@ func build_shop() -> void:
 		var sell_tab:=UI.button("出售",func(): shop_tab="sell"; rebuild(),shop_tab=="sell")
 		sell_tab.set_meta("shop_tab","sell");top.add_child(sell_tab)
 	else: shop_tab="buy"
-	var choices: Array=[["all","全部"],["head","头饰"],["body","身体"],["neck","脖饰"]] if shop=="clothes" else ([["all","全部"],["tool","工具"]] if shop=="tools" else [["all","全部"],["seed","种子"],["ingredient","调料"],["consumable","消耗品"],["crop","农作物"],["food","料理"],["material","材料"]])
+	var choices: Array=[["all","全部"],["head","头饰"],["body","身体"],["neck","脖饰"]] if clothes_shop else ([["all","全部"],["tool","工具"]] if shop=="tools" else [["all","全部"],["seed","种子"],["ingredient","调料"],["consumable","消耗品"],["crop","农作物"],["food","料理"],["material","材料"]])
 	if shop=="furniture":choices=[["all","成品家具"]]
 	if shop in ["spice","almond"]:choices=[["all","本店茶点"]]
 	if shop=="farm" and shop_tab=="buy": choices=[["all","全部"],["seed","种子"],["ingredient","调料"],["consumable","消耗品"]]
@@ -612,9 +615,9 @@ func refresh_shop_items() -> void:
 	for id in DB.catalog().items:
 		var item:=DB.item(id)
 		if shop_tab=="buy" and not DB.sold_here(item,shop,city.map_id):continue
-		if category!="all" and DB.category(id,shop=="clothes")!=category: continue
+		if category!="all" and DB.category(id,is_clothing_shop())!=category: continue
 		if shop_tab=="sell" and (int(item.get("sell",0))<=0 or session.authority.count(id)<1): continue
-		if shop=="clothes":
+		if is_clothing_shop():
 			if DB.Clothes.stock(item.style).item!=id:continue
 			wanted.append(DB.Clothes.shop_garment(item.style,session.state().inventory))
 			continue
@@ -645,17 +648,17 @@ func refresh_shop_items() -> void:
 			row.sell_all.text=("出售 99 份" if count_>99 else "全部出售")+" · %d 币"%(mini(99,count_)*int(item.sell))
 	if wanted.is_empty() and not is_instance_valid(shop_empty):
 		shop_empty=UI.label("暂时没有这一类物品。",20,UI.MUTED);shop_grid.add_child(shop_empty)
-	if shop=="clothes": refresh_shop_preview()
+	if is_clothing_shop(): refresh_shop_preview()
 func build_shop_card(id: String) -> Dictionary:
 	var item:=DB.item(id)
-	var c:=item_card(id,shop_grid,DB.Clothes.stock(item.style).name if shop=="clothes" else "")
+	var c:=item_card(id,shop_grid,DB.Clothes.stock(item.style).name if is_clothing_shop() else "")
 	var row: Dictionary={"card":c.get_parent()}
 	var description:=UI.label(item.description,12,UI.MUTED)
 	description.autowrap_mode=TextServer.AUTOWRAP_WORD_SMART
 	description.custom_minimum_size.x=250
 	c.add_child(description)
 	if shop_tab=="buy":
-		if shop=="clothes":
+		if is_clothing_shop():
 			var fitting:=UI.button("试穿",func(): try_on_clothing(id))
 			fitting.custom_minimum_size.y=36
 			fitting.add_theme_font_size_override("font_size",15)
