@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import json
 import os
+import re
 import secrets
 import socket
 import sqlite3
@@ -11,6 +12,7 @@ import time
 import unicodedata
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 os.umask(0o077)
 STATE = Path(os.environ.get('TUTU_STATE_DIR', '/var/lib/tutuworld'))
@@ -90,7 +92,59 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def download(self):
+        request = urlsplit(self.path)
+        platform = parse_qs(request.query).get('platform', [''])[0]
+        agent = self.headers.get('User-Agent', '').lower()
+        filenames = {'macos': 'TutuWorld-macOS.zip', 'windows': 'TutuWorld-Windows.zip'}
+        if platform not in filenames:
+            platform = ''
+            if not any(word in agent for word in ('mobile', 'android', 'iphone', 'ipad')):
+                if 'windows nt' in agent:
+                    platform = 'windows'
+                elif 'macintosh' in agent or 'mac os x' in agent:
+                    platform = 'macos'
+        body = b''
+        location = ''
+        if platform:
+            manifest = Path(os.environ.get('TUTU_RELEASE_MANIFEST', '/srv/illuminati/www/tutuworld/manifest.json'))
+            try:
+                version = json.loads(json.loads(manifest.read_text())['payload'])['version']
+                if not isinstance(version, str) or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', version):
+                    raise ValueError('Invalid release version')
+                location = '/tutuworld/releases/' + version + '/' + filenames[platform]
+                status = 302
+            except (OSError, KeyError, ValueError, TypeError):
+                status = 503
+                body = '下载清单暂不可用，请稍后重试。'.encode()
+        else:
+            status = 200
+            body = ('<!doctype html><html lang="zh-CN"><meta charset="utf-8">'
+                    '<meta name="viewport" content="width=device-width, initial-scale=1">'
+                    '<title>下载兔兔的世界</title><main><h1>下载兔兔的世界</h1>'
+                    '<p>请选择游玩时使用的电脑。</p><p><a href="?platform=windows">Windows x64</a></p>'
+                    '<p><a href="?platform=macos">Mac 通用版</a></p></main></html>').encode()
+        self.send_response(status)
+        self.send_header('Cache-Control', 'no-store')
+        self.send_header('Vary', 'User-Agent')
+        if location:
+            self.send_header('Location', location)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        if self.command != 'HEAD' and body:
+            self.wfile.write(body)
+
+    def do_HEAD(self):
+        if urlsplit(self.path).path.rstrip('/') == '/tutuworld/download':
+            self.download()
+        else:
+            self.send_error(404)
+
     def do_GET(self):
+        if urlsplit(self.path).path.rstrip('/') == '/tutuworld/download':
+            self.download()
+            return
         if self.path != '/health':
             self.reply(404, {'ok': False})
             return

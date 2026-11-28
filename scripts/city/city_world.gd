@@ -373,8 +373,7 @@ func _process(delta: float) -> void:
 		update_lighting()
 		for n in npcs:refresh_npc_visibility(n)
 	session.set_player_position(sleep_exit if sleep_active else bunny.position)
-	marker.visible=current_target!="" and not paused and not sleep_active and session.job().is_empty() and not hud.photo_mode
-	if marker.visible: marker.position=target_position(current_target)+Vector3(0,1.5+sin(clock*3)*.08,0)
+	update_interaction_marker()
 	if update_timer==0:
 		for node in crops.values():
 			if is_instance_valid(node.marker): node.marker.visible=node.position.distance_to(bunny.position)<12
@@ -428,7 +427,19 @@ func can_walk(p: Vector3) -> bool:
 		if building_.contains_position(p):return true
 	return (preload("res://scripts/city/town_shore.gd").can_walk(p) or preload("res://scripts/building/site.gd").contains(p)) if has_building_world() else Vector2(p.x,p.z/.88).length()<52
 
+func update_interaction_marker() -> void:
+	var t: Dictionary=targets.get(current_target,{})
+	var seat: Node3D=t.get("node") if t.get("kind","")=="bench" else null
+	marker.visible=not t.is_empty() and t.kind not in ["npc","shop"] and not (seat and seat.has_meta("resident_occupant")) and not (paused or sleep_active or nap_active or hud.photo_mode) and session.job().is_empty()
+	if marker.visible:
+		var height:=.30 if seat else 1.50
+		marker.position=target_position(current_target)+Vector3.UP*(height+sin(clock*3)*.08)
+
 func update_target() -> void:
+	select_interaction_target()
+	if is_instance_valid(marker):update_interaction_marker()
+
+func select_interaction_target() -> void:
 	preload("res://scripts/city/production_facilities.gd").refresh(self,session.authority)
 	if sleep_active:
 		current_target=str(session.state().get("rest_bed","home_bed"));quick_action.clear();hud.set_prompt("E   起床，伸个懒腰     ·     睡眠中 · 耐力恢复 +100%")
@@ -626,7 +637,7 @@ func interact() -> void:
 	var t: Dictionary=targets[current_target]
 	if t.kind in ["shop","npc"] and not ConversationAccess.can_talk(self,bunny,t):update_target();return
 	if t.kind in ["bed","bench"] and t.has("node") and not FurnitureAccess.reachable(self,t.node,bunny):update_target();return
-	if session.is_online() and t.kind in ["npc","bench","bed","home_door"]:
+	if session.is_online() and t.kind in ["npc","shop","bench","bed","home_door"]:
 		online_interact(current_target);return
 	match t.kind:
 		"home_door":
@@ -654,17 +665,11 @@ func interact() -> void:
 		"bed": enter_sleep()
 		"boat": preload("res://scripts/valley/boat_travel.gd").go(self)
 		"resource": begin_action("gather",current_target)
-		"shop":
-			talking_npc=current_target
-			dialogue_text=conversation_line(current_target)
-			previous_dialogues[current_target]=dialogue_text
-			hud.show_dialogue(t.node,t.name,dialogue_text,"E · 看看商品   Esc 离开")
-		"npc":
-			if not t.node.get_meta("interaction_available",true): return
-			talking_npc=current_target
-			dialogue_text=conversation_line(current_target)
-			previous_dialogues[current_target]=dialogue_text
-			hud.show_dialogue(t.node,t.name,dialogue_text)
+		"shop","npc":
+			if not t.node.get_meta("interaction_available",true):return
+			var line:=conversation_line(current_target)
+			t.node.play_dialogue_gesture(preload("res://scripts/city/dialogue_gestures.gd").BY_LINE.get(line,""))
+			open_conversation(current_target,line)
 		"bench":
 			var seats=preload("res://scripts/city/seating.gd");var slot: int=seats.local_slot(self,t.node,bunny)
 			if slot<0:hud.notify("座位已坐满，稍等一下吧。");return
@@ -681,7 +686,7 @@ func leave_seat() -> bool:
 	if landing.is_empty():hud.notify("座位旁暂时没有空位，请稍后起身。");return false
 	bunny.stand_up(landing.position);nap_active=false;set_meta("resting_furniture",null);session.set_player_position(landing.position);update_target();return true
 func end_dialogue() -> void:
-	if session.is_online() and talking_npc!="" and targets.get(talking_npc,{}).get("kind","")=="npc":session.dispatch("end_talk")
+	if session.is_online() and talking_npc!="" and targets.get(talking_npc,{}).get("kind","")=="npc":session.dispatch("end_talk",{"target":talking_npc})
 	talking_npc=""
 	hud.hide_dialogue()
 func enter_sleep(restoring: bool=false) -> void:
@@ -947,12 +952,23 @@ func online_stand() -> void:
 	bunny.stand_up(Vector3(float(p[0]),float(p[1]),float(p[2])));sleep_active=false;nap_active=false
 	if is_instance_valid(home) and home.bed_occupant==bunny:home.bed_occupant=null
 func conversation_line(id: String) -> String:
-	var hour:=fposmod(float(session.state().time)/3600*24,24)
-	return People.line_for_npc(id,previous_dialogues.get(id,""),hour)
+	return choose_line(id,session.state(),previous_dialogues)
+
+func choose_line(id: String,listener: Dictionary,memory: Dictionary) -> String:
+	var hour:=fposmod(float(listener.time)/150.,24.)
+	return People.line_for_npc(id,memory.get(id,""),hour)
+
+func open_conversation(id: String,line: String) -> void:
+	var t: Dictionary=targets[id]
+	talking_npc=id
+	dialogue_text=line
+	previous_dialogues[id]=line
+	if t.kind=="shop":hud.show_dialogue(t.node,t.name,line,"E · 看看商品   Esc 离开")
+	else:hud.show_dialogue(t.node,t.name,line)
 func online_interact(id: String) -> void:
 	if network_interaction_pending:return
 	var t: Dictionary=targets[id]
-	var verb: String={"npc":"talk","bench":"sit","bed":"rest","home_door":"door"}[t.kind]
+	var verb: String={"shop":"greet","npc":"talk","bench":"sit","bed":"rest","home_door":"door"}[t.kind]
 	network_interaction_pending=true
 	var result: Dictionary=await session.request_online(verb,{"target":id})
 	network_interaction_pending=false
@@ -960,10 +976,11 @@ func online_interact(id: String) -> void:
 	if t.kind=="bed":enter_sleep(true)
 	elif t.kind=="bench":
 		var seats=preload("res://scripts/city/seating.gd");var slot:=int(session.state().get("net_pose",{}).get("slot",0));bunny.sit_on_surface(seats.seat(t.node,slot));nap_exit=seats.exit_position(t.node,slot);nap_active=true;bunny.play_action(t.node.get_meta("rest_action","nap"),INF)
-	elif t.kind=="npc":
-		talking_npc=id
-		dialogue_text=conversation_line(id)
-		previous_dialogues[id]=dialogue_text;hud.show_dialogue(t.node,t.name,dialogue_text)
+	elif t.kind in ["npc","shop"] and result.has("line"):
+		if not ConversationAccess.can_talk(self,bunny,t):
+			if t.kind=="npc":session.dispatch("end_talk",{"target":id})
+			return
+		open_conversation(id,result.line)
 
 func optimize_npc(n: CharacterBody3D) -> void:
 	var brows: Node3D=n.get_node_or_null("Visual/Head/FixedEyebrows")

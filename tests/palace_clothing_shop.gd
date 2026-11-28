@@ -174,7 +174,39 @@ func run() -> void:
 		root.get_texture().get_image().save_png(out+("/court-front.png" if camera_side<0. else "/court-side.png"))
 	court.update(city,false)
 	check(not emperor.seated and not throne.has_meta("resident_occupant"),"After court the throne is released")
-	print("PALACE_SHOP failures=",failures)
+	# Ignore calendar drift during photography and start a fresh morning.
+	city.hud.show()
+	session.state().time=4800.
+	emperor.position=emperor.get_meta("court_post")
+	stand(throne.to_global(Vector3(0,.04,1.7)))
+	city.current_target=court.THRONE
+	city.interact()
+	court.update(city,true,.01)
+	check(city.hud.bubble_name.text=="景昭" and city.hud.bubble_text.text==court.REQUEST,"The emperor speaks under his personal name")
+	court.update(city,true,10.1)
+	var second_line: String=city.hud.bubble_text.text
+	check(emperor.emote=="angry" and city.hud.bubble.visible and second_line!=court.REQUEST,"The second reminder changes the line and plays anger")
+	city.hud.hide_dialogue()
+	court.update(city,true,14.)
+	check(not city.hud.bubble.visible,"Repeated ticks do not reopen the second reminder")
+	court.update(city,true,1.1)
+	check(city.hud.bubble.visible and city.hud.bubble_text.text not in [court.REQUEST,second_line] and city.bunny.seated,"The final dismissal is visible and leaves the player seated")
+	session.sync_current()
+	check(int(session.world.get("jade_court_dismissed_day",-2))==1 and not session.characters[session.active_character_id].has("jade_court_dismissed_day"),"The local dismissal is shared across character slots")
+	var saved: Dictionary=session.restore_state(session.snapshot()).state
+	check(int(saved.get("jade_court_dismissed_day",-2))==1,"Loading the local save keeps the dismissed date")
+	city.interact()
+	emperor.position=throne.to_global(Vector3(2.08,.03,1.04))
+	court.update(city,true,.4)
+	check(not emperor.seated,"Rising after the final line does not restart the audience")
+	session.state().time+=3600.
+	court.update(city,true,.4)
+	check(emperor.seated,"The local emperor attends again the next morning")
+	while not city.navigation.ready_for_paths or not city.navigation.sampling_ready:
+		await physics_frame
 	city.free()
 	session.free()
+	await process_frame
+	await process_frame
+	print("PALACE_SHOP failures=",failures)
 	quit(int(failures>0))

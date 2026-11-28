@@ -38,6 +38,7 @@ var next_turn: Dictionary={}
 var elapsed:=0.
 var tick:=0.
 var market_period:=-1
+var court_in_session:=false
 var paid_respects: Dictionary={}
 var imperial_court:=preload("res://scripts/jade/imperial_court.gd").new()
 const COURT_DUTIES={14:"bow",34:"bow",35:"read_scroll",36:"bell",38:"bow"}
@@ -83,7 +84,10 @@ func update_market() -> void:
 	var seconds: float=city.manager.world.state.time if city.has_method("chatting_with") else city.session.state().time
 	var hour:=fposmod(seconds,3600.)/150.
 	var period:=1 if hour>=7. and hour<11. else (2 if hour>=17. and hour<22. else 0)
-	if period==market_period:return
+	var audience:=period==1 and int(city.session.state().get("jade_court_dismissed_day",-1))!=floori(seconds/3600.)
+	var market_changed:=period!=market_period
+	if not market_changed and audience==court_in_session:return
+	court_in_session=audience
 	market_period=period
 	paid_respects.clear()
 	for i in MORNING_COURT:
@@ -91,12 +95,13 @@ func update_market() -> void:
 		var driver: Node=actor.get_node("NeighbourWalk")
 		var home: Array=preload("res://scripts/jade/residents.gd").PEOPLE[i]
 		var route:=walk_stops(i,J.point(home[2],home[3]))
-		if period==1:
+		if court_in_session:
 			route.clear()
 			var spot: Vector2=MORNING_COURT[i]
 			route.append(J.point(spot.x,spot.y))
 		driver.route=route;driver.recent.clear();driver.path.clear()
 		driver.wait=(int(i)%7)*.72
+	if not market_changed:return
 	for i in CUSTOMERS+DELIVERIES:
 		var actor: CharacterBody3D=city.targets["JadeCitizen_"+str(i)].node
 		var driver: Node=actor.get_node("NeighbourWalk")
@@ -120,12 +125,12 @@ func update_market() -> void:
 		driver.recent.clear()
 # Each official stops before the throne once per morning audience, even if their route continues.
 func receive_court() -> void:
-	if market_period!=1:return
+	if not court_in_session or imperial_court.stage==3:return
 	for index in COURT_DUTIES:
 		if paid_respects.has(index):continue
 		var id:="JadeCitizen_"+str(index)
 		var actor: CharacterBody3D=city.targets[id].node
-		if actor.position.z> -159. or actor.position.z< -168. or absf(actor.position.x)>6. or absf(actor.position.x)<2. or not actor.action.is_empty():continue
+		if actor.position.z> -159. or actor.position.z< -168. or absf(actor.position.x)>6. or absf(actor.position.x)<2. or not actor.action.is_empty() or not actor.emote.is_empty():continue
 		if city.talking_npc==id or (city.has_method("chatting_with") and is_instance_valid(city.chatting_with(id))):continue
 		var driver: Node=actor.get_node("NeighbourWalk")
 		driver.wait=3.7
@@ -139,13 +144,15 @@ func _physics_process(delta: float) -> void:
 	imperial_court.walk(city,delta)
 	tick+=delta
 	if tick<.40:return
+	var interval:=tick
 	tick=0.
 	refresh_neighbours()
 	update_market()
-	imperial_court.update(city,market_period==1)
+	imperial_court.update(city,market_period==1,interval)
 	receive_court()
 	for actor in city.npcs:
 		var id:=str(actor.name)
+		if not actor.emote.is_empty() or (id==imperial_court.EMPEROR and imperial_court.stage in [1,2]):continue
 		if elapsed<next_turn.get(id,INF) or actor.walking or not actor.action.is_empty():continue
 		if city.talking_npc==id or (city.has_method("chatting_with") and is_instance_valid(city.chatting_with(id))):continue
 		var driver: Node=actor.get_node_or_null("NeighbourWalk")

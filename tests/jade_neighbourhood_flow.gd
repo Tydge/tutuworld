@@ -196,6 +196,8 @@ func run() -> void:
 	var usher: CharacterBody3D=speaker.node
 	usher.position=J.point(-3,-160)
 	usher.action=""
+	# Finish the two-second conversation gesture before the next ceremonial action.
+	usher.advance_emote(preload("res://scripts/characters/emote_motion.gd").SHORT_TIME)
 	ceremony.update_market();ceremony.paid_respects.erase(34);ceremony.receive_court()
 	check(usher.action=="bow" and ceremony.paid_respects.has(34),"The court usher bows on entering the morning audience")
 	var bed: Node3D=city.targets["jade:cot:bed_0"].node

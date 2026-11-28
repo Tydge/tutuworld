@@ -18,7 +18,7 @@ const Stats=preload("res://scripts/services/character_stats.gd")
 const DB=preload("res://scripts/services/game_data.gd")
 const BackgroundMusic=preload("res://scripts/services/background_music.gd")
 const SAVE="user://island_city_v2.json"
-const WORLD_KEYS=["winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","jade_build_layout","land_parcels"]
+const WORLD_KEYS=["jade_court_dismissed_day","winter_outfits","world_id","time","plots","resources","build_layout","icefield_build_layout","jade_build_layout","land_parcels"]
 const CHARACTER_KEYS=["player_id","character_name","species","map_id","coins","inventory","equipment","clothing_designs","jade_visits","snow_trail","hearth_ready_at","experience","stamina","stamina_run_elapsed","stamina_recovery_elapsed","rest_mode","rest_bed","attributes","skills","skill_experience","skill_rules_version","food_effect","player_position","watering_water","valley_landscape_revision"]
 var authority=Authority.new()
 var active:=false
@@ -414,6 +414,7 @@ func restore_state(raw: Dictionary):
 	if not Animals.supports(s.species): s.species="bunny"
 	s.coins=clampi(int(raw.get("coins",650)),0,99999999)
 	s.time=maxf(0,float(raw.get("time",1200)))
+	if raw.has("jade_court_dismissed_day"):s.jade_court_dismissed_day=int(raw.jade_court_dismissed_day)
 	s.inventory.clear()
 	var inventory: Dictionary=raw.get("inventory",{})
 	for id in inventory:

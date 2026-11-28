@@ -29,7 +29,7 @@ def main():
     for name in names.values():
         if not (args.artifacts/name).is_file():raise SystemExit('Missing artifact: '+name)
     pack=args.artifacts/'city.pck'
-    payload={'schema':1,'build':args.build,'version':args.version,'min_launcher':2,'protocol':int(re.search(r'const PROTOCOL := (\d+)',source).group(1)),'notes':re.search(r'const NOTES := "([^"]+)"',source).group(1),'pack':{'url':base+f'releases/{args.version}/city.pck','sha256':hashlib.sha256(pack.read_bytes()).hexdigest(),'bytes':pack.stat().st_size},'installers':{platform:base+f'releases/{args.version}/{names[platform]}' for platform in ['macos','windows']}}
+    payload={'schema':1,'build':args.build,'version':args.version,'min_launcher':2,'protocol':int(re.search(r'const PROTOCOL := (\d+)',source).group(1)),'notes':re.search(r'const NOTES := "([^"]+)"',source).group(1),'pack':{'url':base+f'releases/{args.version}/city.pck','sha256':hashlib.sha256(pack.read_bytes()).hexdigest(),'bytes':pack.stat().st_size},'installers':{platform:base+'download' for platform in ['macos','windows']}}
     data=json.dumps(payload,ensure_ascii=False,separators=(',',':')).encode()
     with tempfile.TemporaryDirectory() as folder:
         temporary=Path(folder);(temporary/'payload').write_bytes(data)

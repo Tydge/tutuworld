@@ -1,0 +1,18 @@
+{
+  "city.pck": {
+    "bytes": 251772684,
+    "sha256": "abbbb6f9e3fd0e800316bc05748e6af3155f4ad229c748a5179e1098691222bc"
+  },
+  "server.pck": {
+    "bytes": 179042444,
+    "sha256": "424207d6e885a7493e288c1a3a6ff19d9b299876c0b841c72053dcd4ed451e66"
+  },
+  "TutuWorld-macOS.zip": {
+    "bytes": 272044622,
+    "sha256": "eec066bbda95bb7cee9ed8739c9e3ed653f0cb3ad373465ac78b957a4d527dc2"
+  },
+  "TutuWorld-Windows.zip": {
+    "bytes": 259788586,
+    "sha256": "2ca4a087a3ab6234a92802a53bb616e5a2c00ea7ef3acc49fdb489389edd28c9"
+  }
+}

@@ -1,23 +1,22 @@
 extends "res://scripts/city/city_world.gd"
 const J=preload("res://scripts/jade/layout.gd")
 const Residents=preload("res://scripts/jade/residents.gd")
-var thanked: Dictionary={}
 var displayed_decree:=-1
 var framed_station:=""
 var station_eye:Vector3
-func conversation_line(id: String) -> String:
+func choose_line(id: String,listener: Dictionary,memory: Dictionary) -> String:
 	var line: Array=Residents.AFTER_WORK.get(id,[])
-	if not line.is_empty() and not thanked.has(id) and line[0] in session.state().jade_visits.marks:
-		thanked[id]=true
+	if not line.is_empty() and not memory.has("after/"+id) and line[0] in listener.jade_visits.marks:
+		memory["after/"+id]=true
 		return line[1]
 	var district:String={"JadeCitizen_0":"0","JadeVendor_farm":"1","JadeCitizen_8":"2"}.get(id,"")
-	var book:Dictionary=session.state().jade_visits
+	var book:Dictionary=listener.jade_visits
 	if book.decree.has(district):
 		var key:="%s/court/%s"%[id,book.rounds.get("audience",0)]
-		if not thanked.has(key):
-			thanked[key]=true
+		if not memory.has(key):
+			memory[key]=true
 			return preload("res://scripts/jade/rounds/scholars.gd").REQUESTS[int(book.decree[district])][int(district)+4]+"。多亏殿里那道朱批。"
-	return super.conversation_line(id)
+	return super.choose_line(id,listener,memory)
 func can_walk(p: Vector3) -> bool:return J.can_walk(p) and not construction_at(p)
 func navigation_bounds() -> Rect2i:return J.NAVIGATION
 func respawn_position() -> Vector3:return Vector3(0,2.12,203)
@@ -265,7 +264,7 @@ func spawn_npcs() -> void:
 	throne.set_meta("rest_action","hold_court")
 	var emperor_pos:=throne.to_global(Vector3(2.65,.06,2.40))
 	var emperor_outfit:={"head":"imperial_mian","body":"imperial_dragon_robe","neck":""}
-	var emperor:=spawn_npc("JadeEmperor","景昭 · 玉京皇帝",emperor_pos,emperor_outfit,"bunny")
+	var emperor:=spawn_npc("JadeEmperor",Residents.EMPEROR[0],emperor_pos,emperor_outfit,"bunny")
 	emperor.set_meta("court_post",emperor_pos)
 	targets["JadeEmperor"]={"kind":"npc","position":emperor_pos,"radius":2.8,"node":emperor,"name":Residents.EMPEROR[0]}
 	for i in range(Residents.PEOPLE.size()):

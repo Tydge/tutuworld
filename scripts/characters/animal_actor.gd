@@ -36,6 +36,7 @@ var action_time := 0.0
 var action_length := 0.0
 var emote := ""
 var emote_age := 0.0
+var dialogue_gesture := false
 var emote_revision := 0
 var network_emote_revision := -1
 var emote_shift := Vector2.ZERO
@@ -165,7 +166,22 @@ func trigger_emote(id: String) -> void:
 	emote_age = 0.0
 	emote_revision += 1
 
+func play_dialogue_gesture(id: String) -> void:
+	if dialogue_gesture:stop_emote()
+	if id.is_empty() or sleeping or seated:return
+	# A greeting interrupts handwork. A seated resident keeps the seated pose.
+	play_action("",0.)
+	trigger_emote(id)
+	dialogue_gesture = true
+
+func advance_emote(delta: float) -> void:
+	if emote.is_empty():return
+	emote_age += delta
+	if not can_move or not action.is_empty() or seated or sleeping or ((dialogue_gesture or EmoteMotion.is_short(emote)) and emote_age >= EmoteMotion.SHORT_TIME):
+		stop_emote()
+
 func stop_emote() -> void:
+	dialogue_gesture = false
 	if emote.is_empty():
 		return
 	if dance_rig != null:
@@ -188,6 +204,7 @@ func sync_emote(row: Dictionary) -> void:
 	stop_emote()
 	if EmoteMotion.is_known(id):
 		emote = id
+		dialogue_gesture = row.get("npc",false)
 		emote_age = float(row.get("emote_age", 0.0))
 
 func play_action(kind: String, duration: float, symbol: String = "") -> void:
@@ -246,6 +263,7 @@ func _physics_process(delta: float) -> void:
 	# Authority advances resident actions and collision, and sends those states.
 	# The clients animate faces, limbs and props from the replicated action.
 	if server_resident:
+		advance_emote(delta)
 		if not action.is_empty():
 			action_time += delta
 			if action_time >= action_length:
@@ -377,10 +395,7 @@ func animate_pose(delta: float) -> void:
 	left_arm.position=arm_rest_left
 	right_arm.position=arm_rest_right
 	clock += delta
-	if not emote.is_empty():
-		emote_age += delta
-		if not can_move or not action.is_empty() or seated or sleeping or (EmoteMotion.is_short(emote) and emote_age >= EmoteMotion.SHORT_TIME):
-			stop_emote()
+	advance_emote(delta)
 	if not emote.is_empty() and rig_profile.species_id == "bunny" and not EmoteMotion.Score.DURATIONS.has(emote):
 		# The rabbit's eyes and brows keep their neutral appearance during gestures.
 		eyes.scale.y = 1.0

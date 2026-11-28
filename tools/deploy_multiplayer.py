@@ -81,6 +81,12 @@ snippet_text="""location = /tutuworld/ws {
  proxy_send_timeout 75s;
  proxy_buffering off;
 }
+location = /tutuworld/download {
+ proxy_pass http://127.0.0.1:18892;
+}
+location = /tutuworld/download/ {
+ proxy_pass http://127.0.0.1:18892;
+}
 location = /tutuworld/health {
  proxy_pass http://127.0.0.1:18892/health;
  add_header Cache-Control "no-store";

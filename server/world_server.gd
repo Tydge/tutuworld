@@ -137,7 +137,7 @@ func character_record(id: String) -> Dictionary:
 	return record
 func save_world() -> bool:
 	for id in actors:records[id]=character_record(id)
-	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"winter_outfits":world.state.get("winter_outfits",{}),"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"icefield_build_layout":world.state.icefield_build_layout,"jade_build_layout":world.state.jade_build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
+	var data:={"schema":1,"epoch":epoch,"clock_alignment":clock_alignment,"world":{"jade_court_dismissed_day":world.state.get("jade_court_dismissed_day",-1),"winter_outfits":world.state.get("winter_outfits",{}),"time":world.state.time,"plots":world.state.plots,"resources":world.state.resources,"build_layout":world.state.build_layout,"icefield_build_layout":world.state.icefield_build_layout,"jade_build_layout":world.state.jade_build_layout,"land_parcels":world.state.land_parcels,"building_revision":world.state.get("building_revision",0)},"characters":records,"care_history":care_history,"doors":doors}
 	var old: Variant=JSON.parse_string(FileAccess.get_file_as_string(save_path)) if FileAccess.file_exists(save_path) else null
 	var backup_valid: bool=old is Dictionary and old.get("schema",0)==1 and old.get("world") is Dictionary
 	return preload("res://scripts/services/atomic_file.gd").write(save_path,JSON.stringify(data,"",false,true),backup_valid)
@@ -390,7 +390,7 @@ func release_all(id: String) -> void:
 	for key in locks.keys():
 		if locks[key].owner==id:
 			var row: Dictionary=locks[key]
-			if row.kind=="talk":maps[row.map].talking_npc=""
+			if row.kind=="talk" and maps[row.map].talking_npc==row.target:maps[row.map].talking_npc=""
 			locks.erase(key)
 func standing_exit(id: String) -> Array:
 	var a=actors[id];var pawn=pawns[id];var pose: Dictionary=a.state.get("net_pose",{})
@@ -405,13 +405,32 @@ func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictiona
 		for other in actors:
 			if other!=id:others[other]=runtime_checkpoint(other)
 	var result:=apply_player(peer_id,request,verb,args)
-	if result.get("ok",false) and verb not in ["history","build_ping"] and not save_world():
+	if result.get("ok",false) and verb not in ["history","build_ping","greet"] and not save_world():
 		building.leases=old_leases;building.notices.clear()
 		restore_runtime(id,backup)
 		for other in others:restore_runtime(other,others[other])
 		building.sync_state()
 		for other in pawns:pawns[other].can_move=building.owned_site(other)=="" and actors[other].state.get("net_pose",{}).is_empty() and actors[other].job.is_empty()
 		return fail("进度暂未保存成功，本次操作没有生效，请稍后再试。")
+	if result.get("ok",false) and verb in ["talk","greet"]:
+		var pawn: CharacterBody3D=pawns[id]
+		var host: Node3D=maps[actors[id].state.map_id]
+		var target:=str(args.target)
+		var resident: CharacterBody3D=host.targets[target].node
+		var memory: Dictionary=pawn.get_meta("dialogues",{})
+		var now:=Time.get_ticks_msec()
+		# Two shoppers arriving together hear the greeting already being delivered.
+		if verb=="greet" and now<int(resident.get_meta("greeting_until",0)):
+			result.line=resident.get_meta("greeting_line")
+		else:
+			result.line=host.choose_line(target,actors[id].state,memory)
+			resident.play_dialogue_gesture(preload("res://scripts/city/dialogue_gestures.gd").BY_LINE.get(result.line,""))
+			if verb=="greet" and result.line in preload("res://scripts/city/npc_profiles.gd").available_lines(target,fposmod(float(world.state.time)/150.,24.)):
+				resident.set_meta("greeting_until",now+2000)
+				resident.set_meta("greeting_line",result.line)
+		memory[target]=result.line
+		pawn.set_meta("dialogues",memory)
+		if verb=="talk":actors[id].state.net_pose.line=result.line
 	if result.get("ok",false) and verb=="dress_resident":
 		maps.icefield.apply_resident_outfits(world.state.get("winter_outfits",{}))
 	if result.get("ok",false) and verb in ["buy_land","build_begin","build_finish","build_cancel"]:
@@ -549,7 +568,12 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 	if verb=="history":return {"ok":true,"history":care_history.get(target,{})}
 	if verb=="unstuck":return relocate(id,vector_from(standing_exit(id)),true)
 	if verb in ["stand","wake"]:return relocate(id,vector_from(standing_exit(id)),false)
-	if verb=="end_talk":release_all(id);a.state.net_pose={};return {"ok":true,"message":""}
+	if verb=="end_talk":
+		var pose: Dictionary=a.state.get("net_pose",{})
+		if pose.get("kind","")=="talk" and (target.is_empty() or pose.target==target):
+			release_all(id)
+			a.state.net_pose={}
+		return {"ok":true,"message":""}
 	if verb=="door":
 		var door_id: String=target if target!="" else "home_door"
 		if not host.targets.has(door_id) or host.targets[door_id].kind not in ["door","home_door"] or pawn.position.distance_to(host.targets[door_id].position)>4.8:return fail("先来到门边吧。")
@@ -557,6 +581,10 @@ func apply_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary
 		var result: Dictionary=house.toggle_door(pawn)
 		if result.ok: doors[map_id if door_id=="home_door" else map_id+":"+door_id]={"open":house.door_open,"target":house.door_target}
 		return result
+	if verb=="greet":
+		var shop: Dictionary=host.targets.get(target,{})
+		if shop.get("kind","")!="shop" or not a.job.is_empty() or not a.state.get("net_pose",{}).is_empty() or not preload("res://scripts/city/conversation_access.gd").can_talk(host,pawn,shop):return fail("请走进店里，来到商人面前。")
+		return {"ok":true,"message":""}
 	if verb in ["sit","talk"]:
 		if not a.job.is_empty() or not a.state.get("net_pose",{}).is_empty():return fail("先结束手上的事情吧。")
 		if not host.targets.has(target):return fail("这里暂时不能互动。")
@@ -858,7 +886,13 @@ func broadcast_motion() -> void:
 			if not editing:
 				for npc in maps[map_id].npcs:
 					var resident: Dictionary={"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})}
+					if npc.emote_revision>0:
+						resident.emote=npc.emote
+						resident.emote_revision=npc.emote_revision
+						resident.emote_age=npc.emote_age
 					if npc.name=="JadeEmperor":
+						resident.court_stage=npc.get_meta("court_stage",0)
+						resident.court_seq=npc.get_meta("court_seq",0)
 						resident.court_request=npc.get_meta("court_request","")
 						if npc.seated:resident.pose={"kind":"sit","target":preload("res://scripts/jade/imperial_court.gd").THRONE}
 					rows.append(resident)

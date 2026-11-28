@@ -318,6 +318,8 @@
       "jade_replay_rules",
       "jade_area_rules",
       "jade_multiplayer_rules",
+      "palace_multiplayer_flow",
+      "dialogue_gesture_coverage",
       "jade_walking_routes",
       "jade_workshop_flow",
       "palace_clothing_shop",
@@ -624,6 +626,12 @@
       "headless": true
     },
     "winter_models_preview": {},
+    "dialogue_gesture_coverage": {
+      "headless": true
+    },
+    "palace_multiplayer_flow": {
+      "headless": true
+    },
     "jade_multiplayer_rules": {
       "headless": true
     },

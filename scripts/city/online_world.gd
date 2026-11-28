@@ -74,7 +74,12 @@ func connection_changed(connected: bool) -> void:
 	if not connected:
 		city.bunny.stop_emote()
 		city.bunny.network_emote_revision = -1
-		motion.erase(session.active_character_id)
+		for npc in city.npcs:
+			npc.stop_emote()
+			npc.network_emote_revision = -1
+			if npc.has_meta("shown_request"):npc.remove_meta("shown_request")
+		buffers.clear()
+		motion.clear()
 	if connected:
 		prediction=preload("res://scripts/services/movement_prediction.gd").new()
 		if city.tools.verb in ["eat","snack","tea"]:
@@ -209,7 +214,7 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 		var throne: Node3D=city.targets[court.THRONE].node
 		if seated:throne.set_meta("resident_occupant",court.EMPEROR)
 		elif throne.has_meta("resident_occupant"):throne.remove_meta("resident_occupant")
-		court.show_request(city,row.get("court_request",""))
+		court.show_request(city,row.get("court_request",""),int(row.get("court_stage",0)),int(row.get("court_seq",0)))
 	var action: String=row.get("action","")
 	var meal_job: Dictionary=row.get("job",{})
 	if action=="eat":
@@ -220,8 +225,7 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 		else:actor.action="";actor.action_time=0
 	if action in ["snack","tea"] and meal_job.has("elapsed") and absf(actor.action_time-float(meal_job.elapsed))>.20:
 		actor.action_time=float(meal_job.elapsed)
-	if not row.get("npc",false):
-		actor.sync_emote(row)
+	actor.sync_emote(row)
 	if row.get("npc",false):
 		var presence: float=row.get("presence",1)
 		actor.set_meta("presence",presence);actor.set_meta("interaction_available",presence>.999 and not sleeping)
