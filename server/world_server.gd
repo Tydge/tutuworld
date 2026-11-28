@@ -36,6 +36,8 @@ var save_path: String
 var auth_url: String
 var clock_alignment: Dictionary={}
 var building_updating:=false
+var finish_queue: Array[Dictionary]=[]
+var publishing_views: Dictionary={}
 var admin_timer:=0.0
 var metrics_timer:=0.0
 var metrics_frames:=0
@@ -122,8 +124,9 @@ func apply_door_states() -> void:
 			row.node.door_open=value.get("open",false);row.node.door_target=float(value.get("target",0));row.node.door_tweening=true
 func character_record(id: String) -> Dictionary:
 	var a=actors[id]
-	var record: Dictionary=a.state.duplicate(true)
+	var record: Dictionary=a.state.duplicate()
 	for key in ["plots","resources","world_id","time","net_pose","build_layout","icefield_build_layout","jade_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
+	record=record.duplicate(true)
 	record.stamina=minf(a.stamina_max(),float(record.stamina)+a.reserved_work_stamina(a.job))
 	record.rest_mode="";record.rest_bed=""
 	if pawns.has(id):record.player_position=standing_exit(id)
@@ -188,7 +191,8 @@ func _process(delta: float) -> void:
 	if snapshot_timer>=.75:
 		snapshot_timer=0
 		for peer_id in peers:
-			if peers[peer_id].character!="":send_snapshot(peer_id)
+			var id: String = peers[peer_id].character
+			if id!="" and building.owned_site(id)=="":send_snapshot(peer_id)
 	if save_timer>=10:save_timer=0;save_world()
 	admin_timer+=delta
 	if admin_timer>=1:
@@ -235,7 +239,7 @@ func send(peer_id: int,data: Dictionary) -> void:
 	if peers.has(peer_id) and peers[peer_id].socket.get_ready_state()==WebSocketPeer.STATE_OPEN:
 		peers[peer_id].socket.put_packet(Codec.encode(data))
 func answer(peer_id: int,request: Dictionary,result: Dictionary) -> void:
-	if peers.has(peer_id) and peers[peer_id].character!="":send_snapshot(peer_id)
+	if peers.has(peer_id) and peers[peer_id].character!="" and (request.get("verb","")!="build_ping" or not result.get("ok",false)):send_snapshot(peer_id)
 	send(peer_id,{"type":"result","id":str(request.get("id","")),"result":result})
 func receive(peer_id: int,data: Dictionary) -> void:
 	var peer: Dictionary=peers[peer_id]
@@ -341,7 +345,7 @@ func create_character(account: String,args: Dictionary) -> Dictionary:
 	var a=Authority.new();var id:="char_"+Crypto.new().generate_random_bytes(12).hex_encode()
 	a.state.merge({"player_id":id,"account_id":account,"character_name":display_name,"species":species,"coins":500,"inventory":{starter:1},"saved_at":Time.get_unix_time_from_system(),"valley_landscape_revision":preload("res://scripts/valley/valley_layout.gd").REVISION},true)
 	a.state.equipment[DB.item(starter).slot]=starter
-	var record: Dictionary=a.state.duplicate(true)
+	var record: Dictionary=a.state.duplicate()
 	for key in ["plots","resources","time","world_id","build_layout","icefield_build_layout","jade_build_layout","land_parcels","building_sites","building_revision","winter_outfits"]:record.erase(key)
 	records[id]=record
 	if not save_world():records.erase(id);return fail("角色还没有保存成功，请稍后再试。")
@@ -394,6 +398,8 @@ func standing_exit(id: String) -> Array:
 	return vector_array(pawn.position)
 func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictionary,defer_building: bool=false) -> Dictionary:
 	var id: String=peers[peer_id].character
+	# Renewals only extend a private, in-memory deadline.
+	if verb=="build_ping":return building.apply(id,verb,args)
 	var backup:=runtime_checkpoint(id);var old_leases: Dictionary=building.leases.duplicate(true);var others: Dictionary={}
 	if verb=="build_begin":
 		for other in actors:
@@ -421,22 +427,47 @@ func execute_player(peer_id: int,request: Dictionary,verb: String,args: Dictiona
 	return result
 
 func finish_building_request(peer_id: int,request: Dictionary,args: Dictionary) -> void:
-	while building_updating:await get_tree().process_frame
 	if not peers.has(peer_id) or peers[peer_id].character=="":return
+	finish_queue.append({"peer":peer_id,"owner":peers[peer_id].character,"request":request,"args":args})
+	if building_updating:return
 	building_updating=true
-	var id: String=peers[peer_id].character
-	var result:=execute_player(peer_id,request,"build_finish",args,true)
-	if result.get("ok",false):
-		var map_id: String=Land.map_for(args.parcel_id)
-		var room:=building_room(map_id)
-		var layout:=Land.layout_for(world.state,map_id)
-		await BuildingFactory.sync_incremental(room,layout,maps[map_id])
-		print("BUILDING_SERVER_UPDATE ",JSON.stringify(room.last_sync))
-		BuildingSync.register(maps[map_id],layout,room,false)
-		refresh_building_navigation(map_id,room)
-		building.release(id,true);building.refresh()
+	while not finish_queue.is_empty():
+		# Requests from neighboring owners can arrive in different network polls.
+		await get_tree().create_timer(.12).timeout
+		var batch:=finish_queue
+		finish_queue=[]
+		var completed: Array[Dictionary]=[]
+		for item in batch:
+			if not peers.has(item.peer) or peers[item.peer].character!=item.owner:continue
+			var map_id: String=actors[item.owner].state.map_id
+			var before:=Land.layout_for(world.state,map_id)
+			var revision: int=world.state.get("building_revision",0)
+			var saved:=execute_player(item.peer,item.request,"build_finish",item.args,true)
+			if not saved.get("ok",false):
+				answer(item.peer,item.request,saved)
+				continue
+			item.result=saved
+			completed.append(item)
+			if not is_same(before,Land.layout_for(world.state,map_id)) and not publishing_views.has(map_id):
+				publishing_views[map_id]={"layout":before,"revision":revision}
+			await get_tree().process_frame
+		for map_id in publishing_views:
+			var room:=building_room(map_id)
+			var layout:=Land.layout_for(world.state,map_id)
+			await BuildingFactory.sync_incremental(room,layout,maps[map_id])
+			print("BUILDING_SERVER_UPDATE ",JSON.stringify(room.last_sync))
+			BuildingSync.register(maps[map_id],layout,room,false)
+			refresh_building_navigation(map_id,room)
+		publishing_views.clear()
+		for item in completed:
+			var lease: Dictionary=building.leases.get(item.args.get("parcel_id",""),{})
+			if lease.get("publishing",false) and lease.owner==item.owner and lease.token==item.args.get("lease",""):
+				building.release(item.owner,true)
+		if not completed.is_empty():building.refresh()
+		for item in completed:
+			if peers.has(item.peer) and peers[item.peer].character==item.owner:
+				send(item.peer,{"type":"result","id":item.request.id,"result":item.result})
 	building_updating=false
-	answer(peer_id,request,result)
 
 func building_room(map_id: String) -> Node3D:
 	var room:=jade_built_room if map_id=="jade" else icefield_built_room if map_id=="icefield" else built_room
@@ -704,7 +735,6 @@ func tick_actor(id: String,delta: float) -> void:
 	if Time.get_ticks_msec()-int(peer.get("motion_at",0))>1000:pawn.network_direction=Vector3.ZERO;pawn.network_jump=false
 	a.state.time=world.state.time;a.state.plots=world.state.plots;a.state.resources=world.state.resources
 	a.state.build_layout=world.state.build_layout;a.state.icefield_build_layout=world.state.icefield_build_layout;a.state.jade_build_layout=world.state.jade_build_layout;a.state.land_parcels=world.state.land_parcels;a.state.building_sites=world.state.building_sites
-	preload("res://scripts/city/production_facilities.gd").refresh(maps[a.state.map_id],a)
 	a.state.player_position=vector_array(pawn.position);a.running=pawn.is_running;a.sleeping=pawn.sleeping
 	pawn.speed_multiplier=a.multiplier("move");pawn.run_speed_multiplier=a.multiplier("run_speed");pawn.stamina_fraction=float(a.state.stamina)/a.stamina_max()
 	a.tick_stamina(delta)
@@ -719,6 +749,7 @@ func tick_actor(id: String,delta: float) -> void:
 	var backup:=runtime_checkpoint(id)
 	var job: Dictionary=a.job.duplicate(true);a.job.clear()
 	var crop: String=str(world.state.plots.get(job.target,{}).get("crop",""))
+	preload("res://scripts/city/production_facilities.gd").refresh(maps[a.state.map_id],a)
 	var event: Dictionary=a.complete(job)
 	if event.type=="completed" and job.verb in ["plant","water","weed","harvest"]:
 		if job.verb=="plant":crop=DB.item(job.item).crop
@@ -803,33 +834,37 @@ func broadcast_motion() -> void:
 		if not batches.has(map_id):
 			batches[map_id] = []
 		batches[map_id].append(actor_packet(id))
-	for map_id in batches:
-		for npc in maps[map_id].npcs:
-			batches[map_id].append({"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})})
+	# Builders see other players in the street. Their editor has paused resident rigs.
+	var player_packets: Dictionary = {}
+	var street_packets: Dictionary = {}
 	var tick := Engine.get_physics_frames()
-	var packets: Dictionary = {}
-	for peer_id in peers:
-		var peer: Dictionary = peers[peer_id]
+	for peer in peers.values():
 		var id: String = peer.character
 		var socket: WebSocketPeer = peer.socket
-		if not actors.has(id) or socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
-			continue
+		if not actors.has(id) or socket.get_ready_state()!=WebSocketPeer.STATE_OPEN:continue
 		var map_id: String = actors[id].state.map_id
+		var editing: bool = building.owned_site(id)!=""
+		var packets := player_packets if editing else street_packets
 		if not packets.has(map_id):
-			packets[map_id] = Codec.encode({"type":"motion","tick":tick,"actors":batches[map_id]})
+			var rows: Array = batches[map_id].duplicate()
+			if not editing:
+				for npc in maps[map_id].npcs:
+					rows.append({"id":str(npc.name),"npc":true,"position":vector_array(npc.position),"velocity":vector_array(npc.velocity),"yaw":npc.visual.rotation.y,"walking":npc.walking,"grounded":npc.is_on_floor(),"action":npc.action,"sleeping":npc.sleeping,"presence":npc.get_meta("presence",1.0),"equipment":npc.get_meta("equipment",{})})
+			packets[map_id] = Codec.encode({"type":"motion","tick":tick,"actors":rows})
 		socket.put_packet(packets[map_id])
 func send_snapshot(peer_id: int) -> void:
 	if not peers.has(peer_id):return
 	var id: String=peers[peer_id].character
 	if not actors.has(id):return
-	var a=actors[id];var snapshot: Dictionary=a.state.duplicate(true)
+	var a=actors[id];var snapshot: Dictionary=a.state.duplicate()
 	snapshot.erase("account_id");snapshot.erase("seen");snapshot.time=world.state.time
 	snapshot.erase("build_layout");snapshot.erase("icefield_build_layout");snapshot.erase("jade_build_layout")
 	snapshot.land_parcels=world.state.land_parcels;snapshot.building_sites=world.state.building_sites
-	var revision: int=world.state.get("building_revision",0)
 	var map_id: String=a.state.map_id
+	var pending: Dictionary=publishing_views.get(map_id,{})
+	var revision: int=pending.get("revision",world.state.get("building_revision",0))
 	if map_id in ["city","icefield","jade"] and (int(peers[peer_id].get("building_revision_sent",-1))!=revision or peers[peer_id].get("building_map_sent","")!=map_id):
-		var key:=Land.layout_key(map_id);snapshot[key]=world.state[key]
+		var key:=Land.layout_key(map_id);snapshot[key]=pending.get("layout",world.state[key])
 		peers[peer_id].building_revision_sent=revision;peers[peer_id].building_map_sent=map_id
 	snapshot.building_revision=revision
 	send(peer_id,{"type":"snapshot","building_protocol":1,"winter_building":true,"state":snapshot,"job":a.job,"locks":locks,"care_history":care_history,"doors":doors,"epoch":epoch,"movement":actor_packet(id)})

@@ -111,6 +111,7 @@ func make_replica(row: Dictionary) -> void:
 	label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.outline_size=6;label.outline_modulate=UI.INK
 	replicas[row.id]={"actor":actor,"props":props,"equipment":row.equipment.duplicate(),"clothing_designs":row.get("clothing_designs",{}),"action":""}
 func record_input(direction: Vector3,jump: bool,running: bool) -> void:
+	if is_instance_valid(city.build_mode) and city.build_mode.active:return
 	if direction.length_squared()>.01 and Time.get_ticks_msec()-construction_notice_at>3000:
 		var point: Vector3=city.bunny.position+direction*.95
 		if preload("res://scripts/building/construction_sites.gd").at(session.state().get("building_sites",{}),point,1.,city.map_id)!="":
@@ -131,8 +132,10 @@ func _process(delta: float) -> void:
 		var packet: Dictionary=prediction.take_packet()
 		if not packet.is_empty():session.remote.send(packet)
 	if not city.preparing:
+		var editing: bool = is_instance_valid(city.build_mode) and city.build_mode.active
 		for id in motion:
 			var row: Dictionary=motion[id]
+			if editing and row.get("npc",false):continue
 			if buffers.has(id):row=buffers[id].sample(float(Time.get_ticks_msec())/1000)
 			if id==session.active_character_id:apply_local(row,delta)
 			elif row.get("npc",false):
@@ -224,7 +227,10 @@ func apply_actor(actor: CharacterBody3D,row: Dictionary,delta: float) -> void:
 			actor.set_meta("last_online_presence",presence)
 			for part in actor.find_children("*","GeometryInstance3D",true,false):
 				if not part is Label3D:part.transparency=1-presence
-		for label in actor.find_children("*","Label3D",true,false):label.visible=presence>.999 and not sleeping
+		var labels_visible: bool=presence>.999 and not sleeping
+		if actor.get_meta("online_labels_visible",null)!=labels_visible:
+			actor.set_meta("online_labels_visible",labels_visible)
+			for label in actor.find_children("*","Label3D",true,false):label.visible=labels_visible
 		city.targets[str(row.id)].position=actor.position
 func actor_for(id: String):
 	if id==session.active_character_id:return city.bunny

@@ -5,6 +5,9 @@ const Sight=preload("res://scripts/jade/sight_geometry.gd")
 var city: Node3D
 func _process(_delta: float) -> void:
 	if not is_instance_valid(city) or not is_instance_valid(city.bunny):return
+	if get_parent().has_meta("build_element_id") and is_instance_valid(city.build_mode) and city.build_mode.active:
+		$Canopy.visible = city.build_mode.roof_view
+		return
 	var p:=to_local(city.bunny.global_position);var head:=p+Vector3.UP*1.35;var eye:=to_local(city.camera.global_position)
 	var on_deck:=p.y>3.9 and absf(p.x)<8. and absf(p.z)<3.
 	var cut:=on_deck and preload("res://scripts/city/interior_view.gd").mode(city)!=1

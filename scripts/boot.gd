@@ -18,7 +18,7 @@ func _ready() -> void:
 	text.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	await get_tree().process_frame
 	# Keep bootstrap independent of release.gd so patched gameplay is first loaded after mounting.
-	var build:=14
+	var build:=15
 	# Editor play must use the working tree, even when an installed client has
 	# downloaded a signed pack with the same build number.
 	if not OS.has_feature("editor") and not OS.get_cmdline_user_args().has("--test"):

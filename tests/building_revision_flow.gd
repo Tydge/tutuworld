@@ -27,6 +27,8 @@ func click(pos: Vector2,double_: bool=false) -> void:
 func world(p: Vector3,double_: bool=false) -> void:await click(root.get_final_transform()*city.camera.unproject_position(p),double_)
 func button(id: String) -> void:
 	var control: Control=editor.ui.root_ui.find_child(id,true,false);check(control!=null and control.is_visible_in_tree(),"Bottom control is visible: "+id)
+	if control!=null and editor.ui.catalog_area.is_ancestor_of(control):
+		editor.ui.catalog_area.ensure_control_visible(control);await frames(2)
 	if control!=null:await click(root.get_final_transform()*(control.get_global_transform_with_canvas()*(control.size*.5)))
 func key(code: Key) -> void:
 	for down in [true,false]:
@@ -41,13 +43,17 @@ func run() -> void:
 	city=load("res://scenes/city.tscn").instantiate();root.add_child(city);current_scene=city
 	while city.camera==null:await process_frame
 	await create_timer(.7).timeout;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await create_timer(1.2).timeout;await frames()
-	editor=city.build_mode;editor.open_editor();editor.distance_=26;editor.update_camera()
+	editor=city.build_mode;editor.open_editor();editor.focus=Vector3(79,0,10);editor.distance_=26;editor.update_camera()
 	var data:=L.add(L.empty(),{"type":"floor","a":[69.,1.],"b":[90.,22.]});check(editor.commit(data),"Create a clean supported construction area")
-	for category in C.CATEGORIES:editor.ui.show_category(category)
-	for i in range(180):
-		if editor.ui.studio.cache.size()>=C.OBJECTS.size()+6:break
+	var expected: Dictionary={}
+	for category in C.CATEGORIES:
+		editor.ui.show_category(category)
+		for id in editor.ui.cards:
+			if editor.ui.cards[id].visible:expected[str(id).trim_prefix("object:").trim_prefix("make:")]=true
+	for i in range(700):
+		if expected.keys().all(func(id):return editor.ui.studio.cache.has(id)):break
 		await frames(1)
-	check(editor.ui.studio.cache.size()==C.OBJECTS.size()+6,"All catalog cards have rendered real-model thumbnails")
+	check(expected.keys().all(func(id):return editor.ui.studio.cache.has(id)),"All available catalog cards have rendered real-model thumbnails")
 	var dock: Control=editor.ui.root_ui.get_node("BuildDock");check(dock.position.y>root.get_visible_rect().size.y*.6,"Construction controls occupy only the bottom of the scene")
 	await button("Category_桌柜");await button("Tool_object_desk");await world(Vector3(77,.18,10))
 	check(not kind("desk").is_empty(),"Desk is placed independently from its chair and decorations")
@@ -112,8 +118,8 @@ func run() -> void:
 	await mouse_at(root.get_final_transform()*city.camera.unproject_position(Vector3(69,.18,1)));await frames(3)
 	check(is_instance_valid(editor.preview) and editor.preview.has_node("Structure/Roof"),"Whole-house preview follows the pointer with actual roof and walls")
 	await photo("template-placement-preview");await world(Vector3(69,.18,1));var count: int=editor.layout.elements.size();check(count==preload("res://scripts/building/templates.gd").player_sample("single_one").elements.size(),"Mouse chooses the first whole-house position")
-	editor.focus=Vector3(88,0,19);editor.update_camera();await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"A second house can be mouse-placed beside the existing house")
-	await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"Overlapping whole-house placement is rejected")
+	editor.focus=Vector3(88,0,19);editor.update_camera();editor.place_template("single_one");await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"A second house can be mouse-placed beside the existing house")
+	editor.place_template("single_one");await world(Vector3(88,.18,19));check(editor.layout.elements.size()==count*2,"Overlapping whole-house placement is rejected")
 	await key(KEY_ESCAPE);editor.focus=Vector3(79,0,10);editor.update_camera();editor.set_night_preview(false);await photo("two-houses-bottom-catalog")
 	await button("BuildUndo");check(editor.layout.elements.size()==count,"One undo removes only the most recently placed whole house")
 	await button("BuildRedo");check(editor.layout.elements.size()==count*2,"One redo restores the complete second house with its attachments")

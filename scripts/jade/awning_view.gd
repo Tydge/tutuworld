@@ -11,6 +11,9 @@ func _process(_delta: float) -> void:
 	var cloth := get_node_or_null("Canopy") as Node3D
 	if cloth == null:
 		return
+	if city and city.has_method("update_camera") and is_instance_valid(city.build_mode) and city.build_mode.active and get_parent().get_parent().get_meta("furniture_kind","") == "jade_gallery":
+		cloth.visible = city.build_mode.roof_view
+		return
 	if not city or not city.has_method("update_camera") or not is_instance_valid(city.bunny) or (is_instance_valid(city.build_mode) and city.build_mode.active):
 		cloth.visible = true
 		return

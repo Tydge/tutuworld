@@ -84,7 +84,9 @@ static func story_descriptors(layout: Dictionary,grid: Dictionary,previous: Dict
 		var connected: Array=vertices[p]
 		if connected.size()!=1 and connected.size()!=2:continue
 		if connected.size()==2 and connected[0].z==connected[1].z:continue
-		var row: Dictionary=grid.walls[connected[0]];var id:=prefix+"joint_%d_%d"%[p.x,p.y]
+		var row: Dictionary=grid.walls[connected[0]]
+		if row.get("form","") in preload("res://scripts/building/structure_catalog.gd").WALL_FORMS:continue
+		var id:=prefix+"joint_%d_%d"%[p.x,p.y]
 		result[id]=descriptor("Joints",{"id":id,"type":"joint","storey":level,"point":Grid.point(p),"corner":connected.size()==2,"wall":row.id,"color":row.color,"axis":connected[0].z},[p,connected.size(),row.color])
 	return result
 static func sync(root: Node3D,layout: Dictionary,city: Node3D,prepared_plans: Dictionary={}) -> Dictionary:
@@ -260,6 +262,8 @@ static func floor_material(row: Dictionary) -> Material:
 	var material:=ShaderMaterial.new()
 	if row.style in ["herringbone","terrazzo","botanical","cottage_tile","glazed_tile"]:
 		material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",preload("res://scripts/building/structure_catalog.gd").pattern(row.style,true));material.set_shader_parameter("building_world_pattern",true)
+	elif row.style=="jade_paving":
+		material.shader=preload("res://assets/shaders/paving.gdshader");material.set_shader_parameter("paving_texture",preload("res://assets/jade/masonry.png"));material.set_shader_parameter("stone_color",Color(row.color))
 	elif row.style=="stone":material.shader=preload("res://assets/shaders/paving.gdshader");material.set_shader_parameter("paving_texture",preload("res://assets/terrain/village_stone_paving_v1.png"));material.set_shader_parameter("stone_color",Color(row.color))
 	elif row.style in ["brick","plaster"]:material.shader=preload("res://assets/shaders/home_surface.gdshader");material.set_shader_parameter("tint",Color(row.color));material.set_shader_parameter("pattern",2 if row.style=="brick" else 0);material.set_shader_parameter("building_world_pattern",true)
 	else:material.shader=preload("res://assets/shaders/home_floor.gdshader");material.set_shader_parameter("wood_color",Color(row.color));material.set_shader_parameter("world_aligned",true)
@@ -272,7 +276,7 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 		if row.type=="wall":pose_wall(module,row)
 		if row.type=="door":
 			module.door_open=bool(row.get("default_open",true));module.door_angle=-PI*.55 if module.door_open else 0.;module.door_target=module.door_angle;module.door_tweening=false;module.configure(city)
-			module.leaf.set_deferred("disabled",false);module.portal.set_deferred("disabled",module.door_open)
+			module.disable_leaves(false);module.portal.set_deferred("disabled",module.door_open)
 		if row.type in ["door","window"]:
 			for child in module.find_children("*","Node",true,false):
 				if child.has_meta("build_element_id"):child.set_meta("build_element_id",row.id)
@@ -327,10 +331,11 @@ static func build_module(root: Node3D,layout: Dictionary,row: Dictionary,parent:
 			var opening:={"id":row.id,"type":row.type,"offset":2.5,"width":2.86 if row.type=="door" else 2.2,"height":3.5 if row.type=="door" else 2.,"bottom":0. if row.type=="door" else 1.1,"color":row.color,"style":row.style,"form":row.get("form","classic")}
 			if row.type=="door":
 				b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(module);b.bake_section(module.get_node("Hinge"))
-				if row.get("form","classic")=="classic" or row.painted:paint(module,row,true)
+				if module.has_node("RightHinge"):b.bake_section(module.get_node("RightHinge"))
+				if row.get("form","classic")=="classic" or (row.painted and row.get("form","")!="jade_panel"):paint(module,row,true)
 				module.configure(city)
 				if not row.get("default_open",true):
-					module.door_open=false;module.door_angle=0.;module.door_target=0.;module.hinge.rotation.y=0.;module.portal.set_deferred("disabled",false)
+					module.door_open=false;module.door_angle=0.;module.door_target=0.;module.pose_leaves();module.portal.set_deferred("disabled",false)
 			var frame:=group(module,"Frame");frame.position.y=-.18 if row.type=="door" else 0.;b.build_opening(frame,0,opening);b.bake_section(frame)
 			if row.type=="window":
 				var picker:=StaticBody3D.new();picker.collision_layer=16;picker.collision_mask=0;var shape:=BoxShape3D.new();shape.size=Vector3(2.2,2.,.10);var collision:=CollisionShape3D.new();collision.shape=shape;collision.position.y=2.28;picker.add_child(collision);module.add_child(picker)
@@ -369,7 +374,7 @@ static func geometry_key(layout: Dictionary,row: Dictionary) -> String:
 		"wall":
 			var data:=wall_data(layout,row,Vector2.ZERO)
 			for opening in data.openings:opening.erase("id")
-			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.color,row.style,row.get("faces",{}),row.a[0]<row.b[0] if is_equal_approx(row.a[1],row.b[1]) else row.a[1]>row.b[1],data.openings,Storeys.of(row)>0])
+			return "wall:"+JSON.stringify([Layout.rect(row).size.length(),row.get("form",""),row.color,row.style,row.get("faces",{}),data.get("pavilion",[]),data.get("frame_span",[]),row.a[0]<row.b[0] if is_equal_approx(row.a[1],row.b[1]) else row.a[1]>row.b[1],data.openings,Storeys.of(row)>0])
 		"joint":return "joint:"+JSON.stringify([row.corner,row.color,row.axis])
 	return ""
 static func pose_wall(module: Node3D,row: Dictionary) -> void:
@@ -410,7 +415,34 @@ static func wall_data(layout: Dictionary,row: Dictionary,center: Vector2) -> Dic
 		if right-left<.001:continue
 		var mid:=(left+right)*.5;var offset:=absf(mid-float(row.a[axis]))
 		openings.append({"id":item.id,"type":item.type,"offset":offset,"color":item.color,"style":item.style,"width":right-left,"height":3.5 if item.type=="door" else 2.,"bottom":0. if item.type=="door" else 1.1,"geometry_only":true,"form":item.get("form","classic"),"full_width":width,"center_shift":absf(p[axis]-float(row.a[axis]))-offset})
-	return {"id":row.id,"a":[row.a[0]-center.x,row.a[1]-center.y],"b":[row.b[0]-center.x,row.b[1]-center.y],"openings":openings,"color":row.color,"style":row.style,"faces":row.get("faces",{})}
+	var data:={"id":row.id,"a":[row.a[0]-center.x,row.a[1]-center.y],"b":[row.b[0]-center.x,row.b[1]-center.y],"openings":openings,"color":row.color,"style":row.style,"form":row.get("form",""),"faces":row.get("faces",{})}
+
+	# Paint may split a wall into many rows. Keep column locations tied to the
+	# complete straight frame so recolouring one cell never adds or moves a pier.
+	var forms=preload("res://scripts/building/structure_catalog.gd")
+	if row.get("form","") in forms.TIMBER_WALLS or row.get("form","") in forms.GALLERY_WALLS:
+		var walls: Dictionary=Layout.compiled(layout,Storeys.of(row)).walls
+		var span_start:=roundi(first*2.)
+		var span_end:=roundi(last*2.)
+		var cross:=roundi(plane_*2.)
+		var step:=Vector3i(1,0,0) if axis==0 else Vector3i(0,1,0)
+		var low:=Vector3i(span_start,cross,0) if axis==0 else Vector3i(cross,span_start,1)
+		var high:=Vector3i(span_end,cross,0) if axis==0 else Vector3i(cross,span_end,1)
+		while walls.get(low-step,{}).get("form","") == row.form:low-=step
+		while walls.get(high,{}).get("form","") == row.form:high+=step
+		data.frame_span=[(high[axis]-low[axis])*.5,first-low[axis]*.5 if row.b[axis]>row.a[axis] else high[axis]*.5-last]
+	if row.get("form","") in preload("res://scripts/building/structure_catalog.gd").PAVILION_WALLS:
+		for roof in layout.elements:
+			if roof.get("form","")!="jade_pavilion" or Storeys.of(roof)!=Storeys.of(row):continue
+			var area:=Layout.rect(roof)
+			if first<area.position[axis]-.01 or last>area.end[axis]+.01:continue
+			if not is_equal_approx(plane_,area.position[1-axis]) and not is_equal_approx(plane_,area.end[1-axis]):continue
+			var direction:=signf(float(row.b[axis])-float(row.a[axis]))
+			var inward:=signf(area.get_center()[1-axis]-plane_)*direction*(1. if axis==0 else -1.)
+			var long_side: bool=axis==roundi(float(roof.get("yaw",0))/90.)%2
+			data.pavilion=[area.size[axis],area.size[1-axis],(area.get_center()[axis]-(first+last)*.5)*direction,inward,long_side]
+			break
+	return data
 
 static func mark_navigation(root: Node3D,row: Dictionary) -> void:
 	if row.is_empty():return

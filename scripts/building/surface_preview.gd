@@ -46,3 +46,5 @@ func bind_marker(marker: Color) -> void:
 func paint(color: Color,style: String) -> void:
 	for material in materials:
 		material.set_shader_parameter("tint",color);material.set_shader_parameter("pattern",C.pattern(style))
+		if style in ["jade_frame","jade_lacquer"]:
+			material.set_shader_parameter("jade_wall_texture",preload("res://assets/jade/lacquer.png") if style=="jade_lacquer" else preload("res://assets/jade/lime.png"))

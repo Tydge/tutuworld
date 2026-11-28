@@ -36,6 +36,7 @@ var demolition_pressed_id:=""
 var demolition_dragging:=false
 var demolition_candidate: Dictionary={}
 var demolition_key:=""
+var draw_press: Variant = null
 var start_point: Variant=null
 var rotation:=0.
 var undo_stack: Array=[]
@@ -79,6 +80,7 @@ var online_updating:=false
 var pending_layout: Dictionary={}
 var applying_layout: Dictionary={}
 var visible_sites: Dictionary={}
+var online_draft_base: Dictionary={}
 var close_confirmation: ConfirmationDialog
 var top_down:=false
 var preview_overlays: Dictionary={}
@@ -147,7 +149,8 @@ func open_nearby_parcel() -> Dictionary:
 		var result: Dictionary=await city.session.request_online("build_begin",{"parcel_id":id})
 		online_pending=false
 		if not result.get("ok",false):return result
-		online_lease=result.lease;heartbeat_left=10.;layout=Layout.normalize(saved_layout(),city.map_id)
+		online_draft_base=saved_layout()
+		online_lease=result.lease;heartbeat_left=10.;layout=Layout.normalize(online_draft_base,city.map_id)
 		# Separate draft serials avoid collisions while another parcel is being edited.
 		layout.next_id=maxi(int(layout.next_id),randi_range(1000000,1000000000))
 	var result:=open_editor(id)
@@ -206,6 +209,7 @@ func finish_close() -> void:
 	drafting.cancel();drafting.halo.hide();city.camera.projection=Camera3D.PROJECTION_PERSPECTIVE
 	ui.appearance_panel.close()
 	restore_moving()
+	online_draft_base={}
 	active=false;start_point=null;moving_id="";ghost.hide();grid.hide();ui.hide();clear_preview();clear_highlight();selection_outline.hide();set_process(false)
 	demolition_start=null;demolition_target_type="";demolition_candidate.clear();selected_unit.clear();moving_unit.clear()
 	for npc in npc_modes:
@@ -241,10 +245,28 @@ func choose_tool(id: String) -> void:
 	ui.appearance_panel.close()
 	upper_floor_plan.clear();upper_floor_locked=false;upper_floor_key=""
 	restore_moving()
+	var finishes: Dictionary = preload("res://scripts/building/structure_catalog.gd").FINISH_TOOLS
+	if finishes.has(id):
+		var finish: Dictionary = finishes[id]
+		choose_tool(id.get_slice(":",0))
+		structure_form = id.get_slice(":",1)
+		ui.updating = true
+		ui.color.color = Color(finish.color)
+		ui.style.selected = ui.STYLES.find(finish.style)
+		ui.updating = false
+		refresh_ui()
+		ui.message("点击网格立柱" if structure_form in ["jade_post","jade_low_post"] else "按住左键拖出范围，松开放置")
+		return
+	if id.begins_with("object:") and Catalog.is_house_plan(id.trim_prefix("object:")):
+		ui.show_templates()
+		place_template(id.trim_prefix("object:"))
+		return
+	if roof_view and id.begins_with("object:"): set_storey(editing_storey)
 	var parts:=id.split(":")
 	structure_form=parts[1] if parts.size()==2 and parts[0] in ["door","window","roof","stairs"] else ("straight" if parts[0]=="stairs" else "classic")
 	if parts[0] in ["door","window","roof","stairs"]:id=parts[0]
 	if id=="object:jade_flower_paper":print_index=maxi(0,city.session.state().jade_visits.prints.size()-1)
+	draw_press = null
 	tool=id;start_point=null;moving_id="";moving_unit.clear();demolition_start=null;demolition_target_type="";demolition_dragging=false;demolition_candidate.clear();demolition_key="";rotation=0.;ghost_key="";ghost.hide();clear_preview()
 	if id.begins_with("object:"):ui.show_category(Catalog.OBJECTS[id.trim_prefix("object:")].category)
 	if id!="select":
@@ -285,7 +307,7 @@ func commit(candidate: Dictionary,history: bool=true) -> bool:
 	if city.session.is_online():
 		var land=preload("res://scripts/building/parcels.gd")
 		if history and not land.same_outside(layout,candidate,parcel_id):ui.message("本次只能修改当前地皮，不能越界建造。",true);return false
-		var allowance:=preload("res://scripts/building/warehouse.gd").balance(city.session.state().inventory,saved_layout(),candidate)
+		var allowance:=preload("res://scripts/building/warehouse.gd").balance(city.session.state().inventory,online_draft_base,candidate)
 		if not allowance.ok:ui.message(allowance.message,true);return false
 		result=Layout.validate(candidate)
 		if result.ok:
@@ -321,6 +343,15 @@ func place_template(kind: String="cottage") -> bool:
 	template_kind=kind;set_storey(0)
 	choose_tool("template");ui.message(preload("res://scripts/building/templates.gd").SAMPLE_NAMES.get(kind,"整栋样板房")+"跟随鼠标 · 点击空地放置 · Esc 取消")
 	return true
+func convert_selected_house() -> void:
+	var shell := selected_row()
+	if not Catalog.is_house_plan(shell.get("kind", "")): return
+	var next := preload("res://scripts/building/templates.gd").convert_shell(layout,shell)
+	if not next.is_empty() and commit(next):
+		selected_id="";selected_unit.clear()
+		choose_tool("select")
+		ui.message("房屋已拆分为可编辑的结构 · 可撤销")
+
 func clear_plot() -> void:
 	var empty:=layout.duplicate(true) if parcel_id!="" else Layout.empty()
 	if parcel_id!="":empty.elements=preload("res://scripts/building/parcels.gd").outside(layout,parcel_id)
@@ -399,8 +430,13 @@ func delete_selected() -> void:
 func rotate_selected() -> void:
 	var kind:=tool.trim_prefix("object:") if tool.begins_with("object:") else str(selected_row().get("kind",""))
 	if Catalog.OBJECTS.get(kind,{}).get("mount","")=="wall":ui.message("挂墙物件会自动朝向墙面，拖动可换墙或调整高度");return
-	if tool.begins_with("object:") or tool in ["move","stairs","template"]:rotation=fposmod(rotation+90.,360.);ghost_key="";return
+	if tool.begins_with("object:") or tool in ["move","stairs","template","roof"]:rotation=fposmod(rotation+90.,360.);ghost_key="";return
 	var next:=layout.duplicate(true);var row:=Layout.find(next,selected_id)
+	if row.get("type","")=="roof":
+		row=row.duplicate(true)
+		row.yaw=fposmod(float(row.get("yaw",0.))+90.,360.)
+		commit(Layout.replace(layout,row))
+		return
 	if row.get("type","") not in ["object","stairs"]:return
 	row.yaw=fposmod(float(row.yaw)+90.,360.)
 	var snapped:=Layout.snap_object(next,row,false) if row.type=="stairs" or Catalog.mount(row)=="floor" else Layout.attach_at(next,row,Vector2(row.position[0],row.position[1]),str(row.support),int(row.support_level));row.position=snapped.position
@@ -471,6 +507,7 @@ func point_at(mouse: Vector2) -> Variant:
 			if point!=null:return Vector2(snappedf(point.x,.1),snappedf(point.z,.1))
 	var hit: Variant=Plane(Vector3.UP,.18+(editing_storey+(1 if roof_view and tool=="floor" else 0))*Storeys.HEIGHT).intersects_ray(origin,direction)
 	if hit==null:return null
+	if tile_brush() and start_point==null:return Grid.point(Grid.cell(Vector2(hit.x,hit.z)+Vector2.ONE*.0001))
 	return Vector2(snappedf(hit.x,.5),snappedf(hit.z,.5))
 func closest_wall(point_: Vector2) -> Dictionary:
 	if not wall_hint.is_empty() and point_.distance_to(wall_hint.point)<.01:return wall_hint
@@ -483,14 +520,26 @@ func closest_wall(point_: Vector2) -> Dictionary:
 func selected_print() -> Array:
 	var album:Array=city.session.state().jade_visits.prints
 	return [] if album.is_empty() else album[clampi(print_index,0,album.size()-1)].duplicate(true)
+func tile_brush() -> bool:
+	return tool=="floor" and structure_form in ["tile","jade_paving"]
+
 func row_at(point_: Vector2) -> Dictionary:
 	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):return {}
 	var row:={"type":tool,"storey":editing_storey+(1 if roof_view and tool=="floor" else 0),"color":ui.color.color.to_html(false),"style":ui.STYLES[ui.style.selected]}
-	if tool=="roof" and roof_snow:row.snow=true
+	if tool=="roof":
+		if roof_snow:row.snow=true
+		if not is_zero_approx(rotation):row.yaw=rotation
+	if tool=="wall":
+		var finish: Dictionary = preload("res://scripts/building/structure_catalog.gd").FINISH_TOOLS.get("wall:"+structure_form,{})
+		if not finish.is_empty():row.form=finish.get("form",finish.style)
 	if tool in ["door","window","roof","stairs"] and structure_form!="classic":row.form=structure_form
 	if tool=="template":return {"type":"template","position":[point_.x,point_.y],"yaw":rotation}
 	if tool=="stairs":row.form=structure_form;row.position=[point_.x,point_.y];row.yaw=rotation
 	elif tool.begins_with("object:"):row.type="object";row.kind=tool.trim_prefix("object:");row.position=[point_.x,point_.y];row.yaw=rotation;row.painted=brush_painted
+	elif tool=="wall" and structure_form in ["jade_post","jade_low_post"]:
+		row.a=[point_.x,point_.y];row.b=[point_.x+.5,point_.y]
+	elif tile_brush() and start_point==null:
+		row.a=[point_.x,point_.y];row.b=[point_.x+.5,point_.y+.5]
 	elif tool in ["floor","roof","wall","railing"]:
 		if start_point==null:return {}
 		var end:=point_
@@ -509,6 +558,7 @@ func row_at(point_: Vector2) -> Dictionary:
 			if near.is_empty():return {}
 			row.wall=near.wall;row.offset=near.offset;row.erase("anchor")
 		else:
+			if row.type=="roof":row.yaw=rotation
 			var area:=Layout.rect(row);var mid:=area.get_center();var delta:=point_-Vector2(snappedf(mid.x,.5),snappedf(mid.y,.5));row.a=[row.a[0]+delta.x,row.a[1]+delta.y];row.b=[row.b[0]+delta.x,row.b[1]+delta.y]
 	else:return {}
 	if tool=="object:jade_flower_paper":
@@ -521,17 +571,22 @@ func row_at(point_: Vector2) -> Dictionary:
 func candidate_layout(row: Dictionary) -> Dictionary:
 	if row.type=="template":return Layout.merge_template(layout,template_source(),Vector2(row.position[0],row.position[1]),float(row.get("yaw",rotation)))
 	if row.type=="stairs":return Extension.place_stair(layout,row,moving_id)
+	if tile_brush():return Layout.lay_tiles(layout,row)
 	if moving_id=="":return Layout.add(layout,row)
 	return Layout.replace_unit(layout,moving_unit,row) if not moving_unit.is_empty() else Layout.replace(layout,row)
 func place_at(point_: Vector2) -> bool:
 	if parcel_id!="" and not preload("res://scripts/building/parcels.gd").includes(parcel_bounds(),point_):ui.message("请在当前地皮边界内建造。",true);return false
-	if tool in ["floor","wall","roof","railing"] and start_point==null:start_point=point_;return true
+	if tool in ["floor","wall","roof","railing"] and start_point==null and structure_form not in ["jade_post","jade_low_post"]:start_point=point_;return true
 	var row:=row_at(point_)
 	if row.is_empty():ui.message("请把门窗放到足够长的墙面上。",true);return false
 	var placed_id: String=row.get("id","build_%d"%layout.next_id)
 	if not commit(candidate_layout(row)):return false
 	if moving_id!="":restore_moving();ghost.hide()
-	if row.type=="template":selected_id="";selected_unit.clear();refresh_ui();return true
+	if row.type=="template":
+		selected_id="";selected_unit.clear()
+		choose_tool("select")
+		ui.message("已放置 · 拖动封闭房间的墙壁扩建，或选中墙面装修")
+		return true
 	selected_id=placed_id;selected_unit.clear()
 	if row.type in ["floor","wall"]:reselect_unit(row)
 	start_point=null;clear_preview()
@@ -544,12 +599,19 @@ func element_id(node: Node) -> String:
 		if node.has_meta("build_element_id"):return node.get_meta("build_element_id")
 		node=node.get_parent()
 	return ""
-func pick_at(mouse: Vector2) -> String:
-	var origin: Vector3=city.camera.project_ray_origin(mouse);var direction: Vector3=city.camera.project_ray_normal(mouse);var query:=PhysicsRayQueryParameters3D.create(origin,origin+direction*250,28)
-	var excluded: Array[RID]=[]
+# Static bodies only change on a rebuild or cutaway, even while the pointer moves.
+var pick_exclusions: Array[RID]=[]
+var pick_hidden_walls: Dictionary={}
+var pick_layout_revision:=-1
+var pick_view_revision:=-1
+func update_pick_exclusions() -> void:
+	var view_revision: int=room.pick_mask_revision if is_instance_valid(room) else -1
+	if pick_layout_revision==layout_revision and pick_view_revision==view_revision:return
+	pick_layout_revision=layout_revision;pick_view_revision=view_revision
+	pick_exclusions.clear()
 	if is_instance_valid(room):
-		excluded.assign(room.other_storey_bodies)
-	var hidden_walls: Dictionary={}
+		pick_exclusions.assign(room.other_storey_bodies)
+	pick_hidden_walls.clear()
 	if is_instance_valid(room):
 		for section in room.sections:
 			# A hidden roof still has real collision on the current storey.
@@ -557,12 +619,15 @@ func pick_at(mouse: Vector2) -> String:
 			var hidden_roof: bool=section.roof and not roof_view
 			var cut_wall: bool=not section.roof and not show_roof and not roof_view and section.get("editor_hidden",false)
 			if not hidden_roof and not cut_wall:continue
-			for body in section.node.find_children("*","StaticBody3D",true,false):excluded.append(body.get_rid())
-			if cut_wall:hidden_walls[element_id(section.node)]=true
+			for body in section.node.find_children("*","StaticBody3D",true,false):pick_exclusions.append(body.get_rid())
+			if cut_wall:pick_hidden_walls[element_id(section.node)]=true
 	if is_instance_valid(room):
 		for body in room.get_node("Furnishing").find_children("*","StaticBody3D",true,false):
-			if body.collision_layer!=16:excluded.append(body.get_rid())
-	query.exclude=excluded;var hit: Dictionary=city.get_world_3d().direct_space_state.intersect_ray(query);var max_distance:=250.
+			if body.collision_layer!=16 or (not roof_view and Catalog.is_house_plan(body.get_parent().get_meta("furniture_kind",""))): pick_exclusions.append(body.get_rid())
+func pick_at(mouse: Vector2) -> String:
+	var origin: Vector3=city.camera.project_ray_origin(mouse);var direction: Vector3=city.camera.project_ray_normal(mouse);var query:=PhysicsRayQueryParameters3D.create(origin,origin+direction*250,28)
+	update_pick_exclusions()
+	query.exclude=pick_exclusions;var hit: Dictionary=city.get_world_3d().direct_space_state.intersect_ray(query);var max_distance:=250.
 	origin.y-=build_base()
 	var picked_id:="";picked_world=null
 	if not hit.is_empty():
@@ -572,6 +637,17 @@ func pick_at(mouse: Vector2) -> String:
 			if node.get_meta("build_grid_type","")=="floor":
 				var floor_: Dictionary=Layout.walkable_grid(layout,editing_storey).floors.get(Grid.cell(picked_world),{});picked_id=str(floor_.get("id",""));break
 			node=node.get_parent()
+	if not roof_view:
+		var slab_y := .18 + Storeys.HEIGHT * editing_storey
+		var foot: Variant = Plane(Vector3.UP,slab_y + .01).intersects_ray(origin,direction)
+		if foot != null and origin.distance_to(foot) < max_distance:
+			for shell in layout.elements:
+				if Storeys.of(shell) != editing_storey or not Catalog.is_house_plan(shell.get("kind","")): continue
+				if Catalog.footprint(shell).has_point(Vector2(foot.x,foot.z)):
+					picked_id = shell.id
+					picked_world = Vector2(foot.x,foot.z)
+					max_distance = origin.distance_to(foot)
+					break
 	# A cutaway changes visibility, not physics. Pick the visible low wall without
 	# letting its hidden upper collision intercept furniture selection.
 	for row in layout.elements:
@@ -579,7 +655,7 @@ func pick_at(mouse: Vector2) -> String:
 		var a:=Vector2(row.a[0],row.a[1]);var b:=Vector2(row.b[0],row.b[1]);var dir: Vector2=(b-a).normalized();var normal:=Vector3(-dir.y,0,dir.x)
 		var point_: Variant=Plane(normal,normal.dot(Vector3(a.x,0,a.y))).intersects_ray(origin,direction)
 		if point_==null:continue
-		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var top: float=(.80 if hidden_walls.has(row.id) else 4.58)+editing_storey*Storeys.HEIGHT
+		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var top: float=(.80 if pick_hidden_walls.has(row.id) else 4.58)+editing_storey*Storeys.HEIGHT
 		if along>=0 and along<=a.distance_to(b) and point_.y>=.18+editing_storey*Storeys.HEIGHT and point_.y<top and origin.distance_to(point_)<max_distance+.15:picked_id=row.id;picked_world=Vector2(point_.x,point_.z);max_distance=origin.distance_to(point_)
 	# Real window holes have no blocking pane collider; pick their wall-plane opening.
 	for row in layout.elements:
@@ -587,7 +663,7 @@ func pick_at(mouse: Vector2) -> String:
 		var wall:=Layout.find(layout,row.wall);var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var dir: Vector2=(b-a).normalized();var normal:=Vector3(-dir.y,0,dir.x)
 		var point_: Variant=Plane(normal,normal.dot(Vector3(a.x,0,a.y))).intersects_ray(origin,direction)
 		if point_==null:continue
-		if hidden_walls.has(row.wall) and point_.y>.8+editing_storey*Storeys.HEIGHT:continue
+		if pick_hidden_walls.has(row.wall) and point_.y>.8+editing_storey*Storeys.HEIGHT:continue
 		var along: float=(Vector2(point_.x,point_.z)-a).dot(dir);var width:=2.86 if row.type=="door" else 2.2;var bottom: float=(.18 if row.type=="door" else 1.28)+editing_storey*Storeys.HEIGHT;var height:=3.5 if row.type=="door" else 2.
 		if absf(along-row.offset)<width*.5+.13 and point_.y>bottom-.1 and point_.y<bottom+height+.15 and origin.distance_to(point_)<max_distance+.2:picked_id=row.id;picked_world=Vector2(point_.x,point_.z);max_distance=origin.distance_to(point_)
 	for row in layout.elements:
@@ -620,7 +696,7 @@ func update_ghost(point_: Vector2) -> void:
 		# Match commit: compare against the normalized private draft. Wire snapshots
 		# may contain different numeric types or a newer version of another parcel.
 		var draft_state: Dictionary=city.session.state().duplicate();draft_state[Land.layout_key(city.map_id)]=layout
-		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(draft_state,parcel_id,result.get("layout",candidate_layout(row)),parcel_revision)
+		var access: Dictionary=preload("res://scripts/building/parcels.gd").validate_edit(draft_state,parcel_id,result.layout if result.has("layout") else candidate_layout(row),parcel_revision)
 		if not access.ok:result=access
 	if row.type=="template":
 		update_template_preview(Vector2(row.position[0],row.position[1]),result.ok)
@@ -727,7 +803,7 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 				var slab:=BoxMesh.new();slab.size=Vector3(area.size.x,.30,area.size.y);var visual:=MeshInstance3D.new();visual.mesh=slab;visual.material_override=m;visual.position.y=.03;preview.add_child(visual)
 			"wall":
 				if area.size.length()<.01:return
-				b.blueprint.materials.plaster=row.color;b.build_wall(preview,{"id":"WallPreview","a":[row.a[0]-mid.x,row.a[1]-mid.y],"b":[row.b[0]-mid.x,row.b[1]-mid.y],"openings":[],"color":row.color,"style":row.style,"faces":row.get("faces",{})})
+				b.blueprint.materials.plaster=row.color;b.build_wall(preview,{"id":"WallPreview","a":[row.a[0]-mid.x,row.a[1]-mid.y],"b":[row.b[0]-mid.x,row.b[1]-mid.y],"openings":[],"color":row.color,"style":row.style,"form":row.get("form",""),"faces":row.get("faces",{})})
 			"railing":
 				Stairs.rail(b,preview,Vector3(row.a[0]-mid.x,.18,row.a[1]-mid.y),Vector3(row.b[0]-mid.x,.18,row.b[1]-mid.y))
 			"roof":
@@ -741,7 +817,7 @@ func update_structure_preview(row: Dictionary,valid: bool) -> void:
 				b.build_opening(holder,0,opening)
 				if row.type=="door":
 					var leaf:=Node3D.new();leaf.set_script(preload("res://scripts/building/room_door.gd"));holder.add_child(leaf);b.root=leaf;b.blueprint.walls=[{"a":[-2.5,0],"b":[2.5,0],"openings":[opening]}];b.build_door(leaf)
-					if row.get("form","classic")=="classic" or row.get("painted",false):Factory.paint(leaf,row,true)
+					if row.get("form","classic")=="classic" or (row.get("painted",false) and row.get("form","")!="jade_panel"):Factory.paint(leaf,row,true)
 				if moving_id!="" and room.render_cache.has(moving_id):
 					var original: Node3D=room.render_cache[moving_id].node;preview_walls.append([original,original.visible]);original.hide()
 
@@ -885,7 +961,9 @@ func _unhandled_input(event: InputEvent) -> void:
 				var point_: Variant=ground_at(event.position) if tool=="upper_floor" else point_at(event.position)
 				if point_!=null:
 					if tool=="upper_floor":update_upper_floor(point_,true)
-					else:place_at(point_)
+					else:
+						if start_point == null and tool in ["wall","floor","railing","roof"]: draw_press = event.position
+						place_at(point_)
 		get_viewport().set_input_as_handled()
 
 func ground_at(mouse: Vector2) -> Variant:
@@ -942,6 +1020,22 @@ func reselect_unit(row: Dictionary) -> void:
 	selected_id=str(source.get("id",""));selected_unit=Layout.unit_at(layout,selected_id,Layout.rect(row).get_center()) if not source.is_empty() else {}
 func _input(event: InputEvent) -> void:
 	if active and is_instance_valid(ui) and ui.route_scroll(event):get_viewport().set_input_as_handled();return
+	if active and draw_press != null and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		var dragged: bool = event.position.distance_to(draw_press) > 7.
+		draw_press = null
+		if tile_brush() and not dragged and start_point!=null:
+			if not ui.pointer_over_ui(event.position):place_at(start_point+Vector2.ONE*.5)
+			start_point=null;ghost_key=""
+			get_viewport().set_input_as_handled()
+			return
+		if dragged and start_point != null:
+			var end: Variant = point_at(event.position)
+			if end != null and not ui.pointer_over_ui(event.position): place_at(end)
+			start_point = null
+			clear_preview()
+			ghost_key = ""
+			get_viewport().set_input_as_handled()
+			return
 	if active and is_instance_valid(drafting) and drafting.release(event):get_viewport().set_input_as_handled();return
 	if active and demolition_start!=null and event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT and not event.pressed:
 		finish_demolition(event.position);get_viewport().set_input_as_handled()
@@ -1040,7 +1134,8 @@ func sync_online_layout() -> void:
 	if not city.session.is_online():return
 	var sites: Dictionary=city.session.state().get("building_sites",{})
 	if active:
-		preload("res://scripts/building/construction_sites.gd").sync(city,sites);visible_sites=sites.duplicate(true)
+		if sites!=visible_sites:
+			preload("res://scripts/building/construction_sites.gd").sync(city,sites);visible_sites=sites.duplicate(true)
 		var site: Dictionary=sites.get(parcel_id,{})
 		if site.get("owner_id","")!=city.session.state().player_id and not online_pending:
 			online_lease="";layout=Layout.normalize(saved_layout(),city.map_id);rebuild();finish_close();city.hud.notify("施工状态已结束，未确认的修改没有发布。")

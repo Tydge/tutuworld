@@ -27,7 +27,7 @@ func run() -> void:
 	check(L.compiled(batch).floors.values().filter(func(row):return row.style=="terrazzo").size()==576,"Default batch changes every matching cell in this room")
 	check(L.compiled(batch).floors[Vector2i(160,8)].style=="wood","The neighboring room keeps its original floor")
 	var special:=selected.duplicate(true);special.color="ffffff";var mixed:=clean(L.replace_unit(data,selected,special));var next:=clean(E.paint(mixed,L.unit_at(mixed,L.compiled(mixed).floors[Vector2i(136,8)].id,Vector2(68.25,4.25)),Color("c6b498"),"herringbone",true,0,Vector2(70,6)))
-	check(L.compiled(next).floors[Vector2i(134,8)].color=="ffffff","A different existing floor finish stays unchanged by batch paint")
+	check(L.compiled(next).floors[Vector2i(134,8)].color=="c6b498","Room-wide paint includes previously customized cells inside the same room")
 	var wall: Dictionary=grid.walls[Vector3i(134,0,0)];var unit:=L.unit_at(data,wall.id,Vector2(67.25,0));var inside:=clean(E.paint(data,unit,Color("9cab92"),"botanical",true,0,Vector2(70,6)))
 	var inside_grid:=L.compiled(inside)
 	check(C.surface(inside_grid.walls[Vector3i(134,0,0)],"positive").style=="botanical" and C.surface(inside_grid.walls[Vector3i(134,0,0)],"negative").style=="original","Only the inside of a reversed or forward wall changes")

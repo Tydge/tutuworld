@@ -49,8 +49,8 @@ func _ready() -> void:
 func level() -> int:return editor.editing_storey+(1 if editor.roof_view and editor.tool=="room" else 0)
 func ground(mouse: Vector2) -> Variant:return screen_point(mouse,.18+level()*S.HEIGHT)
 func base() -> Dictionary:
-	var key:=str(editor.layout_revision)+":"+str(level())
-	if context_key!=key:cached_context=Edit.prepare(editor.layout,level());context_key=key;hover_key=""
+	var key: String=str(editor.layout_revision)+":"+str(level())+":"+editor.parcel_id
+	if context_key!=key:cached_context=Edit.prepare(editor.editing_layout(),level());context_key=key;hover_key=""
 	return cached_context
 func clear_stage() -> void:
 	for pair in originals:
@@ -180,7 +180,10 @@ func finish(mouse: Vector2) -> void:
 		for field in ["a","b"]:unit[field][0]+=planned.delta.x;unit[field][1]+=planned.delta.y
 	clear_stage();mode="";dragging=false
 	if planned.get("ok",false):
-		if editor.commit(Edit.materialize(context_,planned)):
+		var candidate:=Edit.materialize(context_,planned)
+		if editor.parcel_id!="":
+			candidate.elements=preload("res://scripts/building/parcels.gd").outside(editor.layout,editor.parcel_id)+candidate.elements
+		if editor.commit(candidate):
 			if action=="wall" and not unit.is_empty():editor.reselect_unit(unit)
 			editor.refresh_ui();editor.ui.message("房间调整已保存 · 可一步撤销" if action=="wall" else "房间已建好 · 可继续拖建下一间")
 	else:editor.ui.message(planned.get("message","按住左键拖出房间"),true)
@@ -188,6 +191,9 @@ func finish(mouse: Vector2) -> void:
 func sample(mouse: Vector2) -> void:
 	var id: String=editor.pick_at(mouse);var row:=L.find(editor.layout,id)
 	if row.is_empty():editor.ui.message("点击家具或墙地表面吸取同款");return
+	if C.is_house_plan(row.get("kind", "")):
+		editor.choose_tool("object:" + row.kind)
+		return
 	var copied:=row.duplicate(true);var type: String=row.type
 	if type=="wall":
 		var side: String="positive" if (Vector2(editor.city.camera.position.x,editor.city.camera.position.z)-L.rect(row).get_center()).dot(preload("res://scripts/building/structure_catalog.gd").normal(row))>=0. else "negative"
@@ -203,6 +209,7 @@ func apply_brush(row: Dictionary) -> Dictionary:
 		for field in ["appearance","painted","color","style"]:
 			if brush.has(field):row[field]=brush[field].duplicate(true) if brush[field] is Dictionary else brush[field]
 	elif row.type=="roof":row.yaw=editor.rotation
+	elif row.type=="wall" and brush.has("form"):row.form=brush.form
 	return row
 func paint(mouse: Vector2) -> bool:
 	if brush.get("type","") not in ["floor","wall"] or editor.tool!=brush.type or editor.start_point!=null:return false

@@ -598,7 +598,14 @@ func receive_online_snapshot(data: Dictionary) -> void:
 		authority.state.jade_visits=preload("res://scripts/jade/play_board.gd").normalize(journal)
 	for map_id in ["city","icefield","jade"]:
 		var key: String=preload("res://scripts/building/parcels.gd").layout_key(map_id)
-		if not authority.state.has(key):authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)
+		if not authority.state.has(key):
+			authority.state[key]=preload("res://scripts/building/parcels.gd").layout_for(prior_state,map_id)
+		else:
+			# JSON decodes integers as floats. Match native row types so opening or
+			# discarding a draft reuses the already-rendered upper walls and roofs.
+			for row in authority.state[key].get("elements",[]):
+				for field in ["storey","axis","support_level"]:
+					if row.has(field):row[field]=int(row[field])
 	authority.job=data.get("job",{}).duplicate(true)
 	online_locks=data.get("locks",{});online_care=data.get("care_history",{});online_doors=data.get("doors",{})
 	active_character_id=str(state().player_id)

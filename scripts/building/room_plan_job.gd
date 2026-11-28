@@ -1,7 +1,6 @@
 extends RefCounted
 ## Resumable version of the closed-region flood fill used by room plans.
 const Grid=preload("res://scripts/building/grid_layout.gd")
-const Site=preload("res://scripts/building/site.gd")
 var grid: Dictionary
 var first: Vector2i
 var last: Vector2i
@@ -17,7 +16,11 @@ var cells: Dictionary={}
 var start: Vector2i
 var done:=false
 func _init(source: Dictionary) -> void:
-	grid=source;first=Grid.cell(Site.PLOT.end);last=Grid.cell(Site.PLOT.position)
+	grid=source
+	if grid.floors.is_empty() and grid.walls.is_empty():done=true;return
+	if not grid.floors.is_empty():first=grid.floors.keys()[0]
+	else:first=Grid.ends(grid.walls.keys()[0])[0]
+	last=first
 	for c: Vector2i in grid.floors:first=first.min(c);last=last.max(c+Vector2i.ONE)
 	for edge: Vector3i in grid.walls:
 		for c in Grid.ends(edge):first=first.min(c);last=last.max(c+Vector2i.ONE)

@@ -3,6 +3,7 @@ extends RefCounted
 const C=preload("res://scripts/building/catalog.gd")
 const S=preload("res://scripts/building/storeys.gd")
 const G=preload("res://scripts/building/grid_layout.gd")
+const Forms=preload("res://scripts/building/structure_catalog.gd")
 const FACE_OFFSET:=.14
 static func normal(row: Dictionary) -> Vector2:return C.rotate_xz(Vector2.DOWN,float(row.get("yaw",0.)))
 static func height(row: Dictionary) -> float:return float(row.get("mount_height",C.OBJECTS[row.kind].get("mount_height",1.6)))
@@ -14,7 +15,7 @@ static func support(layout: Dictionary,row: Dictionary,walls: Dictionary={}) -> 
 	var width: float=C.OBJECTS[row.kind].size.x;var first:=floori((p[axis]-width*.5-.015)*2.);var last:=ceili((p[axis]+width*.5+.015)*2.);var plane_:=roundi(p[across]*2.);var wall: Dictionary={}
 	for i in range(first,last):
 		var edge:=Vector3i(i,plane_,0) if axis==0 else Vector3i(plane_,i,1)
-		if not walls.has(edge):return {}
+		if not walls.has(edge) or not Forms.supports_mounts(walls[edge]):return {}
 		wall=walls[edge]
 	if height(row)<.15 or height(row)+float(C.OBJECTS[row.kind].height)>4.35:return {}
 	for hole in layout.elements:
@@ -36,7 +37,7 @@ static func attach(layout: Dictionary,row: Dictionary,p: Vector2,viewer: Vector2
 	var out:=row.duplicate(true);out.position=[p.x,p.y];out.support="";out.mount_height=snappedf(clampf(base if base>=0. else height(row),.15,4.35-float(C.OBJECTS[row.kind].height)),.05)
 	var best:=2.5;var chosen: Dictionary={};var point_:=p
 	for wall in layout.elements:
-		if wall.type!="wall" or S.of(wall)!=S.of(row):continue
+		if wall.type!="wall" or S.of(wall)!=S.of(row) or not Forms.supports_mounts(wall):continue
 		var a:=Vector2(wall.a[0],wall.a[1]);var b:=Vector2(wall.b[0],wall.b[1]);var q:=Geometry2D.get_closest_point_to_segment(p,a,b);var distance:=p.distance_to(q)
 		if distance<best:best=distance;chosen=wall;point_=q
 	if chosen.is_empty():return out

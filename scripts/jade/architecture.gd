@@ -224,6 +224,27 @@ static func dims(kind: String) -> Vector3:return preload("res://scripts/jade/lay
 static func facade_lantern(span: float,height: float,depth: float,side: float) -> Vector3:
 	return Vector3(side*(span-.5),height-1.28,depth+.74)
 const POST_LANTERN:=Vector3(.79,3.08,0)
+static func hall_roof(m: Node3D,kind: String,w: float,h: float,z: float) -> void:
+	var royal := kind in ["palace","court"]
+	if kind not in ["loft","inn","clocktower"]:roof(m,w+1.35,z+1.65,3.6 if royal else 2.5,h,royal)
+	if kind=="palace":
+		box(m,Vector3(0,h+1.85,0),Vector3(w*1.36,3.3,z*1.2),RED)
+		for i in range(-2,3):lattice(m,Vector3(i*w*.245,h+2.88,z*.61),w*.18,.9)
+		roof(m,w*.81,z*.81,3.1,h+3.6,royal)
+
+static func bell_turret(m: Node3D,top: float) -> void:
+	# Open lantern drum rises above the balcony roof, ringed by eight glazed gables.
+	for i in range(8):
+		var angle:=i*TAU/8.;var a:=Vector3(cos(angle)*2.48,top+1.85,sin(angle)*2.48)
+		var b:=Vector3(cos(angle+TAU/8.)*2.48,a.y,sin(angle+TAU/8.)*2.48)
+		column(m,a,.155,3.7);beam(m,a+Vector3.UP*1.68,b+Vector3.UP*1.68,.26,JADE)
+		beam(m,a+Vector3.UP*1.35,b+Vector3.UP*1.35,.14,GOLD)
+	var bell:=G.mat("8b6842",.43);bell.metallic=.38
+	G.cylinder(m,Vector3(0,top+1.6,0),.82,2.4,bell,.55)
+	for j in range(3):G.cylinder(m,Vector3(0,top+.48+j*.26,0),.94-j*.08,.11,bell)
+	roof(m,3.64,3.65,2.4,top+3.6,false)
+	G.cylinder(m,Vector3.UP*(top+6.3),.21,.68,G.mat(GOLD),.06)
+
 static func shell(n: Node3D,kind: String,city_floor:=false) -> void:
 	var d:=dims(kind);var w:=d.x;var h:=d.y;var z:=d.z;var royal:=kind in ["palace","court"]
 	var wood:=RED if royal or kind=="loft" else WOOD
@@ -233,12 +254,7 @@ static func shell(n: Node3D,kind: String,city_floor:=false) -> void:
 	if kind=="pavilion":
 		preload("res://scripts/jade/pavilions.gd").octagon(n,w,h,z);return
 	var exterior:=group(n,"Exterior")
-	mesh_part(exterior,"roof_"+kind,func(m):
-		if kind not in ["loft","inn","clocktower"]:roof(m,w+1.35,z+1.65,3.6 if royal else 2.5,h,royal)
-		if kind=="palace":
-			box(m,Vector3(0,h+1.85,0),Vector3(w*1.36,3.3,z*1.2),wood)
-			for i in range(-2,3):lattice(m,Vector3(i*w*.245,h+2.88,z*.61),w*.18,.9)
-			roof(m,w*.81,z*.81,3.1,h+3.6,royal))
+	mesh_part(exterior,"roof_"+kind,hall_roof.bind(kind,w,h,z))
 	for face in ["Front","Rear","West","East"]:
 		var section:=group(n,face);section.rotation.y={"Front":0.,"Rear":PI,"West":-PI/2,"East":PI/2}[face]
 		var front: bool=face=="Front";var span:=w if face in ["Front","Rear"] else z
@@ -302,19 +318,7 @@ static func shell(n: Node3D,kind: String,city_floor:=false) -> void:
 	if kind=="court":preload("res://scripts/jade/pavilions.gd").side_wing(n,w,h,z,.325 if city_floor else 0.)
 	if kind in ["loft","inn","clocktower"]:preload("res://scripts/jade/joinery.gd").upper_floor(n,w,h,z,city_floor)
 	if kind=="clocktower":
-		mesh_part(exterior,"bell_turret",func(m):
-			var top:=h+4.5
-			# Open lantern drum rises above the balcony roof, ringed by eight glazed gables.
-			for i in range(8):
-				var angle:=i*TAU/8.;var a:=Vector3(cos(angle)*2.48,top+1.85,sin(angle)*2.48)
-				var b:=Vector3(cos(angle+TAU/8.)*2.48,a.y,sin(angle+TAU/8.)*2.48)
-				column(m,a,.155,3.7);beam(m,a+Vector3.UP*1.68,b+Vector3.UP*1.68,.26,JADE)
-				beam(m,a+Vector3.UP*1.35,b+Vector3.UP*1.35,.14,GOLD)
-			var bell:=G.mat("8b6842",.43);bell.metallic=.38
-			G.cylinder(m,Vector3(0,top+1.6,0),.82,2.4,bell,.55)
-			for j in range(3):G.cylinder(m,Vector3(0,top+.48+j*.26,0),.94-j*.08,.11,bell)
-			roof(m,3.64,3.65,2.4,top+3.6,false)
-			G.cylinder(m,Vector3.UP*(top+6.3),.21,.68,G.mat(GOLD),.06))
+		mesh_part(exterior,"bell_turret",bell_turret.bind(h+4.5))
 	if kind in ["forge","cloister","store","cottage"]:preload("res://scripts/jade/joinery.gd").veranda(n,kind,w,h,z,city_floor)
 static func prop(n: Node3D,kind: String) -> void:
 	if preload("res://scripts/jade/room_furniture.gd").SIZES.has(kind):

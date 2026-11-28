@@ -22,7 +22,7 @@ func owned_site(owner: String) -> String:
 	return ""
 func fail(message: String) -> Dictionary:return {"ok":false,"message":message}
 func apply(id: String,verb: String,args: Dictionary) -> Dictionary:
-	notices.clear()
+	if verb!="build_ping":notices.clear()
 	var a=manager.actors[id];var pawn=manager.pawns[id];var parcel: Variant=args.get("parcel_id","")
 	if not parcel is String or Land.map_for(parcel)!=a.state.map_id:return fail("请选择当前岛上的地皮。")
 	var map_id: String=a.state.map_id
@@ -90,8 +90,10 @@ func apply(id: String,verb: String,args: Dictionary) -> Dictionary:
 	if not checked.ok:return checked
 	var scope:=Land.validate_edit(a.state,parcel,checked.layout,lease.revision)
 	if not scope.ok:return scope
+	var submitted_ids: Dictionary = {}
+	for mapped_id in id_map.values():submitted_ids[mapped_id]=true
 	for row in checked.layout.elements:
-		if row.id in id_map.values() and not Land.contains_row(parcel,row,checked.layout):return fail("请将所有建筑留在当前地皮内。")
+		if submitted_ids.has(row.id) and not Land.contains_row(parcel,row,checked.layout):return fail("请将所有建筑留在当前地皮内。")
 	for other in manager.pawns:
 		if manager.actors[other].state.map_id==map_id and not Safety.safe(previous,checked.layout,manager.pawns[other].position-Vector3.UP*Land.base_height(map_id)):return fail("角色正在使用这层地板或楼梯，请先离开后再确认完成。")
 	var stock=preload("res://scripts/building/warehouse.gd")

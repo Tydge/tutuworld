@@ -51,7 +51,8 @@ static func slab_plan(ctx: Dictionary,delta: int) -> Dictionary:
 			var cell:=Vector2i(i,n) if ctx.axis==1 else Vector2i(n,i)
 			if grow:
 				var p:=G.point(cell);var site=preload("res://scripts/building/site.gd")
-				if not site.within(p) or not site.within(p+Vector2.ONE*.5):return L.fail("楼板扩建超出了建造地块。")
+				var map_id: String = ctx.base.source.get("map_id", "city")
+				if not site.within(p,map_id) or not site.within(p+Vector2.ONE*.5,map_id):return L.fail("楼板扩建超出了建造地块。")
 				if not grid.floors.has(cell):grid.floors[cell]=ctx.base.grid.floors[nearest]
 			else:grid.floors.erase(cell)
 	var a:=Vector2(ctx.lo*.5,lo*.5) if ctx.axis==1 else Vector2(lo*.5,ctx.lo*.5)

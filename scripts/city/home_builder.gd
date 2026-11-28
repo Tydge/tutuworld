@@ -36,6 +36,7 @@ func material(color: String,pattern: int=0) -> Material:
 	if not materials.has(key):
 		var m:=ShaderMaterial.new();m.shader=load("res://assets/shaders/home_surface.gdshader")
 		m.set_shader_parameter("tint",Color(color));m.set_shader_parameter("pattern",pattern)
+		if pattern in [9,11]:m.set_shader_parameter("jade_wall_texture",preload("res://assets/jade/lacquer.png") if pattern==11 else preload("res://assets/jade/lime.png"))
 		m.set_shader_parameter("roughness_value",.82 if pattern in [1,2] else .94)
 		materials[key]=m
 	return materials[key]

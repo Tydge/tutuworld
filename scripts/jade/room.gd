@@ -25,6 +25,19 @@ func update_lighting(day: float) -> void:
 func _process(delta: float) -> void:
 	if not is_instance_valid(city) or not is_instance_valid(city.camera):return
 	if not is_instance_valid(distant_proxy):distant_proxy=get_node_or_null("DistantShell") as MeshInstance3D
+	if has_meta("player_prefab") and is_instance_valid(city.build_mode) and city.build_mode.active:
+		var outside_view: bool = city.build_mode.roof_view
+		$Exterior.visible = outside_view
+		$HouseName.visible = outside_view
+		if has_node("UpperFloor"): $UpperFloor.visible = outside_view
+		if has_node("West/SideEaves"): $West/SideEaves.visible = outside_view
+		var local_eye := to_local(city.camera.global_position)
+		for face in ["Front","Rear","East","West"]:
+			var toward: Vector3 = {"Front":Vector3.BACK,"Rear":Vector3.FORWARD,"East":Vector3.RIGHT,"West":Vector3.LEFT}[face]
+			get_node(face).visible = outside_view or city.build_mode.show_roof or local_eye.dot(toward) < 0.
+		using_cutaway = true
+		return
+	if has_node("West/SideEaves"): $West/SideEaves.show()
 	var p:=to_local(city.bunny.global_position)
 	var near_room:=p.length_squared()<760.
 	if wall_occluder:wall_occluder.visible=not near_room

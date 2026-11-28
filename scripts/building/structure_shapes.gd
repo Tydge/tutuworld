@@ -19,6 +19,20 @@ static func prism(n: Node3D,points: Array[Vector2],depth: float,material: Materi
 	G.mesh(n,st.commit(),Vector3.ZERO,material,id)
 static func opening(b: RefCounted,n: Node3D,x: float,data: Dictionary) -> void:
 	var w: float=data.width;var h: float=data.height;var bottom: float=b.floor_y+data.bottom;var form: String=data.get("form","classic");var trim: Material=b.material(data.get("color",b.blueprint.materials.trim),1)
+	var jade = preload("res://scripts/building/jade_structure_art.gd")
+	if form in ["jade_shop_window","jade_smith_window"]:
+		var frame: Node3D=b.group(n,"ShopWindow",Vector3(x,bottom+h*.5,0))
+		frame.scale=Vector3(w/2.2,h/2.,1.)
+		jade.stamp(b,frame,form,jade.shop_window.bind(form=="jade_smith_window"),data.get("color","704c38"))
+		return
+	if form == "jade_lattice":
+		var frame: Node3D = b.group(n,"Lattice",Vector3(x,bottom+h*.5,0))
+		frame.scale = Vector3(w/2.2,h/2.,1.)
+		jade.stamp(b, frame,"lattice",jade.lattice,data.get("color","704c38"))
+		return
+	if form == "jade_panel":
+		var header: Node3D = b.group(n,"DoorPlaque",Vector3(x,bottom,0))
+		jade.stamp(b,header,"portal",jade.portal)
 	if form=="round":
 		var ring:=TorusMesh.new();ring.inner_radius=.93;ring.outer_radius=1.08;ring.rings=48;ring.ring_segments=8
 		var rim:=G.mesh(n,ring,Vector3(x,bottom+h*.5,0),trim,"PortholeFrame");rim.rotation.x=PI*.5;rim.scale=Vector3(w/2.1,1.,h/2.1)
@@ -48,7 +62,24 @@ static func door(b: RefCounted,n: Node3D,form: String) -> void:
 	var opening: Dictionary=b.blueprint.walls[0].openings[0];var w: float=opening.width-.14;var h: float=opening.height-.05
 	n.position.y=b.floor_y;var hinge: Node3D=b.group(n,"Hinge",Vector3(-w*.5,0,0));b.root.door_width=w;b.root.door_height=h
 	var oak: Material=b.material("b58b62",1);var brass: Material=b.material("c6aa6a");var cream: Material=b.material("ece1c8")
-	if form=="arch":
+	if form == "jade_panel":
+		var width:=w*.5
+		var lacquer: Material=b.material(opening.get("color","984c37"),11)
+		for leaf in [hinge,b.group(n,"RightHinge",Vector3(width,0,0))]:
+			if leaf!=hinge:leaf.rotation.y=PI
+			b.block(leaf,Vector3(width*.5,h*.5,0),Vector3(width,h,.14),lacquer,"LacquerDoor")
+			for side in [-1.,1.]:
+				for rail in [.12,.54,.9]:
+					b.block(leaf,Vector3(width*.5,h*rail,side*.08),Vector3(width,.09,.035),oak,"CrossRail")
+				for i in range(4):
+					for j in range(3):
+						G.ball(leaf,Vector3(width*(i+1)/5.,h*(.22+j*.22),side*.10),Vector3.ONE*.046,brass,"BrassStud")
+				G.ball(leaf,Vector3(width-.15,h*.43,side*.12),Vector3.ONE*.065,brass,"DoorHandle")
+			P.box(leaf,"LeafCollision",Vector3(width*.5,h*.5,0),Vector3(width,h,.18))
+		P.box(n,"PortalCollision",Vector3(0,h*.5,0),Vector3(w,h,.24))
+		b.group(n,"ActionAnchor",Vector3(0,.02,.15))
+		return
+	elif form=="arch":
 		var leaf: Node3D=b.group(hinge,"ArchedLeaf",Vector3(w*.5,0,0));prism(leaf,arch_points(w,h),.16,oak,"OakArch")
 		for side in [-1,1]:
 			for i in range(6):b.rounded(hinge,Vector3(.24+i*(w-.48)/5.,(h-w*.5)*.5,side*.09),Vector3(.025,h-w*.5-.24,.018),.005,brass,"FlutedDoor")
@@ -66,8 +97,15 @@ static func door(b: RefCounted,n: Node3D,form: String) -> void:
 	for side in [-1,1]:G.ball(hinge,Vector3(w-.36,h*.43,side*.17),Vector3.ONE*.075,brass,"DoorHandle")
 	P.box(hinge,"LeafCollision",Vector3(w*.5,h*.5,0),Vector3(w,h,.20));P.box(n,"PortalCollision",Vector3(0,h*.5,0),Vector3(w,h,.24));b.group(n,"ActionAnchor",Vector3(0,.02,.15))
 static func roof(b: RefCounted,n: Node3D,form: String) -> void:
-	var w: float=b.blueprint.size[0];var d: float=b.blueprint.size[1];var y: float=b.floor_y+b.height;var roof: Material=b.material(b.blueprint.materials.roof,2);var trim: Material=b.material("e6dcc5");var rise:=1.8
-	b.block(n,Vector3(0,y-.03,0),Vector3(w+.3,.16,d+.3),b.material("f0e4cf"),"Ceiling");P.box(n,"CeilingCollision",Vector3(0,y+.02,0),Vector3(w+.3,.14,d+.3))
+	var w: float=b.blueprint.size[0];var d: float=b.blueprint.size[1];var y: float=b.floor_y+b.height
+	P.box(n,"CeilingCollision",Vector3(0,y+(-.98 if form=="jade_veranda" else .02),0),Vector3(w+.3,.14,d+.3))
+	if b.root.get_meta("skip_mesh_baking",false):return
+	var roof: Material=b.material(b.blueprint.materials.roof,2);var trim: Material=b.material("e6dcc5");var rise:=1.8
+	if form not in ["jade_pavilion","jade_walkway","jade_bridge","jade_veranda","jade_stage"]:
+		b.block(n,Vector3(0,y-.03,0),Vector3(w+.3,.16,d+.3),b.material("a38059" if form.begins_with("jade_") else "f0e4cf"),"Ceiling")
+	if form.begins_with("jade_"):
+		preload("res://scripts/building/jade_structure_art.gd").build(b,n,form,w,d,y)
+		return
 	var a:=Vector3(-w*.5-.5,y,-d*.5-.5);var c:=Vector3(w*.5+.5,y,d*.5+.5);var faces: Array=[]
 	if form=="hip":
 		var ridge:=maxf(0.,(d-w)*.5);var front:=Vector3(0,y+rise,-ridge);var back:=Vector3(0,y+rise,ridge)

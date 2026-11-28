@@ -17,7 +17,7 @@ func ready_for(studio: Node,ids: Array) -> bool:
 		if not studio.cache.has(id) or not studio.valid_image(studio.cache[id].get_image()):return false
 	return true
 func wait_for(studio: Node,ids: Array) -> void:
-	for i in range(240):
+	for i in range(maxi(240,ids.size()*5)):
 		if ready_for(studio,ids) and not studio.busy:return
 		await frames(1)
 func photo(name_: String) -> void:
@@ -28,9 +28,17 @@ func run() -> void:
 	while city.camera==null:await process_frame
 	await create_timer(.6).timeout;root.mode=Window.MODE_WINDOWED;root.size=Vector2i(1920,1080);await create_timer(1.2).timeout;await frames(8)
 	editor=city.build_mode;editor.open_editor()
-	for category in C.CATEGORIES+["照明"]:editor.ui.show_category(category)
+	var ids: Array=["stairs:straight","stairs:l","stairs:u"]
+	for category in C.CATEGORIES:
+		editor.ui.show_category(category)
+		for id in editor.ui.cards:
+			var key:=str(id).trim_prefix("object:").trim_prefix("make:")
+			if editor.ui.cards[id].visible and not ids.has(key):ids.append(key)
+	editor.ui.show_templates()
+	for id in editor.ui.cards:
+		if editor.ui.cards[id].visible:ids.append(id)
 	editor.ui.choose_card("stairs")
-	var ids: Array=["floor","wall","door","window","roof","stairs","railing","stairs:straight","stairs:l","stairs:u"];ids.append_array(C.OBJECTS.keys());await wait_for(editor.ui.studio,ids)
+	await wait_for(editor.ui.studio,ids)
 	for id in ids:check(ready_for(editor.ui.studio,[id]),"Catalog icon contains actual visible pixels after rapid category changes: "+id)
 	check(editor.ui.studio.pending.is_empty() and not editor.ui.studio.busy,"The serial thumbnail queue completes without a stuck or duplicate active job")
 	for id in ["floor","table_lamp","pendant"]:editor.ui.studio.cache[id].get_image().save_png(out+"/"+id+"-icon.png")

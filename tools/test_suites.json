@@ -210,6 +210,7 @@
       "kitchen_art_preview"
     ],
     "building_multiplayer": [
+      "concurrent_building",
       "project_integrity",
       "building_multiplayer_rules",
       "building_multiplayer_flow",
@@ -318,12 +319,14 @@
       "jade_multiplayer_rules",
       "jade_walking_routes",
       "jade_workshop_flow",
+      "jade_building_rules",
       "jade_city_flow",
       "jade_neighbourhood_flow",
       "jade_visual_acceptance"
     ]
   },
   "tests": {
+    "jade_building_rules": { "headless": true },
     "emote_flow": {
       "headless": true
     },
@@ -555,6 +558,7 @@
         "--warmup-test"
       ]
     },
+    "concurrent_building": {"headless": true},
     "building_multiplayer_rules": {
       "headless": true
     },

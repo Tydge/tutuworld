@@ -83,8 +83,15 @@ func run() -> void:
 	place(other_id,Land.sign_position("east_ne")+Vector3(0,.1,1.6));result=await client.request("buy_land",{"parcel_id":"east_ne"});check(result.get("ok",false),"Second owner buys a separate parcel")
 	result=await client.request("build_begin",{"parcel_id":"east_ne"});check(result.get("ok",false),"Second owner starts independent construction")
 	var lease: String=result.get("lease","");var other:=L.merge_template(L.empty(),sample,Land.bounds("east_ne").get_center())
+	result=await editor.open_nearby_parcel()
+	check(result.get("ok",false) and server.building.leases.size()==2,"Two owners edit neighboring lots at the same time")
+	var tile:=L.add(editor.layout,{"type":"floor","a":[77,-14],"b":[77.5,-13.5]})
+	check(editor.commit(tile) and editor.undo_stack.size()==1,"First owner edits a private tile while the neighboring lot is closed")
 	result=await client.request("build_finish",{"parcel_id":"east_ne","lease":lease,"expected_revision":0,"elements":other.elements});check(result.get("ok",false),"Second owner confirms another full two-storey house")
 	if not result.get("ok",false):print(result);quit(1);return
+	check(editor.active and editor.undo_stack.size()==1 and editor.layout.elements.size()==100,"Neighbor publishing preserves the active draft and undo history")
+	await editor.discard_online()
+	check(not editor.active and not L.compiled(server.state().build_layout).floors.has(Vector2i(154,-28)),"Discard only removes the private tile")
 	deadline=Time.get_ticks_msec()+100000
 	while (editor.online_updating or editor.layout.elements.size()!=198) and Time.get_ticks_msec()<deadline:await frames(1)
 	check(editor.layout.elements.size()==198,"Spectator receives the second house without changing scenes")
@@ -117,6 +124,7 @@ func run() -> void:
 	check(identities.keys().all(func(id):return editor.room.render_cache[id].node.get_instance_id()==identities[id]),"Publishing a later edit still preserves the other owner's complete house")
 	place(session.active_character_id,Land.sign_position("east_nw")+Vector3(0,.1,1.7));await frames()
 	result=await editor.open_nearby_parcel();check(result.get("ok",false),"Owner can reopen a completed house for another editing session")
+	check(editor.drafting.base().source.elements.size()==99 and editor.layout.elements.size()==198,"Dragging uses only this owner's rooms on the shared map")
 	# Change the other parcel while this owner's private draft remains open.
 	result=await client.request("build_begin",{"parcel_id":"east_ne"});check(result.get("ok",false),"Other owner can edit concurrently with this private draft")
 	for row in second_rows:

@@ -111,6 +111,9 @@ static func validate(raw: Variant,scope: String="") -> Dictionary:
 				var turn: float=float(value.get("yaw",0))
 				if not is_finite(turn) or absf(turn/90.-roundf(turn/90.))>.001:return fail("屋顶旋转须对齐90度。")
 				if not is_zero_approx(fposmod(turn,360.)):row.yaw=fposmod(turn,360.)
+		if type=="wall" and value.has("form"):
+			if not value.form in Structures.WALL_FORMS:return fail("请选择有效的墙体造型。")
+			row.form=value.form
 		if type=="wall" and value.has("faces"):
 			if not value.faces is Dictionary:return fail("墙面装修格式不正确。")
 			var faces: Dictionary={}
@@ -261,6 +264,19 @@ static func add(layout: Dictionary,row: Dictionary) -> Dictionary:
 		for roof in roofs:
 			if Grid.covered(rect(roof),compiled(next,Storeys.of(copy)).floors):next=remove(next,roof.id)
 	return next
+## A tile stroke can cross existing paving. Preserve surrounding cells and their attachments.
+static func lay_tiles(layout: Dictionary, row: Dictionary) -> Dictionary:
+	var level:=Storeys.of(row)
+	var source:=compiled(layout,level)
+	var next:=add(layout,row)
+	var cells:=Grid.coordinates(row)
+	if not cells.any(func(cell):return source.floors.has(cell)):return next
+	var paint:=row.duplicate()
+	paint.id="build_%d"%layout.next_id
+	var grid:={"floors":source.floors.duplicate(),"walls":source.walls}
+	for cell in cells:grid.floors[cell]=paint
+	return Grid.compress(next,grid,level)
+
 static func remove(layout: Dictionary,id: String) -> Dictionary:
 	var next:=layout.duplicate(true);var removed: Dictionary={id:true}
 	for row in next.elements:
@@ -486,7 +502,7 @@ static func opening_supported(row: Dictionary,walls: Dictionary) -> bool:
 	var axis: int=row.axis;var half:=1.43 if row.type=="door" else 1.1;var first:=floori((float(row.anchor[axis])-half-.15)/.5);var last:=ceili((float(row.anchor[axis])+half+.15)/.5);var plane_:=roundi(float(row.anchor[1-axis])/.5)
 	for i in range(first,last):
 		var e:=Vector3i(i,plane_,0) if axis==0 else Vector3i(plane_,i,1)
-		if not walls.has(e):return false
+		if not walls.has(e) or not Structures.supports_mounts(walls[e]):return false
 	return true
 
 static func ceiling_covered(layout: Dictionary,bounds: Rect2,level: int,ignore: String="") -> bool:

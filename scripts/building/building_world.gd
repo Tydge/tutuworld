@@ -24,6 +24,7 @@ var mask_texture: ImageTexture
 var mask_bytes:=PackedByteArray()
 var mask_key:=""
 var view_dirty:=true
+var pick_mask_revision:=0
 var last_view_actor:=Vector3(INF,INF,INF)
 var last_view_camera:=Vector3(INF,INF,INF)
 var last_view_key:=""
@@ -162,6 +163,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 	var view_key:=str(hidden)+str(editor_active)+str(editor_roof)+str(mode_)
 	if mode_!=View.OCCLUSION and not view_dirty and view_key==last_view_key and camera_.distance_squared_to(last_view_camera)<.0001 and actor.distance_squared_to(last_view_actor)<.0001:return
 	var force_update:=view_dirty
+	if force_update:pick_mask_revision+=1
 	last_view_key=view_key;last_view_camera=camera_;last_view_actor=actor;view_dirty=false
 	set_mask(hidden if mode_==View.AUTO else {});roof_hidden=not hidden.is_empty() and mode_==View.AUTO
 	var occluded:=View.sample_targets(sections,camera_,actor,occlusion_cache,force_update) if mode_==View.OCCLUSION else {}
@@ -171,6 +173,7 @@ func refresh_view(camera_: Vector3,actor: Vector3) -> void:
 		var wall: Node3D=section.get("parent_wall",section.node);var normal: Vector3=wall.get_meta("outward",Vector3.BACK)
 		var center: Vector3=wall.global_position;var side: float=normal.dot(camera_-center)
 		var hide_wall: bool=mode_==View.AUTO and not section.roof and (not editor_active or not editor_roof) and hidden_at(Vector2(center.x,center.z)-Vector2(normal.x,normal.z)*signf(side)*.28)
+		if section.get("editor_hidden",false)!=hide_wall:pick_mask_revision+=1
 		section["editor_hidden"]=hide_wall
 		if mode_==View.OCCLUSION:
 			View.fade(section,occluded.has(View.face(section)),delta)

@@ -1,8 +1,19 @@
 extends RefCounted
-const SAMPLE_NAMES:={
+const Catalog = preload("res://scripts/building/catalog.gd")
+const JadePlans = preload("res://scripts/building/jade_plans.gd")
+const FILE_SAMPLES := {
 	"single_one":"温馨小屋","two_storey":"两层楼阁",
 	"snow_tea_house":"松枝茶屋","snow_hearth_cabin":"炉火山舍","snow_ridge_lodge":"雪岭驿馆"
 }
+static var SAMPLE_NAMES := sample_names()
+
+static func sample_names() -> Dictionary:
+	var names := FILE_SAMPLES.duplicate()
+	for id in Catalog.OBJECTS:
+		if Catalog.is_house_plan(id):
+			names[id] = Catalog.OBJECTS[id].name
+	return names
+
 const Layout=preload("res://scripts/building/layout.gd")
 static func cottage() -> Dictionary:
 	var data:={"schema":1,"next_id":1,"elements":[]}
@@ -92,8 +103,43 @@ static var _player_samples: Dictionary={}
 static func player_sample(kind: String) -> Dictionary:
 	if not SAMPLE_NAMES.has(kind):return cottage()
 	if not _player_samples.has(kind):
-		var raw: Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/building_templates/"+kind+".json"))
+		var raw: Dictionary = JadePlans.make(kind) if Catalog.is_house_plan(kind) else JSON.parse_string(FileAccess.get_file_as_string("res://data/building_templates/"+kind+".json"))
 		var result:=Layout.validate(raw)
 		if not result.ok:push_error("Invalid building template: "+kind+" "+str(result.get("message")));return {}
 		_player_samples[kind]=result.layout
 	return _player_samples[kind].duplicate(true)
+
+## Keep existing floor finishes and furniture IDs when replacing an old one-piece house.
+static func convert_shell(layout: Dictionary, shell: Dictionary) -> Dictionary:
+	if not Catalog.is_house_plan(shell.get("kind","")):return {}
+	var source := player_sample(shell.kind)
+	if source.is_empty():return {}
+	var yaw_: float = shell.get("yaw",0.)
+	var offset := Layout.template_origin(source)-JadePlans.ORIGIN
+	var center := Vector2(shell.position[0],shell.position[1]).snapped(Vector2.ONE*.5)+Catalog.rotate_xz(offset,yaw_)
+	var base := layout.duplicate()
+	base.elements=layout.elements.filter(func(part):return part.id!=shell.id)
+	var merged := Layout.merge_template(base,source,center,yaw_)
+	var next := merged.duplicate()
+	next.elements=base.elements.duplicate()
+	var appearance: Dictionary = shell.get("appearance",{})
+	for i in range(base.elements.size(),merged.elements.size()):
+		var row: Dictionary = merged.elements[i]
+		row.storey=int(row.get("storey",0))+int(shell.get("storey",0))
+		var slot: String = {"floor":"stone" if row.style=="jade_paving" else "wood","roof":"ceramic"}.get(row.type,"wood")
+		if row.type=="wall" and row.style=="jade_frame":slot="stone"
+		var dye: String = appearance.get(slot,{}).get("color","")
+		if dye!="":row.color=dye;row.painted=true
+		if row.type!="floor":
+			next.elements.append(row)
+			continue
+		var grid=preload("res://scripts/building/grid_layout.gd")
+		var existing: Dictionary=Layout.compiled(base,row.storey).floors
+		var missing: Dictionary={}
+		for cell in grid.coordinates(row):
+			if not existing.has(cell):missing[cell]=row
+		for piece in grid.rectangles(missing):
+			piece.id="build_%d"%next.next_id
+			next.next_id+=1
+			next.elements.append(piece)
+	return next

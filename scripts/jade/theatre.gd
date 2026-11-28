@@ -34,19 +34,8 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 			if face=="Rear" and level==0:P.box(frame,"Backdrop",Vector3(0,h*.43,depth),Vector3(length_*1.62,h*.86,.21))
 			for j in [-1.,-.50,.50,1.]:P.cylinder(frame,"Post",Vector3(j*length_,h*.5,depth),.20,h)
 			if level==1 and face!="East":P.box(frame,"UpperRail",Vector3(0,.45,depth),Vector3(length_*2.,.9,.15))
-		A.mesh_part(roof,"playhouse_eave"+str(level),func(m):
-			for face in range(4):
-				var side:=A.group(m,"Canopy",Vector3.UP*((level+1)*h));side.rotation.y=face*PI/2.
-				var length_: float=span.x if face%2==0 else span.y;var depth: float=span.y if face%2==0 else span.x
-				var awning:=A.paint(side,Vector3(0,.05,depth+.67),Vector3(length_*2.+2.48,.19,2.21),"tiles");awning.rotation.x=.27
-				for j in range(-6,7):A.beam(side,Vector3(j*length_/6.,.26,depth-.15),Vector3(j*length_/6.,-.24,depth+1.59),.10,"7a5740"))
-	A.mesh_part(roof,"playhouse_lantern",func(m):
-		var loft:=A.group(m,"RoofLantern",Vector3.UP*(2.*h))
-		for side in [-1,1]:
-			A.paint(loft,Vector3(side*w*.57,1.44,0),Vector3(.20,2.88,d*1.25),"lacquer")
-			A.paint(loft,Vector3(0,1.44,side*d*.61),Vector3(w*1.14,2.88,.18),"lacquer")
-			for j in [-1,0,1]:A.lattice(loft,Vector3(j*w*.35,1.54,side*d*.64),w*.30,1.78)
-		A.roof(loft,w*.91,d*.90,2.92,2.91,false))
+		A.mesh_part(roof,"playhouse_eave"+str(level),eaves.bind(span,(level+1)*h))
+	A.mesh_part(roof,"playhouse_lantern",lantern_roof.bind(w,d,2.*h))
 	var slab:=Vector3(w*2.+.7,.27,d*2.+.6)
 	A.paint(upper,Vector3(0,h-.135,0),slab,"lacquer")
 	G.solid_box(upper,Vector3(0,h-.135,0),slab).collision_layer=8
@@ -64,3 +53,18 @@ static func build(n: Node3D,w: float,h: float,d: float) -> void:
 	A.paint(upper,Vector3(w+1.3125,h-.12,d-.23),Vector3(1.925,.24,2.35),"lacquer")
 	A.paint(upper,Vector3(w-.3125,h-.12,d+.6225),Vector3(1.325,.24,.645),"lacquer")
 	G.solid_box(upper,landing,Vector3(3.25,.24,2.35)).collision_layer=8
+
+static func eaves(m: Node3D,span: Vector2,y: float) -> void:
+	for face in range(4):
+		var side:=A.group(m,"Canopy",Vector3.UP*y);side.rotation.y=face*PI/2.
+		var length_: float=span.x if face%2==0 else span.y;var depth: float=span.y if face%2==0 else span.x
+		var awning:=A.paint(side,Vector3(0,.05,depth+.67),Vector3(length_*2.+2.48,.19,2.21),"tiles");awning.rotation.x=.27
+		for j in range(-6,7):A.beam(side,Vector3(j*length_/6.,.26,depth-.15),Vector3(j*length_/6.,-.24,depth+1.59),.10,"7a5740")
+
+static func lantern_roof(m: Node3D,w: float,d: float,y: float) -> void:
+	var loft:=A.group(m,"RoofLantern",Vector3.UP*y)
+	for side in [-1,1]:
+		A.paint(loft,Vector3(side*w*.57,1.44,0),Vector3(.20,2.88,d*1.25),"lacquer")
+		A.paint(loft,Vector3(0,1.44,side*d*.61),Vector3(w*1.14,2.88,.18),"lacquer")
+		for j in [-1,0,1]:A.lattice(loft,Vector3(j*w*.35,1.54,side*d*.64),w*.30,1.78)
+	A.roof(loft,w*.91,d*.90,2.92,2.91,false)

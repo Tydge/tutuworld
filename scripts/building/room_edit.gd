@@ -62,8 +62,9 @@ static func wall_hit(foot: Rect2,walls: Dictionary) -> bool:
 				if foot.intersects(Rect2(a,(b-a)).grow(.13)):return true
 	return false
 static func check_geometry(context: Dictionary,result: Dictionary) -> Dictionary:
+	var map_id: String = context.source.get("map_id", "city")
 	var grid: Dictionary=result.grid;var floor_: Dictionary=grid.floors
-	if grid.walls.size()>L.MAX_WALL_EDGES:return L.fail("墙体超过当前容量。")
+	if grid.walls.size()>L.MAX_WALL_EDGES*L.capacity_multiplier(map_id):return L.fail("墙体超过当前容量。")
 	var walkable:=floor_.duplicate()
 	for cell in context.holes:walkable.erase(cell)
 	var effective: Dictionary=context.source.duplicate(false);effective.elements=context.source.elements.map(func(row):return result.openings.get(row.id,row))
@@ -73,7 +74,7 @@ static func check_geometry(context: Dictionary,result: Dictionary) -> Dictionary
 		if moved:
 			shifted=row.duplicate();var delta: Vector2=result.moves[row.id];shifted.position=[row.position[0]+delta.x,row.position[1]+delta.y]
 		var foot: Rect2=C.footprint(shifted) if moved else info.foot
-		if not preload("res://scripts/building/site.gd").within(foot.position) or not preload("res://scripts/building/site.gd").within(foot.end):return L.fail("随墙移动的物件超出了建造地块。")
+		if not preload("res://scripts/building/site.gd").within(foot.position,map_id) or not preload("res://scripts/building/site.gd").within(foot.end,map_id):return L.fail("随墙移动的物件超出了建造地块。")
 		var touched: bool=moved or result.region.grow(.3).intersects(foot)
 		if touched:
 			if C.mount(row)=="wall" and WallMount.support(effective,shifted,grid.walls).is_empty():return L.fail("调整会让挂墙物件失去支撑或与门窗冲突。")
@@ -124,7 +125,8 @@ static func create(context: Dictionary,area: Rect2,finish: Dictionary) -> Dictio
 	if context.level>=S.MAX:return L.fail("目前最多支持4层房间。")
 	if minf(area.size.x,area.size.y)<1.:return L.fail("房间的长、宽至少1米。")
 	var site=preload("res://scripts/building/site.gd")
-	if not site.within(area.position) or not site.within(area.end):return L.fail("房间需要留在建造地块内。")
+	var map_id: String = context.source.get("map_id", "city")
+	if not site.within(area.position,map_id) or not site.within(area.end,map_id):return L.fail("房间需要留在建造地块内。")
 	var grid:={"floors":context.grid.floors.duplicate(),"walls":context.grid.walls.duplicate()};var added: Dictionary={}
 	var floor_row:={"id":"__room_floor","type":"floor","storey":context.level,"color":finish.get("floor_color","cda56e"),"style":finish.get("floor_style","wood"),"painted":true}
 	for cell in G.coordinates({"a":[area.position.x,area.position.y],"b":[area.end.x,area.end.y]}):
@@ -159,7 +161,7 @@ static func wall_context(context: Dictionary,unit: Dictionary,camera: Vector2) -
 			var cells:=adjacent(current)
 			if exterior:
 				var inside: Vector2i=cells[0] if positive_inside else cells[1];var outside: Vector2i=cells[1] if positive_inside else cells[0]
-				if not house.has(inside) or plan.cell_rooms.has(outside):break
+				if not house.has(inside) or not plan.cell_rooms.has(inside) or plan.cell_rooms.has(outside):break
 			elif (plan.cell_rooms.get(cells[0],"")==room)==(plan.cell_rooms.get(cells[1],"")==room):break
 			if direction<0:first=current
 			else:last=current
@@ -296,9 +298,10 @@ static func resize_layer(context: Dictionary,delta: int,deferred: bool=false) ->
 		var area:=L.rect(wall);area.position+=shift
 		for railing in base.railings:
 			if area.grow(.12).intersects(L.rect(railing).grow(.05)):return L.fail("移动后的墙壁与护栏冲突。")
+	var map_id: String = base.source.get("map_id", "city")
 	for cell in added:
 		var p:=G.point(cell)
-		if not preload("res://scripts/building/site.gd").within(p) or not preload("res://scripts/building/site.gd").within(p+Vector2.ONE*.5):return L.fail("房间扩建超出了建造地块。")
+		if not preload("res://scripts/building/site.gd").within(p,map_id) or not preload("res://scripts/building/site.gd").within(p+Vector2.ONE*.5,map_id):return L.fail("房间扩建超出了建造地块。")
 	if not deferred:
 		checked=check_geometry(base,result)
 		if not checked.ok:return checked

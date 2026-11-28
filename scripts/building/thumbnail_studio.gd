@@ -45,7 +45,14 @@ func render_next() -> void:
 	var form:="classic"
 	if id.contains(":"):
 		var parts:=id.split(":");id=parts[0];form=parts[1]
-	if id=="template":
+	var finish: Dictionary = preload("res://scripts/building/structure_catalog.gd").FINISH_TOOLS.get(key,{})
+	if not finish.is_empty():
+		if id == "wall":
+			var width := .5 if finish.style == "jade_post" else 4.
+			builder.build_wall(model, {"id":"wall","a":[-width*.5,0.],"b":[width*.5,0.],"openings":[],"style":finish.style,"color":finish.color,"form":finish.get("form",finish.style)})
+		else:
+			preload("res://scripts/geometry.gd").box(model,Vector3.ZERO,Vector3(4,.3,3),Factory.floor_material(finish))
+	elif id=="template":
 		build_template_thumbnail(model,preload("res://scripts/building/templates.gd").player_sample(form))
 	elif id=="stairs":preload("res://scripts/building/stairs.gd").build(builder,model,{"form":form if form in ["straight","l","u"] else "straight","color":"c6a373"})
 	elif id=="railing":preload("res://scripts/building/stairs.gd").rail(builder,model,Vector3(-2,0,0),Vector3(2,0,0))
@@ -60,7 +67,7 @@ func render_next() -> void:
 				if id!="wall":openings=[{"id":"preview","type":id,"offset":2.5,"width":2.86 if id=="door" else 2.2,"height":3.5 if id=="door" else 2.,"bottom":0. if id=="door" else 1.1,"form":form}]
 				var data:={"id":"wall","a":[-2.5,0],"b":[2.5,0],"openings":openings};builder.blueprint.walls=[data];builder.build_wall(model,data)
 				if id=="door":model.set_script(preload("res://scripts/building/room_door.gd"));builder.build_door(model)
-			"roof":builder.roof_form=form;builder.blueprint.size=[4.,3.];builder.build_roof(model)
+			"roof":builder.roof_form=form;builder.blueprint.materials.roof=preload("res://scripts/building/structure_catalog.gd").default_color("roof",form);builder.blueprint.size=[4.,3.];builder.build_roof(model)
 			_:builder.blueprint.size=[4.,3.];builder.build_floor(model)
 	if not variant.is_empty():Factory.paint(model,variant)
 	var bounds:=AABB();var found:=false
@@ -105,7 +112,7 @@ func _exit_tree() -> void:
 	draw_ready.emit()
 
 func build_template_thumbnail(model: Node3D,source: Dictionary) -> void:
-	# Catalog silhouettes need only floors, walls/openings and roofs, not furniture or live lights.
+	# Show structural parts, including stairs and railings on open galleries.
 	var origin:=preload("res://scripts/building/layout.gd").template_origin(source)
 	for level in preload("res://scripts/building/storeys.gd").levels(source):
 		var layer:=Node3D.new();model.add_child(layer);layer.position.y=level*4.7
@@ -116,9 +123,21 @@ func build_template_thumbnail(model: Node3D,source: Dictionary) -> void:
 				var data:=Factory.wall_data(source,row,origin)
 				for opening in data.openings:opening.geometry_only=false
 				builder.blueprint.materials.plaster=row.color;builder.build_wall(layer,data)
+			elif row.type=="stairs":
+				var stair := Node3D.new();layer.add_child(stair)
+				stair.position=Vector3(row.position[0]-origin.x,0,row.position[1]-origin.y)
+				stair.rotation.y=deg_to_rad(row.get("yaw",0.))
+				preload("res://scripts/building/stairs.gd").build(builder,stair,row)
+			elif row.type=="railing":
+				var a:=Vector3(row.a[0]-origin.x,.18,row.a[1]-origin.y)
+				var b:=Vector3(row.b[0]-origin.x,.18,row.b[1]-origin.y)
+				preload("res://scripts/building/stairs.gd").rail(builder,layer,a,b)
 			elif row.type in ["floor","roof"]:
 				var rect:=preload("res://scripts/building/layout.gd").rect(row);var center:=rect.get_center()-origin
 				var part:=Node3D.new();layer.add_child(part);part.position=Vector3(center.x,0,center.y)
 				if row.type=="floor":preload("res://scripts/geometry.gd").box(part,Vector3(0,.03,0),Vector3(rect.size.x,.3,rect.size.y),Factory.floor_material(row))
 				else:
-					builder.blueprint.size=[rect.size.x,rect.size.y];builder.blueprint.materials.roof=row.color;builder.roof_form=row.get("form","classic");builder.build_roof(part)
+					var turn: float=row.get("yaw",0.)
+					part.rotation.y=deg_to_rad(turn)
+					builder.blueprint.size=[rect.size.y,rect.size.x] if roundi(turn/90.)%2 else [rect.size.x,rect.size.y]
+					builder.blueprint.materials.roof=row.color;builder.roof_form=row.get("form","classic");builder.build_roof(part)

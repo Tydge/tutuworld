@@ -1,0 +1,36 @@
+Linux staging, serial completion of six palaces
+LINUX_STAGE_RESULT PASS elapsed_publish_batch_ms=30426 failures=[]
+
+Linux staging, batched completion of the same six palaces
+LINUX_STAGE builders=1 tick_hz=61.1 npc_rows=0 world_snapshots=0 presence_packets=38
+LINUX_STAGE builders=2 tick_hz=60.2 npc_rows=0 world_snapshots=0 presence_packets=38
+LINUX_STAGE builders=6 tick_hz=60.7 npc_rows=0 world_snapshots=0 presence_packets=39
+LINUX_STAGE_RESULT PASS elapsed_publish_batch_ms=8065 failures=[]
+
+Local WebSocket clients on one map
+CONCURRENT_BUILDING_METRICS builders=1 physics_hz=60.2 frame_p95_ms=44.1 builder_npc_rows=0 builder_full_snapshots=0 player_packets=26
+CONCURRENT_BUILDING_METRICS builders=2 physics_hz=60.2 frame_p95_ms=47.5 builder_npc_rows=0 builder_full_snapshots=0 player_packets=26
+CONCURRENT_BUILDING_METRICS builders=6 physics_hz=60.0 frame_p95_ms=40.6 builder_npc_rows=0 builder_full_snapshots=0 player_packets=26
+CONCURRENT_PUBLISH elapsed_ms=6243 created=203 modules=203
+CONCURRENT_DRAG_PLAN all_cells=5472 own_cells=912 all_ms=46.22 own_ms=4.35
+CONCURRENT_BUILDING_RESULT PASS rows=90 failures=[]
+
+Godot editor and rules
+BUILDING_MULTIPLAYER_FLOW_RESULT PASS checks=62 failures=[]
+BUILDING_MULTIPLAYER_RULES_RESULT PASS checks=59 failures=[]
+JADE_BUILDING_RULES failures=0
+JADE_WORKSHOP_FLOW failures=[]
+
+macOS native app, signed content build 15 started from retail launchers 14 and 15
+TUTU_CLIENT_READY version=0.6.3 build=15
+TUTU_CLIENT_READY version=0.6.3 build=15
+
+Production cutover and public clients
+BACKUP_CHECKED characters= 4 accounts= 3
+WORLD_AND_ACCOUNT_CHECKS_PASSED layout_records= [154, 102, 12]
+PROMOTED 0.6.3 build=15
+MULTIPLAYER_PUBLIC_RESULT PASS checks=4 failures=[]
+PASS HTTPS signed manifest downloaded
+PASS HTTPS pack staged and SHA256 verified
+PASS Verified pack size=251568560
+UPDATE_DOWNLOAD_RESULT PASS

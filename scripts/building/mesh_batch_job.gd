@@ -22,7 +22,7 @@ func advance(limit: int) -> void:
 		elif batch_cursor<batches.size():var entry: Dictionary=batches[batch_cursor];batch_cursor+=1;append_batch(entry)
 		else:done=true
 func append_part(part: MeshInstance3D) -> void:
-	if part.get_meta("dynamic_mesh",false): return
+	if part.get_meta("dynamic_mesh",false) or part.get_meta("prebatched",false): return
 	var m: Material=part.material_override
 	if m==null: return
 	var shape: Mesh=part.mesh
@@ -39,12 +39,13 @@ func append_part(part: MeshInstance3D) -> void:
 		dye=m.albedo_color;pattern=0
 	elif m is ShaderMaterial and m.shader==Fabric.shader_for("") and not m.get_shader_parameter("patterned"):
 		dye=m.get_shader_parameter("dye");pattern=0
-	if pattern>=0:
+	if pattern>=0 and pattern!=10:
 		var cache_key:=str(pattern)+str(rough)+str(snow)
 		if not builder.batch_materials.has(cache_key):
 			var shared:=ShaderMaterial.new();shared.shader=load("res://assets/shaders/home_surface.gdshader")
 			shared.set_shader_parameter("tint",Color.WHITE);shared.set_shader_parameter("vertex_tint",true)
 			shared.set_shader_parameter("pattern",pattern);shared.set_shader_parameter("roughness_value",rough)
+			if pattern in [9,11]:shared.set_shader_parameter("jade_wall_texture",preload("res://assets/jade/lacquer.png") if pattern==11 else preload("res://assets/jade/lime.png"))
 			shared.set_shader_parameter("roof_snow",snow)
 			if snow:shared.set_shader_parameter("roof_snow_texture",preload("res://assets/terrain/winter/powder_snow_v1.png"))
 			builder.batch_materials[cache_key]=shared

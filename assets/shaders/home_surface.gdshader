@@ -2,7 +2,10 @@ shader_type spatial;
 render_mode diffuse_burley;
 uniform vec4 tint : source_color=vec4(1.0);
 uniform int pattern=0;
+uniform sampler2D jade_wall_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 #include "res://assets/shaders/coastal_tiles.gdshaderinc"
+uniform vec2 joinery_uv_scale=vec2(1.0);
+uniform sampler2D joinery_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform bool roof_snow=false;
 uniform sampler2D roof_snow_texture : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 varying vec3 surface_world_normal;
@@ -122,6 +125,12 @@ void fragment(){
   glaze=mix(glaze,sage,border*.80);
   glaze*=.97+hash(floor(uv))*.045+sin(f.x*3.14159)*sin(f.y*3.14159)*.025;
   color=mix(base*.73,glaze,seam);
+ }else if(pattern==9 || pattern==11){
+  vec2 wall_uv=(abs(local_normal.z)>.6?p.xy:p.zy)*.65;
+  float plaster=dot(texture(jade_wall_texture,wall_uv).rgb,vec3(.333333));
+  color*=pattern==11?clamp(plaster/.23,.63,1.08):clamp(plaster/.76,.86,1.10);
+ }else if(pattern==10){
+  color*=texture(joinery_texture,UV*joinery_uv_scale).rgb;
  }else{color*=1.0+grain*.65;}
  if(plaster_strength>.001 && pattern==0){
   vec2 wall_uv=(abs(local_normal.z)>.6?p.xy:p.zy)*.65;

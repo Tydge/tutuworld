@@ -40,6 +40,7 @@ var studio: Node
 var item_grid: GridContainer
 var catalog_area: ScrollContainer
 var appearance_panel: PanelContainer
+var convert_house_button: Button
 var appearance_button: Button
 var paint_row: HBoxContainer
 var selected_thumb_key:=""
@@ -95,13 +96,15 @@ func _ready() -> void:
 	catalog_area=ScrollContainer.new();catalog_area.name="CatalogScroll";catalog_area.size_flags_vertical=Control.SIZE_EXPAND_FILL;catalog_area.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED;catalog.add_child(catalog_area)
 	item_grid=GridContainer.new();item_grid.columns=7;item_grid.size_flags_horizontal=Control.SIZE_EXPAND_FILL;item_grid.add_theme_constant_override("h_separation",7);item_grid.add_theme_constant_override("v_separation",7);catalog_area.add_child(item_grid)
 	for item in [["房间","room"],["地板","floor"],["墙壁","wall"],["窗户","window"],["房门","door"],["屋顶","roof"],["楼梯","stairs"],["护栏","railing"]]:add_card(item[1],item[0],"结构")
+	for id in Structures.FINISH_TOOLS: add_card(id, Structures.FINISH_TOOLS[id].name, "结构")
 	for form in preload("res://scripts/building/stairs.gd").FORMS:add_card("stairs:"+form,preload("res://scripts/building/stairs.gd").FORMS[form],"结构/stairs")
 	for family in Structures.FORMS:
 		for form in Structures.FORMS[family]:add_card(family+":"+form,Structures.FORMS[family][form],"结构/"+family)
 	var samples: Dictionary=preload("res://scripts/building/templates.gd").SAMPLE_NAMES
 	for id in samples:add_card("template:"+id,samples[id],"样板房")
 	for id in Stock.RECIPES:add_card("make:"+id,Catalog.OBJECTS[id].name,"制作")
-	for id in Catalog.OBJECTS:add_card("object:"+id,Catalog.OBJECTS[id].name,Catalog.OBJECTS[id].category)
+	for id in Catalog.OBJECTS:
+		if not Catalog.is_house_plan(id): add_card("object:"+id,Catalog.OBJECTS[id].name,Catalog.OBJECTS[id].category)
 	body.add_child(VSeparator.new())
 	var details:=UI.column(6);details.custom_minimum_size.x=360;body.add_child(details)
 	var selected_row:=UI.row(8);details.add_child(selected_row)
@@ -111,6 +114,9 @@ func _ready() -> void:
 	roof_snow.toggled.connect(func(value):
 		if not updating:editor.set_roof_snow(value))
 	details.add_child(roof_snow)
+	convert_house_button = compact("转为可扩建房屋", editor.convert_selected_house, "ConvertHouse")
+	convert_house_button.tooltip_text="在原位置拆成独立构件，保留家具、原有地板与主要配色。灯纱、鎏金等细部使用样板材质。可一步撤销。"
+	details.add_child(convert_house_button)
 	var actions:=UI.row(5);details.add_child(actions)
 	move_button=compact("移动 G",func():editor.begin_move(),"MoveBuildElement");rotate_button=compact("旋转 R",func():editor.rotate_selected(),"RotateBuildElement");delete_button=compact("删除",func():editor.delete_selected(),"DeleteBuildElement")
 	for button in [move_button,rotate_button,delete_button]:button.size_flags_horizontal=Control.SIZE_EXPAND_FILL;actions.add_child(button)
@@ -182,8 +188,8 @@ func show_category(value: String) -> void:
 func available_stock(key: String) -> int:
 	var inventory: Dictionary=editor.city.session.state().inventory
 	var adjustment:=0
-	if editor.city.session.is_online():
-		adjustment=int(Stock.count_in(editor.saved_layout()).get(key,0))-int(Stock.count_in(editor.layout).get(key,0))
+	if editor.city.session.is_online() and not editor.online_draft_base.is_empty():
+		adjustment=int(Stock.count_in(editor.online_draft_base).get(key,0))-int(Stock.count_in(editor.layout).get(key,0))
 	return int(inventory.get(key,0))+adjustment
 func set_thumbnail(id: String,texture: Texture2D) -> void:
 	if card_images.has("make:"+id):card_images["make:"+id].texture=texture
@@ -213,6 +219,7 @@ func refresh(row: Dictionary) -> void:
 	floor_choice.text="屋顶" if editor.roof_view else "%d楼"%(editor.editing_storey+1)
 	root_ui.find_child("TopDownView",true,false).set_pressed_no_signal(editor.top_down)
 	root_ui.find_child("GenerateUpperFloor",true,false).disabled=editor.editing_storey>=preload("res://scripts/building/storeys.gd").MAX-1
+	convert_house_button.visible = Catalog.is_house_plan(row.get("kind", ""))
 	var upper: bool=editor.tool=="upper_floor"
 	upper_floor_actions.visible=upper;upper_floor_confirm.disabled=not editor.upper_floor_locked or not editor.upper_floor_plan.get("ok",false)
 	var preview_row:=row
@@ -233,6 +240,9 @@ func refresh(row: Dictionary) -> void:
 	if not row.is_empty() and row.get("support","")!="":selection_hint.text=("%d楼天花板"%(editor.editing_storey+1)) if str(row.support).begins_with("ceiling:") else "依附于 "+Catalog.name_for(preload("res://scripts/building/layout.gd").find(editor.layout,row.support))
 	if row.get("type","")=="object" and Catalog.mount(row)=="wall":selection_hint.text="挂墙 · 高度%.2f米 · 拖动调整位置和高度"%preload("res://scripts/building/wall_mount.gd").height(row)
 	selected_thumb_key=studio.variant_key(preview_row) if preview_row.get("type","")=="object" else (selected_kind+":"+Structures.form(preview_row) if selected_kind in Structures.FORMS or selected_kind=="stairs" else selected_kind)
+	var finish_id: String = editor.tool+":"+editor.structure_form
+	if row.is_empty() and Structures.FINISH_TOOLS.has(finish_id):
+		selected_thumb_key=finish_id;selection.text=Structures.FINISH_TOOLS[finish_id].name
 	if selected_kind=="template":
 		selected_thumb_key="template:"+editor.template_kind
 		selection.text=preload("res://scripts/building/templates.gd").SAMPLE_NAMES.get(editor.template_kind,"整栋样板房")
@@ -247,18 +257,23 @@ func refresh(row: Dictionary) -> void:
 		if row.get("id","")==appearance_panel.target_id:appearance_panel.load_part(false)
 		else:appearance_panel.close()
 	for button in [apply_button,move_button,delete_button]:button.disabled=row.is_empty()
-	rotate_button.disabled=preview_row.get("type","") not in ["object","stairs","template"] or (preview_row.get("type","")=="object" and Catalog.mount(preview_row)=="wall");undo_button.disabled=editor.undo_stack.is_empty();redo_button.disabled=editor.redo_stack.is_empty()
-	for id in tools:tools[id].set_pressed_no_signal((editor.tool==id or editor.tool+":"+editor.structure_form==id or (editor.tool=="template" and id=="template:"+editor.template_kind)))
+	rotate_button.disabled=preview_row.get("type","") not in ["object","stairs","template","roof"] or (preview_row.get("type","")=="object" and Catalog.mount(preview_row)=="wall");undo_button.disabled=editor.undo_stack.is_empty();redo_button.disabled=editor.redo_stack.is_empty()
+	for id in tools:tools[id].set_pressed_no_signal(((editor.tool==id and not Structures.FINISH_TOOLS.has(finish_id)) or editor.tool+":"+editor.structure_form==id or (editor.tool=="template" and id=="template:"+editor.template_kind)))
 	if not row.is_empty():
 		var face: Dictionary=row
 		if row.type=="wall" and wall_face.selected!=2:
 			var unit: Dictionary=preload("res://scripts/building/layout.gd").unit_at(editor.layout,row.id,preload("res://scripts/building/layout.gd").rect(row).get_center())
-			var edit=preload("res://scripts/building/surface_edit.gd");var plan=preload("res://scripts/building/room_plan.gd").make(preload("res://scripts/building/layout.gd").compiled(editor.layout,editor.editing_storey))
+			var edit=preload("res://scripts/building/surface_edit.gd");var plan=preload("res://scripts/building/room_plan.gd").make(preload("res://scripts/building/layout.gd").compiled(editor.editing_layout(),editor.editing_storey))
 			var side: String=edit.inside_side(plan,unit,Vector2(editor.city.camera.global_position.x,editor.city.camera.global_position.z))
 			if wall_face.selected==1:side="negative" if side=="positive" else "positive"
 			face=Structures.surface(row,side)
 		color.color=Color(face.color);style.selected=maxi(0,STYLES.find(face.style))
 	var action: String={"template":"整屋跟随鼠标 · R 旋转 · 点击空地放置 · Esc 取消", "upper_floor":"点击本栋地板选定范围 · 确认后生成上层楼板 · Esc 取消", "select":"点击选中物件 · 再选移动、旋转或删除", "delete":"锤子：按起点类型拆除 · 按住拖动，松开确认 · Esc取消", "wall":"点击墙的起点和终点 · 放置后可分别装修内外墙面", "floor":"点击地板矩形的两个角", "roof":"点击屋顶矩形的两个角", "door":"点击墙面安装门", "window":"点击墙面安装窗户", "stairs":"首座楼梯按本栋轮廓补上层楼板 · 开洞和护栏同步 · R旋转", "railing":"点击护栏起点和终点", "move":"点击新位置完成移动 · Esc 取消"}.get(editor.tool,"点击放置 · R 旋转 · 台灯与摆件自动吸附台面")
+	if editor.tool in ["wall","floor","roof","railing"]:
+		action="按住左键拖出范围，松开建造 · 也可分别点击起点和终点"
+		if editor.tile_brush():action="点击铺一格，或按住左键拖出整片地板"
+		if editor.tool=="roof":action+=" · R 转动屋脊"
+		if editor.structure_form in ["jade_post","jade_low_post"]:action="点击网格放置廊柱"
 	if editor.tool=="room":action="按住左键拖出房间 · 松开建造 · T俯视 · Esc取消"
 	elif editor.tool=="eyedropper":action="点击家具复制同款，或吸取墙地材质 · Esc取消"
 	elif editor.tool=="select":action="点击选中 · 拖动物件移动 · 拖动完整房间的墙调整大小 · G移动 / R旋转"
@@ -267,6 +282,7 @@ func refresh(row: Dictionary) -> void:
 func message(text_: String,error: bool=false) -> void:status.text=text_;status.modulate=Color("a65445") if error else Color("426e5c")
 
 func show_templates() -> void:
+	empty_warehouse.hide()
 	category="样板房";form_family="template";breadcrumb.show();breadcrumb_label.text="整栋样板房 · 选择后点击空地放置"
 	for id in cards:
 		cards[id].visible=cards[id].get_meta("category")=="样板房"
